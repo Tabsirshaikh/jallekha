@@ -28,7 +28,7 @@ JalLekha measures water need independently of requests (Census water access, bui
 1. Research your features first (`docs/research/<id>.md`), get it reviewed.
 2. One branch per task: `feat/<task-id>-<name>` from `main`.
 3. Push, open a pull request into `main`, one teammate reviews, squash and merge.
-4. Update your row in `docs/features.csv` and document findings, changes, validation, limitations and handoff in `docs/BRANCH_WORKLOG.md`.
+4. Add a focused CI workflow named `<owner>:<task-id>`, update `docs/features.csv`, and document findings, changes, validation, limitations and handoff in `docs/BRANCH_WORKLOG.md`.
 
 Full steps: [docs/TEAM_PLAN.md](docs/TEAM_PLAN.md).
 

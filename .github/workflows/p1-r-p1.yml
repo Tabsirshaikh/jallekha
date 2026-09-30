@@ -1,0 +1,34 @@
+name: "P1:R-P1"
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "docs/research/P1.md"
+      - "docs/JALLEKHA_FINAL_SOLUTION.md"
+      - "docs/features.csv"
+      - "docs/P1_TASKS.md"
+      - "docs/BRANCH_WORKLOG.md"
+      - "scripts/ci/verify_p1_r_p1.py"
+      - ".github/workflows/p1-r-p1.yml"
+  push:
+    branches: [research/p1]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-r-p1:
+    name: "P1:R-P1"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify R-P1 deliverables
+        run: python scripts/ci/verify_p1_r_p1.py
