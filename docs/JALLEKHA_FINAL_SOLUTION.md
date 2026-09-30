@@ -176,5 +176,4 @@ New repository, new structure. These v1 modules are **copied with their tests** 
 | Sphere 2018; JMP service ladder; CPHEEO 1999 Table 2.1 (secondary copy) | Verified / secondary |
 | HMWSSB data (OpenCity), DataMeet wards, Census 2011 (OpenCity, NADA), Chicago 311 (v6vf-nfxy) | Verified and recomputed 2026-09-30 |
 | GHMC/Telangana 2025-26 ward and corporation reorganisation notices | Verified; current machine-readable boundary/crosswalk still required |
-| GHMC/Telangana 2025-26 ward and corporation reorganisation notices | Verified; current machine-readable boundary/crosswalk still required |
 | Reservoir levels (D15), HMWSSB notices (D14) | To verify during the build |
