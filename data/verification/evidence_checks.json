@@ -1,11 +1,15 @@
 {
   "inputs_sha256": {
-    "data/derived/crosswalk/census_to_ghmc_2016.csv": "139765b1915ed2635ed96e5e4165a6fa557ea500708f6732218a85080a622472",
+    "data/derived/crosswalk/census_to_ghmc_2016.csv": "779da644d1fa2a0dc8738558ee09c6445ffa14c5e19862967e6ac4eb49ef9fe5",
     "data/raw/census/hyderabad/hh14.xlsx": "8c25065bf17cff44e78c5a84213e7a8f5b3303d2321c26e95e007971f287e53c",
     "data/raw/census/rangareddy/hh14.xlsx": "4035c07e6d447edc3c414b96bf15465f4f3ea3d2ce92300223296329a2783d31",
     "data/raw/geography/datameet/ghmc-wards.geojson": "3fdfef8e787ed543d816fee36a6097c350c4dff2423aae7fa203bb49cbd6edc2",
     "data/verification/source_manifest.csv": "32955b71b8c2162e89bcfc0dfb3e49d934d62951bb9a4d59d39557e0c53cdc37"
   },
+  "normalized_lf_text_inputs": [
+    "data/derived/crosswalk/census_to_ghmc_2016.csv",
+    "data/verification/source_manifest.csv"
+  ],
   "outputs_sha256": {
     "data/derived/evidence/evidence_summary.json": "db21c42794e943e995b1829107b5087d503291ff1a0debab56874ca6c483fd0a",
     "data/derived/evidence/ward_evidence.csv": "a9b29d7ffcabc42cb25d8638700f39ae3b7abbc8b362642af317108a4ff8360c"

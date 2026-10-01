@@ -202,9 +202,17 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
         SUMMARY: (json.dumps(summary, indent=2, sort_keys=True) + "\n").encode(),
     }
     checks = {
-        "inputs_sha256": {p: hashlib.sha256((root / p).read_bytes()).hexdigest() for p in INPUTS},
+        "inputs_sha256": {
+            p: hashlib.sha256(
+                (root / p).read_text(encoding="utf-8").encode("utf-8")
+                if p in (INPUTS[0], INPUTS[4])
+                else (root / p).read_bytes()
+            ).hexdigest()
+            for p in INPUTS
+        },
         "outputs_sha256": {p: hashlib.sha256(b).hexdigest() for p, b in artifacts.items()},
         "schema_version": "E2-1",
+        "normalized_lf_text_inputs": [INPUTS[0], INPUTS[4]],
     }
     artifacts[CHECKS] = (json.dumps(checks, indent=2, sort_keys=True) + "\n").encode()
     return artifacts
