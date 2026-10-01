@@ -38,7 +38,7 @@ def setup() -> None:
         run([sys.executable, "-m", "venv", str(VENV)])
     python = venv_python()
     run([python, "-m", "pip", "install", "--upgrade", "pip"])
-    run([python, "-m", "pip", "install", "-e", ".[dev]"], cwd=ROOT / "backend")
+    run([python, "-m", "pip", "install", "-e", ".[dev,geo,models]"], cwd=ROOT / "backend")
     run([npm_command(), "ci"], cwd=FRONTEND)
 
 
@@ -54,6 +54,9 @@ def test() -> None:
     growth_verifier = ROOT / "scripts" / "evidence" / "verify_growth.py"
     if growth_verifier.exists():
         run([venv_python(), str(growth_verifier)])
+    underserved_verifier = ROOT / "scripts" / "evidence" / "verify_underserved.py"
+    if underserved_verifier.exists():
+        run([venv_python(), str(underserved_verifier)])
     e1_verifier = ROOT / "scripts" / "evidence" / "verify_crosswalk.py"
     if e1_verifier.exists():
         run([venv_python(), str(e1_verifier)])
