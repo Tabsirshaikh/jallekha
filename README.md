@@ -14,6 +14,19 @@ JalLekha measures water need independently of requests (Census water access, bui
 | [docs/TEAM_PLAN.md](docs/TEAM_PLAN.md) | Who builds what, research step, branches, how to push and merge, timeline |
 | [docs/features.csv](docs/features.csv) | Task tracker: owner, branch, dependencies, done-when, status |
 
+
+## Developer setup
+
+Python 3.11+ and Node.js 22+ are required. Commands work in Windows PowerShell and POSIX shells.
+
+```bash
+python tasks.py setup
+python tasks.py test
+python tasks.py lint
+```
+
+Run the API with `.venv/Scripts/python -m uvicorn app.main:app --app-dir backend --reload` on Windows, or the equivalent `.venv/bin/python` path on POSIX. Run the frontend with `npm run dev --prefix frontend`.
+
 ## Three layers
 
 | Layer | Features | Data |
