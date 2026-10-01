@@ -4,7 +4,7 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 
 | ID | Feature | Branch | Status |
 |---|---|---|---|
-| R-P3 | Research note | `research/p3` | Local draft, not pushed |
+| R-P3 | Research note | `research/p3` | IN_REVIEW (PR into `main`) |
 | T1 | F13 duplicate engine | `feat/t1-dedup` | Not started (needs S1, R-P3 merged) |
 | T2 | F5 forecast + backtest | `feat/t2-forecast` | Blocked: 21.9% / 35.1% protocol (`V-VERIFY_REVIEW.md`) missing |
 | T3 | F12 delivery proof | `feat/t3-delivery` | Blocked: S3 not started |
@@ -20,12 +20,12 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 
 ## R-P3: research note
 
-- **Implementation notes:** Research only, no feature code. Decisions per feature (keep / change / add) are in `docs/research/P3.md`. Main changes proposed: F14 adds Urdu ASR and drops NeMo (IndicConformer runs on `transformers` + ONNX); F5 pools scaled conformal residuals across sections (80/90% intervals), uses one global GBM, and benchmarks Chronos-2 if the team accepts it; D7 groundwater source is India-WRIS / CGWB; F18 adds a daily published head hash, `key_id` per entry and gap detection.
-- **Files:** `docs/research/P3.md`, `docs/P3_FEATURES.md`.
-- **Tests and results:** none (docs only). Every claim carries a link; [R]/[S] marks read vs search-summary sources.
+- **Implementation notes:** Research only, no feature code. Decisions per feature (keep / change / add) are in `docs/research/P3.md`. Main changes proposed: F14 adds Urdu ASR and drops NeMo (IndicConformer runs on `transformers` + ONNX); F5 pools scaled conformal residuals across sections (80/90% intervals) and uses one global GBM; Chronos-2 is a backtest-only candidate, owner decision pending (allowed only if it clearly beats seasonal naive and the owner confirms it fits the no-LLM rule); D7 groundwater source is India-WRIS / CGWB; F18 adds a daily published head hash, `key_id` per entry and gap detection. Liu et al.: method and Chicago Water Management data confirmed; venue not confirmed.
+- **Files:** `docs/research/P3.md`, `docs/P3_FEATURES.md`, `docs/P3_BUILD_PLAN.md` (plan + process-safety rule), `docs/JALLEKHA_FINAL_SOLUTION.md` (proposed edits, separate commit), `docs/features.csv` (R-P3 row only).
+- **Tests and results:** none (docs only; `main` has no `tasks.py` until S1 merges). Every claim carries a link; [R]/[S] marks read vs search-summary sources.
 - **How to run:** n/a.
-- **Open questions:** Chronos-2 vs "no LLM in scoring" (team); Liu et al. venue (confirm); D13 Chicago fresh pull (P1/owner); 21.9%/35.1% protocol (P1/owner).
-- **Status log:** 2026-10-01 draft; 2026-10-02 citation check, trimmed to 2 pages.
+- **Open questions:** Chronos-2 vs no-LLM rule (owner); D13 Chicago fresh pull (P1/owner); 21.9%/35.1% method (P1/owner).
+- **Status log:** 2026-10-01 draft; 2026-10-02 citation check, trimmed to 2 pages, Liu venue marked not confirmed, Chronos-2 marked owner decision pending, solution-doc edits split into their own commit, PR opened.
 
 ## T1: duplicate engine (F13)
 
