@@ -51,6 +51,9 @@ def test() -> None:
     d1_verifier = ROOT / "scripts" / "data" / "verify_d1.py"
     if d1_verifier.exists():
         run([venv_python(), str(d1_verifier)])
+    growth_verifier = ROOT / "scripts" / "evidence" / "verify_growth.py"
+    if growth_verifier.exists():
+        run([venv_python(), str(growth_verifier)])
     e1_verifier = ROOT / "scripts" / "evidence" / "verify_crosswalk.py"
     if e1_verifier.exists():
         run([venv_python(), str(e1_verifier)])

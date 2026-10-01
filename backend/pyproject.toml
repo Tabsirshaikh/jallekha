@@ -17,6 +17,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+geo = ["rasterio==1.4.4", "pyproj==3.7.2", "numpy==2.2.6", "shapely==2.1.2"]
 dev = [
   "httpx==0.28.1",
   "pytest==8.3.5",
