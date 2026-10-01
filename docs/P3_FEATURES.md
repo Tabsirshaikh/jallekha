@@ -4,7 +4,7 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 
 | ID | Feature | Branch | Status |
 |---|---|---|---|
-| R-P3 | Research note | `research/p3` | IN_REVIEW (PR into `main`) |
+| R-P3 | Research note | `research/p3` | IN_REVIEW ([PR #7](https://github.com/Tabsirshaikh/jallekha/pull/7)) |
 | T1 | F13 duplicate engine | `feat/t1-dedup` | Not started (needs S1, R-P3 merged) |
 | T2 | F5 forecast + backtest | `feat/t2-forecast` | Blocked: 21.9% / 35.1% protocol (`V-VERIFY_REVIEW.md`) missing |
 | T3 | F12 delivery proof | `feat/t3-delivery` | Blocked: S3 not started |
