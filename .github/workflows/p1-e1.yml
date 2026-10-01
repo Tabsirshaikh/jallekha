@@ -1,0 +1,56 @@
+name: "P1:E1"
+# Verifies Census 2011 to GHMC_2016_150 historical ward crosswalk artifacts,
+# ensuring wards 104 and 107 are never matched, missing polygons are preserved,
+# HH-14 headers are asserted, and coverage thresholds pass.
+
+on:
+  pull_request:
+    branches: [feat/d1-fetch, main]
+    paths:
+      - "data/derived/crosswalk/**"
+      - "data/verification/crosswalk_checks.json"
+      - "scripts/evidence/**"
+      - "backend/tests/test_e1_crosswalk.py"
+      - "docs/worklogs/E1.md"
+      - "docs/features.csv"
+      - ".github/workflows/p1-e1.yml"
+  push:
+    branches: [feat/e1-crosswalk]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-e1:
+    name: "P1:E1"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install openpyxl ruff pytest
+          pip install -e backend
+
+      - name: Build crosswalk artifacts
+        run: python scripts/evidence/build_crosswalk.py
+
+      - name: Verify crosswalk artifacts and data contracts
+        run: python scripts/evidence/verify_crosswalk.py
+
+      - name: Run E1 pytest test suite
+        run: pytest backend/tests/test_e1_crosswalk.py
+
+      - name: Lint and format check with Ruff
+        run: |
+          ruff check --config backend/pyproject.toml scripts/evidence backend/tests/test_e1_crosswalk.py
+          ruff format --config backend/pyproject.toml --check scripts/evidence backend/tests/test_e1_crosswalk.py

@@ -1,0 +1,69 @@
+{
+  "generated_at_utc": "2026-10-01T16:42:43Z",
+  "source_geo_version_hyderabad": "Census2011_Hyderabad",
+  "source_geo_version_rangareddy": "Census2011_Rangareddy",
+  "target_geo_version": "GHMC_2016_150",
+  "current_ward_claim": "BLOCKED — no official machine-readable 300-ward boundary verified",
+  "total_census_source_rows": 162,
+  "total_target_ward_polygons": 145,
+  "known_missing_polygon_wards": [
+    3,
+    4,
+    11,
+    13,
+    31,
+    113
+  ],
+  "never_matched_wards": [
+    104,
+    107
+  ],
+  "wards_104_107_never_matched": true,
+  "exact_ward_number_matches": 145,
+  "unmatched_never_matched_count": 2,
+  "unmatched_known_missing_count": 6,
+  "unmatched_non_ghmc_count": 9,
+  "mandal_fallback_count": 0,
+  "total_unmatched_source_rows": 17,
+  "unmatched_target_ward_nums": [
+    37,
+    104,
+    107,
+    115,
+    116
+  ],
+  "unmatched_target_ward_count": 5,
+  "total_coverage_pct": 89.51,
+  "ghmc_coverage_pct": 94.77,
+  "weighted_pop_coverage_pct": 90.47,
+  "duplicate_target_assignments": {
+    "relation/7857839": [
+      "GHMC (M Corp.) (Part) WARD NO.-0148",
+      "GHMC (M Corp.) (Part) WARD NO.-0148"
+    ],
+    "relation/7858296": [
+      "GHMC (M Corp.) WARD NO.-0134",
+      "GHMC (M Corp.) WARD NO.-0134"
+    ],
+    "relation/7849545": [
+      "GHMC (M Corp.) WARD NO.-0002",
+      "GHMC (M Corp.) WARD NO.-0002"
+    ],
+    "relation/7852447": [
+      "GHMC (M Corp.) (Part) WARD NO.-0009",
+      "GHMC (M Corp.) WARD NO.-0009"
+    ],
+    "relation/7861522": [
+      "GHMC (M Corp.) (Part) WARD NO.-0017",
+      "GHMC (M Corp.) WARD NO.-0017"
+    ]
+  },
+  "conflicting_district_assignments": {
+    "relation/7857839": [
+      "Rangareddy",
+      "Hyderabad"
+    ]
+  },
+  "rows_requiring_review": 17,
+  "basis": "DERIVED"
+}

@@ -1,0 +1,30 @@
+{
+  "generated_at_utc": "2026-10-01T16:42:43Z",
+  "target_geo_version": "GHMC_2016_150",
+  "current_ward_claim_blocked": true,
+  "known_missing_polygon_wards": [
+    3,
+    4,
+    11,
+    13,
+    31,
+    113
+  ],
+  "never_matched_wards": [
+    104,
+    107
+  ],
+  "wards_104_107_never_matched": true,
+  "total_source_rows": 162,
+  "total_matched": 145,
+  "total_unmatched_source": 17,
+  "ghmc_coverage_pct": 94.77,
+  "coverage_reported": true,
+  "all_rows_have_basis": true,
+  "all_rows_have_geo_version": true,
+  "one_to_many_weights_valid": true,
+  "output_sha256": {
+    "census_to_ghmc_2016.csv": "139765b1915ed2635ed96e5e4165a6fa557ea500708f6732218a85080a622472",
+    "crosswalk_summary.json": "afb134c2b21a39571e7e5d9a7012df95e551963468a6f437c86d31bdb7bb7a37"
+  }
+}
