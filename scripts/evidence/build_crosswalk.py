@@ -44,8 +44,11 @@ import json
 import re
 import sys
 import unicodedata
-from datetime import UTC, datetime
+from collections import Counter
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
+
+from location_validation import validate
 
 ROOT = Path(__file__).resolve().parents[2]
 RAW = ROOT / "data" / "raw"
@@ -83,27 +86,6 @@ SOURCE_URL_RGR = (
     " | https://github.com/datameet/Municipal_Spatial_Data/tree/master/Hyderabad"
 )
 
-# Mandal to GHMC Zone heuristic reference
-HYD_MANDAL_TO_ZONE: dict[str, str] = {
-    "Musheerabad": "Central",
-    "Secunderabad": "North",
-    "Tirumalgiri": "North",
-    "Maredpally": "North",
-    "Amberpet": "Central",
-    "Ammerpet": "Central",
-    "Himayatnagar": "Central",
-    "Nampally": "Central",
-    "Khairatabad": "West",
-    "Asifnagar": "Central",
-    "Bandlaguda": "South",
-    "Saidabad": "South",
-    "Charminar": "South",
-    "Bahadurpura": "South",
-    "Golkonda": "Central",
-    "Shaikpet": "West",
-}
-
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -131,7 +113,7 @@ def extract_target_ward_locality(name: str) -> str:
 
 
 def sha256_file(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(path.read_text(encoding="utf-8").encode()).hexdigest()
 
 
 # ---------------------------------------------------------------------------
@@ -168,12 +150,22 @@ def load_target_wards() -> list[dict]:
 
 
 def parse_readme_zone_map() -> dict[int, dict]:
-    """Parse DataMeet Readme.md to get official ward name, circle, and zone."""
+    """Parse community DataMeet reference zones; never evidence of Census correspondence."""
     readme_path = RAW / "geography" / "datameet" / "Readme.md"
     if not readme_path.is_file():
         return {}
 
     zone_map: dict[int, dict] = {}
+    zone = ""
+    for line in readme_path.read_text(encoding="utf-8").splitlines():
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if len(cells) == 2 and re.match(r"Ward\s+\d+", cells[1]):
+            if cells[0]:
+                zone = cells[0]
+            number = extract_target_ward_number(cells[1])
+            zone_map[number] = {"ward_name": cells[1], "zone": zone, "circle": ""}
+    if zone_map:
+        return zone_map
     current_zone = ""
     current_circle = ""
 
@@ -200,6 +192,48 @@ def parse_readme_zone_map() -> dict[int, dict]:
     return zone_map
 
 
+HYD_NAME_ALIASES = {
+    "ammerpet": "ameerpet",
+    "tirumalgiri": "tirumalagiri",
+    "maredpally": "maredpalle",
+    "himayatnagar": "himayathnagar",
+    "golkonda": "golconda",
+}
+
+
+def hyd_census_codes():
+    """Resolve mirror-specific local codes through HH-14's explicit town/ward/mandal keys."""
+    import openpyxl
+
+    book = openpyxl.load_workbook(
+        RAW / "census/hyderabad/hh14.xlsx", read_only=True, data_only=True
+    )
+    codes = {}
+    try:
+        for row in list(book.active.values)[7:]:
+            ward = str(row[7] or "").strip()
+            if not ward.isdigit() or int(ward) == 0 or row[9] != "Urban":
+                continue
+            key = (normalise_name(str(row[5])), str(row[6]).zfill(6), int(ward))
+            value = (str(row[2]).zfill(3), str(row[4]).zfill(5))
+            if key in codes and codes[key] != value:
+                raise ValueError("Ambiguous official HH-14 administrative code")
+            codes[key] = value
+    finally:
+        book.close()
+    return codes
+
+
+def required_count(raw, field):
+    try:
+        value = Decimal(str(raw))
+    except InvalidOperation as exc:
+        raise ValueError(f"Missing/non-numeric Census {field}") from exc
+    if not value.is_finite() or value < 0 or value != value.to_integral_value():
+        raise ValueError(f"Invalid Census {field}: {raw}")
+    return int(value)
+
+
 def load_hyderabad_pca() -> list[dict]:
     """Load Census 2011 Hyderabad PCA ward rows.
 
@@ -212,6 +246,7 @@ def load_hyderabad_pca() -> list[dict]:
         raise FileNotFoundError(f"Missing Hyderabad PCA: {pca_path}")
 
     rows = []
+    official_codes = hyd_census_codes()
     with pca_path.open(encoding="utf-8-sig") as fh:
         reader = csv.DictReader(fh)
         for r in reader:
@@ -234,21 +269,31 @@ def load_hyderabad_pca() -> list[dict]:
                 else:
                     non_ghmc_type = "Non_GHMC"
 
+            mandal = normalise_name(r.get("Name_Mandal", ""))
+            lookup = (
+                HYD_NAME_ALIASES.get(mandal, mandal),
+                r.get("Village_Code", "").zfill(6),
+                ward_num,
+            )
+            district_code, subdistrict_code = official_codes.get(lookup, ("", ""))
             rows.append(
                 {
                     "source_district": "Hyderabad",
+                    "source_original_district_code": r.get("DISTRICT_CODE", ""),
+                    "source_original_subdistt_code": r.get("Mandal_Code", ""),
                     "source_geo_version": SOURCE_GEO_VERSION_HYD,
                     "source_state_code": "28",
-                    "source_district_code": r.get("DISTRICT_CODE", "536").strip(),
-                    "source_subdistt_code": r.get("Mandal_Code", "").strip(),
+                    "source_district_code": district_code,
+                    "source_subdistt_code": subdistrict_code,
                     "source_mandal_name": r.get("Name_Mandal", "").strip(),
+                    "source_town_code": r.get("Village_Code", "").strip(),
                     "source_ward_code": ward_col,
                     "source_level": "WARD",
                     "source_name": vname,
                     "source_name_norm": normalise_name(vname),
                     "source_ward_num": ward_num,
-                    "source_tot_p": int(r.get("TOT_P", 0) or 0),
-                    "source_no_hh": int(r.get("No_HH", 0) or 0),
+                    "source_tot_p": required_count(r.get("TOT_P"), "TOT_P"),
+                    "source_no_hh": required_count(r.get("No_HH"), "No_HH"),
                     "is_ghmc": is_ghmc,
                     "non_ghmc_type": non_ghmc_type,
                     "source_url": SOURCE_URL_HYD,
@@ -295,25 +340,22 @@ def load_rangareddy_pca() -> list[dict]:
         m = re.search(r"WARD NO\.-(\d+)", raw_name)
         ward_num = int(m.group(1)) if m else (int(ward_col) if ward_col.isdigit() else None)
 
-        try:
-            tot_p = int(float(get_val(r, "TOT_P", "0") or 0))
-        except ValueError:
-            tot_p = 0
-        try:
-            no_hh = int(float(get_val(r, "No_HH", "0") or 0))
-        except ValueError:
-            no_hh = 0
+        tot_p = required_count(get_val(r, "TOT_P"), "TOT_P")
+        no_hh = required_count(get_val(r, "No_HH"), "No_HH")
 
         subdistt = get_val(r, "Subdistt")
 
         rows.append(
             {
                 "source_district": "Rangareddy",
+                "source_original_district_code": get_val(r, "District"),
+                "source_original_subdistt_code": subdistt,
                 "source_geo_version": SOURCE_GEO_VERSION_RGR,
                 "source_state_code": get_val(r, "State", "28"),
                 "source_district_code": get_val(r, "District", "537"),
                 "source_subdistt_code": subdistt,
                 "source_mandal_name": f"subdist_{subdistt}",
+                "source_town_code": get_val(r, "Town/Village"),
                 "source_ward_code": ward_col,
                 "source_level": "WARD",
                 "source_name": raw_name,
@@ -335,6 +377,12 @@ def load_rangareddy_pca() -> list[dict]:
 # ---------------------------------------------------------------------------
 
 CROSSWALK_FIELDS = [
+    "source_original_district_code",
+    "source_original_subdistt_code",
+    "source_state_code",
+    "source_district_code",
+    "source_subdistt_code",
+    "source_town_code",
     "source_district",
     "source_geo_version",
     "source_level",
@@ -357,6 +405,7 @@ CROSSWALK_FIELDS = [
     "notes",
     "basis",
     "reviewer_status",
+    "location_status",
     "source_url",
 ]
 
@@ -367,17 +416,15 @@ def build_crosswalk(
     zone_map: dict[int, dict],
 ) -> list[dict]:
     """Execute the multi-tier crosswalk matching logic adhering to all rules."""
+    target_counts = {}
+    for target in target_wards:
+        number = target["target_ward_num"]
+        target_counts[number] = target_counts.get(number, 0) + 1
     target_by_num: dict[int, dict] = {}
     for t in target_wards:
         wn = t["target_ward_num"]
         if wn is not None and wn not in target_by_num:
             target_by_num[wn] = t
-
-    target_by_locality: dict[str, list[dict]] = {}
-    for t in target_wards:
-        loc = t["target_locality_norm"]
-        if loc:
-            target_by_locality.setdefault(loc, []).append(t)
 
     crosswalk_rows = []
 
@@ -422,13 +469,17 @@ def build_crosswalk(
                 "retained unmatched per spec."
             )
 
+        elif target_counts.get(src_num, 0) > 1:
+            method = "unmatched_ambiguous_target"
+            notes = "Multiple differently named target polygons share this number; no first match."
+
         # Case 4: Exact ward number match
         elif src_num is not None and src_num in target_by_num:
             matched_target = target_by_num[src_num]
             method = "ward_number"
-            confidence = "high"
-            score = 1.0
-            weight = 1.0
+            confidence = "low"
+            score = 0.0
+            weight = 0.0
             zinfo = zone_map.get(src_num, {})
             zone_desc = (
                 f" (Zone: {zinfo.get('zone', 'N/A')}, Circle: {zinfo.get('circle', 'N/A')})"
@@ -449,6 +500,12 @@ def build_crosswalk(
             )
 
         row = {
+            "source_original_district_code": src["source_original_district_code"],
+            "source_original_subdistt_code": src["source_original_subdistt_code"],
+            "source_state_code": src["source_state_code"],
+            "source_district_code": src["source_district_code"],
+            "source_subdistt_code": src["source_subdistt_code"],
+            "source_town_code": src["source_town_code"],
             "source_district": district,
             "source_geo_version": src["source_geo_version"],
             "source_level": src["source_level"],
@@ -470,11 +527,30 @@ def build_crosswalk(
             "never_matched": never_matched,
             "notes": notes,
             "basis": BASIS,
-            "reviewer_status": "verified",
+            "reviewer_status": "needs_review" if matched_target else "excluded_by_rule",
+            "location_status": "PENDING_VALIDATION",
             "source_url": src["source_url"],
         }
         crosswalk_rows.append(row)
 
+    source_path = VERIFICATION / "location" / "census2011_wards.geojson"
+    source_layer = (
+        json.loads(source_path.read_text(encoding="utf-8")) if source_path.exists() else None
+    )
+    targets_path = RAW / "geography" / "datameet" / "ghmc-wards.geojson"
+    target_features = json.loads(targets_path.read_text(encoding="utf-8"))["features"]
+    statuses = validate(crosswalk_rows, target_features, source_layer)
+    for row, result in zip(crosswalk_rows, statuses, strict=True):
+        row["location_status"] = result["location_status"]
+        if row["location_status"] == "VERIFIED_EXACT_GEOMETRY":
+            row.update(
+                match_confidence="high",
+                match_score="1.0000",
+                reviewer_status="verified",
+                one_to_many_weight="1.0000",
+            )
+        elif row["target_ward_id"]:
+            row["notes"] += " Candidate only; location validation: " + row["location_status"] + "."
     return crosswalk_rows
 
 
@@ -489,6 +565,10 @@ def compute_summary(
     target_wards: list[dict],
 ) -> dict:
     """Compute audit metrics across crosswalk results."""
+    if len(crosswalk) != len(source_rows):
+        raise ValueError("Crosswalk/source row counts differ")
+    if len({t["target_ward_id"] for t in target_wards}) != len(target_wards):
+        raise ValueError("Duplicate target polygon IDs")
     matched_rows = [r for r in crosswalk if r["target_ward_id"]]
     unmatched_src = [r for r in crosswalk if not r["target_ward_id"]]
 
@@ -516,7 +596,7 @@ def compute_summary(
     ghmc_source_rows = [s for s in source_rows if s.get("is_ghmc", True)]
     ghmc_matched_rows = [
         r
-        for r, s in zip(crosswalk, source_rows, strict=False)
+        for r, s in zip(crosswalk, source_rows, strict=True)
         if s.get("is_ghmc", True) and r["target_ward_id"]
     ]
     ghmc_coverage_pct = (
@@ -525,7 +605,7 @@ def compute_summary(
 
     matched_pop = sum(
         s["source_tot_p"]
-        for s, r in zip(source_rows, crosswalk, strict=False)
+        for s, r in zip(source_rows, crosswalk, strict=True)
         if r["target_ward_id"]
     )
     total_pop = sum(s["source_tot_p"] for s in source_rows)
@@ -541,15 +621,30 @@ def compute_summary(
     for r in matched_rows:
         tid = r["target_ward_id"]
         target_districts.setdefault(tid, set()).add(r["source_district"])
-    conflicting_district = {k: list(v) for k, v in target_districts.items() if len(v) > 1}
+    conflicting_district = {k: sorted(v) for k, v in target_districts.items() if len(v) > 1}
 
-    rows_need_review = [r for r in crosswalk if r["match_confidence"] in ("low", "none")]
+    rows_need_review = [r for r in crosswalk if r["reviewer_status"] == "needs_review"]
 
     return {
-        "generated_at_utc": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "source_data_year": 2011,
+        "coverage_interpretation": "Candidate ward-number matches, not validated geography",
+        "weighted_pop_coverage_interpretation": "Candidate-source population; not transferred",
+        "location_status_counts": dict(
+            sorted(Counter(r["location_status"] for r in crosswalk).items())
+        ),
+        "validated_location_count": sum(
+            r["location_status"] == "VERIFIED_EXACT_GEOMETRY" for r in crosswalk
+        ),
+        "validated_location_coverage_pct": round(
+            100
+            * sum(r["location_status"] == "VERIFIED_EXACT_GEOMETRY" for r in crosswalk)
+            / len(ghmc_source_rows),
+            2,
+        ),
         "source_geo_version_hyderabad": SOURCE_GEO_VERSION_HYD,
         "source_geo_version_rangareddy": SOURCE_GEO_VERSION_RGR,
         "target_geo_version": TARGET_GEO_VERSION,
+        "target_vintage_status": "UNVERIFIED_HISTORICAL_150_WARD_LAYER",
         "current_ward_claim": "BLOCKED — no official machine-readable 300-ward boundary verified",
         "total_census_source_rows": len(source_rows),
         "total_target_ward_polygons": len(target_wards),
@@ -564,6 +659,19 @@ def compute_summary(
         "total_unmatched_source_rows": len(unmatched_src),
         "unmatched_target_ward_nums": unmatched_target_nums,
         "unmatched_target_ward_count": len(unmatched_target_nums),
+        "unmatched_target_polygon_count": len(unmatched_target_ids),
+        "candidate_target_polygon_count": len(matched_target_ids),
+        "candidate_target_polygon_coverage_pct": round(
+            100 * len(matched_target_ids) / len(all_target_ids), 2
+        ),
+        "candidate_target_unique_ward_count": len({r["target_ward_num"] for r in matched_rows}),
+        "ambiguous_target_numbers": sorted(
+            {
+                t["target_ward_num"]
+                for t in target_wards
+                if sum(x["target_ward_num"] == t["target_ward_num"] for x in target_wards) > 1
+            }
+        ),
         "total_coverage_pct": coverage_pct,
         "ghmc_coverage_pct": ghmc_coverage_pct,
         "weighted_pop_coverage_pct": weighted_pop_coverage_pct,
@@ -584,7 +692,14 @@ def compute_checks(crosswalk: list[dict], summary: dict) -> dict:
             assert r["never_matched"] == "true"
 
     return {
-        "generated_at_utc": summary["generated_at_utc"],
+        "source_data_year": 2011,
+        "validated_location_count": summary["validated_location_count"],
+        "normalized_lf_text_hashes": True,
+        "optional_location_source_sha256": hashlib.sha256(
+            (VERIFICATION / "location" / "census2011_wards.geojson").read_bytes()
+        ).hexdigest()
+        if (VERIFICATION / "location" / "census2011_wards.geojson").exists()
+        else None,
         "target_geo_version": TARGET_GEO_VERSION,
         "current_ward_claim_blocked": True,
         "known_missing_polygon_wards": summary["known_missing_polygon_wards"],
@@ -600,9 +715,8 @@ def compute_checks(crosswalk: list[dict], summary: dict) -> dict:
             r["target_geo_version"] == TARGET_GEO_VERSION for r in crosswalk
         ),
         "one_to_many_weights_valid": all(
-            abs(float(r["one_to_many_weight"]) - 1.0) < 1e-6
-            or r["mapping_method"].startswith("unmatched")
-            or r["mapping_method"] == "mandal_fallback"
+            float(r["one_to_many_weight"])
+            == (1.0 if r["location_status"] == "VERIFIED_EXACT_GEOMETRY" else 0.0)
             for r in crosswalk
         ),
         "output_sha256": {},
@@ -612,6 +726,48 @@ def compute_checks(crosswalk: list[dict], summary: dict) -> dict:
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
+
+
+def build_mandal_context(output_path):
+    """Fallback at original Census geography, explicitly not joined to target wards."""
+    import openpyxl
+    from build_evidence import metrics
+
+    with (VERIFICATION / "source_manifest.csv").open(encoding="utf-8", newline="") as handle:
+        urls = {r["file_path"]: r["source_url"] for r in csv.DictReader(handle)}
+    rows = []
+    for district, filename in (("Hyderabad", "hyderabad"), ("Rangareddy", "rangareddy")):
+        relative = f"data/raw/census/{filename}/hh14.xlsx"
+        book = openpyxl.load_workbook(ROOT / relative, read_only=True, data_only=True)
+        try:
+            for row in list(book.active.values)[7:]:
+                if row[9] != "Urban" or not str(row[8]).startswith("Sub-Dist"):
+                    continue
+                result = {
+                    "district": district,
+                    "district_code": str(row[2]).zfill(3),
+                    "subdistrict_code": str(row[4]).zfill(5),
+                    "subdistrict_name": row[5],
+                    "census_year": 2011,
+                    "scope": "ALL_URBAN_SUBDISTRICT_NOT_GHMC_ONLY",
+                    "target_ward_id": "",
+                    "target_mapping_status": "NOT_JOINED",
+                    "source_url": urls[relative],
+                }
+                for key, value in metrics(row).items():
+                    result[key] = value
+                    result[key + "_basis"] = "DERIVED" if value is not None else "UNAVAILABLE"
+                rows.append(result)
+        finally:
+            book.close()
+    rows.sort(key=lambda r: (r["district_code"], r["subdistrict_code"]))
+    keys = [(r["district_code"], r["subdistrict_code"]) for r in rows]
+    if len(keys) != len(set(keys)):
+        raise ValueError("Ambiguous Census urban subdistrict context")
+    with output_path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0]), lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
 
 
 def main() -> int:
@@ -660,20 +816,23 @@ def main() -> int:
     VERIFICATION.mkdir(parents=True, exist_ok=True)
 
     with CROSSWALK_OUT.open("w", encoding="utf-8", newline="") as fh:
-        writer = csv.DictWriter(fh, fieldnames=CROSSWALK_FIELDS)
+        writer = csv.DictWriter(fh, fieldnames=CROSSWALK_FIELDS, lineterminator="\n")
         writer.writeheader()
         writer.writerows(crosswalk)
     print(f"\n  Written: {CROSSWALK_OUT.relative_to(ROOT)}")
 
-    with SUMMARY_OUT.open("w", encoding="utf-8") as fh:
+    with SUMMARY_OUT.open("w", encoding="utf-8", newline="\n") as fh:
         json.dump(summary, fh, indent=2, ensure_ascii=False)
     print(f"  Written: {SUMMARY_OUT.relative_to(ROOT)}")
 
+    context_path = DERIVED / "census_mandal_context.csv"
+    build_mandal_context(context_path)
     checks["output_sha256"] = {
+        "census_mandal_context.csv": sha256_file(context_path),
         "census_to_ghmc_2016.csv": sha256_file(CROSSWALK_OUT),
         "crosswalk_summary.json": sha256_file(SUMMARY_OUT),
     }
-    with CHECKS_OUT.open("w", encoding="utf-8") as fh:
+    with CHECKS_OUT.open("w", encoding="utf-8", newline="\n") as fh:
         json.dump(checks, fh, indent=2, ensure_ascii=False)
     print(f"  Written: {CHECKS_OUT.relative_to(ROOT)}")
 

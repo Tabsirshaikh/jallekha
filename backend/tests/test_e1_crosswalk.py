@@ -99,7 +99,7 @@ def test_crosswalk_coverage_reported() -> None:
     assert checks["coverage_reported"] is True
     assert summary["ghmc_coverage_pct"] >= 85.0
     assert summary["total_census_source_rows"] == 162
-    assert summary["exact_ward_number_matches"] == 145
+    assert summary["exact_ward_number_matches"] == 144
 
 
 def test_hh14_headers_and_zero_based_indices() -> None:

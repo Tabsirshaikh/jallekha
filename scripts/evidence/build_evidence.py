@@ -144,6 +144,7 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
             "source_url": "",
             "hh14_source_url": "",
             "join_status": "NO_CROSSWALK",
+            "location_status": "NO_TARGET_CANDIDATE",
             "review_required": True,
             "allocation_eligible": False,
             "quality_flags": "HISTORICAL;FACILITIES_UNAVAILABLE",
@@ -158,6 +159,7 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
             row.update(
                 source_district=source["source_district"],
                 source_ward_code=source["source_ward_code"],
+                location_status=source["location_status"],
                 source_url=source["source_url"],
             )
             hh_path = INPUTS[2] if source["source_district"] == "Hyderabad" else INPUTS[3]
@@ -165,10 +167,18 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
             candidates = hh.get(source["source_district"], {}).get(
                 int(source["source_ward_num"]), []
             )
+            candidates = [
+                r
+                for r in candidates
+                if str(r[4]).zfill(5) == source["source_subdistt_code"].zfill(5)
+                and str(r[6]).zfill(6) == source["source_town_code"].zfill(6)
+            ]
             row["join_status"] = "HH14_MISSING" if not candidates else "HH14_AMBIGUOUS"
             if len(candidates) == 1:
                 row["join_status"] = "PROVISIONAL_NUMBER_ONLY"
-                row["quality_flags"] += ";LOCATION_UNVERIFIED"
+                row["quality_flags"] += ";" + source["location_status"]
+                if source["location_status"] == "VERIFIED_EXACT_GEOMETRY":
+                    row["join_status"] = "HISTORICAL_LOCATION_VALIDATED"
                 row.update(metrics(candidates[0]))
                 for key, field in (("population", "source_tot_p"), ("households", "source_no_hh")):
                     value = source[field]

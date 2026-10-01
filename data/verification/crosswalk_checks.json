@@ -1,5 +1,8 @@
 {
-  "generated_at_utc": "2026-10-01T16:42:43Z",
+  "source_data_year": 2011,
+  "validated_location_count": 0,
+  "normalized_lf_text_hashes": true,
+  "optional_location_source_sha256": null,
   "target_geo_version": "GHMC_2016_150",
   "current_ward_claim_blocked": true,
   "known_missing_polygon_wards": [
@@ -16,15 +19,16 @@
   ],
   "wards_104_107_never_matched": true,
   "total_source_rows": 162,
-  "total_matched": 145,
-  "total_unmatched_source": 17,
-  "ghmc_coverage_pct": 94.77,
+  "total_matched": 144,
+  "total_unmatched_source": 18,
+  "ghmc_coverage_pct": 94.12,
   "coverage_reported": true,
   "all_rows_have_basis": true,
   "all_rows_have_geo_version": true,
   "one_to_many_weights_valid": true,
   "output_sha256": {
-    "census_to_ghmc_2016.csv": "139765b1915ed2635ed96e5e4165a6fa557ea500708f6732218a85080a622472",
-    "crosswalk_summary.json": "afb134c2b21a39571e7e5d9a7012df95e551963468a6f437c86d31bdb7bb7a37"
+    "census_mandal_context.csv": "10e04774306c56d0a9eef1ec115741767b7abe8c005b659c3cfeb3fda307f3a7",
+    "census_to_ghmc_2016.csv": "b2a920ebbb53e21e9e4711c2db11bb4522b94f7f25f006fa0573c271ac5c6dc5",
+    "crosswalk_summary.json": "3e0b77dc7f49d07fcdb199aa5fcda2a102a0e805bc9a4fe0381f54d1be29dabb"
   }
 }

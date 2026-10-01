@@ -178,18 +178,63 @@ def main() -> int:
         if not target_path.is_file():
             target_path = ROOT / "data" / "verification" / filename
         require(target_path.is_file(), f"Hashed file missing: {target_path}")
-        actual_hash = hashlib.sha256(target_path.read_bytes()).hexdigest()
+        actual_hash = hashlib.sha256(target_path.read_text(encoding="utf-8").encode()).hexdigest()
         require(
             actual_hash == expected_hash,
             f"Hash mismatch for {filename}: expected {expected_hash}, got {actual_hash}",
         )
 
+    from build_crosswalk import (
+        build_crosswalk,
+        load_hyderabad_pca,
+        load_rangareddy_pca,
+        load_target_wards,
+        parse_readme_zone_map,
+    )
+
+    expected = build_crosswalk(
+        load_hyderabad_pca() + load_rangareddy_pca(), load_target_wards(), parse_readme_zone_map()
+    )
+    require(
+        rows == [{k: str(v) for k, v in r.items()} for r in expected],
+        "Crosswalk differs from recomputed location validation",
+    )
+    from tempfile import TemporaryDirectory
+
+    from build_crosswalk import build_mandal_context, compute_checks, compute_summary
+
+    calculated_summary = compute_summary(
+        expected, load_hyderabad_pca() + load_rangareddy_pca(), load_target_wards()
+    )
+    require(summary == calculated_summary, "Summary metrics differ from recomputed values")
+    calculated_checks = compute_checks(expected, calculated_summary)
+    require(
+        {k: v for k, v in checks.items() if k != "output_sha256"}
+        == {k: v for k, v in calculated_checks.items() if k != "output_sha256"},
+        "Verification metadata differs from recomputation",
+    )
+    with TemporaryDirectory() as directory:
+        temporary = Path(directory) / "mandal.csv"
+        build_mandal_context(temporary)
+        require(
+            temporary.read_bytes()
+            == (ROOT / "data/derived/crosswalk/census_mandal_context.csv").read_bytes(),
+            "Mandal fallback differs from original Census data",
+        )
+    verified = [r for r in rows if r["location_status"] == "VERIFIED_EXACT_GEOMETRY"]
+    require(summary["validated_location_count"] == len(verified), "Validated count mismatch")
+    for row in rows:
+        if row["target_ward_id"] and row["location_status"] != "VERIFIED_EXACT_GEOMETRY":
+            require(row["reviewer_status"] == "needs_review", "Unvalidated join labelled reviewed")
+            require(row["match_confidence"] != "high", "Number-only join labelled high confidence")
+    print(f"  Validated historical locations: {len(verified)}; other matches are candidates only")
+
     # 8. Verify HH-14 headers and 0-based column indexing
     verify_hh14_headers()
 
     print("All E1 verification checks passed successfully!")
-    print(f"  GHMC Ward coverage:   {summary['ghmc_coverage_pct']}%")
-    print(f"  Total matched rows:   {summary['exact_ward_number_matches']}")
+    print(f"  GHMC source candidate coverage:   {summary['ghmc_coverage_pct']}%")
+    print(f"  Number-only candidate rows:   {summary['exact_ward_number_matches']}")
     print("  Wards 104/107 never matched: verified (0 assignments)")
     print("  Known missing wards:  verified (0 false matches)")
     print("  HH-14 headers:        asserted with 0-based indices")

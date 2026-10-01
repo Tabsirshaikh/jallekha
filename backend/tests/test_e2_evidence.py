@@ -70,9 +70,17 @@ def test_real_artifacts_and_failed_joins():
 @pytest.mark.parametrize("candidate_count,status", [(0, "HH14_MISSING"), (2, "HH14_AMBIGUOUS")])
 def test_hh_join_failure_never_invents_values(monkeypatch, candidate_count, status):
     # Supply absent or duplicate HH-14 records for every ward while preserving the real crosswalk.
-    source = {i: [tuple([None] * 139)] * candidate_count for i in range(1, 151)}
-    monkeypatch.setattr(evidence, "load_hh", lambda *_: source)
+    with (ROOT / evidence.INPUTS[0]).open(encoding="utf-8", newline="") as handle:
+        crosswalk = list(csv.DictReader(handle))
+    sources = {"536": {}, "537": {}}
+    for record in crosswalk:
+        row = [None] * 139
+        row[4], row[6] = record["source_subdistt_code"], record["source_town_code"]
+        sources[record["source_district_code"]].setdefault(
+            int(record["source_ward_num"]), []
+        ).extend([tuple(row)] * candidate_count)
+    monkeypatch.setattr(evidence, "load_hh", lambda _path, district: sources[district])
     rows = list(csv.DictReader(io.StringIO(evidence.build()[evidence.OUTPUT].decode())))
     affected = [r for r in rows if r["join_status"] == status]
-    assert len(affected) == 135
+    assert len(affected) == 134
     assert all(r[k] == "" for r in affected for k in evidence.METRICS)
