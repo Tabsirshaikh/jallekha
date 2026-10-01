@@ -45,6 +45,9 @@ def setup() -> None:
 def test() -> None:
     run([venv_python(), "-m", "pytest", "backend/tests"])
     run([npm_command(), "run", "test", "--", "--run"], cwd=FRONTEND)
+    data_verifier = ROOT / "scripts" / "data" / "verify_manifest.py"
+    if data_verifier.exists():
+        run([venv_python(), str(data_verifier)])
 
 
 def lint() -> None:
@@ -57,6 +60,7 @@ def lint() -> None:
             "--config",
             "backend/pyproject.toml",
             "backend",
+            "scripts",
             "tasks.py",
         ]
     )
@@ -70,6 +74,7 @@ def lint() -> None:
             "backend/pyproject.toml",
             "--check",
             "backend",
+            "scripts",
             "tasks.py",
         ]
     )
