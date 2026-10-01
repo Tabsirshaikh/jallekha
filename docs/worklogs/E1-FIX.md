@@ -88,3 +88,4 @@ Mandal context supplies no population distribution across new ward boundaries.
 No claim of perfection or validated field geography is made. Code checks do not remove data blockers.
 
 Final local tasks.py check PASS: 34 backend tests, 1 frontend test; all raw/D1/E1/E2 verifiers, Ruff formatting/lint, ESLint and TypeScript. Raw data unchanged.
+PR: https://github.com/Tabsirshaikh/jallekha/pull/9; stacked base feat/e2-evidence. Code repair IN_REVIEW; E1 geographic completion remains pending authoritative data.

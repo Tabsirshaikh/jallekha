@@ -45,4 +45,4 @@
 "X1","README / slides / 3-minute demo script / release tag","all","P4","feat/x1-docs","all","Demo runs offline except map tiles","TODO","","Everyone reviews"
 "Q1","Filling points to show (OSM stand-ins are ASSUMED)","decision","owner","","","Owner decides","ON_HOLD","",""
 "Q2","Use reservoir levels (only with a machine-readable source)","decision","owner","","","Owner decides","ON_HOLD","",""
-"E1-FIX","Repair historical location validation and false confidence claims","F1","P1","codex/e1-location-validation","E1 E2","No number-only verified claims; geometry and Census-key regressions pass","IN_PROGRESS","","Location source data still required"
+"E1-FIX","Repair historical location validation and false confidence claims","F1","P1","codex/e1-location-validation","E1 E2","No number-only verified claims; geometry and Census-key regressions pass","IN_REVIEW","https://github.com/Tabsirshaikh/jallekha/pull/9","Code repair verified; authoritative location source still required"
