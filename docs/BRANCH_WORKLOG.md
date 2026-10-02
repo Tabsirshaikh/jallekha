@@ -211,3 +211,31 @@ The pull-request description must summarize the same information and link to thi
   - P1 reviews.
   - The section-to-ward booking transfer is the remaining E4/E5 blocker.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/27
+
+## `feat/a2-service` — `A2`
+
+- **Owner / date:** P2, 2026-10-02.
+- **Purpose:** Service class, route and need weight per ward (F7), as input to A3 (fair queue) and A4 (scheduled supply).
+- **What we found:**
+  - After E2's 2009-to-2016 crosswalk, no GHMC ward has a majority without tap water (non-tap share max 28.8%, median 1.7%). Unconnected pockets are smaller than a ward, so "no connection" must come from officer input.
+  - Census 2011 records the water source, not supply hours, so "piped intermittent" cannot be derived either.
+  - Off-premises water (WAD) separates wards: 1-28%; the western corridor and Barkas are highest.
+  - The solution doc's "68.4%" off-premises figure is Secunderabad Cantonment Board ward 2, which is not in GHMC. The highest GHMC 2009 Census ward is 33.4% (ward 112). Correct it before slides.
+- **What we changed:**
+  - `backend/app/services/service_models.py`:
+    - `build_ward_needs(evidence, overrides)` gives each ward a class (`piped_regularity_unknown` by default; `no_connection` if non-tap >= 50%, ASSUMED; officer may set any class), a route (`no_connection` -> scheduled F9, piped -> booked F8), need weight `1 + 2*WAD + 1*CAD + 1*hardship` (ASSUMED policy weights), and entitlement = households x need weight.
+    - `scheduled_supply_candidate` when WAD >= 15% (ASSUMED).
+    - `needs_officer_check` with reasons `CENSUS_UNAVAILABLE` / `E2_REVIEW_REQUIRED` / `SCHEDULED_SUPPLY_CANDIDATE`.
+    - Overrides need a reason, a known ward and class, and at most one per ward. `override_event()` gives the ledger entry arguments.
+    - Distance is not part of the need weight.
+  - `config/allocation.py`: thresholds and weights, with sources.
+- **Validation:**
+  - 13 tests in `backend/tests/test_a2_service_models.py` were written first (ImportError), then pass. They cover rules, formula, monotone need, ineligible wards, check reasons, overrides (valid, invalid, duplicate), override to ledger entry (verified chain), and real E2 data (145 wards, 143 with entitlement, 0 Census no-connection).
+  - Real data: need weight 1.15-1.79 (median 1.33), 20 scheduled-supply candidates, 43 wards flagged for an officer check.
+  - `python tasks.py test`: 252 pass, 1 skipped (P3's D6 test, which passes once its skip is removed). `python tasks.py lint` passes.
+- **Known limitations:** Weights and thresholds are policy assumptions for officer sliders (U7). Values come from Census 2011 via an approximate crosswalk.
+- **Handoff / next step:**
+  - A3 orders bookings with `entitlement`; A4 serves `scheduled` wards and candidates the officer confirms.
+  - T6 stores override entries.
+  - T7 explains `need_weight` components.
+- **Pull request:** pending

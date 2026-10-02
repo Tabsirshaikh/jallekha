@@ -50,6 +50,22 @@ class AllocationConfig:
     # Seconds before an OSRM request falls back to the estimate. Ported from v1. Basis: ASSUMED.
     osrm_timeout_seconds: float = 3.0
 
+    # Service models (A2, F7). A ward is "no_connection" by the Census rule only when most
+    # households do not use tap water. Basis: ASSUMED threshold. Ward-level Census 2011 in GHMC
+    # never reaches it (max ~29%), so no_connection normally comes from officer input.
+    no_connection_non_tap_share: float = 0.5
+    # Share of households fetching water outside their premises (WAD) at which a piped ward is
+    # flagged for an officer to check for scheduled supply (F9 "wards F1/F4 flag").
+    # Basis: ASSUMED; about the 90th percentile of E2 wards (16.5%).
+    scheduled_candidate_wad: float = 0.15
+    # Need weight = 1 + wad*WAD + cad*CAD + hardship*hardship (F8 entitlement = households x
+    # need weight). Water access counts double phone access and hardship: the solution document
+    # puts water need first and booking access second. Basis: ASSUMED policy weights; the
+    # officer sliders (U7) change them, and every change is a ledger entry.
+    need_weight_wad: float = 2.0
+    need_weight_cad: float = 1.0
+    need_weight_hardship: float = 1.0
+
     # Booking replay windows (A1, F19). Source: docs/research/P2.md: summer 2025 is the latest
     # complete summer on the pre-Feb-2026 section map (977,933 bookings); 2023 kept for
     # continuity with the solution document. Month totals REAL; daily split SYNTHETIC.
