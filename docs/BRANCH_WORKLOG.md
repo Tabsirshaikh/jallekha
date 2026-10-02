@@ -77,6 +77,17 @@ The pull-request description must summarize the same information and link to thi
 - **Handoff / next step:** U4 preview scope is complete. Integrate the real route / arrival / OTP endpoints when available, preserving server-side geofence and outcome decisions.
 - **Pull request:** pending.
 
+## `feat/u5-evidence` — `U5`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Give officers an atlas for historical water-access and growth evidence, booking equity, and under-served field-check hypotheses.
+- **What we found:** Merged E2–E6 outputs include ward evidence and historical polygons, but the Census join is approximate, the ward geography is incomplete and historical, section-to-ward booking placement is approximate, and field-check flags are hypotheses rather than ground truth. T10 is not needed to render this local snapshot.
+- **What we changed:** Replaced the officer Water Access placeholder with a localized, lazy-loaded evidence experience. It includes a selectable 145-polygon historical ward map, ward search and evidence details, Census 2011 water-access context, Open Buildings 2016–2023 building-change signals, exact section-level booking concentration, approximate ward booking rates, and E5 field-check candidates with reason values and thresholds. `scripts/frontend/build_u5_snapshot.py` regenerates the local JSON snapshot from merged E2–E6 outputs.
+- **Validation:** Frontend lint, production build, and `git diff --check` pass. The production build splits U5 into a separate evidence chunk. Added `.github/workflows/p4-u5.yml` to repeat lint and build in CI.
+- **Known limitations:** The map is the incomplete `GHMC_2016_150` historical scheme, not current boundaries. Census values use an approximate 2009-to-2016 crosswalk and refer to 2011. Open Buildings indicates building change only, not population growth. Citywide section booking totals are exact; ward rates use approximate section placement. Field-check flags are screening hypotheses and do not establish unmet need, neglect, or entitlement. Snapshot data must be regenerated when source outputs change; no live T10 integration is included.
+- **Handoff / next step:** Refresh the generated snapshot from reviewed E2–E6 outputs and connect T10 when its API contract is ready. Keep unavailable metrics null and preserve the historical/approximate labels.
+- **Pull request:** pending.
+
 ## `research/p1` — `R-P1`
 
 - **Owner / date:** P1 (Yaseer), 2026-10-01.
