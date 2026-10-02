@@ -4,8 +4,8 @@ import App from "./App";
 import { LocaleProvider } from "./i18n";
 
 describe("App", () => {
-  it("renders and switches between the officer, resident, and driver workspaces", () => {
-    render(
+  it("translates resident and driver shells and applies Urdu right-to-left direction", () => {
+    const { container } = render(
       <LocaleProvider>
         <App />
       </LocaleProvider>,
@@ -13,10 +13,18 @@ describe("App", () => {
 
     expect(screen.getByRole("heading", { name: "Officer console" })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Resident" }));
-    expect(screen.getByRole("heading", { name: "Water support, made easier." })).toBeInTheDocument();
+    const languagePicker = screen.getByRole("combobox", { name: "Language" });
+    fireEvent.change(languagePicker, { target: { value: "te" } });
+    fireEvent.click(screen.getByRole("button", { name: "నివాసి" }));
+    expect(screen.getByRole("heading", { name: "నీటి సహాయం ఇప్పుడు సులభం." })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Driver" }));
-    expect(screen.getByRole("heading", { name: "Your workday" })).toBeInTheDocument();
+    fireEvent.change(languagePicker, { target: { value: "ur" } });
+    expect(container.querySelector(".app-frame")).toHaveAttribute("dir", "rtl");
+    expect(container.querySelector(".app-frame")).toHaveAttribute("lang", "ur");
+    fireEvent.click(screen.getByRole("button", { name: "ٹینکر ڈرائیور" }));
+    expect(screen.getByRole("heading", { name: "آج کا کام" })).toBeInTheDocument();
+
+    fireEvent.change(languagePicker, { target: { value: "hi" } });
+    expect(screen.getByRole("heading", { name: "आज का काम" })).toBeInTheDocument();
   });
 });
