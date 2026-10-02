@@ -1,0 +1,65 @@
+name: "P3:T7"
+
+# T7 explanations and contest (F16): ward and booking explanations equal E2 / A2 / A3 values
+# (real ward_evidence.csv and a real replayed day), counterfactual re-run on A3, templates in
+# te/ur/hi/en, contest reply needs a reason, both in the stored ledger with a verified chain.
+on:
+  push:
+    branches: [feat/t7-explain]
+  pull_request:
+    branches: [main]
+    paths:
+      - "backend/app/services/explain.py"
+      - "backend/app/services/contest.py"
+      - "backend/app/services/fair_queue.py"
+      - "backend/app/services/service_models.py"
+      - "backend/app/services/booking_groups.py"
+      - "backend/app/services/replay.py"
+      - "backend/app/services/water_debt.py"
+      - "backend/app/services/ledger*.py"
+      - "backend/app/config/explain.py"
+      - "backend/app/config/allocation.py"
+      - "backend/app/models/**"
+      - "backend/tests/services/test_explain.py"
+      - "backend/tests/services/test_contest.py"
+      - "data/derived/evidence/ward_evidence.csv"
+      - "data/derived/crosswalk/section_to_ward_2016.csv"
+      - "data/raw/hmwssb_tankers_portal/**"
+      - ".github/workflows/p3-t7.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  explain:
+    name: "P3:T7"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -e 'backend[dev,geo]'
+      - name: Explanation, counterfactual, contest, A3 queue and A2 need tests
+        run: >-
+          pytest
+          backend/tests/services/test_explain.py
+          backend/tests/services/test_contest.py
+          backend/tests/test_a3_fair_queue.py
+          backend/tests/test_a2_service_models.py
+      - name: Lint T7 files
+        run: >-
+          ruff check --config backend/pyproject.toml
+          backend/app/services/explain.py backend/app/services/contest.py
+          backend/app/config/explain.py backend/app/models/contest.py
+          backend/app/models/contest_reply.py backend/tests/services/test_explain.py
+          backend/tests/services/test_contest.py
+      - name: Format check T7 files
+        run: >-
+          ruff format --check --config backend/pyproject.toml
+          backend/app/services/explain.py backend/app/services/contest.py
+          backend/app/config/explain.py backend/app/models/contest.py
+          backend/app/models/contest_reply.py backend/tests/services/test_explain.py
+          backend/tests/services/test_contest.py
