@@ -1,16 +1,18 @@
 {
   "inputs_sha256": {
     "data/derived/crosswalk/census_to_ghmc_2016.csv": "b2a920ebbb53e21e9e4711c2db11bb4522b94f7f25f006fa0573c271ac5c6dc5",
+    "data/derived/crosswalk/section_to_ward_2016.csv": "7cd5f22f86e0418601aa46f65b08a2e8b85acc5bbcd312adcaab5ffb6faabf25",
     "data/derived/evidence/evidence_summary.json": "bae0ad0035c4f3ecd7308a11fc99893fccb5d67f14da4d69f243b7167a635560",
     "data/derived/evidence/ward_evidence.csv": "55283537df47923deca25f8347c46e4d9c5455089527a36f3e6632ab4e2cc54c",
     "data/derived/growth/growth.csv": "947ba3b5c30c2d16aec9202c947ace47e5a3d47ea8e0fcd31aea5448fa8bef2f",
     "data/derived/growth/summary.json": "c09ac13f36764570f6c1ea304910293bcad6f856e200dc35cd93e8ed3f7c55c0",
+    "data/derived/population/ward_population_2025.csv": "d2fa9e5abbcf32b6cfa636e6b3dd052230547d5dbe8a532260944151d2eff8ab",
     "data/raw/geography/datameet/ghmc-wards.geojson": "3fdfef8e787ed543d816fee36a6097c350c4dff2423aae7fa203bb49cbd6edc2",
     "data/verification/source_manifest.csv": "32955b71b8c2162e89bcfc0dfb3e49d934d62951bb9a4d59d39557e0c53cdc37"
   },
   "outputs_sha256": {
-    "data/derived/underserved/field_checks.json": "6330d5a33c6e7dd3f7f032ed48271382b87ba3b27114001968cf3fe172845734",
-    "data/derived/underserved/summary.json": "91495e6f2518af9971cb24ea8066e6fd4917eb0903096500dd6a2e9d2fcd1f03"
+    "data/derived/underserved/field_checks.json": "48c699c0065b9f37862c514f216ef4f1240f68b3883710e5e615e32206dc1232",
+    "data/derived/underserved/summary.json": "e70ae40ddaf5531e5195ee28eb205a3f92dffe62cd0f5f9e8f0e95c47098605f"
   },
-  "schema_version": "E5-1"
+  "schema_version": "E5-2"
 }

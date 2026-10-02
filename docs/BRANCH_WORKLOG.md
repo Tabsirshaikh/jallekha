@@ -484,3 +484,28 @@ The pull-request description must summarize the same information and link to thi
   - One connection can serve many flats.
 - **Handoff / next step:** E5 uses `households_2025_central` (reference year 2025); A2 can switch entitlement to 2025 households.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/40
+
+## `feat/e5-screen` — E5 under-served field checks switched on (F4)
+
+- **Owner / date:** P2 (covering P1), 2026-10-02.
+- **Purpose:** E5 produced no field checks: it requires current households (<= 2 years old) and a ward booking transfer, and neither existed.
+- **What we found:**
+  - The 2-year rule is right for household exposure, but need shares (WAD, CAD, hardship) only exist in Census 2011 and are structural.
+  - The portal never publishes zero rows (smallest section-month value is 1), so a section missing from an existing month had no bookings. Whole missing months (Dec 2022) stay missing.
+  - A latent bug: `screen()` crashed (KeyError) when eligible and blocked wards were mixed, because per-model scores exist only for eligible wards.
+- **What we changed:**
+  - `config/underserved.py`: `max_need_reference_age_years = 15` (ASSUMED) for need shares; households keep the 2-year rule. `underserved.py` applies each limit to its own field, and the per-model lookup bug is fixed (regression test added).
+  - `build_underserved.py`:
+    - Households = 2025 central estimate (#40), reference 2025.
+    - Bookings = Jan-Dec 2025 HMWSSB portal summed over sections placed in the ward (#33/#39); period complete when all 12 city months exist.
+    - Approximate transfer accepted.
+    - Every row carries `input_notes` (`APPROXIMATE_BOOKING_TRANSFER`, `HISTORICAL_NEED_REFERENCE_2011`, `MODELLED_HOUSEHOLDS_2025`, and `ABSENT_SECTION_MONTH_COUNTED_AS_ZERO` where it applies).
+    - Wards without a placed section stay in data review.
+  - `verify_underserved.py` and E6 test/verifier check consistency instead of "all closed". E6's field layer mirrors E5.
+- **Result:** **107 wards screened, 7 field-check candidates** (peer-median screen): Barkas (WAD 28%, bookings 0.03x peers), Kanchanbagh, Falaknuma, IS Sadan, Chandrayangutta, Shastripuram, Mailardevpally. All are old-city/south wards with high off-premises water, low booking use, and high phone deficit or hardship. 38 wards stay in data review (37 without a placed section, partial-census wards).
+- **Validation:** E5 tests were rewritten and added first (separate age limits, real screen, blockers, mixed-cohort regression), then pass. `python tasks.py test`: 426 pass. `python tasks.py lint` passes. All P1 verifiers pass.
+- **Known limitations:**
+  - A ward with an unplaced section may be undercounted and look under-served (stated in limits).
+  - Candidates only mean "send someone to check".
+  - The Bayesian models (NB/BYM2) are not run in the build (peer-median only).
+- **Pull request:** pending

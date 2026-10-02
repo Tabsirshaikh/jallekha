@@ -10,6 +10,9 @@ class UnderservedConfig:
     ratio_quantile: float = 0.20
     wad_quantile: float = 0.75
     max_reference_age_years: int = 2
+    # Need shares (WAD, non-tap, CAD, hardship) are structural and only Census 2011 has them by
+    # ward, so they may be older than household counts. Basis: ASSUMED; flagged on every row.
+    max_need_reference_age_years: int = 15
     credible_mass: float = 0.95
     chains: int = 2
     draws: int = 1000
