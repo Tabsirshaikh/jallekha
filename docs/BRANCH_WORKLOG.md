@@ -717,4 +717,4 @@ The pull-request description must summarize the same information and link to thi
   - The confidence gate is a stand-in; swap in T9's gate (same protocol) when it merges.
   - Routing of scheduled points is A4's `plan_scheduled_supply` (the registry starts empty). Booked trips are single loads (station → household → station).
   - Cross-station sharing needs HMWSSB's agreement (an officer decision).
-- **Pull request:** (added after opening)
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/49
