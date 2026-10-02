@@ -18,6 +18,7 @@ INPUTS = (
     "data/derived/evidence/ward_evidence.csv",
     "data/derived/equity/summary.json",
     "data/derived/underserved/field_checks.json",
+    "data/derived/equity/wards.csv",
 )
 OUTPUT_DIR = "data/derived/coverage"
 MANIFEST = f"{OUTPUT_DIR}/layers.json"
@@ -30,8 +31,14 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
         evidence_rows = list(csv.DictReader(handle))
     equity_summary = json.loads((root / INPUTS[2]).read_text(encoding="utf-8"))
     underserved = json.loads((root / INPUTS[3]).read_text(encoding="utf-8"))
+    with (root / INPUTS[4]).open(encoding="utf-8-sig", newline="") as handle:
+        equity_wards = list(csv.DictReader(handle))
     layers, manifest = build_coverage_layers(
-        ward_geojson, evidence_rows, underserved["rows"], equity_summary
+        ward_geojson,
+        evidence_rows,
+        underserved["rows"],
+        equity_summary,
+        equity_wards=equity_wards,
     )
     artifacts = {
         f"{OUTPUT_DIR}/{layer_id}.geojson": (

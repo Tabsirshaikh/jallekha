@@ -66,6 +66,7 @@ HMWSSB delivers almost every tanker that is booked (1,316,215 bookings and 1,315
 | D16 | Booking caps and prices by category (domestic 1 per 2 days or 8/month Rs 500; apartments 5-24 flats 2/day or 30/month; 25-200 flats 3/day or 60/month; commercial 1/day or 30/month Rs 850), HMWSSB guidelines; channels 47% IVRS / 46% app / 7% web (Apr 2026, news) | **REAL** | F8 |
 | D17 | Fleet and stations (577 tankers early 2024; 1,150 tankers, 90 filling stations, 150 filling points Dec 2025; 900 to 1,200 tankers Feb 2026; news) | **ASSUMED** | F5, F8, F19 |
 | D18 | Daily booking stream, complaints, outages, delivery confirmations | **SYNTHETIC**, calibrated where a REAL total exists | demo |
+| D19 | HMWSSB billing and collection, consumer accounts (`noofcans`) per section and connection category, monthly Jan 2022-Aug 2026, Telangana Open Data Portal (GODL); same section names as D1 | **REAL** | F3 (bookings per 1,000 domestic connections), F2 (connection growth) |
 | — | Public-tap locations and timings | **NOT AVAILABLE**; officer-entered only, starts empty | F9 |
 
 **Data rules:** raw files are never edited; every derived column carries a `_basis` column; hand-typed values from the v1 prototype (slum share, storage share, supply hours, fill stations, outage events, fleet table, 7.64% elderly default) are **not** imported.

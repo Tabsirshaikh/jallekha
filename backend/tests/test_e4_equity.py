@@ -67,4 +67,55 @@ def test_real_metrics_and_missing_data():
     )
     wards = list(csv.DictReader(io.StringIO(artifacts[equity.OUT + "wards.csv"].decode())))
     assert len(wards) == 145
-    assert all(w["bookings_per_1000"] == "" for w in wards)
+
+
+def test_section_rate_uses_official_domestic_connections():
+    """Bookings per 1,000 HMWSSB domestic connections per month: REAL counts over a REAL
+    denominator, no geography needed. Per-1,000-people stays empty (no section population)."""
+    artifacts = equity.build()
+    sections = list(csv.DictReader(io.StringIO(artifacts[equity.OUT + "sections.csv"].decode())))
+    with_rate = [r for r in sections if r["bookings_per_1000_connections"]]
+    # 7 of 201 sections are facilities or not billed (control room, WTP, pipelines)
+    assert len(with_rate) >= 190
+    for row in with_rate:
+        assert row["denominator_status"] == "HMWSSB_DOMESTIC_CONNECTIONS"
+        expected = 1000 * int(row["bookings"]) / int(row["observed_months"])
+        expected /= float(row["domestic_connections_mean"])
+        assert float(row["bookings_per_1000_connections"]) == pytest.approx(
+            expected, rel=1e-5, abs=1e-6
+        )  # stored mean is rounded
+        assert 0 <= float(row["flats_connection_share"]) <= 1
+        assert row["population"] == "" and row["bookings_per_1000"] == ""
+    summary = json.loads(artifacts[equity.OUT + "summary.json"])
+    assert summary["section_rate_denominator"].startswith("HMWSSB billing")
+    madhapur = next(r for r in sections if r["section"] == "MADHAPUR")
+    median = sorted(float(r["bookings_per_1000_connections"]) for r in with_rate)[
+        len(with_rate) // 2
+    ]
+    assert float(madhapur["bookings_per_1000_connections"]) > 10 * median
+
+
+def test_ward_bookings_are_approximate_and_preserve_placed_bookings():
+    artifacts = equity.build()
+    wards = list(csv.DictReader(io.StringIO(artifacts[equity.OUT + "wards.csv"].decode())))
+    sections = list(csv.DictReader(io.StringIO(artifacts[equity.OUT + "sections.csv"].decode())))
+    links = {
+        r["section"]: r["ward_id"]
+        for r in csv.DictReader(
+            (ROOT / "data/derived/crosswalk/section_to_ward_2016.csv").open(encoding="utf-8")
+        )
+        if r["ward_id"]
+    }
+    placed = sum(int(r["bookings"]) for r in sections if r["section"] in links)
+    with_bookings = [w for w in wards if w["bookings"]]
+    assert sum(float(w["bookings"]) for w in with_bookings) == pytest.approx(placed)
+    for ward in wards:
+        if ward["bookings"]:
+            assert ward["mapping_status"] == "APPROXIMATE_SECTION_POINT_IN_WARD"
+            assert ward["basis"] == "DERIVED_APPROXIMATE"
+        else:
+            assert ward["mapping_status"] == "NO_PLACED_SECTION"
+            assert ward["bookings_per_1000"] == ""
+    summary = json.loads(artifacts[equity.OUT + "summary.json"])
+    assert summary["ward_booking_share_placed"] >= 0.75
+    assert summary["ward_metrics_status"] == "APPROXIMATE_SECTION_POINT_IN_WARD"

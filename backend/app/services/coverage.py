@@ -56,12 +56,17 @@ def _collection(layer_id: str, title: str, features: list[dict], **metadata) -> 
     }
 
 
+def _optional_float(value: object) -> float | None:
+    return float(value) if value not in (None, "") else None
+
+
 def build_coverage_layers(
     ward_geojson: dict,
     evidence_rows: list[dict],
     underserved_rows: list[dict],
     equity_summary: dict,
     config: CoverageConfig = COVERAGE_CONFIG,
+    equity_wards: list[dict] | None = None,
 ) -> tuple[dict[str, dict], dict]:
     """Return three ward layers and a manifest while preserving unavailable values."""
     source_features = _source_features(ward_geojson, config)
@@ -70,7 +75,17 @@ def build_coverage_layers(
     ward_ids = {feature["properties"]["@id"] for feature in source_features}
     if set(evidence) != ward_ids or set(underserved) != ward_ids:
         raise ValueError("E2/E5 ward identifiers do not exactly match the reviewed geography")
-    if equity_summary.get("ward_metrics_status") != ("BLOCKED_NO_VERIFIED_SECTION_WARD_CROSSWALK"):
+    ward_status = equity_summary.get("ward_metrics_status")
+    if ward_status == "APPROXIMATE_SECTION_POINT_IN_WARD":
+        # E4 places sections by located point (section_to_ward_2016.csv); values are approximate
+        if equity_wards is None:
+            raise ValueError("Approximate E4 ward metrics need the E4 ward rows")
+        bookings_by_ward = _index(equity_wards, "E4 wards")
+        if set(bookings_by_ward) != ward_ids:
+            raise ValueError("E4 ward identifiers do not exactly match the reviewed geography")
+    elif ward_status == "BLOCKED_NO_VERIFIED_SECTION_WARD_CROSSWALK":
+        bookings_by_ward = {}
+    else:
         raise ValueError("E4 ward-metric gate differs from the reviewed contract")
 
     water_features = []
@@ -122,10 +137,22 @@ def build_coverage_layers(
                     "ward_id": ward_id,
                     "ward_name": ward_name,
                     "layer_id": BOOKING_COVERAGE,
-                    "observed_bookings": None,
-                    "bookings_per_1000": None,
-                    "value_basis": "UNAVAILABLE",
-                    "display_status": "UNAVAILABLE_NO_VERIFIED_SECTION_TO_WARD_TRANSFER",
+                    "observed_bookings": _optional_float(
+                        bookings_by_ward.get(ward_id, {}).get("bookings")
+                    ),
+                    "bookings_per_1000": _optional_float(
+                        bookings_by_ward.get(ward_id, {}).get("bookings_per_1000")
+                    ),
+                    "value_basis": "DERIVED_APPROXIMATE"
+                    if bookings_by_ward.get(ward_id, {}).get("bookings")
+                    else "UNAVAILABLE",
+                    "display_status": (
+                        "APPROXIMATE_SECTION_POINT_IN_WARD"
+                        if bookings_by_ward.get(ward_id, {}).get("bookings")
+                        else "UNAVAILABLE_NO_PLACED_SECTION"
+                        if bookings_by_ward
+                        else "UNAVAILABLE_NO_VERIFIED_SECTION_TO_WARD_TRANSFER"
+                    ),
                     "allocation_eligible": False,
                 },
             }
@@ -159,10 +186,12 @@ def build_coverage_layers(
         ),
         BOOKING_COVERAGE: _collection(
             BOOKING_COVERAGE,
-            "Ward booking coverage (unavailable pending verified transfer)",
+            "Ward booking coverage (approximate: sections placed by locality name)"
+            if bookings_by_ward
+            else "Ward booking coverage (unavailable pending verified transfer)",
             booking_features,
             value_field="bookings_per_1000",
-            value_status="UNAVAILABLE",
+            value_status="APPROXIMATE" if bookings_by_ward else "UNAVAILABLE",
             source_task="E4",
             exact_section_metrics={
                 "section_count": equity_summary["section_count"],
