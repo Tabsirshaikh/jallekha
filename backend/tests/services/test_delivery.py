@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import math
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
@@ -10,7 +11,7 @@ import pytest
 
 from app.config.trust import TRUST_CONFIG
 from app.services import delivery as dl
-from app.services import ledger, otp
+from app.services import geofence, ledger, otp
 from app.services.geo import offset_point
 from app.services.ledger_port import InMemoryLedger
 from app.services.sms import FakeSmsSender
@@ -422,6 +423,53 @@ def test_valid_per_stop_radius_is_used(chain: InMemoryLedger) -> None:
     state = dl.start_delivery("del-1", "stop-1", *STOP, "drv-1", REPS, chain, T0, radius_m=200)
     _, location = dl.check_geofence(state, *_at(180), chain, T0)
     assert (location.status, location.radius_m) == ("inside", 200)
+
+
+def _floats(value: object) -> list[float]:
+    if isinstance(value, float):
+        return [value]
+    if isinstance(value, dict):
+        return [f for v in value.values() for f in _floats(v)]
+    if isinstance(value, list | tuple):
+        return [f for v in value for f in _floats(v)]
+    return []
+
+
+def test_missing_position_has_no_distance(chain: InMemoryLedger) -> None:
+    # S3 review D8: distance_m is None (was inf) when the phone sends no position.
+    _, location = dl.check_geofence(_start(chain), None, None, chain, T0)
+    assert (location.status, location.inside, location.distance_m) == ("no_location", False, None)
+    assert chain.entries[-1].payload["distance_m"] is None
+
+
+def test_results_and_ledger_never_hold_inf_or_nan(
+    chain: InMemoryLedger, sms: FakeSmsSender
+) -> None:
+    state = dl.request_otp(_start(chain), "rep-1", OTP_KEY, sms, chain, T0)
+    code = sms.sent[-1].params["code"]
+    locations = []
+    for position in [(None, None), *BAD_POSITIONS, _at(151), _at(20)]:
+        locations.append(dl.check_geofence(state, *position, chain, T0)[1])
+        state, _ = dl.verify_otp(state, code, *position, OTP_KEY, chain, T0)
+    numbers = _floats([vars(loc) for loc in locations]) + _floats(
+        [e.payload for e in chain.entries]
+    )
+    assert numbers and all(math.isfinite(n) for n in numbers)
+    for entry in chain.entries:  # strict JSON: no NaN / Infinity tokens
+        json.loads(ledger.payload_json(entry.payload), parse_constant=pytest.fail)
+
+
+@pytest.mark.parametrize("bad_distance", [math.inf, math.nan])
+def test_a_non_finite_distance_from_geofence_becomes_none(
+    chain: InMemoryLedger, monkeypatch: pytest.MonkeyPatch, bad_distance: float
+) -> None:
+    # Guard in T3 itself, in case geofence.check ever returns inf / NaN again.
+    monkeypatch.setattr(
+        dl.geofence, "check", lambda *a, **k: geofence.GeofenceResult(False, bad_distance, 150)
+    )
+    _, location = dl.check_geofence(_start(chain), *_at(20), chain, T0)
+    assert location.distance_m is None and not location.inside
+    assert chain.entries[-1].payload["distance_m"] is None
 
 
 def test_changing_otp_digits_after_issue_keeps_the_issued_otp_working(

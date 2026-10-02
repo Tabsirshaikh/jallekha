@@ -102,7 +102,7 @@ class LocationCheck:
     inside: bool
     distance_m: float | None  # None when there is no usable position
     radius_m: float | None  # None when the radius itself is invalid
-    reason: str | None = None  # invalid_coordinates | invalid_radius
+    reason: str | None = None  # invalid_coordinates | invalid_radius | invalid_distance
 
 
 @dataclass(frozen=True)
@@ -198,6 +198,8 @@ def locate(state: DeliveryState, lat: float | None, lon: float | None) -> Locati
         return LocationCheck("invalid_location", False, None, None, "invalid_coordinates")
     if fence.distance_m is None:
         return LocationCheck("no_location", False, None, fence.radius_m)
+    if not math.isfinite(fence.distance_m):  # S3 review D8: never pass inf / NaN on
+        return LocationCheck("invalid_location", False, None, fence.radius_m, "invalid_distance")
     status: LocationStatus = "inside" if fence.inside else "outside"
     return LocationCheck(status, fence.inside, fence.distance_m, fence.radius_m)
 
