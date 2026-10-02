@@ -352,4 +352,4 @@ The pull-request description must summarize the same information and link to thi
 - **Handoff / next step:**
   - A8 replays with these groups.
   - The same link can give E4/E5 approximate ward bookings (their remaining blocker) in a later PR.
-- **Pull request:** pending
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/33
