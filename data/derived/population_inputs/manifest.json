@@ -1,0 +1,41 @@
+{
+  "dataset": "GHS-POP R2023A, 3 arc-second, WGS84",
+  "citation": "Schiavina M., Freire S., Carioli A., MacManus K. (2023): GHS-POP R2023A - GHS population grid multitemporal (1975-2030). European Commission, JRC. doi:10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE",
+  "retrieved_at_utc": "2026-10-02T17:02:23+00:00",
+  "files": [
+    {
+      "year": 2015,
+      "source_url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2015_GLOBE_R2023A_4326_3ss/V1-0/tiles/GHS_POP_E2015_GLOBE_R2023A_4326_3ss_V1_0_R8_C26.zip",
+      "source_zip_sha256": "0af9a5edc51c3f7f352a31d9a22bfbf1cce42a9c2f5707459eb1a93d642122a8",
+      "source_zip_bytes": 147719714,
+      "source_tif": "GHS_POP_E2015_GLOBE_R2023A_4326_3ss_V1_0_R8_C26.tif",
+      "crop_bounds_wsen": [
+        78.15,
+        17.15,
+        78.75,
+        17.7
+      ],
+      "crop_file": "data/derived/population_inputs/ghs_pop_2015_ghmc.tif",
+      "crop_sha256": "aeb6c87aa9054c86b8de660f532a9c97eff80e77a2fecc71428b26bfee5a38dd",
+      "licence": "CC BY 4.0, (c) European Union 1995-2026 (GHSL, JRC)",
+      "basis": "REAL (modelled grid as published)"
+    },
+    {
+      "year": 2025,
+      "source_url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2025_GLOBE_R2023A_4326_3ss/V1-0/tiles/GHS_POP_E2025_GLOBE_R2023A_4326_3ss_V1_0_R8_C26.zip",
+      "source_zip_sha256": "a78ca27cbc8f5f06b5ef5d1aa3b57fb0a5829167f16d7187ed973816299d9751",
+      "source_zip_bytes": 167805242,
+      "source_tif": "GHS_POP_E2025_GLOBE_R2023A_4326_3ss_V1_0_R8_C26.tif",
+      "crop_bounds_wsen": [
+        78.15,
+        17.15,
+        78.75,
+        17.7
+      ],
+      "crop_file": "data/derived/population_inputs/ghs_pop_2025_ghmc.tif",
+      "crop_sha256": "0fffd986bf09c253628eaf91ca1d2b31fd5250edbd4a5b1e7f1777bf4b0db48e",
+      "licence": "CC BY 4.0, (c) European Union 1995-2026 (GHSL, JRC)",
+      "basis": "REAL (modelled grid as published)"
+    }
+  ]
+}

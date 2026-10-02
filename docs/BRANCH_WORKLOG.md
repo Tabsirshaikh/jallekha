@@ -454,3 +454,33 @@ The pull-request description must summarize the same information and link to thi
   - Downstream: E4 ward bookings 87.1% placed (was 79.3%); E3 connection check over 102 wards, rho 0.51.
 - **Validation:** Section tests were updated first (coverage >= 0.85, spelling variants, common names, rejection of a far ward name, strict limit for second-pass placements), then pass. `python tasks.py test`: 418 pass. `python tasks.py lint` passes. All P1 verifiers pass.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/39
+
+## `feat/population-2025` — 2025 ward population estimate (F2 "growth only as context")
+
+- **Owner / date:** P2 (covering P1), 2026-10-02.
+- **Purpose:** Give every ward a current (2025) population and household estimate with an honest range, so E5 and A2 need not rely only on Census 2011.
+- **What we found:**
+  - GHS-POP R2023A (EU JRC, CC BY 4.0) 3-arc-second tiles are downloadable (168 MB each; the server limits speed per connection, so parallel byte ranges are used).
+  - City-wide: buildings +3.2%/yr, GHS-POP +1.2%/yr, **HMWSSB domestic connections +2.18%/yr (REAL, 2022 -> 2025)**.
+  - Ward by ward, building growth predicts connection growth (Spearman 0.50); **GHS-POP's ward growth does not (0.04)**, because it gives almost every ward +11-15%.
+- **What we changed:**
+  - `scripts/data/fetch_ghs_pop.py`: GHMC crops of the 2015 and 2025 tiles in `data/derived/population_inputs/`, with the source URL, zip SHA-256 and size, and the crop window in `manifest.json` (tiles are too large for git).
+  - `scripts/evidence/build_population.py`:
+    - Estimates per ward: A = Census 2011 x building trend, B = GHS-POP 2025 level, C = Census 2011 x GHS growth.
+    - **Central** = building growth pattern, shifted so the city grows at the HMWSSB connection rate.
+    - Low-high range, `WIDE_RANGE` flag (> 0.6).
+    - Households = central / 2011 household size.
+    - Outputs: `data/derived/population/`.
+  - Solution doc: data row D20.
+- **Result:**
+  - 143 wards. City: Census 2011 6.36M; central 2025 **8.60M** (1.95M households); range across methods 7.33M (GHS level) to 10.11M (buildings).
+  - 42 wards flagged wide range.
+  - Fastest growth: Gajularamaram, Macha Bolarum, Gachibowli.
+- **Validation:** `backend/tests/test_population_2025.py` was written first: crop hashes, reproducibility, central inside range, households formula, city total = Census x connection rate^14, A/C bracket the central total, central pattern validated against connections. A planned "average both patterns" design was dropped after this check showed GHS-POP ward growth carries no signal. `python tasks.py test`: 424 pass. `python tasks.py lint` passes.
+- **Known limitations:**
+  - Modelled, not counted.
+  - The connection rate is assumed constant since 2011.
+  - Household size is held at 2011.
+  - One connection can serve many flats.
+- **Handoff / next step:** E5 uses `households_2025_central` (reference year 2025); A2 can switch entitlement to 2025 households.
+- **Pull request:** pending
