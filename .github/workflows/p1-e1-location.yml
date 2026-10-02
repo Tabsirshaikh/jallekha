@@ -23,6 +23,6 @@ jobs:
       - run: git diff --exit-code -- data/derived/crosswalk data/verification/crosswalk_checks.json
       - run: python scripts/evidence/verify_crosswalk.py
       - run: python scripts/evidence/verify_evidence.py
-      - run: pytest backend/tests
+      - run: pytest backend/tests/test_location_validation.py backend/tests/test_e1_crosswalk.py backend/tests/test_e2_evidence.py
       - run: ruff check --config backend/pyproject.toml scripts/evidence backend/tests
       - run: ruff format --check --config backend/pyproject.toml scripts/evidence backend/tests

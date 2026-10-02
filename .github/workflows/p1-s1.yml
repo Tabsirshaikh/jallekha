@@ -25,7 +25,7 @@ jobs:
           cache: pip
           cache-dependency-path: backend/pyproject.toml
       - name: Install backend
-        run: python -m pip install -e "./backend[dev]"
+        run: python -m pip install -e "./backend[dev,geo,models]"
       - name: Set up Node
         uses: actions/setup-node@v5
         with:

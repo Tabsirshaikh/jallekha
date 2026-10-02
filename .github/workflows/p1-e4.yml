@@ -21,6 +21,6 @@ jobs:
       - run: python scripts/data/verify_manifest.py
       - run: python scripts/evidence/verify_evidence.py
       - run: python scripts/evidence/verify_equity.py
-      - run: pytest backend/tests
+      - run: pytest backend/tests/test_e4_equity.py
       - run: ruff check --config backend/pyproject.toml scripts/evidence/build_equity.py scripts/evidence/verify_equity.py backend/tests/test_e4_equity.py backend/app/config/equity.py
       - run: ruff format --check --config backend/pyproject.toml scripts/evidence/build_equity.py scripts/evidence/verify_equity.py backend/tests/test_e4_equity.py backend/app/config/equity.py

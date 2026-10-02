@@ -4,7 +4,6 @@ import csv
 import sys
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -45,24 +44,38 @@ def main() -> int:
 
     with tracker_path.open(encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
-    require(len(rows) == 46, f"Expected 46 tracker rows, found {len(rows)}")
+    require(len(rows) == 47, f"Expected 47 tracker rows including E1-FIX, found {len(rows)}")
     by_id = {row["id"]: row for row in rows}
     require(len(by_id) == len(rows), "Tracker contains duplicate task IDs")
     require(by_id["R-P1"]["status"] in {"IN_REVIEW", "DONE"}, "R-P1 must be IN_REVIEW or DONE")
-    require(by_id["R-P1"]["pr"] == "https://github.com/Tabsirshaikh/jallekha/pull/2", "R-P1 PR link is missing or incorrect")
+    require(
+        by_id["R-P1"]["pr"] == "https://github.com/Tabsirshaikh/jallekha/pull/2",
+        "R-P1 PR link is missing or incorrect",
+    )
     for task_id in ("D1", "E1", "E3", "E5"):
         require(task_id in by_id, f"Missing revised downstream task: {task_id}")
-    require("geography version" in by_id["D1"]["done_when"].lower(), "D1 must require geography versioning")
-    require("current 300-ward" in by_id["E1"]["task"], "E1 must preserve the current-geography block")
-    require("WorldPop" in by_id["E3"]["task"] and "GHS-POP" in by_id["E3"]["task"], "E3 must use independent population sensitivity sources")
-    require("optional evaluated BYM2" in by_id["E5"]["task"], "E5 must not treat BYM2 as an established default")
+    require(
+        "geography version" in by_id["D1"]["done_when"].lower(),
+        "D1 must require geography versioning",
+    )
+    require(
+        "current 300-ward" in by_id["E1"]["task"], "E1 must preserve the current-geography block"
+    )
+    require(
+        "WorldPop" in by_id["E3"]["notes"] and "GHS-POP" in by_id["E3"]["notes"],
+        "E3 must disclose deferred independent population sensitivity sources",
+    )
+    require(
+        "field-check" in by_id["E5"]["task"],
+        "E5 must describe field-check screening rather than proven under-service",
+    )
 
     solution = solution_path.read_text(encoding="utf-8")
     for marker in (
         "partial historical geometry; not current boundaries",
         "GHMC_2016_150",
-        "Do not convert a building-count ratio directly into exact current households",
-        "BYM2 follows Riebler et al. 2016",
+        "it must not scale Census households",
+        "No flag can change allocation or entitlement",
     ):
         require(marker in solution, f"Solution specification lost the R-P1 correction: {marker}")
     source_row = "GHMC/Telangana 2025-26 ward and corporation reorganisation notices"
@@ -70,7 +83,14 @@ def main() -> int:
 
     worklog = worklog_path.read_text(encoding="utf-8")
     require("## `research/p1` — `R-P1`" in worklog, "Branch worklog has no R-P1 entry")
-    for heading in ("What we found", "What we changed", "Validation", "Known limitations", "Handoff / next step", "Pull request"):
+    for heading in (
+        "What we found",
+        "What we changed",
+        "Validation",
+        "Known limitations",
+        "Handoff / next step",
+        "Pull request",
+    ):
         require(heading in worklog, f"R-P1 worklog is missing: {heading}")
 
     print("P1:R-P1 verification passed")
@@ -85,4 +105,4 @@ if __name__ == "__main__":
         raise SystemExit(main())
     except AssertionError as exc:
         print(f"P1:R-P1 verification failed: {exc}", file=sys.stderr)
-        raise SystemExit(1)
+        raise SystemExit(1) from exc
