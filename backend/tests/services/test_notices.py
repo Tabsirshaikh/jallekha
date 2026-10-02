@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import csv
 import json
 from collections.abc import Iterator
 from datetime import UTC, datetime
@@ -251,9 +252,27 @@ def test_a_notice_with_no_matched_area_creates_no_outage(
 
 
 def test_real_area_tables_load() -> None:
+    # Counts come from P1's files, read here with plain csv / json (not AreaIndex), so the test
+    # checks that T5 loads the tables and does not break when P1 places more sections.
+    repo = Path(__file__).resolve().parents[3]
+    with (repo / "data/derived/crosswalk/section_to_ward_2016.csv").open(
+        encoding="utf-8", newline=""
+    ) as handle:
+        rows = list(csv.DictReader(handle))
+    total = len(rows)
+    placed = sum(1 for row in rows if row["status"] == "MAPPED" and row["ward_id"])
+    geojson = json.loads(
+        (repo / "data/raw/geography/datameet/ghmc-wards.geojson").read_text(encoding="utf-8")
+    )
+    wards = len(geojson["features"])
+    assert total >= 200 and 0 < placed < total and wards == 145
+
     real = nt.AreaIndex.from_files()
-    assert real.section_count == 221 and real.placed_section_count == 142
-    assert real.ward_count == 145
+    assert (real.section_count, real.placed_section_count, real.ward_count) == (
+        total,
+        placed,
+        wards,
+    )
     assert real.match("Kapra").status == "matched"
     assert real.match("Uppal").reason == "ambiguous"
 
