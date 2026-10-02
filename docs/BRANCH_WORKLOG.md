@@ -436,6 +436,81 @@ The pull-request description must summarize the same information and link to thi
   - WorldPop/GHS-POP are still not extracted.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/38
 
+## `fix/section-placement-v2` — better section -> ward placement
+
+- **Owner / date:** P2, 2026-10-02.
+- **Purpose:** Raise the share of bookings placed on wards (was 80.5%).
+- **What we found:**
+  - Most unplaced bookings were spelling variants of 2016 ward names ("Mehidipatnam" for Mehdipatnam, "Vengalraonagar" for Vengal Rao Nagar, "Hubsiguda" for Habsiguda). Nominatim needs exact spelling.
+  - Common names ("Srinivas Nagar", "Kakatiya Nagar", "Meerpet") have several OSM places, and the first answer was taken.
+- **What we changed:** `build_section_wards.py` adds a second chance for unplaced sections, each within 6 km of the division's centre (strict limit):
+  1. Another OSM answer for the same name, nearest the division (`OSM_NEAR_DIVISION`).
+  2. A 2016 ward whose name is a spelling variant: similarity >= 0.85, 0.05 ahead of the next (`WARD_NAME`).
+  - The independent name check uses only OSM-placed sections, so it stays non-circular.
+- **Result:**
+  - 161/221 sections, **88.5% of bookings**, in 108 wards. Methods: 132 inside, 10 nearest-500 m, 5 OSM-near-division, 14 ward-name.
+  - Rejected by the division check: Shapoornagar -> Saroornagar (20 km), Kodandapur(WTP) -> Kondapur (24 km).
+  - Meerpet now uses the Meerpet in its division (1.06 km) instead of the one 13.8 km away.
+  - Downstream: E4 ward bookings 87.1% placed (was 79.3%); E3 connection check over 102 wards, rho 0.51.
+- **Validation:** Section tests were updated first (coverage >= 0.85, spelling variants, common names, rejection of a far ward name, strict limit for second-pass placements), then pass. `python tasks.py test`: 418 pass. `python tasks.py lint` passes. All P1 verifiers pass.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/39
+
+## `feat/population-2025` — 2025 ward population estimate (F2 "growth only as context")
+
+- **Owner / date:** P2 (covering P1), 2026-10-02.
+- **Purpose:** Give every ward a current (2025) population and household estimate with an honest range, so E5 and A2 need not rely only on Census 2011.
+- **What we found:**
+  - GHS-POP R2023A (EU JRC, CC BY 4.0) 3-arc-second tiles are downloadable (168 MB each; the server limits speed per connection, so parallel byte ranges are used).
+  - City-wide: buildings +3.2%/yr, GHS-POP +1.2%/yr, **HMWSSB domestic connections +2.18%/yr (REAL, 2022 -> 2025)**.
+  - Ward by ward, building growth predicts connection growth (Spearman 0.50); **GHS-POP's ward growth does not (0.04)**, because it gives almost every ward +11-15%.
+- **What we changed:**
+  - `scripts/data/fetch_ghs_pop.py`: GHMC crops of the 2015 and 2025 tiles in `data/derived/population_inputs/`, with the source URL, zip SHA-256 and size, and the crop window in `manifest.json` (tiles are too large for git).
+  - `scripts/evidence/build_population.py`:
+    - Estimates per ward: A = Census 2011 x building trend, B = GHS-POP 2025 level, C = Census 2011 x GHS growth.
+    - **Central** = building growth pattern, shifted so the city grows at the HMWSSB connection rate.
+    - Low-high range, `WIDE_RANGE` flag (> 0.6).
+    - Households = central / 2011 household size.
+    - Outputs: `data/derived/population/`.
+  - Solution doc: data row D20.
+- **Result:**
+  - 143 wards. City: Census 2011 6.36M; central 2025 **8.60M** (1.95M households); range across methods 7.33M (GHS level) to 10.11M (buildings).
+  - 42 wards flagged wide range.
+  - Fastest growth: Gajularamaram, Macha Bolarum, Gachibowli.
+- **Validation:** `backend/tests/test_population_2025.py` was written first: crop hashes, reproducibility, central inside range, households formula, city total = Census x connection rate^14, A/C bracket the central total, central pattern validated against connections. A planned "average both patterns" design was dropped after this check showed GHS-POP ward growth carries no signal. `python tasks.py test`: 424 pass. `python tasks.py lint` passes.
+- **Known limitations:**
+  - Modelled, not counted.
+  - The connection rate is assumed constant since 2011.
+  - Household size is held at 2011.
+  - One connection can serve many flats.
+- **Handoff / next step:** E5 uses `households_2025_central` (reference year 2025); A2 can switch entitlement to 2025 households.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/40
+
+## `feat/t4-ledger-wiring` — `T4` follow-up (intake events in the ledger)
+
+- **Owner / date:** P3, 2026-10-02.
+- **Purpose:** Log intake events (F14) to T6's stored ledger now that T6 (#35) and T4 (#37) are merged.
+- **What we found:**
+  - No intake event type existed. Adding them breaks T4's test `test_no_ledger_entries_while_no_intake_event_type_exists`, whose premise is that they are absent.
+  - The ledger write happens after the report is saved, so a failing ledger (for example no `LEDGER_HMAC_KEY`) must not lose the report.
+- **What we changed:**
+  - `backend/app/services/ledger.py` (P2's file, `EVENT_TYPES` only, own commit): `complaint_received`, `complaint_merged`, `complaint_marked_spam`.
+  - `backend/tests/services/test_intake_pipeline.py` (own commit): the one test adapted; the types are removed for that test only, so its purpose (no type, nothing written) is kept.
+  - `backend/app/services/intake_pipeline.py`: `default_service` writes through `ledger_store.get_ledger()`; results carry `ledger_seq`; a ledger failure is logged and the report kept.
+  - `backend/app/models/intake_item.py`: `ledger_missing` marker (set when an entry is expected, cleared once written); `IntakeService.intake_ids_missing_ledger()` lists such items.
+  - Tests `backend/tests/services/test_intake_ledger.py`; docs `docs/P3_FEATURES.md`, `docs/features.csv` (T4 and T6 DONE), `docs/worklogs/T4.md`; workflow `.github/workflows/p3-t4.yml`.
+- **Validation:**
+  - 8 tests written first (failed before the wiring): entries for created / merged / spam items with a verified chain; nothing for duplicates or invalid items; no phone number, name, text, audio or household id in any payload; ledger failure keeps the report; default service uses the stored ledger; missing entries marked and listed.
+  - After merging `main` (E3-FIX #38): `python tasks.py test` exit 0 (425 backend passed, 1 frontend test, all P1 verifiers); `python tasks.py lint` exit 0.
+  - Task workflow `P3:T4` (`.github/workflows/p3-t4.yml`): T4 intake, ledger-wiring, T1 dedup and S3 spam/intake tests, ruff check and format check on the T4 files.
+  - All test data is synthetic.
+- **Known limitations:**
+  - No automatic retry for items marked `ledger_missing`.
+  - The new column needs a fresh database or a manual column add (no migrations; `create_all` does not alter tables).
+- **Handoff / next step:**
+  - T5 / T7 log through `ledger_store.record` in the same way.
+  - Merge note: `feat/t5-notices` edits the T5 row next to the T4 and T6 rows in `docs/P3_FEATURES.md` and `docs/features.csv`; the branch merged second needs a one-line fix in each.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/42
+
 ## `feat/t5-notices` — `T5`
 
 - **Owner / date:** P3, 2026-10-02.

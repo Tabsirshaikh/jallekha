@@ -1,0 +1,36 @@
+{
+  "checks": {
+    "buildings_vs_connections_spearman": 0.5037,
+    "buildings_vs_ghs_growth_spearman": 0.0319,
+    "central_pattern": "BUILDINGS",
+    "central_vs_connection_growth": {
+      "spearman": 0.5037,
+      "wards": 101
+    },
+    "ghs_growth_vs_connections_spearman": 0.038
+  },
+  "city": {
+    "buildings_2025": 10113588,
+    "census_2011": 6357041,
+    "central_2025": 8597463,
+    "connection_growth_annual": 0.021799,
+    "ghs_growth_2025": 7545537,
+    "ghs_level_2025": 7327345,
+    "households_2025_central": 1946191
+  },
+  "limitations": [
+    "Modelled estimate, not a count; use the low-high range, not only the central value.",
+    "The connection growth rate (2022-2025) is assumed to hold since 2011.",
+    "Household size is held at its 2011 value; falling household size would mean more households than shown.",
+    "One HMWSSB connection can serve many flats, so connection growth may understate household growth in apartment areas."
+  ],
+  "method": "central = Census 2011 x exp(14 x (ward building log growth + city shift)), shift set so the city grows at the HMWSSB domestic-connection rate; GHS-POP in range only",
+  "sources": {
+    "buildings": "Open Buildings Temporal via E3 (year shocks removed)",
+    "census": "Census 2011 via E2 (2009 to 2016 ward crosswalk)",
+    "connections": "HMWSSB billing and collection data (Telangana portal, GODL)",
+    "ghs_pop": "GHS-POP R2023A 3 arc-second, EU JRC, CC BY 4.0"
+  },
+  "wards_estimated": 143,
+  "wide_range_wards": 42
+}

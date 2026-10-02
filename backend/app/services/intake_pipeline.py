@@ -12,8 +12,9 @@ app / field-worker items, `client_id` as the idempotency key).
 
 Privacy: raw phone numbers stay in memory only (hashed for the spam burst count, used once for
 the ask-back SMS). Ledger payloads hold ids, codes and numbers only, never phone numbers, names
-or free text. Intake has no ledger event type yet (PROPOSED_EVENTS), so nothing is logged until
-the team adds one; the call then starts working without code changes here.
+or free text. Created, merged and spam items are logged as complaint_received, complaint_merged
+and complaint_marked_spam through T6's stored ledger (`ledger_store`); a ledger failure is logged
+as an error and never loses the report.
 """
 
 from __future__ import annotations
@@ -31,7 +32,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any, Protocol
 
-from sqlalchemy import func, select
+from sqlalchemy import func, select, update
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -51,7 +52,7 @@ from app.config.trust import TRUST_CONFIG
 from app.db import create_all, make_engine, make_session_factory
 from app.models import Complaint, DuplicateLink, IntakeItemRecord, VoiceNote
 from app.models.base import utcnow
-from app.services import dedup, intake, ledger, spam
+from app.services import dedup, intake, ledger, ledger_store, spam
 from app.services.sms import SmsMessage, SmsSender, get_sms_sender, message_language
 
 logger = logging.getLogger("jallekha.intake")
@@ -397,6 +398,7 @@ class IntakeResult:
     language: str | None = None
     spam_score: float | None = None
     error: str | None = None
+    ledger_seq: int | None = None  # sequence of the ledger entry written for this item
 
 
 _KEY_FROM_CONFIG = object()
@@ -538,8 +540,7 @@ class IntakeService:
             if existing is None:
                 raise
             result = existing
-        self._after(item, result)
-        return result
+        return self._after(item, result)
 
     def _by_client_id(self, client_id: str) -> IntakeResult | None:
         with self._sessions() as session:
@@ -617,6 +618,7 @@ class IntakeService:
                 is_synthetic=message.is_synthetic,
             )
             if spam.is_spam(score):
+                record.ledger_missing = self._expects_ledger("spam")
                 session.add(record)
                 session.flush()
                 return IntakeResult(
@@ -654,6 +656,7 @@ class IntakeService:
             session.flush()
             parent_id = self._link_duplicate(session, complaint) if status == "open" else None
             record.status = "merged" if parent_id else "created"
+            record.ledger_missing = self._expects_ledger(record.status)
             record.complaint_id = complaint.id
             session.add(record)
             if voice is not None:
@@ -754,7 +757,8 @@ class IntakeService:
 
     # --- after the transaction -------------------------------------------------------------
 
-    def _after(self, item: IntakeItem, result: IntakeResult) -> None:
+    def _after(self, item: IntakeItem, result: IntakeResult) -> IntakeResult:
+        seq = None
         if result.status in ("created", "merged"):
             if result.complaint_status == "awaiting_location" and item.phone:
                 self._sms.send(
@@ -764,7 +768,7 @@ class IntakeService:
                         language=message_language(result.language),
                     )
                 )
-            self._log(
+            seq = self._log(
                 result.status,
                 {
                     "entity_type": "complaint",
@@ -779,7 +783,7 @@ class IntakeService:
                 },
             )
         elif result.status == "spam":
-            self._log(
+            seq = self._log(
                 "spam",
                 {
                     "entity_type": "intake_item",
@@ -790,25 +794,56 @@ class IntakeService:
                     "is_synthetic": item.message.is_synthetic,
                 },
             )
+        if seq is None:
+            return result
+        if result.intake_id:  # written: clear the "ledger entry missing" marker
+            with self._sessions() as session, session.begin():
+                session.execute(
+                    update(IntakeItemRecord)
+                    .where(IntakeItemRecord.id == result.intake_id)
+                    .values(ledger_missing=False)
+                )
+        return replace(result, ledger_seq=seq)
 
-    def _log(self, kind: str, payload: dict[str, Any]) -> None:
+    def _expects_ledger(self, kind: str) -> bool:
+        return self._ledger is not None and PROPOSED_EVENTS[kind] in ledger.EVENT_TYPES
+
+    def intake_ids_missing_ledger(self) -> list[str]:
+        """Items saved without their ledger entry (to log again once the ledger works)."""
+        with self._sessions() as session:
+            return list(
+                session.scalars(
+                    select(IntakeItemRecord.id)
+                    .where(IntakeItemRecord.ledger_missing.is_(True))
+                    .order_by(IntakeItemRecord.created_at)
+                )
+            )
+
+    def _log(self, kind: str, payload: dict[str, Any]) -> int | None:
+        """Write the intake event; a ledger failure is logged and never loses the report."""
         event = PROPOSED_EVENTS[kind]
         if self._ledger is None or event not in ledger.EVENT_TYPES:
-            return
+            return None
         extra = set(payload) - LEDGER_PAYLOAD_KEYS
         if extra:  # ids, codes and numbers only (never phone numbers, names or free text)
             raise ValueError(f"Ledger payload keys not allowed: {sorted(extra)}")
-        self._ledger.append(event, payload, "intake")
+        try:
+            entry = self._ledger.append(event, payload, "intake")
+        except Exception:
+            logger.exception("Ledger write failed for %s %s", event, payload.get("entity_id"))
+            return None
+        return getattr(entry, "seq", None)
 
 
 _default: IntakeService | None = None
 
 
 def default_service() -> IntakeService:
-    """The application's intake (DATABASE_URL, SMS_PROVIDER, ASR_MODE, PHONE_HASH_KEY)."""
+    """The application's intake (DATABASE_URL, SMS_PROVIDER, ASR_MODE, PHONE_HASH_KEY), logging to
+    the stored ledger (T6, LEDGER_HMAC_KEY)."""
     global _default
     if _default is None:
         engine = make_engine()
         create_all(engine)
-        _default = IntakeService(engine)
+        _default = IntakeService(engine, ledger=ledger_store.get_ledger())
     return _default
