@@ -1,0 +1,23 @@
+{
+  "archive_sha256": "15230e20708dfcdb5a414366fb661df0259529b77ec41172e4957be5ff806257",
+  "basis": "DERIVED",
+  "crs": "EPSG:32644",
+  "geography_sha256": "3fdfef8e787ed543d816fee36a6097c350c4dff2423aae7fa203bb49cbd6edc2",
+  "grid_metres_requested": 32,
+  "license": "CC BY 4.0",
+  "method": "COG overview/average reduction; comparative building index",
+  "native_pixels_per_cell": 4088.14699014266,
+  "native_resolution_metres": 0.5,
+  "retrieved_at_utc": "2026-10-01T20:41:23.508772+00:00",
+  "source_band": "building_fractional_count",
+  "transform": [
+    31.9693094629156,
+    0.0,
+    247032.0,
+    0.0,
+    -31.9693094629156,
+    1923920.0
+  ],
+  "url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2017_06_30/tile_ioTy2ewmkos.tif",
+  "year": 2017
+}

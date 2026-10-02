@@ -1,0 +1,743 @@
+{
+  "crosswalk_sha256_lf": "b2a920ebbb53e21e9e4711c2db11bb4522b94f7f25f006fa0573c271ac5c6dc5",
+  "geography_sha256": "3fdfef8e787ed543d816fee36a6097c350c4dff2423aae7fa203bb49cbd6edc2",
+  "manifest_sha256": {
+    "2016": "b97af06367dd94ab9eda7869f92709bdb742461e7d43c4b4a9785ddbcf83f911",
+    "2017": "f97c8bf31ac4e17ab14178838ec12f736468332b4910cb7f2b067a1c001973ab",
+    "2018": "d46466dca729b998b41cbb6caee086d142aff510e0ffef34f21cc18d8bb55d1f",
+    "2019": "d953585211d91a73cdeccd61a431d5858c7e1564fecbcb29ad1b78d2d18cdb19",
+    "2020": "f4e8dba73acc95124fa71da879b9faacc3498fc795cb0110805aae783c509ca7",
+    "2021": "2136d1298ff48f1e515d6434cf5a7c2f1d328f224079ee0a211664d3cd42a351",
+    "2022": "d07e1e552ef3113b11984b952c0e2f7da8292c66997cb4f5608135d7c063f284",
+    "2023": "d0ac025a1e4fa52b27efe2a44941d021a2c98dd1b5bad49c62e41f821c61c12c"
+  },
+  "output_sha256": {
+    "data/derived/growth/annual.csv": "44c6c444d6f57d4ffa236afe384ff8d21c8effb124acd981be3c5db2504a013b",
+    "data/derived/growth/growth.csv": "b6760f6d1ea11c86462121f0c5e5d1f254e3db8fd1f1509fe7fe14a8cd55cde4",
+    "data/derived/growth/source_comparison.csv": "71feabc11ef18d2616fc5be5fe8c66b4102d2fdb3236bd0d42aceec1e316d320",
+    "data/derived/growth/summary.json": "510a7b6940b244c912c036fa25aaed90eebe7c5f54bf1bf525bad0dbf680da49"
+  },
+  "schema_version": "E3-1",
+  "tile_archives": [
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "80cce49710c82b300fa89cd61fe993935be24e7542396dac101cb912880fda98",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2016_06_30/tile_cgwCGcr2sS0.tif",
+      "tile": "2016_1941a6381477f83b_32m.npz",
+      "year": 2016
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "66ce500798d2c807a2f1a683dda01d5dd4a242295426dc7d7bac37b56516c09e",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2016_06_30/tile_STyYkWz8XGA.tif",
+      "tile": "2016_32437e1b2e44536d_32m.npz",
+      "year": 2016
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "85584e481c938ffd416b2c20cfbf001315c89fc2d777295258dd54d6bd686113",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2016_06_30/tile_f00yNfQ-CZo.tif",
+      "tile": "2016_81bc0a6be32b1eba_32m.npz",
+      "year": 2016
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "bce1901705d52c4d2b1364474ede536084ee138a9ed947cfce23e5b66f10acdf",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2016_06_30/tile_ILDHwfkn2NM.tif",
+      "tile": "2016_af19f9473b186634_32m.npz",
+      "year": 2016
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "174b91b6a985251d2a12d4c54ed375b169b5273cd6158d648e57f8cb13d47094",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2016_06_30/tile_ioTy2ewmkos.tif",
+      "tile": "2016_c412a79081d60eb2_32m.npz",
+      "year": 2016
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "8123dcc8f6e87e41ef61b48e8990f7b41903955812831d18eef74309b0bfb2cc",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2016_06_30/tile_8qaURWYP6Fk.tif",
+      "tile": "2016_c9887c96278ba79e_32m.npz",
+      "year": 2016
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "ba1275f041d178aa28d91102657086dee19c8360b51475c0332b823822995a94",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2016_06_30/tile_AiQBORYndr0.tif",
+      "tile": "2016_df14d55408c32336_32m.npz",
+      "year": 2016
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "c68b70add44730f079576f286d0cf1ef70a58e653b7ab5795a8b776572318d47",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2016_06_30/tile_0PX-jEEaiBo.tif",
+      "tile": "2016_ead19d5cbb4497b4_32m.npz",
+      "year": 2016
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "9eb32376eeef93f6fb584fd3cd9abb2169dc12168cdc548b98510b140693a61a",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2016_06_30/tile_YfYkRm-FZQI.tif",
+      "tile": "2016_efd426d9d4ae98c4_32m.npz",
+      "year": 2016
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "f6ab860f6f10f4acf329d434e87e28168f6df42f069d5fab83f834ea3c697671",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2016_06_30/tile_qxQUVAJNMrM.tif",
+      "tile": "2016_f8e55e8ac7391cdc_32m.npz",
+      "year": 2016
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "c79c79ff1997215c1da764514e566d762a2c5b6dbdff6083c40825cc8398ec14",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2017_06_30/tile_ILDHwfkn2NM.tif",
+      "tile": "2017_110eeefcc945cd0f_32m.npz",
+      "year": 2017
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "b6a3bdf2a2f336e38c31788aafe3e3d9c434e9cd9d823edce011f9061576eaaa",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2017_06_30/tile_cgwCGcr2sS0.tif",
+      "tile": "2017_3fc7d0fffb7a4083_32m.npz",
+      "year": 2017
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "7f23e5e8a35af6992d979e58a0651ddea9574b124e068a80816fab4a8aeaf118",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2017_06_30/tile_YfYkRm-FZQI.tif",
+      "tile": "2017_60b6653bd0e56e41_32m.npz",
+      "year": 2017
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "15230e20708dfcdb5a414366fb661df0259529b77ec41172e4957be5ff806257",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2017_06_30/tile_ioTy2ewmkos.tif",
+      "tile": "2017_93d81d560f8ea049_32m.npz",
+      "year": 2017
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "791425e0927a4065e6b99fbebc34b79814e5587b629625d3633d4692e4bce2cb",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2017_06_30/tile_qxQUVAJNMrM.tif",
+      "tile": "2017_c40b050ed52a9807_32m.npz",
+      "year": 2017
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "14a28c8471098ccadfb764f3bad8fb5fc6301dc30b0aa90f5f86374c4003b4ff",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2017_06_30/tile_AiQBORYndr0.tif",
+      "tile": "2017_c83b51103b5cfa64_32m.npz",
+      "year": 2017
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "90720972ed1a8f499e69532f98efea53772b5a38b13c623651159334198c6c4e",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2017_06_30/tile_f00yNfQ-CZo.tif",
+      "tile": "2017_dba3586731f0be4d_32m.npz",
+      "year": 2017
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "45314d83c29deb5a00304e3f2c79ac28406da19b2634592edf74fd9d485c4859",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2017_06_30/tile_STyYkWz8XGA.tif",
+      "tile": "2017_e38d7bfa41e2ec4d_32m.npz",
+      "year": 2017
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "eada39b6b9b6736695cac49b1e35d8c495bfdfac324c63fdb8b14bbec7b2e6d9",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2017_06_30/tile_0PX-jEEaiBo.tif",
+      "tile": "2017_e38fae290a258698_32m.npz",
+      "year": 2017
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "cf6562fd712cd2c22ef1fb628120fa03b580fbae7e9260c3e7fa999d0e0e10eb",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2017_06_30/tile_8qaURWYP6Fk.tif",
+      "tile": "2017_ff69e437ba4abc31_32m.npz",
+      "year": 2017
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "f1aaf7a531dc1a1d8e4b8efe07def65375a60e31cb0177d5e165ff0b5d7b25be",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2018_06_30/tile_f00yNfQ-CZo.tif",
+      "tile": "2018_00b36da63608890c_32m.npz",
+      "year": 2018
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "b7f1464cf470ce2d5cd93a7c1c71dd8bd44b9779f8788e915a0444c01649fc13",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2018_06_30/tile_8qaURWYP6Fk.tif",
+      "tile": "2018_1416787bfc432093_32m.npz",
+      "year": 2018
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "1c4bd5571f70447d6071c6a50d1a0003c734a203f7939ab40b71abe8c30dfda8",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2018_06_30/tile_ILDHwfkn2NM.tif",
+      "tile": "2018_38de6d8aafa1ec78_32m.npz",
+      "year": 2018
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "b1db397b3fa5360564a1efcda71f71e652c9d940bbabd5bfb8f657bef9dad623",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2018_06_30/tile_AiQBORYndr0.tif",
+      "tile": "2018_40c264828a2137a7_32m.npz",
+      "year": 2018
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "339cdf47a393efc077b5d9cbaf8f2a77eb0de5e55dadd08485357bb603d5248b",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2018_06_30/tile_STyYkWz8XGA.tif",
+      "tile": "2018_54a05d1b9f232ddb_32m.npz",
+      "year": 2018
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "e8e3066eefe03023738adc075fc732950e0a2ca1ec693c916683cc3a345175c2",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2018_06_30/tile_cgwCGcr2sS0.tif",
+      "tile": "2018_865f846e9d947b42_32m.npz",
+      "year": 2018
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "56039d51724697828e9fd9164cdfbd51f5e076339e6962b8d8018ad1674c6c58",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2018_06_30/tile_qxQUVAJNMrM.tif",
+      "tile": "2018_89cc83ec6f463583_32m.npz",
+      "year": 2018
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "2e64e830bb0dc0e87ad8434c9e925c2991e236611182a10a18e707721fd58d4c",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2018_06_30/tile_YfYkRm-FZQI.tif",
+      "tile": "2018_8a79233afeb4cd3e_32m.npz",
+      "year": 2018
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "7d2350fbf03f7925cb7b2994df0792a8f2a6eea6055beb924365e9a3bade50fb",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2018_06_30/tile_0PX-jEEaiBo.tif",
+      "tile": "2018_9b4654603b199e75_32m.npz",
+      "year": 2018
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "7062fe6af5076faa349a17a78eb9488e791ef7b0689777b00af29851c3f00351",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2018_06_30/tile_ioTy2ewmkos.tif",
+      "tile": "2018_fd161355771fca74_32m.npz",
+      "year": 2018
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "f3162971ec3e627dd6d63053dc2fbe1bc15f332b4426a85437e759c6a6fd93db",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2019_06_30/tile_cgwCGcr2sS0.tif",
+      "tile": "2019_10924b6c8192c19f_32m.npz",
+      "year": 2019
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "f96c0864e0ce18a0d80157510a595c22af7d8dbf722949d33760aad8a6adb545",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2019_06_30/tile_qxQUVAJNMrM.tif",
+      "tile": "2019_18ed98caf16f9f77_32m.npz",
+      "year": 2019
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "c6538f0b5d0801035d21504c6365fdad4812507a39dfce77a5b767ac3c0ed424",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2019_06_30/tile_STyYkWz8XGA.tif",
+      "tile": "2019_42574086d4fb46f9_32m.npz",
+      "year": 2019
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "953ac2d597bb1fb3f77f2d880c44a75d92632796f88807ed1ffca8ac514ccfb8",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2019_06_30/tile_8qaURWYP6Fk.tif",
+      "tile": "2019_99d2917ecd55bcdf_32m.npz",
+      "year": 2019
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "6a5664e38891b5c0ca35593f98597640e231dbfe4d548c7083a3fa81e437dd07",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2019_06_30/tile_0PX-jEEaiBo.tif",
+      "tile": "2019_a7dcd9f4df601112_32m.npz",
+      "year": 2019
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "f5bb8061c28c084b31689d859a925601b3faeda781c03a165d09ca81f08b4ebd",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2019_06_30/tile_AiQBORYndr0.tif",
+      "tile": "2019_ba10e602be33762a_32m.npz",
+      "year": 2019
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "c0cf6e8bdf88f97206875cfda7f513199773c734db87116921c832e650113ed2",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2019_06_30/tile_ILDHwfkn2NM.tif",
+      "tile": "2019_d5a97926eebfe2ff_32m.npz",
+      "year": 2019
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "c64576b34f9a7bdefe84a45e301b451b959bff3f6799a107ea53e79549036daf",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2019_06_30/tile_f00yNfQ-CZo.tif",
+      "tile": "2019_de5748b2fe45ab25_32m.npz",
+      "year": 2019
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "e2c007d009e4bd53544499c87ae81efd00a84ec2f4424c0281dd8eec0e5db10a",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2019_06_30/tile_YfYkRm-FZQI.tif",
+      "tile": "2019_e03f85f71a7ee271_32m.npz",
+      "year": 2019
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "938f5fe488d1549896bc44b69082e93263d8987fb5881ac7991ac851fbaea36d",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2019_06_30/tile_ioTy2ewmkos.tif",
+      "tile": "2019_f056832984170bae_32m.npz",
+      "year": 2019
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "3b870b2f7a25ef3dec07844f6bdba490f457089fbc8f8338777a7f112587233b",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2020_06_30/tile_ILDHwfkn2NM.tif",
+      "tile": "2020_140575ceaaea9abf_32m.npz",
+      "year": 2020
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "b7c8b8090a6452d1d665640195e5335a321390534de9bfcb6ef9abcb5f1dd902",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2020_06_30/tile_ioTy2ewmkos.tif",
+      "tile": "2020_5c00ab71677ab204_32m.npz",
+      "year": 2020
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "8c26bb9907d5c0d34b02481a0319450d14072fb4e1cc176c7476f7a1ccee5102",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2020_06_30/tile_STyYkWz8XGA.tif",
+      "tile": "2020_77cfc006f61db39f_32m.npz",
+      "year": 2020
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "edb447eb10418060dbabdb7d268cc81b1f914ea5d119462e18c39ebfc10725f3",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2020_06_30/tile_cgwCGcr2sS0.tif",
+      "tile": "2020_88d25ba0e6a119f0_32m.npz",
+      "year": 2020
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "5815eacd13ec82536b3d53cad4c4380fb866d08bc92acf5729521a6849649e3d",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2020_06_30/tile_f00yNfQ-CZo.tif",
+      "tile": "2020_cc0ac67b748e63e7_32m.npz",
+      "year": 2020
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "28066e57859bdfec17c3f017689daf2e8cfd1104d0718e5128b1e5dc4c4eea37",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2020_06_30/tile_AiQBORYndr0.tif",
+      "tile": "2020_cf81f47b688d4184_32m.npz",
+      "year": 2020
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "2478ad4c14999f03813900b269ca4877cb54aec5ca7906cc7e7d230c0ea500be",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2020_06_30/tile_8qaURWYP6Fk.tif",
+      "tile": "2020_d6e48ee3db65ee97_32m.npz",
+      "year": 2020
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "bc93ecdad8df73ff586ea9906c954973027d6dd57765aefe2c043d221733ac59",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2020_06_30/tile_qxQUVAJNMrM.tif",
+      "tile": "2020_e33e58187bcc1c0e_32m.npz",
+      "year": 2020
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "c9aa39f84961ce39ac7fa8db90ae2756d8ad8fc44d9dfb278d10a09a52c1678a",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2020_06_30/tile_0PX-jEEaiBo.tif",
+      "tile": "2020_eb9c3ac697cc6e0e_32m.npz",
+      "year": 2020
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "19f3da1dc781236b7fda2414f65aa7e9ca6f4d4da4400c6087d0c97462dc3f96",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2020_06_30/tile_YfYkRm-FZQI.tif",
+      "tile": "2020_ebc4aedadfdf5b37_32m.npz",
+      "year": 2020
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "6ac0fec64df7ef0a4796e24dc7dbdf33e20f2a78208153e9e638f0c2b4a582e8",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2021_06_30/tile_8qaURWYP6Fk.tif",
+      "tile": "2021_0a704e6c14a9d0e9_32m.npz",
+      "year": 2021
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "1729db5c63894847b8a6b2eea6d1067461acb6d12aaccc1fdac235df1d3db576",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2021_06_30/tile_f00yNfQ-CZo.tif",
+      "tile": "2021_33c5c65326e8fb58_32m.npz",
+      "year": 2021
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "1b71fa5c2265c6b567457212340237c6ef43d1247fd67358cd62e671abc83a3e",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2021_06_30/tile_0PX-jEEaiBo.tif",
+      "tile": "2021_33c867a04378e998_32m.npz",
+      "year": 2021
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "6f1206482cee9134b3cd6bceed2ed494cbcc20901cffd96cdbfd6571ac83fa6d",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2021_06_30/tile_ILDHwfkn2NM.tif",
+      "tile": "2021_39aeb72a7cfa5b05_32m.npz",
+      "year": 2021
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "8c87feed394aa16203302cbca1b0321df348bc437eabc011b7b1641b3b8c0555",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2021_06_30/tile_qxQUVAJNMrM.tif",
+      "tile": "2021_54d7c544f6523555_32m.npz",
+      "year": 2021
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "adb5049670bc9f3b319507ba503d7b4e64cfe9c363449461cd170e81bf734d42",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2021_06_30/tile_AiQBORYndr0.tif",
+      "tile": "2021_76b06188c730f605_32m.npz",
+      "year": 2021
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "40aa8644e5a77fcd9cc740805587eed1771b9ffe2693de68621536d579e0c3aa",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2021_06_30/tile_STyYkWz8XGA.tif",
+      "tile": "2021_8c5e3fce13ebb300_32m.npz",
+      "year": 2021
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "ffb91f8040e98e7b860cf04cbb1f19a25bd6b8dc4cd790c292d4f7eb34f0315a",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2021_06_30/tile_cgwCGcr2sS0.tif",
+      "tile": "2021_e1153d09c0c26b30_32m.npz",
+      "year": 2021
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "4a8571d36130c9fde40db826bff1fa3636c0180ccc3e3ac6a7207d825616fb03",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2021_06_30/tile_YfYkRm-FZQI.tif",
+      "tile": "2021_ee4698f52184711d_32m.npz",
+      "year": 2021
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "94dbe9f0f50c45bb74268030f6dacb63db02777c9a201fe82147de4efdbba409",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2021_06_30/tile_ioTy2ewmkos.tif",
+      "tile": "2021_f76e83a2a878506e_32m.npz",
+      "year": 2021
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "0047c94c4bc9a168e56362b78ef97d06d4939951740bbb81a9c31f66432d02d1",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2022_06_30/tile_f00yNfQ-CZo.tif",
+      "tile": "2022_293e9f7395a6e2fb_32m.npz",
+      "year": 2022
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "16602cf5c3bf61eeada6ab982e7ad8e782da556e0535aa9ad4e9ebf23a230243",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2022_06_30/tile_0PX-jEEaiBo.tif",
+      "tile": "2022_46e1df44fbe51502_32m.npz",
+      "year": 2022
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "fdd2344567b201df664cecbd0548f9ea870e24e071420cbf734c1a29fb391391",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2022_06_30/tile_AiQBORYndr0.tif",
+      "tile": "2022_90d06cc0dd7ecdce_32m.npz",
+      "year": 2022
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "b93e445cf29316e20465eaef2bc9fa719193aa455949662f919349e5973bb210",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2022_06_30/tile_qxQUVAJNMrM.tif",
+      "tile": "2022_99eaf07352d74d26_32m.npz",
+      "year": 2022
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "972b91c65254f1671b802134974f48abcf5fecc6c9075c5cfa355d8b432444d5",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2022_06_30/tile_STyYkWz8XGA.tif",
+      "tile": "2022_9a957ef8c3fa0a2b_32m.npz",
+      "year": 2022
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "2eb6682b4ca8868dbb536edb695f47c6aadde086c16e2be7bf00fbe478f3b4c5",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2022_06_30/tile_YfYkRm-FZQI.tif",
+      "tile": "2022_cbaf5fbb7e73267c_32m.npz",
+      "year": 2022
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "792cd1d06d5fff29d2816f3a54b35dafea5ed48cab64dd44e71483d5dd153b6e",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2022_06_30/tile_cgwCGcr2sS0.tif",
+      "tile": "2022_d9f37a9fc98446e3_32m.npz",
+      "year": 2022
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "280af2f66b217b1053d48a803540d37e27f0cd078b56e710906af4a743294bc3",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2022_06_30/tile_8qaURWYP6Fk.tif",
+      "tile": "2022_da60c52645311e89_32m.npz",
+      "year": 2022
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "c3333c6f52890c190e993787bf7de336fd922bbdc55a29e291b45028c4ea35d9",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2022_06_30/tile_ILDHwfkn2NM.tif",
+      "tile": "2022_eb10cf8194180667_32m.npz",
+      "year": 2022
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "8cb37b572daaf0fa11920034967483b98956aeb011d5f6a386f8563415095049",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2022_06_30/tile_ioTy2ewmkos.tif",
+      "tile": "2022_f59dd4094cc107b7_32m.npz",
+      "year": 2022
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "dff718de4bfc2de4e7d74cf1d530ebe7036d615f3c06fa7197f6d764df039a5d",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2023_06_30/tile_cgwCGcr2sS0.tif",
+      "tile": "2023_197d334d9c3d8c70_32m.npz",
+      "year": 2023
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "2eaf2e92d1d6096b9ba3dc402a40007d96da7f1fef0627f4672a26f74e6a3e3b",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2023_06_30/tile_8qaURWYP6Fk.tif",
+      "tile": "2023_3a9c5a88ab25bf45_32m.npz",
+      "year": 2023
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "ea460087650337435adcfa960cf529217a6557c01018d79a4fb62b100f1950cd",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2023_06_30/tile_qxQUVAJNMrM.tif",
+      "tile": "2023_3ba2911ae0cb93a4_32m.npz",
+      "year": 2023
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "94430c032a43c236aa4011b5911b7f56119930fd3334fe5e545b137cdd691b5e",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2023_06_30/tile_AiQBORYndr0.tif",
+      "tile": "2023_5f25618cf1faf29f_32m.npz",
+      "year": 2023
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "37e4a0fa6ca3c1b1be2728229fced35bf13eeda225214c02b502f6ef516134d8",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2023_06_30/tile_STyYkWz8XGA.tif",
+      "tile": "2023_69220400efbb5e2d_32m.npz",
+      "year": 2023
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "7594860afe67161440cb5473dbb4520fbca1a8c58859df7f96ffc798fb70867c",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2023_06_30/tile_f00yNfQ-CZo.tif",
+      "tile": "2023_7c29813d6458f80c_32m.npz",
+      "year": 2023
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "03555e2a03780884fb4419ae3c3343ed6753965435be2c5fcdbcbe90b0b7c27b",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2023_06_30/tile_YfYkRm-FZQI.tif",
+      "tile": "2023_7f5eb3a690e6f501_32m.npz",
+      "year": 2023
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "6ea1b69c71254164b43f2f3fadc68710c2fd14219cc0856cb7a1f9c65a5e2ec4",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2023_06_30/tile_ioTy2ewmkos.tif",
+      "tile": "2023_9d048c17d56b9cf7_32m.npz",
+      "year": 2023
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "e1395dd237f74a92ad9960cf2c79232c489ad870d352617dfb2a23f18db6caa4",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2023_06_30/tile_0PX-jEEaiBo.tif",
+      "tile": "2023_f9532bae3ab4db49_32m.npz",
+      "year": 2023
+    },
+    {
+      "basis": "DERIVED",
+      "grid_metres": 32,
+      "source_band": "building_fractional_count",
+      "source_sha256": "410198ba00ca5c34895f24675e69317c8e11414cc2ada64bc2f96c129d613060",
+      "source_url": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/3bcbc_2023_06_30/tile_ILDHwfkn2NM.tif",
+      "tile": "2023_ffd19abc6e8f7032_32m.npz",
+      "year": 2023
+    }
+  ]
+}
