@@ -101,6 +101,14 @@ class AllocationConfig:
     # a missed cycle. Basis: DERIVED from the REAL booking rule; the margin is ASSUMED.
     water_debt_alert_days: int = 3
 
+    # Station trip sharing (A8 follow-up, A7): a filling station lends the trips it has left
+    # after its own queue to short stations within this straight-line radius (km). HMWSSB ties
+    # each token to one station; in July 2026 only 8 of 95 stations had pending bookings
+    # (NewsMeter, 2026-07-14). A few neighbour links give most of the gain of full pooling
+    # (Jordan & Graves 1995). Chosen on the A8 sandbox sweep (Kneedle knee of bookings served vs
+    # km; at 3 km a station has a median of 4 neighbours). Basis: DERIVED (simulation).
+    station_sharing_radius_km: float = 3.0
+
     # Booking replay windows (A1, F19). Source: docs/research/P2.md: summer 2025 is the latest
     # complete summer on the pre-Feb-2026 section map (977,933 bookings); 2023 kept for
     # continuity with the solution document. Month totals REAL; daily split SYNTHETIC.

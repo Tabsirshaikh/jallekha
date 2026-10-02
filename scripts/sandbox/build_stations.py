@@ -11,7 +11,8 @@ the located sections in its HMWSSB division (APPROXIMATE). A division with no lo
 gives no point; its bookings are left out of the sandbox and counted.
 
 Road km = 2 x (straight-line km + section_access_km) x road_factor (ALLOCATION_CONFIG, 1.35),
-round trip; the access km stands for driving inside the section to the household. Each
+round trip; the access km stands for driving inside the section to the household. Station to
+station: 2 x straight-line km x road_factor (for trip sharing, JL_POOL). Each
 section keeps its nearest b4_candidate_stations stations; the first is its home station
 (HMWSSB: "token will be assigned to nearest Tanker Filling Station").
 """
@@ -42,6 +43,7 @@ TANKERS = "data/raw/hmwssb_tankers_portal"
 STATIONS = "data/derived/sandbox/stations.csv"
 SECTIONS = "data/derived/sandbox/section_points.csv"
 NETWORK = "data/derived/sandbox/section_station_km.csv"
+STATION_PAIRS = "data/derived/sandbox/station_station_km.csv"
 CHECKS = "data/verification/sandbox_stations_checks.json"
 WEIGHT_MONTHS = tuple((2025, m) for m in range(3, 8))  # the main replay window
 LOCATED = ("MAPPED", "UNMAPPED_NO_WARD")
@@ -177,6 +179,21 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
         s["bookings_2025_mar_jul"] = served_bookings[s["station_id"]]
         s["basis"] = "ASSUMED_STAND_IN"
 
+    pairs = [
+        {
+            "station_a": a["station_id"],
+            "station_b": b["station_id"],
+            "straight_km": round(haversine_km(a["lat"], a["lng"], b["lat"], b["lng"]), 3),
+            "round_trip_km": round(
+                2
+                * haversine_km(a["lat"], a["lng"], b["lat"], b["lng"])
+                * ALLOCATION_CONFIG.road_factor,
+                3,
+            ),
+        }
+        for i, a in enumerate(stations)
+        for b in stations[i + 1 :]
+    ]
     total = sum(p["bookings_2025_mar_jul"] for p in points)
     by_basis: dict[str, int] = defaultdict(int)
     for p in points:
@@ -199,6 +216,7 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
         STATIONS: _csv(stations),
         SECTIONS: _csv(section_rows),
         NETWORK: _csv(network),
+        STATION_PAIRS: _csv(pairs),
     }
     checks = {
         "summary": summary,

@@ -217,3 +217,65 @@ def test_need_coverage_counts_every_ward_including_those_that_never_book() -> No
     assert jl["zero_water_ward_share"] == 0.0  # 1 reserve trip = 5,000 l/day to W2
     assert jl["gini_need_coverage"] == pytest.approx(sandbox.gini([20000.0, 5000.0]))
     assert jl["jain_need_coverage"] == pytest.approx(sandbox.jain([20000.0, 5000.0]))
+
+
+# S1 is short (1 trip, 3 near bookings); S2 has 2 spare trips (3 trips, 1 booking), 6 km away.
+POOL_NET = Network(
+    round_trip_km={("near", "S1"): 2.0, ("other", "S2"): 2.0},
+    home={"near": "S1", "other": "S2"},
+    station_km={("S1", "S2"): 6.0},
+)
+
+
+def pool_bookings() -> list[SimBooking]:
+    return [booking(i, "near") for i in range(3)] + [booking(9, "other")]
+
+
+def test_jl_pool_lends_only_spare_trips_within_the_limit() -> None:
+    cfg = setting({"S1": 1, "S2": 3}, sharing_max_km=8.0)
+    result = sandbox.run("JL_POOL", pool_bookings(), POOL_NET, cfg)
+    day0 = [s for s in result.served if s.day == 0]
+    assert len(day0) == 4  # S1's own trip + 2 lent by S2 + S2's own booking
+    lent = [s for s in day0 if s.booking.section == "near" and s.station == "S2"]
+    assert len(lent) == 2
+    assert {s.km for s in lent} == {2.0 + 6.0}  # home trip + the lender's detour
+    assert any(s.booking.booking_id == "b009" for s in day0)  # lender's own queue first
+    near = setting({"S1": 1, "S2": 3}, sharing_max_km=5.0)
+    assert (
+        sum(s.day == 0 for s in sandbox.run("JL_POOL", pool_bookings(), POOL_NET, near).served) == 2
+    )
+
+
+def test_jl_pool_keeps_the_fair_order_at_the_borrowing_station() -> None:
+    bookings = [booking(i, "near", group="A") for i in range(4)] + [
+        booking(10 + i, "near", group="B") for i in range(4)
+    ]
+    entitlement = {"A": 3.0, "B": 1.0}
+    cfg = setting(
+        {"S1": 2, "S2": 2},
+        entitlement=entitlement,
+        need_weight={"A": 1, "B": 1},
+        sharing_max_km=8.0,
+    )
+    result = sandbox.run("JL_POOL", bookings, POOL_NET, cfg)
+    pending = [sandbox.queue_booking(b) for b in bookings]
+    direct = fair_queue.order_bookings(pending, 4, entitlement, fair_queue.QueueState())
+    assert [s.booking.booking_id for s in result.served if s.day == 0] == [
+        d.booking.booking_id for d in direct.served
+    ]
+
+
+def test_a_lent_trip_uses_the_direct_km_when_known() -> None:
+    """S2 to the 'near' section directly is 5 km; the detour estimate would be 2 + 6 = 8."""
+    net = Network(
+        round_trip_km={("near", "S1"): 2.0, ("other", "S2"): 2.0, ("near", "S2"): 5.0},
+        home={"near": "S1", "other": "S2"},
+        station_km={("S1", "S2"): 6.0},
+    )
+    cfg = setting({"S1": 1, "S2": 3}, sharing_max_km=8.0)
+    lent = [
+        s
+        for s in sandbox.run("JL_POOL", pool_bookings(), net, cfg).served
+        if s.booking.section == "near" and s.station == "S2"
+    ]
+    assert {s.km for s in lent} == {5.0}

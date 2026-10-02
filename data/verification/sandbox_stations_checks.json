@@ -5,6 +5,7 @@
   "outputs_sha256": {
     "data/derived/sandbox/section_points.csv": "490701a97a443bde6836659b6745d2037be53592ce1ba987296a11f76b1b3bee",
     "data/derived/sandbox/section_station_km.csv": "e99d628e89e4b710565f220265a40fe45cfeeb6707be22fac06d47521ecdf19e",
+    "data/derived/sandbox/station_station_km.csv": "ede51c82437d3add32b51e86cb824f53e0326df76e59e61911794e690ff7cb72",
     "data/derived/sandbox/stations.csv": "6232197e8f8b6605f0a02b3a580f39914d8f81af9c115cb19d7ce96c63cb5a5f"
   },
   "summary": {
