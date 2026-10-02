@@ -509,4 +509,4 @@ The pull-request description must summarize the same information and link to thi
 - **Handoff / next step:**
   - T5 / T7 log through `ledger_store.record` in the same way.
   - Merge note: `feat/t5-notices` edits the T5 row next to the T4 and T6 rows in `docs/P3_FEATURES.md` and `docs/features.csv`; the branch merged second needs a one-line fix in each.
-- **Pull request:** pending.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/42
