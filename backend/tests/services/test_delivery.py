@@ -536,3 +536,16 @@ def test_ledger_port_needs_known_event_and_entity(chain: InMemoryLedger) -> None
         chain.append("not_an_event", {"entity_type": "delivery", "entity_id": "d"}, "system")
     with pytest.raises(ValueError, match="entity"):
         chain.append("delivery_started", {}, "system")
+
+
+@pytest.mark.parametrize("field_name", ["seq", "prev_hash"])
+def test_seq_and_prev_hash_are_part_of_the_entry_hash(
+    chain: InMemoryLedger, field_name: str
+) -> None:
+    # The order and link checks in verify_entries would catch these edits anyway; this shows
+    # the hash itself covers them (S3 review D1, fixed in S3-FIX #25).
+    _start(chain)
+    entry = chain.entries[-1]
+    changed = entry.seq + 1 if field_name == "seq" else "0" * 64
+    assert ledger.entry_hash(entry) == entry.hash
+    assert ledger.entry_hash(replace(entry, **{field_name: changed})) != entry.hash
