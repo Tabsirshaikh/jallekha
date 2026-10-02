@@ -1,0 +1,653 @@
+source_unit_2009,source_names_2009,target_ward_id,target_ward_name,building_share,building_index,area_share,weight_basis
+1,Kapra,relation/7849497,Ward 1 Kapra,0.5577,1.9336,0.6950,DERIVED
+1,Kapra,relation/7849498,Ward 136 Neredmet,0.0235,0.0815,0.0641,DERIVED
+1,Kapra,relation/7849545,Ward 2 Dr A S Rao Nagar,0.2415,0.8373,0.1499,DERIVED
+1,Kapra,relation/7858673,Ward 138 Moula Ali,0.0231,0.0800,0.0127,DERIVED
+2,Cherlapally,relation/7849497,Ward 1 Kapra,0.0800,0.4396,0.0370,DERIVED
+2,Cherlapally,relation/7849545,Ward 2 Dr A S Rao Nagar,0.2805,1.5415,0.2015,DERIVED
+2,Cherlapally,relation/7849614,Ward 5 Mallapur,0.0034,0.0189,0.0076,DERIVED
+2,Cherlapally,relation/7858673,Ward 138 Moula Ali,0.0035,0.0192,0.0034,DERIVED
+3,Mallapur,relation/7849545,Ward 2 Dr A S Rao Nagar,0.0088,0.0260,0.0287,DERIVED
+3,Mallapur,relation/7849614,Ward 5 Mallapur,0.2730,0.8087,0.3320,DERIVED
+3,Mallapur,relation/7852324,Ward 139 East Anand Bagh,0.0665,0.1971,0.0475,DERIVED
+3,Mallapur,relation/7858673,Ward 138 Moula Ali,0.0249,0.0737,0.0177,DERIVED
+4,Nacharam,relation/7849315,Ward 6 Nacharam,0.5008,2.1458,0.5079,DERIVED
+4,Nacharam,relation/7849614,Ward 5 Mallapur,0.4299,1.8420,0.4214,DERIVED
+4,Nacharam,relation/7852324,Ward 139 East Anand Bagh,0.0211,0.0904,0.0205,DERIVED
+4,Nacharam,relation/7858671,Ward 143 Tarnaka,0.0460,0.1971,0.0411,DERIVED
+5,Uppal,relation/7849315,Ward 6 Nacharam,0.0305,0.0937,0.1089,DERIVED
+5,Uppal,relation/7850095,Ward 7 Chilka Nagar,0.6514,2.0030,0.5735,DERIVED
+5,Uppal,relation/7850118,Ward 10 Uppal,0.2714,0.8345,0.2364,DERIVED
+6,Habsiguda,relation/7849315,Ward 6 Nacharam,0.0008,0.0023,0.0024,DERIVED
+6,Habsiguda,relation/7850095,Ward 7 Chilka Nagar,0.0027,0.0080,0.0178,DERIVED
+6,Habsiguda,relation/7852446,Ward 8 Habsiguda,0.7164,2.1194,0.7537,DERIVED
+6,Habsiguda,relation/7852447,Ward 9 Ramanthapur,0.1242,0.3676,0.1055,DERIVED
+6,Habsiguda,relation/7854082,Ward 84 Bagh Amberpet,0.0061,0.0180,0.0026,DERIVED
+6,Habsiguda,relation/7858671,Ward 143 Tarnaka,0.0048,0.0141,0.0048,DERIVED
+6,Habsiguda,relation/7866626,Ward 83 Amberpet,0.1369,0.4051,0.0441,DERIVED
+7,Ramanthapur,relation/7850095,Ward 7 Chilka Nagar,0.0030,0.0109,0.0041,DERIVED
+7,Ramanthapur,relation/7850118,Ward 10 Uppal,0.5368,1.9221,0.7389,DERIVED
+7,Ramanthapur,relation/7852446,Ward 8 Habsiguda,0.0185,0.0663,0.0433,DERIVED
+7,Ramanthapur,relation/7852447,Ward 9 Ramanthapur,0.4417,1.5817,0.2122,DERIVED
+8,Kothapet,relation/7850118,Ward 10 Uppal,0.0032,0.0113,0.0905,DERIVED
+8,Kothapet,relation/7852365,Ward 21 Kothapet,0.3503,1.2179,0.2839,DERIVED
+8,Kothapet,relation/7852447,Ward 9 Ramanthapur,0.0091,0.0315,0.0479,DERIVED
+8,Kothapet,relation/7861518,Ward 22 Chaitanyapuri,0.2577,0.8958,0.1718,DERIVED
+9,Mansoorabad,relation/7850180,Ward 12 Mansoorabad,0.3504,1.5577,0.2361,DERIVED
+9,Mansoorabad,relation/7850268,Ward 15 Vanasthalipuram,0.0069,0.0307,0.0089,DERIVED
+9,Mansoorabad,relation/7852364,Ward 20 RK Puram,0.0209,0.0929,0.0107,DERIVED
+9,Mansoorabad,relation/7852365,Ward 21 Kothapet,0.0764,0.3395,0.0261,DERIVED
+9,Mansoorabad,relation/7861520,Ward 18 Lingojiguda,0.0616,0.2737,0.0153,DERIVED
+10,Hayathnagar,relation/7850180,Ward 12 Mansoorabad,0.2627,1.7137,0.3225,DERIVED
+10,Hayathnagar,relation/7850230,Ward 14 BN Reddy Nagar,0.2118,1.3814,0.2129,DERIVED
+10,Hayathnagar,relation/7850268,Ward 15 Vanasthalipuram,0.0006,0.0036,0.0001,DERIVED
+11,Vanasthalipuram,relation/7850180,Ward 12 Mansoorabad,0.0459,0.1261,0.0479,DERIVED
+11,Vanasthalipuram,relation/7850230,Ward 14 BN Reddy Nagar,0.5872,1.6127,0.5156,DERIVED
+11,Vanasthalipuram,relation/7850268,Ward 15 Vanasthalipuram,0.3597,0.9879,0.3282,DERIVED
+12,Karmanghat,relation/7850180,Ward 12 Mansoorabad,0.0055,0.0258,0.0083,DERIVED
+12,Karmanghat,relation/7850229,Ward 16 Hasthinapuram,0.3535,1.6577,0.3801,DERIVED
+12,Karmanghat,relation/7850230,Ward 14 BN Reddy Nagar,0.0784,0.3679,0.1119,DERIVED
+12,Karmanghat,relation/7850268,Ward 15 Vanasthalipuram,0.2649,1.2423,0.2180,DERIVED
+12,Karmanghat,relation/7861520,Ward 18 Lingojiguda,0.0761,0.3570,0.0545,DERIVED
+12,Karmanghat,relation/7861522,Ward 17 Champapet,0.1532,0.7186,0.0923,DERIVED
+13,Champapet,relation/7850229,Ward 16 Hasthinapuram,0.0436,0.1068,0.0539,DERIVED
+13,Champapet,relation/7861519,Ward 19 Saroornagar,0.0466,0.1143,0.0277,DERIVED
+13,Champapet,relation/7861520,Ward 18 Lingojiguda,0.3346,0.8205,0.3026,DERIVED
+13,Champapet,relation/7861521,Ward 38 IS Sadan,0.0982,0.2409,0.0828,DERIVED
+13,Champapet,relation/7861522,Ward 17 Champapet,0.3997,0.9802,0.3374,DERIVED
+13,Champapet,relation/7861531,Ward 39 Santhosh Nagar,0.0059,0.0144,0.0064,DERIVED
+14,Saroornagar,relation/7852364,Ward 20 RK Puram,0.0031,0.0061,0.0161,DERIVED
+14,Saroornagar,relation/7861517,Ward 23 Gaddiannaram,0.0747,0.1457,0.0614,DERIVED
+14,Saroornagar,relation/7861518,Ward 22 Chaitanyapuri,0.0030,0.0058,0.0065,DERIVED
+14,Saroornagar,relation/7861519,Ward 19 Saroornagar,0.5868,1.1440,0.5909,DERIVED
+14,Saroornagar,relation/7861520,Ward 18 Lingojiguda,0.3324,0.6480,0.3251,DERIVED
+15,Ramakrishnapuram,relation/7852364,Ward 20 RK Puram,0.7328,1.7701,0.7134,DERIVED
+15,Ramakrishnapuram,relation/7852365,Ward 21 Kothapet,0.1613,0.3896,0.1569,DERIVED
+15,Ramakrishnapuram,relation/7861518,Ward 22 Chaitanyapuri,0.0045,0.0108,0.0103,DERIVED
+15,Ramakrishnapuram,relation/7861519,Ward 19 Saroornagar,0.1015,0.2451,0.1193,DERIVED
+16,Gaddiannaram,relation/7852365,Ward 21 Kothapet,0.0158,0.0213,0.0174,DERIVED
+16,Gaddiannaram,relation/7861517,Ward 23 Gaddiannaram,0.4061,0.5484,0.3679,DERIVED
+16,Gaddiannaram,relation/7861518,Ward 22 Chaitanyapuri,0.3533,0.4770,0.3585,DERIVED
+16,Gaddiannaram,relation/7861519,Ward 19 Saroornagar,0.1597,0.2156,0.1432,DERIVED
+16,Gaddiannaram,relation/7861520,Ward 18 Lingojiguda,0.0617,0.0832,0.0707,DERIVED
+17,P&T Colony,relation/7861517,Ward 23 Gaddiannaram,0.6752,0.6463,0.4707,DERIVED
+17,P&T Colony,relation/7861518,Ward 22 Chaitanyapuri,0.2756,0.2638,0.2894,DERIVED
+17,P&T Colony,relation/7861525,Ward 25 Moosarambagh,0.0487,0.0466,0.0524,DERIVED
+18,Moosarambagh,relation/7861518,Ward 22 Chaitanyapuri,0.0069,0.0065,0.0069,DERIVED
+18,Moosarambagh,relation/7861525,Ward 25 Moosarambagh,0.8566,0.8011,0.6962,DERIVED
+18,Moosarambagh,relation/7861526,Ward 26 Old Malakpet,0.0146,0.0136,0.0202,DERIVED
+18,Moosarambagh,relation/7866626,Ward 83 Amberpet,0.0945,0.0884,0.2570,DERIVED
+18,Moosarambagh,relation/7866627,Ward 82 Golnaka,0.0274,0.0256,0.0197,DERIVED
+19,Saidabad,relation/7861517,Ward 23 Gaddiannaram,0.0240,0.0414,0.0244,DERIVED
+19,Saidabad,relation/7861523,Ward 27 Akbarbagh,0.0575,0.0991,0.0583,DERIVED
+19,Saidabad,relation/7861524,Ward 24 Saidabad,0.7480,1.2897,0.7301,DERIVED
+19,Saidabad,relation/7861525,Ward 25 Moosarambagh,0.1704,0.2939,0.1872,DERIVED
+20,IS Sadan,relation/7861517,Ward 23 Gaddiannaram,0.0539,0.1040,0.0354,DERIVED
+20,IS Sadan,relation/7861520,Ward 18 Lingojiguda,0.0165,0.0318,0.0144,DERIVED
+20,IS Sadan,relation/7861521,Ward 38 IS Sadan,0.7919,1.5280,0.7206,DERIVED
+20,IS Sadan,relation/7861522,Ward 17 Champapet,0.0101,0.0194,0.0106,DERIVED
+20,IS Sadan,relation/7861524,Ward 24 Saidabad,0.1239,0.2391,0.1082,DERIVED
+21,Santoshnagar,relation/7861521,Ward 38 IS Sadan,0.0188,0.0335,0.0409,DERIVED
+21,Santoshnagar,relation/7861524,Ward 24 Saidabad,0.0008,0.0014,0.0043,DERIVED
+21,Santoshnagar,relation/7861529,Ward 37 Rein Bazar,0.0042,0.0075,0.0046,DERIVED
+21,Santoshnagar,relation/7861530,Ward 37 Kurmaguda,0.3617,0.6427,0.3633,DERIVED
+21,Santoshnagar,relation/7861531,Ward 39 Santhosh Nagar,0.6145,1.0918,0.5867,DERIVED
+22,Riyasat Nagar,relation/7856356,Ward 40 Riyasat Nagar,0.6885,1.0504,0.6337,DERIVED
+22,Riyasat Nagar,relation/7856357,Ward 36 Lalithabagh,0.0846,0.1291,0.0824,DERIVED
+22,Riyasat Nagar,relation/7861531,Ward 39 Santhosh Nagar,0.1346,0.2053,0.1921,DERIVED
+22,Riyasat Nagar,relation/7861532,Ward 41 Kanchanbagh,0.0923,0.1408,0.0918,DERIVED
+23,Kanchanbagh,relation/7850229,Ward 16 Hasthinapuram,0.0476,0.1036,0.0171,DERIVED
+23,Kanchanbagh,relation/7856356,Ward 40 Riyasat Nagar,0.0523,0.1137,0.0270,DERIVED
+23,Kanchanbagh,relation/7856359,Ward 44 Uppuguda,0.0198,0.0430,0.0107,DERIVED
+23,Kanchanbagh,relation/7856362,Ward 43 Chandrayangutta,0.1509,0.3283,0.0528,DERIVED
+23,Kanchanbagh,relation/7861531,Ward 39 Santhosh Nagar,0.0112,0.0243,0.0035,DERIVED
+23,Kanchanbagh,relation/7861532,Ward 41 Kanchanbagh,0.6940,1.5103,0.7943,DERIVED
+24,Barkas,relation/7856360,Ward 45 Jangammet,0.0016,0.0040,0.0038,DERIVED
+24,Barkas,relation/7856362,Ward 43 Chandrayangutta,0.4836,1.1600,0.3365,DERIVED
+24,Barkas,relation/7856363,Ward 46 Falaknuma,0.0356,0.0854,0.0368,DERIVED
+24,Barkas,relation/7861532,Ward 41 Kanchanbagh,0.1478,0.3546,0.1917,DERIVED
+24,Barkas,relation/7867584,Ward 42 Barkas,0.3310,0.7940,0.4305,DERIVED
+25,Chandrayan Gutta,relation/7856359,Ward 44 Uppuguda,0.1589,0.1172,0.1576,DERIVED
+25,Chandrayan Gutta,relation/7856360,Ward 45 Jangammet,0.0614,0.0453,0.0634,DERIVED
+25,Chandrayan Gutta,relation/7856362,Ward 43 Chandrayangutta,0.7797,0.5749,0.7790,DERIVED
+26,Jangammet,relation/7856358,Ward 35 Gowlipura,0.0552,0.1000,0.0527,DERIVED
+26,Jangammet,relation/7856359,Ward 44 Uppuguda,0.0110,0.0200,0.0189,DERIVED
+26,Jangammet,relation/7856360,Ward 45 Jangammet,0.8766,1.5892,0.8643,DERIVED
+26,Jangammet,relation/7856361,Ward 48 Shalibanda,0.0572,0.1037,0.0641,DERIVED
+27,Uppuguda,relation/7856356,Ward 40 Riyasat Nagar,0.0348,0.0756,0.0461,DERIVED
+27,Uppuguda,relation/7856357,Ward 36 Lalithabagh,0.1127,0.2446,0.0925,DERIVED
+27,Uppuguda,relation/7856358,Ward 35 Gowlipura,0.0470,0.1020,0.0495,DERIVED
+27,Uppuguda,relation/7856359,Ward 44 Uppuguda,0.8055,1.7487,0.8120,DERIVED
+28,Lalithabagh,relation/7856356,Ward 40 Riyasat Nagar,0.2239,0.3924,0.2375,DERIVED
+28,Lalithabagh,relation/7856357,Ward 36 Lalithabagh,0.6616,1.1596,0.6494,DERIVED
+28,Lalithabagh,relation/7856358,Ward 35 Gowlipura,0.0225,0.0394,0.0188,DERIVED
+28,Lalithabagh,relation/7861529,Ward 37 Rein Bazar,0.0194,0.0340,0.0152,DERIVED
+28,Lalithabagh,relation/7861530,Ward 37 Kurmaguda,0.0281,0.0493,0.0245,DERIVED
+28,Lalithabagh,relation/7861531,Ward 39 Santhosh Nagar,0.0185,0.0324,0.0181,DERIVED
+28,Lalithabagh,relation/7865925,Ward 34 Talab Chanchalam,0.0260,0.0456,0.0364,DERIVED
+29,Rain Bazar,relation/7856370,Ward 32 Patthergatti,0.0760,0.1125,0.0719,DERIVED
+29,Rain Bazar,relation/7861528,Ward 29 Chawni,0.0656,0.0971,0.0678,DERIVED
+29,Rain Bazar,relation/7861529,Ward 37 Rein Bazar,0.5267,0.7795,0.5442,DERIVED
+29,Rain Bazar,relation/7861530,Ward 37 Kurmaguda,0.1247,0.1846,0.1215,DERIVED
+29,Rain Bazar,relation/7867252,Ward 30 Dabeerpura,0.2070,0.3064,0.1946,DERIVED
+30,Kurmaguda,relation/7861523,Ward 27 Akbarbagh,0.0026,0.0027,0.0069,DERIVED
+30,Kurmaguda,relation/7861524,Ward 24 Saidabad,0.0214,0.0224,0.0381,DERIVED
+30,Kurmaguda,relation/7861528,Ward 29 Chawni,0.3237,0.3374,0.3420,DERIVED
+30,Kurmaguda,relation/7861530,Ward 37 Kurmaguda,0.6523,0.6800,0.6130,DERIVED
+31,Chavni,relation/7861523,Ward 27 Akbarbagh,0.0133,0.0095,0.0665,DERIVED
+31,Chavni,relation/7861527,Ward 28 Azampura,0.1250,0.0890,0.1066,DERIVED
+31,Chavni,relation/7861528,Ward 29 Chawni,0.8617,0.6140,0.8269,DERIVED
+32,Akberbagh,relation/7861523,Ward 27 Akbarbagh,0.7466,0.9295,0.7593,DERIVED
+32,Akberbagh,relation/7861524,Ward 24 Saidabad,0.1232,0.1534,0.0925,DERIVED
+32,Akberbagh,relation/7861525,Ward 25 Moosarambagh,0.0505,0.0629,0.0615,DERIVED
+32,Akberbagh,relation/7861526,Ward 26 Old Malakpet,0.0789,0.0982,0.0851,DERIVED
+32,Akberbagh,relation/7861528,Ward 29 Chawni,0.0008,0.0010,0.0015,DERIVED
+33,Saleem Nagar,relation/7861525,Ward 25 Moosarambagh,0.4451,0.3713,0.3808,DERIVED
+33,Saleem Nagar,relation/7861526,Ward 26 Old Malakpet,0.3017,0.2517,0.3741,DERIVED
+33,Saleem Nagar,relation/7866627,Ward 82 Golnaka,0.2532,0.2112,0.2450,DERIVED
+34,Old Malakpet,relation/7861526,Ward 26 Old Malakpet,0.8077,0.9405,0.8359,DERIVED
+34,Old Malakpet,relation/7861527,Ward 28 Azampura,0.1216,0.1416,0.0876,DERIVED
+34,Old Malakpet,relation/7866627,Ward 82 Golnaka,0.0707,0.0823,0.0765,DERIVED
+35,Azampura,relation/7854080,Ward 78 Gunfoundry,0.0289,0.0563,0.0575,DERIVED
+35,Azampura,relation/7861523,Ward 27 Akbarbagh,0.0836,0.1631,0.0815,DERIVED
+35,Azampura,relation/7861526,Ward 26 Old Malakpet,0.2024,0.3947,0.1666,DERIVED
+35,Azampura,relation/7861527,Ward 28 Azampura,0.5629,1.0978,0.4952,DERIVED
+35,Azampura,relation/7861528,Ward 29 Chawni,0.0738,0.1438,0.0991,DERIVED
+35,Azampura,relation/7866627,Ward 82 Golnaka,0.0417,0.0813,0.0883,DERIVED
+35,Azampura,relation/7866628,Ward 80 Kachiguda,0.0006,0.0011,0.0022,DERIVED
+35,Azampura,relation/7867252,Ward 30 Dabeerpura,0.0062,0.0120,0.0097,DERIVED
+36,Dabeerpura,relation/7856370,Ward 32 Patthergatti,0.0026,0.0027,0.0003,DERIVED
+36,Dabeerpura,relation/7861527,Ward 28 Azampura,0.2496,0.2533,0.3031,DERIVED
+36,Dabeerpura,relation/7861528,Ward 29 Chawni,0.0326,0.0331,0.0717,DERIVED
+36,Dabeerpura,relation/7867252,Ward 30 Dabeerpura,0.7152,0.7258,0.6249,DERIVED
+37,Noorkhan Bazar,relation/7854080,Ward 78 Gunfoundry,0.0588,0.0623,0.0850,DERIVED
+37,Noorkhan Bazar,relation/7856370,Ward 32 Patthergatti,0.1991,0.2109,0.1670,DERIVED
+37,Noorkhan Bazar,relation/7861527,Ward 28 Azampura,0.0011,0.0011,0.0028,DERIVED
+37,Noorkhan Bazar,relation/7865920,Ward 50 Begum Bazar,0.0131,0.0139,0.0105,DERIVED
+37,Noorkhan Bazar,relation/7867252,Ward 30 Dabeerpura,0.7279,0.7711,0.7348,DERIVED
+38,Pathergatti,relation/7856370,Ward 32 Patthergatti,0.8911,1.0539,0.7686,DERIVED
+38,Pathergatti,relation/7856371,Ward 49 Ghansi Bazar,0.0201,0.0237,0.0292,DERIVED
+38,Pathergatti,relation/7865920,Ward 50 Begum Bazar,0.0819,0.0969,0.1621,DERIVED
+38,Pathergatti,relation/7867252,Ward 30 Dabeerpura,0.0069,0.0081,0.0401,DERIVED
+39,Talabchanchalam,relation/7856368,Ward 33 Moghalpura,0.0708,0.1481,0.0720,DERIVED
+39,Talabchanchalam,relation/7856370,Ward 32 Patthergatti,0.3204,0.6705,0.3387,DERIVED
+39,Talabchanchalam,relation/7861529,Ward 37 Rein Bazar,0.1304,0.2730,0.1333,DERIVED
+39,Talabchanchalam,relation/7865925,Ward 34 Talab Chanchalam,0.4784,1.0010,0.4560,DERIVED
+40,Moghalpura,relation/7856368,Ward 33 Moghalpura,0.6662,0.8237,0.6720,DERIVED
+40,Moghalpura,relation/7856370,Ward 32 Patthergatti,0.2534,0.3134,0.2408,DERIVED
+40,Moghalpura,relation/7856371,Ward 49 Ghansi Bazar,0.0009,0.0011,0.0063,DERIVED
+40,Moghalpura,relation/7865925,Ward 34 Talab Chanchalam,0.0796,0.0984,0.0806,DERIVED
+41,Gowlipura,relation/7856358,Ward 35 Gowlipura,0.8156,1.0218,0.8011,DERIVED
+41,Gowlipura,relation/7856368,Ward 33 Moghalpura,0.1178,0.1476,0.1293,DERIVED
+41,Gowlipura,relation/7865925,Ward 34 Talab Chanchalam,0.0666,0.0834,0.0697,DERIVED
+42,Aliabad,relation/7856358,Ward 35 Gowlipura,0.3594,0.4394,0.3115,DERIVED
+42,Aliabad,relation/7856360,Ward 45 Jangammet,0.0351,0.0429,0.0426,DERIVED
+42,Aliabad,relation/7856361,Ward 48 Shalibanda,0.5020,0.6138,0.5359,DERIVED
+42,Aliabad,relation/7856368,Ward 33 Moghalpura,0.1035,0.1266,0.1100,DERIVED
+43,Falaknuma,relation/7856360,Ward 45 Jangammet,0.0985,0.1632,0.1095,DERIVED
+43,Falaknuma,relation/7856361,Ward 48 Shalibanda,0.1462,0.2423,0.1411,DERIVED
+43,Falaknuma,relation/7856363,Ward 46 Falaknuma,0.4923,0.8160,0.5568,DERIVED
+43,Falaknuma,relation/7856364,Ward 47 Nawab Saheb Kunta,0.2546,0.4219,0.1845,DERIVED
+43,Falaknuma,relation/7856365,Ward 54 Jahanuma,0.0084,0.0139,0.0082,DERIVED
+44,Nawabsaheb Kunta,relation/7856361,Ward 48 Shalibanda,0.0469,0.0503,0.0469,DERIVED
+44,Nawabsaheb Kunta,relation/7856364,Ward 47 Nawab Saheb Kunta,0.7078,0.7591,0.7101,DERIVED
+44,Nawabsaheb Kunta,relation/7856365,Ward 54 Jahanuma,0.2453,0.2631,0.2430,DERIVED
+45,Jahanuma,relation/7856361,Ward 48 Shalibanda,0.0329,0.0572,0.0508,DERIVED
+45,Jahanuma,relation/7856364,Ward 47 Nawab Saheb Kunta,0.0132,0.0229,0.0106,DERIVED
+45,Jahanuma,relation/7856365,Ward 54 Jahanuma,0.8770,1.5219,0.8729,DERIVED
+45,Jahanuma,relation/7856366,Ward 55 Ramnaspura,0.0479,0.0831,0.0425,DERIVED
+45,Jahanuma,relation/7856367,Ward 53 Doodh Bowli,0.0290,0.0503,0.0231,DERIVED
+46,Fathe Darwaza,relation/7856361,Ward 48 Shalibanda,0.5722,0.2343,0.4968,DERIVED
+46,Fathe Darwaza,relation/7856365,Ward 54 Jahanuma,0.0512,0.0210,0.0426,DERIVED
+46,Fathe Darwaza,relation/7856367,Ward 53 Doodh Bowli,0.3479,0.1424,0.4345,DERIVED
+46,Fathe Darwaza,relation/7856369,Ward 52 Puranapool,0.0287,0.0117,0.0261,DERIVED
+47,Shali Banda,relation/7856358,Ward 35 Gowlipura,0.0022,0.0026,0.0070,DERIVED
+47,Shali Banda,relation/7856361,Ward 48 Shalibanda,0.7845,0.9429,0.7408,DERIVED
+47,Shali Banda,relation/7856369,Ward 52 Puranapool,0.1074,0.1291,0.1158,DERIVED
+47,Shali Banda,relation/7856371,Ward 49 Ghansi Bazar,0.1055,0.1269,0.1324,DERIVED
+48,Hussain Alam,relation/7856369,Ward 52 Puranapool,0.3349,0.4076,0.2850,DERIVED
+48,Hussain Alam,relation/7856371,Ward 49 Ghansi Bazar,0.6651,0.8097,0.7150,DERIVED
+49,Ghansi Bazar,relation/7856371,Ward 49 Ghansi Bazar,0.8785,0.8578,0.7099,DERIVED
+49,Ghansi Bazar,relation/7865920,Ward 50 Begum Bazar,0.0549,0.0536,0.1736,DERIVED
+49,Ghansi Bazar,relation/7865921,Ward 51 Goshamahal,0.0666,0.0651,0.1156,DERIVED
+50,Begum Bazar,relation/7854080,Ward 78 Gunfoundry,0.0298,0.0382,0.0248,DERIVED
+50,Begum Bazar,relation/7865919,Ward 77 Jambagh,0.1504,0.1926,0.1457,DERIVED
+50,Begum Bazar,relation/7865920,Ward 50 Begum Bazar,0.8028,1.0277,0.7877,DERIVED
+50,Begum Bazar,relation/7865921,Ward 51 Goshamahal,0.0169,0.0216,0.0418,DERIVED
+51,Goshamahal,relation/7857545,Ward 63 Mangalhat,0.0705,0.0755,0.0522,DERIVED
+51,Goshamahal,relation/7865919,Ward 77 Jambagh,0.1662,0.1779,0.1871,DERIVED
+51,Goshamahal,relation/7865920,Ward 50 Begum Bazar,0.1128,0.1208,0.0732,DERIVED
+51,Goshamahal,relation/7865921,Ward 51 Goshamahal,0.6504,0.6962,0.6876,DERIVED
+52,Dhoolpet,relation/7857545,Ward 63 Mangalhat,0.0561,0.0576,0.0556,DERIVED
+52,Dhoolpet,relation/7865920,Ward 50 Begum Bazar,0.5149,0.5290,0.5409,DERIVED
+52,Dhoolpet,relation/7865921,Ward 51 Goshamahal,0.4290,0.4408,0.4035,DERIVED
+53,Puranapul,relation/7856369,Ward 52 Puranapool,0.4777,0.4131,0.4259,DERIVED
+53,Puranapul,relation/7856371,Ward 49 Ghansi Bazar,0.3959,0.3423,0.3906,DERIVED
+53,Puranapul,relation/7865921,Ward 51 Goshamahal,0.1255,0.1085,0.1696,DERIVED
+53,Puranapul,relation/7865922,Ward 62 Ziaguda,0.0010,0.0008,0.0139,DERIVED
+54,Doodbowli,relation/7856365,Ward 54 Jahanuma,0.0025,0.0035,0.0030,DERIVED
+54,Doodbowli,relation/7856366,Ward 55 Ramnaspura,0.0208,0.0289,0.0297,DERIVED
+54,Doodbowli,relation/7856367,Ward 53 Doodh Bowli,0.7408,1.0287,0.7879,DERIVED
+54,Doodbowli,relation/7856369,Ward 52 Puranapool,0.2339,0.3248,0.1727,DERIVED
+54,Doodbowli,relation/7867248,Ward 56 Kishanbagh,0.0020,0.0028,0.0066,DERIVED
+55,Ramnaspura,relation/7856365,Ward 54 Jahanuma,0.0473,0.0597,0.0869,DERIVED
+55,Ramnaspura,relation/7856366,Ward 55 Ramnaspura,0.8029,1.0131,0.7471,DERIVED
+55,Ramnaspura,relation/7856367,Ward 53 Doodh Bowli,0.1468,0.1852,0.1360,DERIVED
+55,Ramnaspura,relation/7867246,Ward 58 Shastripuram,0.0025,0.0032,0.0134,DERIVED
+56,Kishanbagh,relation/7856365,Ward 54 Jahanuma,0.0010,0.0035,0.0035,DERIVED
+56,Kishanbagh,relation/7856366,Ward 55 Ramnaspura,0.1501,0.5429,0.3322,DERIVED
+56,Kishanbagh,relation/7856369,Ward 52 Puranapool,0.0007,0.0024,0.0012,DERIVED
+56,Kishanbagh,relation/7865922,Ward 62 Ziaguda,0.0011,0.0040,0.0175,DERIVED
+56,Kishanbagh,relation/7867246,Ward 58 Shastripuram,0.0124,0.0447,0.0088,DERIVED
+56,Kishanbagh,relation/7867247,Ward 57 Suleman Nagar,0.1612,0.5833,0.0662,DERIVED
+56,Kishanbagh,relation/7867248,Ward 56 Kishanbagh,0.5271,1.9067,0.2649,DERIVED
+56,Kishanbagh,relation/7867249,Ward 61 Attapur,0.1410,0.5099,0.0656,DERIVED
+57,Shivarampally,relation/7848844,Ward 60 Rajendra Nagar,0.1037,0.5077,0.1350,DERIVED
+57,Shivarampally,relation/7856363,Ward 46 Falaknuma,0.2191,1.0730,0.1086,DERIVED
+57,Shivarampally,relation/7856364,Ward 47 Nawab Saheb Kunta,0.0742,0.3631,0.0311,DERIVED
+57,Shivarampally,relation/7856365,Ward 54 Jahanuma,0.0355,0.1737,0.0210,DERIVED
+57,Shivarampally,relation/7856366,Ward 55 Ramnaspura,0.0008,0.0040,0.0032,DERIVED
+57,Shivarampally,relation/7867246,Ward 58 Shastripuram,0.4566,2.2360,0.4609,DERIVED
+57,Shivarampally,relation/7867247,Ward 57 Suleman Nagar,0.1101,0.5393,0.2301,DERIVED
+58,Mylardevpally,relation/7848844,Ward 60 Rajendra Nagar,0.0025,0.0152,0.0013,DERIVED
+58,Mylardevpally,relation/7849357,Ward 59 Mailardevpally,0.5812,3.5804,0.6464,DERIVED
+58,Mylardevpally,relation/7856362,Ward 43 Chandrayangutta,0.0142,0.0873,0.0073,DERIVED
+58,Mylardevpally,relation/7856363,Ward 46 Falaknuma,0.0176,0.1086,0.0077,DERIVED
+58,Mylardevpally,relation/7867246,Ward 58 Shastripuram,0.1484,0.9139,0.1485,DERIVED
+58,Mylardevpally,relation/7867584,Ward 42 Barkas,0.0040,0.0249,0.0058,DERIVED
+59,Rajendranagar,relation/7848844,Ward 60 Rajendra Nagar,0.5864,3.1876,0.6358,DERIVED
+59,Rajendranagar,relation/7849357,Ward 59 Mailardevpally,0.1298,0.7058,0.1361,DERIVED
+59,Rajendranagar,relation/7857554,Ward 66 Langar Houz,0.0072,0.0390,0.0074,DERIVED
+59,Rajendranagar,relation/7867247,Ward 57 Suleman Nagar,0.0372,0.2021,0.0077,DERIVED
+59,Rajendranagar,relation/7867249,Ward 61 Attapur,0.1392,0.7569,0.0509,DERIVED
+60,Attapur,relation/7848844,Ward 60 Rajendra Nagar,0.0054,0.0210,0.0120,DERIVED
+60,Attapur,relation/7865924,Ward 65 Karwan,0.0086,0.0334,0.0205,DERIVED
+60,Attapur,relation/7867247,Ward 57 Suleman Nagar,0.4650,1.7964,0.3175,DERIVED
+60,Attapur,relation/7867248,Ward 56 Kishanbagh,0.0325,0.1254,0.0181,DERIVED
+60,Attapur,relation/7867249,Ward 61 Attapur,0.4881,1.8856,0.6116,DERIVED
+61,Karwan,relation/7857546,Ward 64 Dattatreya Nagar,0.0308,0.0460,0.0325,DERIVED
+61,Karwan,relation/7857548,Ward 72 Asif Nagar,0.0866,0.1293,0.0744,DERIVED
+61,Karwan,relation/7857550,Ward 71 Gudimalkapur,0.1837,0.2742,0.1742,DERIVED
+61,Karwan,relation/7865922,Ward 62 Ziaguda,0.1056,0.1576,0.1012,DERIVED
+61,Karwan,relation/7865924,Ward 65 Karwan,0.5932,0.8854,0.6177,DERIVED
+62,Ziaguda,relation/7857545,Ward 63 Mangalhat,0.0733,0.1375,0.0520,DERIVED
+62,Ziaguda,relation/7865921,Ward 51 Goshamahal,0.0030,0.0057,0.0050,DERIVED
+62,Ziaguda,relation/7865922,Ward 62 Ziaguda,0.8788,1.6493,0.8840,DERIVED
+62,Ziaguda,relation/7865924,Ward 65 Karwan,0.0445,0.0836,0.0569,DERIVED
+63,Dattathreyanagar,relation/7857545,Ward 63 Mangalhat,0.0874,0.1034,0.1080,DERIVED
+63,Dattathreyanagar,relation/7857546,Ward 64 Dattatreya Nagar,0.8080,0.9556,0.7848,DERIVED
+63,Dattathreyanagar,relation/7857548,Ward 72 Asif Nagar,0.0324,0.0383,0.0300,DERIVED
+63,Dattathreyanagar,relation/7865924,Ward 65 Karwan,0.0722,0.0854,0.0772,DERIVED
+64,Manghalhat,relation/7857544,Ward 76 Mallepally,0.0678,0.1063,0.0722,DERIVED
+64,Manghalhat,relation/7857545,Ward 63 Mangalhat,0.6539,1.0254,0.7139,DERIVED
+64,Manghalhat,relation/7857546,Ward 64 Dattatreya Nagar,0.2057,0.3226,0.1569,DERIVED
+64,Manghalhat,relation/7857548,Ward 72 Asif Nagar,0.0720,0.1129,0.0568,DERIVED
+64,Manghalhat,relation/7865921,Ward 51 Goshamahal,0.0006,0.0009,0.0002,DERIVED
+65,Asifnagar,relation/7857544,Ward 76 Mallepally,0.1400,0.1705,0.1137,DERIVED
+65,Asifnagar,relation/7857546,Ward 64 Dattatreya Nagar,0.0130,0.0158,0.0087,DERIVED
+65,Asifnagar,relation/7857547,Ward 73 Vijay Nagar Colony,0.3557,0.4331,0.3553,DERIVED
+65,Asifnagar,relation/7857548,Ward 72 Asif Nagar,0.4904,0.5972,0.5200,DERIVED
+65,Asifnagar,relation/7857549,Ward 70 Mehdipatnam,0.0009,0.0010,0.0023,DERIVED
+66,Muradnagar,relation/7857547,Ward 73 Vijay Nagar Colony,0.1685,0.2014,0.1616,DERIVED
+66,Muradnagar,relation/7857548,Ward 72 Asif Nagar,0.4662,0.5572,0.4535,DERIVED
+66,Muradnagar,relation/7857549,Ward 70 Mehdipatnam,0.3501,0.4184,0.3499,DERIVED
+66,Muradnagar,relation/7857550,Ward 71 Gudimalkapur,0.0152,0.0181,0.0350,DERIVED
+67,Mehdipatnam,relation/7857547,Ward 73 Vijay Nagar Colony,0.0471,0.0620,0.0429,DERIVED
+67,Mehdipatnam,relation/7857548,Ward 72 Asif Nagar,0.1004,0.1321,0.0599,DERIVED
+67,Mehdipatnam,relation/7857549,Ward 70 Mehdipatnam,0.5816,0.7656,0.5375,DERIVED
+67,Mehdipatnam,relation/7857550,Ward 71 Gudimalkapur,0.2551,0.3358,0.2384,DERIVED
+67,Mehdipatnam,relation/7857551,Ward 69 Nanal Nagar,0.0158,0.0208,0.1212,DERIVED
+68,Gudimalkapur,relation/7857548,Ward 72 Asif Nagar,0.0232,0.0634,0.0170,DERIVED
+68,Gudimalkapur,relation/7857550,Ward 71 Gudimalkapur,0.3254,0.8906,0.2779,DERIVED
+68,Gudimalkapur,relation/7857551,Ward 69 Nanal Nagar,0.0890,0.2435,0.1244,DERIVED
+68,Gudimalkapur,relation/7857553,Ward 67 Golconda,0.0286,0.0782,0.1181,DERIVED
+68,Gudimalkapur,relation/7857554,Ward 66 Langar Houz,0.2314,0.6334,0.1709,DERIVED
+68,Gudimalkapur,relation/7865924,Ward 65 Karwan,0.3025,0.8279,0.2916,DERIVED
+69,Lunger House,relation/7857543,Ward 94 Shaikpet,0.0088,0.0279,0.0134,DERIVED
+69,Lunger House,relation/7857551,Ward 69 Nanal Nagar,0.0023,0.0072,0.0074,DERIVED
+69,Lunger House,relation/7857552,Ward 68 Tolichowki,0.0722,0.2294,0.0263,DERIVED
+69,Lunger House,relation/7857553,Ward 67 Golconda,0.3680,1.1694,0.1985,DERIVED
+69,Lunger House,relation/7857554,Ward 66 Langar Houz,0.5350,1.7002,0.6954,DERIVED
+70,Tolichowki,relation/7857543,Ward 94 Shaikpet,0.0663,0.1502,0.0802,DERIVED
+70,Tolichowki,relation/7857551,Ward 69 Nanal Nagar,0.0054,0.0123,0.0061,DERIVED
+70,Tolichowki,relation/7857552,Ward 68 Tolichowki,0.5533,1.2534,0.7166,DERIVED
+70,Tolichowki,relation/7857553,Ward 67 Golconda,0.3750,0.8494,0.1971,DERIVED
+71,Nanalnagar,relation/7848859,Ward 95 Jubilee Hills,0.0069,0.0131,0.0049,DERIVED
+71,Nanalnagar,relation/7852805,Ward 93 Banjara Hills,0.0768,0.1453,0.0773,DERIVED
+71,Nanalnagar,relation/7857543,Ward 94 Shaikpet,0.0164,0.0311,0.0101,DERIVED
+71,Nanalnagar,relation/7857551,Ward 69 Nanal Nagar,0.7259,1.3732,0.7558,DERIVED
+71,Nanalnagar,relation/7857552,Ward 68 Tolichowki,0.0651,0.1232,0.0328,DERIVED
+71,Nanalnagar,relation/7857553,Ward 67 Golconda,0.0898,0.1698,0.0429,DERIVED
+71,Nanalnagar,relation/7867585,Ward 74 Ahmed Nagar,0.0190,0.0360,0.0762,DERIVED
+72,Ahmed Nagar,relation/7852805,Ward 93 Banjara Hills,0.4700,0.6894,0.3387,DERIVED
+72,Ahmed Nagar,relation/7867585,Ward 74 Ahmed Nagar,0.5300,0.7774,0.6552,DERIVED
+73,Vijayanagar Colony,relation/7857547,Ward 73 Vijay Nagar Colony,0.7720,0.7948,0.6662,DERIVED
+73,Vijayanagar Colony,relation/7857551,Ward 69 Nanal Nagar,0.0051,0.0052,0.0341,DERIVED
+73,Vijayanagar Colony,relation/7865918,Ward 75 Red Hills,0.0202,0.0208,0.0218,DERIVED
+73,Vijayanagar Colony,relation/7867585,Ward 74 Ahmed Nagar,0.2027,0.2086,0.2779,DERIVED
+74,Chintalbasti,relation/7848799,Ward 91 Khairatabad,0.0078,0.0073,0.0096,DERIVED
+74,Chintalbasti,relation/7852805,Ward 93 Banjara Hills,0.1979,0.1862,0.1423,DERIVED
+74,Chintalbasti,relation/7857547,Ward 73 Vijay Nagar Colony,0.2086,0.1963,0.3063,DERIVED
+74,Chintalbasti,relation/7865918,Ward 75 Red Hills,0.4685,0.4409,0.4033,DERIVED
+74,Chintalbasti,relation/7867585,Ward 74 Ahmed Nagar,0.1172,0.1103,0.1385,DERIVED
+75,Mallepally,relation/7857544,Ward 76 Mallepally,0.8644,0.8685,0.8413,DERIVED
+75,Mallepally,relation/7857545,Ward 63 Mangalhat,0.0070,0.0070,0.0059,DERIVED
+75,Mallepally,relation/7857547,Ward 73 Vijay Nagar Colony,0.0331,0.0333,0.0465,DERIVED
+75,Mallepally,relation/7865918,Ward 75 Red Hills,0.0681,0.0684,0.0780,DERIVED
+75,Mallepally,relation/7865919,Ward 77 Jambagh,0.0275,0.0276,0.0282,DERIVED
+76,Red Hills,relation/7848799,Ward 91 Khairatabad,0.0660,0.0639,0.0811,DERIVED
+76,Red Hills,relation/7854080,Ward 78 Gunfoundry,0.0058,0.0056,0.0150,DERIVED
+76,Red Hills,relation/7857544,Ward 76 Mallepally,0.0821,0.0795,0.0468,DERIVED
+76,Red Hills,relation/7865918,Ward 75 Red Hills,0.8461,0.8194,0.8571,DERIVED
+77,Jambagh,relation/7857544,Ward 76 Mallepally,0.0734,0.0996,0.0520,DERIVED
+77,Jambagh,relation/7857545,Ward 63 Mangalhat,0.0011,0.0014,0.0002,DERIVED
+77,Jambagh,relation/7865918,Ward 75 Red Hills,0.0460,0.0624,0.0529,DERIVED
+77,Jambagh,relation/7865919,Ward 77 Jambagh,0.8796,1.1929,0.8948,DERIVED
+78,Gunfoundry,relation/7848799,Ward 91 Khairatabad,0.0181,0.0210,0.0632,DERIVED
+78,Gunfoundry,relation/7854080,Ward 78 Gunfoundry,0.8376,0.9737,0.8236,DERIVED
+78,Gunfoundry,relation/7854081,Ward 79 Himayath Nagar,0.0191,0.0222,0.0217,DERIVED
+78,Gunfoundry,relation/7858226,Ward 90 Kavadiguda,0.0043,0.0050,0.0042,DERIVED
+78,Gunfoundry,relation/7865918,Ward 75 Red Hills,0.0099,0.0115,0.0187,DERIVED
+78,Gunfoundry,relation/7865919,Ward 77 Jambagh,0.1110,0.1290,0.0686,DERIVED
+79,Sultan Bazar,relation/7854080,Ward 78 Gunfoundry,0.6509,1.0845,0.6867,DERIVED
+79,Sultan Bazar,relation/7854081,Ward 79 Himayath Nagar,0.0763,0.1272,0.0622,DERIVED
+79,Sultan Bazar,relation/7865919,Ward 77 Jambagh,0.2130,0.3548,0.2188,DERIVED
+79,Sultan Bazar,relation/7866628,Ward 80 Kachiguda,0.0598,0.0996,0.0323,DERIVED
+80,Himayathnagar,relation/7854080,Ward 78 Gunfoundry,0.0207,0.0315,0.0258,DERIVED
+80,Himayathnagar,relation/7854081,Ward 79 Himayath Nagar,0.8361,1.2706,0.8412,DERIVED
+80,Himayathnagar,relation/7854086,Ward 89 Gandhinagar,0.0428,0.0650,0.0590,DERIVED
+80,Himayathnagar,relation/7858226,Ward 90 Kavadiguda,0.1004,0.1526,0.0740,DERIVED
+81,Barkatpura,relation/7854081,Ward 79 Himayath Nagar,0.4251,0.4058,0.3544,DERIVED
+81,Barkatpura,relation/7854083,Ward 81 Nallakunta,0.0375,0.0358,0.0667,DERIVED
+81,Barkatpura,relation/7854085,Ward 87 Ramnagar,0.0437,0.0418,0.0481,DERIVED
+81,Barkatpura,relation/7854086,Ward 89 Gandhinagar,0.0014,0.0013,0.0073,DERIVED
+81,Barkatpura,relation/7866628,Ward 80 Kachiguda,0.4923,0.4699,0.5235,DERIVED
+82,Kachiguda,relation/7854080,Ward 78 Gunfoundry,0.0194,0.0274,0.0181,DERIVED
+82,Kachiguda,relation/7854081,Ward 79 Himayath Nagar,0.0082,0.0116,0.0081,DERIVED
+82,Kachiguda,relation/7854083,Ward 81 Nallakunta,0.0380,0.0536,0.0247,DERIVED
+82,Kachiguda,relation/7866627,Ward 82 Golnaka,0.2392,0.3380,0.2864,DERIVED
+82,Kachiguda,relation/7866628,Ward 80 Kachiguda,0.6952,0.9821,0.6627,DERIVED
+83,Golnaka,relation/7854082,Ward 84 Bagh Amberpet,0.0617,0.0633,0.0938,DERIVED
+83,Golnaka,relation/7854083,Ward 81 Nallakunta,0.1104,0.1133,0.1226,DERIVED
+83,Golnaka,relation/7866626,Ward 83 Amberpet,0.0035,0.0036,0.0070,DERIVED
+83,Golnaka,relation/7866627,Ward 82 Golnaka,0.8243,0.8455,0.7766,DERIVED
+84,Amberpet,relation/7854082,Ward 84 Bagh Amberpet,0.0940,0.1235,0.0712,DERIVED
+84,Amberpet,relation/7866626,Ward 83 Amberpet,0.8880,1.1673,0.9114,DERIVED
+84,Amberpet,relation/7866627,Ward 82 Golnaka,0.0116,0.0153,0.0151,DERIVED
+85,Bagh Amberpet,relation/7854082,Ward 84 Bagh Amberpet,0.8962,0.8755,0.8685,DERIVED
+85,Bagh Amberpet,relation/7854083,Ward 81 Nallakunta,0.0637,0.0622,0.0798,DERIVED
+85,Bagh Amberpet,relation/7866626,Ward 83 Amberpet,0.0400,0.0391,0.0492,DERIVED
+86,Vidyanagar,relation/7854082,Ward 84 Bagh Amberpet,0.5415,0.3843,0.5438,DERIVED
+86,Vidyanagar,relation/7854083,Ward 81 Nallakunta,0.3021,0.2144,0.2150,DERIVED
+86,Vidyanagar,relation/7854084,Ward 85 Adikmet,0.1023,0.0726,0.0957,DERIVED
+87,Nallakunta,relation/7854083,Ward 81 Nallakunta,0.8102,0.9532,0.8108,DERIVED
+87,Nallakunta,relation/7854084,Ward 85 Adikmet,0.0672,0.0790,0.0843,DERIVED
+87,Nallakunta,relation/7854085,Ward 87 Ramnagar,0.1003,0.1180,0.0873,DERIVED
+87,Nallakunta,relation/7866627,Ward 82 Golnaka,0.0224,0.0263,0.0177,DERIVED
+88,Bagh Lingampally,relation/7854084,Ward 85 Adikmet,0.2666,0.2699,0.2533,DERIVED
+88,Bagh Lingampally,relation/7854085,Ward 87 Ramnagar,0.6605,0.6685,0.6826,DERIVED
+88,Bagh Lingampally,relation/7854086,Ward 89 Gandhinagar,0.0728,0.0737,0.0641,DERIVED
+89,Adikmet,relation/7854084,Ward 85 Adikmet,0.5074,0.5818,0.5772,DERIVED
+89,Adikmet,relation/7854085,Ward 87 Ramnagar,0.0415,0.0476,0.0494,DERIVED
+89,Adikmet,relation/7854087,Ward 86 Musheerabad,0.3686,0.4226,0.3080,DERIVED
+89,Adikmet,relation/7854088,Ward 146 Boudha Nagar,0.0826,0.0947,0.0654,DERIVED
+90,Ramnagar,relation/7854085,Ward 87 Ramnagar,0.5790,0.8604,0.6391,DERIVED
+90,Ramnagar,relation/7854086,Ward 89 Gandhinagar,0.0203,0.0302,0.0375,DERIVED
+90,Ramnagar,relation/7854087,Ward 86 Musheerabad,0.3083,0.4582,0.2391,DERIVED
+90,Ramnagar,relation/7854089,Ward 88 Bholakpur,0.0924,0.1373,0.0843,DERIVED
+91,Musheerabad,relation/7854087,Ward 86 Musheerabad,0.6194,0.3540,0.5654,DERIVED
+91,Musheerabad,relation/7854089,Ward 88 Bholakpur,0.2020,0.1154,0.2078,DERIVED
+91,Musheerabad,relation/7854091,Ward 147 Bansilapet,0.1786,0.1021,0.2268,DERIVED
+92,Bholapur,relation/7854089,Ward 88 Bholakpur,0.8705,0.8337,0.8503,DERIVED
+92,Bholapur,relation/7854091,Ward 147 Bansilapet,0.0692,0.0663,0.0859,DERIVED
+92,Bholapur,relation/7858226,Ward 90 Kavadiguda,0.0603,0.0578,0.0639,DERIVED
+93,Gandhinagar,relation/7854086,Ward 89 Gandhinagar,0.8423,0.5825,0.8140,DERIVED
+93,Gandhinagar,relation/7854089,Ward 88 Bholakpur,0.1281,0.0886,0.1271,DERIVED
+93,Gandhinagar,relation/7858226,Ward 90 Kavadiguda,0.0297,0.0205,0.0589,DERIVED
+94,Kavadiguda,relation/7848799,Ward 91 Khairatabad,0.0013,0.0010,0.0830,DERIVED
+94,Kavadiguda,relation/7854089,Ward 88 Bholakpur,0.0823,0.0649,0.0513,DERIVED
+94,Kavadiguda,relation/7854091,Ward 147 Bansilapet,0.0102,0.0080,0.0096,DERIVED
+94,Kavadiguda,relation/7857839,Ward 148 Ramgopalpet,0.0542,0.0428,0.0552,DERIVED
+94,Kavadiguda,relation/7858226,Ward 90 Kavadiguda,0.8520,0.6716,0.8010,DERIVED
+95,Domalguda,relation/7848799,Ward 91 Khairatabad,0.0010,0.0010,0.0406,DERIVED
+95,Domalguda,relation/7854086,Ward 89 Gandhinagar,0.4844,0.5068,0.4008,DERIVED
+95,Domalguda,relation/7858226,Ward 90 Kavadiguda,0.5146,0.5383,0.5586,DERIVED
+96,Khairtabad,relation/7848799,Ward 91 Khairatabad,0.7365,0.8317,0.9015,DERIVED
+96,Khairtabad,relation/7857794,Ward 98 Ameerpet,0.0156,0.0176,0.0090,DERIVED
+96,Khairtabad,relation/7857795,Ward 97 Somajiguda,0.2203,0.2488,0.0294,DERIVED
+96,Khairtabad,relation/7857839,Ward 148 Ramgopalpet,0.0071,0.0081,0.0063,DERIVED
+96,Khairtabad,relation/7857840,Ward 149 Begumpet,0.0205,0.0231,0.0537,DERIVED
+97,Punjagutta,relation/7848799,Ward 91 Khairatabad,0.6849,0.9339,0.7637,DERIVED
+97,Punjagutta,relation/7852804,Ward 92 Venkateshwara Colony,0.0333,0.0454,0.0637,DERIVED
+97,Punjagutta,relation/7852805,Ward 93 Banjara Hills,0.2266,0.3089,0.1473,DERIVED
+97,Punjagutta,relation/7865918,Ward 75 Red Hills,0.0551,0.0752,0.0246,DERIVED
+98,Somajiguda,relation/7848799,Ward 91 Khairatabad,0.2723,0.4034,0.2728,DERIVED
+98,Somajiguda,relation/7857794,Ward 98 Ameerpet,0.2283,0.3383,0.2817,DERIVED
+98,Somajiguda,relation/7857795,Ward 97 Somajiguda,0.4666,0.6914,0.4171,DERIVED
+98,Somajiguda,relation/7857840,Ward 149 Begumpet,0.0328,0.0486,0.0284,DERIVED
+99,Ameerpet,relation/7857793,Ward 100 Sanath Nagar,0.0340,0.0366,0.0237,DERIVED
+99,Ameerpet,relation/7857794,Ward 98 Ameerpet,0.9478,1.0206,0.9617,DERIVED
+99,Ameerpet,relation/7857795,Ward 97 Somajiguda,0.0016,0.0018,0.0036,DERIVED
+99,Ameerpet,relation/7857800,Ward 99 Vengal Rao Nagar,0.0006,0.0006,0.0022,DERIVED
+99,Ameerpet,relation/7857840,Ward 149 Begumpet,0.0161,0.0173,0.0087,DERIVED
+100,Balkampet,relation/7857793,Ward 100 Sanath Nagar,0.7492,0.8468,0.7020,DERIVED
+100,Balkampet,relation/7857794,Ward 98 Ameerpet,0.2473,0.2796,0.2806,DERIVED
+100,Balkampet,relation/7857798,Ward 101 Erragadda,0.0024,0.0027,0.0120,DERIVED
+100,Balkampet,relation/7857800,Ward 99 Vengal Rao Nagar,0.0011,0.0012,0.0054,DERIVED
+101,Sanathnagar,relation/7857793,Ward 100 Sanath Nagar,0.9214,0.7932,0.8713,DERIVED
+101,Sanathnagar,relation/7857798,Ward 101 Erragadda,0.0240,0.0207,0.0205,DERIVED
+101,Sanathnagar,relation/7858245,Ward 118 Fateh Nagar,0.0544,0.0468,0.1062,DERIVED
+102,Erragadda,relation/7853538,Ward 116 Allapur,0.0252,0.0333,0.0167,DERIVED
+102,Erragadda,relation/7857797,Ward 102 Rahmath Nagar,0.0231,0.0306,0.0144,DERIVED
+102,Erragadda,relation/7857798,Ward 101 Erragadda,0.7885,1.0438,0.7864,DERIVED
+102,Erragadda,relation/7857799,Ward 103 Borabanda,0.0267,0.0354,0.0153,DERIVED
+102,Erragadda,relation/7858244,Ward 117 Moosapet,0.1365,0.1808,0.1671,DERIVED
+103,Vengalrao Nagar,relation/7857795,Ward 97 Somajiguda,0.0119,0.0196,0.0091,DERIVED
+103,Vengalrao Nagar,relation/7857797,Ward 102 Rahmath Nagar,0.0090,0.0149,0.0036,DERIVED
+103,Vengalrao Nagar,relation/7857798,Ward 101 Erragadda,0.0816,0.1349,0.0936,DERIVED
+103,Vengalrao Nagar,relation/7857800,Ward 99 Vengal Rao Nagar,0.8891,1.4686,0.8862,DERIVED
+103,Vengalrao Nagar,relation/7858244,Ward 117 Moosapet,0.0084,0.0139,0.0071,DERIVED
+104,Srinagar Colony,relation/7848859,Ward 95 Jubilee Hills,0.0272,0.0355,0.0295,DERIVED
+104,Srinagar Colony,relation/7852804,Ward 92 Venkateshwara Colony,0.1902,0.2487,0.1923,DERIVED
+104,Srinagar Colony,relation/7857795,Ward 97 Somajiguda,0.5577,0.7290,0.5520,DERIVED
+104,Srinagar Colony,relation/7857796,Ward 96 Yousufguda,0.1455,0.1902,0.1316,DERIVED
+104,Srinagar Colony,relation/7857800,Ward 99 Vengal Rao Nagar,0.0790,0.1032,0.0926,DERIVED
+105,Banjara Hills,relation/7848799,Ward 91 Khairatabad,0.0020,0.0072,0.0034,DERIVED
+105,Banjara Hills,relation/7848859,Ward 95 Jubilee Hills,0.0174,0.0629,0.0369,DERIVED
+105,Banjara Hills,relation/7852804,Ward 92 Venkateshwara Colony,0.5280,1.9053,0.5355,DERIVED
+105,Banjara Hills,relation/7852805,Ward 93 Banjara Hills,0.4526,1.6330,0.4240,DERIVED
+106,Yousufguda,relation/7848859,Ward 95 Jubilee Hills,0.0735,0.0849,0.0836,DERIVED
+106,Yousufguda,relation/7857796,Ward 96 Yousufguda,0.8546,0.9869,0.8133,DERIVED
+106,Yousufguda,relation/7857800,Ward 99 Vengal Rao Nagar,0.0719,0.0830,0.1031,DERIVED
+107,Rahmath Nagar,relation/7848859,Ward 95 Jubilee Hills,0.0075,0.0106,0.0236,DERIVED
+107,Rahmath Nagar,relation/7857796,Ward 96 Yousufguda,0.0428,0.0605,0.2572,DERIVED
+107,Rahmath Nagar,relation/7857797,Ward 102 Rahmath Nagar,0.8204,1.1592,0.5273,DERIVED
+107,Rahmath Nagar,relation/7857798,Ward 101 Erragadda,0.0949,0.1341,0.1119,DERIVED
+107,Rahmath Nagar,relation/7857800,Ward 99 Vengal Rao Nagar,0.0343,0.0485,0.0800,DERIVED
+108,Borabanda,relation/7853538,Ward 116 Allapur,0.0804,0.1634,0.0973,DERIVED
+108,Borabanda,relation/7853541,Ward 107 Madhapur,0.0141,0.0286,0.0360,DERIVED
+108,Borabanda,relation/7857797,Ward 102 Rahmath Nagar,0.1545,0.3141,0.1501,DERIVED
+108,Borabanda,relation/7857799,Ward 103 Borabanda,0.7510,1.5266,0.7166,DERIVED
+109,Jubilee Hills,relation/7848859,Ward 95 Jubilee Hills,0.8247,3.9362,0.7021,DERIVED
+109,Jubilee Hills,relation/7852804,Ward 92 Venkateshwara Colony,0.0126,0.0600,0.1391,DERIVED
+109,Jubilee Hills,relation/7852805,Ward 93 Banjara Hills,0.0008,0.0037,0.0003,DERIVED
+109,Jubilee Hills,relation/7853541,Ward 107 Madhapur,0.0369,0.1761,0.0492,DERIVED
+109,Jubilee Hills,relation/7853545,Ward 104 Kondapur,0.0429,0.2047,0.0731,DERIVED
+109,Jubilee Hills,relation/7857796,Ward 96 Yousufguda,0.0275,0.1312,0.0201,DERIVED
+109,Jubilee Hills,relation/7857797,Ward 102 Rahmath Nagar,0.0274,0.1306,0.0061,DERIVED
+109,Jubilee Hills,relation/7857799,Ward 103 Borabanda,0.0274,0.1307,0.0091,DERIVED
+110,Shaikpet,relation/7848824,Ward 105 Gachibowli,0.0237,0.0683,0.0218,DERIVED
+110,Shaikpet,relation/7848859,Ward 95 Jubilee Hills,0.1150,0.3314,0.0511,DERIVED
+110,Shaikpet,relation/7853545,Ward 104 Kondapur,0.0127,0.0367,0.0164,DERIVED
+110,Shaikpet,relation/7857543,Ward 94 Shaikpet,0.8243,2.3749,0.8725,DERIVED
+110,Shaikpet,relation/7857551,Ward 69 Nanal Nagar,0.0009,0.0025,0.0013,DERIVED
+111;112,Gachibowli; Serilingampally,relation/7848824,Ward 105 Gachibowli,0.3688,5.5191,0.5693,DERIVED
+111;112,Gachibowli; Serilingampally,relation/7853541,Ward 107 Madhapur,0.0089,0.1328,0.0045,DERIVED
+111;112,Gachibowli; Serilingampally,relation/7853542,Ward 109 Hafeezpet,0.0079,0.1182,0.0048,DERIVED
+111;112,Gachibowli; Serilingampally,relation/7853543,Ward 110 Chandanagar,0.0042,0.0635,0.0016,DERIVED
+111;112,Gachibowli; Serilingampally,relation/7853544,Ward 106 Serilingampally,0.2212,3.3097,0.1627,DERIVED
+111;112,Gachibowli; Serilingampally,relation/7853545,Ward 104 Kondapur,0.3069,4.5928,0.1926,DERIVED
+111;112,Gachibowli; Serilingampally,relation/7867251,Ward 111 Bharati Nagar,0.0601,0.8998,0.0142,DERIVED
+113,Hafeezpet,relation/7853538,Ward 116 Allapur,0.0389,0.2245,0.0297,DERIVED
+113,Hafeezpet,relation/7853539,Ward 114 KPHB Colony,0.0364,0.2100,0.0638,DERIVED
+113,Hafeezpet,relation/7853540,Ward 108 Miyapur,0.0268,0.1545,0.0191,DERIVED
+113,Hafeezpet,relation/7853541,Ward 107 Madhapur,0.5199,3.0010,0.6206,DERIVED
+113,Hafeezpet,relation/7853542,Ward 109 Hafeezpet,0.3536,2.0412,0.2442,DERIVED
+113,Hafeezpet,relation/7853543,Ward 110 Chandanagar,0.0167,0.0963,0.0198,DERIVED
+113,Hafeezpet,relation/7853545,Ward 104 Kondapur,0.0078,0.0449,0.0028,DERIVED
+114,Chanda Nagar,relation/7853540,Ward 108 Miyapur,0.4482,1.8428,0.4825,DERIVED
+114,Chanda Nagar,relation/7853542,Ward 109 Hafeezpet,0.0300,0.1233,0.0080,DERIVED
+114,Chanda Nagar,relation/7853543,Ward 110 Chandanagar,0.4995,2.0535,0.4884,DERIVED
+114,Chanda Nagar,relation/7853544,Ward 106 Serilingampally,0.0024,0.0100,0.0019,DERIVED
+114,Chanda Nagar,relation/7867250,Ward 112 Ramachandrapuram,0.0068,0.0278,0.0052,DERIVED
+115,Ramachandrapuram,relation/7853543,Ward 110 Chandanagar,0.0011,0.0024,0.0009,DERIVED
+115,Ramachandrapuram,relation/7867250,Ward 112 Ramachandrapuram,0.6244,1.3640,0.6672,DERIVED
+115,Ramachandrapuram,relation/7867251,Ward 111 Bharati Nagar,0.2842,0.6208,0.1544,DERIVED
+116,[[Patancheru]]vu,relation/7867250,Ward 112 Ramachandrapuram,0.0088,0.0142,0.0047,DERIVED
+117,KPHB Colony,relation/7853538,Ward 116 Allapur,0.0005,0.0018,0.0047,DERIVED
+117,KPHB Colony,relation/7853539,Ward 114 KPHB Colony,0.6552,2.1309,0.7481,DERIVED
+117,KPHB Colony,relation/7853541,Ward 107 Madhapur,0.1282,0.4171,0.0932,DERIVED
+117,KPHB Colony,relation/7858249,Ward 123 Hydernagar,0.0148,0.0483,0.0364,DERIVED
+117,KPHB Colony,relation/7858404,Ward 115 Balaji Nagar,0.2011,0.6540,0.1171,DERIVED
+118,Moosapet,relation/7853538,Ward 116 Allapur,0.1189,0.3263,0.0270,DERIVED
+118,Moosapet,relation/7853539,Ward 114 KPHB Colony,0.0454,0.1246,0.0357,DERIVED
+118,Moosapet,relation/7858244,Ward 117 Moosapet,0.1541,0.4229,0.0325,DERIVED
+118,Moosapet,relation/7858245,Ward 118 Fateh Nagar,0.0045,0.0123,0.0017,DERIVED
+118,Moosapet,relation/7858248,Ward 121 Kukatpally,0.0012,0.0033,0.0030,DERIVED
+118,Moosapet,relation/7858249,Ward 123 Hydernagar,0.0006,0.0015,0.0012,DERIVED
+118,Moosapet,relation/7858404,Ward 115 Balaji Nagar,0.6754,1.8539,0.8982,DERIVED
+119,Mothinagar,relation/7853538,Ward 116 Allapur,0.5699,1.8138,0.5602,DERIVED
+119,Mothinagar,relation/7853541,Ward 107 Madhapur,0.0124,0.0394,0.0520,DERIVED
+119,Mothinagar,relation/7857798,Ward 101 Erragadda,0.0177,0.0565,0.0188,DERIVED
+119,Mothinagar,relation/7857799,Ward 103 Borabanda,0.0160,0.0510,0.0056,DERIVED
+119,Mothinagar,relation/7858244,Ward 117 Moosapet,0.3186,1.0140,0.2996,DERIVED
+119,Mothinagar,relation/7858245,Ward 118 Fateh Nagar,0.0596,0.1898,0.0343,DERIVED
+119,Mothinagar,relation/7858404,Ward 115 Balaji Nagar,0.0054,0.0173,0.0252,DERIVED
+120,Fathe Nagar,relation/7857793,Ward 100 Sanath Nagar,0.0145,0.0310,0.0221,DERIVED
+120,Fathe Nagar,relation/7857794,Ward 98 Ameerpet,0.0035,0.0075,0.0025,DERIVED
+120,Fathe Nagar,relation/7858245,Ward 118 Fateh Nagar,0.9294,1.9877,0.8780,DERIVED
+120,Fathe Nagar,relation/7858247,Ward 120 Balanagar,0.0483,0.1034,0.0797,DERIVED
+120,Fathe Nagar,relation/7858248,Ward 121 Kukatpally,0.0013,0.0027,0.0076,DERIVED
+120,Fathe Nagar,relation/7858404,Ward 115 Balaji Nagar,0.0030,0.0064,0.0099,DERIVED
+121,Old Bowenpally,relation/7858247,Ward 120 Balanagar,0.2893,0.8097,0.3906,DERIVED
+121,Old Bowenpally,relation/7858294,Ward 119 Old Bowenpally,0.5936,1.6613,0.4565,DERIVED
+121,Old Bowenpally,relation/7858403,Ward 131 Quthbullapur,0.0139,0.0390,0.0236,DERIVED
+122,Kukatpally,relation/7858246,Ward 127 Rangareddy Nagar,0.0740,0.2310,0.0858,DERIVED
+122,Kukatpally,relation/7858247,Ward 120 Balanagar,0.3516,1.0972,0.5944,DERIVED
+122,Kukatpally,relation/7858248,Ward 121 Kukatpally,0.5107,1.5937,0.2871,DERIVED
+122,Kukatpally,relation/7858250,Ward 122 Vivekananda Nagar Colony,0.0623,0.1943,0.0264,DERIVED
+122,Kukatpally,relation/7858403,Ward 131 Quthbullapur,0.0012,0.0039,0.0058,DERIVED
+123,Vivekananda Nagar Colony,relation/7852863,Ward 126 Jagathgirigutta,0.0223,0.0453,0.0109,DERIVED
+123,Vivekananda Nagar Colony,relation/7852864,Ward 124 Alwyn Colony,0.1977,0.4010,0.1617,DERIVED
+123,Vivekananda Nagar Colony,relation/7858246,Ward 127 Rangareddy Nagar,0.0495,0.1004,0.0560,DERIVED
+123,Vivekananda Nagar Colony,relation/7858248,Ward 121 Kukatpally,0.2816,0.5713,0.2341,DERIVED
+123,Vivekananda Nagar Colony,relation/7858249,Ward 123 Hydernagar,0.0131,0.0267,0.0168,DERIVED
+123,Vivekananda Nagar Colony,relation/7858250,Ward 122 Vivekananda Nagar Colony,0.4340,0.8804,0.5064,DERIVED
+123,Vivekananda Nagar Colony,relation/7858404,Ward 115 Balaji Nagar,0.0018,0.0036,0.0105,DERIVED
+124,Hydernagar,relation/7852864,Ward 124 Alwyn Colony,0.4389,1.3683,0.3613,DERIVED
+124,Hydernagar,relation/7858249,Ward 123 Hydernagar,0.5523,1.7219,0.5881,DERIVED
+125,Gajula Ramaram,relation/7852863,Ward 126 Jagathgirigutta,0.0718,0.3182,0.0111,DERIVED
+125,Gajula Ramaram,relation/7852865,Ward 128 Chintal,0.1080,0.4790,0.0486,DERIVED
+125,Gajula Ramaram,relation/7852868,Ward 129 Suraram,0.0599,0.2657,0.1460,DERIVED
+125,Gajula Ramaram,relation/7852869,Ward 125 Gajularamaram,0.7020,3.1121,0.6876,DERIVED
+126,Jagadgirigutta,relation/7852863,Ward 126 Jagathgirigutta,0.5419,2.4714,0.4220,DERIVED
+126,Jagadgirigutta,relation/7852864,Ward 124 Alwyn Colony,0.0106,0.0483,0.0116,DERIVED
+126,Jagadgirigutta,relation/7852865,Ward 128 Chintal,0.0076,0.0346,0.1140,DERIVED
+126,Jagadgirigutta,relation/7858246,Ward 127 Rangareddy Nagar,0.1643,0.7493,0.2411,DERIVED
+126,Jagadgirigutta,relation/7858248,Ward 121 Kukatpally,0.1497,0.6826,0.1103,DERIVED
+126,Jagadgirigutta,relation/7858250,Ward 122 Vivekananda Nagar Colony,0.1260,0.5748,0.1006,DERIVED
+127,Chintal,relation/7852865,Ward 128 Chintal,0.4810,0.6464,0.8044,DERIVED
+127,Chintal,relation/7852868,Ward 129 Suraram,0.0007,0.0009,0.0038,DERIVED
+127,Chintal,relation/7858246,Ward 127 Rangareddy Nagar,0.5183,0.6964,0.1918,DERIVED
+128,Shapur Nagar,relation/7852865,Ward 128 Chintal,0.0103,0.0276,0.0025,DERIVED
+128,Shapur Nagar,relation/7852868,Ward 129 Suraram,0.8412,2.2479,0.7184,DERIVED
+128,Shapur Nagar,relation/7852869,Ward 125 Gajularamaram,0.1466,0.3917,0.0968,DERIVED
+129,Suraram Colony,relation/7852866,Ward 132 Jeedimetla,0.0064,0.0354,0.0037,DERIVED
+129,Suraram Colony,relation/7852867,Ward 130 Subash Nagar,0.9079,5.0416,0.8490,DERIVED
+129,Suraram Colony,relation/7852868,Ward 129 Suraram,0.0843,0.4679,0.1349,DERIVED
+130,Jeedimetla,relation/7852865,Ward 128 Chintal,0.0106,0.0421,0.0231,DERIVED
+130,Jeedimetla,relation/7852866,Ward 132 Jeedimetla,0.5750,2.2868,0.6857,DERIVED
+130,Jeedimetla,relation/7852867,Ward 130 Subash Nagar,0.1098,0.4366,0.0843,DERIVED
+130,Jeedimetla,relation/7852868,Ward 129 Suraram,0.0032,0.0126,0.0014,DERIVED
+130,Jeedimetla,relation/7858403,Ward 131 Quthbullapur,0.2747,1.0926,0.1585,DERIVED
+131,Quthbullapur,relation/7852865,Ward 128 Chintal,0.0560,0.1115,0.0741,DERIVED
+131,Quthbullapur,relation/7858246,Ward 127 Rangareddy Nagar,0.2476,0.4929,0.2159,DERIVED
+131,Quthbullapur,relation/7858403,Ward 131 Quthbullapur,0.6964,1.3861,0.7100,DERIVED
+132,Alwal,relation/7858294,Ward 119 Old Bowenpally,0.0559,0.2133,0.0392,DERIVED
+132,Alwal,relation/7858295,Ward 135 Venkatapuram,0.6135,2.3412,0.4396,DERIVED
+132,Alwal,relation/7858296,Ward 134 Alwal,0.3238,1.2357,0.2665,DERIVED
+133,Macha Bollaram,relation/7849439,Ward 133 Macha Bolarum,0.7388,2.8153,0.7231,DERIVED
+133,Macha Bollaram,relation/7852866,Ward 132 Jeedimetla,0.0012,0.0047,0.0099,DERIVED
+133,Macha Bollaram,relation/7858296,Ward 134 Alwal,0.2318,0.8832,0.1227,DERIVED
+134,Yapral,relation/7849439,Ward 133 Macha Bolarum,0.0835,0.2633,0.2029,DERIVED
+134,Yapral,relation/7849497,Ward 1 Kapra,0.3765,1.1867,0.2795,DERIVED
+134,Yapral,relation/7849498,Ward 136 Neredmet,0.4544,1.4322,0.3621,DERIVED
+134,Yapral,relation/7849545,Ward 2 Dr A S Rao Nagar,0.0516,0.1628,0.0277,DERIVED
+135,Defence Colony,relation/7849497,Ward 1 Kapra,0.0199,0.0624,0.0270,DERIVED
+135,Defence Colony,relation/7849498,Ward 136 Neredmet,0.6472,2.0328,0.6768,DERIVED
+135,Defence Colony,relation/7858676,Ward 137 Vinayak Nagar,0.2880,0.9047,0.1925,DERIVED
+135,Defence Colony,relation/7858677,Ward 140 Malkajgiri,0.0015,0.0046,0.0010,DERIVED
+136,Moula Ali,relation/7849497,Ward 1 Kapra,0.0030,0.0109,0.0118,DERIVED
+136,Moula Ali,relation/7849545,Ward 2 Dr A S Rao Nagar,0.0267,0.0988,0.0377,DERIVED
+136,Moula Ali,relation/7852324,Ward 139 East Anand Bagh,0.0010,0.0035,0.0213,DERIVED
+136,Moula Ali,relation/7858673,Ward 138 Moula Ali,0.6534,2.4181,0.6859,DERIVED
+136,Moula Ali,relation/7858676,Ward 137 Vinayak Nagar,0.3123,1.1559,0.2413,DERIVED
+136,Moula Ali,relation/7858677,Ward 140 Malkajgiri,0.0037,0.0135,0.0020,DERIVED
+137,Safilguda,relation/7849498,Ward 136 Neredmet,0.0924,0.2076,0.1005,DERIVED
+137,Safilguda,relation/7852324,Ward 139 East Anand Bagh,0.0021,0.0048,0.0059,DERIVED
+137,Safilguda,relation/7858675,Ward 141 Gautham Nagar,0.0739,0.1662,0.0739,DERIVED
+137,Safilguda,relation/7858676,Ward 137 Vinayak Nagar,0.0626,0.1407,0.0670,DERIVED
+137,Safilguda,relation/7858677,Ward 140 Malkajgiri,0.7601,1.7087,0.6767,DERIVED
+138,Gautham Nagar,relation/7858674,Ward 142 Addagutta,0.0226,0.0393,0.0108,DERIVED
+138,Gautham Nagar,relation/7858675,Ward 141 Gautham Nagar,0.9428,1.6413,0.8182,DERIVED
+139,Old Malkajgiri,relation/7849614,Ward 5 Mallapur,0.0073,0.0205,0.0343,DERIVED
+139,Old Malkajgiri,relation/7852324,Ward 139 East Anand Bagh,0.6336,1.7821,0.7583,DERIVED
+139,Old Malkajgiri,relation/7858671,Ward 143 Tarnaka,0.0020,0.0056,0.0045,DERIVED
+139,Old Malkajgiri,relation/7858673,Ward 138 Moula Ali,0.0893,0.2513,0.0502,DERIVED
+139,Old Malkajgiri,relation/7858675,Ward 141 Gautham Nagar,0.0527,0.1483,0.0303,DERIVED
+139,Old Malkajgiri,relation/7858676,Ward 137 Vinayak Nagar,0.0821,0.2309,0.0469,DERIVED
+139,Old Malkajgiri,relation/7858677,Ward 140 Malkajgiri,0.1330,0.3740,0.0755,DERIVED
+140,Tarnaka,relation/7852324,Ward 139 East Anand Bagh,0.1504,0.3159,0.1261,DERIVED
+140,Tarnaka,relation/7858671,Ward 143 Tarnaka,0.7016,1.4737,0.7317,DERIVED
+140,Tarnaka,relation/7858672,Ward 144 Mettuguda,0.0240,0.0505,0.0604,DERIVED
+140,Tarnaka,relation/7858674,Ward 142 Addagutta,0.1118,0.2349,0.0711,DERIVED
+140,Tarnaka,relation/7858675,Ward 141 Gautham Nagar,0.0122,0.0256,0.0107,DERIVED
+141,Mettuguda,relation/7854090,Ward 145 Seethaphalmandi,0.0063,0.0127,0.0021,DERIVED
+141,Mettuguda,relation/7854091,Ward 147 Bansilapet,0.0201,0.0404,0.0222,DERIVED
+141,Mettuguda,relation/7857838,Ward 150 Monda Market,0.0872,0.1754,0.0847,DERIVED
+141,Mettuguda,relation/7858671,Ward 143 Tarnaka,0.0064,0.0129,0.0045,DERIVED
+141,Mettuguda,relation/7858672,Ward 144 Mettuguda,0.5872,1.1805,0.6103,DERIVED
+141,Mettuguda,relation/7858674,Ward 142 Addagutta,0.2454,0.4935,0.2484,DERIVED
+141,Mettuguda,relation/7858675,Ward 141 Gautham Nagar,0.0473,0.0952,0.0278,DERIVED
+142,Seethaphalmandi,relation/7854090,Ward 145 Seethaphalmandi,0.7349,0.5646,0.7576,DERIVED
+142,Seethaphalmandi,relation/7858671,Ward 143 Tarnaka,0.2220,0.1706,0.1684,DERIVED
+142,Seethaphalmandi,relation/7858672,Ward 144 Mettuguda,0.0390,0.0300,0.0584,DERIVED
+143,Boudha Nagar,relation/7854087,Ward 86 Musheerabad,0.0158,0.0267,0.0262,DERIVED
+143,Boudha Nagar,relation/7854088,Ward 146 Boudha Nagar,0.7480,1.2620,0.6972,DERIVED
+143,Boudha Nagar,relation/7854090,Ward 145 Seethaphalmandi,0.2287,0.3858,0.2695,DERIVED
+143,Boudha Nagar,relation/7854091,Ward 147 Bansilapet,0.0075,0.0126,0.0071,DERIVED
+144,Chilkalguda,relation/7854090,Ward 145 Seethaphalmandi,0.5445,0.5670,0.4233,DERIVED
+144,Chilkalguda,relation/7854091,Ward 147 Bansilapet,0.1027,0.1070,0.1288,DERIVED
+144,Chilkalguda,relation/7858672,Ward 144 Mettuguda,0.3528,0.3674,0.4479,DERIVED
+145,Padmarao Nagar,relation/7854090,Ward 145 Seethaphalmandi,0.0026,0.0032,0.0016,DERIVED
+145,Padmarao Nagar,relation/7854091,Ward 147 Bansilapet,0.9609,1.1934,0.9620,DERIVED
+145,Padmarao Nagar,relation/7857838,Ward 150 Monda Market,0.0054,0.0067,0.0102,DERIVED
+145,Padmarao Nagar,relation/7858672,Ward 144 Mettuguda,0.0311,0.0387,0.0262,DERIVED
+146,Bansilalpet,relation/7848799,Ward 91 Khairatabad,0.0005,0.0007,0.0936,DERIVED
+146,Bansilalpet,relation/7854091,Ward 147 Bansilapet,0.3513,0.4772,0.2222,DERIVED
+146,Bansilalpet,relation/7857838,Ward 150 Monda Market,0.0182,0.0248,0.0283,DERIVED
+146,Bansilalpet,relation/7857839,Ward 148 Ramgopalpet,0.6200,0.8423,0.6476,DERIVED
+146,Bansilalpet,relation/7857840,Ward 149 Begumpet,0.0099,0.0135,0.0084,DERIVED
+147,Ramgopalpet,relation/7857838,Ward 150 Monda Market,0.4147,0.7050,0.3334,DERIVED
+147,Ramgopalpet,relation/7857839,Ward 148 Ramgopalpet,0.4670,0.7939,0.4878,DERIVED
+147,Ramgopalpet,relation/7857840,Ward 149 Begumpet,0.1183,0.2011,0.1788,DERIVED
+148,Begumpet,relation/7857794,Ward 98 Ameerpet,0.0083,0.0188,0.0056,DERIVED
+148,Begumpet,relation/7857839,Ward 148 Ramgopalpet,0.0039,0.0087,0.0039,DERIVED
+148,Begumpet,relation/7857840,Ward 149 Begumpet,0.8844,1.9937,0.8646,DERIVED
+148,Begumpet,relation/7858245,Ward 118 Fateh Nagar,0.0666,0.1501,0.0379,DERIVED
+149,Marredpally,relation/7857838,Ward 150 Monda Market,0.7815,0.8556,0.8144,DERIVED
+149,Marredpally,relation/7857840,Ward 149 Begumpet,0.0054,0.0059,0.0071,DERIVED
+149,Marredpally,relation/7858674,Ward 142 Addagutta,0.0141,0.0154,0.0089,DERIVED
+150,Addagutta,relation/7857838,Ward 150 Monda Market,0.2614,0.3537,0.2709,DERIVED
+150,Addagutta,relation/7858674,Ward 142 Addagutta,0.6566,0.8882,0.6354,DERIVED
+150,Addagutta,relation/7858675,Ward 141 Gautham Nagar,0.0457,0.0618,0.0361,DERIVED

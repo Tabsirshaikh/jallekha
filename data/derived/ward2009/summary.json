@@ -1,0 +1,33 @@
+{
+  "checks": {
+    "census_district_agreement": 0.9597,
+    "census_district_false_inside": 0,
+    "same_name_largest_overlap_share": 0.8586,
+    "same_name_pairs": 99
+  },
+  "fit": {
+    "median_boundary_error_m": 155.1,
+    "method": "affine, symmetric iterative closest point to DataMeet GHMC outline",
+    "metres_per_pdf_point": [
+      15.367,
+      15.381
+    ],
+    "outline_iou": 0.9033,
+    "p90_boundary_error_m": 661.3
+  },
+  "limitations": [
+    "Boundaries come from a 2009 PDF map fitted by affine transform; see boundary error.",
+    "Wards 111 and 112 share one polygon (no dividing line in the PDF).",
+    "Building weights are from 2016; Census households are from 2011.",
+    "Six 2016 wards are missing from the DataMeet layer; shares there are lost."
+  ],
+  "merged_units": [
+    "111;112"
+  ],
+  "units": 149,
+  "ward_numbers_covered": true,
+  "weights": {
+    "source": "Open Buildings 2.5D Temporal 2016 fractional count (E3 tiles, 32 m)",
+    "sources_with_90pct_in_2016_layer": 138
+  }
+}
