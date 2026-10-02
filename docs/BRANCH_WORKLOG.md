@@ -453,4 +453,4 @@ The pull-request description must summarize the same information and link to thi
   - Meerpet now uses the Meerpet in its division (1.06 km) instead of the one 13.8 km away.
   - Downstream: E4 ward bookings 87.1% placed (was 79.3%); E3 connection check over 102 wards, rho 0.51.
 - **Validation:** Section tests were updated first (coverage >= 0.85, spelling variants, common names, rejection of a far ward name, strict limit for second-pass placements), then pass. `python tasks.py test`: 418 pass. `python tasks.py lint` passes. All P1 verifiers pass.
-- **Pull request:** pending
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/39
