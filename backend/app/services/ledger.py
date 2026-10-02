@@ -1,0 +1,125 @@
+"""Tamper-evident hash-chained ledger (F18). Pure core ported from v1 (S3).
+
+hash      = sha256(prev_hash + event_type + entity_id + payload_json + created_at_iso)
+signature = HMAC_SHA256(key, hash)
+
+The first entry uses prev_hash = "GENESIS". Payloads hold ids and numbers only (no personal
+data). Storage, locking and wiring to other features are T6; T6 may extend EVENT_TYPES.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import hmac
+import json
+from dataclasses import dataclass
+from typing import Any
+
+GENESIS = "GENESIS"
+EVENT_TYPES = frozenset(
+    {
+        "ledger_initialized",
+        "plan_created",
+        "plan_approved",
+        "plan_dispatched",
+        "plan_replanned",
+        "override",
+        "otp_issued",
+        "delivery_verified",
+        "delivery_failed",
+        "water_debt_changed",
+        "station_paused",
+        "station_resumed",
+        "weights_changed",
+        "issue_status_changed",
+        "ward_reviewed",
+    }
+)
+
+
+@dataclass(frozen=True)
+class LedgerEntry:
+    seq: int
+    event_type: str
+    entity_type: str
+    entity_id: str
+    payload: dict[str, Any]
+    prev_hash: str
+    hash: str
+    signature: str
+    created_at_iso: str
+
+
+def canonical_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    """Normalise to JSON-native types so the stored payload re-hashes identically."""
+    return json.loads(json.dumps(payload, default=str))
+
+
+def payload_json(payload: dict[str, Any]) -> str:
+    return json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+
+
+def compute_hash(
+    prev_hash: str, event_type: str, entity_id: str, payload: dict[str, Any], created_at_iso: str
+) -> str:
+    material = prev_hash + event_type + entity_id + payload_json(payload) + created_at_iso
+    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+
+
+def sign(hash_hex: str, key: str | None) -> str:
+    if not key:
+        raise ValueError("Ledger HMAC key is not set (LEDGER_HMAC_KEY)")
+    return hmac.new(key.encode(), hash_hex.encode(), hashlib.sha256).hexdigest()
+
+
+def next_entry(
+    last: LedgerEntry | None,
+    event_type: str,
+    entity_type: str,
+    entity_id: Any,
+    payload: dict[str, Any] | None,
+    created_at_iso: str,
+    key: str | None,
+) -> LedgerEntry:
+    """Build the entry that follows `last` (None for the first entry). The caller stores it."""
+    if event_type not in EVENT_TYPES:
+        raise ValueError(f"Unknown ledger event type: {event_type}")
+    body = canonical_payload(payload or {})
+    prev_hash = last.hash if last else GENESIS
+    digest = compute_hash(prev_hash, event_type, str(entity_id), body, created_at_iso)
+    return LedgerEntry(
+        seq=(last.seq + 1) if last else 1,
+        event_type=event_type,
+        entity_type=entity_type,
+        entity_id=str(entity_id),
+        payload=body,
+        prev_hash=prev_hash,
+        hash=digest,
+        signature=sign(digest, key),
+        created_at_iso=created_at_iso,
+    )
+
+
+def verify_entries(entries: list[LedgerEntry], key: str | None) -> dict[str, Any]:
+    """Check every link and signature in order; report the first broken entry."""
+    prev_hash = GENESIS
+    for position, entry in enumerate(entries, start=1):
+        expected = compute_hash(
+            prev_hash, entry.event_type, entry.entity_id, entry.payload, entry.created_at_iso
+        )
+        if entry.seq != position or entry.prev_hash != prev_hash or entry.hash != expected:
+            return {
+                "valid": False,
+                "broken_at": entry.seq,
+                "reason": "hash_mismatch",
+                "checked": entry.seq,
+            }
+        if not hmac.compare_digest(entry.signature, sign(entry.hash, key)):
+            return {
+                "valid": False,
+                "broken_at": entry.seq,
+                "reason": "signature_mismatch",
+                "checked": entry.seq,
+            }
+        prev_hash = entry.hash
+    return {"valid": True, "broken_at": None, "checked": len(entries), "head": prev_hash}
