@@ -22,10 +22,14 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - experiment: sampler
-            args: --variants BYM2 BYM2_SHRINKAGE --chains 4 --cores 4 --tune 2000 --draws 1000 --target-accept 0.99
-          - experiment: poisson
-            args: --variants BYM2 BYM2_SHRINKAGE --cores 2 --bym2-likelihood poisson
+          - experiment: base
+            args: --variants BYM2 --cores 2
+          - experiment: rsr
+            args: --variants BYM2 --cores 2 --restricted --islands-iid
+          - experiment: pc
+            args: --variants BYM2 --cores 2 --rho-prior pc --islands-iid
+          - experiment: rsr_pc
+            args: --variants BYM2 --cores 2 --restricted --rho-prior pc --islands-iid
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6

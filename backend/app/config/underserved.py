@@ -28,6 +28,15 @@ class UnderservedConfig:
     # Count model for the BYM2 variants: "negative_binomial" (original E5 spec) or "poisson"
     # (Riebler et al. 2016 BYM2, where the random effects carry the extra variation).
     bym2_likelihood: str = "negative_binomial"
+    # Prior on the BYM2 mixing parameter: "beta" = Beta(0.5, 0.5) (original E5 spec) or "pc" =
+    # penalised-complexity prior, U = 0.5, alpha = 2/3 (Riebler et al. 2016).
+    bym2_rho_prior: str = "beta"
+    # Restricted spatial regression (Hodges & Reich 2010): area effects projected off the
+    # intercept and need covariates, so they cannot absorb the need effect.
+    bym2_restricted: bool = False
+    # Islands (wards with no neighbour in the cohort) get no structured effect
+    # (Freni-Sterrantino et al. 2018).
+    bym2_islands_iid_only: bool = False
     geography_version: str = "GHMC_2016_150"
 
 

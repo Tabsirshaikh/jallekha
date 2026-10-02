@@ -121,6 +121,9 @@ if __name__ == "__main__":
     parser.add_argument("--target-accept", type=float)
     parser.add_argument("--cores", type=int)
     parser.add_argument("--bym2-likelihood", choices=("negative_binomial", "poisson"))
+    parser.add_argument("--rho-prior", choices=("beta", "pc"))
+    parser.add_argument("--restricted", action="store_true", default=None)
+    parser.add_argument("--islands-iid", action="store_true", default=None)
     parser.add_argument("--output", default=RESULTS)
     args = parser.parse_args()
     overrides = {
@@ -132,6 +135,9 @@ if __name__ == "__main__":
             "target_accept": args.target_accept,
             "cores": args.cores,
             "bym2_likelihood": args.bym2_likelihood,
+            "bym2_rho_prior": args.rho_prior,
+            "bym2_restricted": args.restricted,
+            "bym2_islands_iid_only": args.islands_iid,
         }.items()
         if value is not None
     }

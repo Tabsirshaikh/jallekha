@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import math
 from dataclasses import replace
 from pathlib import Path
 
@@ -365,3 +366,39 @@ def test_poisson_bym2_smoke_on_synthetic_data():
             holdout_ids=("W00",),
             graph_review=review,
         )
+
+
+def test_isolated_wards_get_no_spatial_component():
+    """Freni-Sterrantino et al. (2018): a ward with no neighbours has no structured effect."""
+    wards = ["A", "B", "C", "D"]
+    with_iid = scaled_icar_basis(wards, [("A", "B"), ("B", "C")], islands_iid_only=True)
+    assert with_iid.shape[1] == 2  # 3-ward chain gives 2 columns; island D gives none
+    assert np.allclose(with_iid[3], 0)
+    assert scaled_icar_basis(wards, [("A", "B"), ("B", "C")]).shape[1] == 3  # original spec
+
+
+def test_restricted_projection_removes_covariate_directions():
+    """Hodges & Reich (2010) restricted spatial regression: the spatial effect is projected
+    off the intercept and covariates, so it cannot absorb the need effect."""
+    rng = np.random.default_rng(0)
+    design = rng.normal(size=(12, 2))
+    proj = underserved_models.restricted_projection(design)
+    x = np.column_stack([np.ones(12), design])
+    assert np.allclose(proj @ x, 0, atol=1e-10)
+    assert np.allclose(proj @ proj, proj, atol=1e-10)
+
+
+def test_pc_prior_on_rho_matches_riebler_calibration():
+    """Riebler et al. (2016) PC prior on the BYM2 mixing parameter: P(rho < 0.5) = 2/3."""
+    wards = [f"W{i}" for i in range(8)]
+    edges = [(wards[i], wards[i + 1]) for i in range(7)]
+    basis = scaled_icar_basis(wards, edges)
+    rate, gammas, nulls = underserved_models.pc_rho_setup(basis, len(wards), u=0.5, alpha=2 / 3)
+    grid = np.linspace(1e-6, 1 - 1e-6, 200_001)
+    dens = np.exp(underserved_models.pc_rho_logdensity_numpy(grid, rate, gammas, nulls, len(wards)))
+    total = np.trapezoid(dens, grid)
+    below = np.trapezoid(dens[grid < 0.5], grid[grid < 0.5])
+    # PC prior mass up to phi is 1 - exp(-rate * d(phi)); some mass sits very close to 1
+    d_end = math.sqrt(2 * underserved_models._pc_kld(grid[-1], gammas, nulls, len(wards)))
+    assert total == pytest.approx(1 - math.exp(-rate * d_end), abs=0.005)
+    assert below == pytest.approx(2 / 3, abs=0.005)
