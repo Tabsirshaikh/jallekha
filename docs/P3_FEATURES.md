@@ -7,12 +7,12 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 | R-P3 | Research note | `research/p3` | DONE ([PR #7](https://github.com/Tabsirshaikh/jallekha/pull/7) merged) |
 | S1 fix | Skeleton gaps T1-T10 need | `fix/s1-review` | DONE ([PR #15](https://github.com/Tabsirshaikh/jallekha/pull/15) merged) |
 | T1 | F13 duplicate engine | `feat/t1-dedup` | DONE ([PR #19](https://github.com/Tabsirshaikh/jallekha/pull/19) merged); calibration run waits for D13 |
-| T2 | F5 forecast + backtest | `feat/t2-forecast` | Blocked: 21.9% / 35.1% protocol (`V-VERIFY_REVIEW.md`) missing |
+| T2 | F5 forecast + backtest | `feat/t2-forecast` | IN_PROGRESS (local, not pushed) |
 | T3 | F12 delivery proof | `feat/t3-delivery` | DONE ([PR #26](https://github.com/Tabsirshaikh/jallekha/pull/26) merged); decisions (a) and (b) OPEN |
 | T4 | F14 intake + voice | `feat/t4-intake` | DONE ([PR #37](https://github.com/Tabsirshaikh/jallekha/pull/37) and ledger-wiring follow-up [PR #42](https://github.com/Tabsirshaikh/jallekha/pull/42) merged); keyword lists, offline report time, phone registry and ASR revision OPEN |
 | T5 | F15 notices | `feat/t5-notices` | DONE ([PR #44](https://github.com/Tabsirshaikh/jallekha/pull/44) merged); people-affected rule, exact-only matching and alert wording OPEN |
 | T6 | F18 ledger | `feat/t6-ledger` | DONE ([PR #35](https://github.com/Tabsirshaikh/jallekha/pull/35) merged); rotation period and head-hash schedule OPEN |
-| T7 | F16 explanations + contest | `feat/t7-explain` | IN_REVIEW ([PR #46](https://github.com/Tabsirshaikh/jallekha/pull/46)); reason / outcome codes, counterfactual limits, number removal, tier-counterfactual audience and wording OPEN |
+| T7 | F16 explanations + contest | `feat/t7-explain` | DONE ([PR #46](https://github.com/Tabsirshaikh/jallekha/pull/46) merged); reason / outcome codes, counterfactual limits, number removal, tier-counterfactual audience and wording OPEN |
 | T8 | F6 shortage warning | `feat/t8-shortage` | Blocked: T2, D1 |
 | T9 | F17 confidence gate | `feat/t9-confidence` | Blocked: E2, A8 |
 | T10 | API for all screens | `feat/t10-api` | Shapes to agree with P4 in week 1 |
