@@ -45,6 +45,8 @@ EVENT_TYPES = frozenset(
         "resident_replied",
         "delivery_outcome",
         "outside_tries_exceeded",
+        # A4 scheduled supply (F9)
+        "service_point_registered",
     }
 )
 

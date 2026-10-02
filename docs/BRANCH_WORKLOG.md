@@ -278,3 +278,43 @@ The pull-request description must summarize the same information and link to thi
   - T7 uses `order_bookings` and `Decision` for explanations and counterfactuals.
   - A7 runs it per station-day; A8 compares it with `order_fcfs`.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/31
+
+## `feat/a4-scheduled` — `A4`
+
+- **Owner / date:** P2, 2026-10-02.
+- **Purpose:** Scheduled tanker supply to fixed points for unconnected areas (F9).
+- **What we found:**
+  - The Census rule routes no ward to scheduled supply (A2), so scheduling starts only when an officer confirms A2 candidates or sets a ward to no_connection.
+  - If all 20 candidates were confirmed: about 182,000 people off premises, 2.73 million litres/day at 15 lpcd = 546 tanker loads (about 5% of the reported ~11,000 daily trips).
+- **What we changed:**
+  - `backend/app/services/scheduled_supply.py`:
+    - `scheduled_wards(needs, evidence, confirmed)`: A2 route "scheduled" plus officer-confirmed candidates; people off premises = population x WAD.
+    - `target_litres` (15 lpcd floor; officers may raise the norm, never lower it).
+    - `share_reserve`: floors first; equal fraction of floors when the reserve is short; extra by weighted max-min (progressive filling by need weight, capped at targets).
+    - `ServicePointRegistry` starts **empty** (no seed list). `register()` needs a reason, valid coordinates and a known ward, rejects duplicates, and returns ledger entry args (new event type `service_point_registered`).
+    - `plan_scheduled_supply` routes points with the S3 OR-Tools planner (floor stops mandatory) and returns a timetable (point, ward, tanker, trip, arrival HH:MM, litres). Wards without a point are `NEEDS_SERVICE_POINT`.
+    - Distance never changes a ward's share.
+- **Validation:**
+  - 12 tests in `backend/tests/test_a4_scheduled_supply.py` were written first (ImportError), then pass. They cover:
+    - registry starts empty;
+    - registration rules and ledger entry;
+    - floor and norm;
+    - all targets met;
+    - floors then 2:1 extra;
+    - a capped ward releases its extra;
+    - short reserve gives an equal fraction of floors;
+    - share independent of location;
+    - a ward without a point is reported;
+    - plan to timetable, with timetable litres = routed litres;
+    - a far point raises km but not the share;
+    - real-data scheduled wards.
+  - `python tasks.py test`: 299 pass. `python tasks.py lint` passes.
+- **Known limitations:**
+  - Filling stations for routing are still the OSM stand-ins (Q1, ASSUMED).
+  - Stops are whole tanker loads (the share is rounded to loads per point).
+  - SMS/print wording of the timetable is for P4 (U2) / T5.
+- **Handoff / next step:**
+  - A7 combines this with A3 and A5 into the daily plan.
+  - T6 stores `service_point_registered` entries.
+  - P4 shows the timetable and the officer point registration.
+- **Pull request:** pending
