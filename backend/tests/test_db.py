@@ -5,7 +5,7 @@ from sqlalchemy import String, inspect
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from app.db import create_all, make_engine, make_session_factory
-from app.models import IdTimestampMixin, new_id, utcnow
+from app.models import Base, IdTimestampMixin, new_id, utcnow
 
 
 class ProbeBase(DeclarativeBase):
@@ -39,7 +39,8 @@ def test_mixin_fills_id_and_created_at() -> None:
         assert row.created_at is not None
 
 
-def test_create_all_runs_on_empty_metadata() -> None:
+def test_create_all_creates_every_registered_table() -> None:
     engine = make_engine("sqlite:///:memory:")
     create_all(engine)
-    assert inspect(engine).get_table_names() == []
+    create_all(engine)  # safe to run twice
+    assert set(inspect(engine).get_table_names()) == set(Base.metadata.tables)
