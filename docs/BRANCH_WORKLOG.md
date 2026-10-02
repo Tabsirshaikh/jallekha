@@ -435,3 +435,29 @@ The pull-request description must summarize the same information and link to thi
   - The connection check uses 2022-2025 vs the 2016-2023 building trend, and approximate section placement.
   - WorldPop/GHS-POP are still not extracted.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/38
+
+## `feat/t4-ledger-wiring` — `T4` follow-up (intake events in the ledger)
+
+- **Owner / date:** P3, 2026-10-02.
+- **Purpose:** Log intake events (F14) to T6's stored ledger now that T6 (#35) and T4 (#37) are merged.
+- **What we found:**
+  - No intake event type existed. Adding them breaks T4's test `test_no_ledger_entries_while_no_intake_event_type_exists`, whose premise is that they are absent.
+  - The ledger write happens after the report is saved, so a failing ledger (for example no `LEDGER_HMAC_KEY`) must not lose the report.
+- **What we changed:**
+  - `backend/app/services/ledger.py` (P2's file, `EVENT_TYPES` only, own commit): `complaint_received`, `complaint_merged`, `complaint_marked_spam`.
+  - `backend/tests/services/test_intake_pipeline.py` (own commit): the one test adapted; the types are removed for that test only, so its purpose (no type, nothing written) is kept.
+  - `backend/app/services/intake_pipeline.py`: `default_service` writes through `ledger_store.get_ledger()`; results carry `ledger_seq`; a ledger failure is logged and the report kept.
+  - `backend/app/models/intake_item.py`: `ledger_missing` marker (set when an entry is expected, cleared once written); `IntakeService.intake_ids_missing_ledger()` lists such items.
+  - Tests `backend/tests/services/test_intake_ledger.py`; docs `docs/P3_FEATURES.md`, `docs/features.csv` (T4 and T6 DONE), `docs/worklogs/T4.md`; workflow `.github/workflows/p3-t4.yml`.
+- **Validation:**
+  - 8 tests written first (failed before the wiring): entries for created / merged / spam items with a verified chain; nothing for duplicates or invalid items; no phone number, name, text, audio or household id in any payload; ledger failure keeps the report; default service uses the stored ledger; missing entries marked and listed.
+  - After merging `main` (E3-FIX #38): `python tasks.py test` exit 0 (425 backend passed, 1 frontend test, all P1 verifiers); `python tasks.py lint` exit 0.
+  - Task workflow `P3:T4` (`.github/workflows/p3-t4.yml`): T4 intake, ledger-wiring, T1 dedup and S3 spam/intake tests, ruff check and format check on the T4 files.
+  - All test data is synthetic.
+- **Known limitations:**
+  - No automatic retry for items marked `ledger_missing`.
+  - The new column needs a fresh database or a manual column add (no migrations; `create_all` does not alter tables).
+- **Handoff / next step:**
+  - T5 / T7 log through `ledger_store.record` in the same way.
+  - Merge note: `feat/t5-notices` edits the T5 row next to the T4 and T6 rows in `docs/P3_FEATURES.md` and `docs/features.csv`; the branch merged second needs a one-line fix in each.
+- **Pull request:** pending.
