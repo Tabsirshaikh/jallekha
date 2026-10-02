@@ -251,3 +251,30 @@ The pull-request description must summarize the same information and link to thi
 - **What we changed:** One sentence in `docs/JALLEKHA_FINAL_SOLUTION.md` section 1, with the recompute date and the reason for the change.
 - **Validation:** Figures from `build_evidence.census_units()` (same HH-14 formulas as E2). `scripts/ci/verify_p1_r_p1.py` passes.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/30
+
+## `feat/a3-queue` — `A3`
+
+- **Owner / date:** P2, 2026-10-02.
+- **Purpose:** Fair queue for booked tankers (F8), plus today's FCFS as baseline B1 for A8.
+- **What we found:**
+  - HMWSSB queues each booking at its nearest filling station by serial number (R-P2), so the queue works per station-day.
+  - Bookings are published per HMWSSB section and need per ward, and there is no section-to-ward map yet. So the queue works on generic groups that carry an entitlement; the mapping can be added without changing A3.
+- **What we changed:**
+  - `backend/app/services/fair_queue.py`:
+    - `order_bookings(pending, capacity, entitlement, state)` serves tier 0 (critical facilities) then tier 1 (no water on premises or assisted channel), both FCFS, then deficit round robin across groups. A group's quantum is its entitlement / largest entitlement.
+    - Deficits and the round-robin cursor carry to the next day while a group waits. A turn interrupted by capacity resumes without re-adding its quantum. Empty groups do not bank turns.
+    - Every `Decision` carries position, reason, arrival rank, entitlement, quantum and deficit (for T7).
+    - `order_fcfs` is baseline B1.
+    - `apply_caps` enforces the HMWSSB caps per consumer category (`config/allocation.py booking_caps`, REAL published rule) with `CAP_DAYS_BETWEEN` / `CAP_PER_DAY` / `CAP_PER_MONTH`.
+    - Distance is never used.
+- **Validation:**
+  - 16 tests in `backend/tests/test_a3_fair_queue.py` were written first (ImportError), then pass. They cover tier order, a 2:1 entitlement split (20/10 of 30), FCFS within a group, capacity and waiting order, no starvation over days (entitlement 1 vs 10 served by day 4), no banking by empty groups, missing entitlement, explanation fields, the FCFS baseline, determinism, and all cap rules including history across days.
+  - 20,000 bookings in one station-day are ordered in 0.04 s.
+  - `python tasks.py test`: 287 pass. `python tasks.py lint` passes.
+- **Known limitations:**
+  - Tier-1 declarations and consumer categories are not in the HMWSSB data; A8 draws them (SYNTHETIC) from Census shares.
+  - The section-to-ward entitlement mapping is still open (needs section locations; D12 not ported).
+- **Handoff / next step:**
+  - T7 uses `order_bookings` and `Decision` for explanations and counterfactuals.
+  - A7 runs it per station-day; A8 compares it with `order_fcfs`.
+- **Pull request:** pending
