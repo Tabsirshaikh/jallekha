@@ -693,4 +693,4 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:**
   - Whether HMWSSB allows cross-station tokens is not verified. This is an operating change for the officer to approve (A7).
   - Stand-in stations and synthetic daily arrivals as in A8.
-- **Pull request:** (added after opening)
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/48
