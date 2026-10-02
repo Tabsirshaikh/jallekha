@@ -553,3 +553,33 @@ The pull-request description must summarize the same information and link to thi
 - **Validation:** 19 tests in `tests/test_a6_water_debt.py`, written first and failing first (module missing). A mutation check (counting outage water) makes the outage test fail. `python tasks.py test`: 453 pass. `python tasks.py lint` passes.
 - **Known limitations:** an account is any unit carrying an entitlement (booking group or ward). A7 chooses the unit, feeds daily entitlements and closed deliveries, and stores accounts. Debt does not yet change queue order; that is A7.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/45
+
+## `feat/t5-notices` — `T5`
+
+- **Owner / date:** P3, 2026-10-02.
+- **Purpose:** Supply-notice feed (F15): an officer enters an HMWSSB supply-interruption notice; its areas are matched to wards; it becomes an A5 outage; both are logged in the stored ledger; residents can be alerted in te / ur / hi / en.
+- **What we found:**
+  - `docs/research/P3.md` F15 decided "Keep officer entry": HMWSSB notices are press releases with area lists and hours, with no machine-readable feed; D14 has not been fetched. So no parser was built.
+  - A5's `create_outage` returns `entity_type` / `entity_id` outside its payload and puts `reason` (free text) in it. T5 passes the code `hmwssb_supply_notice` and copies the entity fields into the payload for `ledger_store.record`.
+  - A notice does not state people affected, which A5 needs.
+  - P1's tables: 221 sections (161 placed on a 2016 ward after SEC-FIX #39; 142 before), 145 wards, no locality alias table. "Uppal" is both Ward 10's name and a section P1 placed in Ward 7, so name matching must flag ambiguity. A 0.9 similarity threshold would accept the typo "Nacharm" (0.93), so the proposal is exact matches only.
+- **What we changed:**
+  - `backend/app/config/notices.py`: sources, area table paths, alert wording (te / ur / hi / en), OPEN values.
+  - `backend/app/models/supply_notice.py` (+ `models/__init__.py`): raw text, areas, matched and flagged areas, times, hours, people affected, bases, fingerprint, `ledger_missing`.
+  - `backend/app/services/notices.py`: `AreaIndex` (exact match = confidence 1.0; ambiguous, unplaced and near-miss names flagged, never guessed), `NoticeService.enter` (checks, duplicate refusal, A5 outage, ledger), `send_alerts`, `render_alert`.
+  - `backend/app/routers/notices.py` + `backend/app/main.py`: `POST /notices` (officer entry).
+  - Tests `backend/tests/services/test_notices.py`; docs `docs/P3_FEATURES.md`, `docs/features.csv` (T5 IN_PROGRESS), `docs/worklogs/T5.md`; workflow `.github/workflows/p3-t5.yml`.
+- **Validation:**
+  - 26 tests written first (import failed before the code existed): outage creation; `outage_created` and `notice_published` in the stored ledger with a verified chain; no free text or phone in payloads; duplicates not entered twice; unmatched, near-miss, ambiguous and unplaced areas flagged; no matched area means no outage; P1's real tables load (counts read from the files and compared with `AreaIndex`: 221 / 161 / 145); six malformed or backwards time ranges rejected; people affected from the officer, else the labelled Census fallback; alert wording in four languages; endpoint; ledger failure marker.
+  - `python tasks.py test` exit 0: 460 backend passed, 1 frontend test, all P1 verifiers (run 2026-10-02, after merging #39, #40, #42 and #43; 458 before #43, which adds 2 E5 tests); `python tasks.py lint` exit 0.
+  - Placement counts come from P1's section_to_ward_2016.csv and change when P1 updates it (142 -> 161 placed after SEC-FIX #39); the test reads them from the file.
+  - Task workflow `P3:T5` (`.github/workflows/p3-t5.yml`): T5 tests, A5 outage and T6 ledger-store tests, ruff check and format check on the T5 files.
+  - Notices and phone numbers in tests are synthetic; area names and ward ids come from P1's tables.
+- **Known limitations:**
+  - OPEN, owner to confirm: people-affected rule, exact-only matching, alert wording (native speakers and P4).
+  - 60 of 221 sections are unplaced (after SEC-FIX #39); the crosswalk does not cover section names after the Feb/Mar 2026 re-cut; no locality alias table; Census 2011 ward population overstates partial-ward notices; no resident registry for alerts; no authentication until T10.
+- **Handoff / next step:**
+  - P2 (A5): consider putting `entity_type` / `entity_id` inside `create_outage`'s payload.
+  - P4: review the alert wording; show flagged areas to the officer.
+  - P1: a locality alias table and post-2026 section names would raise the matched share.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/44
