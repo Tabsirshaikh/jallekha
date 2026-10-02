@@ -814,7 +814,7 @@ The pull-request description must summarize the same information and link to thi
   - On the longer D1b portal history (to Jan 2026, before the Feb/Mar 2026 re-cut) seasonal naive scores 26.28% / 47.67%, well above the S2 window; the 80% interval covers only 0.77 there. Section names change every year (no mapping applied).
   - Naive x growth beats the baseline on portal city MAPE (19.77 vs 26.28) but not on section WAPE (48.90 vs 47.67), and is worse on both in S2, so it is not selected.
   - `tasks.py setup` installs no scikit-learn or lightgbm, and weather (D7) / groundwater (D8) data are not in the repo, so the global gradient-boosting model is not run.
-  - `main` at `ef2e53c` (still at `73efb55`, U3) fails 3 tests outside T2 (see Validation).
+  - `main` at `d12e4fd` is green on CI; locally (Windows) P2's two A8 tests fail (see Validation).
 - **What we changed:**
   - `docs/features.csv` / `docs/P3_FEATURES.md` status rows: T7 DONE, T2 IN_PROGRESS (own commit).
   - `backend/app/config/forecast.py`: the recovered protocol with its date; T2 settings (growth window, coverage minimums, `forecast_table_note`, `model_selection_rule` OPEN); `trips_per_tanker_per_day` OPEN with no default.
@@ -824,16 +824,14 @@ The pull-request description must summarize the same information and link to thi
   - No P1, P2 or P4 file was edited.
 - **Validation:**
   - 19 tests written first (`ImportError` before the code existed), including the done-when (21.9% / 35.1% within 0.1 pp on the S2 files, scored months read from the files), no leakage, reconciliation sums, coverage on a hand-checkable fixture, Dec 2022 never zero, sections appearing / disappearing, and the capacity planner refusing to run without trips per day.
-  - `python tasks.py test` exit 1: 591 backend passed, 2 failed; frontend 1 failed. **All 3 failures are inherited from `main` and none is in T2 files**; they fail identically on a clean checkout of `main`, and their files were not edited, skipped or marked:
-    - P4 `frontend/src/App.test.tsx` > "translates resident and driver shells and applies Urdu right-to-left direction": `Unable to find an accessible element with the role "heading" and name "آج کا کام"`; also red on `main`'s CI at `ef2e53c`.
-    - P2 `backend/tests/test_a8_build.py::test_stations_are_reproducible_committed_and_labelled` (`data/derived/sandbox/section_points.csv`: 26 coordinates differ in the last digits, e.g. BACHUPALLY (PD 7) lat 17.49872903654913 committed vs 17.498729036549125 rebuilt) and `::test_one_seed_reproduces` (B1 `tanker_km` 775397.417 vs 775397.417003). They pass on Linux CI and fail on Windows 10.0.26200, Python 3.11.9, shapely 2.1.2 / GEOS 3.13.1, numpy 2.2.6.
+  - After merging `main` (`d12e4fd`): `python tasks.py test`: 591 backend passed, 2 failed; frontend 1 passed. The 2 are inherited, none in T2 files: P2 `backend/tests/test_a8_build.py::test_stations_are_reproducible_committed_and_labelled` and `::test_one_seed_reproduces` fail on Windows only (last-digit float differences, e.g. BACHUPALLY (PD 7) lat 17.49872903654913 committed vs 17.498729036549125 rebuilt; B1 tanker_km 775397.417 vs 775397.417003; Windows 10.0.26200, Python 3.11.9, shapely 2.1.2 / GEOS 3.13.1) and pass on Linux CI; identical on a clean checkout of `main`; not edited, skipped or marked.
   - All P1 verifiers pass when run separately. `python tasks.py lint` exit 0. The `P3:T2` workflow commands pass locally (22 tests, baseline line, ruff).
 - **Known limitations:**
   - OPEN, owner to confirm: trips per tanker per day; the model selection rule; the scikit-learn / lightgbm dependency (team); Chronos-2 (no-LLM rule); where the published forecast starts (pre-re-cut section names).
   - Short series (13 scored months on S2); coverage is pooled over months and sections that are not independent; portal coverage under target (0.77 / 0.87); no weather or groundwater covariates; section names not mapped across years.
 - **Handoff / next step:**
   - Follow-up: a global gradient-boosting model once the team decides the dependency and D7 / D8 exist.
-  - P4: fix `App.test.tsx` on `main`. P2: check `test_a8_build.py` on Windows. This branch is pushed only after `main` is green.
+  - P2: check `test_a8_build.py` on Windows.
   - P1: weather (D8), groundwater (D7) and a trips-per-day source. Owner: confirm the recovered protocol before 21.9% / 35.1% go on slides.
   - T8 builds on the forecast table.
 - **Pull request:** pending.
