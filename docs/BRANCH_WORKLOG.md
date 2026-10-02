@@ -405,4 +405,4 @@ The pull-request description must summarize the same information and link to thi
 - **Handoff / next step:**
   - E3: connection growth and stability (next PR).
   - PS/FS category counts may help F9 (public taps) and Q1 (filling stations).
-- **Pull request:** pending
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/36
