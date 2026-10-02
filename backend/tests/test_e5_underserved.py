@@ -73,11 +73,17 @@ def test_real_inputs_fail_closed_and_have_no_unsupported_flags():
 def test_actual_source_rows_expose_the_specific_review_blockers():
     areas = builder.load_areas()
     assert len(areas) == 145
-    codes = set(blockers(areas[0]))
-    assert "UNVALIDATED_CENSUS_LOCATION" in codes
-    assert "UNVALIDATED_BOOKING_TRANSFER" in codes
-    assert "INCOMPLETE_BOOKING_PERIOD" in codes
-    assert "WARD_BOOKINGS_UNAVAILABLE" in codes
+    # E2 places Census 2011 by the rebuilt 2009 ward map; eligible wards count as located for
+    # a field-check screen (a flag only sends someone to check). Partial wards do not.
+    located = [a for a in areas if a.census_location_validated]
+    assert len(located) == 143
+    for area in areas:
+        codes = set(blockers(area))
+        assert ("UNVALIDATED_CENSUS_LOCATION" in codes) != area.census_location_validated
+        # bookings still cannot be placed on wards, so every ward stays in data review
+        assert "UNVALIDATED_BOOKING_TRANSFER" in codes
+        assert "INCOMPLETE_BOOKING_PERIOD" in codes
+        assert "WARD_BOOKINGS_UNAVAILABLE" in codes
 
 
 def test_peer_median_is_leave_one_out_and_only_uses_need_side_matching():

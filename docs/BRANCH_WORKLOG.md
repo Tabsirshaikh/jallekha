@@ -185,3 +185,29 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:** Removing the last entry is still undetectable without a published head hash (D2, T6).
 - **Handoff / next step:** T3 and T6 can build on S3.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/25
+
+## `fix/d1-boundaries` — P1 follow-ups (D1 boundaries, E5 location rule)
+
+- **Owner / date:** P2, 2026-10-02, doing P1's follow-ups with the owner's approval. P1 should review.
+- **Purpose:** Fix two P1 items found during the E2 crosswalk work (PR #24).
+- **What we found:**
+  - D1's `hyderabad_district.geojson` and `hyderabad_mandals.geojson` held one centre **point** each (Overpass `out center`), not boundaries. Nothing reads them yet.
+  - Overpass was overloaded on 2026-10-02 (504s on three servers); Nominatim lookup returns the boundary polygons.
+  - E5 accepted only exact-geometry Census locations, so E2's approximate placement could never pass.
+- **What we changed:**
+  - `scripts/data/fetch_d1.py`: D5a = Hyderabad district polygon (OSM relation 7255986); D5b = the 16 current Hyderabad district mandals as polygons. Both use Nominatim lookup by relation id; ids were found by name search and are listed in the script.
+  - New `--only=D5a,D5b` option re-fetches only those layers and keeps the other files and manifest rows unchanged (D10 HMWSSB points are byte-identical).
+  - Added the missing top-level `import urllib.request`.
+  - The mandals are labelled as current OSM mandals, not the 2011 Census mandals; GHMC mandals in Rangareddy (reorganised in 2016) are not included.
+  - E5 (`build_underserved.py`): a ward counts as Census-located if E2 placed it exactly **or** approximately on the rebuilt 2009 map and marked it eligible (field checks only). The limitation text says so. E5/E6 artifacts rebuilt.
+- **Validation:**
+  - New `test_d1_district_and_mandals_are_polygons` failed first, then passes. The 16 mandals tile the district exactly (overlap 1.0).
+  - The E5 test was rewritten first: 143 located, 2 partial keep the blocker, all still blocked by the missing booking transfer.
+  - `python tasks.py test`: 199 pass. `python tasks.py lint` passes. `verify_d1.py`, `verify_underserved.py` and `verify_coverage.py` pass.
+- **Known limitations:**
+  - E5 still produces 0 field checks until bookings can be placed on wards (no section-to-ward transfer).
+  - `data/raw/geography/nominatim/hyderabad_district.geojson` (E2 validation) duplicates D5a; both are the same OSM relation.
+- **Handoff / next step:**
+  - P1 reviews.
+  - The section-to-ward booking transfer is the remaining E4/E5 blocker.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/27

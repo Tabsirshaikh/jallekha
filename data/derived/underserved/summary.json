@@ -8,7 +8,7 @@
     "INVALID_OR_MISSING_NON_TAP_SHARE": 2,
     "INVALID_OR_MISSING_WAD": 2,
     "UNVALIDATED_BOOKING_TRANSFER": 145,
-    "UNVALIDATED_CENSUS_LOCATION": 145,
+    "UNVALIDATED_CENSUS_LOCATION": 2,
     "WARD_BOOKINGS_UNAVAILABLE": 145
   },
   "booking_transfer": "UNAVAILABLE_NO_VERIFIED_SECTION_TO_WARD_CROSSWALK",
@@ -22,7 +22,7 @@
   "ground_truth_count": 0,
   "interpretation": "A low booking/reference ratio can trigger a field check only after all evidence gates pass; it does not estimate unreported demand or prove under-service.",
   "limits": [
-    "E2 Census values are approximate (2009 to 2016 ward crosswalk); none is exact-geometry validated.",
+    "E2 Census values are approximate (2009 to 2016 ward crosswalk); they are accepted for field checks only, never as exact-geometry validation.",
     "HMWSSB tanker observations are monthly section totals; no verified section-to-ward transfer exists.",
     "Census household and need covariates are historical and provisional for unvalidated locations.",
     "All 145 E3 growth observations carry a review-only variability flag; growth is not used for ranking.",

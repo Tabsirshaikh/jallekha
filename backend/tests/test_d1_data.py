@@ -58,3 +58,16 @@ def test_d1_retrieval_logs() -> None:
     assert d7_log.is_file(), f"Missing {d7_log}"
     assert len(d6_log.read_text(encoding="utf-8")) > 100
     assert len(d7_log.read_text(encoding="utf-8")) > 100
+
+
+def test_d1_district_and_mandals_are_polygons() -> None:
+    """D5 layers must be boundaries, not centre points (fix found during the E2 crosswalk work)."""
+    osm = ROOT / "data" / "raw" / "geography" / "osm"
+    district = json.loads((osm / "hyderabad_district.geojson").read_bytes().decode("utf-8"))
+    mandals = json.loads((osm / "hyderabad_mandals.geojson").read_bytes().decode("utf-8"))
+    polygon_types = {"Polygon", "MultiPolygon"}
+    assert [f["geometry"]["type"] in polygon_types for f in district["features"]] == [True]
+    assert len(mandals["features"]) == 16
+    assert all(f["geometry"]["type"] in polygon_types for f in mandals["features"])
+    names = {f["properties"]["name"] for f in mandals["features"]}
+    assert {"Shaikpet mandal", "Asif Nagar mandal", "Tirumalagiri mandal"} <= names
