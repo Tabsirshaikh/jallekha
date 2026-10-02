@@ -13,6 +13,7 @@ JalLekha measures water need independently of requests (Census water access, bui
 | [docs/JALLEKHA_FINAL_SOLUTION.md](docs/JALLEKHA_FINAL_SOLUTION.md) | The solution: problem, PS11 mapping, research, data sources, features F1-F20, architecture, evaluation, limits |
 | [docs/TEAM_PLAN.md](docs/TEAM_PLAN.md) | Who builds what, research step, branches, how to push and merge, timeline |
 | [docs/features.csv](docs/features.csv) | Task tracker: owner, branch, dependencies, done-when, status |
+| [docs/BRANCH_WORKLOG.md](docs/BRANCH_WORKLOG.md) | Per-branch findings, changes, validation, limitations and handoffs |
 
 ## Three layers
 
@@ -27,7 +28,7 @@ JalLekha measures water need independently of requests (Census water access, bui
 1. Research your features first (`docs/research/<id>.md`), get it reviewed.
 2. One branch per task: `feat/<task-id>-<name>` from `main`.
 3. Push, open a pull request into `main`, one teammate reviews, squash and merge.
-4. Update your row in `docs/features.csv`.
+4. Add a focused CI workflow named `<owner>:<task-id>`, update `docs/features.csv`, and document findings, changes, validation, limitations and handoff in `docs/BRANCH_WORKLOG.md`.
 
 Full steps: [docs/TEAM_PLAN.md](docs/TEAM_PLAN.md).
 
