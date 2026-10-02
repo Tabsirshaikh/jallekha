@@ -38,8 +38,9 @@ ALERT_TEMPLATES: dict[str, dict[str, str]] = {
 
 @dataclass(frozen=True)
 class NoticeConfig:
-    # P1's area tables (E1 / A3-FIX). section_to_ward_2016: 221 sections, 142 placed on a 2016
-    # ward; ward geojson: 145 GHMC 2016 wards; ward_evidence: Census 2011 population per ward.
+    # P1's area tables (E1 / A3-FIX / SEC-FIX #39). section_to_ward_2016: 221 sections, 161
+    # placed on a 2016 ward (counts change when P1 updates the file); ward geojson: 145 GHMC
+    # 2016 wards; ward_evidence: Census 2011 population per ward.
     sections_path: str = str(REPO_ROOT / "data/derived/crosswalk/section_to_ward_2016.csv")
     wards_path: str = str(REPO_ROOT / "data/raw/geography/datameet/ghmc-wards.geojson")
     evidence_path: str = str(REPO_ROOT / "data/derived/evidence/ward_evidence.csv")
