@@ -739,4 +739,4 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:**
   - The replay has no outages and does not settle debt (no delivery outcomes are simulated).
   - Routing needs registered service points (the registry starts empty) and officer-entered locations for critical stops.
-- **Pull request:** (added after opening)
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/50
