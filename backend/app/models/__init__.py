@@ -10,6 +10,7 @@ from app.models.ledger_entry import LedgerEntryRecord
 from app.models.ledger_head import LedgerHead
 from app.models.representative import Representative
 from app.models.resident_response import ResidentResponse
+from app.models.supply_notice import SupplyNotice
 from app.models.voice_note import VoiceNote
 
 __all__ = [
@@ -24,6 +25,7 @@ __all__ = [
     "LedgerHead",
     "Representative",
     "ResidentResponse",
+    "SupplyNotice",
     "VoiceNote",
     "new_id",
     "utcnow",
