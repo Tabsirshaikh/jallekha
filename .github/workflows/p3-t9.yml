@@ -1,0 +1,66 @@
+name: "P3:T9"
+
+# T9 confidence gate (F17): signal boundaries, low confidence cannot auto-commit (A7's
+# build_plan / approve_plan / mark_checked), the gate on the real files, and the calibration
+# regenerated on Linux from the A7 replay and compared with the committed file (rounded values).
+on:
+  push:
+    branches: [feat/t9-confidence]
+  pull_request:
+    branches: [main]
+    paths:
+      - "backend/app/services/confidence.py"
+      - "backend/app/services/planner.py"
+      - "backend/app/config/confidence.py"
+      - "backend/tests/services/test_confidence.py"
+      - "scripts/trust/calibrate_confidence.py"
+      - "scripts/sandbox/build_planner_replay.py"
+      - "data/derived/confidence_calibration.csv"
+      - "data/derived/evidence/ward_evidence.csv"
+      - "data/derived/crosswalk/section_to_ward_2016.csv"
+      - "data/derived/planner_replay/**"
+      - "data/derived/sandbox/**"
+      - ".github/workflows/p3-t9.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  confidence:
+    name: "P3:T9"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -e 'backend[dev,geo]'
+      - name: Confidence gate and A7 planner tests
+        run: pytest backend/tests/services/test_confidence.py backend/tests/test_a7_planner.py
+      - name: Regenerate the calibration and compare rounded values with the committed file
+        run: |
+          python scripts/trust/calibrate_confidence.py --out "$RUNNER_TEMP/calibration.csv"
+          python - "$RUNNER_TEMP/calibration.csv" <<'EOF'
+          import csv, sys
+          fresh = list(csv.DictReader(open(sys.argv[1], encoding="utf-8")))
+          committed = list(csv.DictReader(open("data/derived/confidence_calibration.csv", encoding="utf-8")))
+          assert len(fresh) == len(committed), (len(fresh), len(committed))
+          for a, b in zip(fresh, committed):
+              assert (a["row_type"], a["threshold"], a["status"]) == (b["row_type"], b["threshold"], b["status"]), (a, b)
+              for col in ("match_share", "flagged_share"):
+                  if a[col] or b[col]:
+                      assert abs(float(a[col]) - float(b[col])) <= 1e-4, (a["threshold"], col, a[col], b[col])
+          print(f"calibration reproduces: {len(fresh)} rows")
+          EOF
+      - name: Lint T9 files
+        run: >-
+          ruff check --config backend/pyproject.toml
+          backend/app/services/confidence.py backend/app/config/confidence.py
+          backend/tests/services/test_confidence.py scripts/trust/calibrate_confidence.py
+      - name: Format check T9 files
+        run: >-
+          ruff format --check --config backend/pyproject.toml
+          backend/app/services/confidence.py backend/app/config/confidence.py
+          backend/tests/services/test_confidence.py scripts/trust/calibrate_confidence.py
