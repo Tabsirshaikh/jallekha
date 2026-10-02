@@ -33,6 +33,25 @@ class TrustConfig:
     ledger_hmac_key: str | None = field(
         default_factory=lambda: env_str("LEDGER_HMAC_KEY"), repr=False
     )
+    # --- F18 stored ledger (T6) ---
+    # Environment: LEDGER_KEY_ID, the id of LEDGER_HMAC_KEY. Source: F18 and docs/research/P3.md
+    # F18 ("key_id per entry for key rotation"). Each entry records the key id it was signed with.
+    ledger_key_id: str = field(default_factory=lambda: env_str("LEDGER_KEY_ID", "k1") or "k1")
+    # Environment: LEDGER_OLD_HMAC_KEYS, "id:key,id:key" for retired keys, so entries signed
+    # before a rotation still verify. Hidden from repr.
+    ledger_old_hmac_keys: str | None = field(
+        default_factory=lambda: env_str("LEDGER_OLD_HMAC_KEYS"), repr=False
+    )
+    # Source: OPEN, owner to confirm. How often the HMAC key is rotated. The research note
+    # decides key ids and rotation, not the period; 90 days is a proposal. Not enforced in code.
+    ledger_key_rotation_days: int = 90
+    # Source: F18 ("the head hash is published daily"). The day boundary and publish time are
+    # OPEN, owner to confirm: proposal = Hyderabad local day (UTC+05:30, minutes below) and
+    # publishing at 06:00 local, before the day's plan. Channel (ward report card / SMS) is P4/T5.
+    ledger_head_utc_offset_minutes: int = 330
+    ledger_head_publish_time_local: str = "06:00"
+    # Retries when two writers take the same sequence number at once. Technical, ASSUMED.
+    ledger_append_retries: int = 20
 
     # --- F13 duplicate engine (T1) ---
     # Source: F13 ("Rule: 100 m radius"), calibrated on Chicago duplicates ("95% within 106 m").
@@ -74,6 +93,20 @@ class TrustConfig:
         (True, "Unconfirmed"),
         (False, "Failed"),
     )
+
+    def ledger_keyring(self) -> dict[str, str]:
+        """Current key (by LEDGER_KEY_ID) plus retired keys; empty when no key is set."""
+        keys: dict[str, str] = {}
+        if self.ledger_hmac_key:
+            keys[self.ledger_key_id] = self.ledger_hmac_key
+        for item in (self.ledger_old_hmac_keys or "").split(","):
+            if not item.strip():
+                continue
+            key_id, sep, secret = item.strip().partition(":")
+            if not sep or not key_id.strip() or not secret.strip():
+                raise ValueError("LEDGER_OLD_HMAC_KEYS must look like 'id:key,id:key'")
+            keys.setdefault(key_id.strip(), secret.strip())
+        return keys
 
 
 TRUST_CONFIG = TrustConfig()
