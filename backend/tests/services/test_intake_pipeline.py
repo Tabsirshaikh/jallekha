@@ -453,8 +453,12 @@ def test_phone_needs_a_hash_key(engine: Engine, sms: FakeSmsSender, tmp_path: Pa
 
 
 def test_no_ledger_entries_while_no_intake_event_type_exists(
-    engine: Engine, sms: FakeSmsSender, tmp_path: Path
+    engine: Engine, sms: FakeSmsSender, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    # The intake types now exist; remove them for this test only to keep its purpose.
+    monkeypatch.setattr(
+        ledger, "EVENT_TYPES", ledger.EVENT_TYPES - set(ip.PROPOSED_EVENTS.values())
+    )
     recorder = RecordingLedger()
     service = ip.IntakeService(
         engine,
@@ -465,7 +469,6 @@ def test_no_ledger_entries_while_no_intake_event_type_exists(
         ledger=recorder,
     )
     service.receive_json(_app("no water"))
-    assert all(event not in ledger.EVENT_TYPES for event in ip.PROPOSED_EVENTS.values())
     assert recorder.calls == []
 
 
