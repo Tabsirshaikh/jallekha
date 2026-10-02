@@ -21,6 +21,8 @@ class Delivery(IdTimestampMixin, Base):
     driver_id: Mapped[str] = mapped_column(String(64), index=True)
     stop_lat: Mapped[float] = mapped_column(Float)
     stop_lon: Mapped[float] = mapped_column(Float)
+    # Per-stop geofence radius override; empty = config (150 m, F12).
+    geofence_radius_m: Mapped[float | None] = mapped_column(Float)
     otp_representative_id: Mapped[str | None] = mapped_column(ForeignKey("representative.id"))
     otp_nonce: Mapped[str | None] = mapped_column(String(32))
     otp_code_hash: Mapped[str | None] = mapped_column(String(64))

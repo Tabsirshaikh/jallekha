@@ -5,9 +5,8 @@ database-backed, concurrency-safe one without touching them. The hash, signature
 types come from the S3 ledger (`services/ledger.py`).
 
 Payload convention: every payload carries `entity_type` and `entity_id`; they fill the entry's
-fields and also stay in the payload, so they are covered by the hash (S3 review D1 notes that
-`entity_type` alone is not). `actor` is added to the payload. Ids and numbers only, no
-personal data (no phone numbers, no OTP codes).
+fields and also stay in the payload. `actor` is added to the payload. Ids and numbers only,
+no personal data (no phone numbers, no OTP codes).
 """
 
 from __future__ import annotations

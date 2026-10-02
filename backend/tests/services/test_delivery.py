@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
+import json
+import math
+from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 
 import pytest
 
 from app.config.trust import TRUST_CONFIG
 from app.services import delivery as dl
-from app.services import ledger
+from app.services import geofence, ledger, otp
 from app.services.geo import offset_point
 from app.services.ledger_port import InMemoryLedger
 from app.services.sms import FakeSmsSender
@@ -223,10 +226,6 @@ def test_geofence_149_inside_151_outside(chain: InMemoryLedger) -> None:
     assert inside.radius_m == TRUST_CONFIG.geofence_radius_metres == 150
 
 
-@pytest.mark.skip(
-    reason="PENDING S3 review D6: geofence.check has no float tolerance, so exactly 150 m is "
-    "'outside' on 176 of 360 bearings. Enable when P2 fixes services/geofence.py."
-)
 def test_geofence_exactly_150_is_inside(chain: InMemoryLedger) -> None:
     state = _start(chain)
     for bearing in range(360):
@@ -374,6 +373,121 @@ def test_wrong_otp_attempts_lock_the_stop_across_reissues(
         dl.request_otp(state, "rep-1", OTP_KEY, sms, chain, T0)
 
 
+BAD_POSITIONS = [
+    (math.nan, 78.4867),
+    (17.385, math.nan),
+    (math.inf, 78.4867),
+    (95.0, 78.4867),
+    (17.385, 181.0),
+]
+
+
+@pytest.mark.parametrize("position", BAD_POSITIONS)
+def test_invalid_driver_position_is_a_clear_result_not_an_error(
+    chain: InMemoryLedger, sms: FakeSmsSender, position: tuple[float, float]
+) -> None:
+    # S3 review D9: geofence.check now raises on NaN / out-of-range coordinates; T3 catches it.
+    state = _start(chain)
+    _, location = dl.check_geofence(state, *position, chain, T0)
+    assert (location.status, location.reason, location.inside) == (
+        "invalid_location",
+        "invalid_coordinates",
+        False,
+    )
+    state = dl.request_otp(state, "rep-1", OTP_KEY, sms, chain, T0)
+    state, result = dl.verify_otp(state, sms.sent[-1].params["code"], *position, OTP_KEY, chain, T0)
+    assert result == "invalid_location"
+    assert state.wrong_attempts == 0 and not state.otp_verified and state.outside_tries == 1
+
+
+def test_invalid_stop_position_is_a_clear_result(chain: InMemoryLedger) -> None:
+    state = dl.start_delivery("del-1", "stop-1", math.nan, 78.4867, "drv-1", REPS, chain, T0)
+    _, location = dl.check_geofence(state, *_at(20), chain, T0)
+    assert (location.status, location.reason) == ("invalid_location", "invalid_coordinates")
+
+
+@pytest.mark.parametrize("radius", [0, -5, math.nan, math.inf])
+def test_invalid_radius_is_a_clear_result_not_an_error(
+    chain: InMemoryLedger, sms: FakeSmsSender, radius: float
+) -> None:
+    # S3 review D7: geofence.check now raises on radius <= 0; T3 checks the radius first.
+    state = dl.start_delivery("del-1", "stop-1", *STOP, "drv-1", REPS, chain, T0, radius_m=radius)
+    _, location = dl.check_geofence(state, *_at(20), chain, T0)
+    assert (location.status, location.reason) == ("invalid_location", "invalid_radius")
+    state = dl.request_otp(state, "rep-1", OTP_KEY, sms, chain, T0)
+    state, result = dl.verify_otp(state, sms.sent[-1].params["code"], *_at(20), OTP_KEY, chain, T0)
+    assert result == "invalid_location" and not state.otp_verified
+
+
+def test_valid_per_stop_radius_is_used(chain: InMemoryLedger) -> None:
+    state = dl.start_delivery("del-1", "stop-1", *STOP, "drv-1", REPS, chain, T0, radius_m=200)
+    _, location = dl.check_geofence(state, *_at(180), chain, T0)
+    assert (location.status, location.radius_m) == ("inside", 200)
+
+
+def _floats(value: object) -> list[float]:
+    if isinstance(value, float):
+        return [value]
+    if isinstance(value, dict):
+        return [f for v in value.values() for f in _floats(v)]
+    if isinstance(value, list | tuple):
+        return [f for v in value for f in _floats(v)]
+    return []
+
+
+def test_missing_position_has_no_distance(chain: InMemoryLedger) -> None:
+    # S3 review D8: distance_m is None (was inf) when the phone sends no position.
+    _, location = dl.check_geofence(_start(chain), None, None, chain, T0)
+    assert (location.status, location.inside, location.distance_m) == ("no_location", False, None)
+    assert chain.entries[-1].payload["distance_m"] is None
+
+
+def test_results_and_ledger_never_hold_inf_or_nan(
+    chain: InMemoryLedger, sms: FakeSmsSender
+) -> None:
+    state = dl.request_otp(_start(chain), "rep-1", OTP_KEY, sms, chain, T0)
+    code = sms.sent[-1].params["code"]
+    locations = []
+    for position in [(None, None), *BAD_POSITIONS, _at(151), _at(20)]:
+        locations.append(dl.check_geofence(state, *position, chain, T0)[1])
+        state, _ = dl.verify_otp(state, code, *position, OTP_KEY, chain, T0)
+    numbers = _floats([vars(loc) for loc in locations]) + _floats(
+        [e.payload for e in chain.entries]
+    )
+    assert numbers and all(math.isfinite(n) for n in numbers)
+    for entry in chain.entries:  # strict JSON: no NaN / Infinity tokens
+        json.loads(ledger.payload_json(entry.payload), parse_constant=pytest.fail)
+
+
+@pytest.mark.parametrize("bad_distance", [math.inf, math.nan])
+def test_a_non_finite_distance_from_geofence_becomes_none(
+    chain: InMemoryLedger, monkeypatch: pytest.MonkeyPatch, bad_distance: float
+) -> None:
+    # Guard in T3 itself, in case geofence.check ever returns inf / NaN again.
+    monkeypatch.setattr(
+        dl.geofence, "check", lambda *a, **k: geofence.GeofenceResult(False, bad_distance, 150)
+    )
+    _, location = dl.check_geofence(_start(chain), *_at(20), chain, T0)
+    assert location.distance_m is None and not location.inside
+    assert chain.entries[-1].payload["distance_m"] is None
+
+
+def test_changing_otp_digits_after_issue_keeps_the_issued_otp_working(
+    chain: InMemoryLedger, sms: FakeSmsSender, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # S3 review D11: the digit count is stored with the OTP and passed when re-deriving.
+    state = dl.request_otp(_start(chain), "rep-1", OTP_KEY, sms, chain, T0)
+    code = sms.sent[-1].params["code"]
+    assert state.otp is not None and state.otp.digits == len(code) == 6
+    shorter = replace(TRUST_CONFIG, otp_digits=4)
+    monkeypatch.setattr(dl, "TRUST_CONFIG", shorter)
+    monkeypatch.setattr(otp, "TRUST_CONFIG", shorter)
+    assert len(otp.derive_code(OTP_KEY, "stop-1", state.otp.nonce)) == 4  # config did change
+    assert dl.issued_code(state, OTP_KEY) == code
+    state, result = dl.verify_otp(state, code, *_at(20), OTP_KEY, chain, T0)
+    assert result == "verified"
+
+
 def test_naive_time_is_rejected(chain: InMemoryLedger) -> None:
     with pytest.raises(ValueError, match="timezone"):
         dl.start_delivery("d", "stop-1", *STOP, "drv", REPS, chain, datetime(2026, 10, 2))
@@ -422,3 +536,16 @@ def test_ledger_port_needs_known_event_and_entity(chain: InMemoryLedger) -> None
         chain.append("not_an_event", {"entity_type": "delivery", "entity_id": "d"}, "system")
     with pytest.raises(ValueError, match="entity"):
         chain.append("delivery_started", {}, "system")
+
+
+@pytest.mark.parametrize("field_name", ["seq", "prev_hash"])
+def test_seq_and_prev_hash_are_part_of_the_entry_hash(
+    chain: InMemoryLedger, field_name: str
+) -> None:
+    # The order and link checks in verify_entries would catch these edits anyway; this shows
+    # the hash itself covers them (S3 review D1, fixed in S3-FIX #25).
+    _start(chain)
+    entry = chain.entries[-1]
+    changed = entry.seq + 1 if field_name == "seq" else "0" * 64
+    assert ledger.entry_hash(entry) == entry.hash
+    assert ledger.entry_hash(replace(entry, **{field_name: changed})) != entry.hash
