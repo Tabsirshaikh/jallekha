@@ -130,7 +130,9 @@ def test_backtest_naive_equals_the_baseline(s2: fc.Panel) -> None:
 
 def test_gbm_is_reported_as_not_run_without_a_library() -> None:
     assert "global_gbm" not in fc.MODELS
-    assert "global_gbm" in fc.NOT_RUN and "not installed" in fc.NOT_RUN["global_gbm"]
+    assert "global_gbm" in fc.NOT_RUN
+    assert "neither installed by setup" in fc.NOT_RUN["global_gbm"]
+    assert "D7 and D8" in fc.NOT_RUN["global_gbm"]
 
 
 # --- sections that appear or disappear ---------------------------------------------------
@@ -251,3 +253,11 @@ def test_run_backtest_writes_outputs_with_basis_columns(tmp_path: Path) -> None:
         assert rows
         derived = [c for c in rows[0] if c in fc.DERIVED_COLUMNS]
         assert derived and all(f"{c}_basis" in rows[0] for c in derived)
+
+
+def test_forecast_table_basis_carries_the_recut_label(s2: fc.Panel) -> None:
+    table = fc.forecast_table(
+        s2, "seasonal_naive", 2, basis_note=FORECAST_CONFIG.forecast_table_note
+    )
+    assert all("re-cut" in str(r["point_basis"]) for r in table if r["point"] is not None)
+    assert "OPEN" in FORECAST_CONFIG.model_selection_rule

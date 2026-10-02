@@ -46,6 +46,20 @@ class ForecastConfig:
     trips_per_tanker_per_day: float | None = None
     # Portal data (D1b) is used up to the month before the Feb/Mar 2026 section re-cut.
     portal_through: tuple[int, int] = (2026, 1)
+    # Label on the 12-month forecast built from the portal data through Jan 2026.
+    # OPEN, owner to confirm: where the published forecast should start.
+    forecast_table_note: str = (
+        "section names are from before the Feb/Mar 2026 re-cut, so Feb 2026 onwards cannot "
+        "be compared section by section with current HMWSSB sections"
+    )
+    # Model choice. docs/P3_BUILD_PLAN.md T2 says only that a model must beat the baseline; it
+    # does not say which metric decides. OPEN, owner to confirm. Rule applied: a model is used
+    # only if it beats seasonal naive on both city MAPE and section WAPE in both backtest runs
+    # (S2 and portal); otherwise seasonal naive is used.
+    model_selection_rule: str = (
+        "a model is used only if it beats seasonal naive on both city MAPE and section WAPE in "
+        "both backtest runs (S2 and portal); otherwise seasonal naive (OPEN)"
+    )
     # Covariates for a later model (weather D8, groundwater D7): not in the repo yet.
     covariates: tuple[str, ...] = ()
 

@@ -34,8 +34,8 @@ SectionValues = dict[str, float]
 
 NOT_RUN: dict[str, str] = {
     "global_gbm": (
-        "not run: needs scikit-learn or lightgbm, not installed by tasks.py setup "
-        "(lightgbm is in the optional ml extra); decision pending"
+        "not run: needs scikit-learn or lightgbm, neither installed by setup; team decision "
+        "on the dependency pending; covariates D7 and D8 not in the repo"
     ),
     "chronos_2": "not run: owner decision pending (no-LLM rule)",
 }
@@ -286,8 +286,9 @@ def common_origins(rows: Sequence[BacktestRow]) -> set[Month]:
 
 
 def select_model(runs: Sequence[Mapping[str, Summary]]) -> str:
-    """A model is used only if it beats seasonal naive on both city MAPE and section WAPE in
-    every run given; otherwise the baseline."""
+    """Selection rule (config `model_selection_rule`, OPEN): a model is used only if it beats
+    seasonal naive on both city MAPE and section WAPE in every run given; otherwise the
+    baseline."""
     names = set.intersection(*(set(run) for run in runs)) - {"seasonal_naive"}
     winners = [
         n
@@ -411,7 +412,11 @@ def conformal_backtest(
 
 
 def forecast_table(
-    panel: Panel, model_name: str, horizon: int, config: ForecastConfig = FORECAST_CONFIG
+    panel: Panel,
+    model_name: str,
+    horizon: int,
+    config: ForecastConfig = FORECAST_CONFIG,
+    basis_note: str = "",
 ) -> list[dict[str, object]]:
     """Section and city rows for the `horizon` months after the panel's last month.
 
@@ -428,6 +433,10 @@ def forecast_table(
     quantiles = {level: conformal_quantile(scores, level) for level in config.interval_levels}
     last = panel.months[-1]
     basis = f"DERIVED: {model_name} on {panel.column} through {last[0]}-{last[1]:02d}"
+    city_basis = "DERIVED: sum of section points"
+    if basis_note:
+        basis = f"{basis}; {basis_note}"
+        city_basis = f"{city_basis}; {basis_note}"
     interval_basis = (
         f"DERIVED: split-conformal, section-scaled pooled residuals of the {model_name} backtest"
     )
@@ -457,7 +466,8 @@ def forecast_table(
             rows.append(row)
         city: dict[str, object] = {
             "level": "city", "section": "", "month": label, "model": model_name,
-            "point": reconcile(forecast), "point_basis": "DERIVED: sum of section points",
+            "point": reconcile(forecast),
+            "point_basis": city_basis,
         }  # fmt: skip
         for level in quantiles:
             pct = int(round(level * 100))

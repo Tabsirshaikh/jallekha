@@ -147,7 +147,9 @@ def main(argv: list[str] | None = None) -> int:
         writer.writeheader()
         writer.writerows(rows)
 
-    table = fc.forecast_table(portal, selected, cfg.horizon_months)
+    table = fc.forecast_table(
+        portal, selected, cfg.horizon_months, basis_note=cfg.forecast_table_note
+    )
     columns = list(dict.fromkeys(k for row in table for k in row))
     with (args.out_dir / "forecast_table.csv").open("w", encoding="utf-8", newline="") as h:
         writer = csv.DictWriter(h, fieldnames=columns)
