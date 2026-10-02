@@ -120,8 +120,8 @@ if __name__ == "__main__":
         document = fit(ROOT, tuple(args.variants))
         path = ROOT / RESULTS
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(
-            json.dumps(document, indent=2, sort_keys=True, allow_nan=False) + "\n",
-            encoding="utf-8",
+        # LF on every platform, so hashes match between Windows and Linux runs
+        path.write_bytes(
+            (json.dumps(document, indent=2, sort_keys=True, allow_nan=False) + "\n").encode()
         )
         print(f"Wrote {RESULTS}")

@@ -146,7 +146,8 @@ if __name__ == "__main__":
     graph = build()
     path = ROOT / OUTPUT
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(graph, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    # LF on every platform: the review records this file's SHA-256
+    path.write_bytes((json.dumps(graph, indent=2, sort_keys=True) + "\n").encode())
     figure(ROOT, graph)
     print(
         f"{graph['edge_count']} edges, {len(graph['components'])} component(s), "

@@ -4,7 +4,7 @@
   "reviewer": "Tabsirshaikh (owner)",
   "reviewed_on": "2026-10-03",
   "source": "data/derived/underserved/ward_adjacency.json",
-  "source_sha256": "370f4ef26541a5c984b41dba5dc5b45e1c8cc94957b0d6061dbe97fd1def89e8",
+  "source_sha256": "d02002994668ddf6368d94125da119849b80a129e093dd5be3ef776474385b4a",
   "method": "Automated verification approved by the owner: 9-setting robustness, live OSM comparison, web spot-check. Not a local-knowledge review.",
   "evidence": {
     "robustness": {
