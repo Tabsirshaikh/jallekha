@@ -14,6 +14,11 @@ class GrowthConfig:
     # Engineering network bound; retries reuse archived successful tile extractions.
     network_workers: int = 4
     network_timeout_seconds: int = 30
+    # A ward's building trend is "stable" when, after removing the city-wide year shocks, its
+    # slope is at least this many standard errors above zero (usual 2-sigma convention).
+    # Basis: ASSUMED statistical threshold; replaces the CV-of-annual-change heuristic, which
+    # flagged every ward because the city-wide shocks dominate small annual changes.
+    minimum_trend_t: float = 2.0
 
 
 GROWTH_CONFIG = GrowthConfig()

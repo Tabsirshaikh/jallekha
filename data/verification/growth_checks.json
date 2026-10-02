@@ -1,5 +1,31 @@
 {
-  "crosswalk_sha256_lf": "b2a920ebbb53e21e9e4711c2db11bb4522b94f7f25f006fa0573c271ac5c6dc5",
+  "billing_sha256": {
+    "data/raw/hmwssb_billing_portal/2022-01.csv": "1c2d2bee9d1d1aa60b2e24f06f7194d49b58581f3f6db00becee4163d31c9157",
+    "data/raw/hmwssb_billing_portal/2022-02.csv": "ca6e9f2b16f4905cea736d53800338bee8d03c6a666b5f71a3d6ea2abedbb224",
+    "data/raw/hmwssb_billing_portal/2022-03.csv": "66204c3618c697e7c478b6890c4bec30a0ef67880b4f0d6b1f0dfab0d5ae615a",
+    "data/raw/hmwssb_billing_portal/2022-04.csv": "1847534b20618b7f57cdb3b47b8756dbb6d317cb6d6024f4b8f765de6688bb42",
+    "data/raw/hmwssb_billing_portal/2022-05.csv": "85339709149a1d36ba5216430ef0f7125d3b661a0fdd9a67bb4cec869159e44c",
+    "data/raw/hmwssb_billing_portal/2022-06.csv": "874490ac8052eac82479b2e50793139b6560e9990849f40e03312bbda1f23f15",
+    "data/raw/hmwssb_billing_portal/2022-07.csv": "3fb71f6f728731ff4f738ba994e365d9c305b0a252fb16cbb0289b54c9f57003",
+    "data/raw/hmwssb_billing_portal/2022-08.csv": "010ca7fc89e0094c5e9dae5da30134e606c92c1d0a8a15c35a7e5402c7d6c85d",
+    "data/raw/hmwssb_billing_portal/2022-09.csv": "cb73da2f45d9fb34038ce400e5f15ae89f09514cf0a86c0ac672d1659ed1bc85",
+    "data/raw/hmwssb_billing_portal/2022-10.csv": "eb354055d8fc6dbf8f3c38f27a9f069e173ac935a78e1e56c593ef1c344a29bc",
+    "data/raw/hmwssb_billing_portal/2022-11.csv": "39e5bb1bd8e7c5049aa159b20ea9334dac3af78e350e827de6ce979f57567231",
+    "data/raw/hmwssb_billing_portal/2022-12.csv": "19b38861914b5f697e1ff1840934cd25314de025d3b59e690775ae4c1c45f9ca",
+    "data/raw/hmwssb_billing_portal/2025-01.csv": "f455ebe1c6c11a337b71e681ae2fe654564095e8964132f26c8f7dcaddd236ff",
+    "data/raw/hmwssb_billing_portal/2025-02.csv": "bd12d02e3c5a124bc335e9608a4ee15b7609566647c03dcdc08d11034069f8ac",
+    "data/raw/hmwssb_billing_portal/2025-03.csv": "4c32562e31a67d14e2c7ad2826c3cf9e00c0c16f2622c737023ad7acce3685ec",
+    "data/raw/hmwssb_billing_portal/2025-04.csv": "61a765a6c515f56235db07d86a07431c6e5dd35e994c70bd75ab84121961c522",
+    "data/raw/hmwssb_billing_portal/2025-05.csv": "d0ba9223a953656403f97fcdeed5f043b0da5fd472c821fe0360ac0fca51dbd2",
+    "data/raw/hmwssb_billing_portal/2025-06.csv": "69e143886de1eec849211956f26d410b7e0351c0d79f9be1e22d7d54f50bca81",
+    "data/raw/hmwssb_billing_portal/2025-07.csv": "bb89b5d3d6f48283a6b9f58f578933e826353c16ed9ebac60711f2e328122506",
+    "data/raw/hmwssb_billing_portal/2025-08.csv": "dbcdd55b7f5511599c5e837f2e4f6fa372b1105fa7bad0c82148c09eb8755434",
+    "data/raw/hmwssb_billing_portal/2025-09.csv": "d4f754434416abc3710a24ae89e950d30426150c3640cc3775f518b8674fc946",
+    "data/raw/hmwssb_billing_portal/2025-10.csv": "9a806bcd11d9f8dba4faf180300babe54564db697883e9364558aa3f41e525b4",
+    "data/raw/hmwssb_billing_portal/2025-11.csv": "1f1812cb60eaa067d953b0f2b461fc09a98003c6e859049861a969b205df51a6",
+    "data/raw/hmwssb_billing_portal/2025-12.csv": "0eeb5e9a77d33564f30bc8b1bb171bf5aecf57c74a1696fa4493744650103a20"
+  },
+  "evidence_sha256_lf": "55283537df47923deca25f8347c46e4d9c5455089527a36f3e6632ab4e2cc54c",
   "geography_sha256": "3fdfef8e787ed543d816fee36a6097c350c4dff2423aae7fa203bb49cbd6edc2",
   "manifest_sha256": {
     "2016": "b97af06367dd94ab9eda7869f92709bdb742461e7d43c4b4a9785ddbcf83f911",
@@ -12,12 +38,13 @@
     "2023": "d0ac025a1e4fa52b27efe2a44941d021a2c98dd1b5bad49c62e41f821c61c12c"
   },
   "output_sha256": {
-    "data/derived/growth/annual.csv": "44c6c444d6f57d4ffa236afe384ff8d21c8effb124acd981be3c5db2504a013b",
-    "data/derived/growth/growth.csv": "b6760f6d1ea11c86462121f0c5e5d1f254e3db8fd1f1509fe7fe14a8cd55cde4",
+    "data/derived/growth/annual.csv": "fbb01736550db1fd5219f619b10dbcd4e231357a3006c265826a3b9ff451bc1e",
+    "data/derived/growth/growth.csv": "0969618561b7c9c4dfa4ee14bedfac0375b3af49bd0ee1df21bb198714072f12",
     "data/derived/growth/source_comparison.csv": "71feabc11ef18d2616fc5be5fe8c66b4102d2fdb3236bd0d42aceec1e316d320",
-    "data/derived/growth/summary.json": "510a7b6940b244c912c036fa25aaed90eebe7c5f54bf1bf525bad0dbf680da49"
+    "data/derived/growth/summary.json": "a6d8ba6bf81d656e0e81173be4e08f7e416dcbfe6dc5c964f0c4a82f811bef1d"
   },
-  "schema_version": "E3-1",
+  "schema_version": "E3-2",
+  "section_wards_sha256_lf": "6f4f0b531628abb1fcf4da12c83d734e2ac444a94524fd9f7c84d7ab60aa5aa1",
   "tile_archives": [
     {
       "basis": "DERIVED",

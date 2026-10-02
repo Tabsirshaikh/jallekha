@@ -15,7 +15,7 @@
   "data_review_count": 145,
   "e2_location_validated_joins": 143,
   "e3_growth_context_only": true,
-  "e3_high_variability_review_flags": 145,
+  "e3_noisy_trend_review_flags": 0,
   "eligible_count": 0,
   "field_check_count": 0,
   "field_check_outcomes_recorded": 0,
@@ -25,7 +25,7 @@
     "E2 Census values are approximate (2009 to 2016 ward crosswalk); they are accepted for field checks only, never as exact-geometry validation.",
     "HMWSSB tanker observations are monthly section totals; no verified section-to-ward transfer exists.",
     "Census household and need covariates are historical and provisional for unvalidated locations.",
-    "All 145 E3 growth observations carry a review-only variability flag; growth is not used for ranking.",
+    "E3 building trends are stable after removing city-wide year shocks; growth is context only and not used for ranking.",
     "No field-check labels exist, so empirical precision/recall and real-world accuracy are unavailable.",
     "This screen cannot identify who did not report or infer reporting propensity from counts alone.",
     "A candidate means 'send someone to check'; it never changes allocation, eligibility, or entitlement."
