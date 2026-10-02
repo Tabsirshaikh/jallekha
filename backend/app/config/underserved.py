@@ -37,6 +37,10 @@ class UnderservedConfig:
     # Islands (wards with no neighbour in the cohort) get no structured effect
     # (Freni-Sterrantino et al. 2018).
     bym2_islands_iid_only: bool = False
+    # Area-effect structure for the spatial variants: "bym2" = structured + unstructured (original
+    # E5 spec) or "icar" = structured only. With a negative-binomial likelihood the unstructured
+    # term duplicates alpha (per-ward extra variation); the E5 diagnosis found alpha unidentified.
+    bym2_structure: str = "bym2"
     geography_version: str = "GHMC_2016_150"
 
 

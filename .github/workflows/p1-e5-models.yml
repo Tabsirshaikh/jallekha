@@ -22,14 +22,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - experiment: base
-            args: --variants BYM2 --cores 2
-          - experiment: rsr
-            args: --variants BYM2 --cores 2 --restricted --islands-iid
-          - experiment: pc
-            args: --variants BYM2 --cores 2 --rho-prior pc --islands-iid
-          - experiment: rsr_pc
-            args: --variants BYM2 --cores 2 --restricted --rho-prior pc --islands-iid
+          - experiment: icar
+            args: --variants BYM2 BYM2_SHRINKAGE --cores 2 --structure icar --islands-iid
+          - experiment: icar_careful
+            args: --variants BYM2 BYM2_SHRINKAGE --chains 4 --cores 4 --tune 2000 --target-accept 0.99 --structure icar --islands-iid
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6

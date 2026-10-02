@@ -137,6 +137,9 @@ def fit_count_model(
         raise ValueError("Invalid model cohort")
     if variant not in ("NB", "BYM2", "BYM2_SHRINKAGE"):
         raise ValueError("Unknown model variant")
+    if config.bym2_structure not in ("bym2", "icar"):
+        raise ValueError(f"Unknown BYM2 structure: {config.bym2_structure}")
+    icar_only = variant != "NB" and config.bym2_structure == "icar"
     if config.bym2_rho_prior not in ("beta", "pc"):
         raise ValueError(f"Unknown BYM2 rho prior: {config.bym2_rho_prior}")
     if config.bym2_likelihood not in ("negative_binomial", "poisson"):
@@ -190,19 +193,24 @@ def fit_count_model(
         if variant != "NB":
             basis = scaled_icar_basis(ids, edges, islands_iid_only=config.bym2_islands_iid_only)
             sigma = pm.HalfNormal("sigma", sigma=0.5 if variant == "BYM2_SHRINKAGE" else 1)
-            if config.bym2_rho_prior == "pc":
-                rate, gammas, nulls = pc_rho_setup(basis, len(areas))
-                rho = pm.Uniform("rho", 0, 1)
-                pm.Potential(
-                    "rho_pc_prior", _pc_rho_logdensity_tensor(rho, rate, gammas, nulls, len(areas))
-                )
-            else:
-                rho = pm.Beta("rho", alpha=0.5, beta=0.5)
             z = pm.Normal("spatial_z", 0, 1, shape=basis.shape[1])
-            theta = pm.Normal("unstructured", 0, 1, shape=len(areas))
-            effect = sigma * (
-                pm.math.sqrt(rho) * pm.math.dot(basis, z) + pm.math.sqrt(1 - rho) * theta
-            )
+            if icar_only:
+                # NB alpha already carries per-ward extra variation; keep only the spatial part
+                effect = sigma * pm.math.dot(basis, z)
+            else:
+                if config.bym2_rho_prior == "pc":
+                    rate, gammas, nulls = pc_rho_setup(basis, len(areas))
+                    rho = pm.Uniform("rho", 0, 1)
+                    pm.Potential(
+                        "rho_pc_prior",
+                        _pc_rho_logdensity_tensor(rho, rate, gammas, nulls, len(areas)),
+                    )
+                else:
+                    rho = pm.Beta("rho", alpha=0.5, beta=0.5)
+                theta = pm.Normal("unstructured", 0, 1, shape=len(areas))
+                effect = sigma * (
+                    pm.math.sqrt(rho) * pm.math.dot(basis, z) + pm.math.sqrt(1 - rho) * theta
+                )
             if config.bym2_restricted:
                 effect = pm.math.dot(restricted_projection(design), effect)
         mu = reference if variant == "NB" else pm.math.exp(fixed + effect)
@@ -223,7 +231,9 @@ def fit_count_model(
         )
     names = ["intercept", "beta"] + (["alpha"] if likelihood == "negative_binomial" else [])
     if variant != "NB":
-        names += ["sigma", "rho", "spatial_z", "unstructured"]
+        names += (
+            ["sigma", "spatial_z"] if icar_only else ["sigma", "rho", "spatial_z", "unstructured"]
+        )
     rhat_parts = [az.rhat(trace, var_names=[name])[name].values for name in names]
     ess_parts = [az.ess(trace, var_names=[name], method="bulk")[name].values for name in names]
     defined = all(
@@ -281,6 +291,7 @@ def fit_count_model(
         "reference": "need covariates/exposure with area effect set to zero",
         "likelihood": likelihood,
         "diagnostics_by_parameter": by_parameter,
+        "structure": None if variant == "NB" else config.bym2_structure,
         "rho_prior": None if variant == "NB" else config.bym2_rho_prior,
         "restricted": None if variant == "NB" else config.bym2_restricted,
         "islands_iid_only": None if variant == "NB" else config.bym2_islands_iid_only,
@@ -289,7 +300,15 @@ def fit_count_model(
             "intercept": "Normal(-4,2)",
             "beta": "Normal(0,1)",
             **({"alpha": "HalfNormal(10)"} if likelihood == "negative_binomial" else {}),
-            "rho": "PC(U=0.5, alpha=2/3)" if config.bym2_rho_prior == "pc" else "Beta(0.5,0.5)",
+            **(
+                {}
+                if icar_only or variant == "NB"
+                else {
+                    "rho": "PC(U=0.5, alpha=2/3)"
+                    if config.bym2_rho_prior == "pc"
+                    else "Beta(0.5,0.5)"
+                }
+            ),
             "sigma": "HalfNormal(0.5)" if variant == "BYM2_SHRINKAGE" else "HalfNormal(1)",
         },
         "scores": scores,

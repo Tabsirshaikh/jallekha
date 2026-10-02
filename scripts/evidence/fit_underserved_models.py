@@ -124,6 +124,7 @@ if __name__ == "__main__":
     parser.add_argument("--rho-prior", choices=("beta", "pc"))
     parser.add_argument("--restricted", action="store_true", default=None)
     parser.add_argument("--islands-iid", action="store_true", default=None)
+    parser.add_argument("--structure", choices=("bym2", "icar"))
     parser.add_argument("--output", default=RESULTS)
     args = parser.parse_args()
     overrides = {
@@ -138,6 +139,7 @@ if __name__ == "__main__":
             "bym2_rho_prior": args.rho_prior,
             "bym2_restricted": args.restricted,
             "bym2_islands_iid_only": args.islands_iid,
+            "bym2_structure": args.structure,
         }.items()
         if value is not None
     }

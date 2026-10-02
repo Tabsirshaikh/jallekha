@@ -402,3 +402,39 @@ def test_pc_prior_on_rho_matches_riebler_calibration():
     d_end = math.sqrt(2 * underserved_models._pc_kld(grid[-1], gammas, nulls, len(wards)))
     assert total == pytest.approx(1 - math.exp(-rate * d_end), abs=0.005)
     assert below == pytest.approx(2 / 3, abs=0.005)
+
+
+def test_icar_structure_drops_the_duplicate_unstructured_effect():
+    """With an NB likelihood, alpha already carries per-ward extra variation; the 'icar'
+    structure keeps only the spatial (neighbour) part, so nothing is estimated twice."""
+    config = UnderservedConfig(
+        minimum_areas=8,
+        peer_count=3,
+        chains=2,
+        draws=60,
+        tune=60,
+        max_rhat=20,
+        minimum_bulk_ess=1,
+        seed=412,
+        bym2_structure="icar",
+    )
+    areas = cohort(config=config)
+    import pytensor
+
+    if __import__("os").name == "nt":
+        pytensor.config.cxx = ""
+    edges = tuple((f"W{i:02}", f"W{i + 1:02}") for i in range(len(areas) - 1))
+    review = {
+        "status": "REVIEWED",
+        "geography_version": config.geography_version,
+        "reviewer": "synthetic-test-only",
+        "source_sha256": "a" * 64,
+    }
+    result = fit_count_model(
+        areas, edges=edges, variant="BYM2", config=config, holdout_ids=("W00",), graph_review=review
+    )
+    assert result["structure"] == "icar"
+    assert (
+        "rho" not in result["priors"] and "unstructured" not in result["diagnostics_by_parameter"]
+    )
+    assert set(result["scores"]) == {"W00"}
