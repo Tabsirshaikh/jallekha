@@ -238,4 +238,4 @@ The pull-request description must summarize the same information and link to thi
   - A3 orders bookings with `entitlement`; A4 serves `scheduled` wards and candidates the officer confirms.
   - T6 stores override entries.
   - T7 explains `need_weight` components.
-- **Pull request:** pending
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/28
