@@ -1,0 +1,4776 @@
+{
+  "duplicates": {
+    "reason": "The booking replay has no complaints, and T1's duplicate calibration has not been run (the D13 Chicago 311 extract is not logged in the source manifest).",
+    "solution_document_value": "71% linked at 100 m / 48 h (not verified here)",
+    "status": "NOT_AVAILABLE"
+  },
+  "jl_worse_than_b1": [
+    {
+      "diff_vs_b1_mean": -0.003062,
+      "metric": "served_share",
+      "policy": "JL",
+      "replay": "main_2025",
+      "scenario": "fleet"
+    },
+    {
+      "diff_vs_b1_mean": 0.003062,
+      "metric": "unmet_share",
+      "policy": "JL",
+      "replay": "main_2025",
+      "scenario": "fleet"
+    },
+    {
+      "diff_vs_b1_mean": 0.002919,
+      "metric": "need_weighted_unmet_share",
+      "policy": "JL",
+      "replay": "main_2025",
+      "scenario": "fleet"
+    },
+    {
+      "diff_vs_b1_mean": 0.008511,
+      "metric": "mean_wait_days",
+      "policy": "JL",
+      "replay": "main_2025",
+      "scenario": "fleet"
+    },
+    {
+      "diff_vs_b1_mean": 6.2e-05,
+      "metric": "km_per_kl",
+      "policy": "JL",
+      "replay": "main_2025",
+      "scenario": "fleet"
+    },
+    {
+      "diff_vs_b1_mean": 0.003258,
+      "metric": "gini_fill_rate",
+      "policy": "JL",
+      "replay": "main_2025",
+      "scenario": "fleet"
+    },
+    {
+      "diff_vs_b1_mean": -0.000976,
+      "metric": "jain_fill_rate",
+      "policy": "JL",
+      "replay": "main_2025",
+      "scenario": "fleet"
+    },
+    {
+      "diff_vs_b1_mean": -0.036009,
+      "metric": "worst_group_fill_rate",
+      "policy": "JL",
+      "replay": "main_2025",
+      "scenario": "fleet"
+    },
+    {
+      "diff_vs_b1_mean": 0.017894,
+      "metric": "km_per_kl",
+      "policy": "JL_POOL",
+      "replay": "main_2025",
+      "scenario": "fleet"
+    },
+    {
+      "diff_vs_b1_mean": -0.026567,
+      "metric": "served_share",
+      "policy": "JL",
+      "replay": "main_2025",
+      "scenario": "tight"
+    },
+    {
+      "diff_vs_b1_mean": 0.026567,
+      "metric": "unmet_share",
+      "policy": "JL",
+      "replay": "main_2025",
+      "scenario": "tight"
+    },
+    {
+      "diff_vs_b1_mean": 0.027325,
+      "metric": "need_weighted_unmet_share",
+      "policy": "JL",
+      "replay": "main_2025",
+      "scenario": "tight"
+    },
+    {
+      "diff_vs_b1_mean": 0.058801,
+      "metric": "mean_wait_days",
+      "policy": "JL",
+      "replay": "main_2025",
+      "scenario": "tight"
+    },
+    {
+      "diff_vs_b1_mean": 0.000753,
+      "metric": "km_per_kl",
+      "policy": "JL",
+      "replay": "main_2025",
+      "scenario": "tight"
+    },
+    {
+      "diff_vs_b1_mean": 0.007601,
+      "metric": "gini_fill_rate",
+      "policy": "JL",
+      "replay": "main_2025",
+      "scenario": "tight"
+    },
+    {
+      "diff_vs_b1_mean": -0.005058,
+      "metric": "jain_fill_rate",
+      "policy": "JL",
+      "replay": "main_2025",
+      "scenario": "tight"
+    },
+    {
+      "diff_vs_b1_mean": -0.018005,
+      "metric": "worst_group_fill_rate",
+      "policy": "JL",
+      "replay": "main_2025",
+      "scenario": "tight"
+    },
+    {
+      "diff_vs_b1_mean": 0.051866,
+      "metric": "km_per_kl",
+      "policy": "JL_POOL",
+      "replay": "main_2025",
+      "scenario": "tight"
+    },
+    {
+      "diff_vs_b1_mean": -0.0,
+      "metric": "served_share",
+      "policy": "JL",
+      "replay": "secondary_2023",
+      "scenario": "fleet"
+    },
+    {
+      "diff_vs_b1_mean": 0.0,
+      "metric": "unmet_share",
+      "policy": "JL",
+      "replay": "secondary_2023",
+      "scenario": "fleet"
+    },
+    {
+      "diff_vs_b1_mean": 0.0,
+      "metric": "need_weighted_unmet_share",
+      "policy": "JL",
+      "replay": "secondary_2023",
+      "scenario": "fleet"
+    },
+    {
+      "diff_vs_b1_mean": 3.6e-05,
+      "metric": "mean_wait_days",
+      "policy": "JL",
+      "replay": "secondary_2023",
+      "scenario": "fleet"
+    },
+    {
+      "diff_vs_b1_mean": 0.0,
+      "metric": "gini_fill_rate",
+      "policy": "JL",
+      "replay": "secondary_2023",
+      "scenario": "fleet"
+    },
+    {
+      "diff_vs_b1_mean": 0.000194,
+      "metric": "km_per_kl",
+      "policy": "JL_POOL",
+      "replay": "secondary_2023",
+      "scenario": "fleet"
+    },
+    {
+      "diff_vs_b1_mean": -0.023284,
+      "metric": "served_share",
+      "policy": "JL",
+      "replay": "secondary_2023",
+      "scenario": "tight"
+    },
+    {
+      "diff_vs_b1_mean": 0.023284,
+      "metric": "unmet_share",
+      "policy": "JL",
+      "replay": "secondary_2023",
+      "scenario": "tight"
+    },
+    {
+      "diff_vs_b1_mean": 0.023738,
+      "metric": "need_weighted_unmet_share",
+      "policy": "JL",
+      "replay": "secondary_2023",
+      "scenario": "tight"
+    },
+    {
+      "diff_vs_b1_mean": 0.103161,
+      "metric": "mean_wait_days",
+      "policy": "JL",
+      "replay": "secondary_2023",
+      "scenario": "tight"
+    },
+    {
+      "diff_vs_b1_mean": 0.001132,
+      "metric": "km_per_kl",
+      "policy": "JL",
+      "replay": "secondary_2023",
+      "scenario": "tight"
+    },
+    {
+      "diff_vs_b1_mean": 0.002979,
+      "metric": "gini_fill_rate",
+      "policy": "JL",
+      "replay": "secondary_2023",
+      "scenario": "tight"
+    },
+    {
+      "diff_vs_b1_mean": -0.001985,
+      "metric": "jain_fill_rate",
+      "policy": "JL",
+      "replay": "secondary_2023",
+      "scenario": "tight"
+    },
+    {
+      "diff_vs_b1_mean": -0.070129,
+      "metric": "worst_group_fill_rate",
+      "policy": "JL",
+      "replay": "secondary_2023",
+      "scenario": "tight"
+    },
+    {
+      "diff_vs_b1_mean": 0.049315,
+      "metric": "km_per_kl",
+      "policy": "JL_POOL",
+      "replay": "secondary_2023",
+      "scenario": "tight"
+    }
+  ],
+  "label": "SIMULATION",
+  "limitations": [
+    "SIMULATION: daily arrivals are synthetic; only monthly section totals are REAL.",
+    "Filling stations are 90 stand-ins placed where bookings cluster; HMWSSB publishes no station list.",
+    "Replay bookings carry no tier, so tier 0/1 priority is not exercised.",
+    "Scheduled supply treats every A2 candidate as officer-confirmed.",
+    "Need weights use Census 2011 shares (E2); groups without a ward use the median.",
+    "Km are straight-line x road factor plus an in-section access distance, not roads."
+  ],
+  "policies": {
+    "B1": "FCFS at the nearest filling station (HMWSSB today)",
+    "B2": "Nearest bookings first at each station",
+    "B3": "Section with most pending bookings first",
+    "B4": "Minimum cost: stations pooled, cheapest trips first",
+    "B5": "Highest ward need weight first",
+    "JL": "JalLekha fair queue (A3) + scheduled-supply reserve (A4)",
+    "JL_F8": "JalLekha fair queue only (A3)",
+    "JL_POOL": "JL + spare trips lent to stations within the sharing radius"
+  },
+  "real_baselines": {
+    "booking_gini_basis": "DERIVED",
+    "booking_gini_sections": 0.780329296,
+    "delivered_share": {
+      "jun_aug_2026": 0.911032,
+      "main_2025": 0.99878,
+      "secondary_2023": 0.998957
+    },
+    "label": "REAL",
+    "source": "HMWSSB tanker bookings, Telangana Open Data Portal (D1); E4 equity summary"
+  },
+  "results": {
+    "main_2025": {
+      "fleet": {
+        "basis": "REAL fleet (news) x DERIVED trips per tanker; split ASSUMED",
+        "policies": {
+          "B1": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.015217,
+              "mean": 0.014991166666666667,
+              "min": 0.014785,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.754284,
+              "mean": 0.7542439333333333,
+              "min": 0.75422,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.996805,
+              "mean": 0.9967665333333334,
+              "min": 0.996717,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.198913,
+              "mean": 0.19888956666666668,
+              "min": 0.198867,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.421759,
+              "mean": 0.4217518,
+              "min": 0.421745,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.106221,
+              "mean": 0.10461903333333335,
+              "min": 0.103165,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.012242,
+              "mean": 0.012185,
+              "min": 0.012117,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.987194,
+              "mean": 0.9871230666666667,
+              "min": 0.987065,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 2035823.708,
+              "mean": 2035665.2428333333,
+              "min": 2035529.757,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.012935,
+              "mean": 0.012876933333333333,
+              "min": 0.012806,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.390687,
+              "mean": 0.39064293333333333,
+              "min": 0.390603,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.61215,
+              "mean": 0.61215,
+              "min": 0.61215,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            }
+          },
+          "B2": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 0.000593999999999999,
+              "diff_vs_b1_mean": 0.00017499999999999992,
+              "diff_vs_b1_min": -0.00014299999999999903,
+              "max": 0.015578,
+              "mean": 0.015166166666666666,
+              "min": 0.014701,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": -1.799999999996249e-05,
+              "diff_vs_b1_mean": -3.213333333333957e-05,
+              "diff_vs_b1_min": -4.700000000001925e-05,
+              "max": 0.754241,
+              "mean": 0.7542118,
+              "min": 0.75418,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 5.000000000032756e-06,
+              "diff_vs_b1_mean": -1.0400000000002999e-05,
+              "diff_vs_b1_min": -5.299999999996974e-05,
+              "max": 0.996804,
+              "mean": 0.9967561333333333,
+              "min": 0.996707,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 2.5999999999998247e-05,
+              "diff_vs_b1_mean": 2.0433333333337114e-05,
+              "diff_vs_b1_min": 1.0000000000010001e-05,
+              "max": 0.198932,
+              "mean": 0.19891,
+              "min": 0.198888,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": -0.00023399999999995647,
+              "diff_vs_b1_mean": -0.00024883333333332774,
+              "diff_vs_b1_min": -0.00026799999999999047,
+              "max": 0.421516,
+              "mean": 0.4215029666666667,
+              "min": 0.421486,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.0018270000000000092,
+              "diff_vs_b1_mean": -0.002141800000000001,
+              "diff_vs_b1_min": -0.0025139999999999885,
+              "max": 0.104279,
+              "mean": 0.10247723333333333,
+              "min": 0.100721,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 9.60000000000006e-05,
+              "diff_vs_b1_mean": 7.993333333333348e-05,
+              "diff_vs_b1_min": 6.600000000000009e-05,
+              "max": 0.012316,
+              "mean": 0.012264933333333334,
+              "min": 0.012192,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": -6.799999999995698e-05,
+              "diff_vs_b1_mean": -8.290000000000796e-05,
+              "diff_vs_b1_min": -0.00010100000000001774,
+              "max": 0.987117,
+              "mean": 0.9870401666666666,
+              "min": 0.986984,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": -1287.1189999999478,
+              "diff_vs_b1_mean": -1371.2150999999837,
+              "diff_vs_b1_min": -1498.6450000000186,
+              "max": 2034491.559,
+              "mean": 2034294.0277333334,
+              "min": 2034117.582,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 0.0001010000000000004,
+              "diff_vs_b1_mean": 8.29000000000001e-05,
+              "diff_vs_b1_min": 6.800000000000035e-05,
+              "max": 0.013016,
+              "mean": 0.012959833333333334,
+              "min": 0.012883,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 6.20000000000065e-05,
+              "diff_vs_b1_mean": 5.073333333333411e-05,
+              "diff_vs_b1_min": 3.999999999998449e-05,
+              "max": 0.390742,
+              "mean": 0.39069366666666666,
+              "min": 0.390651,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.61215,
+              "mean": 0.61215,
+              "min": 0.61215,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            }
+          },
+          "B3": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 0.0005380000000000003,
+              "diff_vs_b1_mean": 0.00017056666666666678,
+              "diff_vs_b1_min": -8.799999999999954e-05,
+              "max": 0.015521,
+              "mean": 0.015161733333333333,
+              "min": 0.014767,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": -1.2000000000012001e-05,
+              "diff_vs_b1_mean": -2.9966666666658703e-05,
+              "diff_vs_b1_min": -4.499999999996174e-05,
+              "max": 0.754248,
+              "mean": 0.7542139666666666,
+              "min": 0.754182,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 6.999999999979245e-06,
+              "diff_vs_b1_mean": -9.40000000000385e-06,
+              "diff_vs_b1_min": -5.299999999996974e-05,
+              "max": 0.996805,
+              "mean": 0.9967571333333333,
+              "min": 0.996708,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 2.3000000000023002e-05,
+              "diff_vs_b1_mean": 1.4933333333337165e-05,
+              "diff_vs_b1_min": 5.999999999978245e-06,
+              "max": 0.198924,
+              "mean": 0.19890449999999998,
+              "min": 0.198884,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": -0.00021999999999999797,
+              "diff_vs_b1_mean": -0.0002398999999999966,
+              "diff_vs_b1_min": -0.0002590000000000092,
+              "max": 0.42153,
+              "mean": 0.4215119,
+              "min": 0.421492,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.0014829999999999982,
+              "diff_vs_b1_mean": -0.001787300000000001,
+              "diff_vs_b1_min": -0.0021599999999999953,
+              "max": 0.104613,
+              "mean": 0.10283173333333333,
+              "min": 0.101053,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 8.599999999999927e-05,
+              "diff_vs_b1_mean": 7.010000000000038e-05,
+              "diff_vs_b1_min": 5.400000000000023e-05,
+              "max": 0.012311,
+              "mean": 0.0122551,
+              "min": 0.012191,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": -5.500000000002725e-05,
+              "diff_vs_b1_mean": -7.146666666666783e-05,
+              "diff_vs_b1_min": -8.900000000000574e-05,
+              "max": 0.987119,
+              "mean": 0.9870515999999999,
+              "min": 0.986991,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": -1192.9920000000857,
+              "diff_vs_b1_mean": -1304.224166666662,
+              "diff_vs_b1_min": -1431.3950000000186,
+              "max": 2034511.327,
+              "mean": 2034361.0186666667,
+              "min": 2034165.191,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 8.900000000000054e-05,
+              "diff_vs_b1_mean": 7.146666666666666e-05,
+              "diff_vs_b1_min": 5.500000000000123e-05,
+              "max": 0.013009,
+              "mean": 0.0129484,
+              "min": 0.012881,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 5.499999999997174e-05,
+              "diff_vs_b1_mean": 4.386666666666798e-05,
+              "diff_vs_b1_min": 2.999999999997449e-05,
+              "max": 0.390737,
+              "mean": 0.3906868,
+              "min": 0.39065,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.61215,
+              "mean": 0.61215,
+              "min": 0.61215,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            }
+          },
+          "B4": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": -0.014785,
+              "diff_vs_b1_mean": -0.014991166666666667,
+              "diff_vs_b1_min": -0.015217,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": -0.00343899999999997,
+              "diff_vs_b1_mean": -0.003462933333333303,
+              "diff_vs_b1_min": -0.003502999999999923,
+              "max": 0.750781,
+              "mean": 0.750781,
+              "min": 0.750781,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 0.003283000000000036,
+              "diff_vs_b1_mean": 0.0032334666666666585,
+              "diff_vs_b1_min": 0.003194999999999948,
+              "max": 1.0,
+              "mean": 1.0,
+              "min": 1.0,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.004594000000000015,
+              "diff_vs_b1_mean": 0.004571433333333338,
+              "diff_vs_b1_min": 0.0045479999999999965,
+              "max": 0.203461,
+              "mean": 0.203461,
+              "min": 0.203461,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.015748999999999957,
+              "diff_vs_b1_mean": 0.01558066666666667,
+              "diff_vs_b1_min": 0.015409000000000006,
+              "max": 0.437503,
+              "mean": 0.4373324666666667,
+              "min": 0.437161,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.10297200000000001,
+              "diff_vs_b1_mean": -0.10441536666666668,
+              "diff_vs_b1_min": -0.10607799999999999,
+              "max": 0.000336,
+              "mean": 0.00020366666666666667,
+              "min": 8.5e-05,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": -0.012117,
+              "diff_vs_b1_mean": -0.012185,
+              "diff_vs_b1_min": -0.012242,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": 0.01293500000000003,
+              "diff_vs_b1_mean": 0.012876933333333337,
+              "diff_vs_b1_min": 0.012805999999999984,
+              "max": 1.0,
+              "mean": 1.0,
+              "min": 1.0,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 103585.29499999993,
+              "diff_vs_b1_mean": 102739.5815666667,
+              "diff_vs_b1_min": 101966.19099999988,
+              "max": 2139237.082,
+              "mean": 2138404.8244,
+              "min": 2137568.005,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": -0.012806,
+              "diff_vs_b1_mean": -0.012876933333333333,
+              "diff_vs_b1_min": -0.012935,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": -0.008098999999999967,
+              "diff_vs_b1_mean": -0.008138499999999991,
+              "diff_vs_b1_min": -0.008182999999999996,
+              "max": 0.38251,
+              "mean": 0.38250443333333334,
+              "min": 0.382504,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.38785000000000003,
+              "diff_vs_b1_mean": 0.38785000000000003,
+              "diff_vs_b1_min": 0.38785000000000003,
+              "max": 1.0,
+              "mean": 1.0,
+              "min": 1.0,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            }
+          },
+          "B5": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 0.0009989999999999999,
+              "diff_vs_b1_mean": 0.0005939333333333335,
+              "diff_vs_b1_min": 0.00022500000000000124,
+              "max": 0.015982,
+              "mean": 0.0155851,
+              "min": 0.0151,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": 8.699999999994823e-05,
+              "diff_vs_b1_mean": 6.883333333333649e-05,
+              "diff_vs_b1_min": 5.100000000002325e-05,
+              "max": 0.754344,
+              "mean": 0.7543127666666667,
+              "min": 0.754286,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": -9.99999999995449e-06,
+              "diff_vs_b1_mean": -2.2733333333335713e-05,
+              "diff_vs_b1_min": -5.500000000002725e-05,
+              "max": 0.996788,
+              "mean": 0.9967438000000001,
+              "min": 0.996685,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": -1.8999999999991246e-05,
+              "diff_vs_b1_mean": -2.7066666666665982e-05,
+              "diff_vs_b1_min": -3.300000000000525e-05,
+              "max": 0.198889,
+              "mean": 0.1988625,
+              "min": 0.198843,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 3.000000000030756e-06,
+              "diff_vs_b1_mean": -8.100000000003475e-06,
+              "diff_vs_b1_min": -2.0999999999993246e-05,
+              "max": 0.421754,
+              "mean": 0.4217437,
+              "min": 0.421732,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.0006569999999999909,
+              "diff_vs_b1_mean": -0.0008497333333333334,
+              "diff_vs_b1_min": -0.0011170000000000069,
+              "max": 0.105385,
+              "mean": 0.1037693,
+              "min": 0.102273,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 4.60000000000009e-05,
+              "diff_vs_b1_mean": 3.2500000000000234e-05,
+              "diff_vs_b1_min": 2.400000000000145e-05,
+              "max": 0.012274,
+              "mean": 0.0122175,
+              "min": 0.012141,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": -2.8000000000028002e-05,
+              "diff_vs_b1_mean": -3.733333333332996e-05,
+              "diff_vs_b1_min": -5.3999999999998494e-05,
+              "max": 0.987166,
+              "mean": 0.9870857333333334,
+              "min": 0.987028,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": -54.64700000011362,
+              "diff_vs_b1_mean": -115.32253333334035,
+              "diff_vs_b1_min": -197.5,
+              "max": 2035765.901,
+              "mean": 2035549.9202999999,
+              "min": 2035389.846,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 5.400000000000023e-05,
+              "diff_vs_b1_mean": 3.733333333333332e-05,
+              "diff_vs_b1_min": 2.8000000000000247e-05,
+              "max": 0.012972,
+              "mean": 0.012914266666666667,
+              "min": 0.012834,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 3.300000000000525e-05,
+              "diff_vs_b1_mean": 2.306666666666568e-05,
+              "diff_vs_b1_min": 1.8000000000018e-05,
+              "max": 0.390714,
+              "mean": 0.390666,
+              "min": 0.390621,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.61215,
+              "mean": 0.61215,
+              "min": 0.61215,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            }
+          },
+          "JL": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 0.0033980000000000017,
+              "diff_vs_b1_mean": 0.0032581666666666666,
+              "diff_vs_b1_min": 0.0031209999999999988,
+              "max": 0.018454,
+              "mean": 0.018249333333333333,
+              "min": 0.018042,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": -0.03142800000000001,
+              "diff_vs_b1_mean": -0.03144626666666667,
+              "diff_vs_b1_min": -0.03147599999999995,
+              "max": 0.722831,
+              "mean": 0.7227976666666667,
+              "min": 0.722774,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": -0.0009550000000000392,
+              "diff_vs_b1_mean": -0.0009760000000000139,
+              "diff_vs_b1_min": -0.0009900000000000464,
+              "max": 0.99583,
+              "mean": 0.9957905333333332,
+              "min": 0.995749,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.016038999999999998,
+              "diff_vs_b1_mean": 0.016022433333333332,
+              "diff_vs_b1_min": 0.016007999999999994,
+              "max": 0.214928,
+              "mean": 0.214912,
+              "min": 0.214887,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 7.00000000000145e-05,
+              "diff_vs_b1_mean": 6.166666666667098e-05,
+              "diff_vs_b1_min": 5.6000000000000494e-05,
+              "max": 0.42182,
+              "mean": 0.42181346666666664,
+              "min": 0.421807,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": 0.010104000000000002,
+              "diff_vs_b1_mean": 0.0085113,
+              "diff_vs_b1_min": 0.006561999999999998,
+              "max": 0.114652,
+              "mean": 0.11313033333333333,
+              "min": 0.11128,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 0.002961,
+              "diff_vs_b1_mean": 0.0029186666666666666,
+              "diff_vs_b1_min": 0.002877000000000001,
+              "max": 0.01517,
+              "mean": 0.015103666666666666,
+              "min": 0.015068,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 2590000.0,
+              "diff_vs_b1_mean": 2590000.0,
+              "diff_vs_b1_min": 2590000.0,
+              "max": 2590000.0,
+              "mean": 2590000.0,
+              "min": 2590000.0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": -0.0030169999999999364,
+              "diff_vs_b1_mean": -0.0030618666666666497,
+              "diff_vs_b1_min": -0.0031049999999999134,
+              "max": 0.984097,
+              "mean": 0.9840612,
+              "min": 0.983995,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": -5915.48499999987,
+              "diff_vs_b1_mean": -6016.92719999998,
+              "diff_vs_b1_min": -6111.617000000086,
+              "max": 2029732.404,
+              "mean": 2029648.3156333333,
+              "min": 2029503.598,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 0.003105000000000002,
+              "diff_vs_b1_mean": 0.003061866666666667,
+              "diff_vs_b1_min": 0.0030170000000000006,
+              "max": 0.016005,
+              "mean": 0.0159388,
+              "min": 0.015903,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": -0.048126,
+              "diff_vs_b1_mean": -0.048149066666666664,
+              "diff_vs_b1_min": -0.04818500000000003,
+              "max": 0.342528,
+              "mean": 0.34249386666666665,
+              "min": 0.342469,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": -0.03600899999999996,
+              "diff_vs_b1_mean": -0.03600899999999996,
+              "diff_vs_b1_min": -0.03600899999999996,
+              "max": 0.576141,
+              "mean": 0.576141,
+              "min": 0.576141,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            }
+          },
+          "JL_F8": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 0.00037400000000000107,
+              "diff_vs_b1_mean": 0.00024810000000000007,
+              "diff_vs_b1_min": 0.0001799999999999996,
+              "max": 0.015478,
+              "mean": 0.015239266666666666,
+              "min": 0.015035,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": 7.00000000000145e-05,
+              "diff_vs_b1_mean": 5.746666666666493e-05,
+              "diff_vs_b1_min": 4.300000000001525e-05,
+              "max": 0.754334,
+              "mean": 0.7543013999999999,
+              "min": 0.754278,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": -1.2000000000012001e-05,
+              "diff_vs_b1_mean": -1.603333333333549e-05,
+              "diff_vs_b1_min": -2.4999999999941735e-05,
+              "max": 0.996786,
+              "mean": 0.9967505,
+              "min": 0.996699,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": -1.6999999999989246e-05,
+              "diff_vs_b1_mean": -2.389999999999707e-05,
+              "diff_vs_b1_min": -2.9000000000001247e-05,
+              "max": 0.198891,
+              "mean": 0.1988656666666667,
+              "min": 0.198847,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 1.2000000000012001e-05,
+              "diff_vs_b1_mean": 7.066666666675585e-06,
+              "diff_vs_b1_min": 2.000000000002e-06,
+              "max": 0.421763,
+              "mean": 0.4217588666666667,
+              "min": 0.421752,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.0006250000000000006,
+              "diff_vs_b1_mean": -0.0007931000000000017,
+              "diff_vs_b1_min": -0.00102300000000001,
+              "max": 0.105455,
+              "mean": 0.10382593333333333,
+              "min": 0.102323,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 3.0000000000000512e-05,
+              "diff_vs_b1_mean": 2.233333333333352e-05,
+              "diff_vs_b1_min": 1.600000000000039e-05,
+              "max": 0.012264,
+              "mean": 0.012207333333333332,
+              "min": 0.012136,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": -2.0000000000020002e-05,
+              "diff_vs_b1_mean": -2.6599999999998847e-05,
+              "diff_vs_b1_min": -3.500000000000725e-05,
+              "max": 0.987171,
+              "mean": 0.9870964666666667,
+              "min": 0.987038,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 9.33599999989383,
+              "diff_vs_b1_mean": -20.08346666665748,
+              "diff_vs_b1_min": -47.90999999991618,
+              "max": 2035806.565,
+              "mean": 2035645.1593666668,
+              "min": 2035510.796,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 3.500000000000031e-05,
+              "diff_vs_b1_mean": 2.6600000000000003e-05,
+              "diff_vs_b1_min": 2.000000000000092e-05,
+              "max": 0.012962,
+              "mean": 0.012903533333333333,
+              "min": 0.012829,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 2.2000000000022002e-05,
+              "diff_vs_b1_mean": 1.6366666666663607e-05,
+              "diff_vs_b1_min": 1.2000000000012001e-05,
+              "max": 0.390704,
+              "mean": 0.3906593,
+              "min": 0.390617,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.61215,
+              "mean": 0.61215,
+              "min": 0.61215,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            }
+          },
+          "JL_POOL": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": -0.013559,
+              "diff_vs_b1_mean": -0.0137336,
+              "diff_vs_b1_min": -0.013881000000000001,
+              "max": 0.001406,
+              "mean": 0.0012575666666666669,
+              "min": 0.001081,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": -0.03458399999999995,
+              "diff_vs_b1_mean": -0.034611933333333324,
+              "diff_vs_b1_min": -0.034651999999999905,
+              "max": 0.719637,
+              "mean": 0.719632,
+              "min": 0.719623,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 0.0031400000000000317,
+              "diff_vs_b1_mean": 0.0031215333333333263,
+              "diff_vs_b1_min": 0.0031010000000000204,
+              "max": 0.999922,
+              "mean": 0.9998880666666667,
+              "min": 0.999843,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.021396,
+              "diff_vs_b1_mean": 0.021371000000000005,
+              "diff_vs_b1_min": 0.021334999999999993,
+              "max": 0.220276,
+              "mean": 0.22026056666666666,
+              "min": 0.220243,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.01799400000000001,
+              "diff_vs_b1_mean": 0.0178938,
+              "diff_vs_b1_min": 0.01775500000000002,
+              "max": 0.439741,
+              "mean": 0.4396456,
+              "min": 0.43951,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.091225,
+              "diff_vs_b1_mean": -0.0934803,
+              "diff_vs_b1_min": -0.096635,
+              "max": 0.012922,
+              "mean": 0.011138733333333335,
+              "min": 0.009586,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": -0.011817999999999999,
+              "diff_vs_b1_mean": -0.011910966666666667,
+              "diff_vs_b1_min": -0.011983,
+              "max": 0.000335,
+              "mean": 0.0002740333333333333,
+              "min": 0.000241,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 2590000.0,
+              "diff_vs_b1_mean": 2590000.0,
+              "diff_vs_b1_min": 2590000.0,
+              "max": 2590000.0,
+              "mean": 2590000.0,
+              "min": 2590000.0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": 0.012650999999999968,
+              "diff_vs_b1_mean": 0.012572766666666672,
+              "diff_vs_b1_min": 0.012473999999999985,
+              "max": 0.999732,
+              "mean": 0.9996958333333333,
+              "min": 0.999637,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 114020.67000000016,
+              "diff_vs_b1_mean": 113396.38036666666,
+              "diff_vs_b1_min": 112689.67899999977,
+              "max": 2149584.827,
+              "mean": 2149061.6232000003,
+              "min": 2148353.343,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": -0.012473999999999999,
+              "diff_vs_b1_mean": -0.012572766666666667,
+              "diff_vs_b1_min": -0.012650999999999999,
+              "max": 0.000363,
+              "mean": 0.00030416666666666667,
+              "min": 0.000268,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": -0.057906999999999986,
+              "diff_vs_b1_mean": -0.0579424,
+              "diff_vs_b1_min": -0.05798599999999998,
+              "max": 0.33274,
+              "mean": 0.3327005333333333,
+              "min": 0.33268,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.295384,
+              "diff_vs_b1_mean": 0.2770052333333333,
+              "diff_vs_b1_min": 0.25428800000000007,
+              "max": 0.907534,
+              "mean": 0.8891552333333334,
+              "min": 0.866438,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            }
+          }
+        },
+        "trips_per_day": 10351
+      },
+      "tight": {
+        "basis": "Calibrated to the REAL Jun-Aug 2026 delivered share",
+        "calibration_b1_served_share_seed0": 0.900029,
+        "factor_on_last_year_daily_bookings": 1.416269,
+        "policies": {
+          "B1": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.069148,
+              "mean": 0.06848603333333332,
+              "min": 0.067755,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.757083,
+              "mean": 0.7569638333333334,
+              "min": 0.7569,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.978377,
+              "mean": 0.9780815,
+              "min": 0.977645,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.193871,
+              "mean": 0.19380643333333333,
+              "min": 0.19373,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.422956,
+              "mean": 0.42292060000000004,
+              "min": 0.422869,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 1.026888,
+              "mean": 1.0148484,
+              "min": 1.005115,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.10059,
+              "mean": 0.10039113333333334,
+              "min": 0.100192,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 2.0,
+              "mean": 2.0,
+              "min": 2.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.90039,
+              "mean": 0.9002080333333333,
+              "min": 0.900029,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 1861887.288,
+              "mean": 1861572.1079333334,
+              "min": 1861224.095,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.099971,
+              "mean": 0.09979196666666666,
+              "min": 0.09961,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.116697,
+              "mean": 0.1164858,
+              "min": 0.116337,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.378093,
+              "mean": 0.378093,
+              "min": 0.378093,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            }
+          },
+          "B2": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 0.030868999999999994,
+              "diff_vs_b1_mean": 0.0295517,
+              "diff_vs_b1_min": 0.02799199999999999,
+              "max": 0.099289,
+              "mean": 0.09803773333333334,
+              "min": 0.096645,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": 0.002717999999999998,
+              "diff_vs_b1_mean": 0.0026011333333333347,
+              "diff_vs_b1_min": 0.002443000000000084,
+              "max": 0.759733,
+              "mean": 0.7595649666666666,
+              "min": 0.759455,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": -0.018343999999999916,
+              "diff_vs_b1_mean": -0.01930373333333332,
+              "diff_vs_b1_min": -0.020265999999999895,
+              "max": 0.959725,
+              "mean": 0.9587777666666667,
+              "min": 0.957756,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": -0.0017920000000000158,
+              "diff_vs_b1_mean": -0.0018854666666666658,
+              "diff_vs_b1_min": -0.001929000000000014,
+              "max": 0.191968,
+              "mean": 0.19192096666666666,
+              "min": 0.191829,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": -0.0019710000000000005,
+              "diff_vs_b1_mean": -0.002015233333333329,
+              "diff_vs_b1_min": -0.0020899999999999808,
+              "max": 0.420953,
+              "mean": 0.4209053666666666,
+              "min": 0.420835,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.14086199999999993,
+              "diff_vs_b1_mean": -0.14704553333333334,
+              "diff_vs_b1_min": -0.15040399999999998,
+              "max": 0.878791,
+              "mean": 0.8678028666666666,
+              "min": 0.861227,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 0.0012630000000000002,
+              "diff_vs_b1_mean": 0.0012051000000000006,
+              "diff_vs_b1_min": 0.0011089999999999989,
+              "max": 0.101799,
+              "mean": 0.10159623333333334,
+              "min": 0.101406,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 2.0,
+              "mean": 2.0,
+              "min": 2.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": -0.0017160000000000508,
+              "diff_vs_b1_mean": -0.0018321000000000105,
+              "diff_vs_b1_min": -0.0018920000000000048,
+              "max": 0.898569,
+              "mean": 0.8983759333333333,
+              "min": 0.898187,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": -12206.793999999994,
+              "diff_vs_b1_mean": -12640.388066666643,
+              "diff_vs_b1_min": -13080.382999999914,
+              "max": 1849420.29,
+              "mean": 1848931.7198666667,
+              "min": 1848391.578,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 0.001891999999999991,
+              "diff_vs_b1_mean": 0.0018320999999999975,
+              "diff_vs_b1_min": 0.0017159999999999953,
+              "max": 0.101813,
+              "mean": 0.10162406666666667,
+              "min": 0.101431,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 0.001693,
+              "diff_vs_b1_mean": 0.0016092666666666677,
+              "diff_vs_b1_min": 0.0014860000000000012,
+              "max": 0.118271,
+              "mean": 0.11809506666666666,
+              "min": 0.1179,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": -0.35991100000000004,
+              "diff_vs_b1_mean": -0.37475963333333334,
+              "diff_vs_b1_min": -0.378093,
+              "max": 0.018182,
+              "mean": 0.0033333666666666667,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.018519,
+              "diff_vs_b1_mean": 0.007407266666666666,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.018519,
+              "mean": 0.007407266666666666,
+              "min": 0.0,
+              "seeds": 30
+            }
+          },
+          "B3": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 0.04088599999999999,
+              "diff_vs_b1_mean": 0.03923086666666666,
+              "diff_vs_b1_min": 0.038135,
+              "max": 0.109314,
+              "mean": 0.1077169,
+              "min": 0.10666,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": 0.002475000000000005,
+              "diff_vs_b1_mean": 0.0023604333333333374,
+              "diff_vs_b1_min": 0.0022650000000000725,
+              "max": 0.759437,
+              "mean": 0.7593242666666666,
+              "min": 0.759206,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": -0.027834999999999943,
+              "diff_vs_b1_mean": -0.02870596666666666,
+              "diff_vs_b1_min": -0.029955000000000065,
+              "max": 0.950365,
+              "mean": 0.9493755333333334,
+              "min": 0.948162,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": -0.0006340000000000234,
+              "diff_vs_b1_mean": -0.0006683999999999996,
+              "diff_vs_b1_min": -0.0007340000000000124,
+              "max": 0.19319,
+              "mean": 0.19313803333333332,
+              "min": 0.193085,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": -0.0016739999999999533,
+              "diff_vs_b1_mean": -0.00172056666666666,
+              "diff_vs_b1_min": -0.0017800000000000038,
+              "max": 0.421256,
+              "mean": 0.42120003333333333,
+              "min": 0.421139,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.2099749999999999,
+              "diff_vs_b1_mean": -0.2180525,
+              "diff_vs_b1_min": -0.22726099999999994,
+              "max": 0.809678,
+              "mean": 0.7967959,
+              "min": 0.787328,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 0.0022039999999999976,
+              "diff_vs_b1_mean": 0.002078466666666668,
+              "diff_vs_b1_min": 0.0019929999999999948,
+              "max": 0.102636,
+              "mean": 0.10246960000000001,
+              "min": 0.10221,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 2.0,
+              "mean": 2.0,
+              "min": 2.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": -0.0025169999999999915,
+              "diff_vs_b1_mean": -0.00260683333333334,
+              "diff_vs_b1_min": -0.0027280000000000637,
+              "max": 0.897835,
+              "mean": 0.8976012,
+              "min": 0.897451,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": -12601.34300000011,
+              "diff_vs_b1_mean": -12941.534333333326,
+              "diff_vs_b1_min": -13251.57799999998,
+              "max": 1849126.791,
+              "mean": 1848630.5736,
+              "min": 1848205.366,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 0.002728000000000008,
+              "diff_vs_b1_mean": 0.0026068333333333343,
+              "diff_vs_b1_min": 0.0025170000000000053,
+              "max": 0.102549,
+              "mean": 0.1023988,
+              "min": 0.102165,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 0.0023940000000000072,
+              "diff_vs_b1_mean": 0.002284366666666667,
+              "diff_vs_b1_min": 0.0021829999999999905,
+              "max": 0.118943,
+              "mean": 0.11877016666666668,
+              "min": 0.118574,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": -0.35991100000000004,
+              "diff_vs_b1_mean": -0.37477133333333335,
+              "diff_vs_b1_min": -0.378093,
+              "max": 0.018182,
+              "mean": 0.0033216666666666668,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.018519,
+              "diff_vs_b1_mean": 0.0070986,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.018519,
+              "mean": 0.0070986,
+              "min": 0.0,
+              "seeds": 30
+            }
+          },
+          "B4": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": -0.016469000000000004,
+              "diff_vs_b1_mean": -0.017731233333333332,
+              "diff_vs_b1_min": -0.019597000000000003,
+              "max": 0.051972,
+              "mean": 0.0507548,
+              "min": 0.049551,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": -0.0042600000000000415,
+              "diff_vs_b1_mean": -0.004410266666666659,
+              "diff_vs_b1_min": -0.004570999999999992,
+              "max": 0.752669,
+              "mean": 0.7525535666666666,
+              "min": 0.7524,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 0.008094000000000046,
+              "diff_vs_b1_mean": 0.006934300000000004,
+              "diff_vs_b1_min": 0.006356000000000028,
+              "max": 0.985739,
+              "mean": 0.9850158,
+              "min": 0.984375,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.003827999999999998,
+              "diff_vs_b1_mean": 0.0037276999999999987,
+              "diff_vs_b1_min": 0.00359799999999999,
+              "max": 0.197618,
+              "mean": 0.19753413333333333,
+              "min": 0.197454,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.058365,
+              "diff_vs_b1_mean": 0.05766913333333334,
+              "diff_vs_b1_min": 0.05712500000000004,
+              "max": 0.481296,
+              "mean": 0.4805897333333334,
+              "min": 0.480053,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.535207,
+              "diff_vs_b1_mean": -0.5457050333333334,
+              "diff_vs_b1_min": -0.554346,
+              "max": 0.475983,
+              "mean": 0.4691433666666667,
+              "min": 0.462089,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": -0.039640999999999996,
+              "diff_vs_b1_mean": -0.039931933333333336,
+              "diff_vs_b1_min": -0.040298999999999995,
+              "max": 0.060695,
+              "mean": 0.060459200000000005,
+              "min": 0.060093,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 2.0,
+              "mean": 2.0,
+              "min": 2.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": 0.03983300000000001,
+              "diff_vs_b1_mean": 0.03948056666666666,
+              "diff_vs_b1_min": 0.03920800000000002,
+              "max": 0.940045,
+              "mean": 0.9396886,
+              "min": 0.939446,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 350648.3459999999,
+              "diff_vs_b1_mean": 346619.2691,
+              "diff_vs_b1_min": 343626.6009999998,
+              "max": 2212273.627,
+              "mean": 2208191.3770333333,
+              "min": 2205243.428,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": -0.039208,
+              "diff_vs_b1_mean": -0.03948056666666667,
+              "diff_vs_b1_min": -0.039833,
+              "max": 0.060554,
+              "mean": 0.0603114,
+              "min": 0.059955,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": -0.040466,
+              "diff_vs_b1_mean": -0.04076143333333333,
+              "diff_vs_b1_min": -0.04112400000000001,
+              "max": 0.07598,
+              "mean": 0.07572436666666667,
+              "min": 0.075403,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.05412299999999998,
+              "diff_vs_b1_mean": 0.01793706666666665,
+              "diff_vs_b1_min": -0.023548000000000013,
+              "max": 0.432216,
+              "mean": 0.3960300666666666,
+              "min": 0.354545,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.009259,
+              "diff_vs_b1_mean": 0.0006172666666666666,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.009259,
+              "mean": 0.0006172666666666666,
+              "min": 0.0,
+              "seeds": 30
+            }
+          },
+          "B5": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 0.024953000000000003,
+              "diff_vs_b1_mean": 0.02404706666666667,
+              "diff_vs_b1_min": 0.022855,
+              "max": 0.09345,
+              "mean": 0.09253310000000001,
+              "min": 0.091966,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": 0.0029240000000000377,
+              "diff_vs_b1_mean": 0.0028368333333333253,
+              "diff_vs_b1_min": 0.0026880000000000237,
+              "max": 0.759864,
+              "mean": 0.7598006666666667,
+              "min": 0.759736,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": -0.017627999999999977,
+              "diff_vs_b1_mean": -0.01841916666666666,
+              "diff_vs_b1_min": -0.019032999999999967,
+              "max": 0.960155,
+              "mean": 0.9596623333333334,
+              "min": 0.959111,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": -0.0011180000000000079,
+              "diff_vs_b1_mean": -0.0011879666666666658,
+              "diff_vs_b1_min": -0.001223999999999975,
+              "max": 0.192669,
+              "mean": 0.19261846666666665,
+              "min": 0.192565,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": -0.0009219999999999784,
+              "diff_vs_b1_mean": -0.0009663666666666608,
+              "diff_vs_b1_min": -0.0010169999999999901,
+              "max": 0.421982,
+              "mean": 0.4219542333333333,
+              "min": 0.421927,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.09907699999999997,
+              "diff_vs_b1_mean": -0.10295186666666667,
+              "diff_vs_b1_min": -0.10599199999999998,
+              "max": 0.922786,
+              "mean": 0.9118965333333333,
+              "min": 0.903169,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 0.0005539999999999989,
+              "diff_vs_b1_mean": 0.0005085666666666673,
+              "diff_vs_b1_min": 0.0004709999999999992,
+              "max": 0.101113,
+              "mean": 0.10089970000000001,
+              "min": 0.100721,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 2.0,
+              "mean": 2.0,
+              "min": 2.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": -0.0011780000000000124,
+              "diff_vs_b1_mean": -0.0012246999999999972,
+              "diff_vs_b1_min": -0.0012780000000000014,
+              "max": 0.899146,
+              "mean": 0.8989833333333334,
+              "min": 0.898787,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": -6529.85400000005,
+              "diff_vs_b1_mean": -6780.666733333321,
+              "diff_vs_b1_min": -7059.427000000142,
+              "max": 1855130.781,
+              "mean": 1854791.4412,
+              "min": 1854418.151,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 0.0012780000000000014,
+              "diff_vs_b1_mean": 0.0012247000000000002,
+              "diff_vs_b1_min": 0.0011779999999999985,
+              "max": 0.101213,
+              "mean": 0.10101666666666667,
+              "min": 0.100854,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 0.0010529999999999984,
+              "diff_vs_b1_mean": 0.0010124666666666666,
+              "diff_vs_b1_min": 0.0009609999999999896,
+              "max": 0.11773,
+              "mean": 0.11749826666666667,
+              "min": 0.117354,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": -0.35991100000000004,
+              "diff_vs_b1_mean": -0.37475963333333334,
+              "diff_vs_b1_min": -0.378093,
+              "max": 0.018182,
+              "mean": 0.0033333666666666667,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.018519,
+              "diff_vs_b1_mean": 0.007715933333333333,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.018519,
+              "mean": 0.007715933333333333,
+              "min": 0.0,
+              "seeds": 30
+            }
+          },
+          "JL": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 0.00821799999999999,
+              "diff_vs_b1_mean": 0.007601066666666667,
+              "diff_vs_b1_min": 0.006952,
+              "max": 0.076499,
+              "mean": 0.0760871,
+              "min": 0.075671,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": -0.02763199999999999,
+              "diff_vs_b1_mean": -0.027702499999999998,
+              "diff_vs_b1_min": -0.027841999999999922,
+              "max": 0.729339,
+              "mean": 0.7292613333333333,
+              "min": 0.729206,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": -0.004603000000000024,
+              "diff_vs_b1_mean": -0.005058099999999995,
+              "diff_vs_b1_min": -0.005318999999999963,
+              "max": 0.973111,
+              "mean": 0.9730234000000001,
+              "min": 0.972908,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.014035999999999993,
+              "diff_vs_b1_mean": 0.01396513333333333,
+              "diff_vs_b1_min": 0.013896999999999993,
+              "max": 0.20782,
+              "mean": 0.20777156666666666,
+              "min": 0.207716,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.0007940000000000169,
+              "diff_vs_b1_mean": 0.0007525666666666745,
+              "diff_vs_b1_min": 0.0007130000000000192,
+              "max": 0.423686,
+              "mean": 0.4236731666666667,
+              "min": 0.423653,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": 0.06405900000000009,
+              "diff_vs_b1_mean": 0.05880073333333331,
+              "diff_vs_b1_min": 0.050826999999999956,
+              "max": 1.08669,
+              "mean": 1.0736491333333333,
+              "min": 1.064428,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 0.027500999999999998,
+              "diff_vs_b1_mean": 0.027325033333333335,
+              "diff_vs_b1_min": 0.027087000000000014,
+              "max": 0.127848,
+              "mean": 0.12771616666666666,
+              "min": 0.127595,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 2.0,
+              "mean": 2.0,
+              "min": 2.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 1635000.0,
+              "diff_vs_b1_mean": 1635000.0,
+              "diff_vs_b1_min": 1635000.0,
+              "max": 1635000.0,
+              "mean": 1635000.0,
+              "min": 1635000.0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": -0.026344999999999952,
+              "diff_vs_b1_mean": -0.026567066666666677,
+              "diff_vs_b1_min": -0.026733000000000007,
+              "max": 0.87378,
+              "mean": 0.8736409666666667,
+              "min": 0.873506,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": -51335.101999999955,
+              "diff_vs_b1_mean": -51724.12113333334,
+              "diff_vs_b1_min": -51989.60599999991,
+              "max": 1810112.602,
+              "mean": 1809847.9868,
+              "min": 1809528.159,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 0.026733000000000007,
+              "diff_vs_b1_mean": 0.026567066666666663,
+              "diff_vs_b1_min": 0.026345000000000007,
+              "max": 0.126494,
+              "mean": 0.12635903333333334,
+              "min": 0.12622,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": -0.02360699999999999,
+              "diff_vs_b1_mean": -0.023769533333333332,
+              "diff_vs_b1_min": -0.023936,
+              "max": 0.092812,
+              "mean": 0.09271626666666667,
+              "min": 0.092611,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": -0.018004999999999993,
+              "diff_vs_b1_mean": -0.018004999999999993,
+              "diff_vs_b1_min": -0.018004999999999993,
+              "max": 0.360088,
+              "mean": 0.360088,
+              "min": 0.360088,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            }
+          },
+          "JL_F8": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": -5.300000000001137e-05,
+              "diff_vs_b1_mean": -0.0007971999999999989,
+              "diff_vs_b1_min": -0.0013949999999999935,
+              "max": 0.068135,
+              "mean": 0.06768883333333334,
+              "min": 0.067203,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": 0.00032599999999993745,
+              "diff_vs_b1_mean": 0.00027253333333333575,
+              "diff_vs_b1_min": 0.000164000000000053,
+              "max": 0.757327,
+              "mean": 0.7572363666666667,
+              "min": 0.757169,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": -0.0011120000000000019,
+              "diff_vs_b1_mean": -0.0015670333333333193,
+              "diff_vs_b1_min": -0.0018639999999999768,
+              "max": 0.976619,
+              "mean": 0.9765144666666666,
+              "min": 0.976388,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.00025499999999997747,
+              "diff_vs_b1_mean": 0.00020166666666666572,
+              "diff_vs_b1_min": 0.00017900000000001248,
+              "max": 0.19407,
+              "mean": 0.1940081,
+              "min": 0.193933,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.00038399999999999546,
+              "diff_vs_b1_mean": 0.00034516666666666864,
+              "diff_vs_b1_min": 0.0003190000000000137,
+              "max": 0.423278,
+              "mean": 0.42326576666666665,
+              "min": 0.423253,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.11134199999999994,
+              "diff_vs_b1_mean": -0.1145107,
+              "diff_vs_b1_min": -0.11666899999999991,
+              "max": 0.911634,
+              "mean": 0.9003377,
+              "min": 0.891668,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 0.0010319999999999913,
+              "diff_vs_b1_mean": 0.0009660666666666674,
+              "diff_vs_b1_min": 0.0009389999999999954,
+              "max": 0.101583,
+              "mean": 0.10135720000000001,
+              "min": 0.101183,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 2.0,
+              "mean": 2.0,
+              "min": 2.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": -0.0008999999999999009,
+              "diff_vs_b1_mean": -0.0009346666666666688,
+              "diff_vs_b1_min": -0.0010050000000000336,
+              "max": 0.899425,
+              "mean": 0.8992733666666666,
+              "min": 0.899064,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": -234.17800000007264,
+              "diff_vs_b1_mean": -414.58073333332624,
+              "diff_vs_b1_min": -565.0969999998342,
+              "max": 1861434.138,
+              "mean": 1861157.5272,
+              "min": 1860760.009,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 0.0010050000000000059,
+              "diff_vs_b1_mean": 0.0009346666666666656,
+              "diff_vs_b1_min": 0.000899999999999998,
+              "max": 0.100936,
+              "mean": 0.10072663333333334,
+              "min": 0.100575,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 0.0007169999999999954,
+              "diff_vs_b1_mean": 0.0006721666666666677,
+              "diff_vs_b1_min": 0.0006309999999999927,
+              "max": 0.11738,
+              "mean": 0.11715796666666667,
+              "min": 0.117018,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.378093,
+              "mean": 0.378093,
+              "min": 0.378093,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            }
+          },
+          "JL_POOL": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": -0.016300999999999996,
+              "diff_vs_b1_mean": -0.016852033333333332,
+              "diff_vs_b1_min": -0.017514999999999996,
+              "max": 0.052177,
+              "mean": 0.051634,
+              "min": 0.051213,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": -0.03077300000000005,
+              "diff_vs_b1_mean": -0.030875933333333345,
+              "diff_vs_b1_min": -0.031012999999999957,
+              "max": 0.726166,
+              "mean": 0.7260879,
+              "min": 0.726015,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 0.007189000000000001,
+              "diff_vs_b1_mean": 0.006795166666666674,
+              "diff_vs_b1_min": 0.00653999999999999,
+              "max": 0.984993,
+              "mean": 0.9848766666666666,
+              "min": 0.98466,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.01772399999999999,
+              "diff_vs_b1_mean": 0.01759873333333333,
+              "diff_vs_b1_min": 0.017492000000000008,
+              "max": 0.211532,
+              "mean": 0.21140516666666667,
+              "min": 0.211313,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.052292000000000005,
+              "diff_vs_b1_mean": 0.051866266666666674,
+              "diff_vs_b1_min": 0.05157200000000001,
+              "max": 0.475197,
+              "mean": 0.47478686666666664,
+              "min": 0.474504,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.37049,
+              "diff_vs_b1_mean": -0.3796083,
+              "diff_vs_b1_min": -0.387981,
+              "max": 0.64368,
+              "mean": 0.6352401000000001,
+              "min": 0.62849,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": -0.010469999999999993,
+              "diff_vs_b1_mean": -0.010686133333333332,
+              "diff_vs_b1_min": -0.010874999999999996,
+              "max": 0.089841,
+              "mean": 0.089705,
+              "min": 0.089586,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 2.0,
+              "mean": 2.0,
+              "min": 2.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 1635000.0,
+              "diff_vs_b1_mean": 1635000.0,
+              "diff_vs_b1_min": 1635000.0,
+              "max": 1635000.0,
+              "mean": 1635000.0,
+              "min": 1635000.0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": 0.01243800000000006,
+              "diff_vs_b1_mean": 0.012237799999999998,
+              "diff_vs_b1_min": 0.012014999999999998,
+              "max": 0.912559,
+              "mean": 0.9124458333333333,
+              "min": 0.912315,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 258692.20299999975,
+              "diff_vs_b1_mean": 256711.74260000003,
+              "diff_vs_b1_min": 255258.6799999997,
+              "max": 2120025.536,
+              "mean": 2118283.8505333336,
+              "min": 2116886.119,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": -0.012014999999999998,
+              "diff_vs_b1_mean": -0.0122378,
+              "diff_vs_b1_min": -0.012438000000000005,
+              "max": 0.087685,
+              "mean": 0.08755416666666667,
+              "min": 0.087441,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": -0.063468,
+              "diff_vs_b1_mean": -0.06367656666666667,
+              "diff_vs_b1_min": -0.06390099999999999,
+              "max": 0.052944,
+              "mean": 0.05280923333333333,
+              "min": 0.052705,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.09385499999999997,
+              "diff_vs_b1_mean": 0.0903935,
+              "diff_vs_b1_min": 0.08549200000000001,
+              "max": 0.471948,
+              "mean": 0.46848650000000003,
+              "min": 0.463585,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            }
+          }
+        },
+        "target_served_share": 0.9,
+        "trips_per_day": 6491
+      }
+    },
+    "secondary_2023": {
+      "fleet": {
+        "basis": "REAL fleet (news) x DERIVED trips per tanker; split ASSUMED",
+        "policies": {
+          "B1": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.000297,
+              "mean": 0.00021933333333333334,
+              "min": 0.000184,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.758111,
+              "mean": 0.7580964,
+              "min": 0.75809,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.999996,
+              "mean": 0.9999951333333333,
+              "min": 0.999991,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.176894,
+              "mean": 0.17689103333333334,
+              "min": 0.176884,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.431818,
+              "mean": 0.4318170333333333,
+              "min": 0.431817,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.000948,
+              "mean": 0.0007389,
+              "min": 0.000558,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 4.6e-05,
+              "mean": 3.4066666666666664e-05,
+              "min": 2.8e-05,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.999967,
+              "mean": 0.9999609333333334,
+              "min": 0.999947,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 859028.612,
+              "mean": 859023.5784666667,
+              "min": 859012.804,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 5.3e-05,
+              "mean": 3.906666666666667e-05,
+              "min": 3.3e-05,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.748659,
+              "mean": 0.7486564333333333,
+              "min": 0.748655,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.980333,
+              "mean": 0.9770044333333333,
+              "min": 0.96823,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.009259,
+              "mean": 0.009259,
+              "min": 0.009259,
+              "seeds": 30
+            }
+          },
+          "B2": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 5.6000000000000006e-05,
+              "diff_vs_b1_mean": 1.1166666666666671e-05,
+              "diff_vs_b1_min": -7.0000000000000075e-06,
+              "max": 0.000304,
+              "mean": 0.0002305,
+              "min": 0.000184,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": 1.0000000000065512e-05,
+              "diff_vs_b1_mean": 2.1999999999966492e-06,
+              "diff_vs_b1_min": -1.0000000000287557e-06,
+              "max": 0.758113,
+              "mean": 0.7580986000000001,
+              "min": 0.75809,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -9.999999999177333e-08,
+              "diff_vs_b1_min": -9.999999999177334e-07,
+              "max": 0.999996,
+              "mean": 0.9999950333333333,
+              "min": 0.999991,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -1.3333333333346669e-06,
+              "diff_vs_b1_min": -4.000000000004e-06,
+              "max": 0.176894,
+              "mean": 0.17688969999999998,
+              "min": 0.176883,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -4.333333333348769e-06,
+              "diff_vs_b1_min": -1.0000000000010001e-05,
+              "max": 0.431817,
+              "mean": 0.4318127,
+              "min": 0.431807,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -2.8100000000000012e-05,
+              "diff_vs_b1_min": -7.000000000000008e-05,
+              "max": 0.000927,
+              "mean": 0.0007107999999999999,
+              "min": 0.000548,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 9.999999999999999e-06,
+              "diff_vs_b1_mean": 3.866666666666668e-06,
+              "diff_vs_b1_min": 0.0,
+              "max": 4.9e-05,
+              "mean": 3.793333333333334e-05,
+              "min": 2.8e-05,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -3.5333333333350166e-06,
+              "diff_vs_b1_min": -9.99999999995449e-06,
+              "max": 0.999967,
+              "mean": 0.9999574,
+              "min": 0.999945,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -12.052866666674769,
+              "diff_vs_b1_min": -29.17000000004191,
+              "max": 859028.612,
+              "mean": 859011.5255999999,
+              "min": 858996.515,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 1.0000000000000006e-05,
+              "diff_vs_b1_mean": 3.5333333333333335e-06,
+              "diff_vs_b1_min": 0.0,
+              "max": 5.5e-05,
+              "mean": 4.26e-05,
+              "min": 3.3e-05,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 2.9999999999752447e-06,
+              "diff_vs_b1_mean": 1.1000000000168283e-06,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.74866,
+              "mean": 0.7486575333333333,
+              "min": 0.748655,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.980333,
+              "mean": 0.9770044333333333,
+              "min": 0.96823,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.009259,
+              "mean": 0.009259,
+              "min": 0.009259,
+              "seeds": 30
+            }
+          },
+          "B3": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 3.500000000000001e-05,
+              "diff_vs_b1_mean": 1.0433333333333337e-05,
+              "diff_vs_b1_min": -7.0000000000000075e-06,
+              "max": 0.000304,
+              "mean": 0.00022976666666666665,
+              "min": 0.000184,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": 6.000000000061512e-06,
+              "diff_vs_b1_mean": 2.0666666666631824e-06,
+              "diff_vs_b1_min": -1.0000000000287557e-06,
+              "max": 0.758113,
+              "mean": 0.7580984666666667,
+              "min": 0.75809,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -9.999999999177333e-08,
+              "diff_vs_b1_min": -9.999999999177334e-07,
+              "max": 0.999996,
+              "mean": 0.9999950333333333,
+              "min": 0.999991,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -1.3000000000013e-06,
+              "diff_vs_b1_min": -3.0000000000030003e-06,
+              "max": 0.176894,
+              "mean": 0.17688973333333333,
+              "min": 0.176883,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -4.266666666682036e-06,
+              "diff_vs_b1_min": -1.0000000000010001e-05,
+              "max": 0.431817,
+              "mean": 0.4318127666666667,
+              "min": 0.431807,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -2.7866666666666675e-05,
+              "diff_vs_b1_min": -6.499999999999995e-05,
+              "max": 0.000927,
+              "mean": 0.0007110333333333333,
+              "min": 0.000548,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 8.999999999999999e-06,
+              "diff_vs_b1_mean": 3.8000000000000017e-06,
+              "diff_vs_b1_min": 0.0,
+              "max": 4.9e-05,
+              "mean": 3.786666666666667e-05,
+              "min": 2.8e-05,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -3.4666666666701337e-06,
+              "diff_vs_b1_min": -8.000000000008e-06,
+              "max": 0.999967,
+              "mean": 0.9999574666666666,
+              "min": 0.999945,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -11.857466666675949,
+              "diff_vs_b1_min": -26.168999999994412,
+              "max": 859028.612,
+              "mean": 859011.721,
+              "min": 858996.515,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 8.000000000000005e-06,
+              "diff_vs_b1_mean": 3.466666666666667e-06,
+              "diff_vs_b1_min": 0.0,
+              "max": 5.5e-05,
+              "mean": 4.2533333333333335e-05,
+              "min": 3.3e-05,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 2.0000000000575113e-06,
+              "diff_vs_b1_mean": 1.0666666666862372e-06,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.74866,
+              "mean": 0.7486575,
+              "min": 0.748655,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.980333,
+              "mean": 0.9770044333333333,
+              "min": 0.96823,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.009259,
+              "mean": 0.009259,
+              "min": 0.009259,
+              "seeds": 30
+            }
+          },
+          "B4": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": -0.000184,
+              "diff_vs_b1_mean": -0.00021933333333333334,
+              "diff_vs_b1_min": -0.000297,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": -3.500000000000725e-05,
+              "diff_vs_b1_mean": -4.1399999999984045e-05,
+              "diff_vs_b1_min": -5.599999999994498e-05,
+              "max": 0.758055,
+              "mean": 0.758055,
+              "min": 0.758055,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 9.000000000036756e-06,
+              "diff_vs_b1_mean": 4.866666666680785e-06,
+              "diff_vs_b1_min": 4.000000000004e-06,
+              "max": 1.0,
+              "mean": 1.0,
+              "min": 1.0,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 2.5999999999998247e-05,
+              "diff_vs_b1_mean": 1.896666666668471e-05,
+              "diff_vs_b1_min": 1.6000000000016e-05,
+              "max": 0.17691,
+              "mean": 0.17691,
+              "min": 0.17691,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.00022899999999997922,
+              "diff_vs_b1_mean": 0.00018453333333332914,
+              "diff_vs_b1_min": 0.00014799999999998148,
+              "max": 0.432046,
+              "mean": 0.43200156666666667,
+              "min": 0.431965,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.000558,
+              "diff_vs_b1_mean": -0.0007389,
+              "diff_vs_b1_min": -0.000948,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": -2.8e-05,
+              "diff_vs_b1_mean": -3.4066666666666664e-05,
+              "diff_vs_b1_min": -4.6e-05,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": 5.299999999996974e-05,
+              "diff_vs_b1_mean": 3.906666666667243e-05,
+              "diff_vs_b1_min": 3.2999999999949736e-05,
+              "max": 1.0,
+              "mean": 1.0,
+              "min": 1.0,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 491.5679999999702,
+              "diff_vs_b1_mean": 400.48966666664154,
+              "diff_vs_b1_min": 327.44999999995343,
+              "max": 859512.276,
+              "mean": 859424.0681333333,
+              "min": 859352.11,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": -3.3e-05,
+              "diff_vs_b1_mean": -3.906666666666667e-05,
+              "diff_vs_b1_min": -5.3e-05,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": -9.99999999995449e-06,
+              "diff_vs_b1_mean": -1.1433333333314237e-05,
+              "diff_vs_b1_min": -1.399999999995849e-05,
+              "max": 0.748645,
+              "mean": 0.748645,
+              "min": 0.748645,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.031769999999999965,
+              "diff_vs_b1_mean": 0.02299556666666664,
+              "diff_vs_b1_min": 0.01966699999999999,
+              "max": 1.0,
+              "mean": 1.0,
+              "min": 1.0,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.009259,
+              "mean": 0.009259,
+              "min": 0.009259,
+              "seeds": 30
+            }
+          },
+          "B5": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 1.3999999999999988e-05,
+              "diff_vs_b1_mean": 4.6666666666666624e-07,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.000297,
+              "mean": 0.0002198,
+              "min": 0.000184,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": 2.0000000000575113e-06,
+              "diff_vs_b1_mean": 6.666666666858372e-08,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.758111,
+              "mean": 0.7580964666666666,
+              "min": 0.75809,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.999996,
+              "mean": 0.9999951333333333,
+              "min": 0.999991,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -3.333333333336667e-08,
+              "diff_vs_b1_min": -1.000000000001e-06,
+              "max": 0.176894,
+              "mean": 0.176891,
+              "min": 0.176884,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.431818,
+              "mean": 0.4318170333333333,
+              "min": 0.431817,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -7.333333333333331e-07,
+              "diff_vs_b1_min": -2.1999999999999993e-05,
+              "max": 0.000948,
+              "mean": 0.0007381666666666667,
+              "min": 0.000558,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 1.9999999999999944e-06,
+              "diff_vs_b1_mean": 6.666666666666648e-08,
+              "diff_vs_b1_min": 0.0,
+              "max": 4.6e-05,
+              "mean": 3.4133333333333334e-05,
+              "min": 2.8e-05,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -6.666666666858372e-08,
+              "diff_vs_b1_min": -2.0000000000575113e-06,
+              "max": 0.999967,
+              "mean": 0.9999608666666667,
+              "min": 0.999947,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -0.06863333333361273,
+              "diff_vs_b1_min": -2.059000000008382,
+              "max": 859028.612,
+              "mean": 859023.5098333334,
+              "min": 859012.804,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 2.000000000000001e-06,
+              "diff_vs_b1_mean": 6.666666666666671e-08,
+              "diff_vs_b1_min": 0.0,
+              "max": 5.3e-05,
+              "mean": 3.913333333333334e-05,
+              "min": 3.3e-05,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 1.0000000000287557e-06,
+              "diff_vs_b1_mean": 3.333333333429186e-08,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.748659,
+              "mean": 0.7486564666666666,
+              "min": 0.748655,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.980333,
+              "mean": 0.9770044333333333,
+              "min": 0.96823,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.009259,
+              "mean": 0.009259,
+              "min": 0.009259,
+              "seeds": 30
+            }
+          },
+          "JL": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 1.3999999999999988e-05,
+              "diff_vs_b1_mean": 4.6666666666666624e-07,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.000297,
+              "mean": 0.0002198,
+              "min": 0.000184,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": -0.05666799999999994,
+              "diff_vs_b1_mean": -0.05667,
+              "diff_vs_b1_min": -0.05667100000000003,
+              "max": 0.701441,
+              "mean": 0.7014264000000001,
+              "min": 0.70142,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.999996,
+              "mean": 0.9999951333333333,
+              "min": 0.999991,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.03681900000000002,
+              "diff_vs_b1_mean": 0.03681896666666668,
+              "diff_vs_b1_min": 0.03681800000000002,
+              "max": 0.213713,
+              "mean": 0.21371,
+              "min": 0.213703,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.431818,
+              "mean": 0.4318170333333333,
+              "min": 0.431817,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": 6.800000000000003e-05,
+              "diff_vs_b1_mean": 3.63e-05,
+              "diff_vs_b1_min": 8.000000000000086e-06,
+              "max": 0.000975,
+              "mean": 0.0007752,
+              "min": 0.000591,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 1.9999999999999944e-06,
+              "diff_vs_b1_mean": 6.666666666666648e-08,
+              "diff_vs_b1_min": 0.0,
+              "max": 4.6e-05,
+              "mean": 3.4133333333333334e-05,
+              "min": 2.8e-05,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 2590000.0,
+              "diff_vs_b1_mean": 2590000.0,
+              "diff_vs_b1_min": 2590000.0,
+              "max": 2590000.0,
+              "mean": 2590000.0,
+              "min": 2590000.0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -6.666666666858372e-08,
+              "diff_vs_b1_min": -2.0000000000575113e-06,
+              "max": 0.999967,
+              "mean": 0.9999608666666667,
+              "min": 0.999947,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -0.06863333333361273,
+              "diff_vs_b1_min": -2.059000000008382,
+              "max": 859028.612,
+              "mean": 859023.5098333334,
+              "min": 859012.804,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 2.000000000000001e-06,
+              "diff_vs_b1_mean": 6.666666666666671e-08,
+              "diff_vs_b1_min": 0.0,
+              "max": 5.3e-05,
+              "mean": 3.913333333333334e-05,
+              "min": 3.3e-05,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": -0.05006699999999997,
+              "diff_vs_b1_mean": -0.050067366666666654,
+              "diff_vs_b1_min": -0.050068,
+              "max": 0.698591,
+              "mean": 0.6985890666666666,
+              "min": 0.698588,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.980333,
+              "mean": 0.9770044333333333,
+              "min": 0.96823,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": -0.009259,
+              "diff_vs_b1_mean": -0.009259,
+              "diff_vs_b1_min": -0.009259,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            }
+          },
+          "JL_F8": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 1.3999999999999988e-05,
+              "diff_vs_b1_mean": 4.6666666666666624e-07,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.000297,
+              "mean": 0.0002198,
+              "min": 0.000184,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": 2.0000000000575113e-06,
+              "diff_vs_b1_mean": 6.666666666858372e-08,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.758111,
+              "mean": 0.7580964666666666,
+              "min": 0.75809,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.999996,
+              "mean": 0.9999951333333333,
+              "min": 0.999991,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -3.333333333336667e-08,
+              "diff_vs_b1_min": -1.000000000001e-06,
+              "max": 0.176894,
+              "mean": 0.176891,
+              "min": 0.176884,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.431818,
+              "mean": 0.4318170333333333,
+              "min": 0.431817,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -7.333333333333331e-07,
+              "diff_vs_b1_min": -2.1999999999999993e-05,
+              "max": 0.000948,
+              "mean": 0.0007381666666666667,
+              "min": 0.000558,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 1.9999999999999944e-06,
+              "diff_vs_b1_mean": 6.666666666666648e-08,
+              "diff_vs_b1_min": 0.0,
+              "max": 4.6e-05,
+              "mean": 3.4133333333333334e-05,
+              "min": 2.8e-05,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -6.666666666858372e-08,
+              "diff_vs_b1_min": -2.0000000000575113e-06,
+              "max": 0.999967,
+              "mean": 0.9999608666666667,
+              "min": 0.999947,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": -0.06863333333361273,
+              "diff_vs_b1_min": -2.059000000008382,
+              "max": 859028.612,
+              "mean": 859023.5098333334,
+              "min": 859012.804,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 2.000000000000001e-06,
+              "diff_vs_b1_mean": 6.666666666666671e-08,
+              "diff_vs_b1_min": 0.0,
+              "max": 5.3e-05,
+              "mean": 3.913333333333334e-05,
+              "min": 3.3e-05,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 1.0000000000287557e-06,
+              "diff_vs_b1_mean": 3.333333333429186e-08,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.748659,
+              "mean": 0.7486564666666666,
+              "min": 0.748655,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.980333,
+              "mean": 0.9770044333333333,
+              "min": 0.96823,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.009259,
+              "mean": 0.009259,
+              "min": 0.009259,
+              "seeds": 30
+            }
+          },
+          "JL_POOL": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": -0.000184,
+              "diff_vs_b1_mean": -0.00021933333333333334,
+              "diff_vs_b1_min": -0.000297,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": -0.056705000000000005,
+              "diff_vs_b1_mean": -0.05671139999999998,
+              "diff_vs_b1_min": -0.05672599999999994,
+              "max": 0.701385,
+              "mean": 0.701385,
+              "min": 0.701385,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 9.000000000036756e-06,
+              "diff_vs_b1_mean": 4.866666666680785e-06,
+              "diff_vs_b1_min": 4.000000000004e-06,
+              "max": 1.0,
+              "mean": 1.0,
+              "min": 1.0,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.03684499999999999,
+              "diff_vs_b1_mean": 0.03683796666666668,
+              "diff_vs_b1_min": 0.03683500000000001,
+              "max": 0.213729,
+              "mean": 0.213729,
+              "min": 0.213729,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.00022699999999997722,
+              "diff_vs_b1_mean": 0.00019353333333332518,
+              "diff_vs_b1_min": 0.00015799999999999148,
+              "max": 0.432044,
+              "mean": 0.43201056666666665,
+              "min": 0.431975,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.000553,
+              "diff_vs_b1_mean": -0.0007191666666666667,
+              "diff_vs_b1_min": -0.000945,
+              "max": 3.8e-05,
+              "mean": 1.9733333333333333e-05,
+              "min": 3e-06,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": -2.8e-05,
+              "diff_vs_b1_mean": -3.4066666666666664e-05,
+              "diff_vs_b1_min": -4.6e-05,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 2590000.0,
+              "diff_vs_b1_mean": 2590000.0,
+              "diff_vs_b1_min": 2590000.0,
+              "max": 2590000.0,
+              "mean": 2590000.0,
+              "min": 2590000.0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": 5.299999999996974e-05,
+              "diff_vs_b1_mean": 3.906666666667243e-05,
+              "diff_vs_b1_min": 3.2999999999949736e-05,
+              "max": 1.0,
+              "mean": 1.0,
+              "min": 1.0,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 485.2950000000419,
+              "diff_vs_b1_mean": 418.2053666666577,
+              "diff_vs_b1_min": 343.9789999999339,
+              "max": 859507.979,
+              "mean": 859441.7838333334,
+              "min": 859370.615,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": -3.3e-05,
+              "diff_vs_b1_mean": -3.906666666666667e-05,
+              "diff_vs_b1_min": -5.3e-05,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": -0.050077999999999956,
+              "diff_vs_b1_mean": -0.05007943333333332,
+              "diff_vs_b1_min": -0.05008199999999996,
+              "max": 0.698577,
+              "mean": 0.698577,
+              "min": 0.698577,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.031769999999999965,
+              "diff_vs_b1_mean": 0.02299556666666664,
+              "diff_vs_b1_min": 0.01966699999999999,
+              "max": 1.0,
+              "mean": 1.0,
+              "min": 1.0,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": -0.009259,
+              "diff_vs_b1_mean": -0.009259,
+              "diff_vs_b1_min": -0.009259,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            }
+          }
+        },
+        "trips_per_day": 10346
+      },
+      "tight": {
+        "basis": "Calibrated to the REAL Jun-Aug 2026 delivered share",
+        "calibration_b1_served_share_seed0": 0.899972,
+        "factor_on_last_year_daily_bookings": 1.254688,
+        "policies": {
+          "B1": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.066405,
+              "mean": 0.0657727,
+              "min": 0.06508,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.756901,
+              "mean": 0.7567076666666667,
+              "min": 0.756596,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.981045,
+              "mean": 0.9806581666666666,
+              "min": 0.980227,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.169171,
+              "mean": 0.16910216666666666,
+              "min": 0.169031,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.433202,
+              "mean": 0.43311503333333334,
+              "min": 0.433054,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.909165,
+              "mean": 0.8988983333333334,
+              "min": 0.883509,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.097475,
+              "mean": 0.0972676,
+              "min": 0.097065,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 2.0,
+              "mean": 2.0,
+              "min": 2.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.900314,
+              "mean": 0.9001163333333333,
+              "min": 0.899942,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 775827.588,
+              "mean": 775575.5244,
+              "min": 775372.257,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.100058,
+              "mean": 0.09988366666666666,
+              "min": 0.099686,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.168066,
+              "mean": 0.16794053333333334,
+              "min": 0.167772,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.455621,
+              "mean": 0.4519372333333333,
+              "min": 0.432243,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.009259,
+              "mean": 0.009259,
+              "min": 0.009259,
+              "seeds": 30
+            }
+          },
+          "B2": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 0.024979,
+              "diff_vs_b1_mean": 0.022942766666666666,
+              "diff_vs_b1_min": 0.021009,
+              "max": 0.090505,
+              "mean": 0.08871546666666667,
+              "min": 0.08659,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": 0.0036249999999999893,
+              "diff_vs_b1_mean": 0.0034056333333333318,
+              "diff_vs_b1_min": 0.00321400000000005,
+              "max": 0.760389,
+              "mean": 0.7601133,
+              "min": 0.759849,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": -0.01549199999999995,
+              "diff_vs_b1_mean": -0.016945766666666646,
+              "diff_vs_b1_min": -0.018657999999999952,
+              "max": 0.965079,
+              "mean": 0.9637124,
+              "min": 0.96226,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": -0.0006919999999999982,
+              "diff_vs_b1_mean": -0.0007946666666666686,
+              "diff_vs_b1_min": -0.0009100000000000219,
+              "max": 0.168442,
+              "mean": 0.1683075,
+              "min": 0.16817,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": -0.0026249999999999885,
+              "diff_vs_b1_mean": -0.0027595666666666665,
+              "diff_vs_b1_min": -0.002839000000000036,
+              "max": 0.430429,
+              "mean": 0.4303554666666667,
+              "min": 0.430267,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.06407099999999999,
+              "diff_vs_b1_mean": -0.06787583333333333,
+              "diff_vs_b1_min": -0.07234800000000008,
+              "max": 0.844866,
+              "mean": 0.8310225,
+              "min": 0.819438,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 0.001794000000000004,
+              "diff_vs_b1_mean": 0.0015690999999999988,
+              "diff_vs_b1_min": 0.0014239999999999947,
+              "max": 0.09906,
+              "mean": 0.09883669999999999,
+              "min": 0.098647,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 2.0,
+              "mean": 2.0,
+              "min": 2.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": -0.0015730000000000466,
+              "diff_vs_b1_mean": -0.0017323333333333357,
+              "diff_vs_b1_min": -0.0019879999999999898,
+              "max": 0.898585,
+              "mean": 0.898384,
+              "min": 0.89815,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": -6137.513000000035,
+              "diff_vs_b1_mean": -6424.9449999999915,
+              "diff_vs_b1_min": -6777.59600000002,
+              "max": 769400.636,
+              "mean": 769150.5793999999,
+              "min": 768792.51,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 0.0019879999999999898,
+              "diff_vs_b1_mean": 0.001732333333333333,
+              "diff_vs_b1_min": 0.001573000000000005,
+              "max": 0.10185,
+              "mean": 0.101616,
+              "min": 0.101415,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 0.0016019999999999923,
+              "diff_vs_b1_mean": 0.0013791333333333304,
+              "diff_vs_b1_min": 0.0012220000000000009,
+              "max": 0.169509,
+              "mean": 0.16931966666666665,
+              "min": 0.169136,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": -0.432243,
+              "diff_vs_b1_mean": -0.44960093333333334,
+              "diff_vs_b1_min": -0.455621,
+              "max": 0.011682,
+              "mean": 0.0023363,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.027778,
+              "diff_vs_b1_mean": 0.015123933333333334,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.037037,
+              "mean": 0.024382933333333336,
+              "min": 0.009259,
+              "seeds": 30
+            }
+          },
+          "B3": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 0.026231000000000004,
+              "diff_vs_b1_mean": 0.024440766666666666,
+              "diff_vs_b1_min": 0.022798,
+              "max": 0.091746,
+              "mean": 0.09021346666666667,
+              "min": 0.088213,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": 0.00313399999999997,
+              "diff_vs_b1_mean": 0.0029323333333333293,
+              "diff_vs_b1_min": 0.002734000000000014,
+              "max": 0.759867,
+              "mean": 0.75964,
+              "min": 0.759374,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": -0.015252999999999961,
+              "diff_vs_b1_mean": -0.01692839999999999,
+              "diff_vs_b1_min": -0.018190999999999957,
+              "max": 0.965298,
+              "mean": 0.9637297666666667,
+              "min": 0.962603,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": -0.00045200000000000795,
+              "diff_vs_b1_mean": -0.0005617000000000002,
+              "diff_vs_b1_min": -0.0006329999999999947,
+              "max": 0.168675,
+              "mean": 0.16854046666666667,
+              "min": 0.168447,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": -0.0018940000000000068,
+              "diff_vs_b1_mean": -0.001997633333333328,
+              "diff_vs_b1_min": -0.0021079999999999988,
+              "max": 0.431232,
+              "mean": 0.4311174,
+              "min": 0.430999,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.05860299999999996,
+              "diff_vs_b1_mean": -0.0638139,
+              "diff_vs_b1_min": -0.067326,
+              "max": 0.845933,
+              "mean": 0.8350844333333334,
+              "min": 0.823701,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 0.0017860000000000098,
+              "diff_vs_b1_mean": 0.0016113999999999998,
+              "diff_vs_b1_min": 0.001457999999999987,
+              "max": 0.099057,
+              "mean": 0.098879,
+              "min": 0.098731,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 2.0,
+              "mean": 2.0,
+              "min": 2.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": -0.0016159999999999508,
+              "diff_vs_b1_mean": -0.0017897666666666701,
+              "diff_vs_b1_min": -0.0019850000000000145,
+              "max": 0.898492,
+              "mean": 0.8983265666666667,
+              "min": 0.898138,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": -4901.631999999983,
+              "diff_vs_b1_mean": -5112.168700000007,
+              "diff_vs_b1_min": -5379.251999999979,
+              "max": 770736.046,
+              "mean": 770463.3557,
+              "min": 770138.418,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 0.0019849999999999868,
+              "diff_vs_b1_mean": 0.0017897666666666658,
+              "diff_vs_b1_min": 0.0016160000000000063,
+              "max": 0.101862,
+              "mean": 0.10167343333333333,
+              "min": 0.101508,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 0.0016509999999999858,
+              "diff_vs_b1_mean": 0.0014711333333333307,
+              "diff_vs_b1_min": 0.0012870000000000104,
+              "max": 0.169558,
+              "mean": 0.16941166666666665,
+              "min": 0.169267,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": -0.38109,
+              "diff_vs_b1_mean": -0.43449186666666667,
+              "diff_vs_b1_min": -0.455621,
+              "max": 0.070093,
+              "mean": 0.017445366666666667,
+              "min": 0.0,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.018519,
+              "diff_vs_b1_mean": 0.009568433333333333,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.027778,
+              "mean": 0.01882743333333333,
+              "min": 0.009259,
+              "seeds": 30
+            }
+          },
+          "B4": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": -0.029716999999999993,
+              "diff_vs_b1_mean": -0.030973066666666667,
+              "diff_vs_b1_min": -0.03246500000000001,
+              "max": 0.036218,
+              "mean": 0.03479963333333334,
+              "min": 0.033398,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": -0.005305000000000004,
+              "diff_vs_b1_mean": -0.005462966666666676,
+              "diff_vs_b1_min": -0.005762000000000045,
+              "max": 0.751403,
+              "mean": 0.7512447000000001,
+              "min": 0.750979,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 0.01372300000000004,
+              "diff_vs_b1_mean": 0.013278200000000021,
+              "diff_vs_b1_min": 0.012919000000000014,
+              "max": 0.994198,
+              "mean": 0.9939363666666666,
+              "min": 0.993635,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.006552000000000002,
+              "diff_vs_b1_mean": 0.006417433333333331,
+              "diff_vs_b1_min": 0.006279000000000007,
+              "max": 0.175654,
+              "mean": 0.1755196,
+              "min": 0.175324,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.03339200000000003,
+              "diff_vs_b1_mean": 0.03294840000000001,
+              "diff_vs_b1_min": 0.032358,
+              "max": 0.466525,
+              "mean": 0.4660634333333334,
+              "min": 0.465469,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.20891300000000002,
+              "diff_vs_b1_mean": -0.21890646666666666,
+              "diff_vs_b1_min": -0.22564300000000004,
+              "max": 0.690737,
+              "mean": 0.6799918666666667,
+              "min": 0.666205,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": -0.023129999999999998,
+              "diff_vs_b1_mean": -0.023376866666666666,
+              "diff_vs_b1_min": -0.023644,
+              "max": 0.074156,
+              "mean": 0.07389073333333333,
+              "min": 0.073608,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 2.0,
+              "mean": 2.0,
+              "min": 2.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": 0.025050000000000017,
+              "diff_vs_b1_mean": 0.024797133333333336,
+              "diff_vs_b1_min": 0.02452500000000002,
+              "max": 0.925173,
+              "mean": 0.9249134666666666,
+              "min": 0.92462,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 82876.81400000001,
+              "diff_vs_b1_mean": 81991.94873333334,
+              "diff_vs_b1_min": 80698.78999999992,
+              "max": 858455.334,
+              "mean": 857567.4731333333,
+              "min": 856251.879,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": -0.02452499999999999,
+              "diff_vs_b1_mean": -0.024797133333333332,
+              "diff_vs_b1_min": -0.02504999999999999,
+              "max": 0.07538,
+              "mean": 0.07508653333333333,
+              "min": 0.074827,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": -0.023847000000000007,
+              "diff_vs_b1_mean": -0.024081200000000004,
+              "diff_vs_b1_min": -0.024332999999999994,
+              "max": 0.144093,
+              "mean": 0.14385933333333334,
+              "min": 0.143651,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.17314500000000005,
+              "diff_vs_b1_mean": 0.15583916666666667,
+              "diff_vs_b1_min": 0.15131299999999998,
+              "max": 0.611688,
+              "mean": 0.6077764,
+              "min": 0.604919,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.009259,
+              "mean": 0.009259,
+              "min": 0.009259,
+              "seeds": 30
+            }
+          },
+          "B5": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 0.010534000000000002,
+              "diff_vs_b1_mean": 0.009888533333333335,
+              "diff_vs_b1_min": 0.009158,
+              "max": 0.076371,
+              "mean": 0.07566123333333333,
+              "min": 0.075001,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": 0.003037999999999985,
+              "diff_vs_b1_mean": 0.0028533999999999986,
+              "diff_vs_b1_min": 0.0027089999999999614,
+              "max": 0.75973,
+              "mean": 0.7595610666666667,
+              "min": 0.759404,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": -0.008669999999999956,
+              "diff_vs_b1_mean": -0.009616433333333325,
+              "diff_vs_b1_min": -0.010314999999999963,
+              "max": 0.971881,
+              "mean": 0.9710417333333333,
+              "min": 0.970575,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": -0.0009109999999999951,
+              "diff_vs_b1_mean": -0.0009671333333333337,
+              "diff_vs_b1_min": -0.0010489999999999944,
+              "max": 0.168248,
+              "mean": 0.16813503333333332,
+              "min": 0.168028,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 1.8999999999991246e-05,
+              "diff_vs_b1_mean": -6.996666666666355e-05,
+              "diff_vs_b1_min": -0.00014999999999998348,
+              "max": 0.433096,
+              "mean": 0.4330450666666667,
+              "min": 0.43297,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.045431,
+              "diff_vs_b1_mean": -0.047434899999999995,
+              "diff_vs_b1_min": -0.050622999999999974,
+              "max": 0.862474,
+              "mean": 0.8514634333333333,
+              "min": 0.838078,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 0.0008690000000000087,
+              "diff_vs_b1_mean": 0.0007029000000000003,
+              "diff_vs_b1_min": 0.0005769999999999942,
+              "max": 0.098152,
+              "mean": 0.0979705,
+              "min": 0.097777,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 2.0,
+              "mean": 2.0,
+              "min": 2.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": -0.0009529999999999816,
+              "diff_vs_b1_mean": -0.001089700000000001,
+              "diff_vs_b1_min": -0.0012820000000000054,
+              "max": 0.899238,
+              "mean": 0.8990266333333333,
+              "min": 0.898826,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": -914.9469999999274,
+              "diff_vs_b1_mean": -1064.2131666666635,
+              "diff_vs_b1_min": -1257.01800000004,
+              "max": 774738.955,
+              "mean": 774511.3112333334,
+              "min": 774204.979,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 0.0012819999999999915,
+              "diff_vs_b1_mean": 0.0010896999999999994,
+              "diff_vs_b1_min": 0.0009529999999999955,
+              "max": 0.101174,
+              "mean": 0.10097336666666666,
+              "min": 0.100762,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 0.0009849999999999859,
+              "diff_vs_b1_mean": 0.0008298999999999992,
+              "diff_vs_b1_min": 0.0007329999999999837,
+              "max": 0.168922,
+              "mean": 0.16877043333333336,
+              "min": 0.168606,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": -0.19568799999999997,
+              "diff_vs_b1_mean": -0.2545929333333333,
+              "diff_vs_b1_min": -0.293533,
+              "max": 0.255495,
+              "mean": 0.19734430000000003,
+              "min": 0.162088,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.018519,
+              "diff_vs_b1_mean": 0.010185766666666669,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.027778,
+              "mean": 0.01944476666666667,
+              "min": 0.009259,
+              "seeds": 30
+            }
+          },
+          "JL": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": 0.0036199999999999982,
+              "diff_vs_b1_mean": 0.0029791666666666677,
+              "diff_vs_b1_min": 0.0025560000000000027,
+              "max": 0.069209,
+              "mean": 0.06875186666666666,
+              "min": 0.068212,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": -0.03441700000000003,
+              "diff_vs_b1_mean": -0.034504133333333346,
+              "diff_vs_b1_min": -0.034647000000000094,
+              "max": 0.72227,
+              "mean": 0.7222035333333333,
+              "min": 0.722087,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": -0.0017119999999999358,
+              "diff_vs_b1_mean": -0.0019846999999999873,
+              "diff_vs_b1_min": -0.0024679999999999147,
+              "max": 0.978855,
+              "mean": 0.9786734666666667,
+              "min": 0.978515,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.012655,
+              "diff_vs_b1_mean": 0.01258293333333333,
+              "diff_vs_b1_min": 0.01250599999999999,
+              "max": 0.181755,
+              "mean": 0.18168510000000002,
+              "min": 0.18161,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.0012090000000000156,
+              "diff_vs_b1_mean": 0.0011322666666666722,
+              "diff_vs_b1_min": 0.0010740000000000194,
+              "max": 0.434303,
+              "mean": 0.4342473,
+              "min": 0.434206,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": 0.11267099999999997,
+              "diff_vs_b1_mean": 0.10316109999999998,
+              "diff_vs_b1_min": 0.09557700000000002,
+              "max": 1.011117,
+              "mean": 1.0020594333333332,
+              "min": 0.992892,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 0.023945000000000008,
+              "diff_vs_b1_mean": 0.023737933333333332,
+              "diff_vs_b1_min": 0.023493,
+              "max": 0.121185,
+              "mean": 0.12100553333333333,
+              "min": 0.120825,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 2.0,
+              "mean": 2.0,
+              "min": 2.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 660000.0,
+              "diff_vs_b1_mean": 660000.0,
+              "diff_vs_b1_min": 660000.0,
+              "max": 660000.0,
+              "mean": 660000.0,
+              "min": 660000.0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": -0.023048999999999986,
+              "diff_vs_b1_mean": -0.023283866666666663,
+              "diff_vs_b1_min": -0.023509000000000002,
+              "max": 0.877016,
+              "mean": 0.8768324666666667,
+              "min": 0.876629,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": -17861.958999999915,
+              "diff_vs_b1_mean": -18087.507633333335,
+              "diff_vs_b1_min": -18351.174,
+              "max": 757649.107,
+              "mean": 757488.0167666667,
+              "min": 757314.257,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 0.023508999999999988,
+              "diff_vs_b1_mean": 0.023283866666666667,
+              "diff_vs_b1_min": 0.023049,
+              "max": 0.123371,
+              "mean": 0.12316753333333333,
+              "min": 0.122984,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": -0.02498900000000001,
+              "diff_vs_b1_mean": -0.025216600000000002,
+              "diff_vs_b1_min": -0.025381000000000015,
+              "max": 0.142906,
+              "mean": 0.14272393333333333,
+              "min": 0.142587,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": -0.03959999999999997,
+              "diff_vs_b1_mean": -0.07012946666666667,
+              "diff_vs_b1_min": -0.079231,
+              "max": 0.392643,
+              "mean": 0.38180776666666666,
+              "min": 0.375535,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": -0.009259,
+              "diff_vs_b1_mean": -0.009259,
+              "diff_vs_b1_min": -0.009259,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            }
+          },
+          "JL_F8": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": -0.002715999999999996,
+              "diff_vs_b1_mean": -0.0034053666666666667,
+              "diff_vs_b1_min": -0.0037509999999999974,
+              "max": 0.062754,
+              "mean": 0.06236733333333333,
+              "min": 0.061816,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": -0.00045399999999995444,
+              "diff_vs_b1_mean": -0.0005292000000000038,
+              "diff_vs_b1_min": -0.0006690000000000307,
+              "max": 0.756276,
+              "mean": 0.7561784666666667,
+              "min": 0.756063,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 0.0005220000000000224,
+              "diff_vs_b1_mean": 0.0002158333333333558,
+              "diff_vs_b1_min": -0.00028799999999995496,
+              "max": 0.981072,
+              "mean": 0.980874,
+              "min": 0.980714,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": -3.600000000000825e-05,
+              "diff_vs_b1_mean": -7.943333333333691e-05,
+              "diff_vs_b1_min": -0.00013099999999999223,
+              "max": 0.169089,
+              "mean": 0.1690227333333333,
+              "min": 0.168967,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.0007040000000000379,
+              "diff_vs_b1_mean": 0.0006184999999999996,
+              "diff_vs_b1_min": 0.0005500000000000504,
+              "max": 0.433798,
+              "mean": 0.4337335333333333,
+              "min": 0.433691,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.029528,
+              "diff_vs_b1_mean": -0.031388200000000005,
+              "diff_vs_b1_min": -0.03401399999999999,
+              "max": 0.878643,
+              "mean": 0.8675101333333333,
+              "min": 0.853981,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": 0.000670999999999991,
+              "diff_vs_b1_mean": 0.0005895999999999994,
+              "diff_vs_b1_min": 0.0004920000000000063,
+              "max": 0.098042,
+              "mean": 0.0978572,
+              "min": 0.097692,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 2.0,
+              "mean": 2.0,
+              "min": 2.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0,
+              "max": 0,
+              "mean": 0.0,
+              "min": 0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": -0.0005129999999999857,
+              "diff_vs_b1_mean": -0.0006201666666666735,
+              "diff_vs_b1_min": -0.0007059999999999844,
+              "max": 0.899658,
+              "mean": 0.8994961666666667,
+              "min": 0.899309,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 703.8390000000363,
+              "diff_vs_b1_mean": 572.257633333335,
+              "diff_vs_b1_min": 410.31200000003446,
+              "max": 776308.589,
+              "mean": 776147.7820333333,
+              "min": 775968.099,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": 0.0007059999999999983,
+              "diff_vs_b1_mean": 0.0006201666666666665,
+              "diff_vs_b1_min": 0.0005129999999999996,
+              "max": 0.100691,
+              "mean": 0.10050383333333333,
+              "min": 0.100342,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": 0.0005960000000000132,
+              "diff_vs_b1_mean": 0.0005236666666666631,
+              "diff_vs_b1_min": 0.00042599999999998195,
+              "max": 0.16861,
+              "mean": 0.16846419999999998,
+              "min": 0.168305,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": -0.03959999999999997,
+              "diff_vs_b1_mean": -0.07012946666666667,
+              "diff_vs_b1_min": -0.079231,
+              "max": 0.392643,
+              "mean": 0.38180776666666666,
+              "min": 0.375535,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 0.009259,
+              "mean": 0.009259,
+              "min": 0.009259,
+              "seeds": 30
+            }
+          },
+          "JL_POOL": {
+            "gini_fill_rate": {
+              "diff_vs_b1_max": -0.023596,
+              "diff_vs_b1_mean": -0.024301266666666665,
+              "diff_vs_b1_min": -0.024936,
+              "max": 0.041964,
+              "mean": 0.041471433333333335,
+              "min": 0.040615,
+              "seeds": 30
+            },
+            "gini_need_coverage": {
+              "diff_vs_b1_max": -0.03437100000000004,
+              "diff_vs_b1_mean": -0.034563033333333326,
+              "diff_vs_b1_min": -0.03481400000000001,
+              "max": 0.722334,
+              "mean": 0.7221446333333333,
+              "min": 0.721927,
+              "seeds": 30
+            },
+            "jain_fill_rate": {
+              "diff_vs_b1_max": 0.010102000000000055,
+              "diff_vs_b1_mean": 0.009764400000000013,
+              "diff_vs_b1_min": 0.0092310000000001,
+              "max": 0.990816,
+              "mean": 0.9904225666666666,
+              "min": 0.990189,
+              "seeds": 30
+            },
+            "jain_need_coverage": {
+              "diff_vs_b1_max": 0.017101000000000005,
+              "diff_vs_b1_mean": 0.0170022,
+              "diff_vs_b1_min": 0.016833000000000015,
+              "max": 0.18621,
+              "mean": 0.18610436666666666,
+              "min": 0.186003,
+              "seeds": 30
+            },
+            "km_per_kl": {
+              "diff_vs_b1_max": 0.05023099999999997,
+              "diff_vs_b1_mean": 0.04931543333333333,
+              "diff_vs_b1_min": 0.04867499999999997,
+              "max": 0.483338,
+              "mean": 0.48243046666666667,
+              "min": 0.481836,
+              "seeds": 30
+            },
+            "mean_wait_days": {
+              "diff_vs_b1_max": -0.13159200000000004,
+              "diff_vs_b1_mean": -0.14145973333333334,
+              "diff_vs_b1_min": -0.149964,
+              "max": 0.770517,
+              "mean": 0.7574386000000001,
+              "min": 0.745718,
+              "seeds": 30
+            },
+            "need_weighted_unmet_share": {
+              "diff_vs_b1_max": -0.009760000000000005,
+              "diff_vs_b1_mean": -0.010177133333333335,
+              "diff_vs_b1_min": -0.010597999999999996,
+              "max": 0.087463,
+              "mean": 0.08709046666666667,
+              "min": 0.08672,
+              "seeds": 30
+            },
+            "p90_wait_days": {
+              "diff_vs_b1_max": 0.0,
+              "diff_vs_b1_mean": 0.0,
+              "diff_vs_b1_min": 0.0,
+              "max": 2.0,
+              "mean": 2.0,
+              "min": 2.0,
+              "seeds": 30
+            },
+            "scheduled_litres_per_day": {
+              "diff_vs_b1_max": 660000.0,
+              "diff_vs_b1_mean": 660000.0,
+              "diff_vs_b1_min": 660000.0,
+              "max": 660000.0,
+              "mean": 660000.0,
+              "min": 660000.0,
+              "seeds": 30
+            },
+            "served_share": {
+              "diff_vs_b1_max": 0.01438600000000001,
+              "diff_vs_b1_mean": 0.013920566666666663,
+              "diff_vs_b1_min": 0.013456000000000023,
+              "max": 0.914439,
+              "mean": 0.9140368999999999,
+              "min": 0.913637,
+              "seeds": 30
+            },
+            "tanker_km": {
+              "diff_vs_b1_max": 103775.62099999993,
+              "diff_vs_b1_mean": 101668.9424,
+              "diff_vs_b1_min": 100176.26100000006,
+              "max": 879282.141,
+              "mean": 877244.4668,
+              "min": 876003.849,
+              "seeds": 30
+            },
+            "unmet_share": {
+              "diff_vs_b1_max": -0.013455999999999996,
+              "diff_vs_b1_mean": -0.013920566666666667,
+              "diff_vs_b1_min": -0.014385999999999996,
+              "max": 0.086363,
+              "mean": 0.0859631,
+              "min": 0.085561,
+              "seeds": 30
+            },
+            "unused_capacity_share": {
+              "diff_vs_b1_max": -0.060634999999999994,
+              "diff_vs_b1_mean": -0.061062366666666666,
+              "diff_vs_b1_min": -0.061519000000000004,
+              "max": 0.107236,
+              "mean": 0.10687816666666668,
+              "min": 0.106507,
+              "seeds": 30
+            },
+            "worst_group_fill_rate": {
+              "diff_vs_b1_max": 0.15543900000000005,
+              "diff_vs_b1_mean": 0.13167783333333336,
+              "diff_vs_b1_min": 0.10503000000000001,
+              "max": 0.601369,
+              "mean": 0.5836150666666666,
+              "min": 0.560651,
+              "seeds": 30
+            },
+            "zero_water_ward_share": {
+              "diff_vs_b1_max": -0.009259,
+              "diff_vs_b1_mean": -0.009259,
+              "diff_vs_b1_min": -0.009259,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "seeds": 30
+            }
+          }
+        },
+        "target_served_share": 0.9,
+        "trips_per_day": 2808
+      }
+    }
+  },
+  "seeds": 30,
+  "settings": {
+    "booking_expiry_days": 3,
+    "fairness_min_group_bookings": 100,
+    "jl_scheduled_reserve_share": 0.05,
+    "scheduled_wards": 20,
+    "section_access_km": 0.732,
+    "station_basis": "ASSUMED_STAND_IN",
+    "stations": 90
+  },
+  "station_sharing": {
+    "curve": [
+      {
+        "gini_need_coverage": 0.729268,
+        "km_per_kl": 0.423672,
+        "mean_wait_days": 1.071244,
+        "radius_km": 0.0,
+        "seeds": 5,
+        "served_share": 0.87363,
+        "worst_group_fill_rate": 0.360088
+      },
+      {
+        "gini_need_coverage": 0.729489,
+        "km_per_kl": 0.427211,
+        "mean_wait_days": 1.012011,
+        "radius_km": 1.0,
+        "seeds": 5,
+        "served_share": 0.878809,
+        "worst_group_fill_rate": 0.360088
+      },
+      {
+        "gini_need_coverage": 0.727358,
+        "km_per_kl": 0.446633,
+        "mean_wait_days": 0.774152,
+        "radius_km": 2.0,
+        "seeds": 5,
+        "served_share": 0.896074,
+        "worst_group_fill_rate": 0.360088
+      },
+      {
+        "gini_need_coverage": 0.726112,
+        "km_per_kl": 0.474857,
+        "mean_wait_days": 0.633478,
+        "radius_km": 3.0,
+        "seeds": 5,
+        "served_share": 0.91246,
+        "worst_group_fill_rate": 0.468115
+      },
+      {
+        "gini_need_coverage": 0.724825,
+        "km_per_kl": 0.518082,
+        "mean_wait_days": 0.532621,
+        "radius_km": 5.0,
+        "seeds": 5,
+        "served_share": 0.927832,
+        "worst_group_fill_rate": 0.505388
+      },
+      {
+        "gini_need_coverage": 0.724144,
+        "km_per_kl": 0.554817,
+        "mean_wait_days": 0.486673,
+        "radius_km": 8.0,
+        "seeds": 5,
+        "served_share": 0.93546,
+        "worst_group_fill_rate": 0.631127
+      },
+      {
+        "gini_need_coverage": 0.724311,
+        "km_per_kl": 0.58065,
+        "mean_wait_days": 0.462609,
+        "radius_km": 12.0,
+        "seeds": 5,
+        "served_share": 0.938438,
+        "worst_group_fill_rate": 0.640436
+      }
+    ],
+    "evidence": [
+      "NewsMeter 2026-07-14: only 8 of 95 HMWSSB filling stations had pending bookings",
+      "Jordan & Graves 1995; Bassamboo, Randhawa & Van Mieghem 2012: a few links give most of the gain of full pooling"
+    ],
+    "knee_radius_km": 3.0,
+    "radius_km_in_use": 3.0,
+    "replay": "main_2025",
+    "rule": "Kneedle (Satopaa et al. 2011) on served share vs km per kl",
+    "scenario": "tight"
+  }
+}

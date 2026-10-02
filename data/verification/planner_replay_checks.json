@@ -1,0 +1,13 @@
+{
+  "days": 153,
+  "inputs_sha256": {
+    "data/verification/sandbox_checks.json": "a69d0d7e601c10d8f4fc1f1be8234e50285951a4d3373fbc62befa1325729fef"
+  },
+  "outputs_sha256": {
+    "data/derived/planner_replay/days.csv": "f228a95b154798d6bfaae7ee371b1cc1a9d1100982aa747f20d00282fb9f0d98",
+    "data/derived/planner_replay/groups.csv": "724ad7b469bec7d1348f70fe31bcdfc0865684bf1f79bfee554d7341a03a9820"
+  },
+  "replay": "main_2025",
+  "scenario": "tight",
+  "seed": 0
+}

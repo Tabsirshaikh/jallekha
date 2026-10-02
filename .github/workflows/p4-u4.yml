@@ -1,0 +1,41 @@
+name: P4:U4
+
+on:
+  push:
+    branches: [feat/u4-driver]
+    paths:
+      - "frontend/**"
+      - "docs/features.csv"
+      - "docs/BRANCH_WORKLOG.md"
+      - ".github/workflows/p4-u4.yml"
+  pull_request:
+    paths:
+      - "frontend/**"
+      - "docs/features.csv"
+      - "docs/BRANCH_WORKLOG.md"
+      - ".github/workflows/p4-u4.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  driver-app:
+    name: driver-app
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install frontend
+        run: npm ci --prefix frontend
+      - name: Lint frontend
+        run: npm run lint --prefix frontend
+      - name: Build frontend
+        run: npm run build --prefix frontend

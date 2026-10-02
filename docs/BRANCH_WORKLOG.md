@@ -45,6 +45,28 @@ The pull-request description must summarize the same information and link to thi
 - **Handoff / next step:** After U1 review/merge, start U2 once P3 T4 (intake) is ready. U3 follows U2; U4 also waits for P3 T3 delivery proof.
 - **Pull request:** pending.
 
+## `feat/u2-resident` — `U2`
+
+- **Owner / date:** P4, 2026-10-02.
+- **Purpose:** Build the resident-facing reporting and tracking experience with an offline-first queue.
+- **What we found:** P3's T4 intake batch endpoint accepts app items with `client_id`, `channel`, `category`, `text`, `language_hint`, and `area_id`; it returns per-item outcomes. There is no resident-facing delivery-code or ward-information API in `main`. U1 is merged; T4's implementation is present via PR #37, though its tracker row remains `IN_REVIEW`.
+- **What we changed:** Added English, Telugu, Urdu and Hindi resident flows for issue reports, request tracking and an area card. Reports persist in IndexedDB, can include device location only after the resident opts in, and sync idempotently through T4's `/intake/batch` contract when online; the dev server proxies `/intake` to the local API. Added a web manifest and service worker for cached app-shell use. The UI explicitly identifies local-only reports and unavailable live delivery/ward data.
+- **Validation:** `git diff --check` passes. `.github/workflows/p4-u2.yml` runs frontend lint and production build. Local UI/test/build validation has not been run.
+- **Known limitations:** Live delivery-code assignment and verified ward service information need backend/API support. Intake submission also needs the API running and reachable at `/intake/batch`. All translations are drafts pending native-speaker review.
+- **Handoff / next step:** Coordinate with P3 on resident-facing delivery-code and ward-information API shapes; then connect the card to verified data.
+- **Pull request:** pending.
+
+## `feat/u4-driver` — `U4`
+
+- **Owner / date:** P4, 2026-10-02.
+- **Purpose:** Build the driver route, arrival and delivery-proof screens.
+- **What we found:** T3's service exposes server-side geofence and OTP verification and four outcomes (`Confirmed`, `Disputed`, `Unconfirmed`, `Failed`), but main has no driver or delivery API router. R-P4 requires clear synthetic labels and no false claims about live service.
+- **What we changed:** Added English, Telugu, Urdu and Hindi driver route and delivery-proof screens, with three visibly synthetic stops and a preview-only arrival action. A local fixture flow uses the displayed demo OTP (`123456`) and a selectable simulated resident response to demonstrate all four T3 outcomes; the code is cleared and nothing is sent or persisted.
+- **Validation:** Frontend lint and production build pass. `.github/workflows/p4-u4.yml` repeats both checks. UI and test suite have not been run locally.
+- **Known limitations:** This is a fixture-backed demonstration, not live route assignment, GPS geofence confirmation, OTP verification, resident messaging or ledger persistence. Live API integration remains a follow-up after P3 provides endpoints.
+- **Handoff / next step:** U4 preview scope is complete. Integrate the real route / arrival / OTP endpoints when available, preserving server-side geofence and outcome decisions.
+- **Pull request:** pending.
+
 ## `research/p1` — `R-P1`
 
 - **Owner / date:** P1 (Yaseer), 2026-10-01.
@@ -615,3 +637,128 @@ The pull-request description must summarize the same information and link to thi
   - P4: review the wording; show `no_census_data` wards and counterfactuals as returned.
   - T10: routes for explanations and contests.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/46
+
+## `feat/a8-sandbox` — A8 policy sandbox (F19)
+
+- **Owner / date:** P2, 2026-10-03.
+- **Purpose:** compare today's process (B1) with the baselines and JalLekha on the same replayed bookings, as F19 and PS11 QE5 ask. This unblocks P3's T9 (confidence threshold chosen on replay) and T10.
+- **What we built:**
+  - `services/sandbox.py`: daily station queues with a trip capacity. A booking unserved for `booking_expiry_days` (3, ASSUMED) is unmet. Seven policies:
+    - B1 FCFS at the nearest station.
+    - B2 nearest first.
+    - B3 largest bookers first.
+    - B4 minimum cost (stations pooled, cheapest trips first).
+    - B5 need first.
+    - JL_F8 (A3 fair queue).
+    - JL (JL_F8 + A4 reserve of 5% of trips for scheduled supply, ASSUMED).
+  - Measures:
+    - Unmet and need-weighted unmet share, waiting days.
+    - Tanker km and km per kilolitre, unused capacity.
+    - Fill-rate Gini, Jain and worst ward (among bookers).
+    - **Need coverage** (litres per day per unit of entitlement over every ward, scheduled supply included): Gini, Jain, share of wards with no water.
+  - `compare` gives mean, range and same-seed differences against B1.
+  - `config/sandbox.py`: every value has a source and basis.
+  - `scripts/sandbox/build_stations.py`: **90 stand-in filling stations** (REAL count; positions ASSUMED, booking-weighted k-means). HMWSSB publishes no station list (checked: tracking site, news, OSM).
+    - Section points are geocoded (89% of bookings) or the division centre (11%, APPROXIMATE).
+    - Road km = 2 x (straight line + 0.732 km in-section access, DERIVED from ward areas) x 1.35.
+  - `scripts/sandbox/build_sandbox.py`: Mar-Jul 2025 (main) and Mar-Jul 2023 replays, 30 seeds, two capacity scenarios. Each station's capacity follows its share of the previous year's bookings.
+    - fleet: 1,150 tankers x 9 trips.
+    - tight: calibrated so B1 delivers 90%, the REAL Jun-Aug 2026 share (91.1%).
+    - Outputs `data/derived/sandbox/results.csv` and `summary.json` (SIMULATION), with REAL baselines kept apart (booking Gini 0.78; delivered 99.9% in 2025, 91.1% Jun-Aug 2026).
+  - `booking_groups.ward_group` added (shared group naming).
+- **Results (30 seeds, means; SIMULATION):**
+  - **Fleet capacity:** all policies serve 98.7-100% (REAL 2025: 99.9%). Capacity is not the problem: 39% of trips go unused, but stations sized on last year's demand miss growth areas. Pooling stations (B4) serves 100%.
+  - **Tight capacity (2025, B1 = 90.0%):**
+    - JL_F8 serves the same as B1 (89.9%) with shorter waits (0.90 vs 1.01 days) and slightly more even fill rates (Gini 0.068 vs 0.069).
+    - B2, B3 and B5 cut waits but leave some wards almost unserved (worst ward fill 0.3% vs 37.8%).
+    - B4 serves the most (94.0%) at 14% more km per kilolitre.
+  - **Need coverage:** under every booking-only policy water follows bookings (Gini about 0.75-0.76). JL lowers it to 0.72-0.73 (0.70 in 2023), and no ward is left without water.
+  - **Where JL is worse (listed in `summary.json`):** the 5% scheduled reserve costs booked service, -2.7 points served and +0.06 days wait in the tight 2025 case. Its worst booking ward is also lower (36.0% vs 37.8%).
+  - Duplicate merge share is NOT_AVAILABLE: the replay has no complaints, and T1's calibration has not run (D13 extract not logged).
+- **Takeaways for A7:** pooling station capacity across neighbours (as B4 does) is the biggest lever for booked service. A7 may want to let a station's spare trips serve a neighbour's queue. That is a design choice for the owner, not made here.
+- **Validation:**
+  - `tests/test_a8_sandbox.py` (15): policy order, capacity, expiry, B4 pooling, JL_F8 = A3 `order_bookings`, JL reserve via A4, determinism, Gini/Jain, measures, need coverage, B1 comparison. The tests were run after the code; deliberate breaks of B2 order, expiry and capacity each made tests fail, and the need-coverage test was written first and failed first.
+  - `tests/test_a8_build.py` (8): stations reproducible; outputs match checks; 30 seeds per cell; same bookings per seed; tight B1 = 90% ± 1 point; summary recomputed from the results; REAL kept apart; JL-worse list complete; one seed re-run reproduces the committed rows.
+  - `python tasks.py test`: 476 pass. `python tasks.py lint` passes.
+- **How to rebuild:** `python scripts/sandbox/build_stations.py`, then `python scripts/sandbox/build_sandbox.py --workers 4` (about 30 min on 4 workers; about 450 MB each).
+- **Known limitations:**
+  - Stations are stand-ins.
+  - Daily arrivals are synthetic.
+  - Replay bookings have no tier, so tier 0/1 are not exercised.
+  - Every A2 scheduled candidate is treated as officer-confirmed.
+  - Km are not road-routed.
+  - Water debt (A6) does not yet change queue order (A7).
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/47
+
+## `feat/a8-pooling` — A8 follow-up: station trip sharing (JL_POOL)
+
+- **Owner / date:** P2, 2026-10-03.
+- **Purpose:** A8 showed that pooling station capacity (B4) is the biggest lever for booked service. The owner asked to research it and implement the best form for JalLekha.
+- **Research** (`docs/research/P2.md`, "Station trip sharing"):
+  - REAL problem: in July 2026 only 8 of 95 HMWSSB stations had pending bookings (NewsMeter); in April 2025, 14-15 stations had backlogs. HMWSSB adds tankers and shifts; no source shows trips lent between stations.
+  - Theory: limited flexibility gives most of the gain of full pooling (Jordan & Graves 1995; Bassamboo, Randhawa & Van Mieghem 2012).
+- **What we built:**
+  - `services/station_sharing.py`: a station lends only the trips left after its own queue, to stations within a radius. OR-Tools min-cost max-flow moves the most trips at the least extra km. A7 will reuse it.
+  - `sandbox.py`: new policy **JL_POOL** (JL + sharing). The borrower keeps its A3 fair order. A lent trip uses the direct lender-section km when known, otherwise the detour estimate.
+  - `build_stations.py`: station-to-station km.
+  - `build_sandbox.py`: a radius sweep (0-12 km, 5 seeds, main replay, tight capacity). Kneedle (Satopää et al. 2011) picks the knee. The "where JalLekha is worse" list now covers JL and JL_POOL.
+  - `config/allocation.py`: `station_sharing_radius_km = 3.0` (DERIVED from the sweep; a median of 4 neighbours per station).
+- **Results (30 seeds, SIMULATION):** JL_POOL vs B1:
+  - Tight 2025: served 91.2% vs 90.0%; wait 0.64 vs 1.01 days; worst ward 46.9% vs 37.8%; need-coverage Gini 0.726 vs 0.757; need-weighted unmet 9.0% vs 10.0%; km per kl +12% (the only measure where it is worse; listed).
+  - Fleet 2025: served 99.97% vs 98.7%.
+  - Tight 2023: served 91.4% vs 90.0%.
+- **Validation:**
+  - `test_station_sharing.py` (6), written first and failing first.
+  - JL_POOL sandbox tests (3), written first. Deliberate breaks (ignoring the radius, lending trips a station still needs) each made a test fail.
+  - `test_a8_build.py`: the knee rule, the radius in use equals the committed sweep's knee, served never falls as the radius grows.
+  - `python tasks.py test`: 552 pass. `python tasks.py lint` passes.
+- **Known limitations:**
+  - Whether HMWSSB allows cross-station tokens is not verified. This is an operating change for the officer to approve (A7).
+  - Stand-in stations and synthetic daily arrivals as in A8.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/48
+
+## `feat/a7-planner` — A7 daily planner (F8-F11, F17 gate stand-in)
+
+- **Owner / date:** P2, 2026-10-03.
+- **Purpose:** one daily plan that combines outage response, scheduled supply, the fair queue, water debt and station sharing, held as a DRAFT until an officer approves it with a reason.
+- **What we built:** `services/planner.py`.
+  - `build_plan(inputs, gate, ledger, now)` plans the day's trips in this order:
+    1. Outage response (A5, at most `outage_max_fleet_share` = 30% of trips, ASSUMED).
+    2. The scheduled-supply reserve (A4, `scheduled_reserve_share` = 5%, ASSUMED; the sandbox now reads the same value).
+    3. Each station's A3 fair queue with the trips left. Outage and reserve trips come from every station in proportion (largest remainder).
+  - Water debt (A6) raises a group's turns: entitlement x (1 + `debt_priority_weight` x debt / cap), so a group at the cap gets double turns (weight 1.0, ASSUMED).
+  - Spare trips go to neighbours within 3 km (`station_sharing`, #48).
+  - The output is an ordered list per station (with the lender for shared trips), next-day queue states and a SHA-256 digest of the plan. It is logged as `plan_created`.
+  - Confidence: a `ConfidenceGate` protocol. `ProvisionalGate` (labelled PROVISIONAL) flags groups whose need comes from the A3 fallback (no Census data) **until P3's T9 replaces it**.
+  - `mark_checked` (reason required, `ward_reviewed`) and `approve_plan` (reason required; refused while a flagged group is unchecked; refused twice; `plan_approved` carries the digest of the exact plan). Reason text stays off the ledger (SHA-256 and length only, as T7 does).
+- **Validation:**
+  - `tests/test_a7_planner.py` (13): A3 equivalence, outage first, reserve, debt raises turns, sharing within/beyond the radius, trips never overspent, flags block approval, reasons required, end-to-end plan → check → approve with ledger entries and chain verify, determinism, bad input, inputs not mutated.
+  - Deliberate breaks (no flag check, debt ignored, outage not deducted) each made tests fail.
+  - `python tasks.py test`: 565 pass. `python tasks.py lint` passes.
+- **Known limitations:**
+  - The confidence gate is a stand-in; swap in T9's gate (same protocol) when it merges.
+  - Routing of scheduled points is A4's `plan_scheduled_supply` (the registry starts empty). Booked trips are single loads (station → household → station).
+  - Cross-station sharing needs HMWSSB's agreement (an officer decision).
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/49
+
+## `feat/a7-routes` — A7 follow-up: routes and the planner replay for T9
+
+- **Owner / date:** P2, 2026-10-03.
+- **Why:** checking #49 against its own spec found two gaps. The plan had no **routes** (features.csv: "queue + schedule + outage → routes → ..."), and there was no **per-day replay output** that T9 needs (P3_BUILD_PLAN: "plan, inputs, quality signals").
+- **What we changed:**
+  - `planner.py`: tier-0 critical stops, outage points (registered points in the outage wards) and scheduled points are routed together by the S3 OR-Tools planner, using the tankers set aside for those trips (fleet sorted by id; enough for the outage + reserve trips at `max_trips_per_tanker`).
+    - Priority: critical 100 (mandatory) > outage up to 90 (floor stops mandatory) > scheduled up to 80.
+    - Output: `special_stops` (kind, place, ward, tanker, trip, sequence, arrival, litres), `special_tankers`, and `unrouted` (NEEDS_LOCATION / NEEDS_SERVICE_POINT / NO_FLEET_GIVEN / NOT_ROUTED), so no need is skipped silently.
+    - Routes are part of the plan digest. `plan_created` logs the routing status, routed stops, km and unrouted count.
+  - `scheduled_supply.py`: `scheduled_demands` extracted from `plan_scheduled_supply` (behaviour unchanged; A4 tests pass) so the planner reuses A4's demands.
+  - `scripts/sandbox/build_planner_replay.py`: the real planner day by day on the A8 replay (Mar-Jul 2025, seed 0, tight capacity, 3 km sharing, scheduled reserve).
+    - Outputs `data/derived/planner_replay/days.csv` (per-day trips, served, waiting, expired, trips lent, flags, digest) and `groups.csv` (per day and group: pending, served, served by a lent trip, entitlement and the quality signals need basis, location status and flag). Labelled SIMULATION.
+    - `replay(setup, entitlement=..., fallback_groups=...)` lets T9 re-run the same days with a degraded signal and compare plans by digest.
+    - Cross-check: the planner serves 91.1% of bookings, matching A8's JL_POOL (91.2%).
+- **Validation:**
+  - 4 routing tests and 5 replay tests. The routing tests were written first and failed first; one expectation was corrected because the router delivers whole 5,000 l loads.
+  - `python tasks.py test`: 574 pass. `python tasks.py lint` passes.
+- **Known limitations:**
+  - The replay has no outages and does not settle debt (no delivery outcomes are simulated).
+  - Routing needs registered service points (the registry starts empty) and officer-entered locations for critical stops.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/50

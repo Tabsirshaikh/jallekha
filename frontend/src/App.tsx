@@ -1,5 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { localeNames, supportedLocales, useLocale, type MessageKey } from "./i18n";
+import DriverExperience from "./DriverExperience";
+import ResidentExperience from "./ResidentExperience";
 
 type Workspace = "officer" | "resident" | "driver";
 type IconName = "overview" | "atlas" | "plan" | "impact" | "help" | "water" | "report" | "route" | "proof" | "settings" | "arrow" | "location" | "check";
@@ -131,38 +133,6 @@ function OfficerHome() {
   );
 }
 
-function ResidentHome() {
-  const { t } = useLocale();
-  return (
-    <div className="resident-page">
-      <section className="resident-hero"><div className="resident-hero-copy"><p className="eyebrow">{t("neighbourhoodHyderabad")}</p><h1>{t("waterSupportTitle")}</h1><p>{t("residentIntro")}</p><button className="button button-dark">{t("getHelp")} <Icon name="arrow" size={18} /></button></div><div className="water-art" aria-hidden="true"><span className="sun-orb" /><span className="water-drop"><Icon name="water" size={70} /></span><span className="art-ripple ripple-one" /><span className="art-ripple ripple-two" /></div></section>
-      <div className="resident-notice"><span className="notice-icon"><Icon name="location" size={18} /></span><span><strong>{t("chooseWardTitle")}</strong><small>{t("chooseWardDescription")}</small></span><button className="text-button">{t("chooseWard")} <Icon name="arrow" size={17} /></button></div>
-      <div className="section-heading resident-section-heading"><div><h2>{t("whatToDo")}</h2><p className="muted">{t("chooseOption")}</p></div></div>
-      <div className="action-grid">
-        <button className="action-card"><span className="action-icon teal"><Icon name="water" size={23} /></span><span className="action-copy"><strong>{t("trackRequest")}</strong><small>{t("trackRequestDescription")}</small></span><Icon name="arrow" size={18} /></button>
-        <button className="action-card"><span className="action-icon coral"><Icon name="report" size={23} /></span><span className="action-copy"><strong>{t("reportWaterIssue")}</strong><small>{t("reportWaterDescription")}</small></span><Icon name="arrow" size={18} /></button>
-        <button className="action-card"><span className="action-icon blue"><Icon name="impact" size={23} /></span><span className="action-copy"><strong>{t("seeWardUpdates")}</strong><small>{t("wardUpdatesDescription")}</small></span><Icon name="arrow" size={18} /></button>
-      </div>
-      <div className="human-help"><span className="help-avatar"><Icon name="help" size={21} /></span><span><strong>{t("speakToSomeone")}</strong><small>{t("fieldWorkerHelp")}</small></span><button className="button button-secondary">{t("askForHelp")}</button></div>
-      <p className="prototype-note">{t("residentDemoNotice")}</p>
-    </div>
-  );
-}
-
-function DriverHome() {
-  const { t } = useLocale();
-  return (
-    <div className="driver-page">
-      <div className="driver-heading"><div><p className="eyebrow">{t("driverWorkspace")}</p><h1>{t("yourWorkday")}</h1><p className="muted">{t("driverIntro")}</p></div><span className="driver-status"><span className="status-dot" />{t("ready")}</span></div>
-      <section className="driver-route-card"><div className="route-card-top"><div><span className="route-label">{t("todaysRoute")}</span><h2>{t("noRouteAssigned")}</h2></div><span className="route-icon"><Icon name="route" size={23} /></span></div><p>{t("routeWaitDescription")}</p><div className="route-summary"><div><small>{t("stops")}</small><strong>—</strong></div><div><small>{t("firstStop")}</small><strong>—</strong></div><div><small>{t("routeStatus")}</small><strong>{t("waiting")}</strong></div></div></section>
-      <div className="driver-section-title"><h2>{t("atEachStop")}</h2><p className="muted">{t("stopIntro")}</p></div>
-      <div className="driver-steps"><article className="driver-step"><span className="driver-step-icon"><Icon name="location" /></span><div><strong>{t("arriveAtStop")}</strong><p>{t("confirmLocation")}</p></div><span className="step-number">1</span></article><article className="driver-step"><span className="driver-step-icon"><Icon name="proof" /></span><div><strong>{t("confirmDeliveryOtp")}</strong><p>{t("askRepresentative")}</p></div><span className="step-number">2</span></article><article className="driver-step"><span className="driver-step-icon"><Icon name="check" /></span><div><strong>{t("recordOutcome")}</strong><p>{t("saveOutcome")}</p></div><span className="step-number">3</span></article></div>
-      <div className="driver-footer-note"><Icon name="help" size={18} /><span>{t("gpsHelp")}</span><button className="text-button">{t("getHelp")}</button></div>
-      <p className="prototype-note">{t("driverDemoNotice")}</p>
-    </div>
-  );
-}
-
 export default function App() {
   const [workspace, setWorkspace] = useState<Workspace>("officer");
   const [activeItem, setActiveItem] = useState<MessageKey>("officerOverview");
@@ -182,7 +152,7 @@ export default function App() {
         <MobileNavigation workspace={workspace} activeItem={activeItem} onNavigate={setActiveItem} />
         <main className={`page-content ${workspace}-content`}>
           <div className="page-title-mobile"><p className="eyebrow">{t(meta.eyebrow)}</p><h1>{t(meta.title)}</h1><p className="muted">{t(meta.description)}</p></div>
-          {activeItem !== navByWorkspace[workspace][0].key ? <PlaceholderPage workspace={workspace} pageKey={activeItem} /> : workspace === "officer" ? <OfficerHome /> : workspace === "resident" ? <ResidentHome /> : <DriverHome />}
+          {workspace === "driver" ? <DriverExperience page={activeItem === "driverProof" ? "proof" : activeItem === "help" ? "help" : "route"} onNavigate={setActiveItem} /> : workspace === "resident" ? <ResidentExperience page={activeItem === "residentReport" ? "report" : activeItem === "residentRequests" ? "requests" : activeItem === "residentUpdates" ? "ward" : "home"} onNavigate={setActiveItem} /> : activeItem !== navByWorkspace[workspace][0].key ? <PlaceholderPage workspace={workspace} pageKey={activeItem} /> : <OfficerHome />}
         </main>
         <footer className="app-footer"><span>JalLekha <span className="footer-separator">·</span> {t("footerTagline")}</span><span>{t("footerPromise")}</span></footer>
       </div>
