@@ -223,10 +223,6 @@ def test_geofence_149_inside_151_outside(chain: InMemoryLedger) -> None:
     assert inside.radius_m == TRUST_CONFIG.geofence_radius_metres == 150
 
 
-@pytest.mark.skip(
-    reason="PENDING S3 review D6: geofence.check has no float tolerance, so exactly 150 m is "
-    "'outside' on 176 of 360 bearings. Enable when P2 fixes services/geofence.py."
-)
 def test_geofence_exactly_150_is_inside(chain: InMemoryLedger) -> None:
     state = _start(chain)
     for bearing in range(360):
