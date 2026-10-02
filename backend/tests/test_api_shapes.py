@@ -60,7 +60,9 @@ def test_every_example_is_valid_labelled_json_without_phone_numbers() -> None:
             assert body["response"] is None and meta["basis"] is None, path.name
         else:
             assert meta["basis"] and meta["built_from"], path.name
-        assert not re.search(r"\+?91\d{10}|\b[6-9]\d{9}\b", text), path.name
+        # An Indian mobile number, not digits inside a decimal or a longer number.
+        phone = r"(?<![\d.])(?:\+?91)?[6-9]\d{9}(?![\d.])"
+        assert not re.search(phone, text), path.name
 
 
 @pytest.fixture

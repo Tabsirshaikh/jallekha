@@ -15,12 +15,12 @@
         "seq": 1,
         "event_type": "outage_created",
         "entity_type": "outage",
-        "entity_id": "07d73efc-aa88-493c-aad0-8762e4fecc07",
+        "entity_id": "cc1b00bd-8a7c-40cb-9668-1ba7111dc0e5",
         "payload": {
           "actor": "officer-7",
           "created_by": "officer-7",
           "end": "2026-10-05T00:30:00+00:00",
-          "entity_id": "07d73efc-aa88-493c-aad0-8762e4fecc07",
+          "entity_id": "cc1b00bd-8a7c-40cb-9668-1ba7111dc0e5",
           "entity_type": "outage",
           "key_id": "k1",
           "people_affected": 82117.0,
@@ -33,8 +33,8 @@
           ]
         },
         "prev_hash": "GENESIS",
-        "hash": "970c8819e5147e098b9e7484c3a257ad0c5453db2255f82a7d3675114a16fb08",
-        "signature": "932956593247ee0d89cf633b44ebb75acfac5bd421e52126486f9aaab2f60de4",
+        "hash": "3f941e55f49f40b60ed023ae242dd393546b7e0f386663e835c82d8d79d7ecce",
+        "signature": "cdc91c2709051307e4d3e9fd7803266fcb22efb50cb796f62e77e6802d8a4df2",
         "created_at_iso": "2026-10-03T06:00:00+00:00",
         "key_id": "k1"
       },
@@ -42,17 +42,17 @@
         "seq": 2,
         "event_type": "notice_published",
         "entity_type": "supply_notice",
-        "entity_id": "b08e1263-ceb3-43d3-ae45-4e0fef790503",
+        "entity_id": "c3f8fd33-2a82-4115-b33b-a98862db4d52",
         "payload": {
           "actor": "officer-7",
-          "entity_id": "b08e1263-ceb3-43d3-ae45-4e0fef790503",
+          "entity_id": "c3f8fd33-2a82-4115-b33b-a98862db4d52",
           "entity_type": "supply_notice",
           "flagged_count": 1,
           "hours": 24.0,
           "is_synthetic": true,
           "key_id": "k1",
           "needs_officer_review": true,
-          "outage_id": "07d73efc-aa88-493c-aad0-8762e4fecc07",
+          "outage_id": "cc1b00bd-8a7c-40cb-9668-1ba7111dc0e5",
           "people_affected": 82117.0,
           "source": "hmwssb_press_release",
           "ward_ids": [
@@ -60,9 +60,9 @@
             "relation/7849497"
           ]
         },
-        "prev_hash": "970c8819e5147e098b9e7484c3a257ad0c5453db2255f82a7d3675114a16fb08",
-        "hash": "10465be30780137df6c8c7f26025134878dc725e089aa1f7260fd8504514a332",
-        "signature": "2d0532fa6ecd519ee1dbe8e182053c9e11729c0de7f02957e784c6fe72890d15",
+        "prev_hash": "3f941e55f49f40b60ed023ae242dd393546b7e0f386663e835c82d8d79d7ecce",
+        "hash": "15a4cd270a9ba363fc5e71e68f5023782e70f1cc6b5ea776e76458a93b0128b0",
+        "signature": "d43b0ea833ddf9488d8f6fcc7039527b7f9ab854356efb836dbbb0a2353c71f7",
         "created_at_iso": "2026-10-03T06:00:00+00:00",
         "key_id": "k1"
       }

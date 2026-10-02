@@ -1,14 +1,13 @@
 {
   "_example": {
-    "endpoint": "GET /explain/bookings/{booking_id}?lang=hi",
+    "endpoint": "GET /explain/bookings/{booking_id}",
     "status": "FROM_MAIN (service on main, route not built)",
     "basis": "SIMULATION booking (A8 replay day 1; SYNTHETIC arrival, REAL monthly total); explanation DERIVED from A3",
-    "built_from": "services/explain.py explain_booking -> BookingExplanation; find_counterfactual -> Counterfactual (Change); render_booking / render_counterfactual",
+    "built_from": "services/explain.py explain_booking -> BookingExplanation; find_counterfactual -> Counterfactual (Change); codes and values; the UI translates",
     "notes": "Queue of filling station ST19 on 2025-03-01 with capacity = the plan's booked_trips (215, after the scheduled reserve; raw capacity 226), A3 state at its start; the served set equals the plan's. waiting_hours is negative because the replay's 05:00 plan already holds bookings that arrive later that day (finding for P2 / T7, not a display rule)."
   },
   "request": {
-    "booking_id": "2025-03-01:HAFEEZPET:00173",
-    "lang": "hi"
+    "booking_id": "2025-03-01:HAFEEZPET:00173"
   },
   "response": {
     "explanation": {
@@ -71,11 +70,6 @@
           "not part of today's ordering"
         ]
       ]
-    },
-    "text": {
-      "lang": "hi",
-      "body": "बुकिंग 2025-03-01:HAFEEZPET:00173: स्थान 216 पर प्रतीक्षा में; आज की क्षमता 215 फेरे। पानी के बकाये की जानकारी अभी उपलब्ध नहीं है।",
-      "counterfactual": "श्रेणी 1 की बुकिंग होने पर यह स्थान 216 से स्थान 1 पर आ जाती। 15 मिनट पहले आने पर यह स्थान 216 से स्थान 212 पर आ जाती। इसके समूह का हक़ 140% अधिक होने पर यह स्थान 216 से स्थान 215 पर आ जाती। पानी का बकाया आज के क्रम का हिस्सा नहीं है, इसलिए इसे बदलने से बुकिंग का स्थान नहीं बदलता।"
     }
   }
 }

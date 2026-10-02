@@ -12,8 +12,8 @@
   "response": {
     "status": "created",
     "client_id": null,
-    "intake_id": "f7fd1ee0-39ee-4423-b74e-eb0da6cb360d",
-    "complaint_id": "35094572-0f47-46ed-9fec-25ff96f97b9e",
+    "intake_id": "536c756e-6dc8-498c-b29e-784fd4a2f465",
+    "complaint_id": "80cf0abf-2508-4bdc-bdfe-50f0264ba33f",
     "complaint_status": "awaiting_location",
     "parent_id": null,
     "category": "no_water",

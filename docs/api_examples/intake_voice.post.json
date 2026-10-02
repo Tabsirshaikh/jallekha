@@ -16,8 +16,8 @@
   "response": {
     "status": "created",
     "client_id": "device-7f3a-0005",
-    "intake_id": "7c389695-0660-4ca7-a4f5-44fc274ced4d",
-    "complaint_id": "dc05aab9-e8a8-46b5-a2c2-151b3e8b4568",
+    "intake_id": "e675e512-438f-4394-8967-d96d80c1cdf7",
+    "complaint_id": "0b522645-45ec-46a4-bf01-96411ee0adc2",
     "complaint_status": "needs_transcription",
     "parent_id": null,
     "category": "other",

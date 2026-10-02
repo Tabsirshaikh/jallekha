@@ -22,6 +22,7 @@
     "otp_verified": true,
     "sampled_residents": 3,
     "replies": 3,
+    "outcome_status": "Confirmed",
     "outcome": {
       "outcome": "Confirmed",
       "rule": "majority",

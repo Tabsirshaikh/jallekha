@@ -1,9 +1,9 @@
 {
   "_example": {
-    "endpoint": "GET /explain/wards/{ward_id}?lang=te",
+    "endpoint": "GET /explain/wards/{ward_id}",
     "status": "FROM_MAIN (service on main, route not built)",
     "basis": "REAL ward_evidence.csv row; need and entitlement DERIVED (A2); *_basis per value",
-    "built_from": "services/explain.py explain_ward -> WardExplanation; render_ward(e, lang) -> text",
+    "built_from": "services/explain.py explain_ward -> WardExplanation (codes and values; the UI translates)",
     "input_row": {
       "file": "data/derived/evidence/ward_evidence.csv",
       "key_column": "ward_id",
@@ -13,8 +13,7 @@
     }
   },
   "request": {
-    "ward_id": "relation/7848799",
-    "lang": "te"
+    "ward_id": "relation/7848799"
   },
   "response": {
     "explanation": {
@@ -56,10 +55,6 @@
         "cap_litres": null,
         "in_debt_since": null
       }
-    },
-    "text": {
-      "lang": "te",
-      "body": "Ward 91 Khairatabad: సేవా తరగతి piped_regularity_unknown (CENSUS_2011_RULE). Ward 91 Khairatabad: అవసర భారం 1.35 (WAD 0.0783, CAD 0.0826, కష్టం 0.1159); 12959 కుటుంబాలు; హక్కు 17559.4. ఆధారం: Census 2011 / historical 2016 geography. నీటి బాకీ సమాచారం ఇంకా అందుబాటులో లేదు."
     }
   }
 }

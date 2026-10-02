@@ -6,15 +6,15 @@
     "built_from": "ContestService.reply -> ContestResult; ledger contest_replied"
   },
   "request": {
-    "contest_id": "4d2fe5cb-99dc-4089-80ce-d284b8be00a8",
+    "contest_id": "1e030438-fcb3-4f50-ac47-d8baec77a857",
     "officer_id": "officer-7",
     "outcome_code": "ranking_stands",
     "reason_text": "Census 2011 shows piped water for most households; field check scheduled."
   },
   "response": {
     "status": "replied",
-    "contest_id": "4d2fe5cb-99dc-4089-80ce-d284b8be00a8",
-    "reply_id": "f184e2b8-2a2f-48ab-944e-b8f1a7b13605",
+    "contest_id": "1e030438-fcb3-4f50-ac47-d8baec77a857",
+    "reply_id": "bddaa77e-58c9-4dc9-8cb9-93b071a32111",
     "ledger_seq": 2,
     "error": null
   }

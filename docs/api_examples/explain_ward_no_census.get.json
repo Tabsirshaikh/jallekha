@@ -1,6 +1,6 @@
 {
   "_example": {
-    "endpoint": "GET /explain/wards/{ward_id}?lang=en (ward without Census data)",
+    "endpoint": "GET /explain/wards/{ward_id} (ward without Census data)",
     "status": "FROM_MAIN (service on main, route not built)",
     "basis": "REAL ward_evidence.csv row with empty Census values",
     "built_from": "explain_ward -> WardExplanation(status=no_census_data)",
@@ -13,8 +13,7 @@
     }
   },
   "request": {
-    "ward_id": "relation/7867250",
-    "lang": "en"
+    "ward_id": "relation/7867250"
   },
   "response": {
     "explanation": {
@@ -56,10 +55,6 @@
         "cap_litres": null,
         "in_debt_since": null
       }
-    },
-    "text": {
-      "lang": "en",
-      "body": "Ward 112 Ramachandrapuram: service class piped_regularity_unknown (UNAVAILABLE). Ward 112 Ramachandrapuram: no Census data for this ward (PARTIAL_CENSUS_COVERAGE); its need cannot be computed, so no number is shown. Water debt is not available yet."
     }
   }
 }

@@ -2,8 +2,8 @@
   "_example": {
     "endpoint": "GET /shortage",
     "status": "NOT DESIGNED",
-    "owner": "P3 (T8, not started)",
-    "notes": "T8 is not started. T2's capacity_plan (local) refuses to run without a sourced trips-per-tanker-per-day value.",
+    "owner": "P3 (T8)",
+    "notes": "T8 not merged; see the T8 branch.",
     "basis": null,
     "built_from": null
   },

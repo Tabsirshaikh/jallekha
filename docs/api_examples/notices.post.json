@@ -21,8 +21,8 @@
   },
   "response": {
     "status": "created",
-    "notice_id": "b08e1263-ceb3-43d3-ae45-4e0fef790503",
-    "outage_id": "07d73efc-aa88-493c-aad0-8762e4fecc07",
+    "notice_id": "c3f8fd33-2a82-4115-b33b-a98862db4d52",
+    "outage_id": "cc1b00bd-8a7c-40cb-9668-1ba7111dc0e5",
     "ward_ids": [
       "relation/7849315",
       "relation/7849497"
@@ -66,7 +66,7 @@
     "people_affected_basis": "DERIVED, HISTORICAL: Census 2011 population of the matched wards (whole wards; a notice may cover only part of a ward). Rule OPEN, owner to confirm; officer to check",
     "needs_officer_review": true,
     "outage": {
-      "outage_id": "07d73efc-aa88-493c-aad0-8762e4fecc07",
+      "outage_id": "cc1b00bd-8a7c-40cb-9668-1ba7111dc0e5",
       "ward_ids": [
         "relation/7849315",
         "relation/7849497"

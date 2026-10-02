@@ -44,6 +44,7 @@
         "otp_verified": false,
         "sampled_residents": 0,
         "replies": 0,
+        "outcome_status": "pending",
         "outcome": null
       }
     },
@@ -70,6 +71,7 @@
         "otp_verified": true,
         "sampled_residents": 0,
         "replies": 0,
+        "outcome_status": "pending",
         "outcome": null
       }
     }
