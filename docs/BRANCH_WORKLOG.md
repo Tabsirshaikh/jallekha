@@ -376,3 +376,33 @@ The pull-request description must summarize the same information and link to thi
   - **T5:** call `create_outage(..., source="notice", ...)` with the notice's wards, start/end and reason, then store the returned ledger args (T6).
   - A7 routes the response with the S3 planner.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/34
+
+## `feat/e4-section-rates` — D1c billing data, E4 rates, E6 booking layer (limitation F3)
+
+- **Owner / date:** P2 (covering P1), 2026-10-02.
+- **Purpose:** Remove F3's NULL bookings-per-1,000 limitation.
+- **What we found:**
+  - HMWSSB publishes **billing and collection data by section** (Telangana portal dataset `3485ce9d-…`, GODL, Jan 2022-Aug 2026, 56 monthly CSVs). `noofcans` = connections per section and category.
+  - Section names match the tanker table (183/184 sections, 100% of bookings, May 2025).
+  - The portal metadata gives the category legend (D Domestic, DS Domestic-Slums, M0 Domestic with Flats, MB Multi Stored Buildings, PS Public stand post, FS Filling station, …).
+- **What we changed:**
+  - `scripts/data/fetch_hmwssb_billing.py`: raw files go to `data/raw/hmwssb_billing_portal/`, with `data/verification/hmwssb_billing_manifest.csv` and `backend/tests/test_d1c_billing.py`.
+  - **E4** (`build_equity.py`):
+    - `sections.csv` gains `domestic_connections_mean`, `flats_connection_share` and **`bookings_per_1000_connections`** (per month, REAL/REAL, same months as the bookings); `denominator_status = HMWSSB_DOMESTIC_CONNECTIONS`.
+    - Per-1,000-people stays empty (no section population).
+    - `wards.csv`: **approximate** ward bookings via `section_to_ward_2016.csv` and bookings per 1,000 people (Census 2011 via E2); wards without a placed section stay empty (`NO_PLACED_SECTION`).
+    - The headline Gini 0.78 and top-10% share 67.7% are unchanged.
+  - **E6** (`coverage.py`): the booking layer shows E4's approximate ward bookings (labelled `DERIVED_APPROXIMATE`) when E4 reports `APPROXIMATE_SECTION_POINT_IN_WARD`, and stays empty when blocked. The builder reads `equity/wards.csv`; the verifier and test compare with E4's own counts.
+  - Solution doc: data row D19.
+- **Result:**
+  - 194/201 sections have a rate (median 11 bookings per 1,000 domestic connections per month; Kondapur 697, Hafeezpet 506, Madhapur 503). The 7 without a rate are facilities (control room, WTP, pipelines) or not billed.
+  - 79.3% of bookings are placed on 94 wards.
+- **Validation:** Tests were written first: `test_d1c_billing.py` (hashes, months, columns, section-name match) and E4 tests for the rate formula, empty per-people values, the Madhapur rate > 10x the median, ward mass preservation and statuses. A real bug was caught on the way: the new loop variable shadowed `count`. `python tasks.py test`: 328 pass. `python tasks.py lint` passes. All P1 verifiers pass.
+- **Known limitations:**
+  - One connection can serve many flats (`flats_connection_share` is reported).
+  - Ward values are approximate (one point per section, about 20% of bookings unplaced).
+  - Post-Feb-2026 sections are re-cut.
+- **Handoff / next step:**
+  - E3: connection growth and stability (next PR).
+  - PS/FS category counts may help F9 (public taps) and Q1 (filling stations).
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/36

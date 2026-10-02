@@ -12,10 +12,14 @@
   ],
   "seasonality_caveat": "Unbalanced observed years; December 2022 has no records, not zero",
   "section_count": 201,
+  "section_rate_denominator": "HMWSSB billing and collection data, mean monthly domestic connections (categories D, DS, DM, DP, M0, M1, M4, MB) over the same months",
+  "section_rate_source_url": "https://data.telangana.gov.in/api/1/metastore/schemas/dataset/items/3485ce9d-4a9c-4293-b7e9-02e6697b9a75",
   "source_row_count": 4398,
   "source_url": "https://data.opencity.in/dataset/hyderabad-water-supply-through-tankers-data",
   "top_booking_share": 0.676969188,
   "top_fraction_requested": 0.1,
   "top_section_count": 21,
-  "ward_metrics_status": "BLOCKED_NO_VERIFIED_SECTION_WARD_CROSSWALK"
+  "ward_booking_share_placed": 0.79293,
+  "ward_metrics_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
+  "ward_rate_population": "Census 2011 population via E2 (2009 to 2016 crosswalk)"
 }

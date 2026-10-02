@@ -71,11 +71,23 @@ def test_unavailable_values_are_null_and_provisional_values_remain_review_only()
         not feature["properties"]["allocation_eligible"]
         for feature in booking["features"] + field["features"]
     )
-    assert all(
-        feature["properties"]["bookings_per_1000"] is None
-        and feature["properties"]["observed_bookings"] is None
-        for feature in booking["features"]
-    )
+    # Booking layer = E4's approximate ward bookings (sections placed by located point)
+    e4 = {
+        r["ward_id"]: r
+        for r in csv.DictReader(
+            (ROOT / "data/derived/equity/wards.csv").open(encoding="utf-8", newline="")
+        )
+    }
+    for feature in booking["features"]:
+        props = feature["properties"]
+        row = e4[props["ward_id"]]
+        if row["bookings"]:
+            assert props["observed_bookings"] == float(row["bookings"])
+            assert props["display_status"] == "APPROXIMATE_SECTION_POINT_IN_WARD"
+            assert props["value_basis"] == "DERIVED_APPROXIMATE"
+        else:
+            assert props["observed_bookings"] is None and props["bookings_per_1000"] is None
+            assert props["display_status"] == "UNAVAILABLE_NO_PLACED_SECTION"
     assert all(
         feature["properties"]["field_check_candidate"] is None
         and feature["properties"]["display_status"] == "DATA_REVIEW_REQUIRED"
@@ -91,7 +103,15 @@ def test_manifest_has_exactly_three_layers_and_excludes_unsupported_tap_claim():
         BOOKING_COVERAGE,
         FIELD_CHECKS,
     ]
-    assert [item["non_null_value_count"] for item in manifest["layers"]] == [143, 0, 0]
+    e4_rates = sum(
+        1
+        for r in csv.DictReader(
+            (ROOT / "data/derived/equity/wards.csv").open(encoding="utf-8", newline="")
+        )
+        if r["bookings_per_1000"]
+    )
+    assert e4_rates >= 85
+    assert [item["non_null_value_count"] for item in manifest["layers"]] == [143, e4_rates, 0]
     assert manifest["excluded_layers"] == [
         {
             "layer_id": "people_within_500m_public_tap",
