@@ -57,11 +57,16 @@ def test() -> None:
     underserved_verifier = ROOT / "scripts" / "evidence" / "verify_underserved.py"
     if underserved_verifier.exists():
         run([venv_python(), str(underserved_verifier)])
+    coverage_verifier = ROOT / "scripts" / "evidence" / "verify_coverage.py"
+    if coverage_verifier.exists():
+        run([venv_python(), str(coverage_verifier)])
     e1_verifier = ROOT / "scripts" / "evidence" / "verify_crosswalk.py"
     if e1_verifier.exists():
         run([venv_python(), str(e1_verifier)])
 
     run([venv_python(), str(ROOT / "scripts/evidence/verify_evidence.py")])
+
+    run([venv_python(), str(ROOT / "scripts/evidence/verify_equity.py")])
 
 
 def lint() -> None:

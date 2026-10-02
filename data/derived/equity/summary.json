@@ -1,0 +1,21 @@
+{
+  "bookings": 1316215,
+  "bottom_booking_share": 0.029077316,
+  "bottom_section_count": 100,
+  "delivered": 1315622,
+  "delivery_to_booking_ratio": 0.999549466,
+  "gini": 0.780329296,
+  "gini_basis": "DERIVED",
+  "interpretation": "Concentration of observed bookings, not unequal need or proven neglect",
+  "missing_source_months": [
+    "2022-12"
+  ],
+  "seasonality_caveat": "Unbalanced observed years; December 2022 has no records, not zero",
+  "section_count": 201,
+  "source_row_count": 4398,
+  "source_url": "https://data.opencity.in/dataset/hyderabad-water-supply-through-tankers-data",
+  "top_booking_share": 0.676969188,
+  "top_fraction_requested": 0.1,
+  "top_section_count": 21,
+  "ward_metrics_status": "BLOCKED_NO_VERIFIED_SECTION_WARD_CROSSWALK"
+}
