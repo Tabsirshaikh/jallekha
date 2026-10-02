@@ -17,3 +17,12 @@ frontend/dist/
 Thumbs.db
 *.egg-info/
 *.tsbuildinfo
+
+# Model weights and caches (F13/F14 ML extras); never commit them
+/models/
+*.nemo
+*.onnx
+*.pt
+*.pth
+*.ckpt
+*.safetensors
