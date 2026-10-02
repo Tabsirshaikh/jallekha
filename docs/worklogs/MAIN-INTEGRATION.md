@@ -10,9 +10,9 @@ The E1 repair CI failed because it ran all backend tests after E3 was added with
 
 ## What we changed
 
-- Preserved main's P1/P3/P4 research and merged the complete E6, S2, E1 repair, and E5 branch histories. E4 and S1 head commits are already ancestors of these branches.
+- Preserved main's P1/P3/P4 research and merged the complete E6, S2, E1 repair, E5, and latest S1 branch histories. The E4 head is also preserved as an ancestor. S1 includes the teammate's config source comments and rename of the full-suite workflow to `CI`, triggered on main pushes and PRs.
 - Kept implemented F2/F3/F4 safeguards while retaining other contributors' updated forecasting, speech, ledger, geography, and source notes.
-- Scoped E1 repair and E4 CI to their task tests; S1 remains the full-repository check and now installs the geo/model extras it needs.
+- Scoped E1 repair and E4 CI to their task tests; the full-repository `CI` workflow now installs the geo/model extras it needs.
 - Updated research verification for the 47-row tracker and implemented evidence gates. Independent WorldPop/GHS-POP sensitivity remains explicitly deferred rather than falsely claimed complete.
 - Added LF handling for generated GeoJSON so clean Windows checkouts retain reproducible bytes.
 - Updated completed task records, retaining their original PR links and unresolved data limitations.
