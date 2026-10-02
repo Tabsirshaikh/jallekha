@@ -435,3 +435,33 @@ The pull-request description must summarize the same information and link to thi
   - The connection check uses 2022-2025 vs the 2016-2023 building trend, and approximate section placement.
   - WorldPop/GHS-POP are still not extracted.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/38
+
+## `feat/t5-notices` — `T5`
+
+- **Owner / date:** P3, 2026-10-02.
+- **Purpose:** Supply-notice feed (F15): an officer enters an HMWSSB supply-interruption notice; its areas are matched to wards; it becomes an A5 outage; both are logged in the stored ledger; residents can be alerted in te / ur / hi / en.
+- **What we found:**
+  - `docs/research/P3.md` F15 decided "Keep officer entry": HMWSSB notices are press releases with area lists and hours, with no machine-readable feed; D14 has not been fetched. So no parser was built.
+  - A5's `create_outage` returns `entity_type` / `entity_id` outside its payload and puts `reason` (free text) in it. T5 passes the code `hmwssb_supply_notice` and copies the entity fields into the payload for `ledger_store.record`.
+  - A notice does not state people affected, which A5 needs.
+  - P1's tables: 221 sections (142 placed on a 2016 ward), 145 wards, no locality alias table. "Uppal" is both Ward 10's name and a section P1 placed in Ward 7, so name matching must flag ambiguity. A 0.9 similarity threshold would accept the typo "Nacharm" (0.93), so the proposal is exact matches only.
+- **What we changed:**
+  - `backend/app/config/notices.py`: sources, area table paths, alert wording (te / ur / hi / en), OPEN values.
+  - `backend/app/models/supply_notice.py` (+ `models/__init__.py`): raw text, areas, matched and flagged areas, times, hours, people affected, bases, fingerprint, `ledger_missing`.
+  - `backend/app/services/notices.py`: `AreaIndex` (exact match = confidence 1.0; ambiguous, unplaced and near-miss names flagged, never guessed), `NoticeService.enter` (checks, duplicate refusal, A5 outage, ledger), `send_alerts`, `render_alert`.
+  - `backend/app/routers/notices.py` + `backend/app/main.py`: `POST /notices` (officer entry).
+  - Tests `backend/tests/services/test_notices.py`; docs `docs/P3_FEATURES.md`, `docs/features.csv` (T5 IN_PROGRESS), `docs/worklogs/T5.md`; workflow `.github/workflows/p3-t5.yml`.
+- **Validation:**
+  - 26 tests written first (import failed before the code existed): outage creation; `outage_created` and `notice_published` in the stored ledger with a verified chain; no free text or phone in payloads; duplicates not entered twice; unmatched, near-miss, ambiguous and unplaced areas flagged; no matched area means no outage; P1's real tables load (221 / 142 / 145); six malformed or backwards time ranges rejected; people affected from the officer, else the labelled Census fallback; alert wording in four languages; endpoint; ledger failure marker.
+  - After merging `main` (E3-FIX #38): `python tasks.py test` exit 0 (443 backend passed, 1 frontend test, all P1 verifiers); `python tasks.py lint` exit 0.
+  - Task workflow `P3:T5` (`.github/workflows/p3-t5.yml`): T5 tests, A5 outage and T6 ledger-store tests, ruff check and format check on the T5 files.
+  - Notices and phone numbers in tests are synthetic; area names and ward ids come from P1's tables.
+- **Known limitations:**
+  - OPEN, owner to confirm: people-affected rule, exact-only matching, alert wording (native speakers and P4).
+  - 79 of 221 sections are unplaced; the crosswalk does not cover section names after the Feb/Mar 2026 re-cut; no locality alias table; Census 2011 ward population overstates partial-ward notices; no resident registry for alerts; no authentication until T10.
+- **Handoff / next step:**
+  - P2 (A5): consider putting `entity_type` / `entity_id` inside `create_outage`'s payload.
+  - P4: review the alert wording; show flagged areas to the officer.
+  - P1: a locality alias table and post-2026 section names would raise the matched share.
+  - Merge note: `feat/t4-ledger-wiring` edits the T4 and T6 rows next to the T5 row in `docs/P3_FEATURES.md` and `docs/features.csv`; the branch merged second needs a one-line fix in each.
+- **Pull request:** pending.
