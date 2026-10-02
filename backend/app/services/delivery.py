@@ -96,6 +96,7 @@ class DeliveryState:
     started_at: datetime
     otp: OtpChallenge | None = None
     wrong_attempts: int = 0
+    outside_tries: int = 0
     otp_verified: bool = False
     sampled_resident_ids: tuple[str, ...] = ()
     sample_seed: str | None = None
@@ -165,18 +166,24 @@ def check_geofence(
 ) -> tuple[DeliveryState, geofence.GeofenceResult]:
     """Server-side check of the driver's position against the stop (150 m, F12)."""
     result = geofence.check(lat, lon, state.stop_lat, state.stop_lon)
+    _log_geofence(state, result, ledger, _aware(now))
+    return state, result
+
+
+def _log_geofence(
+    state: DeliveryState, result: geofence.GeofenceResult, ledger: LedgerPort, now: datetime
+) -> None:
     distance = result.distance_m if result.distance_m != float("inf") else None
     _log(
         ledger,
         "geofence_checked",
         state,
-        _aware(now),
+        now,
         actor=state.driver_id,
         inside=result.inside,
         distance_m=distance,
         radius_m=result.radius_m,
     )
-    return state, result
 
 
 def request_otp(
@@ -233,7 +240,12 @@ def verify_otp(
     ledger: LedgerPort,
     now: datetime,
 ) -> tuple[DeliveryState, VerifyResult]:
-    """Check the code at the stop. Only a wrong code inside the geofence uses up an attempt."""
+    """Check the code at the stop. Only a wrong code inside the geofence uses up an attempt.
+
+    The geofence is checked before the code, so a try from outside reveals nothing about the
+    code. Outside tries are logged up to `outside_tries_max` per visit, then one
+    `outside_tries_exceeded` entry, then nothing (OPEN value, config/trust.py).
+    """
     now = _aware(now)
     result: VerifyResult
     if state.otp_verified:
@@ -244,14 +256,32 @@ def verify_otp(
         result = "no_otp"
     elif otp.is_expired(state.otp.expires_at, now):
         result = "expired"
-    elif not check_geofence(state, lat, lon, ledger, now)[1].inside:
-        result = "outside_geofence"
-    elif otp.check(otp_key, code, state.stop_id, state.otp.code_hash):
-        result = "verified"
-        state = replace(state, otp_verified=True)
     else:
-        result = "wrong_code"
-        state = replace(state, wrong_attempts=state.wrong_attempts + 1)
+        fence = geofence.check(lat, lon, state.stop_lat, state.stop_lon)
+        if not fence.inside:
+            result = "outside_geofence"
+            state = replace(state, outside_tries=state.outside_tries + 1)
+            cap = TRUST_CONFIG.outside_tries_max
+            if state.outside_tries > cap:
+                if state.outside_tries == cap + 1:
+                    _log(
+                        ledger,
+                        "outside_tries_exceeded",
+                        state,
+                        now,
+                        actor=state.driver_id,
+                        outside_tries=state.outside_tries,
+                        outside_tries_max=cap,
+                    )
+                return state, result
+        _log_geofence(state, fence, ledger, now)
+        if fence.inside:
+            if otp.check(otp_key, code, state.stop_id, state.otp.code_hash):
+                result = "verified"
+                state = replace(state, otp_verified=True)
+            else:
+                result = "wrong_code"
+                state = replace(state, wrong_attempts=state.wrong_attempts + 1)
     _log(
         ledger,
         "otp_attempted",
@@ -262,6 +292,7 @@ def verify_otp(
         wrong_attempts=state.wrong_attempts,
         max_attempts=TRUST_CONFIG.otp_max_attempts,
         locked=state.otp_locked,
+        outside_tries=state.outside_tries,
     )
     return state, result
 

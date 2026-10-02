@@ -278,6 +278,36 @@ def test_geofence_is_checked_before_the_code(
         assert reply == "outside_geofence"
 
 
+def test_outside_tries_are_capped_with_one_final_ledger_entry(
+    chain: InMemoryLedger, sms: FakeSmsSender
+) -> None:
+    cap = TRUST_CONFIG.outside_tries_max
+    state = dl.request_otp(_start(chain), "rep-1", OTP_KEY, sms, chain, T0)
+    code = sms.sent[-1].params["code"]
+    for attempt in range(1, cap + 1):
+        before = len(chain.entries)
+        state, reply = dl.verify_otp(state, code, *_at(151), OTP_KEY, chain, T0)
+        assert reply == "outside_geofence" and state.outside_tries == attempt
+        assert [e.event_type for e in chain.entries[before:]] == [
+            "geofence_checked",
+            "otp_attempted",
+        ]
+    before = len(chain.entries)
+    for _ in range(5):  # tries cap+1 .. cap+5
+        state, reply = dl.verify_otp(state, code, *_at(151), OTP_KEY, chain, T0)
+        assert reply == "outside_geofence"
+    added = chain.entries[before:]
+    assert [e.event_type for e in added] == ["outside_tries_exceeded"]
+    assert added[0].payload["outside_tries"] == cap + 1
+    assert added[0].payload["outside_tries_max"] == cap
+    assert state.outside_tries == cap + 5
+    assert state.wrong_attempts == 0 and not state.otp_verified
+    assert ledger.verify_entries(list(chain.entries), LEDGER_KEY)["valid"]
+    # The cap only limits logging: the code still works once the driver is at the stop.
+    state, reply = dl.verify_otp(state, code, *_at(20), OTP_KEY, chain, T0)
+    assert reply == "verified" and state.otp_verified
+
+
 # --- OTP (decision a, OPEN) --------------------------------------------------------------
 
 

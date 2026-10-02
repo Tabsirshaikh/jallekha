@@ -28,6 +28,8 @@ class Delivery(IdTimestampMixin, Base):
     otp_issued_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     otp_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     otp_wrong_attempts: Mapped[int] = mapped_column(Integer, default=0)
+    # OTP tries from outside the geofence (never attempts; logged up to outside_tries_max).
+    outside_tries: Mapped[int] = mapped_column(Integer, default=0)
     otp_verified: Mapped[bool] = mapped_column(Boolean, default=False)
     residents_sampled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     sample_seed: Mapped[str | None] = mapped_column(String(64))

@@ -20,6 +20,11 @@ class TrustConfig:
     # Source: OPEN, owner to confirm. Proposal: 10 minutes (NIST SP 800-63B v4 section 3.1.3.2,
     # "within 10 minutes").
     otp_valid_minutes: int = 10
+    # Source: OPEN, owner to confirm. OTP tries from outside the geofence per stop visit that
+    # are written to the ledger. They never use up an attempt and reveal nothing about the code;
+    # the cap only stops ledger flooding. Try cap+1 writes one outside_tries_exceeded entry,
+    # later tries write nothing. 10 is a proposal.
+    outside_tries_max: int = 10
     # No source in docs/JALLEKHA_FINAL_SOLUTION.md. Related rule, F11: only Confirmed
     # deliveries (F12) count. Meaning and value to be decided in T3 / A6.
     unresolved_delivery_changes_shortfall: bool = False

@@ -58,7 +58,11 @@ def test_delivery_round_trip_with_outcome_and_one_reply_per_resident() -> None:
         )
         session.commit()
         stored = session.query(Delivery).one()
-        assert (stored.otp_wrong_attempts, stored.otp_verified) == (0, False)
+        assert (stored.otp_wrong_attempts, stored.outside_tries, stored.otp_verified) == (
+            0,
+            0,
+            False,
+        )
         assert session.query(DeliveryOutcome).one().counts_toward_debt
 
         session.add(ResidentResponse(delivery_id=delivery.id, resident_id="res-1", answer="no"))
