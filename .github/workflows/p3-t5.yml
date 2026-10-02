@@ -1,0 +1,55 @@
+name: "P3:T5"
+
+# T5 supply-notice feed (F15): officer entry, area matching against P1's tables (flag, never
+# guess), A5 outage creation, stored ledger (T6) with a verified chain, alerts in te/ur/hi/en.
+on:
+  push:
+    branches: [feat/t5-notices]
+  pull_request:
+    branches: [main]
+    paths:
+      - "backend/app/services/notices.py"
+      - "backend/app/services/outage.py"
+      - "backend/app/services/ledger*.py"
+      - "backend/app/config/notices.py"
+      - "backend/app/models/**"
+      - "backend/app/routers/notices.py"
+      - "backend/tests/services/test_notices.py"
+      - "data/derived/crosswalk/section_to_ward_2016.csv"
+      - "data/derived/evidence/ward_evidence.csv"
+      - "data/raw/geography/datameet/ghmc-wards.geojson"
+      - ".github/workflows/p3-t5.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  notices:
+    name: "P3:T5"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -e 'backend[dev,geo]'
+      - name: Notice, A5 outage and T6 ledger-store tests (incl. P1's real area tables)
+        run: >-
+          pytest
+          backend/tests/services/test_notices.py
+          backend/tests/test_a5_outage.py
+          backend/tests/services/test_ledger_store.py
+      - name: Lint T5 files
+        run: >-
+          ruff check --config backend/pyproject.toml
+          backend/app/services/notices.py backend/app/config/notices.py
+          backend/app/models/supply_notice.py backend/app/routers/notices.py
+          backend/tests/services/test_notices.py
+      - name: Format check T5 files
+        run: >-
+          ruff format --check --config backend/pyproject.toml
+          backend/app/services/notices.py backend/app/config/notices.py
+          backend/app/models/supply_notice.py backend/app/routers/notices.py
+          backend/tests/services/test_notices.py
