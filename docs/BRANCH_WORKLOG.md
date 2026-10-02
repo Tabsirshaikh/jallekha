@@ -553,3 +553,55 @@ The pull-request description must summarize the same information and link to thi
 - **Validation:** 19 tests in `tests/test_a6_water_debt.py`, written first and failing first (module missing). A mutation check (counting outage water) makes the outage test fail. `python tasks.py test`: 453 pass. `python tasks.py lint` passes.
 - **Known limitations:** an account is any unit carrying an entitlement (booking group or ward). A7 chooses the unit, feeds daily entitlements and closed deliveries, and stores accounts. Debt does not yet change queue order; that is A7.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/45
+
+## `feat/a8-sandbox` — A8 policy sandbox (F19)
+
+- **Owner / date:** P2, 2026-10-03.
+- **Purpose:** compare today's process (B1) with the baselines and JalLekha on the same replayed bookings, as F19 and PS11 QE5 ask. This unblocks P3's T9 (confidence threshold chosen on replay) and T10.
+- **What we built:**
+  - `services/sandbox.py`: daily station queues with a trip capacity. A booking unserved for `booking_expiry_days` (3, ASSUMED) is unmet. Seven policies:
+    - B1 FCFS at the nearest station.
+    - B2 nearest first.
+    - B3 largest bookers first.
+    - B4 minimum cost (stations pooled, cheapest trips first).
+    - B5 need first.
+    - JL_F8 (A3 fair queue).
+    - JL (JL_F8 + A4 reserve of 5% of trips for scheduled supply, ASSUMED).
+  - Measures:
+    - Unmet and need-weighted unmet share, waiting days.
+    - Tanker km and km per kilolitre, unused capacity.
+    - Fill-rate Gini, Jain and worst ward (among bookers).
+    - **Need coverage** (litres per day per unit of entitlement over every ward, scheduled supply included): Gini, Jain, share of wards with no water.
+  - `compare` gives mean, range and same-seed differences against B1.
+  - `config/sandbox.py`: every value has a source and basis.
+  - `scripts/sandbox/build_stations.py`: **90 stand-in filling stations** (REAL count; positions ASSUMED, booking-weighted k-means). HMWSSB publishes no station list (checked: tracking site, news, OSM).
+    - Section points are geocoded (89% of bookings) or the division centre (11%, APPROXIMATE).
+    - Road km = 2 x (straight line + 0.732 km in-section access, DERIVED from ward areas) x 1.35.
+  - `scripts/sandbox/build_sandbox.py`: Mar-Jul 2025 (main) and Mar-Jul 2023 replays, 30 seeds, two capacity scenarios. Each station's capacity follows its share of the previous year's bookings.
+    - fleet: 1,150 tankers x 9 trips.
+    - tight: calibrated so B1 delivers 90%, the REAL Jun-Aug 2026 share (91.1%).
+    - Outputs `data/derived/sandbox/results.csv` and `summary.json` (SIMULATION), with REAL baselines kept apart (booking Gini 0.78; delivered 99.9% in 2025, 91.1% Jun-Aug 2026).
+  - `booking_groups.ward_group` added (shared group naming).
+- **Results (30 seeds, means; SIMULATION):**
+  - **Fleet capacity:** all policies serve 98.7-100% (REAL 2025: 99.9%). Capacity is not the problem: 39% of trips go unused, but stations sized on last year's demand miss growth areas. Pooling stations (B4) serves 100%.
+  - **Tight capacity (2025, B1 = 90.0%):**
+    - JL_F8 serves the same as B1 (89.9%) with shorter waits (0.90 vs 1.01 days) and slightly more even fill rates (Gini 0.068 vs 0.069).
+    - B2, B3 and B5 cut waits but leave some wards almost unserved (worst ward fill 0.3% vs 37.8%).
+    - B4 serves the most (94.0%) at 14% more km per kilolitre.
+  - **Need coverage:** under every booking-only policy water follows bookings (Gini about 0.75-0.76). JL lowers it to 0.72-0.73 (0.70 in 2023), and no ward is left without water.
+  - **Where JL is worse (listed in `summary.json`):** the 5% scheduled reserve costs booked service, -2.7 points served and +0.06 days wait in the tight 2025 case. Its worst booking ward is also lower (36.0% vs 37.8%).
+  - Duplicate merge share is NOT_AVAILABLE: the replay has no complaints, and T1's calibration has not run (D13 extract not logged).
+- **Takeaways for A7:** pooling station capacity across neighbours (as B4 does) is the biggest lever for booked service. A7 may want to let a station's spare trips serve a neighbour's queue. That is a design choice for the owner, not made here.
+- **Validation:**
+  - `tests/test_a8_sandbox.py` (15): policy order, capacity, expiry, B4 pooling, JL_F8 = A3 `order_bookings`, JL reserve via A4, determinism, Gini/Jain, measures, need coverage, B1 comparison. The tests were run after the code; deliberate breaks of B2 order, expiry and capacity each made tests fail, and the need-coverage test was written first and failed first.
+  - `tests/test_a8_build.py` (8): stations reproducible; outputs match checks; 30 seeds per cell; same bookings per seed; tight B1 = 90% ± 1 point; summary recomputed from the results; REAL kept apart; JL-worse list complete; one seed re-run reproduces the committed rows.
+  - `python tasks.py test`: 476 pass. `python tasks.py lint` passes.
+- **How to rebuild:** `python scripts/sandbox/build_stations.py`, then `python scripts/sandbox/build_sandbox.py --workers 4` (about 30 min on 4 workers; about 450 MB each).
+- **Known limitations:**
+  - Stations are stand-ins.
+  - Daily arrivals are synthetic.
+  - Replay bookings have no tier, so tier 0/1 are not exercised.
+  - Every A2 scheduled candidate is treated as officer-confirmed.
+  - Km are not road-routed.
+  - Water debt (A6) does not yet change queue order (A7).
+- **Pull request:** (added after opening)
