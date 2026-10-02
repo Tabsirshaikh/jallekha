@@ -1,0 +1,59 @@
+name: "P3:T4"
+
+# T4 unified intake (F14) and its ledger wiring: channels, spam, languages, offline sync,
+# voice fallback, T1 duplicate merge, ledger payloads (ids and numbers only).
+on:
+  push:
+    branches: [feat/t4-intake, feat/t4-ledger-wiring]
+  pull_request:
+    branches: [main]
+    paths:
+      - "backend/app/services/intake_pipeline.py"
+      - "backend/app/services/intake.py"
+      - "backend/app/services/spam.py"
+      - "backend/app/services/dedup.py"
+      - "backend/app/services/ledger*.py"
+      - "backend/app/config/intake.py"
+      - "backend/app/models/**"
+      - "backend/app/routers/intake.py"
+      - "backend/tests/services/test_intake_*.py"
+      - "backend/tests/test_intake_models_router.py"
+      - ".github/workflows/p3-t4.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  intake:
+    name: "P3:T4"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -e 'backend[dev,geo]'
+      - name: Intake, ledger wiring, T1 dedup and S3 spam / intake tests
+        run: >-
+          pytest
+          backend/tests/services/test_intake_pipeline.py
+          backend/tests/services/test_intake_ledger.py
+          backend/tests/test_intake_models_router.py
+          backend/tests/services/test_dedup.py
+          backend/tests/test_s3_spam_intake.py
+      - name: Lint T4 files
+        run: >-
+          ruff check --config backend/pyproject.toml
+          backend/app/services/intake_pipeline.py backend/app/config/intake.py
+          backend/app/models/intake_item.py backend/app/models/voice_note.py
+          backend/app/routers/intake.py backend/tests/services/test_intake_pipeline.py
+          backend/tests/services/test_intake_ledger.py backend/tests/test_intake_models_router.py
+      - name: Format check T4 files
+        run: >-
+          ruff format --check --config backend/pyproject.toml
+          backend/app/services/intake_pipeline.py backend/app/config/intake.py
+          backend/app/models/intake_item.py backend/app/models/voice_note.py
+          backend/app/routers/intake.py backend/tests/services/test_intake_pipeline.py
+          backend/tests/services/test_intake_ledger.py backend/tests/test_intake_models_router.py

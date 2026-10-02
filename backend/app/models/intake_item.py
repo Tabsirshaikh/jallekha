@@ -30,3 +30,6 @@ class IntakeItemRecord(IdTimestampMixin, Base):
     spam_score: Mapped[float | None] = mapped_column(Float)
     spam_reasons: Mapped[str | None] = mapped_column(Text)
     is_synthetic: Mapped[bool] = mapped_column(Boolean, default=False)
+    # True while the item's ledger entry (T6) is expected but not written, e.g. the ledger
+    # failed after the report was saved; such items can be found and logged again later.
+    ledger_missing: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
