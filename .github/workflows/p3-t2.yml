@@ -1,0 +1,51 @@
+name: "P3:T2"
+
+# T2 forecast and backtest (F5): seasonal naive reproduces the 21.9% / 35.1% baseline on the
+# S2 files, no leakage, reconciliation, conformal coverage, capacity planner without a default.
+on:
+  push:
+    branches: [feat/t2-forecast]
+  pull_request:
+    branches: [main]
+    paths:
+      - "backend/app/services/forecast.py"
+      - "backend/app/services/hmwssb.py"
+      - "backend/app/config/forecast.py"
+      - "backend/tests/services/test_forecast.py"
+      - "backend/tests/test_forecast_config.py"
+      - "scripts/forecast/**"
+      - "data/raw/hmwssb_tankers/**"
+      - "data/raw/hmwssb_tankers_portal/**"
+      - ".github/workflows/p3-t2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  forecast:
+    name: "P3:T2"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -e 'backend[dev,geo]'
+      - name: Forecast, baseline and config tests
+        run: pytest backend/tests/services/test_forecast.py backend/tests/test_forecast_config.py
+      - name: Backtest script runs and reproduces the baseline
+        run: |
+          python scripts/forecast/run_backtest.py --out-dir "$RUNNER_TEMP/forecast" | tee run.txt
+          grep -q "city MAPE 21.89% / section WAPE 35.12%" run.txt
+      - name: Lint T2 files
+        run: >-
+          ruff check --config backend/pyproject.toml
+          backend/app/services/forecast.py backend/app/config/forecast.py
+          backend/tests/services/test_forecast.py scripts/forecast
+      - name: Format check T2 files
+        run: >-
+          ruff format --check --config backend/pyproject.toml
+          backend/app/services/forecast.py backend/app/config/forecast.py
+          backend/tests/services/test_forecast.py scripts/forecast

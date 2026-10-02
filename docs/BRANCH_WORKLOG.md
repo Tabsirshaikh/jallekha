@@ -805,6 +805,38 @@ The pull-request description must summarize the same information and link to thi
   - Routing needs registered service points (the registry starts empty) and officer-entered locations for critical stops.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/50
 
+## `feat/t2-forecast` — `T2`
+
+- **Owner / date:** P3, 2026-10-03.
+- **Purpose:** Forecast and backtest (F5): monthly HMWSSB bookings per section and city, 12 months ahead, with a reproduced seasonal-naive baseline, a rolling-origin backtest, bottom-up reconciliation, split-conformal intervals and a capacity check.
+
+- **What we found:**
+  - `V-VERIFY_REVIEW.md`, which recorded how 21.9% / 35.1% were computed, was never found. The protocol was recovered by reproduction on 2026-10-03 and confirmed by Padmaja: `noofbookings`; seasonal naive (same month a year earlier); Dec 2022 missing, not zero, so Dec 2023 is not scored (13 months, Jan 2023 - Feb 2024); all sections, missing = 0; city MAPE = mean of monthly errors; section WAPE pooled. Result 21.89% / 35.12% on the S2 files. `delivered` and both-years sections also land within 0.1 pp; Dec 2022 as zero and per-month WAPE do not.
+  - On the longer D1b portal history (to Jan 2026, before the Feb/Mar 2026 re-cut) seasonal naive scores 26.28% / 47.67%, well above the S2 window; the 80% interval covers only 0.77 there. Section names change every year (no mapping applied).
+  - Naive x growth beats the baseline on portal city MAPE (19.77 vs 26.28) but not on section WAPE (48.90 vs 47.67), and is worse on both in S2, so it is not selected.
+  - `tasks.py setup` installs no scikit-learn or lightgbm, and weather (D7) / groundwater (D8) data are not in the repo, so the global gradient-boosting model is not run.
+  - `main` at `d12e4fd` is green on CI; locally (Windows) P2's two A8 tests fail (see Validation).
+- **What we changed:**
+  - `docs/features.csv` / `docs/P3_FEATURES.md` status rows: T7 DONE, T2 IN_PROGRESS (own commit).
+  - `backend/app/config/forecast.py`: the recovered protocol with its date; T2 settings (growth window, coverage minimums, `forecast_table_note`, `model_selection_rule` OPEN); `trips_per_tanker_per_day` OPEN with no default.
+  - `backend/app/services/forecast.py`: panel loader (P2's `hmwssb.read_rows`, unchanged), baseline protocol, seasonal naive, naive x growth, leak-proof rolling backtest, bottom-up reconciliation, split-conformal intervals, model selection, capacity planner, forecast table.
+  - `scripts/forecast/run_backtest.py`; outputs `data/derived/forecast_backtest.csv` and `data/derived/forecast_table.csv` (every derived column has a `_basis`; the table is labelled as using section names from before the Feb/Mar 2026 re-cut, so Feb 2026 onwards cannot be compared section by section with current HMWSSB sections).
+  - Tests `backend/tests/services/test_forecast.py`; workflow `.github/workflows/p3-t2.yml`; `docs/worklogs/T2.md`.
+  - No P1, P2 or P4 file was edited.
+- **Validation:**
+  - 19 tests written first (`ImportError` before the code existed), including the done-when (21.9% / 35.1% within 0.1 pp on the S2 files, scored months read from the files), no leakage, reconciliation sums, coverage on a hand-checkable fixture, Dec 2022 never zero, sections appearing / disappearing, and the capacity planner refusing to run without trips per day.
+  - After merging `main` (`d12e4fd`): `python tasks.py test`: 591 backend passed, 2 failed; frontend 1 passed. The 2 are inherited, none in T2 files: P2 `backend/tests/test_a8_build.py::test_stations_are_reproducible_committed_and_labelled` and `::test_one_seed_reproduces` fail on Windows only (last-digit float differences, e.g. BACHUPALLY (PD 7) lat 17.49872903654913 committed vs 17.498729036549125 rebuilt; B1 tanker_km 775397.417 vs 775397.417003; Windows 10.0.26200, Python 3.11.9, shapely 2.1.2 / GEOS 3.13.1) and pass on Linux CI; identical on a clean checkout of `main`; not edited, skipped or marked.
+  - All P1 verifiers pass when run separately. `python tasks.py lint` exit 0. The `P3:T2` workflow commands pass locally (22 tests, baseline line, ruff).
+- **Known limitations:**
+  - OPEN, owner to confirm: trips per tanker per day; the model selection rule; the scikit-learn / lightgbm dependency (team); Chronos-2 (no-LLM rule); where the published forecast starts (pre-re-cut section names).
+  - Short series (13 scored months on S2); coverage is pooled over months and sections that are not independent; portal coverage under target (0.77 / 0.87); no weather or groundwater covariates; section names not mapped across years.
+- **Handoff / next step:**
+  - Follow-up: a global gradient-boosting model once the team decides the dependency and D7 / D8 exist.
+  - P2: check `test_a8_build.py` on Windows.
+  - P1: weather (D8), groundwater (D7) and a trips-per-day source. Owner: confirm the recovered protocol before 21.9% / 35.1% go on slides.
+  - T8 builds on the forecast table.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/58
+
 ## `docs/api-shapes` — API shapes draft for T10 (Part 7 item 1)
 
 - **Owner / date:** P3, 2026-10-03.
@@ -818,10 +850,11 @@ The pull-request description must summarize the same information and link to thi
   - `docs/api_shapes.md`: conventions, status legend, what exists today, 17 sections (36 endpoints) with method and path, request, response fields and types, basis, errors, roles, and open questions for P4. Status: 7 route on main, 22 from main (service or file on main, route not built), 3 PROPOSED (T2 forecast and backtest, T9 confidence, from the local branches' actual output), 4 NOT DESIGNED (shortage: T8 not started; report card, SMS summary, impact: P4 / P2 to propose).
   - `docs/api_examples/*.json` (36): each produced by calling the real route, service or file (temporary databases; SYNTHETIC requests; P2's replay day 1 for the plan and booking examples, SIMULATION; real ward rows from `ward_evidence.csv`); each records its endpoint, status, basis and source in `_example`. No phone numbers (a placeholder is shown; the services never echo numbers) and no personal free text. Response-field tables in the doc are generated from these files. The generator scripts were kept out of the repo (docs-only scope).
   - `backend/tests/test_api_shapes.py` (3 tests). No backend code, routes or frontend files changed.
+  - P4 answers applied (2026-10-03): duplicate = "already sent", merged = linked to existing complaint; spam = received and flagged; four delivery outcomes, pending until reply window closes; stable ward_id + section_id; snake_case; null/UNAVAILABLE; SYNTHETIC demo forecasts; roles officer/driver/resident/field_worker + gateway; offset/limit/total + after_seq/limit; structured codes; needs_check; per-item batch status; ISO 8601 with offset; ward report card; impact section. Councillor role OPEN.
 - **Validation:**
-  - The new tests check that every example is valid, labelled JSON without phone numbers; that the merged routes (health, intake x3, notices, ledger x2), called with each example's request, return the documented fields (the ledger `payload` is per event type); and that file-based examples equal their source rows (7 rows).
-  - `pytest backend/tests`: 575 passed, 2 failed (`main` has 572 + these 3). Frontend 1 failed. All 8 P1 verifiers pass. **All failures are inherited from `main`**, none in these files: P4 `frontend/src/App.test.tsx` (Urdu heading "آج کا کام" not found); P2 `test_a8_build.py::test_stations_are_reproducible_committed_and_labelled` and `::test_one_seed_reproduces` (Windows float last digits, pass on Linux CI); lint: `ruff format --check` on P4's `scripts/frontend/build_u5_snapshot.py` and `build_u6_snapshot.py`, and `ruff check` E501 x9 in `build_u6_snapshot.py` (both byte-identical to `main`). Frontend lint and typecheck pass.
-  - No task-specific workflow: the test runs in `ci.yml` (`backend/tests`).
-- **Known limitations:** Roles, auth, pagination, language handling and the display of flagged / unavailable values are proposals for P4 to answer. Example ids (UUIDs) and hashes change on every generation; the test compares fields, not values, for routes. Examples are not regenerated by CI (no generator in the repo).
-- **Handoff / next step:** P4: answer the open questions at the end of `docs/api_shapes.md`. P2: plan store, delivery store, booked-trips rule for explanations, replay arrivals after plan time, Impact source. Owner: whether this gets a `features.csv` row. T10 builds the routes from the agreed shapes.
+  - 3 tests: examples valid/labelled JSON without phone numbers; merged routes return documented fields; file-based examples match source rows.
+  - After merging `main` (`570d4b8`, T2 #58): `python tasks.py test`: ~613 backend passed, 2 failed; frontend 1 passed. Inherited failures same as T2/T9.
+  - `python tasks.py lint` exit 0.
+- **Known limitations:** Roles, auth, pagination and language handling are proposals for T10 to implement. Councillor role OPEN.
+- **Handoff / next step:** T10 builds the routes from the agreed shapes. P4: no further questions open.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/57
