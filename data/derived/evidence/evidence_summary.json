@@ -1,0 +1,18 @@
+{
+  "allocation_eligible_count": 0,
+  "current_ward_claim_blocked": true,
+  "join_status_counts": {
+    "AMBIGUOUS_CROSSWALK": 5,
+    "NO_CROSSWALK": 5,
+    "PROVISIONAL_NUMBER_ONLY": 135
+  },
+  "limitations": [
+    "Number-only E1 mappings lack location validation; review all joins.",
+    "Census 2011 percentages are not current household observations.",
+    "No verified facilities source; counts remain empty.",
+    "Hardship is a mean of overlapping proxies, not a household union.",
+    "Non-tap weight requires approved policy; no composite WAD invented."
+  ],
+  "row_count": 145,
+  "wad_non_tap_weight": null
+}

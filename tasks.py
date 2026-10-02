@@ -51,6 +51,11 @@ def test() -> None:
     d1_verifier = ROOT / "scripts" / "data" / "verify_d1.py"
     if d1_verifier.exists():
         run([venv_python(), str(d1_verifier)])
+    e1_verifier = ROOT / "scripts" / "evidence" / "verify_crosswalk.py"
+    if e1_verifier.exists():
+        run([venv_python(), str(e1_verifier)])
+
+    run([venv_python(), str(ROOT / "scripts/evidence/verify_evidence.py")])
 
 
 def lint() -> None:

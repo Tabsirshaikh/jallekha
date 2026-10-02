@@ -1,0 +1,25 @@
+name: "P1:E2"
+on:
+  push:
+    branches: [feat/e2-evidence]
+  pull_request:
+    branches: [main, feat/e1-crosswalk]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  evidence:
+    name: "P1:E2"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -e 'backend[dev]'
+      - run: python scripts/data/verify_manifest.py
+      - run: python scripts/evidence/verify_evidence.py
+      - run: pytest backend/tests/test_e2_evidence.py
+      - run: ruff check --config backend/pyproject.toml scripts/evidence/build_evidence.py scripts/evidence/verify_evidence.py backend/tests/test_e2_evidence.py
+      - run: ruff format --check --config backend/pyproject.toml scripts/evidence/build_evidence.py scripts/evidence/verify_evidence.py backend/tests/test_e2_evidence.py
