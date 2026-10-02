@@ -3,7 +3,7 @@
     "data/derived/equity/summary.json": "c938a5fd40778ecc6948c4dc01c1927317a82155d839162bd689727778387ac1",
     "data/derived/equity/wards.csv": "65dbf4c35326e354c8b5b7146eae74e31a649b9598835bc87959e904e57ea4c1",
     "data/derived/evidence/ward_evidence.csv": "55283537df47923deca25f8347c46e4d9c5455089527a36f3e6632ab4e2cc54c",
-    "data/derived/underserved/field_checks.json": "9b50700bb3a91e9759dcd9c34f32484e517901f0c38292a06244a461e41dcba4",
+    "data/derived/underserved/field_checks.json": "6330d5a33c6e7dd3f7f032ed48271382b87ba3b27114001968cf3fe172845734",
     "data/raw/geography/datameet/ghmc-wards.geojson": "3fdfef8e787ed543d816fee36a6097c350c4dff2423aae7fa203bb49cbd6edc2"
   },
   "outputs_sha256": {

@@ -67,7 +67,8 @@ def test_real_inputs_fail_closed_and_have_no_unsupported_flags():
     assert all(row["status"] == "DATA_REVIEW_REQUIRED" for row in result["rows"])
     assert all(row["field_check_candidate"] is None for row in result["rows"])
     assert all(row["growth_ratio_basis"] == "DERIVED" for row in result["rows"])
-    assert all(row["growth_quality"] == "REVIEW_HIGH_VARIABILITY" for row in result["rows"])
+    # E3 judges stability after removing city-wide year shocks; every ward has a clear trend
+    assert all(row["growth_quality"] == "STABLE_TREND" for row in result["rows"])
 
 
 def test_actual_source_rows_expose_the_specific_review_blockers():

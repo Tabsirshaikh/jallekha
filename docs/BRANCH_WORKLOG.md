@@ -406,3 +406,32 @@ The pull-request description must summarize the same information and link to thi
   - E3: connection growth and stability (next PR).
   - PS/FS category counts may help F9 (public taps) and Q1 (filling stations).
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/36
+
+## `fix/e3-growth-stability` — E3 stability, E2 census, connection check (limitation F2)
+
+- **Owner / date:** P2 (covering P1), 2026-10-02.
+- **Purpose:** Remove F2's "all 145 wards high variability / joins not location-validated / no HMWSSB validation" limitation.
+- **What we found:**
+  - The CV-of-annual-log-change flag fired on every ward because Open Buildings counts jump **city-wide** from year to year: median ward change +9.6%, -0.4%, -4.8%, +7.1%, +1.3%, +11.7%, +2.7%. Google documents this ("building count over an area could also be unstable ... cloud cover, misalignment between input images and fewer Sentinel-2 timeframes for years 2016-2017").
+  - The CV also explodes when annual growth is small (~3%).
+  - E3 still read the old E1 number join.
+- **What we changed:**
+  - `build_growth.py`:
+    - City-wide year shocks (cumulative median ward log change minus its own linear trend) are removed, keeping the city trend.
+    - Least-squares trend per ward; `STABLE_TREND` if t >= `minimum_trend_t` (2.0, `config/growth.py`), else `REVIEW_NOISY_TREND`.
+    - New columns `adjusted_annual_growth`, `trend_t`, `connection_growth_2022_2025`. The raw CV column is kept for transparency.
+    - Census status and households come from E2.
+    - `booking_validation` per ward from the section links.
+    - Independent check: Spearman of ward building trend vs HMWSSB domestic connection growth 2022 -> 2025 (billing, sections placed on wards).
+    - No household projection (growth stays a covariate, R-P1).
+  - E5: reads the renamed summary key and has updated limitation text; its booking gate is unchanged (approximate transfer is not verified).
+- **Result:**
+  - 145/145 wards `STABLE_TREND` (median t 7.4, min 2.45); was 145/145 high variability.
+  - City trend +3.24%/yr.
+  - Connection check: Spearman **0.52** over 92 wards (the raw 2016-2023 ratio gives 0.47).
+  - 143 approximate census joins from E2, 0 exact.
+- **Validation:** E3 tests were rewritten first (E2 census, shocks removed and summing to 0, >= 140 stable, connection check rho >= 0.4 over >= 80 wards), then pass. `python tasks.py test`: 332 pass. `python tasks.py lint` passes. All P1 verifiers pass.
+- **Known limitations:**
+  - The connection check uses 2022-2025 vs the 2016-2023 building trend, and approximate section placement.
+  - WorldPop/GHS-POP are still not extracted.
+- **Pull request:** pending

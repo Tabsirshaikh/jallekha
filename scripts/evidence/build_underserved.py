@@ -89,7 +89,7 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
         "blocking_reason_counts": dict(sorted(blockers.items())),
         "e2_location_validated_joins": evidence_summary["allocation_eligible_count"],
         "e3_growth_context_only": True,
-        "e3_high_variability_review_flags": growth_summary["high_variability_review_flags"],
+        "e3_noisy_trend_review_flags": growth_summary["noisy_trend_review_flags"],
         "booking_transfer": "UNAVAILABLE_NO_VERIFIED_SECTION_TO_WARD_CROSSWALK",
         "tanker_data_granularity": "MONTHLY_HMWSSB_SECTION_COUNTS",
         "reporting_probability": None,
@@ -113,8 +113,8 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
                 "for unvalidated locations."
             ),
             (
-                "All 145 E3 growth observations carry a review-only variability flag; "
-                "growth is not used for ranking."
+                "E3 building trends are stable after removing city-wide year shocks; growth is "
+                "context only and not used for ranking."
             ),
             (
                 "No field-check labels exist, so empirical precision/recall and "
