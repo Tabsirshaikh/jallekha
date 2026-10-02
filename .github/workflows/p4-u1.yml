@@ -1,0 +1,43 @@
+name: P4:U1
+
+on:
+  push:
+    branches: [feat/u1-i18n]
+    paths:
+      - "frontend/**"
+      - "docs/features.csv"
+      - "docs/BRANCH_WORKLOG.md"
+      - ".github/workflows/p4-u1.yml"
+  pull_request:
+    paths:
+      - "frontend/**"
+      - "docs/features.csv"
+      - "docs/BRANCH_WORKLOG.md"
+      - ".github/workflows/p4-u1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  u1-localization:
+    name: u1-localization
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install frontend
+        run: npm ci --prefix frontend
+      - name: Test frontend
+        run: npm run test --prefix frontend -- --run
+      - name: Lint frontend
+        run: npm run lint --prefix frontend
+      - name: Build frontend
+        run: npm run build --prefix frontend

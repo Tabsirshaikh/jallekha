@@ -1,26 +1,26 @@
 import { useState, type ReactNode } from "react";
-import { useLocale } from "./i18n";
+import { localeNames, supportedLocales, useLocale, type MessageKey } from "./i18n";
 
 type Workspace = "officer" | "resident" | "driver";
 type IconName = "overview" | "atlas" | "plan" | "impact" | "help" | "water" | "report" | "route" | "proof" | "settings" | "arrow" | "location" | "check";
 
-const navByWorkspace: Record<Workspace, { label: string; icon: IconName }[]> = {
+const navByWorkspace: Record<Workspace, { key: MessageKey; icon: IconName }[]> = {
   officer: [
-    { label: "Overview", icon: "overview" },
-    { label: "Water access", icon: "atlas" },
-    { label: "Allocation plan", icon: "plan" },
-    { label: "Impact", icon: "impact" },
+    { key: "officerOverview", icon: "overview" },
+    { key: "officerWaterAccess", icon: "atlas" },
+    { key: "officerAllocationPlan", icon: "plan" },
+    { key: "officerImpact", icon: "impact" },
   ],
   resident: [
-    { label: "Home", icon: "overview" },
-    { label: "My requests", icon: "water" },
-    { label: "Report an issue", icon: "report" },
-    { label: "Ward updates", icon: "impact" },
+    { key: "residentHome", icon: "overview" },
+    { key: "residentRequests", icon: "water" },
+    { key: "residentReport", icon: "report" },
+    { key: "residentUpdates", icon: "impact" },
   ],
   driver: [
-    { label: "Today’s route", icon: "route" },
-    { label: "Delivery proof", icon: "proof" },
-    { label: "Help", icon: "help" },
+    { key: "driverRoute", icon: "route" },
+    { key: "driverProof", icon: "proof" },
+    { key: "help", icon: "help" },
   ],
 };
 
@@ -44,56 +44,66 @@ function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
   return <svg {...common}>{paths[name]}</svg>;
 }
 
-const workspaceNames: Record<Workspace, { title: string; description: string; eyebrow: string }> = {
-  officer: { title: "Officer console", description: "Evidence-led planning and service oversight", eyebrow: "Operations workspace" },
-  resident: { title: "Resident app", description: "Water updates and support for your neighbourhood", eyebrow: "Community access" },
-  driver: { title: "Driver app", description: "Your assigned trips and delivery confirmation", eyebrow: "Field operations" },
+const workspaceNames: Record<Workspace, { title: MessageKey; description: MessageKey; eyebrow: MessageKey }> = {
+  officer: { title: "officerConsole", description: "officerDescription", eyebrow: "operationsWorkspace" },
+  resident: { title: "residentApp", description: "residentDescription", eyebrow: "communityAccess" },
+  driver: { title: "driverApp", description: "driverDescription", eyebrow: "fieldOperations" },
 };
 
 function Brand() {
-  return <div className="brand-lockup"><span className="brand-mark"><Icon name="water" size={22} /></span><span><strong>JalLekha</strong><small>WATER, SHARED FAIRLY</small></span></div>;
+  const { t } = useLocale();
+  return <div className="brand-lockup"><span className="brand-mark"><Icon name="water" size={22} /></span><span><strong>JalLekha</strong><small>{t("brandTagline")}</small></span></div>;
 }
 
 function WorkspaceSwitcher({ value, onChange }: { value: Workspace; onChange: (workspace: Workspace) => void }) {
+  const { t, locale, setLocale } = useLocale();
+  const workspaceLabel: Record<Workspace, MessageKey> = { officer: "officer", resident: "resident", driver: "driver" };
   return (
-    <div className="workspace-switcher" role="group" aria-label="Choose a workspace">
+    <div className="topbar-controls">
+    <label className="language-picker"><span className="sr-only">{t("language")}</span><select aria-label={t("language")} value={locale} onChange={(event) => setLocale(event.target.value as (typeof supportedLocales)[number])}>{supportedLocales.map((item) => <option key={item} value={item}>{localeNames[item]}</option>)}</select></label>
+    <label className="mobile-workspace-picker"><span className="sr-only">{t("chooseWorkspace")}</span><select aria-label={t("chooseWorkspace")} value={value} onChange={(event) => onChange(event.target.value as Workspace)}>{(["officer", "resident", "driver"] as const).map((workspace) => <option key={workspace} value={workspace}>{t(workspaceLabel[workspace])}</option>)}</select></label>
+    <div className="workspace-switcher" role="group" aria-label={t("chooseWorkspace")}>
       {(["officer", "resident", "driver"] as const).map((workspace) => (
         <button key={workspace} className={value === workspace ? "workspace-tab active" : "workspace-tab"} onClick={() => onChange(workspace)} aria-pressed={value === workspace}>
-          {workspace === "officer" ? "Officer" : workspace === "resident" ? "Resident" : "Driver"}
+          {t(workspaceLabel[workspace])}
         </button>
       ))}
+    </div>
     </div>
   );
 }
 
-function Sidebar({ workspace, activeItem, onNavigate }: { workspace: Workspace; activeItem: string; onNavigate: (label: string) => void }) {
+function Sidebar({ workspace, activeItem, onNavigate }: { workspace: Workspace; activeItem: MessageKey; onNavigate: (label: MessageKey) => void }) {
+  const { t } = useLocale();
   const meta = workspaceNames[workspace];
   return (
     <aside className="sidebar">
       <Brand />
       <div className="sidebar-rule" />
-      <p className="sidebar-label">{meta.eyebrow}</p>
-      <nav className="side-nav" aria-label={`${workspace} navigation`}>
+      <p className="sidebar-label">{t(meta.eyebrow)}</p>
+      <nav className="side-nav" aria-label={t("navigation")}>
         {navByWorkspace[workspace].map((item) => (
-          <button key={item.label} className={activeItem === item.label ? "nav-item selected" : "nav-item"} onClick={() => onNavigate(item.label)} aria-current={activeItem === item.label ? "page" : undefined}>
-            <Icon name={item.icon} /><span>{item.label}</span>{activeItem === item.label && <span className="nav-indicator" />}
+          <button key={item.key} className={activeItem === item.key ? "nav-item selected" : "nav-item"} onClick={() => onNavigate(item.key)} aria-current={activeItem === item.key ? "page" : undefined}>
+            <Icon name={item.icon} /><span>{t(item.key)}</span>{activeItem === item.key && <span className="nav-indicator" />}
           </button>
         ))}
       </nav>
       <div className="sidebar-bottom">
-        <div className="offline-chip"><span className="status-dot" />Demo workspace</div>
-        <button className="profile-button"><span className="avatar">JL</span><span className="profile-copy"><strong>{workspace === "resident" ? "Your account" : workspace === "driver" ? "Driver profile" : "Officer profile"}</strong><small>Hyderabad, Telangana</small></span><Icon name="settings" size={18} /></button>
+        <div className="offline-chip"><span className="status-dot" />{t("demoWorkspace")}</div>
+        <button className="profile-button"><span className="avatar">JL</span><span className="profile-copy"><strong>{t(workspace === "resident" ? "yourAccount" : workspace === "driver" ? "driverProfile" : "officerProfile")}</strong><small>{t("hyderabadTelangana")}</small></span><Icon name="settings" size={18} /></button>
       </div>
     </aside>
   );
 }
 
-function MobileNavigation({ workspace, activeItem, onNavigate }: { workspace: Workspace; activeItem: string; onNavigate: (label: string) => void }) {
-  return <nav className="mobile-nav" aria-label={`${workspace} navigation`}>{navByWorkspace[workspace].map((item) => <button key={item.label} className={activeItem === item.label ? "mobile-nav-item selected" : "mobile-nav-item"} onClick={() => onNavigate(item.label)} aria-current={activeItem === item.label ? "page" : undefined}><Icon name={item.icon} size={18} /><span>{item.label}</span></button>)}</nav>;
+function MobileNavigation({ workspace, activeItem, onNavigate }: { workspace: Workspace; activeItem: MessageKey; onNavigate: (label: MessageKey) => void }) {
+  const { t } = useLocale();
+  return <nav className="mobile-nav" aria-label={t("navigation")}>{navByWorkspace[workspace].map((item) => <button key={item.key} className={activeItem === item.key ? "mobile-nav-item selected" : "mobile-nav-item"} onClick={() => onNavigate(item.key)} aria-current={activeItem === item.key ? "page" : undefined}><Icon name={item.icon} size={18} /><span>{t(item.key)}</span></button>)}</nav>;
 }
 
-function PlaceholderPage({ workspace, label }: { workspace: Workspace; label: string }) {
-  return <section className="placeholder-page"><span className="placeholder-icon"><Icon name={navByWorkspace[workspace].find((item) => item.label === label)?.icon ?? "overview"} size={25} /></span><p className="eyebrow">Workspace section</p><h1>{label}</h1><p>This section is part of the JalLekha workspace. Its feature view will be added in the next implementation step.</p><span className="prototype-note">Shell preview · No live data is connected</span></section>;
+function PlaceholderPage({ workspace, pageKey }: { workspace: Workspace; pageKey: MessageKey }) {
+  const { t } = useLocale();
+  return <section className="placeholder-page"><span className="placeholder-icon"><Icon name={navByWorkspace[workspace].find((item) => item.key === pageKey)?.icon ?? "overview"} size={25} /></span><p className="eyebrow">{t("workspaceSection")}</p><h1>{t(pageKey)}</h1><p>{t("sectionPlaceholder")}</p><span className="prototype-note">{t("shellPreview")}</span></section>;
 }
 
 function SourceTag({ kind }: { kind: "REAL" | "DERIVED" | "SIMULATION" }) {
@@ -101,77 +111,80 @@ function SourceTag({ kind }: { kind: "REAL" | "DERIVED" | "SIMULATION" }) {
 }
 
 function OfficerHome() {
+  const { t } = useLocale();
   return (
     <>
-      <div className="welcome-row"><div><p className="eyebrow">Planning workspace</p><h1>Good morning</h1><p className="muted">A clear view of water access, service, and the work ahead.</p></div><button className="button button-secondary"><Icon name="location" size={18} /> Hyderabad <span className="chevron">⌄</span></button></div>
-      <section className="notice-bar"><span className="notice-icon"><Icon name="check" size={18} /></span><p><strong>Evidence before allocation</strong><span>Review the data basis and confidence before approving a plan.</span></p><span className="notice-link">Read the guide <Icon name="arrow" size={16} /></span></section>
-      <div className="section-heading"><div><h2>At a glance</h2><p className="muted">Current evidence available for planning</p></div><span className="updated-label"><span className="status-dot" /> Workspace ready</span></div>
+      <div className="welcome-row"><div><p className="eyebrow">{t("planningWorkspace")}</p><h1>{t("goodMorning")}</h1><p className="muted">{t("officerIntro")}</p></div><button className="button button-secondary"><Icon name="location" size={18} /> {t("hyderabad")} <span className="chevron">⌄</span></button></div>
+      <section className="notice-bar"><span className="notice-icon"><Icon name="check" size={18} /></span><p><strong>{t("evidenceBeforeAllocation")}</strong><span>{t("reviewDataBasis")}</span></p><span className="notice-link">{t("readGuide")} <Icon name="arrow" size={16} /></span></section>
+      <div className="section-heading"><div><h2>{t("atAGlance")}</h2><p className="muted">{t("currentEvidence")}</p></div><span className="updated-label"><span className="status-dot" /> {t("readyToReview")}</span></div>
       <div className="metric-grid">
-        <article className="metric-card"><div className="metric-top"><span className="metric-icon teal"><Icon name="atlas" /></span><SourceTag kind="REAL" /></div><p className="metric-label">Water access evidence</p><strong className="metric-value">Ward-level</strong><p className="metric-note">Census baseline, with source age shown</p></article>
-        <article className="metric-card"><div className="metric-top"><span className="metric-icon blue"><Icon name="water" /></span><SourceTag kind="DERIVED" /></div><p className="metric-label">Service and coverage</p><strong className="metric-value">Ready to review</strong><p className="metric-note">Explore need alongside booking history</p></article>
-        <article className="metric-card"><div className="metric-top"><span className="metric-icon amber"><Icon name="plan" /></span><SourceTag kind="SIMULATION" /></div><p className="metric-label">Allocation workspace</p><strong className="metric-value">No plan pending</strong><p className="metric-note">A plan will need officer review to proceed</p></article>
+        <article className="metric-card"><div className="metric-top"><span className="metric-icon teal"><Icon name="atlas" /></span><SourceTag kind="REAL" /></div><p className="metric-label">{t("waterAccessEvidence")}</p><strong className="metric-value">{t("wardLevel")}</strong><p className="metric-note">{t("censusBaseline")}</p></article>
+        <article className="metric-card"><div className="metric-top"><span className="metric-icon blue"><Icon name="water" /></span><SourceTag kind="DERIVED" /></div><p className="metric-label">{t("serviceCoverage")}</p><strong className="metric-value">{t("readyToReview")}</strong><p className="metric-note">{t("exploreNeed")}</p></article>
+        <article className="metric-card"><div className="metric-top"><span className="metric-icon amber"><Icon name="plan" /></span><SourceTag kind="SIMULATION" /></div><p className="metric-label">{t("allocationWorkspace")}</p><strong className="metric-value">{t("noPlanPending")}</strong><p className="metric-note">{t("officerReviewPlan")}</p></article>
       </div>
       <div className="content-grid">
-        <section className="panel focus-panel"><div className="panel-heading"><div><p className="eyebrow">Start here</p><h2>Build a fair picture</h2></div><span className="panel-mark"><Icon name="atlas" size={21} /></span></div><p className="panel-copy">See where households face barriers to water access, then compare that evidence with tanker service over time.</p><button className="text-button">Open water access <Icon name="arrow" size={17} /></button><div className="mini-legend"><span><i className="legend-dot teal-dot" />Access need</span><span><i className="legend-dot blue-dot" />Service history</span><span><i className="legend-dot amber-dot" />Needs review</span></div></section>
-        <section className="panel checklist-panel"><div className="panel-heading"><div><p className="eyebrow">Your workflow</p><h2>Planning checklist</h2></div><span className="quiet-count">01 / 03</span></div><ol className="checklist"><li className="complete"><span className="step-check"><Icon name="check" size={14} /></span><span><strong>Review the evidence</strong><small>Understand what the data can tell you</small></span></li><li><span className="step-number">2</span><span><strong>Compare service patterns</strong><small>Look for places to check with the community</small></span></li><li><span className="step-number">3</span><span><strong>Review a proposed plan</strong><small>Approve only with a recorded reason</small></span></li></ol></section>
+        <section className="panel focus-panel"><div className="panel-heading"><div><p className="eyebrow">{t("startHere")}</p><h2>{t("buildFairPicture")}</h2></div><span className="panel-mark"><Icon name="atlas" size={21} /></span></div><p className="panel-copy">{t("fairPictureCopy")}</p><button className="text-button">{t("openWaterAccess")} <Icon name="arrow" size={17} /></button><div className="mini-legend"><span><i className="legend-dot teal-dot" />{t("accessNeed")}</span><span><i className="legend-dot blue-dot" />{t("serviceHistory")}</span><span><i className="legend-dot amber-dot" />{t("needsReview")}</span></div></section>
+        <section className="panel checklist-panel"><div className="panel-heading"><div><p className="eyebrow">{t("yourWorkflow")}</p><h2>{t("planningChecklist")}</h2></div><span className="quiet-count">{t("checklistCount")}</span></div><ol className="checklist"><li className="complete"><span className="step-check"><Icon name="check" size={14} /></span><span><strong>{t("reviewEvidence")}</strong><small>{t("understandData")}</small></span></li><li><span className="step-number">2</span><span><strong>{t("comparePatterns")}</strong><small>{t("fieldCheckPrompt")}</small></span></li><li><span className="step-number">3</span><span><strong>{t("reviewProposedPlan")}</strong><small>{t("approvalReason")}</small></span></li></ol></section>
       </div>
-      <p className="honesty-note"><span className="honesty-mark">i</span>Historical and approximate data is labelled where it appears. A flag is a prompt to investigate, not proof of neglect.</p>
+      <p className="honesty-note"><span className="honesty-mark">i</span>{t("historicalApproximate")} {t("flagNotProof")}</p>
     </>
   );
 }
 
 function ResidentHome() {
+  const { t } = useLocale();
   return (
     <div className="resident-page">
-      <section className="resident-hero"><div className="resident-hero-copy"><p className="eyebrow">Your neighbourhood · Hyderabad</p><h1>Water support,<br />made easier.</h1><p>Check updates, tell us what is happening, or get help from a field worker.</p><button className="button button-dark">Get help <Icon name="arrow" size={18} /></button></div><div className="water-art" aria-hidden="true"><span className="sun-orb" /><span className="water-drop"><Icon name="water" size={70} /></span><span className="art-ripple ripple-one" /><span className="art-ripple ripple-two" /></div></section>
-      <div className="resident-notice"><span className="notice-icon"><Icon name="location" size={18} /></span><span><strong>Choose your ward to see local updates</strong><small>Your ward helps us show the right schedule and service information.</small></span><button className="text-button">Choose ward <Icon name="arrow" size={17} /></button></div>
-      <div className="section-heading resident-section-heading"><div><h2>What would you like to do?</h2><p className="muted">Choose an option to continue</p></div></div>
+      <section className="resident-hero"><div className="resident-hero-copy"><p className="eyebrow">{t("neighbourhoodHyderabad")}</p><h1>{t("waterSupportTitle")}</h1><p>{t("residentIntro")}</p><button className="button button-dark">{t("getHelp")} <Icon name="arrow" size={18} /></button></div><div className="water-art" aria-hidden="true"><span className="sun-orb" /><span className="water-drop"><Icon name="water" size={70} /></span><span className="art-ripple ripple-one" /><span className="art-ripple ripple-two" /></div></section>
+      <div className="resident-notice"><span className="notice-icon"><Icon name="location" size={18} /></span><span><strong>{t("chooseWardTitle")}</strong><small>{t("chooseWardDescription")}</small></span><button className="text-button">{t("chooseWard")} <Icon name="arrow" size={17} /></button></div>
+      <div className="section-heading resident-section-heading"><div><h2>{t("whatToDo")}</h2><p className="muted">{t("chooseOption")}</p></div></div>
       <div className="action-grid">
-        <button className="action-card"><span className="action-icon teal"><Icon name="water" size={23} /></span><span className="action-copy"><strong>Track a request</strong><small>See the latest update on your water request</small></span><Icon name="arrow" size={18} /></button>
-        <button className="action-card"><span className="action-icon coral"><Icon name="report" size={23} /></span><span className="action-copy"><strong>Report a water issue</strong><small>Tell us about a shortage, leak, or missed tanker</small></span><Icon name="arrow" size={18} /></button>
-        <button className="action-card"><span className="action-icon blue"><Icon name="impact" size={23} /></span><span className="action-copy"><strong>See ward updates</strong><small>Read local water access and service information</small></span><Icon name="arrow" size={18} /></button>
+        <button className="action-card"><span className="action-icon teal"><Icon name="water" size={23} /></span><span className="action-copy"><strong>{t("trackRequest")}</strong><small>{t("trackRequestDescription")}</small></span><Icon name="arrow" size={18} /></button>
+        <button className="action-card"><span className="action-icon coral"><Icon name="report" size={23} /></span><span className="action-copy"><strong>{t("reportWaterIssue")}</strong><small>{t("reportWaterDescription")}</small></span><Icon name="arrow" size={18} /></button>
+        <button className="action-card"><span className="action-icon blue"><Icon name="impact" size={23} /></span><span className="action-copy"><strong>{t("seeWardUpdates")}</strong><small>{t("wardUpdatesDescription")}</small></span><Icon name="arrow" size={18} /></button>
       </div>
-      <div className="human-help"><span className="help-avatar"><Icon name="help" size={21} /></span><span><strong>Would you rather speak to someone?</strong><small>A field worker can help you make a report.</small></span><button className="button button-secondary">Ask for help</button></div>
-      <p className="prototype-note">Demo workspace · No request will be sent to a live service.</p>
+      <div className="human-help"><span className="help-avatar"><Icon name="help" size={21} /></span><span><strong>{t("speakToSomeone")}</strong><small>{t("fieldWorkerHelp")}</small></span><button className="button button-secondary">{t("askForHelp")}</button></div>
+      <p className="prototype-note">{t("residentDemoNotice")}</p>
     </div>
   );
 }
 
 function DriverHome() {
+  const { t } = useLocale();
   return (
     <div className="driver-page">
-      <div className="driver-heading"><div><p className="eyebrow">Driver workspace</p><h1>Your workday</h1><p className="muted">Route and delivery details assigned to you.</p></div><span className="driver-status"><span className="status-dot" />Ready</span></div>
-      <section className="driver-route-card"><div className="route-card-top"><div><span className="route-label">TODAY’S ROUTE</span><h2>No route assigned</h2></div><span className="route-icon"><Icon name="route" size={23} /></span></div><p>Your assigned stops will appear here when a route is ready.</p><div className="route-summary"><div><small>Stops</small><strong>—</strong></div><div><small>First stop</small><strong>—</strong></div><div><small>Route status</small><strong>Waiting</strong></div></div></section>
-      <div className="driver-section-title"><h2>At each stop</h2><p className="muted">A simple record keeps deliveries clear for everyone.</p></div>
-      <div className="driver-steps"><article className="driver-step"><span className="driver-step-icon"><Icon name="location" /></span><div><strong>Arrive at the stop</strong><p>Confirm your location when you reach the delivery point.</p></div><span className="step-number">1</span></article><article className="driver-step"><span className="driver-step-icon"><Icon name="proof" /></span><div><strong>Confirm delivery with OTP</strong><p>Ask a registered representative for the delivery code.</p></div><span className="step-number">2</span></article><article className="driver-step"><span className="driver-step-icon"><Icon name="check" /></span><div><strong>Record the outcome</strong><p>Save what happened, even if there is a problem.</p></div><span className="step-number">3</span></article></div>
-      <div className="driver-footer-note"><Icon name="help" size={18} /><span>Having trouble with GPS? Your app will show when location is unavailable.</span><button className="text-button">Get help</button></div>
-      <p className="prototype-note">Demo workspace · No route or delivery is connected to live operations.</p>
+      <div className="driver-heading"><div><p className="eyebrow">{t("driverWorkspace")}</p><h1>{t("yourWorkday")}</h1><p className="muted">{t("driverIntro")}</p></div><span className="driver-status"><span className="status-dot" />{t("ready")}</span></div>
+      <section className="driver-route-card"><div className="route-card-top"><div><span className="route-label">{t("todaysRoute")}</span><h2>{t("noRouteAssigned")}</h2></div><span className="route-icon"><Icon name="route" size={23} /></span></div><p>{t("routeWaitDescription")}</p><div className="route-summary"><div><small>{t("stops")}</small><strong>—</strong></div><div><small>{t("firstStop")}</small><strong>—</strong></div><div><small>{t("routeStatus")}</small><strong>{t("waiting")}</strong></div></div></section>
+      <div className="driver-section-title"><h2>{t("atEachStop")}</h2><p className="muted">{t("stopIntro")}</p></div>
+      <div className="driver-steps"><article className="driver-step"><span className="driver-step-icon"><Icon name="location" /></span><div><strong>{t("arriveAtStop")}</strong><p>{t("confirmLocation")}</p></div><span className="step-number">1</span></article><article className="driver-step"><span className="driver-step-icon"><Icon name="proof" /></span><div><strong>{t("confirmDeliveryOtp")}</strong><p>{t("askRepresentative")}</p></div><span className="step-number">2</span></article><article className="driver-step"><span className="driver-step-icon"><Icon name="check" /></span><div><strong>{t("recordOutcome")}</strong><p>{t("saveOutcome")}</p></div><span className="step-number">3</span></article></div>
+      <div className="driver-footer-note"><Icon name="help" size={18} /><span>{t("gpsHelp")}</span><button className="text-button">{t("getHelp")}</button></div>
+      <p className="prototype-note">{t("driverDemoNotice")}</p>
     </div>
   );
 }
 
 export default function App() {
   const [workspace, setWorkspace] = useState<Workspace>("officer");
-  const [activeItem, setActiveItem] = useState("Overview");
+  const [activeItem, setActiveItem] = useState<MessageKey>("officerOverview");
   const { direction, locale, t } = useLocale();
   const meta = workspaceNames[workspace];
 
   function changeWorkspace(next: Workspace) {
     setWorkspace(next);
-    setActiveItem(navByWorkspace[next][0].label);
+    setActiveItem(navByWorkspace[next][0].key);
   }
 
   return (
     <div className="app-frame" dir={direction} lang={locale}>
       <Sidebar workspace={workspace} activeItem={activeItem} onNavigate={setActiveItem} />
       <div className="main-column">
-        <header className="topbar"><div className="mobile-brand"><Brand /></div><div className="topbar-context"><span className="topbar-kicker">JALLEKHA 2.0</span><span className="topbar-divider">/</span><span>{meta.title}</span></div><WorkspaceSwitcher value={workspace} onChange={changeWorkspace} /><button className="help-button" aria-label={t("help")}><Icon name="help" size={20} /></button></header>
+        <header className="topbar"><div className="mobile-brand"><Brand /></div><div className="topbar-context"><span className="topbar-kicker">JALLEKHA 2.0</span><span className="topbar-divider">/</span><span>{t(meta.title)}</span></div><WorkspaceSwitcher value={workspace} onChange={changeWorkspace} /><button className="help-button" aria-label={t("help")}><Icon name="help" size={20} /></button></header>
         <MobileNavigation workspace={workspace} activeItem={activeItem} onNavigate={setActiveItem} />
         <main className={`page-content ${workspace}-content`}>
-          <div className="page-title-mobile"><p className="eyebrow">{meta.eyebrow}</p><h1>{meta.title}</h1><p className="muted">{meta.description}</p></div>
-          {activeItem !== navByWorkspace[workspace][0].label ? <PlaceholderPage workspace={workspace} label={activeItem} /> : workspace === "officer" ? <OfficerHome /> : workspace === "resident" ? <ResidentHome /> : <DriverHome />}
+          <div className="page-title-mobile"><p className="eyebrow">{t(meta.eyebrow)}</p><h1>{t(meta.title)}</h1><p className="muted">{t(meta.description)}</p></div>
+          {activeItem !== navByWorkspace[workspace][0].key ? <PlaceholderPage workspace={workspace} pageKey={activeItem} /> : workspace === "officer" ? <OfficerHome /> : workspace === "resident" ? <ResidentHome /> : <DriverHome />}
         </main>
-        <footer className="app-footer"><span>JalLekha <span className="footer-separator">·</span> Community water-supply allocation</span><span>Built for clarity, fairness, and accountability</span></footer>
+        <footer className="app-footer"><span>JalLekha <span className="footer-separator">·</span> {t("footerTagline")}</span><span>{t("footerPromise")}</span></footer>
       </div>
     </div>
   );

@@ -31,7 +31,18 @@ The pull-request description must summarize the same information and link to thi
 - **What we changed:** Replaced the starter page with responsive officer, resident, and driver workspace previews; added role navigation for desktop and mobile, explicit demo/no-live-service states, REAL/DERIVED/SIMULATION tags, reusable visual tokens and components, and `frontend/src/i18n.tsx` with locale metadata and direction handling for English, Telugu, Urdu, and Hindi. Text is at least 16px and interactive controls are at least 48px. No external font or runtime service is required.
 - **Validation:** `npm run lint`, `npm run build`, and `npm run test -- --run` pass locally. The frontend test wraps `App` in `LocaleProvider` and confirms all three workspaces render and switch. Opened the Vite app at `http://127.0.0.1:5173/` and confirmed the officer, resident, and driver workspaces render and switch. Added `.github/workflows/p4-s4.yml` to repeat lint and production build for the `P4:S4` task check.
 - **Known limitations:** Translation catalogs are scaffolding only; actual translated UI strings belong to U1. Data screens and real API integrations belong to U5-U10. This is a shell preview with no live requests, route assignment, or allocation approval.
-- **Handoff / next step:** After S4 review/merge, implement U1 translations and Urdu RTL visual review, then proceed to U2 resident app when P3 T4 is ready.
+- **Handoff / next step:** Merged to main in PR #16. U1 is underway on `feat/u1-i18n`; resident/driver functionality follows after U1 and P3 T4.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/16
+
+## `feat/u1-i18n` — `U1`
+
+- **Owner / date:** P4, 2026-10-02.
+- **Purpose:** Make the shared officer, resident, and driver shells available in English, Telugu, Urdu, and Hindi, with Urdu RTL behavior.
+- **What we found:** S4 supplied locale context and direction handling but no language picker or translated catalog. R-P4 recommends short, clear language, logical layout properties, and native review of Urdu wording.
+- **What we changed:** Added a locale selector and full shell message catalogs for en/te/ur/hi. Workspace labels, navigation, resident and driver content, and shared shell copy use translation keys; selecting Urdu applies RTL direction to the app and document. Added a locale-switching UI test.
+- **Validation:** `npm run test -- --run` passes (1 test covering Telugu and Hindi strings, workspace switching, and Urdu RTL/lang attributes); `npm run lint` passes; `npm run build` passes. CI workflow `P4:U1` will run frontend tests, lint, and build.
+- **Known limitations:** These are draft translations. Native speakers must review Telugu, Urdu, and Hindi wording and layout before release; no runtime translation is used.
+- **Handoff / next step:** After U1 review/merge, start U2 once P3 T4 (intake) is ready. U3 follows U2; U4 also waits for P3 T3 delivery proof.
 - **Pull request:** pending.
 
 ## `research/p1` — `R-P1`
