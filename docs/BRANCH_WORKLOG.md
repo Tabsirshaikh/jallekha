@@ -553,7 +553,7 @@ The pull-request description must summarize the same information and link to thi
   - Tests `backend/tests/services/test_notices.py`; docs `docs/P3_FEATURES.md`, `docs/features.csv` (T5 IN_PROGRESS), `docs/worklogs/T5.md`; workflow `.github/workflows/p3-t5.yml`.
 - **Validation:**
   - 26 tests written first (import failed before the code existed): outage creation; `outage_created` and `notice_published` in the stored ledger with a verified chain; no free text or phone in payloads; duplicates not entered twice; unmatched, near-miss, ambiguous and unplaced areas flagged; no matched area means no outage; P1's real tables load (counts read from the files and compared with `AreaIndex`: 221 / 161 / 145); six malformed or backwards time ranges rejected; people affected from the officer, else the labelled Census fallback; alert wording in four languages; endpoint; ledger failure marker.
-  - `python tasks.py test` exit 0: 458 backend passed, 1 frontend test, all P1 verifiers (run 2026-10-02, after merging #39, #40 and #42); `python tasks.py lint` exit 0.
+  - `python tasks.py test` exit 0: 460 backend passed, 1 frontend test, all P1 verifiers (run 2026-10-02, after merging #39, #40, #42 and #43; 458 before #43, which adds 2 E5 tests); `python tasks.py lint` exit 0.
   - Placement counts come from P1's section_to_ward_2016.csv and change when P1 updates it (142 -> 161 placed after SEC-FIX #39); the test reads them from the file.
   - Task workflow `P3:T5` (`.github/workflows/p3-t5.yml`): T5 tests, A5 outage and T6 ledger-store tests, ruff check and format check on the T5 files.
   - Notices and phone numbers in tests are synthetic; area names and ward ids come from P1's tables.
@@ -564,4 +564,4 @@ The pull-request description must summarize the same information and link to thi
   - P2 (A5): consider putting `entity_type` / `entity_id` inside `create_outage`'s payload.
   - P4: review the alert wording; show flagged areas to the officer.
   - P1: a locality alias table and post-2026 section names would raise the matched share.
-- **Pull request:** pending.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/44
