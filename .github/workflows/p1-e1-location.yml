@@ -1,0 +1,28 @@
+name: "P1:E1-FIX"
+on:
+  push:
+    branches: [codex/e1-location-validation]
+  pull_request:
+    branches: [feat/e2-evidence, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  location-validation:
+    name: "P1:E1-FIX"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -e 'backend[dev]'
+      - run: python scripts/data/verify_manifest.py
+      - run: python scripts/evidence/build_crosswalk.py
+      - run: git diff --exit-code -- data/derived/crosswalk data/verification/crosswalk_checks.json
+      - run: python scripts/evidence/verify_crosswalk.py
+      - run: python scripts/evidence/verify_evidence.py
+      - run: pytest backend/tests/test_location_validation.py backend/tests/test_e1_crosswalk.py backend/tests/test_e2_evidence.py
+      - run: ruff check --config backend/pyproject.toml scripts/evidence backend/tests
+      - run: ruff format --check --config backend/pyproject.toml scripts/evidence backend/tests

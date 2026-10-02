@@ -1,0 +1,27 @@
+name: "P1:E5"
+on:
+  push:
+    branches: [feat/e5-underserved]
+  pull_request:
+    branches: [feat/e3-growth, codex/e1-location-validation, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  underserved:
+    name: "P1:E5"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -e 'backend[dev,geo,models]'
+      - run: python scripts/evidence/verify_crosswalk.py
+      - run: python scripts/evidence/verify_evidence.py
+      - run: python scripts/evidence/verify_growth.py
+      - run: python scripts/evidence/verify_underserved.py
+      - run: pytest backend/tests/test_e5_underserved.py backend/tests/test_e2_evidence.py backend/tests/test_e3_growth.py backend/tests/test_location_validation.py
+      - run: ruff check --config backend/pyproject.toml backend/app/config/underserved.py backend/app/services/underserved.py backend/app/services/underserved_models.py backend/tests/test_e5_underserved.py scripts/evidence/build_underserved.py scripts/evidence/verify_underserved.py tasks.py
+      - run: ruff format --check --config backend/pyproject.toml backend/app/config/underserved.py backend/app/services/underserved.py backend/app/services/underserved_models.py backend/tests/test_e5_underserved.py scripts/evidence/build_underserved.py scripts/evidence/verify_underserved.py tasks.py

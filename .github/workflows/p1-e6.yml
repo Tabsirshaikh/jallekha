@@ -1,0 +1,27 @@
+name: "P1:E6"
+on:
+  push:
+    branches: [feat/e6-coverage]
+  pull_request:
+    branches: [feat/e5-underserved, feat/e4-equity, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  coverage:
+    name: "P1:E6"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -e 'backend[dev,geo,models]'
+      - run: python scripts/evidence/verify_evidence.py
+      - run: python scripts/evidence/verify_equity.py
+      - run: python scripts/evidence/verify_underserved.py
+      - run: python scripts/evidence/verify_coverage.py
+      - run: pytest backend/tests/test_e6_coverage.py backend/tests/test_e4_equity.py backend/tests/test_e5_underserved.py
+      - run: ruff check --config backend/pyproject.toml backend/app/config/coverage.py backend/app/services/coverage.py backend/tests/test_e6_coverage.py scripts/evidence/build_coverage.py scripts/evidence/verify_coverage.py tasks.py
+      - run: ruff format --check --config backend/pyproject.toml backend/app/config/coverage.py backend/app/services/coverage.py backend/tests/test_e6_coverage.py scripts/evidence/build_coverage.py scripts/evidence/verify_coverage.py tasks.py

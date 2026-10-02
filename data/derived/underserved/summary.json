@@ -1,0 +1,41 @@
+{
+  "area_count": 145,
+  "blocking_reason_counts": {
+    "BOOKING_PERIOD_UNAVAILABLE": 145,
+    "CAD_AND_HARDSHIP_UNAVAILABLE": 11,
+    "HOUSEHOLD_EXPOSURE_UNAVAILABLE": 11,
+    "INCOMPLETE_BOOKING_PERIOD": 145,
+    "INVALID_OR_MISSING_NON_TAP_SHARE": 11,
+    "INVALID_OR_MISSING_WAD": 11,
+    "UNVALIDATED_BOOKING_TRANSFER": 145,
+    "UNVALIDATED_CENSUS_LOCATION": 145,
+    "WARD_BOOKINGS_UNAVAILABLE": 145
+  },
+  "booking_transfer": "UNAVAILABLE_NO_VERIFIED_SECTION_TO_WARD_CROSSWALK",
+  "data_review_count": 145,
+  "e2_location_validated_joins": 0,
+  "e3_growth_context_only": true,
+  "e3_high_variability_review_flags": 145,
+  "eligible_count": 0,
+  "field_check_count": 0,
+  "field_check_outcomes_recorded": 0,
+  "ground_truth_count": 0,
+  "interpretation": "A low booking/reference ratio can trigger a field check only after all evidence gates pass; it does not estimate unreported demand or prove under-service.",
+  "limits": [
+    "E2 has zero location-validated Census-to-polygon assignments.",
+    "HMWSSB tanker observations are monthly section totals; no verified section-to-ward transfer exists.",
+    "Census household and need covariates are historical and provisional for unvalidated locations.",
+    "All 145 E3 growth observations carry a review-only variability flag; growth is not used for ranking.",
+    "No field-check labels exist, so empirical precision/recall and real-world accuracy are unavailable.",
+    "This screen cannot identify who did not report or infer reporting propensity from counts alone.",
+    "A candidate means 'send someone to check'; it never changes allocation, eligibility, or entitlement."
+  ],
+  "real_world_accuracy": null,
+  "reporting_probability": null,
+  "screen_status": "DATA_REVIEW_REQUIRED",
+  "screened_count": 0,
+  "screening_basis": "REAL_SOURCE_INPUTS;NO_SYNTHETIC_VALUES_IN_OPERATIONAL_OUTPUT",
+  "stability_evaluated": false,
+  "tanker_data_granularity": "MONTHLY_HMWSSB_SECTION_COUNTS",
+  "under_service_ground_truth": null
+}

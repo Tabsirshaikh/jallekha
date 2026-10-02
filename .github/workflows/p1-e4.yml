@@ -1,0 +1,26 @@
+name: "P1:E4"
+on:
+  push:
+    branches: [feat/e4-equity]
+  pull_request:
+    branches: [codex/e1-location-validation, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  equity:
+    name: "P1:E4"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -e 'backend[dev]'
+      - run: python scripts/data/verify_manifest.py
+      - run: python scripts/evidence/verify_evidence.py
+      - run: python scripts/evidence/verify_equity.py
+      - run: pytest backend/tests/test_e4_equity.py
+      - run: ruff check --config backend/pyproject.toml scripts/evidence/build_equity.py scripts/evidence/verify_equity.py backend/tests/test_e4_equity.py backend/app/config/equity.py
+      - run: ruff format --check --config backend/pyproject.toml scripts/evidence/build_equity.py scripts/evidence/verify_equity.py backend/tests/test_e4_equity.py backend/app/config/equity.py

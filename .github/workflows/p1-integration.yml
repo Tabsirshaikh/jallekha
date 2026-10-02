@@ -1,0 +1,24 @@
+name: "P1:integration"
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, codex/p1-main-integration]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  integration:
+    name: "P1:integration"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: python scripts/ci/verify_main_integration.py
+      - run: python scripts/ci/verify_p1_r_p1.py
+      - run: git diff --check

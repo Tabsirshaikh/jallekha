@@ -1,0 +1,64 @@
+{
+  "aggregation": "32m average fractional count multiplied by native source-pixel area factor; approximate index",
+  "booking_validation": "BLOCKED_NO_VERIFIED_SECTION_TO_WARD_CROSSWALK_AND_NO_2016_BOOKINGS",
+  "boundary_vintage": "Unverified historical 150-ward DataMeet layer; not current GHMC geography",
+  "comparison_sources": [
+    {
+      "basis": "DERIVED",
+      "geographic_unit": "historical ward polygon",
+      "period": "2016-2023",
+      "source": "Google Open Buildings Temporal",
+      "source_url": "https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_Research_open-buildings-temporal_v1",
+      "status": "EXTRACTED_DERIVED_BUILDING_SIGNAL",
+      "use": "urban building-change covariate only"
+    },
+    {
+      "basis": "UNAVAILABLE",
+      "geographic_unit": "modelled population grid",
+      "period": "2016-2020 common-comparison candidate",
+      "source": "WorldPop India population raster",
+      "source_url": "https://data.worldpop.org/GIS/Population/Global_2000_2020/2020/IND/ind_ppp_2020.tif",
+      "status": "NOT_EXTRACTED_RANGE_READ_UNSUPPORTED; 1.84 GB full download excluded",
+      "use": "independent population sensitivity not ground truth"
+    },
+    {
+      "basis": "UNAVAILABLE",
+      "geographic_unit": "modelled population grid",
+      "period": "five-year epochs, includes modelled 2025 projection",
+      "source": "GHS-POP R2023A",
+      "source_url": "https://human-settlement.emergency.copernicus.eu/ghs_pop2023.php",
+      "status": "NOT_EXTRACTED_DIFFERING_EPOCHS_AND_GRID",
+      "use": "independent population sensitivity, incomparable without harmonization"
+    }
+  ],
+  "grid_metres": 32,
+  "growth_ratio_p10": 1.18508336,
+  "growth_ratio_p90": 1.41729733,
+  "high_variability_review_flags": 145,
+  "interpretation": "Building-change signal; buildings are not households or population",
+  "limitations": [
+    "Only 145 polygon features; layer is an incomplete historical 150-ward scheme.",
+    "E1 has zero location-validated Census-to-polygon assignments.",
+    "Open Buildings confidence is uncalibrated; Google documents positional/temporal jitter, tile seams, and missed small buildings.",
+    "32m aggregation bounds extraction; compare 16m/64m before treating small ranking differences as stable.",
+    "WorldPop's India raster host does not support range reads; the 1.84GB file was not downloaded.",
+    "GHS-POP grid epochs differ from 2016-2023; no multi-source agreement score is reported.",
+    "Ward-level booking validation lacks an authoritative crosswalk; tanker data begins in 2022."
+  ],
+  "median_building_growth_ratio": 1.27011527,
+  "multi_source_growth_range": null,
+  "period": "2016-2023",
+  "polygon_count": 145,
+  "population_projection": "BLOCKED; no current household estimate is computed",
+  "row_count": 145,
+  "source": "Google Open Buildings Temporal V1",
+  "source_band": "building_fractional_count",
+  "unclassified_stability_polygons": 0,
+  "usable_growth_ratios": 145,
+  "validated_census_joins": 0,
+  "variability_review_threshold": {
+    "metric": "coefficient_of_variation_of_annual_log_growth",
+    "status": "ENGINEERING_REVIEW_HEURISTIC_NOT_VALIDATED_QUALITY_BOUND",
+    "threshold": 0.25
+  }
+}
