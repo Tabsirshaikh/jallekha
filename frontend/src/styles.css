@@ -155,6 +155,42 @@ h2 { margin: 0; color: var(--ink); font: 700 18px/1.3 "Manrope", sans-serif; let
 .human-help strong { color: #486258; font-size: 16px; }
 .human-help small { color: #8b9891; font-size: 16px; }
 .prototype-note { margin: 16px 0 0; color: #9aa49e; text-align: center; font-size: 16px; }
+.resident-state-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; color: #73847b; font-size: 16px; }
+.resident-connectivity { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; }
+.resident-connectivity i { width: 9px; height: 9px; border-radius: 50%; background: #34896a; }
+.resident-connectivity.offline i { background: #bd7b32; }
+.resident-experience .resident-hero { margin-bottom: 15px; }
+.resident-form-card, .resident-ward-card { max-width: 760px; margin: 0 auto; padding: clamp(20px, 4vw, 34px); border: 1px solid #e7ece8; border-radius: 17px; background: white; box-shadow: 0 3px 12px #193b3208; }
+.resident-form-card h1, .resident-ward-card h1, .resident-section-title h1 { margin: 13px 0 8px; font-size: clamp(25px, 3vw, 34px); }
+.resident-form-card form { display: grid; gap: 18px; margin-top: 22px; }
+.resident-form-card label { display: grid; gap: 8px; color: #35594c; font-size: 16px; font-weight: 700; }
+.resident-form-card select, .resident-form-card textarea, .resident-form-card input { width: 100%; min-height: 50px; padding: 12px 13px; border: 1px solid #dce5df; border-radius: 10px; background: #fff; color: #254a40; font: inherit; font-weight: 400; }
+.resident-form-card textarea { min-height: 120px; resize: vertical; }
+.resident-form-card select:focus, .resident-form-card textarea:focus, .resident-form-card input:focus { outline: 3px solid #b8dfcf; outline-offset: 1px; }
+.resident-form-card .button:disabled { cursor: not-allowed; opacity: .55; }
+.resident-privacy-note, .resident-status-message { margin: 0; color: #72847a; font-size: 16px; line-height: 1.55; }
+.resident-status-message { padding: 10px 12px; border-radius: 9px; background: #eff7f2; color: #27664f; }
+.resident-section-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.resident-list-section { max-width: 900px; margin: 0 auto; }
+.resident-empty-state { padding: 28px; border: 1px dashed #cfdad2; border-radius: 12px; color: #71847a; text-align: center; }
+.resident-request-list { display: grid; gap: 12px; }
+.resident-request-card { display: grid; gap: 9px; padding: 17px; border: 1px solid #e4ebe5; border-radius: 13px; background: white; }
+.resident-request-card h2 { margin: 0; }
+.resident-request-card p { margin: 0; color: #65796f; font-size: 16px; line-height: 1.5; }
+.resident-request-card small { color: #74867c; font-size: 16px; line-height: 1.5; }
+.resident-request-card-head, .resident-request-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: #78877f; font-size: 16px; }
+.resident-request-state { width: fit-content; padding: 5px 9px; border-radius: 999px; background: #fff3df; color: #8b5e1e; font-weight: 700; }
+.resident-request-state.submitted { background: #e7f4ec; color: #277252; }
+.resident-request-state.needs_location, .resident-request-state.invalid { background: #f9ece7; color: #95543c; }
+.resident-request-meta { flex-wrap: wrap; justify-content: flex-start; padding-top: 8px; border-top: 1px solid #edf1ed; }
+.resident-request-meta strong { color: #65796f; }
+.resident-ward-card { max-width: 760px; }
+.resident-ward-card > p:not(.eyebrow) { margin-block: 16px; color: #667970; font-size: 16px; line-height: 1.6; }
+.resident-data-badge { display: inline-flex; padding: 6px 9px; border-radius: 6px; background: #f0f2ef; color: #718078; font-size: 16px; font-weight: 700; }
+.resident-ward-placeholder { display: grid; gap: 9px; margin: 20px 0; padding: 18px; border: 1px dashed #cbd9d0; border-radius: 12px; background: #f9fbf9; color: #526a5f; }
+.resident-ward-placeholder > span { font-size: 24px; }
+.resident-ward-placeholder small { color: #798a80; font-size: 16px; line-height: 1.5; }
+.resident-honesty-note { margin: 16px auto 0; color: #8a9890; text-align: center; font-size: 16px; line-height: 1.55; }
 
 /* Driver workspace */
 .driver-page { max-width: 900px; margin: 0 auto; }
@@ -235,6 +271,9 @@ h2 { margin: 0; color: var(--ink); font: 700 18px/1.3 "Manrope", sans-serif; let
   .app-footer { flex-direction: column; padding: 14px 18px; }
   .app-footer span + span { display: none; }
   .resident-content { padding-top: 19px; }
+  .resident-state-row { align-items: flex-start; flex-direction: column; gap: 5px; font-size: 16px; }
+  .resident-section-title { align-items: flex-start; flex-direction: column; }
+  .resident-request-card-head, .resident-request-meta { align-items: flex-start; flex-direction: column; }
   .resident-hero { min-height: 290px; align-items: flex-start; padding: 25px 23px; }
   .resident-hero-copy { max-width: 70%; }
   .resident-hero h1 { font-size: 29px; }

@@ -45,6 +45,17 @@ The pull-request description must summarize the same information and link to thi
 - **Handoff / next step:** After U1 review/merge, start U2 once P3 T4 (intake) is ready. U3 follows U2; U4 also waits for P3 T3 delivery proof.
 - **Pull request:** pending.
 
+## `feat/u2-resident` — `U2`
+
+- **Owner / date:** P4, 2026-10-02.
+- **Purpose:** Build the resident-facing reporting and tracking experience with an offline-first queue.
+- **What we found:** P3's T4 intake batch endpoint accepts app items with `client_id`, `channel`, `category`, `text`, `language_hint`, and `area_id`; it returns per-item outcomes. There is no resident-facing delivery-code or ward-information API in `main`. U1 is merged; T4's implementation is present via PR #37, though its tracker row remains `IN_REVIEW`.
+- **What we changed:** Added English, Telugu, Urdu and Hindi resident flows for issue reports, request tracking and an area card. Reports persist in IndexedDB, can include device location only after the resident opts in, and sync idempotently through T4's `/intake/batch` contract when online; the dev server proxies `/intake` to the local API. Added a web manifest and service worker for cached app-shell use. The UI explicitly identifies local-only reports and unavailable live delivery/ward data.
+- **Validation:** `git diff --check` passes. `.github/workflows/p4-u2.yml` runs frontend lint and production build. Local UI/test/build validation has not been run.
+- **Known limitations:** Live delivery-code assignment and verified ward service information need backend/API support. Intake submission also needs the API running and reachable at `/intake/batch`. All translations are drafts pending native-speaker review.
+- **Handoff / next step:** Coordinate with P3 on resident-facing delivery-code and ward-information API shapes; then connect the card to verified data.
+- **Pull request:** pending.
+
 ## `research/p1` — `R-P1`
 
 - **Owner / date:** P1 (Yaseer), 2026-10-01.
