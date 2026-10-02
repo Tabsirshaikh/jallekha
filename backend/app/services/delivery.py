@@ -19,6 +19,7 @@ functions (`services/otp.py`, `services/geofence.py`), used unchanged.
 
 from __future__ import annotations
 
+import math
 import random
 import unicodedata
 from collections.abc import Collection, Iterable
@@ -34,8 +35,16 @@ from app.services.sms import SmsMessage, SmsSender, message_language
 Outcome = Literal["Confirmed", "Disputed", "Unconfirmed", "Failed"]
 Answer = Literal["yes", "no"]
 VerifyResult = Literal[
-    "verified", "already_verified", "wrong_code", "expired", "locked", "outside_geofence", "no_otp"
+    "verified",
+    "already_verified",
+    "wrong_code",
+    "expired",
+    "locked",
+    "outside_geofence",
+    "invalid_location",
+    "no_otp",
 ]
+LocationStatus = Literal["inside", "outside", "no_location", "invalid_location"]
 
 OTP_TEMPLATE = "delivery.otp"
 RESIDENT_CHECK_TEMPLATE = "delivery.resident_check"
@@ -86,6 +95,17 @@ class OutcomeDecision:
 
 
 @dataclass(frozen=True)
+class LocationCheck:
+    """T3's geofence result. Invalid input is a status here, never an unhandled error."""
+
+    status: LocationStatus
+    inside: bool
+    distance_m: float | None  # None when there is no usable position
+    radius_m: float | None  # None when the radius itself is invalid
+    reason: str | None = None  # invalid_coordinates | invalid_radius
+
+
+@dataclass(frozen=True)
 class DeliveryState:
     delivery_id: str
     stop_id: str
@@ -94,6 +114,7 @@ class DeliveryState:
     driver_id: str
     representatives: tuple[Representative, ...]
     started_at: datetime
+    geofence_radius_m: float | None = None  # per-stop override; None = config (150 m)
     otp: OtpChallenge | None = None
     wrong_attempts: int = 0
     outside_tries: int = 0
@@ -142,6 +163,7 @@ def start_delivery(
     representatives: Iterable[Representative],
     ledger: LedgerPort,
     now: datetime,
+    radius_m: float | None = None,
 ) -> DeliveryState:
     reps = tuple(representatives)
     low, high = TRUST_CONFIG.delivery_representatives_min, TRUST_CONFIG.delivery_representatives_max
@@ -149,7 +171,9 @@ def start_delivery(
         raise ValueError(f"A stop needs {low}-{high} registered representatives, got {len(reps)}")
     if any(rep.stop_id != stop_id for rep in reps):
         raise ValueError(f"Every representative must belong to stop {stop_id}")
-    state = DeliveryState(delivery_id, stop_id, stop_lat, stop_lon, driver_id, reps, _aware(now))
+    state = DeliveryState(
+        delivery_id, stop_id, stop_lat, stop_lon, driver_id, reps, _aware(now), radius_m
+    )
     _log(
         ledger,
         "delivery_started",
@@ -161,28 +185,46 @@ def start_delivery(
     return state
 
 
+def locate(state: DeliveryState, lat: float | None, lon: float | None) -> LocationCheck:
+    """Run the S3 geofence check; turn its input errors (S3 review D7, D9) into a status."""
+    radius = state.geofence_radius_m
+    if radius is not None and not (
+        isinstance(radius, int | float) and math.isfinite(radius) and radius > 0
+    ):
+        return LocationCheck("invalid_location", False, None, None, "invalid_radius")
+    try:
+        fence = geofence.check(lat, lon, state.stop_lat, state.stop_lon, radius_m=radius)
+    except ValueError:  # NaN, infinite or out-of-range coordinates (driver or stop)
+        return LocationCheck("invalid_location", False, None, None, "invalid_coordinates")
+    if fence.distance_m is None:
+        return LocationCheck("no_location", False, None, fence.radius_m)
+    status: LocationStatus = "inside" if fence.inside else "outside"
+    return LocationCheck(status, fence.inside, fence.distance_m, fence.radius_m)
+
+
 def check_geofence(
     state: DeliveryState, lat: float | None, lon: float | None, ledger: LedgerPort, now: datetime
-) -> tuple[DeliveryState, geofence.GeofenceResult]:
+) -> tuple[DeliveryState, LocationCheck]:
     """Server-side check of the driver's position against the stop (150 m, F12)."""
-    result = geofence.check(lat, lon, state.stop_lat, state.stop_lon)
-    _log_geofence(state, result, ledger, _aware(now))
-    return state, result
+    location = locate(state, lat, lon)
+    _log_location(state, location, ledger, _aware(now))
+    return state, location
 
 
-def _log_geofence(
-    state: DeliveryState, result: geofence.GeofenceResult, ledger: LedgerPort, now: datetime
+def _log_location(
+    state: DeliveryState, location: LocationCheck, ledger: LedgerPort, now: datetime
 ) -> None:
-    distance = result.distance_m if result.distance_m != float("inf") else None
     _log(
         ledger,
         "geofence_checked",
         state,
         now,
         actor=state.driver_id,
-        inside=result.inside,
-        distance_m=distance,
-        radius_m=result.radius_m,
+        status=location.status,
+        reason=location.reason,
+        inside=location.inside,
+        distance_m=location.distance_m,
+        radius_m=location.radius_m,
     )
 
 
@@ -251,7 +293,8 @@ def verify_otp(
     """Check the code at the stop. Only a wrong code inside the geofence uses up an attempt.
 
     The geofence is checked before the code, so a try from outside reveals nothing about the
-    code. Outside tries are logged up to `outside_tries_max` per visit, then one
+    code. An invalid position or radius gives `invalid_location` and counts as an outside try.
+    Outside tries are logged up to `outside_tries_max` per visit, then one
     `outside_tries_exceeded` entry, then nothing (OPEN value, config/trust.py).
     """
     now = _aware(now)
@@ -265,9 +308,10 @@ def verify_otp(
     elif otp.is_expired(state.otp.expires_at, now):
         result = "expired"
     else:
-        fence = geofence.check(lat, lon, state.stop_lat, state.stop_lon)
-        if not fence.inside:
-            result = "outside_geofence"
+        location = locate(state, lat, lon)
+        if not location.inside:
+            invalid = location.status == "invalid_location"
+            result = "invalid_location" if invalid else "outside_geofence"
             state = replace(state, outside_tries=state.outside_tries + 1)
             cap = TRUST_CONFIG.outside_tries_max
             if state.outside_tries > cap:
@@ -282,8 +326,8 @@ def verify_otp(
                         outside_tries_max=cap,
                     )
                 return state, result
-        _log_geofence(state, fence, ledger, now)
-        if fence.inside:
+        _log_location(state, location, ledger, now)
+        if location.inside:
             if otp.check(otp_key, code, state.stop_id, state.otp.code_hash):
                 result = "verified"
                 state = replace(state, otp_verified=True)

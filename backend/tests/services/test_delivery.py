@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 
@@ -369,6 +370,58 @@ def test_wrong_otp_attempts_lock_the_stop_across_reissues(
     assert result == "locked" and not state.otp_verified
     with pytest.raises(ValueError, match="locked"):
         dl.request_otp(state, "rep-1", OTP_KEY, sms, chain, T0)
+
+
+BAD_POSITIONS = [
+    (math.nan, 78.4867),
+    (17.385, math.nan),
+    (math.inf, 78.4867),
+    (95.0, 78.4867),
+    (17.385, 181.0),
+]
+
+
+@pytest.mark.parametrize("position", BAD_POSITIONS)
+def test_invalid_driver_position_is_a_clear_result_not_an_error(
+    chain: InMemoryLedger, sms: FakeSmsSender, position: tuple[float, float]
+) -> None:
+    # S3 review D9: geofence.check now raises on NaN / out-of-range coordinates; T3 catches it.
+    state = _start(chain)
+    _, location = dl.check_geofence(state, *position, chain, T0)
+    assert (location.status, location.reason, location.inside) == (
+        "invalid_location",
+        "invalid_coordinates",
+        False,
+    )
+    state = dl.request_otp(state, "rep-1", OTP_KEY, sms, chain, T0)
+    state, result = dl.verify_otp(state, sms.sent[-1].params["code"], *position, OTP_KEY, chain, T0)
+    assert result == "invalid_location"
+    assert state.wrong_attempts == 0 and not state.otp_verified and state.outside_tries == 1
+
+
+def test_invalid_stop_position_is_a_clear_result(chain: InMemoryLedger) -> None:
+    state = dl.start_delivery("del-1", "stop-1", math.nan, 78.4867, "drv-1", REPS, chain, T0)
+    _, location = dl.check_geofence(state, *_at(20), chain, T0)
+    assert (location.status, location.reason) == ("invalid_location", "invalid_coordinates")
+
+
+@pytest.mark.parametrize("radius", [0, -5, math.nan, math.inf])
+def test_invalid_radius_is_a_clear_result_not_an_error(
+    chain: InMemoryLedger, sms: FakeSmsSender, radius: float
+) -> None:
+    # S3 review D7: geofence.check now raises on radius <= 0; T3 checks the radius first.
+    state = dl.start_delivery("del-1", "stop-1", *STOP, "drv-1", REPS, chain, T0, radius_m=radius)
+    _, location = dl.check_geofence(state, *_at(20), chain, T0)
+    assert (location.status, location.reason) == ("invalid_location", "invalid_radius")
+    state = dl.request_otp(state, "rep-1", OTP_KEY, sms, chain, T0)
+    state, result = dl.verify_otp(state, sms.sent[-1].params["code"], *_at(20), OTP_KEY, chain, T0)
+    assert result == "invalid_location" and not state.otp_verified
+
+
+def test_valid_per_stop_radius_is_used(chain: InMemoryLedger) -> None:
+    state = dl.start_delivery("del-1", "stop-1", *STOP, "drv-1", REPS, chain, T0, radius_m=200)
+    _, location = dl.check_geofence(state, *_at(180), chain, T0)
+    assert (location.status, location.radius_m) == ("inside", 200)
 
 
 def test_changing_otp_digits_after_issue_keeps_the_issued_otp_working(
