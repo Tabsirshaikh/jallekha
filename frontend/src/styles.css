@@ -200,7 +200,19 @@ h2 { margin: 0; color: var(--ink); font: 700 18px/1.3 "Manrope", sans-serif; let
 .driver-proof-panel form input { width: min(100%, 320px); min-height: 54px; padding: 10px 14px; border: 1px solid #dbe5de; border-radius: 10px; background: #fff; color: #24483f; font: 700 24px/1.2 ui-monospace, monospace; letter-spacing: .18em; }
 .driver-proof-panel form input:focus { outline: 3px solid #b8dfcf; outline-offset: 1px; }
 .driver-proof-panel form .button:disabled { cursor: not-allowed; opacity: .55; }
+.driver-demo-code { margin: -4px 0 2px; color: #8a682d; font-size: 16px; font-weight: 700; }
+.driver-feedback-options { display: grid; gap: 9px; width: min(100%, 520px); margin: 2px 0 4px; padding: 12px; border: 1px solid #e4ebe5; border-radius: 10px; }
+.driver-feedback-options legend { padding: 0 5px; color: #405f53; font-size: 16px; font-weight: 700; }
+.driver-feedback-options label { display: flex; align-items: center; gap: 9px; font-weight: 500 !important; }
+.driver-feedback-options input { width: 18px !important; min-height: 18px !important; accent-color: #287761; }
 .driver-feedback { margin: 13px 0; padding: 11px 13px; border-radius: 9px; background: #fff5e6; color: #805b20; font-size: 16px; line-height: 1.5; }
+.driver-preview-outcome { display: grid; gap: 5px; margin-top: 14px; padding: 14px; border: 1px solid #d7e7dd; border-inline-start: 4px solid #51866e; border-radius: 10px; background: #f5faf6; }
+.driver-preview-outcome small { color: #74847b; font-size: 14px; }
+.driver-preview-outcome strong { color: #35594c; font-size: 18px; }
+.driver-preview-outcome span { color: #62776d; font-size: 16px; line-height: 1.5; }
+.driver-preview-outcome.disputed { border-inline-start-color: #bd8b43; }
+.driver-preview-outcome.unconfirmed { border-inline-start-color: #6685a1; }
+.driver-preview-outcome.failed { border-inline-start-color: #b96756; }
 .driver-outcome-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
 .driver-outcome { display: grid; gap: 7px; padding: 13px; border: 1px solid #e8ede8; border-inline-start: 4px solid #51866e; border-radius: 10px; background: #fbfcfb; }
 .driver-outcome strong { color: #35594c; font-size: 16px; }

@@ -50,10 +50,10 @@ The pull-request description must summarize the same information and link to thi
 - **Owner / date:** P4, 2026-10-02.
 - **Purpose:** Build the driver route, arrival and delivery-proof screens.
 - **What we found:** T3's service exposes server-side geofence and OTP verification and four outcomes (`Confirmed`, `Disputed`, `Unconfirmed`, `Failed`), but main has no driver or delivery API router. R-P4 requires clear synthetic labels and no false claims about live service.
-- **What we changed:** Added English, Telugu, Urdu and Hindi driver route and delivery-proof screens, with three visibly synthetic stops, a preview-only arrival action, a six-digit OTP entry that is cleared without being stored or accepted, and all four T3 outcomes with their conditions.
-- **Validation:** `npm run lint`, `npm run build`, and `git diff --check` pass. `.github/workflows/p4-u4.yml` repeats frontend lint and production build. UI and test suite have not been run locally.
-- **Known limitations:** A live assigned route, geofence confirmation and OTP verification require an API backed by T3. Route fixtures are synthetic.
-- **Handoff / next step:** Connect the driver flow after P3 adds the route / arrival / OTP endpoints; preserve server-side geofence and outcome decisions.
+- **What we changed:** Added English, Telugu, Urdu and Hindi driver route and delivery-proof screens, with three visibly synthetic stops and a preview-only arrival action. A local fixture flow uses the displayed demo OTP (`123456`) and a selectable simulated resident response to demonstrate all four T3 outcomes; the code is cleared and nothing is sent or persisted.
+- **Validation:** Frontend lint and production build pass. `.github/workflows/p4-u4.yml` repeats both checks. UI and test suite have not been run locally.
+- **Known limitations:** This is a fixture-backed demonstration, not live route assignment, GPS geofence confirmation, OTP verification, resident messaging or ledger persistence. Live API integration remains a follow-up after P3 provides endpoints.
+- **Handoff / next step:** U4 preview scope is complete. Integrate the real route / arrival / OTP endpoints when available, preserving server-side geofence and outcome decisions.
 - **Pull request:** pending.
 
 ## `research/p1` — `R-P1`
