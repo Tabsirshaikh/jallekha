@@ -318,3 +318,38 @@ The pull-request description must summarize the same information and link to thi
   - T6 stores `service_point_registered` entries.
   - P4 shows the timetable and the officer point registration.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/32
+
+## `fix/a3-section-wards` — section -> ward link for the A3 fair queue
+
+- **Owner / date:** P2, 2026-10-02.
+- **Purpose:** Close A3's open gap: bookings are published per HMWSSB section, need (A2 entitlement) is per 2016 ward.
+- **What we found:**
+  - No public section boundaries or locations exist (R-P1, R-P2), but sections are named after localities.
+  - Of 221 sections (Jan 2022 - Jan 2026), Nominatim finds 161 names inside GHMC.
+  - A fixed 6 km division-outlier limit wrongly dropped correct sections in wide edge-of-city divisions (e.g. Manikonda, Nallagandla), so the limit is relative.
+- **What we changed:**
+  - `scripts/data/fetch_section_geocodes.py`: cleans names ("KONDAPUR (DIV 15)" -> "Kondapur") and searches Nominatim in the GHMC box (1 request/s). Raw answers are kept in `data/raw/geography/nominatim/hmwssb_section_search.json`, with `data/verification/section_geocode_manifest.csv`.
+  - `scripts/evidence/build_section_wards.py`:
+    - Best answer inside GHMC: places/boundaries first, then OSM importance.
+    - Point in a 2016 ward, or the nearest ward within 500 m.
+    - Division check: unused if farther than both 6 km and 3x the division's median distance from its median location.
+    - Independent name check.
+    - Outputs: `data/derived/crosswalk/section_to_ward_2016.csv` + `section_to_ward_summary.json`.
+    - No Voronoi service areas (per R-P1).
+  - `backend/app/services/booking_groups.py`: `group_for(section)` gives "ward:<id>" or "section:<name>"; `group_entitlements` uses A2 entitlement per ward, and the median ward entitlement as a flagged fallback for unplaced sections and wards without entitlement, so no booking is dropped.
+- **Result:**
+  - 142 of 221 sections placed, covering **80.5% of bookings**, in 98 wards.
+  - Same-name sections land in or next to that ward in 97% of 66 pairs.
+  - 14 outliers are not used: mostly common names (Defence Colony, Housing Board, Srinivas Nagar) or the wrong same-name place (Meerpet, Pragathinagar).
+  - 60 sections have no OSM match (e.g. "CONTROL ROOM", "M.R.G.FILTERS"); 5 fall outside the ward layer.
+- **Validation:**
+  - 7 tests in `backend/tests/test_section_wards.py` were written first (missing data), then pass. They cover reproducible artifacts, one row per section, the coverage gate, the name check, outlier rules (Meerpet dropped, Manikonda kept), groups and entitlements for every section, and a real replayed day (6 May 2025) through `order_bookings`.
+  - `python tasks.py test`: 306 pass. `python tasks.py lint` passes.
+- **Known limitations:**
+  - One point per section, not a service area.
+  - About 20% of bookings use the flagged fallback entitlement.
+  - Sections after the Feb/Mar 2026 re-cut are not covered.
+- **Handoff / next step:**
+  - A8 replays with these groups.
+  - The same link can give E4/E5 approximate ward bookings (their remaining blocker) in a later PR.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/33
