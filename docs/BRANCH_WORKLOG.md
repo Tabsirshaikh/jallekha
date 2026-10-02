@@ -552,4 +552,4 @@ The pull-request description must summarize the same information and link to thi
 - **Decided here:** `trust.unresolved_delivery_changes_shortfall` (left open by T3) means "an Unconfirmed delivery reduces debt". It stays False, per F11.
 - **Validation:** 19 tests in `tests/test_a6_water_debt.py`, written first and failing first (module missing). A mutation check (counting outage water) makes the outage test fail. `python tasks.py test`: 453 pass. `python tasks.py lint` passes.
 - **Known limitations:** an account is any unit carrying an entitlement (booking group or ward). A7 chooses the unit, feeds daily entitlements and closed deliveries, and stores accounts. Debt does not yet change queue order; that is A7.
-- **Pull request:** (added after opening)
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/45
