@@ -127,15 +127,46 @@ def test_real_baselines_and_duplicates_are_kept_apart(summary) -> None:
 
 
 def test_where_jl_is_worse_is_listed(summary) -> None:
-    listed = {(w["replay"], w["scenario"], w["metric"]) for w in summary["jl_worse_than_b1"]}
+    listed = {
+        (w["replay"], w["scenario"], w["policy"], w["metric"]) for w in summary["jl_worse_than_b1"]
+    }
     for replay_name, scenarios in summary["results"].items():
         for scenario, block in scenarios.items():
-            for metric in sandbox_build.METRICS:
-                if metric in sandbox_build.NEUTRAL:
-                    continue
-                diff = block["policies"]["JL"][metric]["diff_vs_b1_mean"]
-                worse = diff < -1e-9 if metric in sandbox_build.HIGHER_IS_BETTER else diff > 1e-9
-                assert ((replay_name, scenario, metric) in listed) == worse
+            for policy in sandbox_build.JALLEKHA_POLICIES:
+                for metric in sandbox_build.METRICS:
+                    if metric in sandbox_build.NEUTRAL:
+                        continue
+                    diff = block["policies"][policy][metric]["diff_vs_b1_mean"]
+                    worse = (
+                        diff < -1e-9 if metric in sandbox_build.HIGHER_IS_BETTER else diff > 1e-9
+                    )
+                    assert ((replay_name, scenario, policy, metric) in listed) == worse
+
+
+def test_knee_rule() -> None:
+    curve = [
+        {"radius_km": 0.0, "served_share": 0.80, "km_per_kl": 0.40},
+        {"radius_km": 2.0, "served_share": 0.88, "km_per_kl": 0.42},  # most gain, little km
+        {"radius_km": 5.0, "served_share": 0.90, "km_per_kl": 0.50},
+        {"radius_km": 9.0, "served_share": 0.90, "km_per_kl": 0.60},
+    ]
+    assert sandbox_build.knee_radius(curve) == 2.0
+    flat = [dict(p, served_share=0.8) for p in curve]
+    assert sandbox_build.knee_radius(flat) == 0.0  # no gain: no sharing
+
+
+def test_sharing_radius_in_use_is_the_sweep_knee(summary) -> None:
+    from app.config.allocation import ALLOCATION_CONFIG
+
+    sharing = summary["station_sharing"]
+    assert [p["radius_km"] for p in sharing["curve"]] == list(sandbox_build.SWEEP_RADII_KM)
+    assert {p["seeds"] for p in sharing["curve"]} == {sandbox_build.SWEEP_SEEDS}
+    assert sandbox_build.knee_radius(sharing["curve"]) == sharing["knee_radius_km"]
+    assert sharing["knee_radius_km"] == ALLOCATION_CONFIG.station_sharing_radius_km
+    assert sharing["radius_km_in_use"] == ALLOCATION_CONFIG.station_sharing_radius_km
+    # sharing never lowers bookings served
+    served = [p["served_share"] for p in sharing["curve"]]
+    assert served == sorted(served)
 
 
 def test_one_seed_reproduces(results) -> None:

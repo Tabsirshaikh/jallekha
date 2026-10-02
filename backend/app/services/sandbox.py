@@ -14,6 +14,10 @@ Policies (all on the same bookings, stations and capacities):
 - JL_F8 the A3 fair queue (deficit round robin by entitlement) at each station.
 - JL JL_F8 plus the F9 reserve: a share of every station's trips goes to scheduled supply
   (A4 share_reserve), so fewer trips are left for bookings.
+- JL_POOL JL plus station trip sharing (station_sharing): a station's trips left after its own
+  queue go to short stations within sharing_max_km; the borrower keeps its fair order. A lent
+  trip's km is the lender-section km when known (its nearest stations), else the borrower's
+  trip + the lender-borrower round trip (APPROXIMATE upper bound).
 Replay bookings carry no tier, so all are tier 2 in the queue. Outputs are SIMULATION.
 """
 
@@ -25,11 +29,13 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
-from app.services import fair_queue
+from app.services import fair_queue, station_sharing
 from app.services.booking_groups import WARD_PREFIX, ward_group
 from app.services.scheduled_supply import ScheduledWard, share_reserve
 
-POLICIES = ("B1", "B2", "B3", "B4", "B5", "JL_F8", "JL")
+POLICIES = ("B1", "B2", "B3", "B4", "B5", "JL_F8", "JL", "JL_POOL")
+RESERVE_POLICIES = ("JL", "JL_POOL")
+FAIR_QUEUE_POLICIES = ("JL_F8", "JL", "JL_POOL")
 BASELINE = "B1"
 
 
@@ -47,6 +53,8 @@ class Network:
     # (section, station) -> round-trip km; the entries are also B4's candidate stations
     round_trip_km: Mapping[tuple[str, str], float]
     home: Mapping[str, str]  # section -> nearest station (where its tokens queue today)
+    # (station, station) -> round-trip km, for JL_POOL trip sharing (symmetric lookup)
+    station_km: Mapping[tuple[str, str], float] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -59,6 +67,7 @@ class Setting:
     litres_per_trip: float
     scheduled: tuple[ScheduledWard, ...] = ()
     reserve_share: float = 0.0
+    sharing_max_km: float = 0.0  # JL_POOL: lend spare trips to stations this close
 
 
 @dataclass(frozen=True, slots=True)
@@ -117,7 +126,7 @@ def _station_order(
         ordered = sorted(pending, key=lambda b: (-counts[b.section], *_arrival(b)))
     elif policy == "B5":
         ordered = sorted(pending, key=lambda b: (-setting.need_weight[b.group], *_arrival(b)))
-    else:  # JL_F8, JL
+    else:  # FAIR_QUEUE_POLICIES
         by_id = {b.booking_id: b for b in pending}
         result = fair_queue.order_bookings(
             [queue_booking(b) for b in pending],
@@ -160,7 +169,7 @@ def run(
         raise ValueError(f"Unknown policy {policy}; expected one of {POLICIES}")
     reserve = dict.fromkeys(setting.capacity, 0)
     scheduled_litres: dict[str, float] = {}
-    if policy == "JL" and setting.scheduled:
+    if policy in RESERVE_POLICIES and setting.scheduled:
         reserve = {s: round(c * setting.reserve_share) for s, c in setting.capacity.items()}
         litres = sum(reserve.values()) * setting.litres_per_trip
         shares = share_reserve(list(setting.scheduled), litres)
@@ -175,8 +184,11 @@ def run(
     served: list[Served] = []
     unmet: list[SimBooking] = []
 
-    def serve(b: SimBooking, day: int, station: str) -> None:
-        km = network.round_trip_km[(b.section, station)]
+    def serve(b: SimBooking, day: int, station: str, lent_to: str | None = None, detour=0.0):
+        """lent_to: the borrowing station whose queue a lent trip serves. A lent trip uses
+        the direct lender-section km when known, else the borrower's trip plus the detour."""
+        direct = network.round_trip_km.get((b.section, station))
+        km = direct if direct is not None else network.round_trip_km[(b.section, lent_to)] + detour
         served.append(Served(b, day, station, day - b.day, km))
 
     for day in range(setting.days + setting.expiry_days):
@@ -196,19 +208,38 @@ def run(
             for station in pending:
                 pending[station] = [b for b in pending[station] if b.booking_id not in done]
             continue
+        lent: dict[str, list[tuple[float, str]]] = defaultdict(list)
+        if policy == "JL_POOL":
+            spare, short = {}, {}
+            for station, capacity in booked_capacity.items():
+                waiting = len(pending.get(station, ()))
+                spare[station], short[station] = (
+                    max(0, capacity - waiting),
+                    max(0, waiting - capacity),
+                )
+            for t in station_sharing.share_spare_trips(
+                spare, short, network.station_km, setting.sharing_max_km
+            ):
+                lent[t.borrower].extend([(t.round_trip_km, t.lender)] * t.trips)
         for station in sorted(pending):
+            own = booked_capacity.get(station, 0)
+            extra = sorted(lent.get(station, ()))
             chosen = _station_order(
                 policy,
                 station,
                 pending[station],
-                booked_capacity.get(station, 0),
+                own + len(extra),
                 network,
                 setting,
                 states,
             )
             done = {b.booking_id for b in chosen}
-            for b in chosen:
-                serve(b, day, station)
+            for i, b in enumerate(chosen):
+                if i < own:
+                    serve(b, day, station)
+                else:
+                    detour, lender = extra[i - own]
+                    serve(b, day, lender, lent_to=station, detour=detour)
             pending[station] = [b for b in pending[station] if b.booking_id not in done]
     unmet.extend(b for queue in pending.values() for b in queue)
     return RunResult(

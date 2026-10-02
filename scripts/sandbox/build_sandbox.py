@@ -53,13 +53,14 @@ from app.services import (  # noqa: E402
 TANKERS = "data/raw/hmwssb_tankers_portal"
 SECTIONS = "data/derived/sandbox/section_points.csv"
 NETWORK = "data/derived/sandbox/section_station_km.csv"
+STATION_PAIRS = "data/derived/sandbox/station_station_km.csv"
 EQUITY = "data/derived/equity/summary.json"
 EVIDENCE = "data/derived/evidence/ward_evidence.csv"
 SECTION_WARDS = booking_groups.SECTION_WARDS
 RESULTS = "data/derived/sandbox/results.csv"
 SUMMARY = "data/derived/sandbox/summary.json"
 CHECKS = "data/verification/sandbox_checks.json"
-INPUTS = (TANKERS, SECTIONS, NETWORK, EQUITY, EVIDENCE, SECTION_WARDS)
+INPUTS = (TANKERS, SECTIONS, NETWORK, STATION_PAIRS, EQUITY, EVIDENCE, SECTION_WARDS)
 
 LABEL = "SIMULATION"
 REPLAYS = {
@@ -93,6 +94,10 @@ HIGHER_IS_BETTER = {
 }
 NEUTRAL = {"tanker_km", "scheduled_litres_per_day"}  # km is reported per kilolitre
 CALIBRATION_STEPS = 16
+# Station trip sharing radius sweep (JL_POOL, main replay, tight capacity). Radius 0 = JL.
+SWEEP_REPLAY, SWEEP_SCENARIO = "main_2025", "tight"
+SWEEP_RADII_KM = (0.0, 1.0, 2.0, 3.0, 5.0, 8.0, 12.0)
+SWEEP_SEEDS = 5
 POLICY_NOTES = {
     "B1": "FCFS at the nearest filling station (HMWSSB today)",
     "B2": "Nearest bookings first at each station",
@@ -101,6 +106,7 @@ POLICY_NOTES = {
     "B5": "Highest ward need weight first",
     "JL_F8": "JalLekha fair queue only (A3)",
     "JL": "JalLekha fair queue (A3) + scheduled-supply reserve (A4)",
+    "JL_POOL": "JL + spare trips lent to stations within the sharing radius",
 }
 
 
@@ -137,7 +143,13 @@ def load_context(root: Path = ROOT) -> Context:
     candidates = {n.ward_id for n in needs if n.scheduled_supply_candidate}
     # Simulation: every A2 candidate is treated as officer-confirmed for scheduled supply.
     scheduled = tuple(scheduled_supply.scheduled_wards(needs, evidence, candidates))
-    return Context(rows, sandbox.Network(km, home), mapping, entitlement, need_weight, scheduled)
+    with (root / STATION_PAIRS).open(encoding="utf-8", newline="") as handle:
+        pairs = {
+            (r["station_a"], r["station_b"]): float(r["round_trip_km"])
+            for r in csv.DictReader(handle)
+        }
+    network = sandbox.Network(km, home, pairs)
+    return Context(rows, network, mapping, entitlement, need_weight, scheduled)
 
 
 def _days_in(months: tuple[tuple[int, int], ...]) -> int:
@@ -188,7 +200,17 @@ def scaled_capacity(base: dict[str, float], factor: float) -> dict[str, int]:
     return {s: max(1, round(factor * b)) for s, b in sorted(base.items())}
 
 
-def setting_for(ctx: Context, months, capacity: dict[str, int]) -> sandbox.Setting:
+def sharing_round_trip_km(radius_km: float) -> float:
+    """Straight-line sharing radius as the round-trip road km used by the station pairs."""
+    return 2 * radius_km * ALLOCATION_CONFIG.road_factor
+
+
+def setting_for(
+    ctx: Context,
+    months,
+    capacity: dict[str, int],
+    radius_km: float = ALLOCATION_CONFIG.station_sharing_radius_km,
+) -> sandbox.Setting:
     return sandbox.Setting(
         days=_days_in(months),
         capacity=capacity,
@@ -198,6 +220,7 @@ def setting_for(ctx: Context, months, capacity: dict[str, int]) -> sandbox.Setti
         litres_per_trip=ALLOCATION_CONFIG.tanker_load_litres,
         scheduled=ctx.scheduled,
         reserve_share=SANDBOX_CONFIG.jl_scheduled_reserve_share,
+        sharing_max_km=sharing_round_trip_km(radius_km),
     )
 
 
@@ -255,6 +278,62 @@ def run_seed(
     return rows
 
 
+def sweep_seed(ctx: Context, capacity: dict[str, int], seed: int) -> list[dict[str, Any]]:
+    """JL (radius 0) and JL_POOL at each sharing radius for one seed."""
+    months = REPLAYS[SWEEP_REPLAY]
+    bookings, _ = bookings_for(ctx, months, seed)
+    rows = []
+    for radius in SWEEP_RADII_KM:
+        cfg = setting_for(ctx, months, capacity, radius_km=radius)
+        policy = "JL_POOL" if radius else "JL"
+        m = sandbox.measures(
+            sandbox.run(policy, bookings, ctx.network, cfg),
+            bookings,
+            ctx.network,
+            cfg,
+            SANDBOX_CONFIG.fairness_min_group_bookings,
+        )
+        rows.append({"radius_km": radius, "seed": seed} | {k: m[k] for k in SWEEP_METRICS})
+    return rows
+
+
+SWEEP_METRICS = (
+    "served_share",
+    "mean_wait_days",
+    "km_per_kl",
+    "worst_group_fill_rate",
+    "gini_need_coverage",
+)
+
+
+def sweep_curve(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    curve = []
+    for radius in SWEEP_RADII_KM:
+        at = [r for r in rows if r["radius_km"] == radius]
+        curve.append(
+            {"radius_km": radius, "seeds": len(at)}
+            | {k: round(sum(r[k] for r in at) / len(at), 6) for k in SWEEP_METRICS}
+        )
+    return curve
+
+
+def knee_radius(curve: list[dict[str, Any]]) -> float:
+    """Kneedle (Satopaa et al. 2011): with served gain and km cost each scaled to 0-1 over
+    the sweep, the radius where gain minus cost is largest."""
+    first, last = curve[0], curve[-1]
+    gain = last["served_share"] - first["served_share"]
+    cost = last["km_per_kl"] - first["km_per_kl"]
+    if gain <= 0 or cost <= 0:
+        return first["radius_km"]
+
+    def score(point: dict[str, Any]) -> float:
+        return (point["served_share"] - first["served_share"]) / gain - (
+            point["km_per_kl"] - first["km_per_kl"]
+        ) / cost
+
+    return max(curve, key=lambda p: (round(score(p), 9), -p["radius_km"]))["radius_km"]
+
+
 _CTX: Context | None = None
 
 
@@ -266,6 +345,11 @@ def _worker_init() -> None:
 def _worker(job: tuple[str, dict[str, dict[str, int]], int]) -> list[dict[str, Any]]:
     assert _CTX is not None
     return run_seed(_CTX, *job)
+
+
+def _sweep_worker(job: tuple[dict[str, int], int]) -> list[dict[str, Any]]:
+    assert _CTX is not None
+    return sweep_seed(_CTX, *job)
 
 
 def _sha(path: Path) -> str:
@@ -296,24 +380,30 @@ def real_baselines(ctx: Context, root: Path) -> dict[str, Any]:
     }
 
 
+JALLEKHA_POLICIES = ("JL", "JL_POOL")
+
+
 def jl_worse(summary: dict[str, Any]) -> list[dict[str, Any]]:
+    """Every measure where a JalLekha policy is worse than B1 on average (F19: state it)."""
     worse = []
     for replay_name, scenarios in summary.items():
         for scenario, block in scenarios.items():
-            for metric in METRICS:
-                if metric in NEUTRAL:
-                    continue
-                diff = block["policies"]["JL"][metric]["diff_vs_b1_mean"]
-                bad = diff < -1e-9 if metric in HIGHER_IS_BETTER else diff > 1e-9
-                if bad:
-                    worse.append(
-                        {
-                            "replay": replay_name,
-                            "scenario": scenario,
-                            "metric": metric,
-                            "diff_vs_b1_mean": round(diff, 6),
-                        }
-                    )
+            for policy in JALLEKHA_POLICIES:
+                for metric in METRICS:
+                    if metric in NEUTRAL:
+                        continue
+                    diff = block["policies"][policy][metric]["diff_vs_b1_mean"]
+                    bad = diff < -1e-9 if metric in HIGHER_IS_BETTER else diff > 1e-9
+                    if bad:
+                        worse.append(
+                            {
+                                "replay": replay_name,
+                                "scenario": scenario,
+                                "policy": policy,
+                                "metric": metric,
+                                "diff_vs_b1_mean": round(diff, 6),
+                            }
+                        )
     return worse
 
 
@@ -344,11 +434,17 @@ def build(root: Path = ROOT, workers: int = 1, seeds: int | None = None) -> dict
             },
         }
     jobs = [(name, capacities[name], seed) for name in REPLAYS for seed in range(seeds)]
+    sweep_jobs = [
+        (capacities[SWEEP_REPLAY][SWEEP_SCENARIO], seed) for seed in range(min(seeds, SWEEP_SEEDS))
+    ]
     if workers > 1:
         with ProcessPoolExecutor(workers, initializer=_worker_init) as pool:
             chunks = list(pool.map(_worker, jobs))
+            sweep_chunks = list(pool.map(_sweep_worker, sweep_jobs))
     else:
         chunks = [run_seed(ctx, *job) for job in jobs]
+        sweep_chunks = [sweep_seed(ctx, *job) for job in sweep_jobs]
+    curve = sweep_curve([row for chunk in sweep_chunks for row in chunk])
     rows = sorted(
         (row for chunk in chunks for row in chunk),
         key=lambda r: (
@@ -373,6 +469,19 @@ def build(root: Path = ROOT, workers: int = 1, seeds: int | None = None) -> dict
         "policies": POLICY_NOTES,
         "results": summary,
         "jl_worse_than_b1": jl_worse(summary),
+        "station_sharing": {
+            "radius_km_in_use": ALLOCATION_CONFIG.station_sharing_radius_km,
+            "knee_radius_km": knee_radius(curve),
+            "rule": "Kneedle (Satopaa et al. 2011) on served share vs km per kl",
+            "replay": SWEEP_REPLAY,
+            "scenario": SWEEP_SCENARIO,
+            "curve": curve,
+            "evidence": [
+                "NewsMeter 2026-07-14: only 8 of 95 HMWSSB filling stations had pending bookings",
+                "Jordan & Graves 1995; Bassamboo, Randhawa & Van Mieghem 2012: a few links "
+                "give most of the gain of full pooling",
+            ],
+        },
         "real_baselines": real_baselines(ctx, root),
         "duplicates": {
             "status": "NOT_AVAILABLE",

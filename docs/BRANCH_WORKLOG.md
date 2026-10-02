@@ -667,3 +667,30 @@ The pull-request description must summarize the same information and link to thi
   - Km are not road-routed.
   - Water debt (A6) does not yet change queue order (A7).
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/47
+
+## `feat/a8-pooling` — A8 follow-up: station trip sharing (JL_POOL)
+
+- **Owner / date:** P2, 2026-10-03.
+- **Purpose:** A8 showed that pooling station capacity (B4) is the biggest lever for booked service. The owner asked to research it and implement the best form for JalLekha.
+- **Research** (`docs/research/P2.md`, "Station trip sharing"):
+  - REAL problem: in July 2026 only 8 of 95 HMWSSB stations had pending bookings (NewsMeter); in April 2025, 14-15 stations had backlogs. HMWSSB adds tankers and shifts; no source shows trips lent between stations.
+  - Theory: limited flexibility gives most of the gain of full pooling (Jordan & Graves 1995; Bassamboo, Randhawa & Van Mieghem 2012).
+- **What we built:**
+  - `services/station_sharing.py`: a station lends only the trips left after its own queue, to stations within a radius. OR-Tools min-cost max-flow moves the most trips at the least extra km. A7 will reuse it.
+  - `sandbox.py`: new policy **JL_POOL** (JL + sharing). The borrower keeps its A3 fair order. A lent trip uses the direct lender-section km when known, otherwise the detour estimate.
+  - `build_stations.py`: station-to-station km.
+  - `build_sandbox.py`: a radius sweep (0-12 km, 5 seeds, main replay, tight capacity). Kneedle (Satopää et al. 2011) picks the knee. The "where JalLekha is worse" list now covers JL and JL_POOL.
+  - `config/allocation.py`: `station_sharing_radius_km = 3.0` (DERIVED from the sweep; a median of 4 neighbours per station).
+- **Results (30 seeds, SIMULATION):** JL_POOL vs B1:
+  - Tight 2025: served 91.2% vs 90.0%; wait 0.64 vs 1.01 days; worst ward 46.9% vs 37.8%; need-coverage Gini 0.726 vs 0.757; need-weighted unmet 9.0% vs 10.0%; km per kl +12% (the only measure where it is worse; listed).
+  - Fleet 2025: served 99.97% vs 98.7%.
+  - Tight 2023: served 91.4% vs 90.0%.
+- **Validation:**
+  - `test_station_sharing.py` (6), written first and failing first.
+  - JL_POOL sandbox tests (3), written first. Deliberate breaks (ignoring the radius, lending trips a station still needs) each made a test fail.
+  - `test_a8_build.py`: the knee rule, the radius in use equals the committed sweep's knee, served never falls as the radius grows.
+  - `python tasks.py test`: 552 pass. `python tasks.py lint` passes.
+- **Known limitations:**
+  - Whether HMWSSB allows cross-station tokens is not verified. This is an operating change for the officer to approve (A7).
+  - Stand-in stations and synthetic daily arrivals as in A8.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/48
