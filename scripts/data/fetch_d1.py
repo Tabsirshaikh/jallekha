@@ -25,6 +25,7 @@ import hashlib
 import json
 import sys
 import time
+import urllib.request
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -50,6 +51,21 @@ DRY_RUN = "--dry-run" in sys.argv
 # When --skip-fetch is used, the manifest is regenerated from already-committed files
 # without hitting Overpass.  CI uses this after the developer commits the raw GeoJSON.
 SKIP_FETCH = "--skip-fetch" in sys.argv
+# --only D5a,D5b re-fetches just those layers; the others keep their committed bytes and rows.
+ONLY = {
+    key
+    for arg in sys.argv
+    if arg.startswith("--only=")
+    for key in arg.removeprefix("--only=").split(",")
+    if key
+}
+
+NOMINATIM_LOOKUP = "https://nominatim.openstreetmap.org/lookup"
+NOMINATIM_HEADERS = {"User-Agent": "JalLekha-D1/1.0 (github.com/Tabsirshaikh/jallekha)"}
+
+
+def nominatim_url(osm_ids: list[str]) -> str:
+    return f"{NOMINATIM_LOOKUP}?osm_ids={','.join(osm_ids)}&format=geojson&polygon_geojson=1"
 
 
 # ---------------------------------------------------------------------------
@@ -147,49 +163,49 @@ def write_manifest(rows: list[dict]) -> None:
 
 QUERIES: dict[str, dict] = {
     "D5a": {
-        # Hyderabad district boundary.
-        # In Telangana OSM, districts may be admin_level=5 or 6; query both.
-        # 'out center tags' is lightweight; centroid + name suffice for crosswalk fallback.
-        "query": (
-            "[out:json][timeout:60];"
-            "("
-            'relation["admin_level"="5"]["boundary"="administrative"]'
-            f'["name"~"Hyderabad"]({HYD_BBOX});'
-            'relation["admin_level"="6"]["boundary"="administrative"]'
-            f'["name"~"Hyderabad"]({HYD_BBOX});'
-            ");"
-            "out center tags;"
-        ),
+        # Hyderabad district boundary polygon. The earlier Overpass "out center" query stored
+        # only a centre point, so boundaries come from Nominatim lookup (OSM relation 7255986).
+        "nominatim_ids": ["R7255986"],
         "out_path": RAW / "geography" / "osm" / "hyderabad_district.geojson",
         "dataset_id": "D5a-OSM-Hyderabad-District",
-        "source_url": "https://overpass-api.de/api/interpreter",
         "license": "ODbL 1.0 (OpenStreetMap contributors)",
         "geography": "Hyderabad district, Telangana",
-        "granularity": "district-level centroids with name tags",
+        "granularity": "district boundary polygon",
         "notes": (
-            "OSM admin_level=5 or 6 boundary relations named Hyderabad within bbox. "
-            "out center tags only (centroid + metadata); full polygon on demand. "
+            "OSM relation 7255986 boundary polygon via Nominatim lookup. "
             "ODbL: openstreetmap.org/copyright"
         ),
     },
     "D5b": {
-        # Telangana mandal (admin_level 8) boundaries within Hyderabad bbox
-        "query": (
-            "[out:json][timeout:60];"
-            'relation["admin_level"="8"]["boundary"="administrative"]'
-            f"({HYD_BBOX});"
-            "out center tags;"
-        ),
+        # The 16 current mandals of Hyderabad district as boundary polygons. Relation ids were
+        # found with Nominatim search "<name> mandal, Hyderabad, Telangana" on 2026-10-02.
+        "nominatim_ids": [
+            "R9823521",  # Amberpet
+            "R9844052",  # Ameerpet
+            "R9823465",  # Asif Nagar
+            "R9823555",  # Bahadurpura
+            "R9823546",  # Bandlaguda
+            "R9823525",  # Charminar
+            "R9823335",  # Golconda
+            "R9823507",  # Himayatnagar
+            "R9823290",  # Khairatabad
+            "R9823218",  # Marredpally
+            "R9823557",  # Musheerabad
+            "R9823503",  # Nampally
+            "R9823538",  # Saidabad
+            "R9823232",  # Secunderabad
+            "R9823301",  # Shaikpet
+            "R9823209",  # Tirumalagiri
+        ],
         "out_path": RAW / "geography" / "osm" / "hyderabad_mandals.geojson",
         "dataset_id": "D5b-OSM-Hyderabad-Mandals",
-        "source_url": "https://overpass-api.de/api/interpreter",
         "license": "ODbL 1.0 (OpenStreetMap contributors)",
-        "geography": "Hyderabad district mandals, Telangana",
-        "granularity": "mandal-level centroids with name tags",
+        "geography": "Hyderabad district mandals (current OSM boundaries), Telangana",
+        "granularity": "mandal boundary polygons",
         "notes": (
-            "OSM admin_level=8 relations within Hyderabad bounding box 17.20,78.20,17.65,78.70. "
-            "Used as geographic fallback for Census ward crosswalk (E1). "
-            "out center tags only; full polygon geometry fetched on demand."
+            "16 current Hyderabad district mandals via Nominatim lookup. These are today's "
+            "OSM mandals, not the 2011 Census mandals; GHMC mandals in Rangareddy (reorganised "
+            "in 2016) are not included."
         ),
     },
     "D10": {
@@ -251,6 +267,16 @@ def fetch_osm_layer(key: str, spec: dict, manifest_rows: list[dict]) -> None:
         print(f"  [DRY-RUN] {key}: empty stub -> {out_path.relative_to(ROOT)}")
         payload = json.dumps(geojson, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
         out_path.write_bytes(payload)
+    elif "nominatim_ids" in spec:
+        url = nominatim_url(spec["nominatim_ids"])
+        print(f"  {key}: Nominatim lookup...", end=" ", flush=True)
+        request = urllib.request.Request(url, headers=NOMINATIM_HEADERS)
+        with urllib.request.urlopen(request, timeout=90) as resp:
+            payload = resp.read()
+        geojson = json.loads(payload.decode("utf-8"))
+        print(f"{len(geojson.get('features', []))} features")
+        time.sleep(2)  # Nominatim usage policy: at most one request per second
+        out_path.write_bytes(payload)
     else:
         print(f"  {key}: querying Overpass...", end=" ", flush=True)
         osm = overpass_json(spec["query"])
@@ -266,7 +292,9 @@ def fetch_osm_layer(key: str, spec: dict, manifest_rows: list[dict]) -> None:
         {
             "dataset_id": spec["dataset_id"],
             "file_path": str(out_path.relative_to(ROOT)).replace("\\", "/"),
-            "source_url": spec["source_url"],
+            "source_url": nominatim_url(spec["nominatim_ids"])
+            if "nominatim_ids" in spec
+            else spec["source_url"],
             "retrieved_at_utc": retrieved_at,
             "source_modified": "",
             "license": spec["license"],
@@ -284,8 +312,17 @@ def main() -> int:
     mode = "skip-fetch" if SKIP_FETCH else ("dry-run" if DRY_RUN else "live")
     print(f"D1 fetch (mode={mode})")
     manifest_rows: list[dict] = []
+    existing: dict[str, dict] = {}
+    if MANIFEST_PATH.is_file():
+        with MANIFEST_PATH.open(encoding="utf-8", newline="") as fh:
+            existing = {row["dataset_id"]: row for row in csv.DictReader(fh)}
 
     for key, spec in QUERIES.items():
+        if ONLY and key not in ONLY:
+            # keep the committed file and its manifest row unchanged
+            manifest_rows.append(existing[spec["dataset_id"]])
+            print(f"  {key}: kept (not in --only)")
+            continue
         try:
             fetch_osm_layer(key, spec, manifest_rows)
         except Exception as exc:

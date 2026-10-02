@@ -9,8 +9,8 @@
     "data/verification/source_manifest.csv": "32955b71b8c2162e89bcfc0dfb3e49d934d62951bb9a4d59d39557e0c53cdc37"
   },
   "outputs_sha256": {
-    "data/derived/underserved/field_checks.json": "d5aef29142b945309cb2078f50a94cd86a2f1e0e6d770678de5f40e2915ab530",
-    "data/derived/underserved/summary.json": "f491887a3ce5c4b74a3a209e0dc306fee0819c47d1ae4ae127288a2a2f976b6e"
+    "data/derived/underserved/field_checks.json": "9b50700bb3a91e9759dcd9c34f32484e517901f0c38292a06244a461e41dcba4",
+    "data/derived/underserved/summary.json": "fd622455e63a656049b4690910aec7662cc9c7ae51f4b1dae9c1195333c01e57"
   },
   "schema_version": "E5-1"
 }

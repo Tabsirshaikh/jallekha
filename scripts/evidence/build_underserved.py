@@ -42,8 +42,10 @@ def load_areas(root: Path = ROOT) -> list[AreaEvidence]:
     areas = []
     for row in evidence:
         growth_row = growth.get(row["ward_id"], {})
+        # Exact geometry, or E2's approximate placement on the rebuilt 2009 ward map: enough
+        # for a field-check screen, because a flag only sends someone to check.
         census_valid = (
-            row["location_status"] == "VERIFIED_EXACT_GEOMETRY"
+            row["location_status"] in ("VERIFIED_EXACT_GEOMETRY", "APPROXIMATE_2009_MAP")
             and row["allocation_eligible"].strip().lower() == "true"
         )
         booking_valid = growth_row.get("booking_validation") == "VERIFIED_SECTION_TO_WARD_TRANSFER"
@@ -99,8 +101,8 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
         ),
         "limits": [
             (
-                "E2 Census values are approximate (2009 to 2016 ward crosswalk); "
-                "none is exact-geometry validated."
+                "E2 Census values are approximate (2009 to 2016 ward crosswalk); they are "
+                "accepted for field checks only, never as exact-geometry validation."
             ),
             (
                 "HMWSSB tanker observations are monthly section totals; no verified "
