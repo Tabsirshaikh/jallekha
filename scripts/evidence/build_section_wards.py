@@ -13,8 +13,11 @@ named after localities, so:
    median location of its division than both OUTLIER_KM and SPREAD_FACTOR x the division's
    median distance is a likely wrong lookup (e.g. another place with the same name) and is
    not used. The relative part keeps wide edge-of-city divisions from being cut.
-5. Independent check (names never decide the ward): a section named like a 2016 ward should
-   land in that ward or a neighbouring one.
+5. Second chance for unplaced sections, each within 6 km of its division's centre: another
+   OSM answer for the same name (common names like "Srinivas Nagar" have several), or a 2016
+   ward whose name is a spelling variant ("Mehidipatnam" -> "Mehdipatnam").
+6. Independent check (names never decide the ward in step 3): a section placed by its own OSM
+   location and named like a 2016 ward should land in that ward or a neighbouring one.
 
 The link is DERIVED and approximate (one point per section, not a service area). Voronoi
 service areas are deliberately not generated (docs/research/P1.md).
@@ -59,6 +62,10 @@ NEAREST_WARD_M = 500.0
 OUTLIER_KM = 6.0
 SPREAD_FACTOR = 3.0
 MIN_DIVISION_SECTIONS = 3
+# Second pass: a 2016 ward name counts as a spelling variant of a section name at this
+# similarity, clearly ahead of the next ward name. Basis: ASSUMED.
+WARD_NAME_MIN_RATIO = 0.85
+WARD_NAME_MARGIN = 0.05
 ADJACENT_M = 200.0
 PREFERRED_CATEGORIES = ("place", "boundary")
 
@@ -173,11 +180,70 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
                     ward_id="", ward_name="", ward_method="", status="UNMAPPED_DIVISION_OUTLIER"
                 )
 
-    # independent name check
+    # second chance for unplaced sections, both checked against the division (strict limit):
+    # 2. another OSM answer for the same name (common names have several) near the division;
+    # 3. a 2016 ward whose name is a spelling variant of the section name.
+    to_wgs = Transformer.from_crs("EPSG:32644", "EPSG:4326", always_xy=True).transform
+    centres = {}
+    for division in {r["division"] for r in table}:
+        points = [r["_xy"] for r in table if r["division"] == division and r["status"] == "MAPPED"]
+        if len(points) >= MIN_DIVISION_SECTIONS:
+            centres[division] = (
+                statistics.median(p[0] for p in points),
+                statistics.median(p[1] for p in points),
+            )
+    ward_keys = {wid: _norm(re.sub(r"^Ward \d+ ", "", name)) for wid, (name, _) in wards.items()}
+
+    def place(row, x, y, method):
+        point = Point(x, y)
+        inside = [wid for wid, (_, geom) in wards.items() if geom.contains(point)]
+        if not inside:
+            return False
+        lng, lat = to_wgs(x, y)
+        row.update(
+            lat=f"{lat:.6f}",
+            lng=f"{lng:.6f}",
+            ward_id=inside[0],
+            ward_name=wards[inside[0]][0],
+            ward_method=method,
+            division_distance_km=f"{math.dist((x, y), centres[row['division']]) / 1000:.2f}",
+            status="MAPPED",
+            _xy=(x, y),
+        )
+        return True
+
+    for row in table:
+        if row["status"] == "MAPPED" or row["division"] not in centres:
+            continue
+        centre = centres[row["division"]]
+        candidates = [
+            to_utm(float(r["lon"]), float(r["lat"]))
+            for r in answers.get(row["lookup_name"], [])
+            if ghmc.contains(Point(to_utm(float(r["lon"]), float(r["lat"]))))
+        ]
+        near = [c for c in candidates if math.dist(c, centre) / 1000 <= OUTLIER_KM]
+        if near:
+            best = min(near, key=lambda c: math.dist(c, centre))
+            row["osm_label"] = row["osm_label"] or "second_pass"
+            if place(row, best[0], best[1], "OSM_NEAR_DIVISION"):
+                continue
+        key = _norm(
+            re.sub(r"\b(HIGH LEVEL|LOW LEVEL|OLD|NEW|SECTION)\b", "", row["section"].split("(")[0])
+        )
+        scores = sorted(
+            ((SequenceMatcher(None, key, value).ratio(), wid) for wid, value in ward_keys.items()),
+            reverse=True,
+        )
+        if scores[0][0] >= WARD_NAME_MIN_RATIO and scores[0][0] - scores[1][0] >= WARD_NAME_MARGIN:
+            spot = wards[scores[0][1]][1].representative_point()
+            if math.dist((spot.x, spot.y), centre) / 1000 <= OUTLIER_KM:
+                place(row, spot.x, spot.y, "WARD_NAME")
+
+    # independent name check (only sections placed by their own OSM location)
     by_name = {_norm(re.sub(r"^Ward \d+ ", "", name)): wid for wid, (name, _) in wards.items()}
     pairs = hits = 0
     for row in table:
-        if row["status"] != "MAPPED":
+        if row["status"] != "MAPPED" or row["ward_method"] not in ("INSIDE", "NEAREST_500M"):
             continue
         key = _norm(row["lookup_name"])
         same = [wid for n, wid in by_name.items() if SequenceMatcher(None, n, key).ratio() >= 0.9]

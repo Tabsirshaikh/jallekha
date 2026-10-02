@@ -39,12 +39,12 @@
   },
   "output_sha256": {
     "data/derived/growth/annual.csv": "fbb01736550db1fd5219f619b10dbcd4e231357a3006c265826a3b9ff451bc1e",
-    "data/derived/growth/growth.csv": "0969618561b7c9c4dfa4ee14bedfac0375b3af49bd0ee1df21bb198714072f12",
+    "data/derived/growth/growth.csv": "947ba3b5c30c2d16aec9202c947ace47e5a3d47ea8e0fcd31aea5448fa8bef2f",
     "data/derived/growth/source_comparison.csv": "71feabc11ef18d2616fc5be5fe8c66b4102d2fdb3236bd0d42aceec1e316d320",
-    "data/derived/growth/summary.json": "a6d8ba6bf81d656e0e81173be4e08f7e416dcbfe6dc5c964f0c4a82f811bef1d"
+    "data/derived/growth/summary.json": "c09ac13f36764570f6c1ea304910293bcad6f856e200dc35cd93e8ed3f7c55c0"
   },
   "schema_version": "E3-2",
-  "section_wards_sha256_lf": "6f4f0b531628abb1fcf4da12c83d734e2ac444a94524fd9f7c84d7ab60aa5aa1",
+  "section_wards_sha256_lf": "7cd5f22f86e0418601aa46f65b08a2e8b85acc5bbcd312adcaab5ffb6faabf25",
   "tile_archives": [
     {
       "basis": "DERIVED",
