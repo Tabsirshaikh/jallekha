@@ -1,4 +1,16 @@
-"""Reduce cached Open Buildings signals by historical polygon, without household projection."""
+"""Reduce cached Open Buildings signals by historical polygon, without household projection.
+
+Stability: Open Buildings counts jump city-wide from year to year (Google: "building count over
+an area could also be unstable ... due to cloud cover, misalignment between input images and
+fewer Sentinel-2 timeframes for years 2016-2017"). The shared shock of each year (median ward
+log change, minus the city's own linear trend) is removed; each ward's remaining log series is
+fitted with a line and is STABLE_TREND when its slope is >= minimum_trend_t standard errors.
+
+Census values come from E2 (Census 2011 placed on 2016 wards through the rebuilt 2009 ward
+map). Independent check (F2): ward building trend vs HMWSSB domestic connection growth
+2022 -> 2025, with sections placed on wards (data/derived/crosswalk/section_to_ward_2016.csv).
+Growth stays a covariate; no household projection is made.
+"""
 
 from __future__ import annotations
 
@@ -24,7 +36,13 @@ import fetch_growth  # noqa: E402
 from app.config.growth import GROWTH_CONFIG as CONFIG  # noqa: E402
 
 GEO = "data/raw/geography/datameet/ghmc-wards.geojson"
-CROSSWALK = "data/derived/crosswalk/census_to_ghmc_2016.csv"
+EVIDENCE = "data/derived/evidence/ward_evidence.csv"
+SECTION_WARDS = "data/derived/crosswalk/section_to_ward_2016.csv"
+BILLING = "data/raw/hmwssb_billing_portal"
+CONNECTION_YEARS = (2022, 2025)  # whole years before the Feb/Mar 2026 section re-cut
+MIN_BASE_CONNECTIONS = 500  # smaller ward totals give unstable growth ratios
+# Domestic connection categories (HMWSSB billing legend), as in E4.
+DOMESTIC_CATEGORIES = ("D", "DS", "DM", "DP", "M0", "M1", "M4", "MB")
 CACHE = ROOT / "data/derived/growth_inputs"
 OUT = "data/derived/growth/"
 YEARS = CONFIG.years
@@ -40,16 +58,79 @@ def csv_bytes(rows):
     return stream.getvalue().encode()
 
 
+def year_shocks(series):
+    """Shared shock per year: cumulative median ward log change minus its own linear trend."""
+    years = len(next(iter(series.values())))
+    effect = [0.0] + [
+        float(np.median([s[i] - s[i - 1] for s in series.values()])) for i in range(1, years)
+    ]
+    cumulative = np.cumsum(effect)
+    x = np.arange(years) - (years - 1) / 2
+    slope = float((x * (cumulative - cumulative.mean())).sum() / (x * x).sum())
+    shocks = cumulative - (cumulative.mean() + slope * x)
+    return [float(v) for v in shocks], slope
+
+
+def trend(values):
+    """Least-squares slope of a log series and its t statistic."""
+    y = np.asarray(values, dtype=float)
+    x = np.arange(len(y)) - (len(y) - 1) / 2
+    slope = float((x * (y - y.mean())).sum() / (x * x).sum())
+    residual = y - (y.mean() + slope * x)
+    sd = math.sqrt(float((residual * residual).sum()) / (len(y) - 2))
+    t = slope / (sd / math.sqrt(float((x * x).sum()))) if sd > 0 else math.inf
+    return slope, t
+
+
+def spearman(a, b):
+    def ranks(values):
+        order = sorted(range(len(values)), key=lambda i: values[i])
+        out = [0.0] * len(values)
+        i = 0
+        while i < len(order):
+            j = i
+            while j + 1 < len(order) and values[order[j + 1]] == values[order[i]]:
+                j += 1
+            for k in range(i, j + 1):
+                out[order[k]] = (i + j) / 2
+            i = j + 1
+        return np.asarray(out)
+
+    ra, rb = ranks(a), ranks(b)
+    ra, rb = ra - ra.mean(), rb - rb.mean()
+    return float((ra * rb).sum() / math.sqrt(float((ra * ra).sum() * (rb * rb).sum())))
+
+
+def connection_growth(root):
+    """Ward growth of mean monthly domestic HMWSSB connections between CONNECTION_YEARS."""
+    with (root / SECTION_WARDS).open(encoding="utf-8", newline="") as handle:
+        links = {r["section"]: r["ward_id"] for r in csv.DictReader(handle) if r["ward_id"]}
+    means = {}
+    paths = []
+    for year in CONNECTION_YEARS:
+        totals, months = {}, 0
+        for path in sorted((root / BILLING).glob(f"{year}-*.csv")):
+            months += 1
+            paths.append(path)
+            with path.open(encoding="utf-8-sig", newline="") as handle:
+                for row in csv.DictReader(handle):
+                    ward = links.get((row["section"] or "").strip())
+                    if ward and row["category"] in DOMESTIC_CATEGORIES:
+                        totals[ward] = totals.get(ward, 0.0) + float(row["noofcans"] or 0)
+        means[year] = {w: v / months for w, v in totals.items()} if months else {}
+    first, last = (means[y] for y in CONNECTION_YEARS)
+    growth = {
+        w: last[w] / first[w] - 1 for w in first if w in last and first[w] >= MIN_BASE_CONNECTIONS
+    }
+    return growth, set(links.values()), paths
+
+
 def aggregate(root=ROOT):
     geometry_path = root / GEO
     features = json.loads(geometry_path.read_text(encoding="utf-8"))["features"]
     targets = fetch_growth.projected_targets()
-    crosspath = root / CROSSWALK
-    crosswalk = list(csv.DictReader(crosspath.open(encoding="utf-8", newline="")))
-    by_target = {}
-    for row in crosswalk:
-        if row["target_ward_id"]:
-            by_target.setdefault(row["target_ward_id"], []).append(row)
+    with (root / EVIDENCE).open(encoding="utf-8", newline="") as handle:
+        evidence = {row["ward_id"]: row for row in csv.DictReader(handle)}
     per_year = {
         year: {
             ward: {"index": 0.0, "cells": 0, "valid_cells": 0, "footprints": []} for ward in targets
@@ -140,14 +221,7 @@ def aggregate(root=ROOT):
     for feature in sorted(features, key=lambda f: f["properties"]["@id"]):
         ward = feature["properties"]["@id"]
         area = targets[ward].area
-        cross = by_target.get(ward, [])
-        census_status = (
-            cross[0]["location_status"]
-            if len(cross) == 1
-            else "AMBIGUOUS_CROSSWALK"
-            if len(cross) > 1
-            else "NO_CROSSWALK"
-        )
+        census_status = evidence.get(ward, {}).get("location_status", "NO_E2_ROW")
         for year in YEARS:
             record = per_year[year][ward]
             footprint = (
@@ -179,6 +253,14 @@ def aggregate(root=ROOT):
                 }
             )
     lookup = {(row["ward_id"], row["year"]): row for row in annual}
+    complete_logs = {}
+    for feature in features:
+        ward = feature["properties"]["@id"]
+        yearly = [lookup[(ward, y)]["building_count_index"] for y in YEARS]
+        if all(v for v in yearly):
+            complete_logs[ward] = [math.log(v) for v in yearly]
+    shocks, city_slope = year_shocks(complete_logs)
+    connections, placed_wards, billing_paths = connection_growth(root)
     growth = []
     for feature in sorted(features, key=lambda f: f["properties"]["@id"]):
         ward = feature["properties"]["@id"]
@@ -202,14 +284,12 @@ def aggregate(root=ROOT):
             if mean is not None and mean != 0
             else None
         )
-        crows = by_target.get(ward, [])
-        census_status = (
-            crows[0]["location_status"]
-            if len(crows) == 1
-            else "AMBIGUOUS_CROSSWALK"
-            if len(crows) > 1
-            else "NO_CROSSWALK"
-        )
+        census_status = evidence.get(ward, {}).get("location_status", "NO_E2_ROW")
+        if ward in complete_logs:
+            slope, t = trend([v - s for v, s in zip(complete_logs[ward], shocks, strict=True)])
+            stability = "STABLE_TREND" if t >= CONFIG.minimum_trend_t else "REVIEW_NOISY_TREND"
+        else:
+            slope, t, stability = None, None, "INSUFFICIENT_HISTORY"
         growth.append(
             {
                 "ward_id": ward,
@@ -220,21 +300,22 @@ def aggregate(root=ROOT):
                 "building_index_2023": current,
                 "building_growth_ratio": round(ratio, 8) if ratio is not None else None,
                 "annual_log_change_cv": round(cv, 8) if cv is not None else None,
-                "growth_stability": (
-                    "INSUFFICIENT_HISTORY"
-                    if not complete
-                    else "REVIEW_HIGH_VARIABILITY"
-                    if cv is not None and cv >= 0.25
-                    else "NO_HIGH_VARIABILITY_FLAG"
-                    if cv is not None
-                    else "UNCLASSIFIED_NEAR_ZERO_MEAN"
-                ),
+                "adjusted_annual_growth": round(math.exp(slope) - 1, 6)
+                if slope is not None
+                else None,
+                "trend_t": round(t, 4) if t is not None and math.isfinite(t) else None,
+                "growth_stability": stability,
                 "all_years_usable": complete,
                 "grid_metres": CONFIG.grid_metres,
                 "census_location_status": census_status,
-                "census_households_2011": None,
+                "census_households_2011": evidence.get(ward, {}).get("households") or None,
                 "adjusted_current_households": None,
-                "booking_validation": "BLOCKED_NO_SECTION_WARD_CROSSWALK",
+                "connection_growth_2022_2025": round(connections[ward], 6)
+                if ward in connections
+                else None,
+                "booking_validation": "APPROXIMATE_SECTION_POINT_IN_WARD"
+                if ward in placed_wards
+                else "NO_PLACED_SECTION",
                 "basis": "DERIVED" if ratio is not None else "UNAVAILABLE",
                 "quality_flag": "BUILDING_SIGNAL_ONLY;NOT_HOUSEHOLDS"
                 if ratio is not None
@@ -276,19 +357,64 @@ def aggregate(root=ROOT):
     summary = {
         "row_count": len(growth),
         "polygon_count": len(features),
-        "validated_census_joins": 0,
+        "approximate_census_joins": sum(
+            r["location_status"] == "APPROXIMATE_2009_MAP" and r["allocation_eligible"] == "True"
+            for r in evidence.values()
+        ),
+        "exact_geometry_census_joins": sum(
+            r["location_status"] == "VERIFIED_EXACT_GEOMETRY" for r in evidence.values()
+        ),
         "usable_growth_ratios": len(growth_values),
-        "high_variability_review_flags": sum(
-            row["growth_stability"] == "REVIEW_HIGH_VARIABILITY" for row in growth
+        "noisy_trend_review_flags": sum(
+            row["growth_stability"] == "REVIEW_NOISY_TREND" for row in growth
         ),
-        "variability_review_threshold": {
-            "metric": "coefficient_of_variation_of_annual_log_growth",
-            "threshold": 0.25,
-            "status": "ENGINEERING_REVIEW_HEURISTIC_NOT_VALIDATED_QUALITY_BOUND",
+        "stability": {
+            "method": (
+                "remove city-wide year shocks (cumulative median ward log change minus its "
+                "linear trend), then least-squares trend per ward; STABLE_TREND if t >= "
+                "minimum_trend_t"
+            ),
+            "minimum_trend_t": CONFIG.minimum_trend_t,
+            "city_year_shocks_log": [round(s, 6) for s in shocks],
+            "city_trend_annual_growth": round(math.exp(city_slope) - 1, 6),
+            "replaced": "CV of annual log change >= 0.25 (flagged all 145 wards)",
+            "source_note": (
+                "Google Open Buildings Temporal: aggregates like building count can be unstable "
+                "(cloud cover, image misalignment, fewer Sentinel-2 frames in 2016-2017)"
+            ),
         },
-        "unclassified_stability_polygons": sum(
-            row["growth_stability"] == "UNCLASSIFIED_NEAR_ZERO_MEAN" for row in growth
-        ),
+        "independent_checks": {
+            "connection_growth": {
+                "description": (
+                    "Spearman rank correlation, ward adjusted building trend vs growth of mean "
+                    "monthly HMWSSB domestic connections 2022 -> 2025 (sections placed on wards)"
+                ),
+                "wards": sum(
+                    1
+                    for row in growth
+                    if row["connection_growth_2022_2025"] is not None
+                    and row["adjusted_annual_growth"] is not None
+                ),
+                "spearman": round(
+                    spearman(
+                        [
+                            row["adjusted_annual_growth"]
+                            for row in growth
+                            if row["connection_growth_2022_2025"] is not None
+                            and row["adjusted_annual_growth"] is not None
+                        ],
+                        [
+                            row["connection_growth_2022_2025"]
+                            for row in growth
+                            if row["connection_growth_2022_2025"] is not None
+                            and row["adjusted_annual_growth"] is not None
+                        ],
+                    ),
+                    4,
+                ),
+                "basis": "DERIVED (REAL billing counts, approximate section placement)",
+            }
+        },
         "period": "2016-2023",
         "grid_metres": CONFIG.grid_metres,
         "source": "Google Open Buildings Temporal V1",
@@ -307,7 +433,10 @@ def aggregate(root=ROOT):
         "growth_ratio_p90": round(float(np.quantile(growth_values, 0.9)), 8)
         if growth_values
         else None,
-        "booking_validation": "BLOCKED_NO_VERIFIED_SECTION_TO_WARD_CROSSWALK_AND_NO_2016_BOOKINGS",
+        "booking_validation": (
+            "APPROXIMATE_SECTION_POINT_IN_WARD; checked against HMWSSB connection growth "
+            "(independent_checks); tanker and billing data begin in 2022"
+        ),
         "population_projection": "BLOCKED; no current household estimate is computed",
         "boundary_vintage": (
             "Unverified historical 150-ward DataMeet layer; not current GHMC geography"
@@ -315,7 +444,10 @@ def aggregate(root=ROOT):
         "multi_source_growth_range": None,
         "limitations": [
             "Only 145 polygon features; layer is an incomplete historical 150-ward scheme.",
-            "E1 has zero location-validated Census-to-polygon assignments.",
+            (
+                "Census placement is approximate (E2: Census 2011 via the rebuilt 2009 ward map); "
+                "no exact-geometry join exists."
+            ),
             (
                 "Open Buildings confidence is uncalibrated; Google documents positional/temporal "
                 "jitter, tile seams, and missed small buildings."
@@ -333,8 +465,8 @@ def aggregate(root=ROOT):
                 "is reported."
             ),
             (
-                "Ward-level booking validation lacks an authoritative crosswalk; tanker data "
-                "begins in 2022."
+                "The connection check uses approximate section placement (about 80% of bookings) "
+                "and 2022-2025, a later period than the 2016-2023 building trend."
             ),
         ],
         "comparison_sources": source_comparison,
@@ -345,20 +477,29 @@ def aggregate(root=ROOT):
         OUT + "source_comparison.csv": csv_bytes(source_comparison),
         OUT + "summary.json": (json.dumps(summary, indent=2, sort_keys=True) + "\n").encode(),
         "data/verification/growth_checks.json": build_checks(
-            root, annual, growth, manifest_hashes, tile_list
+            root, annual, growth, manifest_hashes, tile_list, billing_paths
         ),
     }
 
 
-def build_checks(root, annual, growth, manifest_hashes, tile_list):
+def build_checks(root, annual, growth, manifest_hashes, tile_list, billing_paths):
     return (
         json.dumps(
             {
-                "schema_version": "E3-1",
+                "schema_version": "E3-2",
                 "geography_sha256": hashlib.sha256((root / GEO).read_bytes()).hexdigest(),
-                "crosswalk_sha256_lf": hashlib.sha256(
-                    (root / CROSSWALK).read_text(encoding="utf-8").encode()
+                "evidence_sha256_lf": hashlib.sha256(
+                    (root / EVIDENCE).read_text(encoding="utf-8").encode()
                 ).hexdigest(),
+                "section_wards_sha256_lf": hashlib.sha256(
+                    (root / SECTION_WARDS).read_text(encoding="utf-8").encode()
+                ).hexdigest(),
+                "billing_sha256": {
+                    str(p.relative_to(root)).replace("\\", "/"): hashlib.sha256(
+                        p.read_bytes()
+                    ).hexdigest()
+                    for p in billing_paths
+                },
                 "manifest_sha256": manifest_hashes,
                 "tile_archives": sorted(tile_list, key=lambda r: r["tile"]),
                 "output_sha256": {},

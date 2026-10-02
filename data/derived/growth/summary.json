@@ -1,6 +1,7 @@
 {
   "aggregation": "32m average fractional count multiplied by native source-pixel area factor; approximate index",
-  "booking_validation": "BLOCKED_NO_VERIFIED_SECTION_TO_WARD_CROSSWALK_AND_NO_2016_BOOKINGS",
+  "approximate_census_joins": 143,
+  "booking_validation": "APPROXIMATE_SECTION_POINT_IN_WARD; checked against HMWSSB connection growth (independent_checks); tanker and billing data begin in 2022",
   "boundary_vintage": "Unverified historical 150-ward DataMeet layer; not current GHMC geography",
   "comparison_sources": [
     {
@@ -31,34 +32,53 @@
       "use": "independent population sensitivity, incomparable without harmonization"
     }
   ],
+  "exact_geometry_census_joins": 0,
   "grid_metres": 32,
   "growth_ratio_p10": 1.18508336,
   "growth_ratio_p90": 1.41729733,
-  "high_variability_review_flags": 145,
+  "independent_checks": {
+    "connection_growth": {
+      "basis": "DERIVED (REAL billing counts, approximate section placement)",
+      "description": "Spearman rank correlation, ward adjusted building trend vs growth of mean monthly HMWSSB domestic connections 2022 -> 2025 (sections placed on wards)",
+      "spearman": 0.5245,
+      "wards": 92
+    }
+  },
   "interpretation": "Building-change signal; buildings are not households or population",
   "limitations": [
     "Only 145 polygon features; layer is an incomplete historical 150-ward scheme.",
-    "E1 has zero location-validated Census-to-polygon assignments.",
+    "Census placement is approximate (E2: Census 2011 via the rebuilt 2009 ward map); no exact-geometry join exists.",
     "Open Buildings confidence is uncalibrated; Google documents positional/temporal jitter, tile seams, and missed small buildings.",
     "32m aggregation bounds extraction; compare 16m/64m before treating small ranking differences as stable.",
     "WorldPop's India raster host does not support range reads; the 1.84GB file was not downloaded.",
     "GHS-POP grid epochs differ from 2016-2023; no multi-source agreement score is reported.",
-    "Ward-level booking validation lacks an authoritative crosswalk; tanker data begins in 2022."
+    "The connection check uses approximate section placement (about 80% of bookings) and 2022-2025, a later period than the 2016-2023 building trend."
   ],
   "median_building_growth_ratio": 1.27011527,
   "multi_source_growth_range": null,
+  "noisy_trend_review_flags": 0,
   "period": "2016-2023",
   "polygon_count": 145,
   "population_projection": "BLOCKED; no current household estimate is computed",
   "row_count": 145,
   "source": "Google Open Buildings Temporal V1",
   "source_band": "building_fractional_count",
-  "unclassified_stability_polygons": 0,
-  "usable_growth_ratios": 145,
-  "validated_census_joins": 0,
-  "variability_review_threshold": {
-    "metric": "coefficient_of_variation_of_annual_log_growth",
-    "status": "ENGINEERING_REVIEW_HEURISTIC_NOT_VALIDATED_QUALITY_BOUND",
-    "threshold": 0.25
-  }
+  "stability": {
+    "city_trend_annual_growth": 0.032428,
+    "city_year_shocks_log": [
+      -0.005588,
+      0.054266,
+      0.018381,
+      -0.062366,
+      -0.02524,
+      -0.044078,
+      0.034954,
+      0.029671
+    ],
+    "method": "remove city-wide year shocks (cumulative median ward log change minus its linear trend), then least-squares trend per ward; STABLE_TREND if t >= minimum_trend_t",
+    "minimum_trend_t": 2.0,
+    "replaced": "CV of annual log change >= 0.25 (flagged all 145 wards)",
+    "source_note": "Google Open Buildings Temporal: aggregates like building count can be unstable (cloud cover, image misalignment, fewer Sentinel-2 frames in 2016-2017)"
+  },
+  "usable_growth_ratios": 145
 }
