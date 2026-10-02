@@ -1,7 +1,11 @@
 """Tamper-evident hash-chained ledger (F18). Pure core ported from v1 (S3).
 
-hash      = sha256(prev_hash + event_type + entity_id + payload_json + created_at_iso)
+hash      = sha256(canonical JSON of every stored field except hash and signature)
 signature = HMAC_SHA256(key, hash)
+
+Every field of LedgerEntry (seq, prev_hash, event_type, entity_type, entity_id, payload,
+created_at_iso, and any field added later) is part of the hash, so editing any of them is
+detected. NaN and Infinity are rejected because they are not valid JSON.
 
 The first entry uses prev_hash = "GENESIS". Payloads hold ids and numbers only (no personal
 data). Storage, locking and wiring to other features are T6; T6 may extend EVENT_TYPES.
@@ -12,7 +16,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 import json
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass, replace
 from typing import Any
 
 GENESIS = "GENESIS"
@@ -52,18 +56,19 @@ class LedgerEntry:
 
 def canonical_payload(payload: dict[str, Any]) -> dict[str, Any]:
     """Normalise to JSON-native types so the stored payload re-hashes identically."""
-    return json.loads(json.dumps(payload, default=str))
+    return json.loads(json.dumps(payload, default=str, allow_nan=False))
 
 
 def payload_json(payload: dict[str, Any]) -> str:
-    return json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return json.dumps(
+        payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False
+    )
 
 
-def compute_hash(
-    prev_hash: str, event_type: str, entity_id: str, payload: dict[str, Any], created_at_iso: str
-) -> str:
-    material = prev_hash + event_type + entity_id + payload_json(payload) + created_at_iso
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+def entry_hash(entry: LedgerEntry) -> str:
+    """sha256 over every stored field except the hash and signature themselves."""
+    content = {k: v for k, v in asdict(entry).items() if k not in ("hash", "signature")}
+    return hashlib.sha256(payload_json(content).encode("utf-8")).hexdigest()
 
 
 def sign(hash_hex: str, key: str | None) -> str:
@@ -84,29 +89,29 @@ def next_entry(
     """Build the entry that follows `last` (None for the first entry). The caller stores it."""
     if event_type not in EVENT_TYPES:
         raise ValueError(f"Unknown ledger event type: {event_type}")
-    body = canonical_payload(payload or {})
-    prev_hash = last.hash if last else GENESIS
-    digest = compute_hash(prev_hash, event_type, str(entity_id), body, created_at_iso)
-    return LedgerEntry(
+    unsigned = LedgerEntry(
         seq=(last.seq + 1) if last else 1,
         event_type=event_type,
         entity_type=entity_type,
         entity_id=str(entity_id),
-        payload=body,
-        prev_hash=prev_hash,
-        hash=digest,
-        signature=sign(digest, key),
+        payload=canonical_payload(payload or {}),
+        prev_hash=last.hash if last else GENESIS,
+        hash="",
+        signature="",
         created_at_iso=created_at_iso,
     )
+    digest = entry_hash(unsigned)
+    return replace(unsigned, hash=digest, signature=sign(digest, key))
 
 
 def verify_entries(entries: list[LedgerEntry], key: str | None) -> dict[str, Any]:
     """Check every link and signature in order; report the first broken entry."""
     prev_hash = GENESIS
     for position, entry in enumerate(entries, start=1):
-        expected = compute_hash(
-            prev_hash, entry.event_type, entry.entity_id, entry.payload, entry.created_at_iso
-        )
+        try:
+            expected = entry_hash(entry)
+        except (TypeError, ValueError):  # a stored payload that is not valid JSON
+            expected = None
         if entry.seq != position or entry.prev_hash != prev_hash or entry.hash != expected:
             return {
                 "valid": False,

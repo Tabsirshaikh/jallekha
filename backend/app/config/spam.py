@@ -20,6 +20,9 @@ class SpamConfig:
     outside_area_points: float = 0.3
     # Share of non-letter characters above which text counts as gibberish.
     gibberish_nonletter_ratio: float = 0.6
+    # Neither letters nor gibberish: address punctuation (digits are skipped too), so an address
+    # such as "H.No 12-3-456/7" is not flagged (S3 review D13). Basis: ASSUMED.
+    address_punctuation: str = ".,-/#:()"
     gibberish_points: float = 0.2
     # Unregistered phone and no area given.
     unregistered_points: float = 0.2

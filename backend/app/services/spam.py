@@ -23,9 +23,16 @@ class SpamSignals:
 
 
 def non_letter_ratio(text: str) -> float:
-    """Share of non-space characters that are not letters. Combining marks (Indic vowel signs)
-    count as letters."""
-    chars = [ch for ch in text if not ch.isspace()]
+    """Share of characters that are not letters, skipping spaces, digits and address
+    punctuation (house numbers are normal). Combining marks (Indic vowel signs) count as
+    letters."""
+    chars = [
+        ch
+        for ch in text
+        if not ch.isspace()
+        and unicodedata.category(ch) != "Nd"
+        and ch not in SPAM_CONFIG.address_punctuation
+    ]
     if not chars:
         return 0.0
     letters = sum(1 for ch in chars if unicodedata.category(ch)[0] in ("L", "M"))

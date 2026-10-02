@@ -1,6 +1,8 @@
 """Delivery OTPs (F12). Ported from v1 (S3); the delivery flow that uses them is T3.
 
-The code is HMAC(key, "stop_id:nonce") mod 10^digits, so the plain code is never stored:
+The code is HMAC(key, "stop_id:nonce:digits") mod 10^digits, so the same inputs always give
+the same code even if the configured length changes later (store the digit count with an
+issued OTP and pass it when re-deriving). The plain code is never stored:
 only the nonce and sha256(code + stop_id + key) are kept. The server can re-derive the code
 to show it to the verified recipient.
 """
@@ -21,10 +23,12 @@ def _require(key: str | None) -> str:
     return key
 
 
-def derive_code(key: str | None, stop_id: object, nonce: str) -> str:
-    digits = TRUST_CONFIG.otp_digits
+def derive_code(key: str | None, stop_id: object, nonce: str, digits: int | None = None) -> str:
+    digits = TRUST_CONFIG.otp_digits if digits is None else digits
+    if not isinstance(digits, int) or not 1 <= digits <= 12:
+        raise ValueError(f"OTP digit count must be 1-12, got {digits}")
     digest = hmac.new(
-        _require(key).encode(), f"{stop_id}:{nonce}".encode(), hashlib.sha256
+        _require(key).encode(), f"{stop_id}:{nonce}:{digits}".encode(), hashlib.sha256
     ).hexdigest()
     return f"{int(digest, 16) % (10**digits):0{digits}d}"
 
