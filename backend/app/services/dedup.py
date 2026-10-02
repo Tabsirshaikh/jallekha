@@ -51,7 +51,7 @@ class DedupRule:
     def from_config(cls) -> DedupRule:
         return cls(
             radius_m=TRUST_CONFIG.dedup_radius_metres,
-            window_hours=TRUST_CONFIG.dedup_window_hours,
+            window_hours=dict(TRUST_CONFIG.dedup_window_hours),
         )
 
     def window_for(self, category: str) -> timedelta:
