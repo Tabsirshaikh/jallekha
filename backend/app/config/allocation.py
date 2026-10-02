@@ -80,6 +80,18 @@ class AllocationConfig:
         }
     )
 
+    # Outage response (A5, F10): "Tier 0 first, then everyone to 10-15 lpcd; priority rises
+    # with hours cut off (deprivation cost)". Floor and target are the F10 range; basis ASSUMED.
+    outage_floor_lpcd: float = 10.0
+    outage_target_lpcd: float = 15.0
+    # Deprivation weight = exp(hours / tau): rises faster the longer water is cut off
+    # (Holguin-Veras et al. 2013: deprivation cost is non-linear in time). tau is ASSUMED.
+    deprivation_tau_hours: float = 24.0
+    # A ward becomes an outage candidate for officer confirmation when it has this many
+    # distinct "no water" reports (after T1 duplicate linking) within the window. ASSUMED.
+    outage_min_distinct_reports: int = 5
+    outage_detection_window_hours: float = 6.0
+
     # Booking replay windows (A1, F19). Source: docs/research/P2.md: summer 2025 is the latest
     # complete summer on the pre-Feb-2026 section map (977,933 bookings); 2023 kept for
     # continuity with the solution document. Month totals REAL; daily split SYNTHETIC.
