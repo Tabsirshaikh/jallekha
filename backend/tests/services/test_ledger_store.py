@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import importlib.util
+import sys
 import threading
 from collections.abc import Iterator
 from dataclasses import replace
@@ -325,3 +327,29 @@ def test_entries_round_trip_exactly(store: StoredLedger) -> None:
     entry = store.entries[0]
     assert ledger.entry_hash(entry) == entry.hash
     assert replace(entry) == entry
+
+
+# --- daily publish script ------------------------------------------------------------------
+
+
+def _publish_script():  # type: ignore[no-untyped-def]
+    path = Path(__file__).resolve().parents[3] / "scripts/trust/publish_ledger_head.py"
+    spec = importlib.util.spec_from_file_location("publish_ledger_head", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_publish_script_exit_codes(
+    engine: Engine, store: StoredLedger, capsys: pytest.CaptureFixture[str]
+) -> None:
+    script = _publish_script()
+    assert script.main(store) == 2  # empty
+    _fill(store, 3)
+    assert script.main(store) == 0
+    assert "seq 3 hash" in capsys.readouterr().out
+    assert len(store.heads()) == 1
+    _change_row(engine, 2, entity_id="x")
+    assert script.main(store) == 1  # does not publish over a broken chain
