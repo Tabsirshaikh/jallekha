@@ -483,4 +483,4 @@ The pull-request description must summarize the same information and link to thi
   - Household size is held at 2011.
   - One connection can serve many flats.
 - **Handoff / next step:** E5 uses `households_2025_central` (reference year 2025); A2 can switch entitlement to 2025 households.
-- **Pull request:** pending
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/40
