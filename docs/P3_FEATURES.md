@@ -5,8 +5,8 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 | ID | Feature | Branch | Status |
 |---|---|---|---|
 | R-P3 | Research note | `research/p3` | DONE ([PR #7](https://github.com/Tabsirshaikh/jallekha/pull/7) merged) |
-| S1 fix | Skeleton gaps T1-T10 need | `fix/s1-review` | Local, not pushed |
-| T1 | F13 duplicate engine | `feat/t1-dedup` | Not started (needs S1, R-P3 merged) |
+| S1 fix | Skeleton gaps T1-T10 need | `fix/s1-review` | DONE ([PR #15](https://github.com/Tabsirshaikh/jallekha/pull/15) merged) |
+| T1 | F13 duplicate engine | `feat/t1-dedup` | IN_PROGRESS: core done locally; calibration waits for D13 |
 | T2 | F5 forecast + backtest | `feat/t2-forecast` | Blocked: 21.9% / 35.1% protocol (`V-VERIFY_REVIEW.md`) missing |
 | T3 | F12 delivery proof | `feat/t3-delivery` | Blocked: S3 not started |
 | T4 | F14 intake + voice | `feat/t4-intake` | Blocked: S3, T1 |
@@ -49,11 +49,17 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 
 ## T1: duplicate engine (F13)
 
-- **Implementation notes:** _to fill_
-- **Files:** _to fill_
-- **Tests and results:** _to fill_
-- **How to run:** _to fill_
-- **Status log:** _to fill_
+- **Implementation notes:** Rule from `docs/JALLEKHA_FINAL_SOLUTION.md` F13, values in `config/trust.py` with sources.
+  - `find_parent(new, existing)`: only earlier complaints of the **same category** within the category window (48 h no-water / tanker-missed / dirty water; 168 h leak / other; inclusive) qualify. **Same household id matches first**, at any distance. Otherwise the nearest complaint within **100 m** (inclusive), then the most recent; unknown categories and naive timestamps are rejected.
+  - `link_duplicates(complaints)`: processes in time order with a grid index; chained reports are linked to the **cluster root** (union-find) and keep `matched_id` for audit; result does not depend on input order.
+  - `duplicate_rate_by_area(complaints, links, area_key, period)`: duplicates / complaints per area and UTC month or week, with `duplicate_rate_basis` (DERIVED). A reporting-activity signal (Liu et al.), not a need measure; missing area is reported as `unassigned`.
+  - Text similarity (LaBSE, `ml` extra) is off by default, only records `text_score`, never creates or blocks a merge, and falls back to none when the model is missing. Untested on Indian data.
+  - Models: `complaint` and `duplicate_link` (one table each; one link per child; basis column).
+  - Calibration: `scripts/trust/calibrate_dedup.py` runs only on a D13 file registered in `data/verification/source_manifest.csv` with a matching SHA-256. It reports p95 child-parent distance, p90 hours per Chicago SR type and the linked share for 100 m / 48 h and 300 m / 7 d, next to the solution document's 106 m, 71% and 88% for comparison only. **Not run: D13 is not registered yet.**
+- **Files:** `backend/app/config/trust.py`, `backend/app/services/dedup.py`, `backend/app/models/{complaint.py, duplicate_link.py, __init__.py}`, `scripts/trust/calibrate_dedup.py`, `backend/tests/services/{test_dedup.py, test_dedup_calibration.py}`, `backend/tests/test_dedup_models.py`, `backend/tests/test_db.py` (S1 test updated now that tables exist), `docs/worklogs/T1.md`, `docs/features.csv` (T1 row), `docs/P3_FEATURES.md`.
+- **Tests and results (2026-10-02, Windows):** done-when tests: leak 5 days apart merges, no-water 5 days apart does not, 150 m apart does not; plus household first, household outside window, exactly 100 m / 100.5 m, 48 h / 48 h + 1 s, 7-day `other`, different category, later complaint never a parent, nearest wins, unknown category, naive time, chain to root, order independence, grid vs brute force (300 points), haversine, text secondary + fallback, duplicate rate. `python tasks.py test` exit 0: 105 backend tests (32 new), 1 frontend test, all P1 verifiers. `python tasks.py lint` exit 0. Calibration script: refusal paths and a six-row test fixture only.
+- **How to run:** `.venv\Scripts\python -m pytest backend/tests/services/test_dedup.py`. Calibration (after P1 registers D13): `.venv\Scripts\python scripts/trust/calibrate_dedup.py --input <D13 file>` → `data/derived/dedup_calibration.csv`.
+- **Status log:** 2026-10-02 core engine, models and calibration script committed locally on `feat/t1-dedup`; calibration waits for P1's D13 pull; awaiting approval to push.
 
 ## T2: forecast + backtest (F5)
 
