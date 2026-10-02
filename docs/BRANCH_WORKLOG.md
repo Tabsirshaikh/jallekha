@@ -184,4 +184,4 @@ The pull-request description must summarize the same information and link to thi
   - `python tasks.py test`: 198 pass. `python tasks.py lint` passes.
 - **Known limitations:** Removing the last entry is still undetectable without a published head hash (D2, T6).
 - **Handoff / next step:** T3 and T6 can build on S3.
-- **Pull request:** pending
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/25
