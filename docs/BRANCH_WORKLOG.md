@@ -583,3 +583,35 @@ The pull-request description must summarize the same information and link to thi
   - P4: review the alert wording; show flagged areas to the officer.
   - P1: a locality alias table and post-2026 section names would raise the matched share.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/44
+
+## `feat/t7-explain` — `T7`
+
+- **Owner / date:** P3, 2026-10-03.
+- **Purpose:** Explanations and contest (F16): an explanation for every ward and every booking, the smallest single change that would move a booking up (counterfactual), text in te / ur / hi / en, and contests whose officer reply must give a reason, with both in the ledger.
+- **What we found:**
+  - A3's `order_bookings` takes each booking's arrival time, tier and group, the capacity, group entitlements (A2) and the carried-over round-robin state. Waiting time is an input (arrival time); **water debt is not** (A6 does not feed A3), so the counterfactual reports it as "not part of today's ordering" instead of varying it.
+  - `order_bookings` with capacity = all pending gives a full order whose first `capacity` places equal today's served positions (tested on a real day), so waiting bookings get a place too.
+  - A6 stores no debt accounts: debt is explained only when the caller passes a `DebtAccount`.
+  - E2 has no Census values for the two partial-coverage wards; critical facilities are UNAVAILABLE for every ward.
+  - No booking-to-filling-station mapping exists; the real-day test uses one division's bookings as one station's queue.
+  - Note for P2: A2's `override_event` puts the officer's free-text `reason` into its ledger payload (not changed here).
+- **What we changed:**
+  - `docs/features.csv` / `docs/P3_FEATURES.md` status rows: T4 and T5 DONE, T7 IN_PROGRESS (own commit).
+  - `backend/app/config/explain.py`: contest roles and targets (F16), reason and outcome codes (OPEN), text limit, counterfactual limits (OPEN), 15 templates in te / ur / hi / en (wording OPEN).
+  - `backend/app/models/contest.py`, `contest_reply.py` (+ `models/__init__.py`): one table each; one reply per contest; text, SHA-256 of the text, `ledger_missing`.
+  - `backend/app/services/explain.py`: `explain_ward`, `explain_booking`, `QueueDay`, `find_counterfactual` (re-runs P2's `order_bookings`, one input at a time), `reproduce`, `step_back`, `render_*`.
+  - `backend/app/services/contest.py`: `ContestService.file` / `.reply` (reply needs a non-empty reason, an officer id and an outcome code), `contest_filed` / `contest_replied` via `ledger_store.record` with ids, codes and the text hash, `verify_text`, phone numbers removed from stored text, `ids_missing_ledger`.
+  - Tests `backend/tests/services/test_explain.py`, `backend/tests/services/test_contest.py`; workflow `.github/workflows/p3-t7.yml`; `docs/worklogs/T7.md`.
+  - No P1, P2 or P4 file was edited.
+- **Validation:**
+  - 39 tests written first (import failed before the code existed): the done-when (reply without a reason rejected, nothing stored or logged; contest and reply in the stored ledger, chain verifies); ward values equal E2 / A2 for every eligible ward of the real `ward_evidence.csv`; booking values equal A3's `Decision` on a real replayed day (A1 replay of the REAL May 2025 totals, daily split SYNTHETIC); counterfactual reproduces exactly on re-run and one step less is not enough; no-change and already-first cases; no-Census wards without numbers; debt with and without an account; no free text or phone in ledger payloads; hash check detects edited text; all templates in four languages. Counts come from the files.
+  - `python tasks.py test` exit 0 (518 backend passed, 1 frontend test, all P1 verifiers); `python tasks.py lint` exit 0.
+  - Task workflow `P3:T7`: T7 tests with A3 and A2 tests, ruff check and format check on the T7 files (run locally: 68 passed, clean).
+- **Known limitations:**
+  - OPEN, owner to confirm: contest reason codes, reply outcome codes, counterfactual limits, template wording (native speakers and P4).
+  - Debt only with a `DebtAccount` until A7; one input changed at a time; Census 2011 on a historical 2016 ward map; no retry for `ledger_missing`; no API until T10.
+- **Handoff / next step:**
+  - P2: consider a code plus a text hash in A2's `override_event` payload instead of free text; A7 to store `DebtAccount`s.
+  - P4: review the wording; show `no_census_data` wards and counterfactuals as returned.
+  - T10: routes for explanations and contests.
+- **Pull request:** pending.
