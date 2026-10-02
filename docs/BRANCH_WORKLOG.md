@@ -210,4 +210,4 @@ The pull-request description must summarize the same information and link to thi
 - **Handoff / next step:**
   - P1 reviews.
   - The section-to-ward booking transfer is the remaining E4/E5 blocker.
-- **Pull request:** pending
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/27
