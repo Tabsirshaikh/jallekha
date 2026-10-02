@@ -88,11 +88,18 @@ def test_unavailable_values_are_null_and_provisional_values_remain_review_only()
         else:
             assert props["observed_bookings"] is None and props["bookings_per_1000"] is None
             assert props["display_status"] == "UNAVAILABLE_NO_PLACED_SECTION"
-    assert all(
-        feature["properties"]["field_check_candidate"] is None
-        and feature["properties"]["display_status"] == "DATA_REVIEW_REQUIRED"
-        for feature in field["features"]
-    )
+    # Field-check layer mirrors E5 (2025 households and bookings; approximate transfer)
+    e5 = {
+        r["ward_id"]: r
+        for r in json.loads(
+            (ROOT / "data/derived/underserved/field_checks.json").read_text(encoding="utf-8")
+        )["rows"]
+    }
+    for feature in field["features"]:
+        props = feature["properties"]
+        assert props["field_check_candidate"] == e5[props["ward_id"]]["field_check_candidate"]
+        assert props["display_status"] == e5[props["ward_id"]]["status"]
+    assert sum(bool(f["properties"]["field_check_candidate"]) for f in field["features"]) >= 1
 
 
 def test_manifest_has_exactly_three_layers_and_excludes_unsupported_tap_claim():
@@ -111,7 +118,17 @@ def test_manifest_has_exactly_three_layers_and_excludes_unsupported_tap_claim():
         if r["bookings_per_1000"]
     )
     assert e4_rates >= 85
-    assert [item["non_null_value_count"] for item in manifest["layers"]] == [143, e4_rates, 0]
+    e5_screened = sum(
+        r["field_check_candidate"] is not None
+        for r in json.loads(
+            (ROOT / "data/derived/underserved/field_checks.json").read_text(encoding="utf-8")
+        )["rows"]
+    )
+    assert [item["non_null_value_count"] for item in manifest["layers"]] == [
+        143,
+        e4_rates,
+        e5_screened,
+    ]
     assert manifest["excluded_layers"] == [
         {
             "layer_id": "people_within_500m_public_tap",

@@ -22,7 +22,13 @@ if __name__ == "__main__":
         for row in csv.DictReader((ROOT / "data/derived/equity/wards.csv").open(encoding="utf-8"))
         if row["bookings_per_1000"]
     )
-    if list(counts.values()) != [143, e4_rates, 0]:
+    e5_screened = sum(
+        r["field_check_candidate"] is not None
+        for r in json.loads(
+            (ROOT / "data/derived/underserved/field_checks.json").read_text(encoding="utf-8")
+        )["rows"]
+    )
+    if list(counts.values()) != [143, e4_rates, e5_screened]:
         raise SystemExit("E6 null/value coverage differs from reviewed E2/E4/E5 state")
     excluded = {item["layer_id"] for item in manifest["excluded_layers"]}
     if "people_within_500m_public_tap" not in excluded:

@@ -84,15 +84,15 @@ def blockers(area: AreaEvidence, config=UNDERSERVED_CONFIG) -> list[str]:
     if not isinstance(area.period_year, int) or isinstance(area.period_year, bool):
         reasons.append("BOOKING_PERIOD_UNAVAILABLE")
     else:
-        for field, code in (
-            ("household_reference_year", "HOUSEHOLD_REFERENCE"),
-            ("need_reference_year", "NEED_REFERENCE"),
+        for field, code, max_age in (
+            ("household_reference_year", "HOUSEHOLD_REFERENCE", config.max_reference_age_years),
+            ("need_reference_year", "NEED_REFERENCE", config.max_need_reference_age_years),
         ):
             reference = getattr(area, field)
             if (
                 not isinstance(reference, int)
                 or isinstance(reference, bool)
-                or not 0 <= area.period_year - reference <= config.max_reference_age_years
+                or not 0 <= area.period_year - reference <= max_age
             ):
                 reasons.append(f"STALE_OR_MISSING_{code}")
     if (
@@ -244,7 +244,9 @@ def screen(areas, model_results=None, config: UnderservedConfig = UNDERSERVED_CO
         else:
             candidate = area.ward_id in flags.get("PEER_MEDIAN", set())
             status = "PEER_ONLY_FIELD_CHECK" if candidate else "NO_PEER_SCREENING_FLAG"
-        per_model = {name: values[area.ward_id] for name, values in scores.items()}
+        per_model = {
+            name: values[area.ward_id] for name, values in scores.items() if area.ward_id in values
+        }
         reasons = [{"code": code, "value": None, "basis": "UNAVAILABLE"} for code in missing]
         if candidate:
             for name in voted:
