@@ -181,6 +181,38 @@ h2 { margin: 0; color: var(--ink); font: 700 18px/1.3 "Manrope", sans-serif; let
 .driver-footer-note { display: flex; align-items: center; gap: 10px; margin-top: 15px; padding: 12px 14px; border-radius: 11px; background: #edf3f4; color: #6f8385; font-size: 16px; }
 .driver-footer-note > span { flex: 1; }
 .driver-footer-note .text-button { min-width: 75px; justify-content: flex-end; }
+.driver-demo-badge { display: inline-flex; align-items: center; padding: 8px 11px; border: 1px solid #eed9ac; border-radius: 999px; background: #fff7e8; color: #8a682d; font-size: 16px; font-weight: 800; }
+.driver-stop-list { display: grid; gap: 10px; }
+.driver-stop-card { display: flex; align-items: center; gap: 13px; padding: 13px; border: 1px solid #e4ebe5; border-radius: 13px; background: white; }
+.driver-stop-number { display: grid; flex: 0 0 auto; width: 42px; height: 42px; place-items: center; border-radius: 12px; background: #e8f4ef; color: #287761; font-weight: 800; }
+.driver-stop-info { display: grid; flex: 1; gap: 4px; min-width: 0; }
+.driver-stop-info strong { color: #34544a; font-size: 16px; }
+.driver-stop-info small { color: #89968f; font-size: 16px; }
+.driver-arrival-state, .driver-help-panel { display: grid; gap: 11px; margin-top: 14px; padding: 17px; border: 1px solid #e2eae4; border-radius: 13px; background: #f8fbf8; color: #52695f; }
+.driver-arrival-state strong { color: #2d6550; }
+.driver-arrival-state p, .driver-help-panel p { margin: 0; color: #6f8177; font-size: 16px; line-height: 1.55; }
+.driver-arrival-state .button { justify-self: start; }
+.driver-arrival-state.compact { margin: 15px 0; }
+.driver-proof-panel { margin-top: 17px; padding: 22px; border: 1px solid #e4ebe5; border-radius: 15px; background: white; }
+.driver-proof-panel > h2 { margin-block: 14px 8px; }
+.driver-proof-panel form { display: grid; justify-items: start; gap: 11px; padding-bottom: 20px; border-bottom: 1px solid #edf1ed; }
+.driver-proof-panel form label { color: #405f53; font-size: 16px; font-weight: 700; }
+.driver-proof-panel form input { width: min(100%, 320px); min-height: 54px; padding: 10px 14px; border: 1px solid #dbe5de; border-radius: 10px; background: #fff; color: #24483f; font: 700 24px/1.2 ui-monospace, monospace; letter-spacing: .18em; }
+.driver-proof-panel form input:focus { outline: 3px solid #b8dfcf; outline-offset: 1px; }
+.driver-proof-panel form .button:disabled { cursor: not-allowed; opacity: .55; }
+.driver-feedback { margin: 13px 0; padding: 11px 13px; border-radius: 9px; background: #fff5e6; color: #805b20; font-size: 16px; line-height: 1.5; }
+.driver-outcome-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+.driver-outcome { display: grid; gap: 7px; padding: 13px; border: 1px solid #e8ede8; border-inline-start: 4px solid #51866e; border-radius: 10px; background: #fbfcfb; }
+.driver-outcome strong { color: #35594c; font-size: 16px; }
+.driver-outcome span { color: #74847b; font-size: 16px; line-height: 1.5; }
+.driver-outcome.disputed { border-inline-start-color: #bd8b43; }
+.driver-outcome.unconfirmed { border-inline-start-color: #6685a1; }
+.driver-outcome.failed { border-inline-start-color: #b96756; }
+.driver-silence-note { margin: 14px 0 0; padding: 12px; border-radius: 9px; background: #eff4f2; color: #62776d; font-size: 16px; line-height: 1.55; }
+.driver-honesty-note { margin: 15px auto 0; color: #8a9890; text-align: center; font-size: 16px; line-height: 1.55; }
+.driver-help-panel { margin-top: 10px; }
+.driver-help-panel h2 { margin: 0; }
+.driver-help-panel .button { justify-self: start; }
 
 @media (max-width: 1050px) {
   .sidebar { width: 220px; }
@@ -253,6 +285,12 @@ h2 { margin: 0; color: var(--ink); font: 700 18px/1.3 "Manrope", sans-serif; let
   .driver-heading h1 { font-size: 27px; }
   .driver-status { padding: 8px 10px; font-size: 16px; }
   .driver-route-card { padding: 19px; }
+  .driver-stop-card { align-items: flex-start; flex-wrap: wrap; }
+  .driver-stop-info { flex-basis: calc(100% - 60px); }
+  .driver-stop-card .button { flex: 1; }
+  .driver-outcome-list { grid-template-columns: 1fr; }
+  .driver-demo-badge { align-self: flex-start; font-size: 16px; }
+  .driver-heading { flex-wrap: wrap; }
 }
 
 .placeholder-page { min-height: 320px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: clamp(24px, 6vw, 60px); border: 1px solid var(--line); border-radius: 18px; background: white; }

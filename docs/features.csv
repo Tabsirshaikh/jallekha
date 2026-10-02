@@ -35,7 +35,7 @@
 "U1","i18n: Telugu / Urdu (RTL) / Hindi / English","F14","P4","feat/u1-i18n","S4 R-P4","All resident + driver strings in 4 languages","DONE","","Native language review required before release"
 "U2","Resident app with offline queue","F14","P4","feat/u2-resident","U1 T4","Report / track / delivery code / ward card","TODO","",""
 "U3","Field-worker mode","F14","P4","feat/u3-field","U2","Report for others; offline sync","TODO","",""
-"U4","Driver app (route / arrived / OTP)","F12","P4","feat/u4-driver","U1 T3","Four outcomes visible","TODO","",""
+"U4","Driver app (route / arrived / OTP)","F12","P4","feat/u4-driver","U1 T3","Four outcomes visible","IN_PROGRESS","","Live driver API pending from P3; route fixtures are SYNTHETIC"
 "U5","Atlas / Equity / Under-served screens","F1-F4","P4","feat/u5-evidence","T10","Census 2011 and growth labels; reasons shown","TODO","","Fixtures first"
 "U6","Forecast + shortage screen","F5 F6","P4","feat/u6-forecast","T10","Range + accuracy vs baseline","TODO","",""
 "U7","Plan screen: queue / schedule / sliders with who-gains / confidence tick / approval","F8-F11 F17","P4","feat/u7-plan","A7 T10","Approval requires reason","TODO","",""
