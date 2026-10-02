@@ -63,11 +63,35 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 
 ## T2: forecast + backtest (F5)
 
-- **Implementation notes:** _to fill_
-- **Files:** _to fill_
-- **Tests and results:** _to fill_
-- **How to run:** _to fill_
-- **Status log:** _to fill_
+- **Implementation notes:** `services/forecast.py` (pure, standard library only), `scripts/forecast/run_backtest.py`, `config/forecast.py`. No LLM; no new library; no API route (T10).
+  - **Baseline protocol (recovered by reproduction on 2026-10-03; confirmed by Padmaja):** `V-VERIFY_REVIEW.md`, which recorded how 21.9% / 35.1% were computed, was never found (`data/verification/SOURCES.md`). On the S2 files (`data/raw/hmwssb_tankers`): forecast `noofbookings`; seasonal naive = same month one year earlier; Dec 2022 is **missing, not zero**, so Dec 2023 is not scored (13 scored months, Jan 2023 - Feb 2024); all sections present in either month, a missing section value counted as 0; city MAPE = mean of monthly absolute percentage errors of city totals; section WAPE = sum of absolute errors / sum of actuals, pooled over all section-months. Result: **21.89% / 35.12%**. `delivered` instead of `noofbookings`, and only sections present in both years, also land within 0.1 pp, so the data does not distinguish them; Dec 2022 as zero (27.47%) and per-month-averaged WAPE (35.52%) do not reproduce.
+  - **Data:** P2's `hmwssb.read_rows` (unchanged); a month whose file has no rows stays missing.
+  - **Models:** (a) seasonal naive; (b) seasonal naive x year-on-year growth (city total of the 3 most recent months that have a value a year earlier, over the same months a year earlier; ASSUMED window). (c) A global gradient-boosting model is **not run**: it needs scikit-learn or lightgbm, which `tasks.py setup` does not install (decision pending). Chronos-2 is not run (owner decision pending). Weather (D8) and groundwater (D7) are not in the repo; `ForecastConfig.covariates` is the place to add them later.
+  - **No leakage:** every model refuses training data at or after its target month; the backtest trains on months strictly before each origin (one-step-ahead, rolling).
+  - **Reconciliation:** bottom-up; the city forecast is the sum of the section forecasts.
+  - **Intervals:** split-conformal at 80% and 90%: absolute errors scaled by each section's calibration error (median positive scale as fallback), pooled across sections; the first half of the scored months calibrates, the rest tests. Lower bounds are cut at 0. Coverage is reported only with at least 6 calibration and 6 test months (ASSUMED); otherwise the result says "insufficient" with the month counts. City rows have no interval: section intervals do not add up.
+  - **Longer history:** the D1b portal files up to Jan 2026 (before the Feb/Mar 2026 section re-cut) are a second, separately labelled run. Section names do not line up across years (for example 8 appear and 5 disappear in 2023, 7 appear and 14 disappear in 2025); no mapping is applied: a missing section counts as 0.
+  - **Backtest results** (`data/derived/forecast_backtest.csv`; the two models compared on the origins they share):
+
+    | Run | Model | Origins | City MAPE | Section WAPE | Coverage 80% / 90% |
+    |---|---|---|---|---|---|
+    | S2, Jan 2022 - Feb 2024 | seasonal naive | 13 (all) | 21.89 | 35.12 | 0.86 / 0.91 (7 test months) |
+    | S2 | seasonal naive | 10 (Apr 2023 - Feb 2024) | 15.09 | 31.38 | |
+    | S2 | naive x growth | 10 | 25.32 | 40.59 | insufficient (5 + 5 months) |
+    | Portal, Jan 2022 - Jan 2026 | seasonal naive | 36 (all) | 27.80 | 47.65 | 0.77 / 0.87 (18 test months) |
+    | Portal | seasonal naive | 33 (Apr 2023 - Jan 2026) | 26.28 | 47.67 | |
+    | Portal | naive x growth | 33 | 19.77 | 48.90 | 0.77 / 0.85 (17 test months) |
+
+  - **Model choice:** a model is used only if it beats seasonal naive on both city MAPE and section WAPE in both runs. None does (naive x growth is better on portal city MAPE but worse on section WAPE, and worse on both in S2), so **seasonal naive is used**.
+  - **Forecast table** (`data/derived/forecast_table.csv`): section and city rows for 12 months after the portal run's last month (Feb 2026 - Jan 2027), with 80% / 90% section intervals and a `_basis` per derived column. These use section names from before the Feb/Mar 2026 re-cut.
+  - **Capacity planner** (`capacity_plan`): trips needed (one booking = one trip, ASSUMED) versus fleet (ASSUMED, D17) x trips per tanker per day x days. Trips per day has **no source**: it is a required input with no default (OPEN), and the script writes no capacity file without it.
+  - **OPEN, owner to confirm. Not decided.** Trips per tanker per day; whether to add scikit-learn or lightgbm for a gradient-boosting model; Chronos-2 (no-LLM rule); which data the published 12-month forecast should start from (sections were re-cut in Feb/Mar 2026). ASSUMED: growth window 3 months, minimum 6 + 6 months for coverage, scale fallback, one booking = one trip, fleet figures.
+  - **Known limits:** 13 scored months on S2 (and 36 on the portal run) is short; coverage is pooled over sections and months that are not independent, so it is indicative; portal coverage is under target (0.77 at 80%, 0.87 at 90%); section names change between years and are not mapped; no weather or groundwater covariates; the forecast table uses pre-re-cut section names.
+- **Files:** `backend/app/config/forecast.py`, `backend/app/services/forecast.py`, `backend/tests/services/test_forecast.py`, `scripts/forecast/run_backtest.py`, `data/derived/forecast_backtest.csv`, `data/derived/forecast_table.csv`, `.github/workflows/p3-t2.yml`, `docs/worklogs/T2.md`, `docs/features.csv`, `docs/P3_FEATURES.md`, `docs/BRANCH_WORKLOG.md`.
+- **Config keys:** `FORECAST_CONFIG`: `horizon_months`, `seasonal_period_months`, `baseline_city_mape_pct`, `baseline_section_wape_pct`, `baseline_tolerance_pp`, `baseline_column`, `baseline_recovered_on`, `baseline_protocol`, `interval_levels`, `min_calibration_months`, `min_test_months`, `growth_window_months`, `fleet_tankers_early_2024`, `fleet_tankers_2026`, `trips_per_tanker_per_day` (OPEN, None), `portal_through`, `covariates`.
+- **Tests and results (2026-10-03, Windows):** written first (`ImportError` before the code existed). Done-when: seasonal naive on the S2 files reproduces 21.9% / 35.1% within 0.1 pp, with the scored months read from the files. Also: every row of the files in the panel; Dec 2022 missing, never zero; the protocol recorded in config; models refuse future data and future values never change a forecast (no leakage); seasonal naive and naive x growth on hand-checkable fixtures; backtest naive equals the baseline; gradient boosting reported as not run; a section that appears or disappears counts as 0; section changes between years read from the portal files; section forecasts sum to the city forecast; conformal quantile and coverage on a tiny fixture; coverage reported or "insufficient"; model choice; the capacity planner refusing to run without trips per day; the script writing both files with `_basis` columns. 18 new tests. `python tasks.py test` exit 0: 536 backend passed, 1 frontend test, all P1 verifiers. `python tasks.py lint` exit 0.
+- **How to run:** `.venv\Scripts\python -m pytest backend/tests/services/test_forecast.py`; `.venv\Scripts\python scripts/forecast/run_backtest.py` (writes `data/derived/forecast_backtest.csv` and `forecast_table.csv`; add `--trips-per-day N` only with a sourced value).
+- **Status log:** 2026-10-03 protocol recovered and confirmed; config, service, script, outputs, tests and the `P3:T2` workflow committed locally on `feat/t2-forecast`; not pushed. Waiting for: a decision on scikit-learn / lightgbm; the owner on trips per day, Chronos-2 and the forecast start; P1 on weather (D8) and groundwater (D7).
 
 ## T3: delivery proof (F12)
 
