@@ -245,6 +245,39 @@ def test_otp_outside_geofence_is_not_verified_and_not_counted(
     assert result == "verified" and state.otp_verified
 
 
+def test_wrong_and_correct_code_outside_get_the_same_reply(
+    chain: InMemoryLedger, sms: FakeSmsSender
+) -> None:
+    state = dl.request_otp(_start(chain), "rep-1", OTP_KEY, sms, chain, T0)
+    code = sms.sent[-1].params["code"]
+    digits = TRUST_CONFIG.otp_digits
+    wrong = f"{(int(code) + 1) % 10**digits:0{digits}d}"
+    after_wrong, wrong_reply = dl.verify_otp(state, wrong, *_at(151), OTP_KEY, chain, T0)
+    after_right, right_reply = dl.verify_otp(state, code, *_at(151), OTP_KEY, chain, T0)
+    assert wrong_reply == right_reply == "outside_geofence"
+    for after in (after_wrong, after_right):
+        assert after.wrong_attempts == 0 and not after.otp_verified
+    # The logged attempt reveals nothing about the code either.
+    outside_entries = [e.payload for e in chain.entries if e.event_type == "otp_attempted"]
+    assert [p["result"] for p in outside_entries] == ["outside_geofence"] * 2
+    assert outside_entries[0]["wrong_attempts"] == outside_entries[1]["wrong_attempts"] == 0
+
+
+def test_geofence_is_checked_before_the_code(
+    chain: InMemoryLedger, sms: FakeSmsSender, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    state = dl.request_otp(_start(chain), "rep-1", OTP_KEY, sms, chain, T0)
+    code = sms.sent[-1].params["code"]
+
+    def code_must_not_be_checked(*args: object) -> bool:
+        raise AssertionError("OTP code checked before the geofence")
+
+    monkeypatch.setattr(dl.otp, "check", code_must_not_be_checked)
+    for lat_lon in (_at(151), (None, None)):
+        _, reply = dl.verify_otp(state, code, *lat_lon, OTP_KEY, chain, T0)
+        assert reply == "outside_geofence"
+
+
 # --- OTP (decision a, OPEN) --------------------------------------------------------------
 
 
