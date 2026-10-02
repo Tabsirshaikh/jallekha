@@ -1,0 +1,43 @@
+name: P4:U6
+
+on:
+  push:
+    branches: [feat/u6-forecast]
+    paths:
+      - "frontend/**"
+      - "scripts/frontend/build_u6_snapshot.py"
+      - "docs/features.csv"
+      - "docs/BRANCH_WORKLOG.md"
+      - ".github/workflows/p4-u6.yml"
+  pull_request:
+    paths:
+      - "frontend/**"
+      - "scripts/frontend/build_u6_snapshot.py"
+      - "docs/features.csv"
+      - "docs/BRANCH_WORKLOG.md"
+      - ".github/workflows/p4-u6.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  forecast-shortage-screens:
+    name: forecast-shortage-screens
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install frontend
+        run: npm ci --prefix frontend
+      - name: Lint frontend
+        run: npm run lint --prefix frontend
+      - name: Build frontend
+        run: npm run build --prefix frontend
