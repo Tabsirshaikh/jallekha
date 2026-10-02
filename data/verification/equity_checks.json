@@ -5,8 +5,8 @@
     "data/derived/equity/monthly.csv": "f4c96b7644531da85ed5e076ca7d1a4395ccf3b49518a0105b29a3df8baec5dd",
     "data/derived/equity/seasonality.csv": "8ac04e6664a46abe797b84f0479110d8dadeabc0281ea34a81b59bd1b7c55507",
     "data/derived/equity/sections.csv": "0032980d327caf81056918047ee5021fdefcd1a7090574436790063b2838e60e",
-    "data/derived/equity/summary.json": "c938a5fd40778ecc6948c4dc01c1927317a82155d839162bd689727778387ac1",
-    "data/derived/equity/wards.csv": "65dbf4c35326e354c8b5b7146eae74e31a649b9598835bc87959e904e57ea4c1"
+    "data/derived/equity/summary.json": "6daec4e3e762a0b02074086fbca73e5e64bad001f30baf487d308a1230d1768e",
+    "data/derived/equity/wards.csv": "ca868e6b2a1493da88ac1ac8fdf070ff94667ad569e367869ff3a163ff9dc7c1"
   },
   "raw_inputs_sha256": {
     "data/raw/hmwssb_billing_portal/2022-01.csv": "1c2d2bee9d1d1aa60b2e24f06f7194d49b58581f3f6db00becee4163d31c9157",
@@ -61,5 +61,5 @@
     "data/raw/hmwssb_tankers/2024-01.csv": "311f2e103146596dd16930d4c78ba54da27b965490eb8dfb6d4a918b0ea88985",
     "data/raw/hmwssb_tankers/2024-02.csv": "9950c45274e0d265f0a1be6a9580395b0b3911abad584dc3b4b51a6a42d6647c"
   },
-  "section_wards_sha256_lf": "6f4f0b531628abb1fcf4da12c83d734e2ac444a94524fd9f7c84d7ab60aa5aa1"
+  "section_wards_sha256_lf": "7cd5f22f86e0418601aa46f65b08a2e8b85acc5bbcd312adcaab5ffb6faabf25"
 }

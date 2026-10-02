@@ -2010,10 +2010,10 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "bookings_per_1000": 5.34335,
+        "bookings_per_1000": 18.64882,
         "display_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
         "layer_id": "booking_coverage",
-        "observed_bookings": 202.0,
+        "observed_bookings": 705.0,
         "value_basis": "DERIVED_APPROXIMATE",
         "ward_id": "relation/7849357",
         "ward_name": "Ward 59 Mailardevpally"
@@ -5464,10 +5464,10 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "bookings_per_1000": 11.27728,
+        "bookings_per_1000": 68.418745,
         "display_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
         "layer_id": "booking_coverage",
-        "observed_bookings": 463.0,
+        "observed_bookings": 2809.0,
         "value_basis": "DERIVED_APPROXIMATE",
         "ward_id": "relation/7852365",
         "ward_name": "Ward 21 Kothapet"
@@ -5660,11 +5660,11 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "bookings_per_1000": null,
-        "display_status": "UNAVAILABLE_NO_PLACED_SECTION",
+        "bookings_per_1000": 127.622514,
+        "display_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
         "layer_id": "booking_coverage",
-        "observed_bookings": null,
-        "value_basis": "UNAVAILABLE",
+        "observed_bookings": 4909.0,
+        "value_basis": "DERIVED_APPROXIMATE",
         "ward_id": "relation/7852446",
         "ward_name": "Ward 8 Habsiguda"
       },
@@ -10328,11 +10328,11 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "bookings_per_1000": null,
-        "display_status": "UNAVAILABLE_NO_PLACED_SECTION",
+        "bookings_per_1000": 77.587031,
+        "display_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
         "layer_id": "booking_coverage",
-        "observed_bookings": null,
-        "value_basis": "UNAVAILABLE",
+        "observed_bookings": 3245.0,
+        "value_basis": "DERIVED_APPROXIMATE",
         "ward_id": "relation/7854083",
         "ward_name": "Ward 81 Nallakunta"
       },
@@ -11316,11 +11316,11 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "bookings_per_1000": null,
-        "display_status": "UNAVAILABLE_NO_PLACED_SECTION",
+        "bookings_per_1000": 123.121209,
+        "display_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
         "layer_id": "booking_coverage",
-        "observed_bookings": null,
-        "value_basis": "UNAVAILABLE",
+        "observed_bookings": 5988.0,
+        "value_basis": "DERIVED_APPROXIMATE",
         "ward_id": "relation/7854090",
         "ward_name": "Ward 145 Seethaphalmandi"
       },
@@ -11688,11 +11688,11 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "bookings_per_1000": null,
-        "display_status": "UNAVAILABLE_NO_PLACED_SECTION",
+        "bookings_per_1000": 0.432938,
+        "display_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
         "layer_id": "booking_coverage",
-        "observed_bookings": null,
-        "value_basis": "UNAVAILABLE",
+        "observed_bookings": 20.0,
+        "value_basis": "DERIVED_APPROXIMATE",
         "ward_id": "relation/7856356",
         "ward_name": "Ward 40 Riyasat Nagar"
       },
@@ -13564,11 +13564,11 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "bookings_per_1000": null,
-        "display_status": "UNAVAILABLE_NO_PLACED_SECTION",
+        "bookings_per_1000": 1.369613,
+        "display_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
         "layer_id": "booking_coverage",
-        "observed_bookings": null,
-        "value_basis": "UNAVAILABLE",
+        "observed_bookings": 60.0,
+        "value_basis": "DERIVED_APPROXIMATE",
         "ward_id": "relation/7856367",
         "ward_name": "Ward 53 Doodh Bowli"
       },
@@ -14372,11 +14372,11 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "bookings_per_1000": null,
-        "display_status": "UNAVAILABLE_NO_PLACED_SECTION",
+        "bookings_per_1000": 16.108962,
+        "display_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
         "layer_id": "booking_coverage",
-        "observed_bookings": null,
-        "value_basis": "UNAVAILABLE",
+        "observed_bookings": 712.0,
+        "value_basis": "DERIVED_APPROXIMATE",
         "ward_id": "relation/7857544",
         "ward_name": "Ward 76 Mallepally"
       },
@@ -14820,11 +14820,11 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "bookings_per_1000": null,
-        "display_status": "UNAVAILABLE_NO_PLACED_SECTION",
+        "bookings_per_1000": 156.46729,
+        "display_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
         "layer_id": "booking_coverage",
-        "observed_bookings": null,
-        "value_basis": "UNAVAILABLE",
+        "observed_bookings": 8596.0,
+        "value_basis": "DERIVED_APPROXIMATE",
         "ward_id": "relation/7857547",
         "ward_name": "Ward 73 Vijay Nagar Colony"
       },
@@ -15084,11 +15084,11 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "bookings_per_1000": null,
-        "display_status": "UNAVAILABLE_NO_PLACED_SECTION",
+        "bookings_per_1000": 97.239304,
+        "display_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
         "layer_id": "booking_coverage",
-        "observed_bookings": null,
-        "value_basis": "UNAVAILABLE",
+        "observed_bookings": 3716.0,
+        "value_basis": "DERIVED_APPROXIMATE",
         "ward_id": "relation/7857549",
         "ward_name": "Ward 70 Mehdipatnam"
       },
@@ -15444,10 +15444,10 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "bookings_per_1000": 39.059199,
+        "bookings_per_1000": 120.205624,
         "display_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
         "layer_id": "booking_coverage",
-        "observed_bookings": 1664.0,
+        "observed_bookings": 5121.0,
         "value_basis": "DERIVED_APPROXIMATE",
         "ward_id": "relation/7857551",
         "ward_name": "Ward 69 Nanal Nagar"
@@ -15600,11 +15600,11 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "bookings_per_1000": null,
-        "display_status": "UNAVAILABLE_NO_PLACED_SECTION",
+        "bookings_per_1000": 129.483371,
+        "display_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
         "layer_id": "booking_coverage",
-        "observed_bookings": null,
-        "value_basis": "UNAVAILABLE",
+        "observed_bookings": 5361.0,
+        "value_basis": "DERIVED_APPROXIMATE",
         "ward_id": "relation/7857552",
         "ward_name": "Ward 68 Tolichowki"
       },
@@ -17204,11 +17204,11 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "bookings_per_1000": null,
-        "display_status": "UNAVAILABLE_NO_PLACED_SECTION",
+        "bookings_per_1000": 319.664626,
+        "display_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
         "layer_id": "booking_coverage",
-        "observed_bookings": null,
-        "value_basis": "UNAVAILABLE",
+        "observed_bookings": 17805.0,
+        "value_basis": "DERIVED_APPROXIMATE",
         "ward_id": "relation/7857800",
         "ward_name": "Ward 99 Vengal Rao Nagar"
       },
@@ -18736,10 +18736,10 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "bookings_per_1000": 236.067125,
+        "bookings_per_1000": 344.73327,
         "display_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
         "layer_id": "booking_coverage",
-        "observed_bookings": 11479.0,
+        "observed_bookings": 16763.0,
         "value_basis": "DERIVED_APPROXIMATE",
         "ward_id": "relation/7858245",
         "ward_name": "Ward 118 Fateh Nagar"
@@ -20680,10 +20680,10 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "bookings_per_1000": 1117.422951,
+        "bookings_per_1000": 1760.161216,
         "display_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
         "layer_id": "booking_coverage",
-        "observed_bookings": 55727.0,
+        "observed_bookings": 87781.0,
         "value_basis": "DERIVED_APPROXIMATE",
         "ward_id": "relation/7858404",
         "ward_name": "Ward 115 Balaji Nagar"
@@ -23318,10 +23318,10 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "bookings_per_1000": 9.29497,
+        "bookings_per_1000": 77.550567,
         "display_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
         "layer_id": "booking_coverage",
-        "observed_bookings": 335.0,
+        "observed_bookings": 2795.0,
         "value_basis": "DERIVED_APPROXIMATE",
         "ward_id": "relation/7861522",
         "ward_name": "Ward 17 Champapet"
@@ -24974,10 +24974,10 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "bookings_per_1000": 113.592279,
+        "bookings_per_1000": 270.875716,
         "display_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
         "layer_id": "booking_coverage",
-        "observed_bookings": 4802.0,
+        "observed_bookings": 11451.0,
         "value_basis": "DERIVED_APPROXIMATE",
         "ward_id": "relation/7865918",
         "ward_name": "Ward 75 Red Hills"

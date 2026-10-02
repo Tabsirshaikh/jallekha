@@ -10,15 +10,15 @@
     "Unmapped sections use a flagged fallback entitlement in the fair queue.",
     "Section names after the Feb/Mar 2026 re-cut are not covered."
   ],
-  "mapped_booking_share": 0.8049,
-  "mapped_section_count": 142,
+  "mapped_booking_share": 0.8849,
+  "mapped_section_count": 161,
   "method": "Nominatim lookup of the section locality name inside GHMC; point in 2016 ward",
   "sections": 221,
   "status_counts": {
-    "MAPPED": 142,
-    "UNMAPPED_DIVISION_OUTLIER": 14,
-    "UNMAPPED_NO_RESULT": 60,
+    "MAPPED": 161,
+    "UNMAPPED_DIVISION_OUTLIER": 6,
+    "UNMAPPED_NO_RESULT": 49,
     "UNMAPPED_NO_WARD": 5
   },
-  "wards_with_a_section": 98
+  "wards_with_a_section": 108
 }

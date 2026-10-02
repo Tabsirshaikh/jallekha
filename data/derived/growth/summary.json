@@ -40,8 +40,8 @@
     "connection_growth": {
       "basis": "DERIVED (REAL billing counts, approximate section placement)",
       "description": "Spearman rank correlation, ward adjusted building trend vs growth of mean monthly HMWSSB domestic connections 2022 -> 2025 (sections placed on wards)",
-      "spearman": 0.5245,
-      "wards": 92
+      "spearman": 0.5058,
+      "wards": 102
     }
   },
   "interpretation": "Building-change signal; buildings are not households or population",
