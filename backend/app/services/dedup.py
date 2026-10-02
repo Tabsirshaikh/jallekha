@@ -17,11 +17,10 @@ from datetime import datetime, timedelta
 from typing import Literal, Protocol
 
 from app.config.trust import TRUST_CONFIG
+from app.services.geo import EARTH_RADIUS_M, haversine_m
 
 logger = logging.getLogger("jallekha.dedup")
 
-# Mean Earth radius (IUGG), metres.
-EARTH_RADIUS_M = 6_371_008.8
 # Float tolerance for the inclusive radius check (1 micrometre).
 _DISTANCE_TOLERANCE_M = 1e-6
 _METRES_PER_DEGREE_LAT = EARTH_RADIUS_M * math.pi / 180
@@ -51,7 +50,7 @@ class DedupRule:
     def from_config(cls) -> DedupRule:
         return cls(
             radius_m=TRUST_CONFIG.dedup_radius_metres,
-            window_hours=TRUST_CONFIG.dedup_window_hours,
+            window_hours=dict(TRUST_CONFIG.dedup_window_hours),
         )
 
     def window_for(self, category: str) -> timedelta:
@@ -116,14 +115,6 @@ def load_text_similarity(
     except Exception as exc:  # missing extra, missing weights, no network
         logger.warning("Text similarity unavailable, continuing without it: %s", exc)
         return NullTextSimilarity()
-
-
-def haversine_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
-    phi1, phi2 = math.radians(lat1), math.radians(lat2)
-    dphi = phi2 - phi1
-    dlmb = math.radians(lon2 - lon1)
-    a = math.sin(dphi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlmb / 2) ** 2
-    return 2 * EARTH_RADIUS_M * math.asin(min(1.0, math.sqrt(a)))
 
 
 class GridIndex:
