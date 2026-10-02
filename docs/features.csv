@@ -24,7 +24,7 @@
 "A8","Policy sandbox B1-B5 vs JL; 30+ seeds; four PS11 measures","F19","P2","feat/a8-sandbox","A1 A3 A4 T1","Results CSV with SIMULATION label; real baselines separate","TODO","",""
 "T1","Duplicate engine: 100 m + per-category windows + household id + embeddings; duplicate-rate signal","F13","P3","feat/t1-dedup","S1 R-P3","Tests for leak 5 days merges / no-water 5 days not / 150 m not","DONE","https://github.com/Tabsirshaikh/jallekha/pull/19","Calibration numbers from Chicago"
 "T2","Forecast: seasonal naive / growth / GBM + weather + groundwater; reconciliation; conformal; backtest","F5","P3","feat/t2-forecast","S2 D1","Seasonal naive reproduces 21.9% / 35.1% within 0.1 pp","TODO","","Report honestly if nothing beats baseline"
-"T3","Delivery proof: representatives / OTP / geofence / resident SMS / four outcomes","F12","P3","feat/t3-delivery","S3","Outcome table exact; silence counts for nothing; ledger entries","TODO","",""
+"T3","Delivery proof: representatives / OTP / geofence / resident SMS / four outcomes","F12","P3","feat/t3-delivery","S3","Outcome table exact; silence counts for nothing; ledger entries","IN_REVIEW","https://github.com/Tabsirshaikh/jallekha/pull/26",""
 "T4","Intake: app / SMS / missed call / voice (IndicConformer te+hi) / field worker / offline sync","F14","P3","feat/t4-intake","S3 T1","Voice note works offline-fallback; tests","TODO","","ASR runs server-side"
 "T5","Supply-notice feed → outage events + resident alerts","F15","P3","feat/t5-notices","A5","Notice creates outage with area and hours","TODO","",""
 "T6","Ledger wiring for every allocation-affecting change","F18","P3","feat/t6-ledger","S3","Tamper test catches edited entry","TODO","",""
