@@ -40,6 +40,7 @@ EVENT_TYPES = frozenset(
         "residents_sampled",
         "resident_replied",
         "delivery_outcome",
+        "outside_tries_exceeded",
     }
 )
 
