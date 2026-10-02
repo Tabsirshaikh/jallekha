@@ -239,3 +239,15 @@ The pull-request description must summarize the same information and link to thi
   - T6 stores override entries.
   - T7 explains `need_weight` components.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/28
+
+## `fix/doc-census-figures` — solution doc census figures
+
+- **Owner / date:** P2 (covering P1/owner), 2026-10-02.
+- **Purpose:** Make the section 1 Census numbers verifiable before slides.
+- **What we found:**
+  - "Up to 68.4% without water on premises" is Secunderabad Cantonment Board ward 2, not GHMC.
+  - Recomputed from HH-14, GHMC wards only (148 Census wards, 2009 numbering): max 33.4% (2009 ward 112, Serilingampally), median 5.5% (doc said 5.2%).
+  - Still correct: no phone up to 19.2% (Dabeerpura); western wards 12-33% (2009 wards 111-114).
+- **What we changed:** One sentence in `docs/JALLEKHA_FINAL_SOLUTION.md` section 1, with the recompute date and the reason for the change.
+- **Validation:** Figures from `build_evidence.census_units()` (same HH-14 formulas as E2). `scripts/ci/verify_p1_r_p1.py` passes.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/30
