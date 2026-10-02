@@ -1,18 +1,29 @@
 {
-  "allocation_eligible_count": 0,
+  "allocation_eligible_count": 143,
+  "census_ward_numbering": "GHMC 2009 delimitation (not the 2016 ward numbers)",
+  "crosswalk": {
+    "census_district_agreement": 0.9597,
+    "median_boundary_error_m": 155.1,
+    "method": "Census 2011 wards placed on the rebuilt 2009 ward map and split over 2016 wards by Open Buildings 2016 building share",
+    "min_census_coverage": 0.8,
+    "min_metric_coverage": 0.9,
+    "same_name_largest_overlap_share": 0.8586
+  },
   "current_ward_claim_blocked": true,
   "join_status_counts": {
-    "AMBIGUOUS_CROSSWALK": 5,
-    "NO_CROSSWALK": 6,
-    "PROVISIONAL_NUMBER_ONLY": 134
+    "AREAL_2009_CROSSWALK": 143,
+    "PARTIAL_CENSUS_COVERAGE": 2
   },
   "limitations": [
-    "Number-only E1 mappings lack location validation; review all joins.",
+    "Values are Census 2011 moved from 2009 wards to 2016 wards; approximate.",
+    "The 2009 map is fitted from a PDF (median boundary error in crosswalk).",
+    "2009 wards 115-116 were in Medak district; that Census table is not loaded.",
     "Census 2011 percentages are not current household observations.",
     "No verified facilities source; counts remain empty.",
     "Hardship is a mean of overlapping proxies, not a household union.",
     "Non-tap weight requires approved policy; no composite WAD invented."
   ],
+  "review_required_count": 24,
   "row_count": 145,
   "wad_non_tap_weight": null
 }

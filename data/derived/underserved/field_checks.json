@@ -462,27 +462,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -1034,27 +1014,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -1514,27 +1474,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -1672,27 +1612,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -1876,27 +1796,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -4196,27 +4096,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -4768,27 +4648,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -4880,27 +4740,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -5498,27 +5338,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -5840,27 +5660,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -5906,27 +5706,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -6708,7 +6488,27 @@
         },
         {
           "basis": "UNAVAILABLE",
+          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
+          "value": null
+        },
+        {
+          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
+          "value": null
+        },
+        {
+          "basis": "UNAVAILABLE",
+          "code": "INVALID_OR_MISSING_WAD",
+          "value": null
+        },
+        {
+          "basis": "UNAVAILABLE",
+          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
+          "value": null
+        },
+        {
+          "basis": "UNAVAILABLE",
+          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -6754,7 +6554,27 @@
         },
         {
           "basis": "UNAVAILABLE",
+          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
+          "value": null
+        },
+        {
+          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
+          "value": null
+        },
+        {
+          "basis": "UNAVAILABLE",
+          "code": "INVALID_OR_MISSING_WAD",
+          "value": null
+        },
+        {
+          "basis": "UNAVAILABLE",
+          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
+          "value": null
+        },
+        {
+          "basis": "UNAVAILABLE",
+          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -7365,27 +7185,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -7937,27 +7737,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -8417,27 +8197,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -8575,27 +8335,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -8779,27 +8519,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -11099,27 +10819,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -11671,27 +11371,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -11783,27 +11463,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -12401,27 +12061,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -12743,27 +12383,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -12809,27 +12429,7 @@
         },
         {
           "basis": "UNAVAILABLE",
-          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_WAD",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
-          "value": null
-        },
-        {
-          "basis": "UNAVAILABLE",
-          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -13611,7 +13211,27 @@
         },
         {
           "basis": "UNAVAILABLE",
+          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
+          "value": null
+        },
+        {
+          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
+          "value": null
+        },
+        {
+          "basis": "UNAVAILABLE",
+          "code": "INVALID_OR_MISSING_WAD",
+          "value": null
+        },
+        {
+          "basis": "UNAVAILABLE",
+          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
+          "value": null
+        },
+        {
+          "basis": "UNAVAILABLE",
+          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {
@@ -13657,7 +13277,27 @@
         },
         {
           "basis": "UNAVAILABLE",
+          "code": "HOUSEHOLD_EXPOSURE_UNAVAILABLE",
+          "value": null
+        },
+        {
+          "basis": "UNAVAILABLE",
           "code": "WARD_BOOKINGS_UNAVAILABLE",
+          "value": null
+        },
+        {
+          "basis": "UNAVAILABLE",
+          "code": "INVALID_OR_MISSING_WAD",
+          "value": null
+        },
+        {
+          "basis": "UNAVAILABLE",
+          "code": "INVALID_OR_MISSING_NON_TAP_SHARE",
+          "value": null
+        },
+        {
+          "basis": "UNAVAILABLE",
+          "code": "CAD_AND_HARDSHIP_UNAVAILABLE",
           "value": null
         },
         {

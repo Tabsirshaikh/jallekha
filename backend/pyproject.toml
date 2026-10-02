@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-geo = ["rasterio==1.4.4", "pyproj==3.7.2", "numpy==2.2.6", "shapely==2.1.2"]
+geo = ["rasterio==1.4.4", "pyproj==3.7.2", "numpy==2.2.6", "shapely==2.1.2", "pdfplumber==0.11.10"]
 models = ["numpy==2.2.6", "pymc==5.25.1", "arviz==0.22.0"]
 # Optional, heavy, not installed by `tasks.py setup` or CI. Install: pip install -e "./backend[ml]"
 ml = [

@@ -126,3 +126,39 @@ The pull-request description must summarize the same information and link to thi
   - A8 runs the policies on the same seeds (common random numbers).
   - P3's T9/T10 get the replay format: `DailyCount(day, division, section, bookings, basis, total_basis)` and `Booking(booking_id, section, division, arrived_at, basis)`.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/22
+
+## `fix/e2-ward-crosswalk` — E2 fix (Census ward numbering), affects E4-E6
+
+- **Owner / date:** P2, 2026-10-02, with the owner's approval to change P1's finished work. P1 should review.
+- **Purpose:** E2 allowed 0 wards for allocation. Find out why and fix it at the source.
+- **What we found:**
+  - **Census 2011 numbers GHMC wards by the 2009 delimitation; the DataMeet layer is the 2016 delimitation.** Wards were renumbered and redrawn in 2015.
+    - Only 15 of 144 numbers keep their name (2009 names: Wikipedia 2009 election results).
+    - The Census district split proves it: under 2016 numbers, Census "Hyderabad district" wards 104-110 would be Kondapur, Gachibowli, Madhapur and others, all in Rangareddy.
+    - So the E1/E2 number join put Census values on the wrong area for most wards; e.g. 2016 "Ward 91 Khairatabad" carried 2009 ward 91 (Musheerabad).
+  - No machine-readable 2009 ward map exists online. IDFC, hyderabad-svi and bharatlas all reuse the 2016 OSM wards. The official GHMC 2009 ward PDF (GODL) is a vector ArcMap export with ward lines and red ward-number labels.
+  - `data/raw/geography/osm/hyderabad_district.geojson` and `hyderabad_mandals.geojson` hold a single Point each, not boundaries (D1 issue for P1).
+- **What we changed:**
+  - New raw sources with manifest (`scripts/data/fetch_ward2009.py`, `data/verification/ward2009_manifest.csv`): GHMC 2009 ward PDF, pinned Wikipedia revision of the 2009 ward table, OSM Hyderabad district polygon (validation only).
+  - `scripts/evidence/build_ward2009.py`:
+    - Polygonizes the PDF ward lines (pdfplumber, MIT; 149 units, wards 111+112 merged because the PDF has no line between them).
+    - Fits them to the DataMeet GHMC outline by affine iterative closest point (outline IoU 0.90, median boundary error 155 m).
+    - Writes `data/derived/ward2009/` and `data/derived/crosswalk/ward2009_to_ghmc2016_weights.csv` (share of each 2009 ward's Open Buildings 2016 building count in each 2016 ward, from the E3 tiles).
+  - **Independent checks (not used in the fit):** Census district agreement 96% with 0 wards wrongly inside Hyderabad district (the 2016 number join scores 84%); the 2009 ward with the same name is the largest overlap for 86% of 99 name pairs.
+  - `build_evidence.py` (E2): Census wards (2009 numbering) are split over 2016 wards by building share.
+    - New columns: `crosswalk_method`, `census_coverage`, `dominant_source_share`, `source_units`.
+    - New statuses: `AREAL_2009_CROSSWALK` / `PARTIAL_CENSUS_COVERAGE` / `HH14_*` / `NO_CENSUS_ROW`.
+    - Result: **143 of 145 wards allocation-eligible** (was 0). 2 are partial: they overlap 2009 wards 115-116, which were in Medak district and are not loaded. Wards that are mixtures (<50% from one 2009 ward) or incomplete are `review_required`.
+    - HH-14 formulas, header checks and fail-closed handling are unchanged.
+  - E4/E5/E6 artifacts rebuilt. E6 water layer now labels values `APPROXIMATE_2009_CROSSWALK` and passes E2 eligibility through (booking and field layers stay unavailable). E5 stays closed, because its exact-geometry rule and the missing section-to-ward booking transfer still block it; only its limitation text changed.
+  - `pdfplumber==0.11.10` added to the `geo` extra.
+- **Validation:**
+  - Tests written first (`test_ward2009.py` new, E2 tests rewritten, including a regression test that 2016 Ward 91 Khairatabad takes nothing from 2009 ward 91), then made to pass.
+  - `python tasks.py test`: 170 pass, plus all P1 verifiers. `python tasks.py lint` passes.
+  - P1 CI steps run locally: E1 rebuild leaves `data/derived/crosswalk` unchanged; `verify_main_integration.py` and `verify_p1_r_p1.py` pass.
+- **Known limitations:** Values are approximate (PDF fit; Census 2011 households spread by 2016 buildings). The 2016 layer still lacks 6 wards. Current 300-ward claim stays blocked. Medak-district Census (2009 wards 115-116) is not loaded.
+- **Handoff / next step:**
+  - P1 reviews the method and decides whether E5 should accept approximate locations.
+  - P1 should fix the D1 district/mandal files (points, not polygons).
+  - A2 uses the eligible wards with `review_required` as the officer-check flag.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/24

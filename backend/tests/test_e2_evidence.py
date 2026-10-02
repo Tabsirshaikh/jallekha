@@ -47,29 +47,81 @@ def test_formulas_and_missing_components():
     assert evidence.share([80, 30]) is None
 
 
-def test_real_artifacts_and_failed_joins():
-    first = evidence.build()
-    assert first == evidence.build()
-    for path, content in first.items():
+STATUSES = {
+    "AREAL_2009_CROSSWALK",
+    "PARTIAL_CENSUS_COVERAGE",
+    "NO_CENSUS_ROW",
+    "HH14_MISSING",
+    "HH14_AMBIGUOUS",
+}
+
+
+@pytest.fixture(scope="module")
+def built():
+    return evidence.build()
+
+
+def _rows(artifacts):
+    return list(csv.DictReader(io.StringIO(artifacts[evidence.OUTPUT].decode())))
+
+
+def test_real_artifacts_are_reproducible(built):
+    assert built == evidence.build()
+    for path, content in built.items():
         assert (ROOT / path).read_bytes() == content
-    rows = list(csv.DictReader(io.StringIO(first[evidence.OUTPUT].decode())))
+
+
+def test_every_2016_ward_has_a_row_and_a_known_status(built):
+    rows = _rows(built)
     assert len(rows) == len({r["ward_id"] for r in rows}) == 145
-    ambiguous = [r for r in rows if r["join_status"] == "AMBIGUOUS_CROSSWALK"]
-    assert len(ambiguous) == 5
-    assert any(r["join_status"] == "NO_CROSSWALK" for r in rows)
-    for row in rows:
-        assert row["review_required"] == "True"
-        assert row["allocation_eligible"] == "False"
-        assert row["critical_facilities"] == ""
+    assert {r["join_status"] for r in rows} <= STATUSES
+    assert all(r["crosswalk_method"] == "BUILDING_WEIGHTED_2009_MAP" for r in rows)
+
+
+def test_eligible_wards_have_complete_derived_values(built):
+    rows = _rows(built)
+    eligible = [r for r in rows if r["allocation_eligible"] == "True"]
+    assert len(eligible) >= 120
+    for row in eligible:
+        assert row["join_status"] == "AREAL_2009_CROSSWALK"
+        assert float(row["census_coverage"]) >= evidence.MIN_CENSUS_COVERAGE
         for key in evidence.METRICS:
-            if row["join_status"] != "PROVISIONAL_NUMBER_ONLY":
-                assert row[key] == ""
-            assert row[key + "_basis"] == ("DERIVED" if row[key] else "UNAVAILABLE")
+            if key == "critical_facilities":
+                assert row[key] == "" and row[key + "_basis"] == "UNAVAILABLE"
+            else:
+                assert row[key] != "" and row[key + "_basis"] == "DERIVED"
+    for row in rows:
+        if row["allocation_eligible"] != "True":
+            assert row["review_required"] == "True"
+
+
+def test_census_goes_to_the_right_place_not_the_same_number(built):
+    """Census ward numbers follow the 2009 map; 2016 ward 91 is Khairatabad (2009 ward 96),
+    2016 ward 105 is Gachibowli (2009 wards 111-112)."""
+    by_name = {r["ward_name"]: r for r in _rows(built)}
+
+    def sources(name: str) -> list[str]:
+        return [part.split(":")[0] for part in by_name[name]["source_units"].split(";")]
+
+    # The 2016 ward was drawn from parts of 2009 wards 96 (Khairtabad) and 97 (Punjagutta);
+    # 2009 ward 91 (Musheerabad), which the old number join used, is not a source.
+    assert "96" in sources("Ward 91 Khairatabad")[:2]
+    assert "91" not in sources("Ward 91 Khairatabad")
+    assert sources("Ward 105 Gachibowli")[0] == "111+112"
+    assert "105" not in sources("Ward 105 Gachibowli")
+
+
+def test_households_are_conserved(built):
+    rows = _rows(built)
+    estimated = sum(int(r["households"]) for r in rows if r["households"])
+    census = evidence.census_unit_totals()["households"]
+    # Some census households sit in the six 2016 wards missing from the DataMeet layer.
+    assert 0.85 * census <= estimated <= census
 
 
 @pytest.mark.parametrize("candidate_count,status", [(0, "HH14_MISSING"), (2, "HH14_AMBIGUOUS")])
 def test_hh_join_failure_never_invents_values(monkeypatch, candidate_count, status):
-    # Supply absent or duplicate HH-14 records for every ward while preserving the real crosswalk.
+    # Supply absent or duplicate HH-14 records for every census row.
     with (ROOT / evidence.INPUTS[0]).open(encoding="utf-8", newline="") as handle:
         crosswalk = list(csv.DictReader(handle))
     sources = {"536": {}, "537": {}}
@@ -80,7 +132,8 @@ def test_hh_join_failure_never_invents_values(monkeypatch, candidate_count, stat
             int(record["source_ward_num"]), []
         ).extend([tuple(row)] * candidate_count)
     monkeypatch.setattr(evidence, "load_hh", lambda _path, district: sources[district])
-    rows = list(csv.DictReader(io.StringIO(evidence.build()[evidence.OUTPUT].decode())))
-    affected = [r for r in rows if r["join_status"] == status]
-    assert len(affected) == 134
-    assert all(r[k] == "" for r in affected for k in evidence.METRICS)
+    rows = _rows(evidence.build())
+    assert {r["join_status"] for r in rows} <= {status, "NO_CENSUS_ROW"}
+    assert sum(r["join_status"] == status for r in rows) >= 140
+    assert all(r[k] == "" for r in rows for k in evidence.METRICS)
+    assert all(r["allocation_eligible"] == "False" for r in rows)

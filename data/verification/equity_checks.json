@@ -1,12 +1,12 @@
 {
-  "evidence_input_sha256_lf": "9537eccd0e8f44ed77b7344e784d66ff302aef7339912396ac0194cd13bed7e9",
+  "evidence_input_sha256_lf": "55283537df47923deca25f8347c46e4d9c5455089527a36f3e6632ab4e2cc54c",
   "outputs_sha256": {
     "data/derived/equity/lorenz.csv": "9dd6aa1e8b03b2a6b68a29884727ccd1e466edb9f00b935b36ec8b365ad4ea39",
     "data/derived/equity/monthly.csv": "f4c96b7644531da85ed5e076ca7d1a4395ccf3b49518a0105b29a3df8baec5dd",
     "data/derived/equity/seasonality.csv": "8ac04e6664a46abe797b84f0479110d8dadeabc0281ea34a81b59bd1b7c55507",
     "data/derived/equity/sections.csv": "b514eae6c18040899eaecc07f17901f30ab6f227a7ec43520c63d69b51311797",
     "data/derived/equity/summary.json": "21bc06e1a0f420710c591192bb04b071a4748eebc0bbdac06ca2809d4efe17c0",
-    "data/derived/equity/wards.csv": "840999a92b1778e47ec2f3423291831bd62e37c6cb66384300365d5664c3011c"
+    "data/derived/equity/wards.csv": "375f16f341c479e24378c5e7f02fb6fee9424746a6b8883849437bd19073e5b3"
   },
   "raw_inputs_sha256": {
     "data/raw/hmwssb_tankers/2022-01.csv": "06a3879c7985bbd4f1c1fad99cd1337566b49edeb5cd8caf4f9b916afd43ad58",
