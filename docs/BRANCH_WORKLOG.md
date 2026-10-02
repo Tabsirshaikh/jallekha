@@ -435,3 +435,22 @@ The pull-request description must summarize the same information and link to thi
   - The connection check uses 2022-2025 vs the 2016-2023 building trend, and approximate section placement.
   - WorldPop/GHS-POP are still not extracted.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/38
+
+## `fix/section-placement-v2` — better section -> ward placement
+
+- **Owner / date:** P2, 2026-10-02.
+- **Purpose:** Raise the share of bookings placed on wards (was 80.5%).
+- **What we found:**
+  - Most unplaced bookings were spelling variants of 2016 ward names ("Mehidipatnam" for Mehdipatnam, "Vengalraonagar" for Vengal Rao Nagar, "Hubsiguda" for Habsiguda). Nominatim needs exact spelling.
+  - Common names ("Srinivas Nagar", "Kakatiya Nagar", "Meerpet") have several OSM places, and the first answer was taken.
+- **What we changed:** `build_section_wards.py` adds a second chance for unplaced sections, each within 6 km of the division's centre (strict limit):
+  1. Another OSM answer for the same name, nearest the division (`OSM_NEAR_DIVISION`).
+  2. A 2016 ward whose name is a spelling variant: similarity >= 0.85, 0.05 ahead of the next (`WARD_NAME`).
+  - The independent name check uses only OSM-placed sections, so it stays non-circular.
+- **Result:**
+  - 161/221 sections, **88.5% of bookings**, in 108 wards. Methods: 132 inside, 10 nearest-500 m, 5 OSM-near-division, 14 ward-name.
+  - Rejected by the division check: Shapoornagar -> Saroornagar (20 km), Kodandapur(WTP) -> Kondapur (24 km).
+  - Meerpet now uses the Meerpet in its division (1.06 km) instead of the one 13.8 km away.
+  - Downstream: E4 ward bookings 87.1% placed (was 79.3%); E3 connection check over 102 wards, rho 0.51.
+- **Validation:** Section tests were updated first (coverage >= 0.85, spelling variants, common names, rejection of a far ward name, strict limit for second-pass placements), then pass. `python tasks.py test`: 418 pass. `python tasks.py lint` passes. All P1 verifiers pass.
+- **Pull request:** pending

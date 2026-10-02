@@ -51,6 +51,12 @@ def test_every_section_before_the_recut_has_one_row(built) -> None:
         "UNMAPPED_NO_WARD",
         "UNMAPPED_DIVISION_OUTLIER",
     }
+    assert {r["ward_method"] for r in table if r["status"] == "MAPPED"} <= {
+        "INSIDE",
+        "NEAREST_500M",
+        "OSM_NEAR_DIVISION",
+        "WARD_NAME",
+    }
     for row in table:
         if row["status"] == "MAPPED":
             assert row["ward_id"].startswith("relation/") and row["basis"] == "DERIVED"
@@ -60,8 +66,8 @@ def test_every_section_before_the_recut_has_one_row(built) -> None:
 
 def test_most_bookings_are_placed(built) -> None:
     summary = json.loads(built[builder.SUMMARY])
-    assert summary["mapped_booking_share"] >= 0.7
-    assert summary["mapped_section_count"] >= 130
+    assert summary["mapped_booking_share"] >= 0.85
+    assert summary["mapped_section_count"] >= 160
 
 
 def test_sections_named_like_a_ward_land_in_or_next_to_it(built) -> None:
@@ -76,10 +82,28 @@ def test_division_outliers_are_not_used(built) -> None:
         if row["status"] == "UNMAPPED_DIVISION_OUTLIER":
             assert float(row["division_distance_km"]) > builder.OUTLIER_KM
     table = {r["section"]: r for r in rows(built)}
-    # another place with the same name, 13.8 km from its south-eastern division
-    assert table["MEERPET (DIV 20)"]["status"] == "UNMAPPED_DIVISION_OUTLIER"
+    # the only OSM answer is another place with the same name, 22 km away: not used
+    assert table["PRAGATHINAGAR (PD 7)"]["status"] == "UNMAPPED_DIVISION_OUTLIER"
+    # the first answer was the wrong Meerpet (13.8 km); the second pass picks the one in division
+    assert table["MEERPET (DIV 20)"]["ward_method"] == "OSM_NEAR_DIVISION"
+    assert float(table["MEERPET (DIV 20)"]["division_distance_km"]) < 2
     # a wide edge-of-city division keeps its correctly placed sections
     assert table["MANIKONDA (DIV 18)"]["status"] == "MAPPED"
+
+
+def test_spelling_variants_and_common_names_are_resolved_inside_the_division(built) -> None:
+    table = {r["section"]: r for r in rows(built)}
+    # spelling variant of a 2016 ward name
+    assert table["MEHIDIPATNAM"]["ward_method"] == "WARD_NAME"
+    assert table["MEHIDIPATNAM"]["ward_name"] == "Ward 70 Mehdipatnam"
+    assert table["VENGALRAONAGAR"]["ward_name"] == "Ward 99 Vengal Rao Nagar"
+    # a common name with several OSM places: the one inside its own division
+    assert table["SRINIVAS NAGAR"]["ward_method"] == "OSM_NEAR_DIVISION"
+    # a similar-looking ward name 20 km from the division is rejected
+    assert table["SHAPOORNAGAR"]["ward_name"] != "Ward 19 Saroornagar"
+    for row in table.values():
+        if row["ward_method"] in ("OSM_NEAR_DIVISION", "WARD_NAME") and row["division_distance_km"]:
+            assert float(row["division_distance_km"]) <= builder.OUTLIER_KM
 
 
 # ---------------- booking groups for the A3 queue ----------------
