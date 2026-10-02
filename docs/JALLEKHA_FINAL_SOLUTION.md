@@ -48,7 +48,7 @@ HMWSSB delivers almost every tanker that is booked (1,316,215 bookings and 1,315
 
 | # | Dataset | Status | Used by |
 |---|---|---|---|
-| D1 | HMWSSB tanker bookings/deliveries, 201 sections, monthly Jan 2022-Feb 2024 (Dec 2022 empty), OpenCity | **REAL**, verified (4,398 rows) | F3, F4, F5, F8 |
+| D1 | HMWSSB tanker bookings/deliveries, 201 sections, monthly Jan 2022-Feb 2024 (Dec 2022 empty), OpenCity; the same table continues to **Aug 2026** on the Telangana Open Data Portal (dataset 7f408a3a-7cdb-4d33-bfa3-1869f88c0e25, OGL India; identical on all 26 overlapping months; sections re-cut Feb/Mar 2026), see `docs/research/P2.md` | **REAL**, verified (4,398 rows); portal extension **TO FETCH** (P1) | F3, F4, F5, F8, F19 |
 | D2 | Historical GHMC ward polygons, 145 of the 2016 scheme's 150 (wards 3, 4, 11, 13, 31, 113 missing), DataMeet/OSM | **REAL**, partial historical geometry; not current boundaries | all spatial demo views |
 | D3 | Census 2011 PCA + HH-14 by ward, Hyderabad district (108 wards, 3,943,323 people), OpenCity | **REAL**, verified | F1 |
 | D4 | Census 2011 PCA + HH-14, GHMC wards in Rangareddy (NADA catalogs 6728, 9835) | **REAL** | F1 west/north |
@@ -63,8 +63,8 @@ HMWSSB delivers almost every tanker that is booked (1,316,215 bookings and 1,315
 | D13 | Chicago 311 water complaints 2022-23 with duplicate flag and parent id (31,098 rows, 4,994 duplicates) | **REAL**, another city | F13 calibration |
 | D14 | HMWSSB supply-interruption notices (published through press/website) | **TO FETCH**; parse only what is published | F15, F10 |
 | D15 | Reservoir levels (CWC/India-WRIS bulletins for Nagarjuna Sagar, Yellampally; twin reservoirs in news) | **TO VERIFY**; build F6 without it if no machine-readable source | F6 |
-| D16 | Booking caps, prices, channels, HMWSSB guidelines | **REAL** | F8 |
-| D17 | Fleet size (577 tankers early 2024; 1,123 in 2026, news) | **ASSUMED** | F5, F8 |
+| D16 | Booking caps and prices by category (domestic 1 per 2 days or 8/month Rs 500; apartments 5-24 flats 2/day or 30/month; 25-200 flats 3/day or 60/month; commercial 1/day or 30/month Rs 850), HMWSSB guidelines; channels 47% IVRS / 46% app / 7% web (Apr 2026, news) | **REAL** | F8 |
+| D17 | Fleet and stations (577 tankers early 2024; 1,150 tankers, 90 filling stations, 150 filling points Dec 2025; 900 to 1,200 tankers Feb 2026; news) | **ASSUMED** | F5, F8, F19 |
 | D18 | Daily booking stream, complaints, outages, delivery confirmations | **SYNTHETIC**, calibrated where a REAL total exists | demo |
 | — | Public-tap locations and timings | **NOT AVAILABLE**; officer-entered only, starts empty | F9 |
 
@@ -92,7 +92,7 @@ HMWSSB delivers almost every tanker that is booked (1,316,215 bookings and 1,315
 
 **F7 Service models.** Each ward is classed from Census + officer input: piped normal, piped intermittent, no connection. Booked service → F8; no-connection areas → F9; sudden loss of piped supply → F10.
 
-**F8 Fair Queue for booked tankers.** When bookings exceed capacity: tier 0 critical facilities; tier 1 households declaring no water on premises (spot-checked; SYNTHETIC in demo, drawn to Census ward shares) and assisted-channel bookings; then **deficit round robin** across wards by entitlement (households × need weight). HMWSSB caps kept. Output: daily ordered list per filling point → router.
+**F8 Fair Queue for booked tankers.** When bookings exceed capacity: tier 0 critical facilities; tier 1 households declaring no water on premises (spot-checked; SYNTHETIC in demo, drawn to Census ward shares) and assisted-channel bookings; then **deficit round robin** across wards by entitlement (households × need weight). HMWSSB caps kept (by consumer category). Today each booking token goes to the nearest filling station and waits by serial number (FCFS per station); the fair queue reorders bookings **within each station's daily capacity**. Output: daily ordered list per filling point → router.
 
 **F9 Scheduled Supply Planner.** For wards F1/F4 flag: target litres = households without water on premises × household size × norm (15 lpcd floor, officer may raise). Fleet reserve allocated by **weighted max-min** with a minimum-share floor; stops are officer-registered fixed points (list **starts empty**); timetable published by SMS and printable notice.
 
@@ -118,7 +118,7 @@ HMWSSB delivers almost every tanker that is booked (1,316,215 bookings and 1,315
 
 **F18 Tamper-evident ledger.** SHA-256 hash chain with HMAC; every allocation-affecting change (plan, override, weights, delivery outcome, debt, contest) is an entry. Each entry carries a sequence number (gaps are detected) and a `key_id` (HMAC key rotation); the head hash is published daily (ward report card / SMS) so the key holder cannot silently rewrite history. "Tamper-evident, not blockchain."
 
-**F19 Policy sandbox and Impact page.** Replay the real Mar-Jul 2023 section totals (daily arrivals SYNTHETIC, monthly totals exact) under capacity limits. Policies: B1 FCFS (today), B2 nearest filling point, B3 largest bookers first, B4 minimum cost, B5 need-weighted, JL (F8 + F9). 30+ seeds. Four PS11 measures vs B1: unmet need share and waiting days; tanker km and km per litre; duplicate merge share; Gini, Jain index and worst-ward fill rate. Real baselines (booking Gini 0.78 sections / 0.86 wards) shown separately. Every number on the Impact page has a badge REAL / DERIVED / SIMULATION; state where JL is worse (usually km).
+**F19 Policy sandbox and Impact page.** Replay the real Mar-Jul **2025** section totals (main) and Mar-Jul 2023 (continuity) (daily arrivals SYNTHETIC, monthly totals exact) under capacity limits: fleet × trips/day (ASSUMED) and a capacity tightened to the REAL Jun-Aug 2026 delivered share (89-92%). All policies run on the same seeds. Policies: B1 FCFS per nearest filling station (today), B2 nearest filling point, B3 largest bookers first, B4 minimum cost, B5 need-weighted, JL (F8 + F9). 30+ seeds. Four PS11 measures vs B1: unmet need share and waiting days; tanker km and km per litre; duplicate merge share; Gini, Jain index and worst-ward fill rate. Real baselines (booking Gini 0.78 sections / 0.86 wards) shown separately. Every number on the Impact page has a badge REAL / DERIVED / SIMULATION; state where JL is worse (usually km).
 
 **F20 Open ward report cards.** A public page per ward (and SMS summary) with its need, bookings, debt, deliveries and schedule, so communities can check the system.
 
@@ -151,7 +151,7 @@ On the calibrated simulation (always labelled): the four PS11 measures from F19,
 
 ## 8. Risks and honest limits
 
-1. Census is 2011; F2 measures sensitivity but does not update water-access observations. 2. The demo uses an incomplete historical 2016 ward layer; Hyderabad's 2025-26 reorganisation requires official current boundaries and a new crosswalk. 3. Section locations are automatic; ward-level numbers are approximate and no authoritative public section polygons were verified. 4. HMWSSB data ends Feb 2024 (RTI drafts exist for newer months). 5. Daily arrivals, deliveries and complaints are synthetic. 6. Duplicate calibration is from Chicago; text similarity untested on Indian data. 7. Filling-point locations are assumed. 8. Under-served flags have no ground truth; they trigger checks, not conclusions. On slides use only numbers re-verified in `V-VERIFY_REVIEW.md`; never "rich areas take the tankers".
+1. Census is 2011; F2 measures sensitivity but does not update water-access observations. 2. The demo uses an incomplete historical 2016 ward layer; Hyderabad's 2025-26 reorganisation requires official current boundaries and a new crosswalk. 3. Section locations are automatic; ward-level numbers are approximate and no authoritative public section polygons were verified. 4. HMWSSB data now runs to Aug 2026 (Telangana portal), but sections were re-cut in Feb/Mar 2026, so 2026 is not comparable section by section with earlier years. 5. Daily arrivals, deliveries and complaints are synthetic. 6. Duplicate calibration is from Chicago; text similarity untested on Indian data. 7. Filling-point locations are assumed. 8. Under-served flags have no ground truth; they trigger checks, not conclusions. On slides use only numbers re-verified in `V-VERIFY_REVIEW.md`; never "rich areas take the tankers".
 
 ## 9. Starting from scratch: what is ported
 

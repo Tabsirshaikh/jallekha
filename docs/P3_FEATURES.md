@@ -4,7 +4,8 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 
 | ID | Feature | Branch | Status |
 |---|---|---|---|
-| R-P3 | Research note | `research/p3` | IN_REVIEW ([PR #7](https://github.com/Tabsirshaikh/jallekha/pull/7)) |
+| R-P3 | Research note | `research/p3` | DONE ([PR #7](https://github.com/Tabsirshaikh/jallekha/pull/7) merged) |
+| S1 fix | Skeleton gaps T1-T10 need | `fix/s1-review` | Local, not pushed |
 | T1 | F13 duplicate engine | `feat/t1-dedup` | Not started (needs S1, R-P3 merged) |
 | T2 | F5 forecast + backtest | `feat/t2-forecast` | Blocked: 21.9% / 35.1% protocol (`V-VERIFY_REVIEW.md`) missing |
 | T3 | F12 delivery proof | `feat/t3-delivery` | Blocked: S3 not started |
@@ -25,7 +26,26 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 - **Tests and results:** none (docs only; `main` has no `tasks.py` until S1 merges). Every claim carries a link; [R]/[S] marks read vs search-summary sources.
 - **How to run:** n/a.
 - **Open questions:** Chronos-2 vs no-LLM rule (owner); D13 Chicago fresh pull (P1/owner); 21.9%/35.1% method (P1/owner).
-- **Status log:** 2026-10-01 draft; 2026-10-02 citation check, trimmed to 2 pages, Liu venue marked not confirmed, Chronos-2 marked owner decision pending, solution-doc edits split into their own commit, PR opened.
+- **Status log:** 2026-10-01 draft; 2026-10-02 citation check, trimmed to 2 pages, Liu venue marked not confirmed, Chronos-2 marked owner decision pending, solution-doc edits split into their own commit, PR opened; PR #7 merged into `main`, status DONE.
+
+## S1: skeleton review fixes
+
+- **Implementation notes:** S1 (PR #3) met its done-when; the P3 review (`docs/reviews/S1-review.md`, local) listed what T1-T10 still need. Branch `fix/s1-review` from `main` after PR #3 merged, one `S1: <what>` commit per item. Nothing that other areas depend on was restructured; `/health` keeps its exact response.
+  1. `.env.example`: `DATABASE_URL`, `LEDGER_HMAC_KEY`, `OSRM_URL` (listed for P2, not read yet), `ASR_MODE`, `SMS_PROVIDER`. No secrets.
+  2. Settings from the environment (`config/env.py`): `DATABASE_URL` (default SQLite `jallekha.db` anchored to the repo root, no longer the working directory), `LEDGER_HMAC_KEY` (no default, hidden from `repr`), `ASR_MODE` (`fallback` / `indicconformer`), `SMS_PROVIDER` (`fake`); invalid values are rejected.
+  3. `services/` package: already on `main` (added by P1 with E5/E6); nothing to do.
+  4. `models/` package: `Base`, `IdTimestampMixin` (UUID4 string ids, timezone-aware UTC `created_at`), `new_id`, `utcnow`; `app/db.py` with `make_engine`, `make_session_factory`, `create_all` (no migrations yet). One table per model file.
+  5. `routers/` package; `/health` moved to `routers/system.py`.
+  6. `config/forecast.py`: horizon 12, seasonal period 12, baseline 21.9% / 35.1% with 0.1 pp tolerance, interval levels 80/90%, fleet 577 / 1,123 (ASSUMED). Trips per tanker per day left out: no source yet (T2 adds it).
+  7. Optional `ml` extra in `backend/pyproject.toml` (sentence-transformers, lightgbm, hierarchicalforecast, transformers, onnxruntime, onnx, torch 2.11.0 + torchaudio 2.11.0). Not installed by `tasks.py setup` or CI.
+  8. `data/synthetic/README.md` with the SYNTHETIC labelling rules (`data/derived/` already existed).
+  9. `.gitignore`: model weights (`/models/`, `*.nemo`, `*.onnx`, `*.pt`, `*.pth`, `*.ckpt`, `*.safetensors`); `backend/app/models/` stays tracked.
+  10. One error shape for every endpoint (`app/errors.py`): `{"error": {"code", "message", "details"}}` for HTTP errors, validation errors (422, `validation_error`) and unexpected errors (500, `internal_error`, no internals leaked).
+- **Files:** `.env.example`, `.gitignore`, `backend/pyproject.toml`, `backend/app/{db.py, errors.py, main.py}`, `backend/app/config/{env.py, database.py, trust.py, access.py, forecast.py}`, `backend/app/models/{__init__.py, base.py}`, `backend/app/routers/{__init__.py, system.py}`, `backend/tests/{test_config_env.py, test_db.py, test_forecast_config.py, test_errors.py}`, `data/synthetic/README.md`, `docs/P3_FEATURES.md`.
+- **Tests and results (2026-10-02, Windows 11, Python 3.11.9, Node 24.16):** `python tasks.py test` exit 0: 73 backend tests passed (54 existing + 19 new), 1 frontend test, all P1 data/evidence verifiers pass. `python tasks.py lint` exit 0 (ruff check, ruff format, eslint, tsc). `scripts/ci/verify_main_integration.py` and `scripts/ci/verify_p1_r_p1.py` pass. `ml` extra: `pip install --dry-run ".[ml]"` resolves (38 packages); not installed or run.
+- **How to run:** `python tasks.py test` / `python tasks.py lint`. API: `.venv\Scripts\python -m uvicorn app.main:app --app-dir backend --env-file .env` after copying `.env.example` to `.env`. Optional ML: `.venv\Scripts\python -m pip install -e "./backend[ml]"`.
+- **Not done:** frontend API base URL and fixtures folder (P4's area); `tasks.py` messages when Python/Node are missing; `run-api` command; Windows CI job; database migrations.
+- **Status log:** 2026-10-02 fixes committed locally on `fix/s1-review`; awaiting approval to push.
 
 ## T1: duplicate engine (F13)
 
