@@ -434,4 +434,4 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:**
   - The connection check uses 2022-2025 vs the 2016-2023 building trend, and approximate section placement.
   - WorldPop/GHS-POP are still not extracted.
-- **Pull request:** pending
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/38
