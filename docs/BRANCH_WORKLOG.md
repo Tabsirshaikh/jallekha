@@ -317,4 +317,4 @@ The pull-request description must summarize the same information and link to thi
   - A7 combines this with A3 and A5 into the daily plan.
   - T6 stores `service_point_registered` entries.
   - P4 shows the timetable and the officer point registration.
-- **Pull request:** pending
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/32
