@@ -2,8 +2,9 @@ import { useState, type ReactNode } from "react";
 import { localeNames, supportedLocales, useLocale, type MessageKey } from "./i18n";
 import DriverExperience from "./DriverExperience";
 import ResidentExperience from "./ResidentExperience";
+import FieldWorkerExperience from "./FieldWorkerExperience";
 
-type Workspace = "officer" | "resident" | "driver";
+type Workspace = "officer" | "resident" | "fieldWorker" | "driver";
 type IconName = "overview" | "atlas" | "plan" | "impact" | "help" | "water" | "report" | "route" | "proof" | "settings" | "arrow" | "location" | "check";
 
 const navByWorkspace: Record<Workspace, { key: MessageKey; icon: IconName }[]> = {
@@ -18,6 +19,10 @@ const navByWorkspace: Record<Workspace, { key: MessageKey; icon: IconName }[]> =
     { key: "residentRequests", icon: "water" },
     { key: "residentReport", icon: "report" },
     { key: "residentUpdates", icon: "impact" },
+  ],
+  fieldWorker: [
+    { key: "fieldWorkerNewReport", icon: "report" },
+    { key: "fieldWorkerQueue", icon: "water" },
   ],
   driver: [
     { key: "driverRoute", icon: "route" },
@@ -49,6 +54,7 @@ function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
 const workspaceNames: Record<Workspace, { title: MessageKey; description: MessageKey; eyebrow: MessageKey }> = {
   officer: { title: "officerConsole", description: "officerDescription", eyebrow: "operationsWorkspace" },
   resident: { title: "residentApp", description: "residentDescription", eyebrow: "communityAccess" },
+  fieldWorker: { title: "fieldWorkerApp", description: "fieldWorkerDescription", eyebrow: "fieldOperations" },
   driver: { title: "driverApp", description: "driverDescription", eyebrow: "fieldOperations" },
 };
 
@@ -59,13 +65,13 @@ function Brand() {
 
 function WorkspaceSwitcher({ value, onChange }: { value: Workspace; onChange: (workspace: Workspace) => void }) {
   const { t, locale, setLocale } = useLocale();
-  const workspaceLabel: Record<Workspace, MessageKey> = { officer: "officer", resident: "resident", driver: "driver" };
+  const workspaceLabel: Record<Workspace, MessageKey> = { officer: "officer", resident: "resident", fieldWorker: "fieldWorker", driver: "driver" };
   return (
     <div className="topbar-controls">
     <label className="language-picker"><span className="sr-only">{t("language")}</span><select aria-label={t("language")} value={locale} onChange={(event) => setLocale(event.target.value as (typeof supportedLocales)[number])}>{supportedLocales.map((item) => <option key={item} value={item}>{localeNames[item]}</option>)}</select></label>
-    <label className="mobile-workspace-picker"><span className="sr-only">{t("chooseWorkspace")}</span><select aria-label={t("chooseWorkspace")} value={value} onChange={(event) => onChange(event.target.value as Workspace)}>{(["officer", "resident", "driver"] as const).map((workspace) => <option key={workspace} value={workspace}>{t(workspaceLabel[workspace])}</option>)}</select></label>
+    <label className="mobile-workspace-picker"><span className="sr-only">{t("chooseWorkspace")}</span><select aria-label={t("chooseWorkspace")} value={value} onChange={(event) => onChange(event.target.value as Workspace)}>{(["officer", "resident", "fieldWorker", "driver"] as const).map((workspace) => <option key={workspace} value={workspace}>{t(workspaceLabel[workspace])}</option>)}</select></label>
     <div className="workspace-switcher" role="group" aria-label={t("chooseWorkspace")}>
-      {(["officer", "resident", "driver"] as const).map((workspace) => (
+      {(["officer", "resident", "fieldWorker", "driver"] as const).map((workspace) => (
         <button key={workspace} className={value === workspace ? "workspace-tab active" : "workspace-tab"} onClick={() => onChange(workspace)} aria-pressed={value === workspace}>
           {t(workspaceLabel[workspace])}
         </button>
@@ -92,7 +98,7 @@ function Sidebar({ workspace, activeItem, onNavigate }: { workspace: Workspace; 
       </nav>
       <div className="sidebar-bottom">
         <div className="offline-chip"><span className="status-dot" />{t("demoWorkspace")}</div>
-        <button className="profile-button"><span className="avatar">JL</span><span className="profile-copy"><strong>{t(workspace === "resident" ? "yourAccount" : workspace === "driver" ? "driverProfile" : "officerProfile")}</strong><small>{t("hyderabadTelangana")}</small></span><Icon name="settings" size={18} /></button>
+        <button className="profile-button"><span className="avatar">JL</span><span className="profile-copy"><strong>{t(workspace === "resident" ? "yourAccount" : workspace === "fieldWorker" ? "fieldWorkerProfile" : workspace === "driver" ? "driverProfile" : "officerProfile")}</strong><small>{t("hyderabadTelangana")}</small></span><Icon name="settings" size={18} /></button>
       </div>
     </aside>
   );
@@ -152,7 +158,7 @@ export default function App() {
         <MobileNavigation workspace={workspace} activeItem={activeItem} onNavigate={setActiveItem} />
         <main className={`page-content ${workspace}-content`}>
           <div className="page-title-mobile"><p className="eyebrow">{t(meta.eyebrow)}</p><h1>{t(meta.title)}</h1><p className="muted">{t(meta.description)}</p></div>
-          {workspace === "driver" ? <DriverExperience page={activeItem === "driverProof" ? "proof" : activeItem === "help" ? "help" : "route"} onNavigate={setActiveItem} /> : workspace === "resident" ? <ResidentExperience page={activeItem === "residentReport" ? "report" : activeItem === "residentRequests" ? "requests" : activeItem === "residentUpdates" ? "ward" : "home"} onNavigate={setActiveItem} /> : activeItem !== navByWorkspace[workspace][0].key ? <PlaceholderPage workspace={workspace} pageKey={activeItem} /> : <OfficerHome />}
+          {workspace === "driver" ? <DriverExperience page={activeItem === "driverProof" ? "proof" : activeItem === "help" ? "help" : "route"} onNavigate={setActiveItem} /> : workspace === "resident" ? <ResidentExperience page={activeItem === "residentReport" ? "report" : activeItem === "residentRequests" ? "requests" : activeItem === "residentUpdates" ? "ward" : "home"} onNavigate={setActiveItem} /> : workspace === "fieldWorker" ? <FieldWorkerExperience page={activeItem === "fieldWorkerQueue" ? "queue" : "report"} onNavigate={setActiveItem} /> : activeItem !== navByWorkspace[workspace][0].key ? <PlaceholderPage workspace={workspace} pageKey={activeItem} /> : <OfficerHome />}
         </main>
         <footer className="app-footer"><span>JalLekha <span className="footer-separator">·</span> {t("footerTagline")}</span><span>{t("footerPromise")}</span></footer>
       </div>
