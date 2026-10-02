@@ -54,18 +54,48 @@ def cohort(count=12, basis="SIMULATED", config=None):
     return result
 
 
-def test_real_inputs_fail_closed_and_have_no_unsupported_flags():
+def test_need_indicators_have_their_own_age_limit():
+    """Households must be current (2-year rule); Census need shares are structural and may be
+    historical (only ward-level source), up to max_need_reference_age_years."""
+    from app.config.underserved import UNDERSERVED_CONFIG
+
+    base = replace(
+        cohort()[1],
+        period_year=2025,
+        household_reference_year=2025,
+        need_reference_year=2011,
+    )
+    assert "STALE_OR_MISSING_NEED_REFERENCE" not in blockers(base, UNDERSERVED_CONFIG)
+    stale_households = replace(base, household_reference_year=2011)
+    assert "STALE_OR_MISSING_HOUSEHOLD_REFERENCE" in blockers(stale_households, UNDERSERVED_CONFIG)
+    too_old = replace(
+        base, need_reference_year=2025 - UNDERSERVED_CONFIG.max_need_reference_age_years - 1
+    )
+    assert "STALE_OR_MISSING_NEED_REFERENCE" in blockers(too_old, UNDERSERVED_CONFIG)
+
+
+def test_real_screen_runs_on_2025_households_and_bookings():
     output = builder.build()
     result = json.loads(output[builder.ROWS])
     summary = json.loads(output[builder.SUMMARY])
     assert len(result["rows"]) == 145
-    assert len(result["data_review_queue"]) == 145
-    assert result["field_check_list"] == []
-    assert summary["eligible_count"] == 0
-    assert summary["field_check_count"] == 0
+    assert summary["eligible_count"] >= 90
+    assert summary["eligible_count"] + len(result["data_review_queue"]) == 145
+    assert summary["booking_transfer"] == "APPROXIMATE_SECTION_POINT_IN_WARD"
     assert summary["reporting_probability"] is None
-    assert all(row["status"] == "DATA_REVIEW_REQUIRED" for row in result["rows"])
-    assert all(row["field_check_candidate"] is None for row in result["rows"])
+    candidates = [r for r in result["rows"] if r["field_check_candidate"]]
+    assert len(candidates) == summary["field_check_count"] == len(result["field_check_list"])
+    assert 1 <= len(candidates) <= 0.25 * summary["eligible_count"]
+    for row in candidates:
+        assert row["status"] == "PEER_ONLY_FIELD_CHECK"
+        assert {
+            "APPROXIMATE_BOOKING_TRANSFER",
+            "HISTORICAL_NEED_REFERENCE_2011",
+            "MODELLED_HOUSEHOLDS_2025",
+        } <= set(row["input_notes"])
+    for row in result["rows"]:
+        if row["status"] == "DATA_REVIEW_REQUIRED":
+            assert row["field_check_candidate"] is None
     assert all(row["growth_ratio_basis"] == "DERIVED" for row in result["rows"])
     # E3 judges stability after removing city-wide year shocks; every ward has a clear trend
     assert all(row["growth_quality"] == "STABLE_TREND" for row in result["rows"])
@@ -74,17 +104,22 @@ def test_real_inputs_fail_closed_and_have_no_unsupported_flags():
 def test_actual_source_rows_expose_the_specific_review_blockers():
     areas = builder.load_areas()
     assert len(areas) == 145
-    # E2 places Census 2011 by the rebuilt 2009 ward map; eligible wards count as located for
-    # a field-check screen (a flag only sends someone to check). Partial wards do not.
     located = [a for a in areas if a.census_location_validated]
     assert len(located) == 143
+    with_bookings = [a for a in areas if a.bookings is not None]
+    assert len(with_bookings) >= 90
     for area in areas:
         codes = set(blockers(area))
         assert ("UNVALIDATED_CENSUS_LOCATION" in codes) != area.census_location_validated
-        # bookings still cannot be placed on wards, so every ward stays in data review
-        assert "UNVALIDATED_BOOKING_TRANSFER" in codes
-        assert "INCOMPLETE_BOOKING_PERIOD" in codes
-        assert "WARD_BOOKINGS_UNAVAILABLE" in codes
+        assert area.period_year == 2025
+        # partial-census wards have no 2025 household estimate, so no reference year
+        assert area.household_reference_year == (2025 if area.households else None)
+        if area.bookings is None:
+            # no HMWSSB section placed in this ward: it cannot be screened
+            assert "WARD_BOOKINGS_UNAVAILABLE" in codes
+        else:
+            assert "UNVALIDATED_BOOKING_TRANSFER" not in codes
+            assert "INCOMPLETE_BOOKING_PERIOD" not in codes
 
 
 def test_peer_median_is_leave_one_out_and_only_uses_need_side_matching():
@@ -265,3 +300,12 @@ def test_model_fits_require_holdouts_and_reviewed_spatial_graphs():
             config=TEST_CONFIG,
             holdout_ids=("W00",),
         )
+
+
+def test_screen_handles_a_mix_of_eligible_and_blocked_areas():
+    """Regression: per-model scores exist only for eligible areas; blocked ones must not crash."""
+    areas = cohort(12) + [replace(cohort(1)[0], ward_id="BLOCKED", bookings=None)]
+    result = screen(areas, config=TEST_CONFIG)
+    blocked = next(r for r in result["rows"] if r["ward_id"] == "BLOCKED")
+    assert blocked["status"] == "DATA_REVIEW_REQUIRED"
+    assert blocked["model_scores"] == {}
