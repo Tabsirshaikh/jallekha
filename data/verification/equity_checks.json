@@ -1,0 +1,39 @@
+{
+  "evidence_input_sha256_lf": "9537eccd0e8f44ed77b7344e784d66ff302aef7339912396ac0194cd13bed7e9",
+  "outputs_sha256": {
+    "data/derived/equity/lorenz.csv": "9dd6aa1e8b03b2a6b68a29884727ccd1e466edb9f00b935b36ec8b365ad4ea39",
+    "data/derived/equity/monthly.csv": "f4c96b7644531da85ed5e076ca7d1a4395ccf3b49518a0105b29a3df8baec5dd",
+    "data/derived/equity/seasonality.csv": "8ac04e6664a46abe797b84f0479110d8dadeabc0281ea34a81b59bd1b7c55507",
+    "data/derived/equity/sections.csv": "b514eae6c18040899eaecc07f17901f30ab6f227a7ec43520c63d69b51311797",
+    "data/derived/equity/summary.json": "21bc06e1a0f420710c591192bb04b071a4748eebc0bbdac06ca2809d4efe17c0",
+    "data/derived/equity/wards.csv": "840999a92b1778e47ec2f3423291831bd62e37c6cb66384300365d5664c3011c"
+  },
+  "raw_inputs_sha256": {
+    "data/raw/hmwssb_tankers/2022-01.csv": "06a3879c7985bbd4f1c1fad99cd1337566b49edeb5cd8caf4f9b916afd43ad58",
+    "data/raw/hmwssb_tankers/2022-02.csv": "806e30aaede8f1ce7a9dc76dd8af949bb5ca442c7ed1e6dc70dae7450c1fccbe",
+    "data/raw/hmwssb_tankers/2022-03.csv": "46647f4fa310cccbf5307e6e2f6e044b7d9d51c2de747cfcf52bdd85c5acb63b",
+    "data/raw/hmwssb_tankers/2022-04.csv": "84189041e289fa990fcce6e2f67b76cad7cc93933f7919ba87997e14783d188e",
+    "data/raw/hmwssb_tankers/2022-05.csv": "f9a4fbd9a8d49b9f1f72b7805271ab5df855d463b54bde23b234978a84f3eb82",
+    "data/raw/hmwssb_tankers/2022-06.csv": "a56b86a1b0903af2a5ada6ea1be1a43b548e04af71e7f56730175c96d493c9a0",
+    "data/raw/hmwssb_tankers/2022-07.csv": "2222e10b3d5ab7994dedc6b212f816b971fbb2740e6be1502e212b55b0e31f43",
+    "data/raw/hmwssb_tankers/2022-08.csv": "697616f1930ba8dad75427b07a17e792e5ce3711eca5ab2fa2313dc1f5612fc7",
+    "data/raw/hmwssb_tankers/2022-09.csv": "604b1d0a35dbd627312b74ed6b88aa81b43b72da44a329101550d3741b895d3f",
+    "data/raw/hmwssb_tankers/2022-10.csv": "f434796ab4fcad689fe79dfa837b73aba56d7a2977a59735914a254772c746cb",
+    "data/raw/hmwssb_tankers/2022-11.csv": "299b8d6aff8ceb144e2bb69a0bd05ce6356e76600ceb207707fa98b4deb649a4",
+    "data/raw/hmwssb_tankers/2022-12.csv": "907d6fb53dcdc083624b47b20bb40b0edf07c489daa1f1d74858e57180ff963e",
+    "data/raw/hmwssb_tankers/2023-01.csv": "6651e1bef3af724ed35ce43c45bfa83f27f360e6940567ff2658732f796e881e",
+    "data/raw/hmwssb_tankers/2023-02.csv": "e6b2e8fbd9485e772da850788f4bd1283f2e557baed2a770d8d446f52ec77c2c",
+    "data/raw/hmwssb_tankers/2023-03.csv": "80fb022ba134d5fa3de7d9a64e18c48282b10263cd2db33c5f4fdb302efa45b1",
+    "data/raw/hmwssb_tankers/2023-04.csv": "9e9787a011371d6a97f37122de08bb3e6a29d8203b5802262f7892e4acf9447f",
+    "data/raw/hmwssb_tankers/2023-05.csv": "b9e6f00080b4217a138c80c7c3f8237c0eedb081e110e96035e5c72b3a719252",
+    "data/raw/hmwssb_tankers/2023-06.csv": "d6b13b76c4832a18b98b04a77f12df26ba99b8571e8f340110e75029507ea0ea",
+    "data/raw/hmwssb_tankers/2023-07.csv": "0a73843ca5dfa72d56729993f96edc1c29a1aa3cdc7505b7f0210ef8caca6ff0",
+    "data/raw/hmwssb_tankers/2023-08.csv": "7c82b35a6ec1cfc5810fb481410024a004b3a53b46fc2b7a5974bb6866ea75b8",
+    "data/raw/hmwssb_tankers/2023-09.csv": "f15b5efbd240d69c84d027d273a9e565ae36f6f97827f88162f7a328aa003aef",
+    "data/raw/hmwssb_tankers/2023-10.csv": "77cdb07eabc92dfc6b41f39cd1e0b8c6a0d62c795f8ef3531aacaaf099ee9a9a",
+    "data/raw/hmwssb_tankers/2023-11.csv": "4d2edac876d17d3b90244215e24b8c6f591d03b1e59e17e1971e029ba7699302",
+    "data/raw/hmwssb_tankers/2023-12.csv": "3fa6045b898e50ff9668e09693081387dab43c7793a0c7ee2a3b02baec01d681",
+    "data/raw/hmwssb_tankers/2024-01.csv": "311f2e103146596dd16930d4c78ba54da27b965490eb8dfb6d4a918b0ea88985",
+    "data/raw/hmwssb_tankers/2024-02.csv": "9950c45274e0d265f0a1be6a9580395b0b3911abad584dc3b4b51a6a42d6647c"
+  }
+}
