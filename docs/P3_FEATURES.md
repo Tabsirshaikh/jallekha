@@ -4,7 +4,7 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 
 | ID | Feature | Branch | Status |
 |---|---|---|---|
-| R-P3 | Research note | `research/p3` | IN_REVIEW ([PR #7](https://github.com/Tabsirshaikh/jallekha/pull/7)) |
+| R-P3 | Research note | `research/p3` | DONE ([PR #7](https://github.com/Tabsirshaikh/jallekha/pull/7) merged) |
 | S1 fix | Skeleton gaps T1-T10 need | `fix/s1-review` | Local, not pushed |
 | T1 | F13 duplicate engine | `feat/t1-dedup` | Not started (needs S1, R-P3 merged) |
 | T2 | F5 forecast + backtest | `feat/t2-forecast` | Blocked: 21.9% / 35.1% protocol (`V-VERIFY_REVIEW.md`) missing |
@@ -26,7 +26,7 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 - **Tests and results:** none (docs only; `main` has no `tasks.py` until S1 merges). Every claim carries a link; [R]/[S] marks read vs search-summary sources.
 - **How to run:** n/a.
 - **Open questions:** Chronos-2 vs no-LLM rule (owner); D13 Chicago fresh pull (P1/owner); 21.9%/35.1% method (P1/owner).
-- **Status log:** 2026-10-01 draft; 2026-10-02 citation check, trimmed to 2 pages, Liu venue marked not confirmed, Chronos-2 marked owner decision pending, solution-doc edits split into their own commit, PR opened.
+- **Status log:** 2026-10-01 draft; 2026-10-02 citation check, trimmed to 2 pages, Liu venue marked not confirmed, Chronos-2 marked owner decision pending, solution-doc edits split into their own commit, PR opened; PR #7 merged into `main`, status DONE.
 
 ## S1: skeleton review fixes
 
