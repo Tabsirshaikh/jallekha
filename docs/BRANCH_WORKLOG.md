@@ -277,4 +277,4 @@ The pull-request description must summarize the same information and link to thi
 - **Handoff / next step:**
   - T7 uses `order_bookings` and `Decision` for explanations and counterfactuals.
   - A7 runs it per station-day; A8 compares it with `order_fcfs`.
-- **Pull request:** pending
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/31
