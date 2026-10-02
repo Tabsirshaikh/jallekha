@@ -1,0 +1,15 @@
+{
+  "inputs_sha256": {
+    "data/derived/equity/summary.json": "21bc06e1a0f420710c591192bb04b071a4748eebc0bbdac06ca2809d4efe17c0",
+    "data/derived/evidence/ward_evidence.csv": "9537eccd0e8f44ed77b7344e784d66ff302aef7339912396ac0194cd13bed7e9",
+    "data/derived/underserved/field_checks.json": "c8b2c47e6f686c2b93f1b4abd07f3cd061fe6820e22b3c022bdeb34862bf9627",
+    "data/raw/geography/datameet/ghmc-wards.geojson": "3fdfef8e787ed543d816fee36a6097c350c4dff2423aae7fa203bb49cbd6edc2"
+  },
+  "outputs_sha256": {
+    "data/derived/coverage/booking_coverage.geojson": "ae0d738b7442ae5a881dfed42a73c3be9f9acd060806c6f9d10a9331ec4d4646",
+    "data/derived/coverage/field_check_status.geojson": "307fad2e952c26c373fc1b1afc0d3d4856c96f8374c3ba376a7c83b980c4644b",
+    "data/derived/coverage/layers.json": "34cdf799afec8bd7b63a7e7036529fdebebd8e7663362d99c9c53e8e09a77c0e",
+    "data/derived/coverage/water_access_evidence.geojson": "6d2228b157e32f7c2a9ccd71cd00aeb69c48c9a78021c855cb2416a659d1639d"
+  },
+  "schema_version": "E6-1"
+}

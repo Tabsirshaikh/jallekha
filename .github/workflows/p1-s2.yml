@@ -1,0 +1,32 @@
+name: "P1:S2"
+
+on:
+  pull_request:
+    branches: [feat/s1-skeleton, main]
+    paths:
+      - "data/**"
+      - "scripts/data/**"
+      - "docs/worklogs/S2.md"
+      - "docs/features.csv"
+      - ".github/workflows/p1-s2.yml"
+  push:
+    branches: [feat/s2-data]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-data:
+    name: "P1:S2"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Verify raw-file provenance and integrity
+        run: python scripts/data/verify_manifest.py

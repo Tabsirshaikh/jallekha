@@ -1,0 +1,4 @@
+source,period,status,geographic_unit,use,source_url,basis
+Google Open Buildings Temporal,2016-2023,EXTRACTED_DERIVED_BUILDING_SIGNAL,historical ward polygon,urban building-change covariate only,https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_Research_open-buildings-temporal_v1,DERIVED
+WorldPop India population raster,2016-2020 common-comparison candidate,NOT_EXTRACTED_RANGE_READ_UNSUPPORTED; 1.84 GB full download excluded,modelled population grid,independent population sensitivity not ground truth,https://data.worldpop.org/GIS/Population/Global_2000_2020/2020/IND/ind_ppp_2020.tif,UNAVAILABLE
+GHS-POP R2023A,"five-year epochs, includes modelled 2025 projection",NOT_EXTRACTED_DIFFERING_EPOCHS_AND_GRID,modelled population grid,"independent population sensitivity, incomparable without harmonization",https://human-settlement.emergency.copernicus.eu/ghs_pop2023.php,UNAVAILABLE
