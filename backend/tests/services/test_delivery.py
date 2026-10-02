@@ -2,13 +2,14 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 
 import pytest
 
 from app.config.trust import TRUST_CONFIG
 from app.services import delivery as dl
-from app.services import ledger
+from app.services import ledger, otp
 from app.services.geo import offset_point
 from app.services.ledger_port import InMemoryLedger
 from app.services.sms import FakeSmsSender
@@ -368,6 +369,22 @@ def test_wrong_otp_attempts_lock_the_stop_across_reissues(
     assert result == "locked" and not state.otp_verified
     with pytest.raises(ValueError, match="locked"):
         dl.request_otp(state, "rep-1", OTP_KEY, sms, chain, T0)
+
+
+def test_changing_otp_digits_after_issue_keeps_the_issued_otp_working(
+    chain: InMemoryLedger, sms: FakeSmsSender, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # S3 review D11: the digit count is stored with the OTP and passed when re-deriving.
+    state = dl.request_otp(_start(chain), "rep-1", OTP_KEY, sms, chain, T0)
+    code = sms.sent[-1].params["code"]
+    assert state.otp is not None and state.otp.digits == len(code) == 6
+    shorter = replace(TRUST_CONFIG, otp_digits=4)
+    monkeypatch.setattr(dl, "TRUST_CONFIG", shorter)
+    monkeypatch.setattr(otp, "TRUST_CONFIG", shorter)
+    assert len(otp.derive_code(OTP_KEY, "stop-1", state.otp.nonce)) == 4  # config did change
+    assert dl.issued_code(state, OTP_KEY) == code
+    state, result = dl.verify_otp(state, code, *_at(20), OTP_KEY, chain, T0)
+    assert result == "verified"
 
 
 def test_naive_time_is_rejected(chain: InMemoryLedger) -> None:

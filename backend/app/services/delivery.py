@@ -205,10 +205,11 @@ def request_otp(
     if rep is None:
         raise ValueError(f"Representative {representative_id} is not registered for this stop")
     nonce = nonce or otp.new_nonce()
-    code = otp.derive_code(otp_key, state.stop_id, nonce)
+    digits = TRUST_CONFIG.otp_digits
+    code = otp.derive_code(otp_key, state.stop_id, nonce, digits=digits)
     expires_at = now + timedelta(minutes=TRUST_CONFIG.otp_valid_minutes)
     challenge = OtpChallenge(
-        rep.id, nonce, otp.code_hash(otp_key, code, state.stop_id), len(code), now, expires_at
+        rep.id, nonce, otp.code_hash(otp_key, code, state.stop_id), digits, now, expires_at
     )
     sms.send(
         SmsMessage(
@@ -229,6 +230,13 @@ def request_otp(
         wrong_attempts=state.wrong_attempts,
     )
     return replace(state, otp=challenge)
+
+
+def issued_code(state: DeliveryState, otp_key: str) -> str:
+    """Re-derive the issued code (e.g. to resend it) with the digit count stored at issue."""
+    if state.otp is None:
+        raise ValueError("No OTP issued for this delivery")
+    return otp.derive_code(otp_key, state.stop_id, state.otp.nonce, digits=state.otp.digits)
 
 
 def verify_otp(
