@@ -1,0 +1,23 @@
+{
+  "inputs_sha256": {
+    "data/derived/crosswalk/section_to_ward_2016.csv": "7cd5f22f86e0418601aa46f65b08a2e8b85acc5bbcd312adcaab5ffb6faabf25"
+  },
+  "outputs_sha256": {
+    "data/derived/sandbox/section_points.csv": "490701a97a443bde6836659b6745d2037be53592ce1ba987296a11f76b1b3bee",
+    "data/derived/sandbox/section_station_km.csv": "e99d628e89e4b710565f220265a40fe45cfeeb6707be22fac06d47521ecdf19e",
+    "data/derived/sandbox/stations.csv": "6232197e8f8b6605f0a02b3a580f39914d8f81af9c115cb19d7ce96c63cb5a5f"
+  },
+  "summary": {
+    "booking_share_by_point_basis": {
+      "DIVISION_CENTRE_APPROXIMATE": 0.111401,
+      "GEOCODED": 0.888597,
+      "NO_POINT": 2e-06
+    },
+    "bookings_2025_mar_jul": 977933,
+    "median_home_round_trip_km": 2.632,
+    "road_factor": 1.35,
+    "station_basis": "ASSUMED_STAND_IN (booking-weighted k-means; HMWSSB publishes no list)",
+    "station_count_source": "Telangana Today, 2025-12-21: 90 tanker filling stations",
+    "stations": 90
+  }
+}

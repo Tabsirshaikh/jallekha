@@ -32,10 +32,17 @@ def load_section_wards(root: Path) -> dict[str, SectionLink]:
         }
 
 
+WARD_PREFIX = "ward:"
+
+
+def ward_group(ward_id: str) -> str:
+    return f"{WARD_PREFIX}{ward_id}"
+
+
 def group_for(section: str, mapping: dict[str, SectionLink]) -> str:
     link = mapping.get(section)
     if link is not None and link.ward_id:
-        return f"ward:{link.ward_id}"
+        return ward_group(link.ward_id)
     return f"section:{section}"
 
 
@@ -51,7 +58,7 @@ def group_entitlements(
         group = group_for(section, mapping)
         if group in entitlement:
             continue
-        ward_id = group.removeprefix("ward:") if group.startswith("ward:") else None
+        ward_id = group.removeprefix(WARD_PREFIX) if group.startswith(WARD_PREFIX) else None
         if ward_id in by_ward:
             entitlement[group] = by_ward[ward_id]
         else:
