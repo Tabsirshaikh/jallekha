@@ -48,6 +48,9 @@ def test() -> None:
     data_verifier = ROOT / "scripts" / "data" / "verify_manifest.py"
     if data_verifier.exists():
         run([venv_python(), str(data_verifier)])
+    d1_verifier = ROOT / "scripts" / "data" / "verify_d1.py"
+    if d1_verifier.exists():
+        run([venv_python(), str(d1_verifier)])
 
 
 def lint() -> None:

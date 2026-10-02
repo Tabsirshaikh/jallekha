@@ -1,0 +1,53 @@
+name: "P1:D1"
+# Verifies committed OSM GeoJSON files and provenance manifest.
+# The live Overpass fetch is a developer step (python scripts/data/fetch_d1.py);
+# CI uses --skip-fetch to regenerate hashes from the committed files.
+
+on:
+  pull_request:
+    branches: [feat/s2-data, main]
+    paths:
+      - "data/raw/geography/osm/**"
+      - "data/raw/d6_open_buildings/**"
+      - "data/raw/d7_groundwater/**"
+      - "data/verification/d1_manifest.csv"
+      - "scripts/data/fetch_d1.py"
+      - "scripts/data/verify_d1.py"
+      - "docs/worklogs/D1.md"
+      - "docs/features.csv"
+      - ".github/workflows/p1-d1.yml"
+  push:
+    branches: [feat/d1-fetch]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-d1:
+    name: "P1:D1"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Regenerate d1_manifest from committed files (no Overpass needed)
+        run: python scripts/data/fetch_d1.py --skip-fetch
+
+      - name: Verify D1 GeoJSON structure, SHA-256 integrity, and retrieval logs
+        run: python scripts/data/verify_d1.py
+
+      - name: Verify S2 raw data is still intact
+        run: python scripts/data/verify_manifest.py
+
+      - name: Lint D1 scripts with Ruff
+        run: |
+          pip install ruff --quiet
+          ruff check --config backend/pyproject.toml scripts/data/fetch_d1.py scripts/data/verify_d1.py
+          ruff format --config backend/pyproject.toml --check scripts/data/fetch_d1.py scripts/data/verify_d1.py
