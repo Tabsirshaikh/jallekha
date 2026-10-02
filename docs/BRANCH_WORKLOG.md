@@ -94,3 +94,24 @@ The pull-request description must summarize the same information and link to thi
   - P3 T3 uses `otp`/`geofence`; T6 stores `LedgerEntry` rows and calls `next_entry`/`verify_entries` with `TRUST_CONFIG.ledger_hmac_key`; T4 builds the pipeline on `intake` + `spam`.
   - P2 A4 builds on `vrp.plan`; A1 reads files with `hmwssb.read_rows`.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/20
+
+## `feat/a1-replay` — `A1`
+
+- **Owner / date:** P2, 2026-10-02.
+- **Purpose:** Daily tanker bookings for the F19 policy sandbox, rebuilt from real HMWSSB monthly totals.
+- **What we found:** HMWSSB publishes bookings per section per month only. In the replay windows (Mar-Jul 2025 and 2023, portal data) every section appears once per month with no zero rows. No public daily or hourly booking pattern was found, so v1's hand-typed weekday profile is not used.
+- **What we changed:**
+  - `backend/app/services/replay.py`:
+    - `daily_counts(rows, months, seed)` spreads each section-month total over its days (each day equally likely); the totals are preserved exactly.
+    - `arrivals(days, seed)` gives each booking a random second of its day (IST) and returns bookings in arrival (FCFS) order with stable ids `YYYY-MM-DD:SECTION:NNNNN`.
+    - Randomness is seeded per section-month, so adding months does not change the others.
+    - Rows carry `basis="SYNTHETIC"` (split) and `total_basis="REAL"` (month total).
+    - Months without data (e.g. Dec 2022) raise `ValueError`.
+  - `config/allocation.py`: `replay_months_main` (Mar-Jul 2025) and `replay_months_secondary` (Mar-Jul 2023), with source.
+- **Validation:** 8 tests in `backend/tests/test_a1_replay.py` were written first and seen failing (ImportError), then pass. They cover exact section-month totals for both windows, the 977,933 total for summer 2025, seeding, month bounds, labels, refusal of empty months, and arrivals (count, order, same day, ids, repeatable). `python tasks.py test`: 160 pytest tests pass, plus all P1 verifiers. `python tasks.py lint` passes.
+- **Known limitations:** The day and time-of-day split is uniform (ASSUMED); a real daily pattern would need HMWSSB daily data (RTI). Categories (domestic, apartment, commercial) are not in the source and are not invented here.
+- **Handoff / next step:**
+  - A3 orders `arrivals(...)` per filling station.
+  - A8 runs the policies on the same seeds (common random numbers).
+  - P3's T9/T10 get the replay format: `DailyCount(day, division, section, bookings, basis, total_basis)` and `Booking(booking_id, section, division, arrived_at, basis)`.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/22

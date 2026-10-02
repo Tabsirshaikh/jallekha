@@ -50,5 +50,23 @@ class AllocationConfig:
     # Seconds before an OSRM request falls back to the estimate. Ported from v1. Basis: ASSUMED.
     osrm_timeout_seconds: float = 3.0
 
+    # Booking replay windows (A1, F19). Source: docs/research/P2.md: summer 2025 is the latest
+    # complete summer on the pre-Feb-2026 section map (977,933 bookings); 2023 kept for
+    # continuity with the solution document. Month totals REAL; daily split SYNTHETIC.
+    replay_months_main: tuple[tuple[int, int], ...] = (
+        (2025, 3),
+        (2025, 4),
+        (2025, 5),
+        (2025, 6),
+        (2025, 7),
+    )
+    replay_months_secondary: tuple[tuple[int, int], ...] = (
+        (2023, 3),
+        (2023, 4),
+        (2023, 5),
+        (2023, 6),
+        (2023, 7),
+    )
+
 
 ALLOCATION_CONFIG = AllocationConfig()
