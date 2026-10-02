@@ -15,7 +15,7 @@ if __name__ == "__main__":
     manifest = json.loads(expected[MANIFEST])
     if len(manifest["layers"]) != 3 or manifest["feature_count"] != 145:
         raise SystemExit("E6 must contain exactly three 145-feature layers")
-    if {item["non_null_value_count"] for item in manifest["layers"]} != {0, 134}:
+    if {item["non_null_value_count"] for item in manifest["layers"]} != {0, 143}:
         raise SystemExit("E6 null/value coverage differs from reviewed E2/E4/E5 state")
     excluded = {item["layer_id"] for item in manifest["excluded_layers"]}
     if "people_within_500m_public_tap" not in excluded:

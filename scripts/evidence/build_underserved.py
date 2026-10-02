@@ -98,7 +98,10 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
             "gates pass; it does not estimate unreported demand or prove under-service."
         ),
         "limits": [
-            "E2 has zero location-validated Census-to-polygon assignments.",
+            (
+                "E2 Census values are approximate (2009 to 2016 ward crosswalk); "
+                "none is exact-geometry validated."
+            ),
             (
                 "HMWSSB tanker observations are monthly section totals; no verified "
                 "section-to-ward transfer exists."

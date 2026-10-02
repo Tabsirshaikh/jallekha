@@ -89,8 +89,13 @@ def build_coverage_layers(
             wad_status = "UNAVAILABLE_MISSING_EVIDENCE"
         else:
             wad_value = float(wad)
-            wad_basis = "DERIVED_HISTORICAL_PROVISIONAL"
-            wad_status = "REVIEW_REQUIRED_UNVALIDATED_CENSUS_LOCATION"
+            # E2 moves Census 2011 values from 2009 wards to 2016 wards by building share.
+            wad_basis = "DERIVED_HISTORICAL_APPROXIMATE"
+            wad_status = (
+                "REVIEW_REQUIRED_APPROXIMATE_2009_CROSSWALK"
+                if str(e2.get("review_required", "True")).lower() == "true"
+                else "APPROXIMATE_2009_CROSSWALK"
+            )
 
         water_features.append(
             {
@@ -105,7 +110,7 @@ def build_coverage_layers(
                     "display_status": wad_status,
                     "reference_year": config.census_reference_year,
                     "location_status": e2["location_status"],
-                    "allocation_eligible": False,
+                    "allocation_eligible": str(e2.get("allocation_eligible", "")).lower() == "true",
                 },
             }
         )
@@ -146,7 +151,7 @@ def build_coverage_layers(
     layers = {
         WATER_ACCESS: _collection(
             WATER_ACCESS,
-            "Historical water-access evidence (location review required)",
+            "Historical water-access evidence (Census 2011 via 2009-to-2016 ward crosswalk)",
             water_features,
             value_field="water_access_deficit_share",
             value_status="PROVISIONAL_NOT_FOR_ALLOCATION",

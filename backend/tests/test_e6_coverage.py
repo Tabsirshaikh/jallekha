@@ -1,3 +1,4 @@
+import csv
 import importlib.util
 import json
 from pathlib import Path
@@ -47,9 +48,29 @@ def test_unavailable_values_are_null_and_provisional_values_remain_review_only()
             feature["properties"]["water_access_deficit_share"] is not None
             for feature in water["features"]
         )
-        == 134
+        == 143
     )
-    assert all(not feature["properties"]["allocation_eligible"] for feature in water["features"])
+    # Water-access eligibility passes through from E2 (approximate 2009 -> 2016 crosswalk).
+    e2_rows = list(
+        csv.DictReader(
+            (ROOT / "data/derived/evidence/ward_evidence.csv").open(encoding="utf-8", newline="")
+        )
+    )
+    e2_eligible = {r["ward_id"] for r in e2_rows if r["allocation_eligible"] == "True"}
+    assert {
+        feature["properties"]["ward_id"]
+        for feature in water["features"]
+        if feature["properties"]["allocation_eligible"]
+    } == e2_eligible
+    assert all(
+        feature["properties"]["display_status"].endswith("APPROXIMATE_2009_CROSSWALK")
+        for feature in water["features"]
+        if feature["properties"]["water_access_deficit_share"] is not None
+    )
+    assert all(
+        not feature["properties"]["allocation_eligible"]
+        for feature in booking["features"] + field["features"]
+    )
     assert all(
         feature["properties"]["bookings_per_1000"] is None
         and feature["properties"]["observed_bookings"] is None
@@ -70,7 +91,7 @@ def test_manifest_has_exactly_three_layers_and_excludes_unsupported_tap_claim():
         BOOKING_COVERAGE,
         FIELD_CHECKS,
     ]
-    assert [item["non_null_value_count"] for item in manifest["layers"]] == [134, 0, 0]
+    assert [item["non_null_value_count"] for item in manifest["layers"]] == [143, 0, 0]
     assert manifest["excluded_layers"] == [
         {
             "layer_id": "people_within_500m_public_tap",
