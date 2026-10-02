@@ -694,3 +694,27 @@ The pull-request description must summarize the same information and link to thi
   - Whether HMWSSB allows cross-station tokens is not verified. This is an operating change for the officer to approve (A7).
   - Stand-in stations and synthetic daily arrivals as in A8.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/48
+
+## `feat/a7-planner` — A7 daily planner (F8-F11, F17 gate stand-in)
+
+- **Owner / date:** P2, 2026-10-03.
+- **Purpose:** one daily plan that combines outage response, scheduled supply, the fair queue, water debt and station sharing, held as a DRAFT until an officer approves it with a reason.
+- **What we built:** `services/planner.py`.
+  - `build_plan(inputs, gate, ledger, now)` plans the day's trips in this order:
+    1. Outage response (A5, at most `outage_max_fleet_share` = 30% of trips, ASSUMED).
+    2. The scheduled-supply reserve (A4, `scheduled_reserve_share` = 5%, ASSUMED; the sandbox now reads the same value).
+    3. Each station's A3 fair queue with the trips left. Outage and reserve trips come from every station in proportion (largest remainder).
+  - Water debt (A6) raises a group's turns: entitlement x (1 + `debt_priority_weight` x debt / cap), so a group at the cap gets double turns (weight 1.0, ASSUMED).
+  - Spare trips go to neighbours within 3 km (`station_sharing`, #48).
+  - The output is an ordered list per station (with the lender for shared trips), next-day queue states and a SHA-256 digest of the plan. It is logged as `plan_created`.
+  - Confidence: a `ConfidenceGate` protocol. `ProvisionalGate` (labelled PROVISIONAL) flags groups whose need comes from the A3 fallback (no Census data) **until P3's T9 replaces it**.
+  - `mark_checked` (reason required, `ward_reviewed`) and `approve_plan` (reason required; refused while a flagged group is unchecked; refused twice; `plan_approved` carries the digest of the exact plan). Reason text stays off the ledger (SHA-256 and length only, as T7 does).
+- **Validation:**
+  - `tests/test_a7_planner.py` (13): A3 equivalence, outage first, reserve, debt raises turns, sharing within/beyond the radius, trips never overspent, flags block approval, reasons required, end-to-end plan → check → approve with ledger entries and chain verify, determinism, bad input, inputs not mutated.
+  - Deliberate breaks (no flag check, debt ignored, outage not deducted) each made tests fail.
+  - `python tasks.py test`: 565 pass. `python tasks.py lint` passes.
+- **Known limitations:**
+  - The confidence gate is a stand-in; swap in T9's gate (same protocol) when it merges.
+  - Routing of scheduled points is A4's `plan_scheduled_supply` (the registry starts empty). Booked trips are single loads (station → household → station).
+  - Cross-station sharing needs HMWSSB's agreement (an officer decision).
+- **Pull request:** (added after opening)
