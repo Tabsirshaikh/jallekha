@@ -2,6 +2,8 @@
 
 from app.models.base import Base, IdTimestampMixin, new_id, utcnow
 from app.models.complaint import Complaint
+from app.models.contest import Contest
+from app.models.contest_reply import ContestReply
 from app.models.delivery import Delivery
 from app.models.delivery_outcome import DeliveryOutcome
 from app.models.duplicate_link import DuplicateLink
@@ -16,6 +18,8 @@ from app.models.voice_note import VoiceNote
 __all__ = [
     "Base",
     "Complaint",
+    "Contest",
+    "ContestReply",
     "Delivery",
     "DeliveryOutcome",
     "DuplicateLink",
