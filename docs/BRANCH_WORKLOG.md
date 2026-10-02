@@ -88,6 +88,17 @@ The pull-request description must summarize the same information and link to thi
 - **Handoff / next step:** Refresh the generated snapshot from reviewed E2–E6 outputs and connect T10 when its API contract is ready. Keep unavailable metrics null and preserve the historical/approximate labels.
 - **Pull request:** pending.
 
+## `feat/u6-forecast` — `U6`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Show observed tanker demand, forecast ranges and shortage warning signals to officers.
+- **What we found:** The Telangana Open Data Portal tanker files contain monthly city totals from January 2022 through August 2026, with December 2022 empty. T2 and T8 remain TODO; the repository records seasonal-naive backtest errors of 21.9% city MAPE and 35.1% section WAPE but does not document the exact protocol. GHMC groundwater station coverage and extraction/licence are unconfirmed; no verified reservoir series is available.
+- **What we changed:** Added a localized officer screen with a real monthly demand chart, latest/peak actuals, the documented baseline benchmark and accuracy caveat, plus 80%/90% illustrative range fixtures and demo-capacity shortage scenarios. The UI labels history REAL, benchmark DERIVED, and projections/capacity SIMULATION. `scripts/frontend/build_u6_snapshot.py` regenerates the snapshot from the portal CSVs and records the missing month as null. Added `.github/workflows/p4-u6.yml`.
+- **Validation:** Frontend lint, production build, and `git diff --check` pass. CI workflow repeats frontend lint and build. No tests were run.
+- **Known limitations:** Demo forecast intervals are not calibrated outputs, the capacity threshold is illustrative, and shortage cards are not operational warnings. Accuracy benchmarks are historical and their protocol is undocumented. Groundwater and reservoir inputs are unavailable; T2/T8 APIs are not connected.
+- **Handoff / next step:** Replace fixtures with T2 forecast and backtest results plus T8 risk output when those tasks land. Confirm groundwater coverage/licence and fleet trip capacity before showing operational risk.
+- **Pull request:** pending.
+
 ## `research/p1` — `R-P1`
 
 - **Owner / date:** P1 (Yaseer), 2026-10-01.
