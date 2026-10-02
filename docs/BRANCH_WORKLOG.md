@@ -114,4 +114,4 @@ The pull-request description must summarize the same information and link to thi
   - A3 orders `arrivals(...)` per filling station.
   - A8 runs the policies on the same seeds (common random numbers).
   - P3's T9/T10 get the replay format: `DailyCount(day, division, section, bookings, basis, total_basis)` and `Booking(booking_id, section, division, arrived_at, basis)`.
-- **Pull request:** pending
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/22
