@@ -7,4 +7,4 @@
 - **Validation:** The new tests failed on the old code (`cannot pickle 'mappingproxy'`) and pass after the fix. `dedup.haversine_m is geo.haversine_m` is `True`. `python tasks.py test` exit 0: 162 backend tests, 1 frontend test, all P1 verifiers. `python tasks.py lint` exit 0. `verify_main_integration.py` and `verify_p1_r_p1.py` pass.
 - **Known limitations:** `services/geo.haversine_m` turns NaN coordinates into a large distance instead of an error (S3 review D9, P2's file); dedup inherits that behaviour, as it did with its own copy.
 - **Handoff / next step:** None for other areas. T1's Chicago calibration still waits for P1's registered D13 pull.
-- **Pull request:** pending.
+- **Pull request:** [#23](https://github.com/Tabsirshaikh/jallekha/pull/23).
