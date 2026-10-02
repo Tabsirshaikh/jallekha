@@ -45,6 +45,8 @@ EVENT_TYPES = frozenset(
         "resident_replied",
         "delivery_outcome",
         "outside_tries_exceeded",
+        # A4 scheduled supply (F9)
+        "service_point_registered",
         # T6: other modules (plan, override, weights and debt use the types above)
         "notice_published",  # T5 supply notice (F15)
         "outage_recorded",  # T5 outage event (F15)

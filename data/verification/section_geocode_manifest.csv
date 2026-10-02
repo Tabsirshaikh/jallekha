@@ -1,0 +1,2 @@
+dataset_id,file_path,source_url,retrieved_at_utc,license,basis,sha256,bytes,notes
+SEC-nominatim-search,data/raw/geography/nominatim/hmwssb_section_search.json,https://nominatim.openstreetmap.org/search,2026-10-02T14:32:48+00:00,ODbL 1.0 (OpenStreetMap contributors),REAL,7d43857b0a1138e6e23d4b7ccf172b6734f3c50079c371c84009a52c0a7cf3e6,304450,"208 cleaned HMWSSB section names, GHMC viewbox, raw answers"

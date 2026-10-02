@@ -239,3 +239,117 @@ The pull-request description must summarize the same information and link to thi
   - T6 stores override entries.
   - T7 explains `need_weight` components.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/28
+
+## `fix/doc-census-figures` — solution doc census figures
+
+- **Owner / date:** P2 (covering P1/owner), 2026-10-02.
+- **Purpose:** Make the section 1 Census numbers verifiable before slides.
+- **What we found:**
+  - "Up to 68.4% without water on premises" is Secunderabad Cantonment Board ward 2, not GHMC.
+  - Recomputed from HH-14, GHMC wards only (148 Census wards, 2009 numbering): max 33.4% (2009 ward 112, Serilingampally), median 5.5% (doc said 5.2%).
+  - Still correct: no phone up to 19.2% (Dabeerpura); western wards 12-33% (2009 wards 111-114).
+- **What we changed:** One sentence in `docs/JALLEKHA_FINAL_SOLUTION.md` section 1, with the recompute date and the reason for the change.
+- **Validation:** Figures from `build_evidence.census_units()` (same HH-14 formulas as E2). `scripts/ci/verify_p1_r_p1.py` passes.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/30
+
+## `feat/a3-queue` — `A3`
+
+- **Owner / date:** P2, 2026-10-02.
+- **Purpose:** Fair queue for booked tankers (F8), plus today's FCFS as baseline B1 for A8.
+- **What we found:**
+  - HMWSSB queues each booking at its nearest filling station by serial number (R-P2), so the queue works per station-day.
+  - Bookings are published per HMWSSB section and need per ward, and there is no section-to-ward map yet. So the queue works on generic groups that carry an entitlement; the mapping can be added without changing A3.
+- **What we changed:**
+  - `backend/app/services/fair_queue.py`:
+    - `order_bookings(pending, capacity, entitlement, state)` serves tier 0 (critical facilities) then tier 1 (no water on premises or assisted channel), both FCFS, then deficit round robin across groups. A group's quantum is its entitlement / largest entitlement.
+    - Deficits and the round-robin cursor carry to the next day while a group waits. A turn interrupted by capacity resumes without re-adding its quantum. Empty groups do not bank turns.
+    - Every `Decision` carries position, reason, arrival rank, entitlement, quantum and deficit (for T7).
+    - `order_fcfs` is baseline B1.
+    - `apply_caps` enforces the HMWSSB caps per consumer category (`config/allocation.py booking_caps`, REAL published rule) with `CAP_DAYS_BETWEEN` / `CAP_PER_DAY` / `CAP_PER_MONTH`.
+    - Distance is never used.
+- **Validation:**
+  - 16 tests in `backend/tests/test_a3_fair_queue.py` were written first (ImportError), then pass. They cover tier order, a 2:1 entitlement split (20/10 of 30), FCFS within a group, capacity and waiting order, no starvation over days (entitlement 1 vs 10 served by day 4), no banking by empty groups, missing entitlement, explanation fields, the FCFS baseline, determinism, and all cap rules including history across days.
+  - 20,000 bookings in one station-day are ordered in 0.04 s.
+  - `python tasks.py test`: 287 pass. `python tasks.py lint` passes.
+- **Known limitations:**
+  - Tier-1 declarations and consumer categories are not in the HMWSSB data; A8 draws them (SYNTHETIC) from Census shares.
+  - The section-to-ward entitlement mapping is still open (needs section locations; D12 not ported).
+- **Handoff / next step:**
+  - T7 uses `order_bookings` and `Decision` for explanations and counterfactuals.
+  - A7 runs it per station-day; A8 compares it with `order_fcfs`.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/31
+
+## `feat/a4-scheduled` — `A4`
+
+- **Owner / date:** P2, 2026-10-02.
+- **Purpose:** Scheduled tanker supply to fixed points for unconnected areas (F9).
+- **What we found:**
+  - The Census rule routes no ward to scheduled supply (A2), so scheduling starts only when an officer confirms A2 candidates or sets a ward to no_connection.
+  - If all 20 candidates were confirmed: about 182,000 people off premises, 2.73 million litres/day at 15 lpcd = 546 tanker loads (about 5% of the reported ~11,000 daily trips).
+- **What we changed:**
+  - `backend/app/services/scheduled_supply.py`:
+    - `scheduled_wards(needs, evidence, confirmed)`: A2 route "scheduled" plus officer-confirmed candidates; people off premises = population x WAD.
+    - `target_litres` (15 lpcd floor; officers may raise the norm, never lower it).
+    - `share_reserve`: floors first; equal fraction of floors when the reserve is short; extra by weighted max-min (progressive filling by need weight, capped at targets).
+    - `ServicePointRegistry` starts **empty** (no seed list). `register()` needs a reason, valid coordinates and a known ward, rejects duplicates, and returns ledger entry args (new event type `service_point_registered`).
+    - `plan_scheduled_supply` routes points with the S3 OR-Tools planner (floor stops mandatory) and returns a timetable (point, ward, tanker, trip, arrival HH:MM, litres). Wards without a point are `NEEDS_SERVICE_POINT`.
+    - Distance never changes a ward's share.
+- **Validation:**
+  - 12 tests in `backend/tests/test_a4_scheduled_supply.py` were written first (ImportError), then pass. They cover:
+    - registry starts empty;
+    - registration rules and ledger entry;
+    - floor and norm;
+    - all targets met;
+    - floors then 2:1 extra;
+    - a capped ward releases its extra;
+    - short reserve gives an equal fraction of floors;
+    - share independent of location;
+    - a ward without a point is reported;
+    - plan to timetable, with timetable litres = routed litres;
+    - a far point raises km but not the share;
+    - real-data scheduled wards.
+  - `python tasks.py test`: 299 pass. `python tasks.py lint` passes.
+- **Known limitations:**
+  - Filling stations for routing are still the OSM stand-ins (Q1, ASSUMED).
+  - Stops are whole tanker loads (the share is rounded to loads per point).
+  - SMS/print wording of the timetable is for P4 (U2) / T5.
+- **Handoff / next step:**
+  - A7 combines this with A3 and A5 into the daily plan.
+  - T6 stores `service_point_registered` entries.
+  - P4 shows the timetable and the officer point registration.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/32
+
+## `fix/a3-section-wards` — section -> ward link for the A3 fair queue
+
+- **Owner / date:** P2, 2026-10-02.
+- **Purpose:** Close A3's open gap: bookings are published per HMWSSB section, need (A2 entitlement) is per 2016 ward.
+- **What we found:**
+  - No public section boundaries or locations exist (R-P1, R-P2), but sections are named after localities.
+  - Of 221 sections (Jan 2022 - Jan 2026), Nominatim finds 161 names inside GHMC.
+  - A fixed 6 km division-outlier limit wrongly dropped correct sections in wide edge-of-city divisions (e.g. Manikonda, Nallagandla), so the limit is relative.
+- **What we changed:**
+  - `scripts/data/fetch_section_geocodes.py`: cleans names ("KONDAPUR (DIV 15)" -> "Kondapur") and searches Nominatim in the GHMC box (1 request/s). Raw answers are kept in `data/raw/geography/nominatim/hmwssb_section_search.json`, with `data/verification/section_geocode_manifest.csv`.
+  - `scripts/evidence/build_section_wards.py`:
+    - Best answer inside GHMC: places/boundaries first, then OSM importance.
+    - Point in a 2016 ward, or the nearest ward within 500 m.
+    - Division check: unused if farther than both 6 km and 3x the division's median distance from its median location.
+    - Independent name check.
+    - Outputs: `data/derived/crosswalk/section_to_ward_2016.csv` + `section_to_ward_summary.json`.
+    - No Voronoi service areas (per R-P1).
+  - `backend/app/services/booking_groups.py`: `group_for(section)` gives "ward:<id>" or "section:<name>"; `group_entitlements` uses A2 entitlement per ward, and the median ward entitlement as a flagged fallback for unplaced sections and wards without entitlement, so no booking is dropped.
+- **Result:**
+  - 142 of 221 sections placed, covering **80.5% of bookings**, in 98 wards.
+  - Same-name sections land in or next to that ward in 97% of 66 pairs.
+  - 14 outliers are not used: mostly common names (Defence Colony, Housing Board, Srinivas Nagar) or the wrong same-name place (Meerpet, Pragathinagar).
+  - 60 sections have no OSM match (e.g. "CONTROL ROOM", "M.R.G.FILTERS"); 5 fall outside the ward layer.
+- **Validation:**
+  - 7 tests in `backend/tests/test_section_wards.py` were written first (missing data), then pass. They cover reproducible artifacts, one row per section, the coverage gate, the name check, outlier rules (Meerpet dropped, Manikonda kept), groups and entitlements for every section, and a real replayed day (6 May 2025) through `order_bookings`.
+  - `python tasks.py test`: 306 pass. `python tasks.py lint` passes.
+- **Known limitations:**
+  - One point per section, not a service area.
+  - About 20% of bookings use the flagged fallback entitlement.
+  - Sections after the Feb/Mar 2026 re-cut are not covered.
+- **Handoff / next step:**
+  - A8 replays with these groups.
+  - The same link can give E4/E5 approximate ward bookings (their remaining blocker) in a later PR.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/33

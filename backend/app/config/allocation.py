@@ -66,6 +66,20 @@ class AllocationConfig:
     need_weight_cad: float = 1.0
     need_weight_hardship: float = 1.0
 
+    # HMWSSB tanker booking caps per consumer category (A3, F8). Source: HMWSSB tanker booking
+    # guidelines (hyderabadwater.gov.in, checked 2026-10-02; docs/research/P2.md): domestic
+    # "1 in two days (or) maximum 8 in a month"; multi-storied 5-24 flats "2 in one day (or)
+    # maximum 30 in month"; 25-200 flats "3 in one day (or) maximum 60 in month"; commercial
+    # "1 in one day (or) maximum 30 in month". Basis: REAL (published rule).
+    booking_caps: dict[str, dict[str, int]] = field(
+        default_factory=lambda: {
+            "domestic": {"min_days_between": 2, "per_month": 8},
+            "apartment_5_24": {"per_day": 2, "per_month": 30},
+            "apartment_25_200": {"per_day": 3, "per_month": 60},
+            "commercial": {"per_day": 1, "per_month": 30},
+        }
+    )
+
     # Booking replay windows (A1, F19). Source: docs/research/P2.md: summer 2025 is the latest
     # complete summer on the pre-Feb-2026 section map (977,933 bookings); 2023 kept for
     # continuity with the solution document. Month totals REAL; daily split SYNTHETIC.

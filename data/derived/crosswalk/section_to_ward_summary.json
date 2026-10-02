@@ -1,0 +1,24 @@
+{
+  "checks": {
+    "outlier_km": 6.0,
+    "outlier_spread_factor": 3.0,
+    "same_name_in_or_adjacent_share": 0.9697,
+    "same_name_ward_pairs": 66
+  },
+  "limitations": [
+    "One point per section, not a service area; a section serving several wards is attributed to one.",
+    "Unmapped sections use a flagged fallback entitlement in the fair queue.",
+    "Section names after the Feb/Mar 2026 re-cut are not covered."
+  ],
+  "mapped_booking_share": 0.8049,
+  "mapped_section_count": 142,
+  "method": "Nominatim lookup of the section locality name inside GHMC; point in 2016 ward",
+  "sections": 221,
+  "status_counts": {
+    "MAPPED": 142,
+    "UNMAPPED_DIVISION_OUTLIER": 14,
+    "UNMAPPED_NO_RESULT": 60,
+    "UNMAPPED_NO_WARD": 5
+  },
+  "wards_with_a_section": 98
+}
