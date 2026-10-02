@@ -30,7 +30,7 @@ s2_2022-01_2024-02,coverage,seasonal_naive,,7,1300,,,,,0.8,0.86,"DERIVED: split-
 s2_2022-01_2024-02,coverage,seasonal_naive,,7,1300,,,,,0.9,0.9123,"DERIVED: split-conformal, first half of scored months calibrate, section-scaled pooled residuals",6 calibration months
 s2_2022-01_2024-02,coverage,naive_x_growth,,5,0,,,,,0.8,,UNAVAILABLE: too few scored months,10 scored months give 5 calibration and 5 test months; at least 6 and 6 are needed
 s2_2022-01_2024-02,coverage,naive_x_growth,,5,0,,,,,0.9,,UNAVAILABLE: too few scored months,10 scored months give 5 calibration and 5 test months; at least 6 and 6 are needed
-s2_2022-01_2024-02,not_run,global_gbm,,,,,,,,,,,"not run: needs scikit-learn or lightgbm, not installed by tasks.py setup (lightgbm is in the optional ml extra); decision pending"
+s2_2022-01_2024-02,not_run,global_gbm,,,,,,,,,,,"not run: needs scikit-learn or lightgbm, neither installed by setup; team decision on the dependency pending; covariates D7 and D8 not in the repo"
 s2_2022-01_2024-02,not_run,chronos_2,,,,,,,,,,,not run: owner decision pending (no-LLM rule)
 portal_2022-01_2026-01,origin,seasonal_naive,2023-01,1,177,47.7567,"DERIVED: rolling-origin backtest on portal_2022-01_2026-01 (noofbookings), training before origin",50.6258,"DERIVED: rolling-origin backtest on portal_2022-01_2026-01 (noofbookings), training before origin",,,,
 portal_2022-01_2026-01,origin,seasonal_naive,2023-02,1,181,49.9394,"DERIVED: rolling-origin backtest on portal_2022-01_2026-01 (noofbookings), training before origin",52.4259,"DERIVED: rolling-origin backtest on portal_2022-01_2026-01 (noofbookings), training before origin",,,,
@@ -109,7 +109,7 @@ portal_2022-01_2026-01,coverage,seasonal_naive,,18,3442,,,,,0.8,0.7708,"DERIVED:
 portal_2022-01_2026-01,coverage,seasonal_naive,,18,3442,,,,,0.9,0.8672,"DERIVED: split-conformal, first half of scored months calibrate, section-scaled pooled residuals",18 calibration months
 portal_2022-01_2026-01,coverage,naive_x_growth,,17,3257,,,,,0.8,0.771,"DERIVED: split-conformal, first half of scored months calibrate, section-scaled pooled residuals",16 calibration months
 portal_2022-01_2026-01,coverage,naive_x_growth,,17,3257,,,,,0.9,0.8483,"DERIVED: split-conformal, first half of scored months calibrate, section-scaled pooled residuals",16 calibration months
-portal_2022-01_2026-01,not_run,global_gbm,,,,,,,,,,,"not run: needs scikit-learn or lightgbm, not installed by tasks.py setup (lightgbm is in the optional ml extra); decision pending"
+portal_2022-01_2026-01,not_run,global_gbm,,,,,,,,,,,"not run: needs scikit-learn or lightgbm, neither installed by setup; team decision on the dependency pending; covariates D7 and D8 not in the repo"
 portal_2022-01_2026-01,not_run,chronos_2,,,,,,,,,,,not run: owner decision pending (no-LLM rule)
 both,selected,seasonal_naive,,,,,,,,,,,no model beats seasonal naive on both metrics in both runs; baseline used
 portal,section_changes,,2023,,,,,,,,,,"196 sections; 8 appeared, 5 disappeared vs the year before (no mapping applied)"
