@@ -93,4 +93,4 @@ The pull-request description must summarize the same information and link to thi
 - **Handoff / next step:**
   - P3 T3 uses `otp`/`geofence`; T6 stores `LedgerEntry` rows and calls `next_entry`/`verify_entries` with `TRUST_CONFIG.ledger_hmac_key`; T4 builds the pipeline on `intake` + `spam`.
   - P2 A4 builds on `vrp.plan`; A1 reads files with `hmwssb.read_rows`.
-- **Pull request:** pending
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/20
