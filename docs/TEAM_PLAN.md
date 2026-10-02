@@ -37,6 +37,8 @@ git fetch origin && git merge origin/main
 Finish: tests + lint pass → set the row to `IN_REVIEW` with the PR link → PR into `main` → review → merge → row `DONE`.
 
 **Rules**
+- Every branch updates `docs/BRANCH_WORKLOG.md` with findings, changes, validation, limitations, handoff and PR link before review. Keep it accurate after review changes.
+- Every task gets a focused GitHub Actions workflow named `<owner>:<task-id>` (for example `P1:E1`). It must run meaningful checks for that task and be recorded in the branch worklog.
 - Only touch files your task lists; ask the owner of another area for changes there.
 - Config: each area has its own section (`config/evidence.py`, `config/allocation.py`, ...) so nobody edits the same file.
 - One database table per model file.
@@ -77,9 +79,9 @@ git push
 If the conflict is in someone else's area, ask them before choosing.
 
 **4. Open a pull request**
-1. `python tasks.py test` and `python tasks.py lint` pass on your machine.
+1. `python tasks.py test` and `python tasks.py lint` pass on your machine. Run the task-specific verifier locally; its `<owner>:<task-id>` GitHub Actions check must also pass.
 2. On GitHub: **Pull requests → New pull request**, base = `main`, compare = your branch.
-3. Title: `<task-id>: <what it does>`. Description: what you built, how you tested it (command + result), data used and its basis, anything not done.
+3. Title: `<task-id>: <what it does>`. Description: what you found, what you changed, how you tested it (command + result), data used and its basis, known limitations and the next handoff. Link the matching entry in `docs/BRANCH_WORKLOG.md`.
 4. In `features.csv` set `status` to `IN_REVIEW` and paste the PR link in `pr` (commit this on your branch).
 5. Request a review from one teammate (for research notes: one teammate + the owner).
 

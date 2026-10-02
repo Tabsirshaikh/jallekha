@@ -49,11 +49,11 @@ HMWSSB delivers almost every tanker that is booked (1,316,215 bookings and 1,315
 | # | Dataset | Status | Used by |
 |---|---|---|---|
 | D1 | HMWSSB tanker bookings/deliveries, 201 sections, monthly Jan 2022-Feb 2024 (Dec 2022 empty), OpenCity | **REAL**, verified (4,398 rows) | F3, F4, F5, F8 |
-| D2 | GHMC ward polygons, 145 (2016 numbering; wards 3, 4, 11, 13, 31, 113 missing), DataMeet/OSM, with zone list in the DataMeet readme | **REAL** | all spatial |
+| D2 | Historical GHMC ward polygons, 145 of the 2016 scheme's 150 (wards 3, 4, 11, 13, 31, 113 missing), DataMeet/OSM | **REAL**, partial historical geometry; not current boundaries | all spatial demo views |
 | D3 | Census 2011 PCA + HH-14 by ward, Hyderabad district (108 wards, 3,943,323 people), OpenCity | **REAL**, verified | F1 |
 | D4 | Census 2011 PCA + HH-14, GHMC wards in Rangareddy (NADA catalogs 6728, 9835) | **REAL** | F1 west/north |
-| D5 | District and mandal boundaries, OSM | **TO FETCH** (needed for the Census crosswalk) | F1 |
-| D6 | **Google Open Buildings 2.5D Temporal**, annual building presence, count and height 2016-2023, 4 m effective resolution, covers India (Earth Engine / HDX) | **TO FETCH**, verified to exist | F2 growth adjustment |
+| D5 | District/mandal boundaries plus official 2025-26 notices for 300 wards and the three-corporation reorganisation | **TO FETCH**; current machine-readable ward boundaries/crosswalk not verified | F1 geography versioning |
+| D6 | **Google Open Buildings 2.5D Temporal** (2016-2023) plus WorldPop and GHS-POP 100 m population grids | **TO FETCH**, verified; modelled sources with documented uncertainty | F2 growth sensitivity |
 | D7 | **Groundwater level, Telangana GW Dept**: telemetry (six-hourly) and manual quarterly wells, National Water Data Portal, CSV | **TO FETCH**, verified to exist | F5 covariate, F6 |
 | D8 | Daily weather 2022-2026, Open-Meteo | **REAL** | F5 |
 | D9 | OSM hospitals, clinics, UPHCs, schools, care homes (885 / 310 / 350 / 399 / 59) | **REAL**, verified | F1, F8 tier 0, F10 |
@@ -76,13 +76,13 @@ HMWSSB delivers almost every tanker that is booked (1,316,215 bookings and 1,315
 
 ### Layer A: Evidence (real data)
 
-**F1 Water Access Atlas.** Per ward: population, households, **Water Access Deficit** (WAD = share without water on premises: near + away; plus smaller weight for non-tap source), **Channel Access Deficit** (CAD = share with no phone), **hardship** (one room or less, dilapidated, no assets), critical facilities. Census-to-polygon join: ward number + location check against mandal/district boundary (D5) and the DataMeet zone list; **fallback** to exact mandal-level aggregates when under half the wards pass. Every ward carries a join-quality flag. Label: "Census 2011".
+**F1 Water Access Atlas.** Per area: population, households, **Water Access Deficit** (WAD = share without water on premises: near + away; plus smaller weight for non-tap source), **Channel Access Deficit** (CAD = share with no phone), **hardship** (one room or less, dilapidated, no assets), critical facilities. The demo is frozen to the historical `GHMC_2016_150` scheme and labels its 145 available polygons as incomplete. Census-to-polygon joins use ward number, name and location checks with exact mandal aggregates as fallback. Every area carries `geography_version`, effective dates, source and join quality. The current 300-ward/three-corporation view remains unavailable until official machine-readable boundaries and a crosswalk are verified. Label: "Census 2011 / historical 2016 geography".
 
-**F2 Growth adjustment (new).** Census is 15 years old. Using Open Buildings Temporal (D6), compute building count per ward per year 2016-2023 and a growth ratio. Current households = Census households × growth ratio (DERIVED, labelled). Fast-growing wards (the western corridor) stop being under-counted. Validation: ward growth vs. HMWSSB booking growth by section.
+**F2 Growth sensitivity (new).** Census is 15 years old. Compute 2016-2023 building change from Open Buildings and compare it with WorldPop and GHS-POP population surfaces. Report the three estimates, their range and agreement as **DERIVED** signals. Do not convert a building-count ratio directly into exact current households. Validate direction and stability against HMWSSB section booking growth where spatial matching is credible.
 
 **F3 Booking Equity and coverage map.** Bookings per 1,000 people per ward, Gini and Lorenz curve, top-10% share, seasonality, scatter of bookings vs WAD. Map with three layers: households without water on premises, bookings per 1,000, coverage gap (from F4). Section-level numbers are exact; ward-level are approximate (automatic geocoding). No "people within 500 m of a public tap" layer (data does not exist).
 
-**F4 Under-served Area Detector (upgraded method).** Expected bookings from a **Bayesian spatial count model** (negative binomial with BYM2 spatial random effect; need-side covariates only: households from F2, WAD, non-tap share), following Agostini et al. 2024. Observed/expected ratio with credible interval. Flag = ratio in bottom quantile AND WAD above upper quantile AND (CAD or hardship above median); thresholds in config. Fallback: peer-median comparison. Output: plain-language reasons from real numbers and a **field-check list**. A flag means "send someone to check", never "proven neglect". Officers' field-check results are stored and reported as the only ground truth.
+**F4 Under-served Area Detector (upgraded method).** Start with a negative-binomial expected-booking baseline using need-side covariates only (population/growth range, WAD and non-tap share) and a peer-median sensitivity check. Evaluate an optional BYM2 spatial random effect separately using a verified adjacency graph and documented priors; BYM2 follows Riebler et al. 2016, while Agostini et al. 2024 motivates the broader latent under-reporting problem. Flag only when results are stable across configured variants. Output: observed/expected range, uncertainty, plain-language reasons and a **field-check list**. A flag means "send someone to check", never "proven neglect"; it cannot change entitlement automatically. Field-check outcomes are the only operational ground truth.
 
 **F5 Surge Forecast and Capacity Planner.** Monthly bookings per section and city, 12 months ahead. Baseline seasonal naive (measured: 21.9% city MAPE, 35.1% section WAPE); candidates seasonal naive × YoY growth, gradient boosting with month, lag-12, trend, weather (D8) and groundwater depth (D7); hierarchical reconciliation section→city; split-conformal intervals checked for coverage in a rolling-origin backtest. Only a model that beats the baseline is used; if none does, say so. Capacity: trips needed vs fleet × trips/day (ASSUMED, labelled).
 
@@ -133,7 +133,7 @@ Trust:  driver PWA ─► F12 OTP + geofence + resident SMS ─► outcome ─�
 Access: F14 intake (app, SMS, IVR, voice, field worker, offline) ─► F13 duplicates ─► complaints / outages
 ```
 
-**Stack:** FastAPI + SQLAlchemy (SQLite locally, PostgreSQL/PostGIS in Docker), React + TypeScript PWAs, TanStack Query, Leaflet, OR-Tools, OSRM with cached legs, pandas / scikit-learn / statsmodels / PyMC or CmdStan (BYM2), shapely, MAPIE or own split-conformal, IndicConformer (NeMo). No LLM in any scoring, allocation or explanation step.
+**Stack:** FastAPI + SQLAlchemy (SQLite locally, PostgreSQL/PostGIS in Docker), React + TypeScript PWAs, TanStack Query, Leaflet, OR-Tools, OSRM with cached legs, pandas / scikit-learn / statsmodels, optional PyMC or CmdStan for evaluated spatial models, shapely, MAPIE or own split-conformal, IndicConformer (NeMo). No LLM in any scoring, allocation or explanation step.
 
 **Code rules:** business logic in pure, unit-tested services; thin routers; every weight and threshold in config with its source; every data column with a basis; external services (OSRM, ASR) have offline fallbacks; synthetic data labelled on screen.
 
@@ -151,7 +151,7 @@ On the calibrated simulation (always labelled): the four PS11 measures from F19,
 
 ## 8. Risks and honest limits
 
-1. Census is 2011; F2 reduces but does not remove this. 2. The Census-to-ward crosswalk may cover only part of the city; coverage is reported. 3. Section locations are automatic; ward-level numbers are approximate. 4. HMWSSB data ends Feb 2024 (RTI drafts exist for newer months). 5. Daily arrivals, deliveries and complaints are synthetic. 6. Duplicate calibration is from Chicago; text similarity untested on Indian data. 7. Filling-point locations are assumed. 8. Under-served flags have no ground truth; they trigger checks, not conclusions. On slides use only numbers re-verified in `V-VERIFY_REVIEW.md`; never "rich areas take the tankers".
+1. Census is 2011; F2 measures sensitivity but does not update water-access observations. 2. The demo uses an incomplete historical 2016 ward layer; Hyderabad's 2025-26 reorganisation requires official current boundaries and a new crosswalk. 3. Section locations are automatic; ward-level numbers are approximate and no authoritative public section polygons were verified. 4. HMWSSB data ends Feb 2024 (RTI drafts exist for newer months). 5. Daily arrivals, deliveries and complaints are synthetic. 6. Duplicate calibration is from Chicago; text similarity untested on Indian data. 7. Filling-point locations are assumed. 8. Under-served flags have no ground truth; they trigger checks, not conclusions. On slides use only numbers re-verified in `V-VERIFY_REVIEW.md`; never "rich areas take the tankers".
 
 ## 9. Starting from scratch: what is ported
 
@@ -170,9 +170,10 @@ New repository, new structure. These v1 modules are **copied with their tests** 
 | Agostini, Pierson & Garg (2024), AAAI 38(20):21888-21896, Bayesian spatial model for under-reporting; code github.com/gsagostini/networks_underreporting | Verified |
 | Gao, Iravani & Sinclair (2026), "Sequential Fair Allocation and Routing in Nonprofit Operations", arXiv 2606.19278 | Verified |
 | Obermeyer et al. (2019), *Science*; Shreedhar & Varghese (1996), deficit round robin; Grinsztajn et al. (2022), NeurIPS; Wickramasuriya et al. (2019), *JASA*; Holguín-Veras et al. (2013), *J. Operations Management*; Chow (1970); Angelopoulos et al. (2022), conformal risk control; Wachter et al. (2017); Riebler et al. (2016), BYM2; Jain, Chiu & Hawe (1984) | Standard references; titles and years checked in the 22 Sep audit (R-01 to R-10) or well established |
-| Google Open Buildings 2.5D Temporal (sites.research.google/gr/open-buildings/temporal; Earth Engine GOOGLE/Research/open-buildings-temporal/v1; HDX) | Verified to exist, covers India 2016-2023 |
+| Google Open Buildings 2.5D Temporal; WorldPop India 100 m; EC/JRC GHS-POP R2023A | Verified modelled spatial sources; use for sensitivity, not direct water-access measurement |
 | Telangana GW Dept groundwater levels, National Water Data Portal (nwdp.nwic.gov.in) | Verified to exist (telemetry 2021-2025, quarterly manual) |
 | AI4Bharat IndicConformer (github.com/AI4Bharat/IndicConformerASR; Hugging Face), MIT | Verified |
 | Sphere 2018; JMP service ladder; CPHEEO 1999 Table 2.1 (secondary copy) | Verified / secondary |
 | HMWSSB data (OpenCity), DataMeet wards, Census 2011 (OpenCity, NADA), Chicago 311 (v6vf-nfxy) | Verified and recomputed 2026-09-30 |
+| GHMC/Telangana 2025-26 ward and corporation reorganisation notices | Verified; current machine-readable boundary/crosswalk still required |
 | Reservoir levels (D15), HMWSSB notices (D14) | To verify during the build |
