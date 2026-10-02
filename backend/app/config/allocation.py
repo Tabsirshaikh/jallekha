@@ -109,6 +109,18 @@ class AllocationConfig:
     # km; at 3 km a station has a median of 4 neighbours). Basis: DERIVED (simulation).
     station_sharing_radius_km: float = 3.0
 
+    # Daily planner (A7). Order of the day's trips: outage response (F10, tier 0 first), then
+    # the scheduled-supply reserve (F9), then each station's fair queue (F8).
+    # Most of the day's trips outage response may take before other service. Basis: ASSUMED.
+    outage_max_fleet_share: float = 0.3
+    # Share of the day's trips set aside for scheduled supply when scheduled wards exist (the
+    # A8 sandbox's JL reserve). Basis: ASSUMED; A8 reports its cost to booked service.
+    scheduled_reserve_share: float = 0.05
+    # Water debt (A6) raises a group's fair-queue turns: entitlement x (1 + w x debt / cap), so
+    # a group at the debt cap gets (1 + w) times its usual turns. F11 "previous service, unmet
+    # demand" (QE2). Basis: ASSUMED; an officer slider (U7), every change logged.
+    debt_priority_weight: float = 1.0
+
     # Booking replay windows (A1, F19). Source: docs/research/P2.md: summer 2025 is the latest
     # complete summer on the pre-Feb-2026 section map (977,933 bookings); 2023 kept for
     # continuity with the solution document. Month totals REAL; daily split SYNTHETIC.

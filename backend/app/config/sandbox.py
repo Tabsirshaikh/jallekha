@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from app.config.allocation import ALLOCATION_CONFIG
+
 
 @dataclass(frozen=True)
 class SandboxConfig:
@@ -26,7 +28,7 @@ class SandboxConfig:
     # JL only: share of each station's daily trips set aside for scheduled supply (F9) to
     # wards where people fetch water off premises. Basis: ASSUMED; JL_F8 (queue only, no
     # reserve) is reported next to JL so the cost of the reserve to booked service is visible.
-    jl_scheduled_reserve_share: float = 0.05
+    jl_scheduled_reserve_share: float = ALLOCATION_CONFIG.scheduled_reserve_share
     # Groups (wards) with fewer bookings than this over the replay are left out of Gini, Jain
     # and worst fill rate, which would otherwise be driven by a handful of bookings.
     # Basis: ASSUMED.
