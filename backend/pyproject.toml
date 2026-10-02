@@ -19,6 +19,17 @@ dependencies = [
 [project.optional-dependencies]
 geo = ["rasterio==1.4.4", "pyproj==3.7.2", "numpy==2.2.6", "shapely==2.1.2"]
 models = ["numpy==2.2.6", "pymc==5.25.1", "arviz==0.22.0"]
+# Optional, heavy, not installed by `tasks.py setup` or CI. Install: pip install -e "./backend[ml]"
+ml = [
+  "sentence-transformers==6.1.0",  # T1 text similarity (LaBSE), F13
+  "lightgbm==4.7.0",  # T2 gradient-boosting candidate, F5
+  "hierarchicalforecast==1.5.3",  # T2 reconciliation, F5 (docs/research/P3.md)
+  "transformers==5.18.0",  # T4 IndicConformer, F14 (model card: transformers + onnxruntime)
+  "onnxruntime==1.30.0",
+  "onnx==1.23.1",
+  "torch==2.11.0",  # pinned to match torchaudio 2.11.0 (resolver otherwise picks a newer torch)
+  "torchaudio==2.11.0",
+]
 dev = [
   "httpx==0.28.1",
   "pytest==8.3.5",
