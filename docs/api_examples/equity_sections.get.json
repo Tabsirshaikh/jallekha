@@ -1,0 +1,61 @@
+{
+  "_example": {
+    "endpoint": "GET /equity/sections?offset=0&limit=2",
+    "status": "FROM_MAIN (data on main, route not built)",
+    "basis": "count_basis / metric_basis columns",
+    "built_from": "data/derived/equity/sections.csv",
+    "source": {
+      "file": "data/derived/equity/sections.csv",
+      "key_column": "section",
+      "keys": [
+        "MADHAPUR",
+        "KONDAPUR (DIV 15)"
+      ]
+    }
+  },
+  "request": {
+    "offset": 0,
+    "limit": 2
+  },
+  "response": {
+    "total": 201,
+    "offset": 0,
+    "limit": 2,
+    "items": [
+      {
+        "section": "MADHAPUR",
+        "division": 15,
+        "bookings": 135332,
+        "delivered": 135295,
+        "rank": 1,
+        "share": 0.102819068,
+        "observed_months": 25,
+        "population": null,
+        "bookings_per_1000": null,
+        "domestic_connections_mean": 10772.68,
+        "flats_connection_share": 0.125454,
+        "bookings_per_1000_connections": 502.50077,
+        "denominator_status": "HMWSSB_DOMESTIC_CONNECTIONS",
+        "count_basis": "REAL",
+        "metric_basis": "DERIVED"
+      },
+      {
+        "section": "KONDAPUR (DIV 15)",
+        "division": 15,
+        "bookings": 125555,
+        "delivered": 125535,
+        "rank": 2,
+        "share": 0.095390951,
+        "observed_months": 25,
+        "population": null,
+        "bookings_per_1000": null,
+        "domestic_connections_mean": 7202.72,
+        "flats_connection_share": 0.207933,
+        "bookings_per_1000_connections": 697.264367,
+        "denominator_status": "HMWSSB_DOMESTIC_CONNECTIONS",
+        "count_basis": "REAL",
+        "metric_basis": "DERIVED"
+      }
+    ]
+  }
+}

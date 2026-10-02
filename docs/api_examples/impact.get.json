@@ -1,0 +1,12 @@
+{
+  "_example": {
+    "endpoint": "GET /impact",
+    "status": "NOT DESIGNED",
+    "owner": "P4 / P2 to propose",
+    "notes": "F19 Impact page. A8's data/derived/sandbox/results.csv and summary.json (SIMULATION) exist on main and are the likely source; no shape agreed.",
+    "basis": null,
+    "built_from": null
+  },
+  "request": null,
+  "response": null
+}

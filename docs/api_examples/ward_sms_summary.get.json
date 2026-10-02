@@ -1,0 +1,12 @@
+{
+  "_example": {
+    "endpoint": "GET /wards/{ward_id}/sms-summary",
+    "status": "NOT DESIGNED",
+    "owner": "P4 / P2 to propose",
+    "notes": "F20 SMS summary; no service or template exists.",
+    "basis": null,
+    "built_from": null
+  },
+  "request": null,
+  "response": null
+}

@@ -1,0 +1,29 @@
+{
+  "_example": {
+    "endpoint": "POST /intake/voice (multipart: audio file + fields)",
+    "status": "FROM_MAIN (service on main, route not built)",
+    "basis": "SYNTHETIC audio bytes; response from the real IntakeService.receive_voice with the fallback transcriber",
+    "built_from": "services/intake_pipeline.py IntakeService.receive_voice -> IntakeResult"
+  },
+  "request": {
+    "audio": "<audio file, multipart>",
+    "content_type": "audio/webm",
+    "lat": 17.44,
+    "lon": 78.498,
+    "client_id": "device-7f3a-0005",
+    "language_hint": "te"
+  },
+  "response": {
+    "status": "created",
+    "client_id": "device-7f3a-0005",
+    "intake_id": "7c389695-0660-4ca7-a4f5-44fc274ced4d",
+    "complaint_id": "dc05aab9-e8a8-46b5-a2c2-151b3e8b4568",
+    "complaint_status": "needs_transcription",
+    "parent_id": null,
+    "category": "other",
+    "language": "te",
+    "spam_score": 0.0,
+    "error": null,
+    "ledger_seq": 6
+  }
+}

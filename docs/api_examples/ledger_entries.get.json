@@ -1,0 +1,71 @@
+{
+  "_example": {
+    "endpoint": "GET /ledger/entries?after_seq=0&limit=2",
+    "status": "ROUTE_ON_MAIN",
+    "basis": "Entries written by the notice example above (SYNTHETIC notice) to a temporary stored ledger",
+    "built_from": "app/routers/ledger.py list_entries() -> StoredLedger.page -> LedgerEntry + key_id"
+  },
+  "request": {
+    "after_seq": 0,
+    "limit": 2
+  },
+  "response": {
+    "entries": [
+      {
+        "seq": 1,
+        "event_type": "outage_created",
+        "entity_type": "outage",
+        "entity_id": "07d73efc-aa88-493c-aad0-8762e4fecc07",
+        "payload": {
+          "actor": "officer-7",
+          "created_by": "officer-7",
+          "end": "2026-10-05T00:30:00+00:00",
+          "entity_id": "07d73efc-aa88-493c-aad0-8762e4fecc07",
+          "entity_type": "outage",
+          "key_id": "k1",
+          "people_affected": 82117.0,
+          "reason": "hmwssb_supply_notice",
+          "source": "notice",
+          "start": "2026-10-04T00:30:00+00:00",
+          "ward_ids": [
+            "relation/7849315",
+            "relation/7849497"
+          ]
+        },
+        "prev_hash": "GENESIS",
+        "hash": "970c8819e5147e098b9e7484c3a257ad0c5453db2255f82a7d3675114a16fb08",
+        "signature": "932956593247ee0d89cf633b44ebb75acfac5bd421e52126486f9aaab2f60de4",
+        "created_at_iso": "2026-10-03T06:00:00+00:00",
+        "key_id": "k1"
+      },
+      {
+        "seq": 2,
+        "event_type": "notice_published",
+        "entity_type": "supply_notice",
+        "entity_id": "b08e1263-ceb3-43d3-ae45-4e0fef790503",
+        "payload": {
+          "actor": "officer-7",
+          "entity_id": "b08e1263-ceb3-43d3-ae45-4e0fef790503",
+          "entity_type": "supply_notice",
+          "flagged_count": 1,
+          "hours": 24.0,
+          "is_synthetic": true,
+          "key_id": "k1",
+          "needs_officer_review": true,
+          "outage_id": "07d73efc-aa88-493c-aad0-8762e4fecc07",
+          "people_affected": 82117.0,
+          "source": "hmwssb_press_release",
+          "ward_ids": [
+            "relation/7849315",
+            "relation/7849497"
+          ]
+        },
+        "prev_hash": "970c8819e5147e098b9e7484c3a257ad0c5453db2255f82a7d3675114a16fb08",
+        "hash": "10465be30780137df6c8c7f26025134878dc725e089aa1f7260fd8504514a332",
+        "signature": "2d0532fa6ecd519ee1dbe8e182053c9e11729c0de7f02957e784c6fe72890d15",
+        "created_at_iso": "2026-10-03T06:00:00+00:00",
+        "key_id": "k1"
+      }
+    ]
+  }
+}

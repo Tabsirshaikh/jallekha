@@ -1,0 +1,18 @@
+{
+  "_example": {
+    "endpoint": "GET /ledger/verify",
+    "status": "ROUTE_ON_MAIN",
+    "basis": "Same temporary ledger",
+    "built_from": "app/routers/ledger.py verify() -> StoredLedger.verify -> ChainCheck"
+  },
+  "request": null,
+  "response": {
+    "valid": true,
+    "checked": 2,
+    "broken_at": null,
+    "reason": null,
+    "head_seq": 2,
+    "head_hash": "10465be30780137df6c8c7f26025134878dc725e089aa1f7260fd8504514a332",
+    "detail": null
+  }
+}

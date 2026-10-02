@@ -1,0 +1,88 @@
+{
+  "_example": {
+    "endpoint": "POST /notices",
+    "status": "ROUTE_ON_MAIN",
+    "basis": "SYNTHETIC notice text; area matching against the REAL section_to_ward_2016.csv / ward geojson; people_affected from the REAL Census 2011 ward population (DERIVED)",
+    "built_from": "app/routers/notices.py enter_notice() -> services/notices.py NoticeService.enter -> NoticeResult (AreaMatch, OutageEvent)"
+  },
+  "request": {
+    "source": "hmwssb_press_release",
+    "source_ref": "https://example.org/hmwssb/notice-0001",
+    "raw_text": "Water supply will be interrupted in Kapra and Nacharam on 4 Oct for pipeline works.",
+    "area_names": [
+      "Kapra",
+      "Nacharam",
+      "Kapra Colony West"
+    ],
+    "start": "2026-10-04T06:00:00+05:30",
+    "end": "2026-10-05T06:00:00+05:30",
+    "entered_by": "officer-7",
+    "is_synthetic": true
+  },
+  "response": {
+    "status": "created",
+    "notice_id": "b08e1263-ceb3-43d3-ae45-4e0fef790503",
+    "outage_id": "07d73efc-aa88-493c-aad0-8762e4fecc07",
+    "ward_ids": [
+      "relation/7849315",
+      "relation/7849497"
+    ],
+    "matched": [
+      {
+        "name": "Kapra",
+        "status": "matched",
+        "ward_id": "relation/7849497",
+        "ward_name": "Ward 1 Kapra",
+        "confidence": 1.0,
+        "method": "ward_name",
+        "reason": null,
+        "suggestion": null
+      },
+      {
+        "name": "Nacharam",
+        "status": "matched",
+        "ward_id": "relation/7849315",
+        "ward_name": "Ward 6 Nacharam",
+        "confidence": 1.0,
+        "method": "ward_name",
+        "reason": null,
+        "suggestion": null
+      }
+    ],
+    "flagged": [
+      {
+        "name": "Kapra Colony West",
+        "status": "flagged",
+        "ward_id": null,
+        "ward_name": null,
+        "confidence": 0.643,
+        "method": null,
+        "reason": "no_confident_match",
+        "suggestion": "Ward 114 KPHB Colony"
+      }
+    ],
+    "hours": 24.0,
+    "people_affected": 82117.0,
+    "people_affected_basis": "DERIVED, HISTORICAL: Census 2011 population of the matched wards (whole wards; a notice may cover only part of a ward). Rule OPEN, owner to confirm; officer to check",
+    "needs_officer_review": true,
+    "outage": {
+      "outage_id": "07d73efc-aa88-493c-aad0-8762e4fecc07",
+      "ward_ids": [
+        "relation/7849315",
+        "relation/7849497"
+      ],
+      "start": "2026-10-04T00:30:00+00:00",
+      "end": "2026-10-05T00:30:00+00:00",
+      "source": "notice",
+      "reason": "hmwssb_supply_notice",
+      "created_by": "officer-7",
+      "people_affected": 82117.0,
+      "planned_hours": 24.0
+    },
+    "ledger_seqs": [
+      1,
+      2
+    ],
+    "error": null
+  }
+}

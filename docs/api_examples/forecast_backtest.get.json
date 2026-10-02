@@ -1,0 +1,78 @@
+{
+  "_example": {
+    "endpoint": "GET /forecast/backtest",
+    "status": "PROPOSED, service not merged (T2 on feat/t2-forecast, local)",
+    "basis": "*_basis columns (DERIVED)",
+    "built_from": "feat/t2-forecast: data/derived/forecast_backtest.csv (summary rows shown)"
+  },
+  "request": null,
+  "response": {
+    "items": [
+      {
+        "run": "s2_2022-01_2024-02",
+        "row_type": "summary_common_origins",
+        "model": "naive_x_growth",
+        "origin": "2023-04..2024-02",
+        "months": 10,
+        "section_months": 1866,
+        "city_mape": 25.3185,
+        "city_mape_basis": "DERIVED: rolling-origin backtest on s2_2022-01_2024-02 (noofbookings), training before origin; origins shared by all models",
+        "section_wape": 40.5941,
+        "section_wape_basis": "DERIVED: rolling-origin backtest on s2_2022-01_2024-02 (noofbookings), training before origin; origins shared by all models",
+        "interval": null,
+        "coverage": null,
+        "coverage_basis": null,
+        "note": null
+      },
+      {
+        "run": "s2_2022-01_2024-02",
+        "row_type": "summary_common_origins",
+        "model": "seasonal_naive",
+        "origin": "2023-04..2024-02",
+        "months": 10,
+        "section_months": 1866,
+        "city_mape": 15.0943,
+        "city_mape_basis": "DERIVED: rolling-origin backtest on s2_2022-01_2024-02 (noofbookings), training before origin; origins shared by all models",
+        "section_wape": 31.3821,
+        "section_wape_basis": "DERIVED: rolling-origin backtest on s2_2022-01_2024-02 (noofbookings), training before origin; origins shared by all models",
+        "interval": null,
+        "coverage": null,
+        "coverage_basis": null,
+        "note": null
+      },
+      {
+        "run": "s2_2022-01_2024-02",
+        "row_type": "summary_all_origins",
+        "model": "naive_x_growth",
+        "origin": null,
+        "months": 10,
+        "section_months": 1866,
+        "city_mape": 25.3185,
+        "city_mape_basis": "DERIVED: rolling-origin backtest on s2_2022-01_2024-02 (noofbookings), training before origin",
+        "section_wape": 40.5941,
+        "section_wape_basis": "DERIVED: rolling-origin backtest on s2_2022-01_2024-02 (noofbookings), training before origin",
+        "interval": null,
+        "coverage": null,
+        "coverage_basis": null,
+        "note": null
+      },
+      {
+        "run": "s2_2022-01_2024-02",
+        "row_type": "summary_all_origins",
+        "model": "seasonal_naive",
+        "origin": null,
+        "months": 13,
+        "section_months": 2413,
+        "city_mape": 21.8935,
+        "city_mape_basis": "DERIVED: rolling-origin backtest on s2_2022-01_2024-02 (noofbookings), training before origin",
+        "section_wape": 35.1222,
+        "section_wape_basis": "DERIVED: rolling-origin backtest on s2_2022-01_2024-02 (noofbookings), training before origin",
+        "interval": null,
+        "coverage": null,
+        "coverage_basis": null,
+        "note": null
+      }
+    ],
+    "total": 117
+  }
+}

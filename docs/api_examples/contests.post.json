@@ -1,0 +1,23 @@
+{
+  "_example": {
+    "endpoint": "POST /contests",
+    "status": "FROM_MAIN (service on main, route not built)",
+    "basis": "SYNTHETIC request; response from the real ContestService on a temporary database",
+    "built_from": "services/contest.py ContestService.file -> ContestResult; ledger contest_filed (text as sha256 + length)"
+  },
+  "request": {
+    "filed_by": "resident-demo-01",
+    "role": "resident",
+    "target_type": "ward",
+    "target_id": "relation/7848799",
+    "reason_code": "need_data_wrong",
+    "reason_text": "Our lane has no tap connection; the ward figure looks too low."
+  },
+  "response": {
+    "status": "filed",
+    "contest_id": "4d2fe5cb-99dc-4089-80ce-d284b8be00a8",
+    "reply_id": null,
+    "ledger_seq": 1,
+    "error": null
+  }
+}

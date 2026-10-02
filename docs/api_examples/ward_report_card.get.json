@@ -1,0 +1,12 @@
+{
+  "_example": {
+    "endpoint": "GET /wards/{ward_id}/report-card",
+    "status": "NOT DESIGNED",
+    "owner": "P4 / P2 to propose",
+    "notes": "F20: need, bookings, debt, deliveries, schedule; no service builds a report card.",
+    "basis": null,
+    "built_from": null
+  },
+  "request": null,
+  "response": null
+}
