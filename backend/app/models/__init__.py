@@ -5,8 +5,10 @@ from app.models.complaint import Complaint
 from app.models.delivery import Delivery
 from app.models.delivery_outcome import DeliveryOutcome
 from app.models.duplicate_link import DuplicateLink
+from app.models.intake_item import IntakeItemRecord
 from app.models.representative import Representative
 from app.models.resident_response import ResidentResponse
+from app.models.voice_note import VoiceNote
 
 __all__ = [
     "Base",
@@ -15,8 +17,10 @@ __all__ = [
     "DeliveryOutcome",
     "DuplicateLink",
     "IdTimestampMixin",
+    "IntakeItemRecord",
     "Representative",
     "ResidentResponse",
+    "VoiceNote",
     "new_id",
     "utcnow",
 ]

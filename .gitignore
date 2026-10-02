@@ -26,3 +26,6 @@ Thumbs.db
 *.pth
 *.ckpt
 *.safetensors
+
+# Uploaded voice notes and other runtime files (F14); never commit them
+/uploads/
