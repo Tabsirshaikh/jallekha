@@ -49,6 +49,12 @@ EVENT_TYPES = frozenset(
         "service_point_registered",
         # A5 outage response (F10)
         "outage_created",
+        # T6: other modules (plan, override, weights and debt use the types above; outages use
+        # A5's outage_created)
+        "notice_published",  # T5 supply notice (F15)
+        "contest_filed",  # T7 contest (F16)
+        "contest_replied",  # T7 officer reply (F16)
+        "field_check_recorded",  # field check
     }
 )
 
