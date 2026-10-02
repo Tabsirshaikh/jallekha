@@ -718,3 +718,25 @@ The pull-request description must summarize the same information and link to thi
   - Routing of scheduled points is A4's `plan_scheduled_supply` (the registry starts empty). Booked trips are single loads (station → household → station).
   - Cross-station sharing needs HMWSSB's agreement (an officer decision).
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/49
+
+## `feat/a7-routes` — A7 follow-up: routes and the planner replay for T9
+
+- **Owner / date:** P2, 2026-10-03.
+- **Why:** checking #49 against its own spec found two gaps. The plan had no **routes** (features.csv: "queue + schedule + outage → routes → ..."), and there was no **per-day replay output** that T9 needs (P3_BUILD_PLAN: "plan, inputs, quality signals").
+- **What we changed:**
+  - `planner.py`: tier-0 critical stops, outage points (registered points in the outage wards) and scheduled points are routed together by the S3 OR-Tools planner, using the tankers set aside for those trips (fleet sorted by id; enough for the outage + reserve trips at `max_trips_per_tanker`).
+    - Priority: critical 100 (mandatory) > outage up to 90 (floor stops mandatory) > scheduled up to 80.
+    - Output: `special_stops` (kind, place, ward, tanker, trip, sequence, arrival, litres), `special_tankers`, and `unrouted` (NEEDS_LOCATION / NEEDS_SERVICE_POINT / NO_FLEET_GIVEN / NOT_ROUTED), so no need is skipped silently.
+    - Routes are part of the plan digest. `plan_created` logs the routing status, routed stops, km and unrouted count.
+  - `scheduled_supply.py`: `scheduled_demands` extracted from `plan_scheduled_supply` (behaviour unchanged; A4 tests pass) so the planner reuses A4's demands.
+  - `scripts/sandbox/build_planner_replay.py`: the real planner day by day on the A8 replay (Mar-Jul 2025, seed 0, tight capacity, 3 km sharing, scheduled reserve).
+    - Outputs `data/derived/planner_replay/days.csv` (per-day trips, served, waiting, expired, trips lent, flags, digest) and `groups.csv` (per day and group: pending, served, served by a lent trip, entitlement and the quality signals need basis, location status and flag). Labelled SIMULATION.
+    - `replay(setup, entitlement=..., fallback_groups=...)` lets T9 re-run the same days with a degraded signal and compare plans by digest.
+    - Cross-check: the planner serves 91.1% of bookings, matching A8's JL_POOL (91.2%).
+- **Validation:**
+  - 4 routing tests and 5 replay tests. The routing tests were written first and failed first; one expectation was corrected because the router delivers whole 5,000 l loads.
+  - `python tasks.py test`: 574 pass. `python tasks.py lint` passes.
+- **Known limitations:**
+  - The replay has no outages and does not settle debt (no delivery outcomes are simulated).
+  - Routing needs registered service points (the registry starts empty) and officer-entered locations for critical stops.
+- **Pull request:** (added after opening)

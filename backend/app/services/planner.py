@@ -12,9 +12,15 @@ Order of the day's trips (one trip = one 5,000 l load):
 4. Station trip sharing (station_sharing): a station's trips left after its own queue go to
    short stations within `station_sharing_radius_km`; the borrower keeps its fair order. Each
    booked trip is one load, so its route is station -> household -> station.
-5. Confidence (F17): a gate scores every group in the plan. Until P3's T9 lands, the
+5. Routes: tier-0 critical stops, outage points and scheduled points are routed together by
+   the S3 OR-Tools planner (A4's demands for scheduled points), with the tankers set aside
+   for those trips (fleet sorted by id, enough for the outage + reserve trips). Priority:
+   critical (100, mandatory) > outage (up to 90, floor stops mandatory) > scheduled (up to
+   80). A need without a place (no location, no registered point) or without a fleet is
+   listed in `unrouted`, never skipped silently.
+6. Confidence (F17): a gate scores every group in the plan. Until P3's T9 lands, the
    ProvisionalGate flags groups whose need comes from the A3 fallback (no Census data).
-6. Approval (F16/F17): a plan is a DRAFT until an officer approves it with a reason; every
+7. Approval (F16/F17): a plan is a DRAFT until an officer approves it with a reason; every
    flagged group must first be marked "checked" with a reason. plan_created, ward_reviewed and
    plan_approved are ledger entries; reason text stays off the ledger (only its SHA-256), and
    the approval carries the digest of the exact plan built.
@@ -28,13 +34,19 @@ import math
 from collections import defaultdict
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import asdict, dataclass, field, replace
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import Any, Protocol
 
 from app.config.allocation import ALLOCATION_CONFIG
-from app.services import fair_queue, outage, station_sharing
+from app.services import fair_queue, outage, station_sharing, vrp
 from app.services.ledger_port import LedgerPort
-from app.services.scheduled_supply import ScheduledWard, WardShare, share_reserve
+from app.services.scheduled_supply import (
+    ScheduledWard,
+    ServicePointRegistry,
+    WardShare,
+    scheduled_demands,
+    share_reserve,
+)
 from app.services.water_debt import DebtAccount, cap_litres
 
 SYSTEM = "system"
@@ -64,6 +76,13 @@ class PlanInputs:
     critical_stops: Sequence[outage.CriticalStop] = ()
     station_km: Mapping[tuple[str, str], float] = field(default_factory=dict)  # round trip
     sharing_radius_km: float = ALLOCATION_CONFIG.station_sharing_radius_km
+    # Routing of outage and scheduled deliveries (optional: without a fleet, needs are listed)
+    critical_locations: Mapping[str, vrp.Point] = field(default_factory=dict)  # stop -> point
+    registry: ServicePointRegistry = field(default_factory=ServicePointRegistry)
+    fleet: Sequence[vrp.Tanker] = ()
+    depots: Sequence[vrp.Station] = ()
+    routing_seconds: float | None = None
+    shift_start: str = "06:00"
 
 
 @dataclass(frozen=True)
@@ -115,6 +134,26 @@ class StationPlan:
 
 
 @dataclass(frozen=True)
+class SpecialStop:
+    kind: str  # critical | outage | scheduled
+    place_id: str  # critical stop id or service point id
+    ward_id: str
+    tanker_id: str
+    trip: int
+    sequence: int
+    arrival: str  # HH:MM local
+    litres: int
+
+
+@dataclass(frozen=True)
+class Unrouted:
+    kind: str  # critical | outage | scheduled
+    place_id: str  # critical stop id, outage id or ward id
+    litres: float
+    reason: str  # NEEDS_LOCATION | NEEDS_SERVICE_POINT | NO_FLEET_GIVEN | NOT_ROUTED
+
+
+@dataclass(frozen=True)
 class DailyPlan:
     plan_id: str
     day: date
@@ -128,6 +167,10 @@ class DailyPlan:
     flags: dict[str, Assessment]
     queue_states: dict[str, fair_queue.QueueState]
     digest: str
+    routing: vrp.PlanResult | None = None
+    special_stops: tuple[SpecialStop, ...] = ()
+    unrouted: tuple[Unrouted, ...] = ()
+    special_tankers: tuple[str, ...] = ()
     status: str = "DRAFT"  # DRAFT | APPROVED
     checked: dict[str, str] = field(default_factory=dict)  # group -> officer's reason
     approved_by: str | None = None
@@ -174,6 +217,103 @@ def _validate(data: PlanInputs) -> None:
         raise ValueError(f"Bookings at unknown station(s): {unknown}")
     if data.sharing_radius_km < 0:
         raise ValueError("sharing_radius_km cannot be negative")
+
+
+def _special_demands(
+    data: PlanInputs, response: outage.OutageResponse, scheduled: dict[str, WardShare]
+) -> tuple[list[vrp.Demand], dict[str, tuple[str, str, str]], list[Unrouted]]:
+    """Routing demands for critical stops, outage points and scheduled points; needs that
+    have no place are returned as Unrouted."""
+    load = ALLOCATION_CONFIG.tanker_load_litres
+    demands: list[vrp.Demand] = []
+    meta: dict[str, tuple[str, str, str]] = {}  # demand id -> (kind, place id, ward id)
+    missing: list[Unrouted] = []
+    names = {c.stop_id: c.name for c in data.critical_stops}
+    for c in response.critical:
+        if c.litres <= 0:
+            continue
+        point = data.critical_locations.get(c.stop_id)
+        if point is None:
+            missing.append(Unrouted("critical", c.stop_id, c.litres, "NEEDS_LOCATION"))
+            continue
+        stops = math.ceil(c.litres / load - 1e-9)
+        demand_id = f"critical:{c.stop_id}"
+        demands.append(vrp.Demand(demand_id, names[c.stop_id], 100.0, point, stops, stops))
+        meta[demand_id] = ("critical", c.stop_id, c.ward_id)
+    top = max((a.priority for a in response.allocations), default=1.0)
+    for a in response.allocations:
+        if a.litres <= 0:
+            continue
+        points = [p for w in a.ward_ids for p in data.registry.for_ward(w)]
+        if not points:
+            missing.append(Unrouted("outage", a.outage_id, a.litres, "NEEDS_SERVICE_POINT"))
+            continue
+        for p in points:
+            stops = max(1, round(a.litres / len(points) / load))
+            floor = min(stops, max(1, round(a.floor / len(points) / load)))
+            demand_id = f"outage:{a.outage_id}:{p.point_id}"
+            demands.append(
+                vrp.Demand(demand_id, p.name, 90 * a.priority / top, (p.lat, p.lng), stops, floor)
+            )
+            meta[demand_id] = ("outage", p.point_id, p.ward_id)
+    if scheduled:
+        wards = [w for w in data.scheduled if w.ward_id in scheduled]
+        plans, scheduled_list, points = scheduled_demands(wards, scheduled, data.registry)
+        for ward_id, ward_plan in sorted(plans.items()):
+            if ward_plan.status == "NEEDS_SERVICE_POINT" and ward_plan.litres > 0:
+                missing.append(
+                    Unrouted("scheduled", ward_id, ward_plan.litres, "NEEDS_SERVICE_POINT")
+                )
+        for d in scheduled_list:
+            demand_id = f"scheduled:{d.id}"
+            demands.append(replace(d, id=demand_id, priority=0.8 * d.priority))
+            meta[demand_id] = ("scheduled", d.id, points[d.id].ward_id)
+    return demands, meta, missing
+
+
+def _route(
+    data: PlanInputs,
+    demands: list[vrp.Demand],
+    meta: dict[str, tuple[str, str, str]],
+    trips: int,
+) -> tuple[vrp.PlanResult | None, tuple[SpecialStop, ...], list[Unrouted], tuple[str, ...]]:
+    load = ALLOCATION_CONFIG.tanker_load_litres
+    if not demands:
+        return None, (), [], ()
+    if not data.fleet or not data.depots:
+        unrouted = [
+            Unrouted(meta[d.id][0], meta[d.id][1], d.stops_wanted * load, "NO_FLEET_GIVEN")
+            for d in demands
+        ]
+        return None, (), unrouted, ()
+    needed = max(1, math.ceil(trips / ALLOCATION_CONFIG.max_trips_per_tanker))
+    tankers = sorted(data.fleet, key=lambda t: t.id)[:needed]
+    result = vrp.plan(demands, tankers, list(data.depots), time_limit_s=data.routing_seconds)
+    start = datetime.strptime(data.shift_start, "%H:%M")
+    stops = tuple(
+        sorted(
+            (
+                SpecialStop(
+                    kind=meta[stop.demand_id][0],
+                    place_id=meta[stop.demand_id][1],
+                    ward_id=meta[stop.demand_id][2],
+                    tanker_id=route.tanker_id,
+                    trip=stop.trip,
+                    sequence=stop.sequence,
+                    arrival=(start + timedelta(minutes=stop.eta_min)).strftime("%H:%M"),
+                    litres=stop.litres,
+                )
+                for route in result.routes
+                for stop in route.stops
+            ),
+            key=lambda s: (s.arrival, s.tanker_id, s.sequence),
+        )
+    )
+    unrouted = [
+        Unrouted(meta[str(d["demand_id"])][0], meta[str(d["demand_id"])][1], 0.0, "NOT_ROUTED")
+        for d in result.dropped
+    ]
+    return result, stops, unrouted, tuple(t.id for t in tankers)
 
 
 def build_plan(
@@ -242,6 +382,12 @@ def build_plan(
             tuple(b.booking_id for b in result.waiting),
         )
 
+    demands, meta, missing = _special_demands(data, response, scheduled)
+    routing, special_stops, not_routed, special_tankers = _route(
+        data, demands, meta, outage_trips + reserve_trips
+    )
+    unrouted = tuple(missing + not_routed)
+
     groups = {b.group for p in stations.values() for b in p.served}
     groups |= {p.booking.group for p in data.pending}
     flags = {g: a for g, a in gate.assess(groups).items() if a.needs_check}
@@ -260,6 +406,9 @@ def build_plan(
         "reserve_trips": reserve_trips,
         "effective_entitlement": {g: round(v, 9) for g, v in sorted(weights.items())},
         "flags": {g: asdict(a) for g, a in sorted(flags.items())},
+        "special_stops": [asdict(s) for s in special_stops],
+        "unrouted": [asdict(u) for u in unrouted],
+        "special_tankers": list(special_tankers),
     }
     plan = DailyPlan(
         plan_id=data.plan_id,
@@ -274,6 +423,10 @@ def build_plan(
         flags=dict(sorted(flags.items())),
         queue_states=states,
         digest=_digest(content),
+        routing=routing,
+        special_stops=special_stops,
+        unrouted=unrouted,
+        special_tankers=special_tankers,
     )
     ledger.append(
         "plan_created",
@@ -290,6 +443,10 @@ def build_plan(
             "booked_waiting": sum(len(p.waiting) for p in stations.values()),
             "trips_lent": sum(t.trips for t in transfers),
             "flagged_groups": sorted(flags),
+            "routing_status": routing.status if routing else "NOT_ROUTED",
+            "routed_stops": len(special_stops),
+            "route_km": routing.total_km if routing else 0.0,
+            "unrouted_needs": len(unrouted),
         },
         SYSTEM,
     )
