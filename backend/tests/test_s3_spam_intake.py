@@ -56,7 +56,9 @@ def test_indian_scripts_are_not_gibberish() -> None:
     assert spam.non_letter_ratio("दो दिन से पानी नहीं आया") < 0.1
     assert spam.non_letter_ratio("రెండు రోజులుగా నీళ్లు రాలేదు") < 0.1
     assert spam.non_letter_ratio("دو دن سے پانی نہیں آیا") < 0.1
-    assert spam.non_letter_ratio("111 222 ###") == 1
+    # digits and address punctuation are neither letters nor gibberish (S3 review D13)
+    assert spam.non_letter_ratio("111 222 ###") == 0
+    assert spam.non_letter_ratio("!!! *** ~~~") == 1
 
 
 def test_intake_rejects_unknown_channel() -> None:

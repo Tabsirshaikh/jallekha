@@ -162,3 +162,26 @@ The pull-request description must summarize the same information and link to thi
   - P1 should fix the D1 district/mandal files (points, not polygons).
   - A2 uses the eligible wards with `review_required` as the officer-check flag.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/24
+
+## `fix/s3-ledger-geofence` — S3 review fixes
+
+- **Owner / date:** P2, 2026-10-02. Fixes P3's review of PR #20.
+- **Purpose:** Fix the two defects that block T3/T6 (D1, D6) and the low-severity items (D3, D7, D8, D9, D11, D13, D14).
+- **What we changed:**
+  - **D1:** the ledger hash covers every stored field (`entry_hash`: canonical JSON of all `LedgerEntry` fields except `hash`/`signature`, so fields added later are covered automatically). `compute_hash` is replaced.
+  - **D3:** NaN and Infinity are rejected (`allow_nan=False`).
+  - **D6:** the geofence boundary uses a 1e-6 m tolerance.
+  - **D7:** radius `None` = default; 0 or negative raises.
+  - **D8:** missing location gives `distance_m=None`.
+  - **D9:** non-finite or out-of-range coordinates raise.
+  - **D11:** the OTP HMAC input includes the digit count; `derive_code(..., digits=)` re-derives an issued code exactly.
+  - **D13:** digits and address punctuation (`config/spam.py address_punctuation`) are not counted as gibberish.
+  - **D14:** "missed call = no water" is marked ASSUMED.
+  - Not ours (per the review): D2 (head hash, T6), D10/D12 (OTP validity and attempts, T3/owner).
+- **Validation:**
+  - `backend/tests/test_s3_review_fixes.py` was written first; 15 tests failed, one per defect, then all pass. It covers: every `LedgerEntry` field edited after signing is detected; reorder and delete are detected; NaN/±inf rejected; points exactly 150 m away inside on all 360 bearings, +1 mm outside; radius 0/-10 rejected; missing location gives distance None; invalid coordinates for both the point and the stop; OTP digits; address text.
+  - Two original S3 tests were updated to the new requirements (`entry_hash`; "111 222 ###" is not gibberish under D13).
+  - `python tasks.py test`: 198 pass. `python tasks.py lint` passes.
+- **Known limitations:** Removing the last entry is still undetectable without a published head hash (D2, T6).
+- **Handoff / next step:** T3 and T6 can build on S3.
+- **Pull request:** pending

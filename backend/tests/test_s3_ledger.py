@@ -70,6 +70,5 @@ def test_unknown_event_type_is_rejected() -> None:
 def test_payload_is_canonical_so_it_rehashes_identically() -> None:
     entry = chain(1)[0]
     assert ledger.payload_json({"b": 1, "a": 2}) == '{"a":2,"b":1}'
-    assert entry.hash == ledger.compute_hash(
-        ledger.GENESIS, entry.event_type, entry.entity_id, entry.payload, entry.created_at_iso
-    )
+    assert entry.prev_hash == ledger.GENESIS
+    assert entry.hash == ledger.entry_hash(entry)

@@ -41,5 +41,7 @@ def preset_category(message: IntakeMessage) -> str | None:
     if message.category:
         return message.category
     if message.channel == "missed_call":
+        # ASSUMED: a missed call carries no text, so it is read as "no water" (the v1
+        # prototype's rule). No HMWSSB source; T4 may replace it with an IVR menu choice.
         return "no_water"
     return None
