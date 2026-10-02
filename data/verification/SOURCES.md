@@ -25,3 +25,9 @@ python scripts/data/verify_manifest.py
 - **`V-VERIFY_REVIEW.md`:** no source copy was found. Its reported checks are not reproduced or claimed here.
 
 No hand-typed analytical values or v1 prototype tables are included. Derived tables must be written outside `data/raw/` and must carry basis and quality fields.
+
+## Added after S2
+
+| IDs | Files | Source | Status |
+|---|---:|---|---|
+| D1b | 56 monthly CSVs, Jan 2022-Aug 2026, plus portal metadata JSON, in `data/raw/hmwssb_tankers_portal/` | [Telangana Open Data Portal, HMWSSB water tankers data](https://data.telangana.gov.in/api/1/metastore/schemas/dataset/items/7f408a3a-7cdb-4d33-bfa3-1869f88c0e25) | REAL source bytes; Open Government License, India; same columns as D1 and identical on all 26 overlapping months; sections re-cut Feb/Mar 2026, so 2026 is a new section geography. Register: `hmwssb_portal_manifest.csv`; checked by `backend/tests/test_d1b_portal.py`; fetched by `scripts/data/fetch_hmwssb_portal.py` |
