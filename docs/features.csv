@@ -18,7 +18,7 @@
 "A2","Service models + need weights per ward","F7","P2","feat/a2-service","E2","Classes from Census + officer input; tests","DONE","https://github.com/Tabsirshaikh/jallekha/pull/28",""
 "A3","Fair queue: tiers + deficit round robin + HMWSSB caps","F8","P2","feat/a3-queue","A1 A2","order_bookings tested; caps from config","DONE","https://github.com/Tabsirshaikh/jallekha/pull/31","Tier-1 households SYNTHETIC from Census shares"
 "A4","Scheduled supply: weighted max-min + floor + officer service points (start empty) + routing","F9","P2","feat/a4-scheduled","A2 D1 S3","Test asserts zero seeded service points; distance only as cost","DONE","https://github.com/Tabsirshaikh/jallekha/pull/32",""
-"A5","Outage response with deprivation-cost priority","F10","P2","feat/a5-outage","T1","Tier 0 first; priority rises with hours cut off; no debt","IN_REVIEW","",""
+"A5","Outage response with deprivation-cost priority","F10","P2","feat/a5-outage","T1","Tier 0 first; priority rises with hours cut off; no debt","DONE","https://github.com/Tabsirshaikh/jallekha/pull/34",""
 "A6","Water debt in litres","F11","P2","feat/a6-debt","T3","Only Confirmed counts; cap + alert; ledger entry","TODO","",""
 "A7","Daily planner: queue + schedule + outage → routes → confidence gate → approval","F8-F11","P2","feat/a7-planner","A3 A4 A5 A6 T9","End-to-end plan test; approval needs a reason","TODO","",""
 "A8","Policy sandbox B1-B5 vs JL; 30+ seeds; four PS11 measures","F19","P2","feat/a8-sandbox","A1 A3 A4 T1","Results CSV with SIMULATION label; real baselines separate","TODO","",""

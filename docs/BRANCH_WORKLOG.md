@@ -375,4 +375,4 @@ The pull-request description must summarize the same information and link to thi
 - **Handoff / next step:**
   - **T5:** call `create_outage(..., source="notice", ...)` with the notice's wards, start/end and reason, then store the returned ledger args (T6).
   - A7 routes the response with the S3 planner.
-- **Pull request:** pending
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/34
