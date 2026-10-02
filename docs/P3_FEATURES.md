@@ -13,7 +13,7 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 | T5 | F15 notices | `feat/t5-notices` | DONE ([PR #44](https://github.com/Tabsirshaikh/jallekha/pull/44) merged); people-affected rule, exact-only matching and alert wording OPEN |
 | T6 | F18 ledger | `feat/t6-ledger` | DONE ([PR #35](https://github.com/Tabsirshaikh/jallekha/pull/35) merged); rotation period and head-hash schedule OPEN |
 | T7 | F16 explanations + contest | `feat/t7-explain` | DONE ([PR #46](https://github.com/Tabsirshaikh/jallekha/pull/46) merged); reason / outcome codes, counterfactual limits, number removal, tier-counterfactual audience and wording OPEN |
-| T8 | F6 shortage warning | `feat/t8-shortage` | Blocked: T2, D1 |
+| T8 | F6 shortage warning | `feat/t8-shortage` | IN_PROGRESS (local, cut from `feat/t2-forecast`) |
 | T9 | F17 confidence gate | `feat/t9-confidence` | Blocked: E2, A8 |
 | T10 | API for all screens | `feat/t10-api` | Shapes to agree with P4 in week 1 |
 
