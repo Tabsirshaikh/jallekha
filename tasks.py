@@ -55,6 +55,8 @@ def test() -> None:
     if e1_verifier.exists():
         run([venv_python(), str(e1_verifier)])
 
+    run([venv_python(), str(ROOT / "scripts/evidence/verify_evidence.py")])
+
 
 def lint() -> None:
     run(
