@@ -47,6 +47,8 @@ EVENT_TYPES = frozenset(
         "outside_tries_exceeded",
         # A4 scheduled supply (F9)
         "service_point_registered",
+        # A5 outage response (F10)
+        "outage_created",
     }
 )
 

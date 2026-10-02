@@ -353,3 +353,26 @@ The pull-request description must summarize the same information and link to thi
   - A8 replays with these groups.
   - The same link can give E4/E5 approximate ward bookings (their remaining blocker) in a later PR.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/33
+
+## `feat/a5-outage` — `A5`
+
+- **Owner / date:** P2, 2026-10-02.
+- **Purpose:** Response to sudden loss of piped supply (F10), and the outage-creation call that T5 (supply notices) uses.
+- **What we changed:**
+  - `backend/app/services/outage.py`:
+    - **`create_outage(outage_id, ward_ids, start, end, source, reason, created_by, known_wards, people_affected)`** is the single creation function. Sources are `complaints` / `notice` / `officer`. It validates wards, source, reason, end > start and people >= 0, and returns `OutageEvent` + ledger args (new event type `outage_created`).
+    - `detect_from_complaints(complaints, now)`: wards with >= 5 distinct `no_water` reports in 6 h (T1 `link_duplicates` children removed; timezone-aware times as T1 requires) become candidates needing officer confirmation.
+    - `deprivation_weight(h) = exp(h / 24)`: rises faster the longer water is cut off (Holguin-Veras 2013); ASSUMED tau.
+    - `plan_response(outages, critical_stops, capacity_litres, now)`: tier-0 critical stops first, then each active outage's 10 lpcd floor in priority order (longest cut-off first), then top-ups to 15 lpcd. Ended outages are listed, not served. `counts_toward_water_debt = False`.
+    - `people_in_wards` (population from E2).
+  - `config/allocation.py`: floor/target lpcd, tau, detection threshold and window, with sources.
+- **Validation:**
+  - 17 tests in `backend/tests/test_a5_outage.py` were written first (ImportError), then pass. They cover creation and ledger entry, 6 rejection cases, detection (distinct reports, duplicates not double-counted, old and leak reports ignored), convex deprivation weight, longest outage first when short, critical facilities first, floor-then-top-up never above target, ended outages, no debt, and population.
+  - `python tasks.py test`: 323 pass. `python tasks.py lint` passes.
+- **Known limitations:**
+  - There is no verified critical-facility source yet (E2 facilities UNAVAILABLE); tier-0 stops come from officers.
+  - Detection threshold and tau are policy assumptions.
+- **Handoff / next step:**
+  - **T5:** call `create_outage(..., source="notice", ...)` with the notice's wards, start/end and reason, then store the returned ledger args (T6).
+  - A7 routes the response with the S3 planner.
+- **Pull request:** pending
