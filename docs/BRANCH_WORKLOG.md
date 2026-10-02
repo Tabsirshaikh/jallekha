@@ -99,6 +99,16 @@ The pull-request description must summarize the same information and link to thi
 - **Handoff / next step:** Replace fixtures with T2 forecast and backtest results plus T8 risk output when those tasks land. Confirm groundwater coverage/licence and fleet trip capacity before showing operational risk.
 - **Pull request:** pending.
 
+## `feat/u7-plan` — `U7`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Let an officer review the daily allocation queue, scheduled trips, priority weights, confidence flags, and a reason-gated approval.
+- **What we changed:** Added a four-language officer plan screen with a synthetic queue and schedule, adjustable need/service-gap/debt weights, an explicit “who gains” comparison, a flagged group that requires a manual review tick, and an approval reason field. The approval confirmation is local to the preview; no API, dispatch, entitlement, or ledger is changed. Connected the view to officer navigation and added a dedicated CI workflow.
+- **Validation:** Frontend lint and production build pass; `git diff --check` passes. No tests were run.
+- **Known limitations:** T10 plan/approval API integration is not available. All groups, values, trips, schedule, scores and resulting approval are SIMULATION fixtures; weighting is not a validated policy. Translation strings need native-speaker review.
+- **Handoff / next step:** Replace preview fixtures with A7/T10 responses when the API is available. Preserve server-side confidence/approval gates and ledger behavior.
+- **Pull request:** pending.
+
 ## `research/p1` — `R-P1`
 
 - **Owner / date:** P1 (Yaseer), 2026-10-01.

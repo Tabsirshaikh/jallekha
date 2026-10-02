@@ -22,9 +22,9 @@ describe("App", () => {
     expect(container.querySelector(".app-frame")).toHaveAttribute("dir", "rtl");
     expect(container.querySelector(".app-frame")).toHaveAttribute("lang", "ur");
     fireEvent.click(screen.getByRole("button", { name: "ٹینکر ڈرائیور" }));
-    expect(screen.getByRole("heading", { name: "آج کا کام" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "آج کا راستہ" })).toBeInTheDocument();
 
     fireEvent.change(languagePicker, { target: { value: "hi" } });
-    expect(screen.getByRole("heading", { name: "आज का काम" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "आज का मार्ग" })).toBeInTheDocument();
   });
 });

@@ -38,10 +38,7 @@ def main() -> None:
     e5 = read_json("data/derived/underserved/field_checks.json")
     field_by_id = {row["ward_id"]: row for row in e5["rows"]}
     geojson = read_json("data/derived/coverage/water_access_evidence.geojson")
-    geometry_by_id = {
-        feature["properties"]["ward_id"]: feature
-        for feature in geojson["features"]
-    }
+    geometry_by_id = {feature["properties"]["ward_id"]: feature for feature in geojson["features"]}
 
     ids = [row["ward_id"] for row in evidence_rows]
     expected = set(ids)
