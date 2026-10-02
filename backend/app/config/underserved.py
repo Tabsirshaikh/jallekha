@@ -21,6 +21,13 @@ class UnderservedConfig:
     max_rhat: float = 1.01
     minimum_bulk_ess: float = 100
     max_model_areas: int = 250
+    # NUTS step-size target (higher = smaller steps, fewer divergences, slower). Basis: ASSUMED.
+    target_accept: float = 0.95
+    # Chains run in parallel on this many cores; results are seeded per chain. Basis: ASSUMED.
+    cores: int = 1
+    # Count model for the BYM2 variants: "negative_binomial" (original E5 spec) or "poisson"
+    # (Riebler et al. 2016 BYM2, where the random effects carry the extra variation).
+    bym2_likelihood: str = "negative_binomial"
     geography_version: str = "GHMC_2016_150"
 
 

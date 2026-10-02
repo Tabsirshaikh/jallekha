@@ -28,7 +28,7 @@ import importlib.metadata
 import json
 import platform
 import sys
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -68,7 +68,7 @@ def environment() -> dict[str, str]:
     return {"python": platform.python_version(), "platform": platform.platform(), **versions}
 
 
-def fit(root: Path, variants: tuple[str, ...]) -> dict:
+def fit(root: Path, variants: tuple[str, ...], config=UNDERSERVED_CONFIG) -> dict:
     from app.services.underserved_models import fit_crossvalidated_count_model
 
     cohort = build_underserved.screening_cohort(root)
@@ -83,6 +83,7 @@ def fit(root: Path, variants: tuple[str, ...]) -> dict:
             variant=variant,
             folds=FOLDS,
             graph_review=review if variant != "NB" else None,
+            config=config,
         )
         print(f"  {variant}: {results[variant]['status']}", flush=True)
     return {
@@ -92,7 +93,7 @@ def fit(root: Path, variants: tuple[str, ...]) -> dict:
         "cohort_size": len(cohort),
         "adjacency_sha256": review["source_sha256"] if review else None,
         "cohort_edges": len(edges),
-        "config": asdict(UNDERSERVED_CONFIG),
+        "config": asdict(config),
         "folds": FOLDS,
         "environment": environment(),
         "results": results,
@@ -113,15 +114,36 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--variants", nargs="+", default=list(VARIANTS), choices=VARIANTS)
     parser.add_argument("--check", action="store_true")
+    # Diagnostic overrides (sampler and BYM2 count model); defaults are config/underserved.py
+    parser.add_argument("--chains", type=int)
+    parser.add_argument("--tune", type=int)
+    parser.add_argument("--draws", type=int)
+    parser.add_argument("--target-accept", type=float)
+    parser.add_argument("--cores", type=int)
+    parser.add_argument("--bym2-likelihood", choices=("negative_binomial", "poisson"))
+    parser.add_argument("--output", default=RESULTS)
     args = parser.parse_args()
+    overrides = {
+        key: value
+        for key, value in {
+            "chains": args.chains,
+            "tune": args.tune,
+            "draws": args.draws,
+            "target_accept": args.target_accept,
+            "cores": args.cores,
+            "bym2_likelihood": args.bym2_likelihood,
+        }.items()
+        if value is not None
+    }
+    config = replace(UNDERSERVED_CONFIG, **overrides)
     if args.check:
         check(ROOT)
     else:
-        document = fit(ROOT, tuple(args.variants))
-        path = ROOT / RESULTS
+        document = fit(ROOT, tuple(args.variants), config)
+        path = ROOT / args.output
         path.parent.mkdir(parents=True, exist_ok=True)
         # LF on every platform, so hashes match between Windows and Linux runs
         path.write_bytes(
             (json.dumps(document, indent=2, sort_keys=True, allow_nan=False) + "\n").encode()
         )
-        print(f"Wrote {RESULTS}")
+        print(f"Wrote {args.output}")

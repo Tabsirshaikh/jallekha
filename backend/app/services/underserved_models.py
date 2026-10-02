@@ -76,6 +76,9 @@ def fit_count_model(
         raise ValueError("Invalid model cohort")
     if variant not in ("NB", "BYM2", "BYM2_SHRINKAGE"):
         raise ValueError("Unknown model variant")
+    if config.bym2_likelihood not in ("negative_binomial", "poisson"):
+        raise ValueError(f"Unknown BYM2 likelihood: {config.bym2_likelihood}")
+    likelihood = "negative_binomial" if variant == "NB" else config.bym2_likelihood
     ids = [a.ward_id for a in areas]
     if not holdout_ids:
         raise ValueError("Held-out areas are required; in-sample scores cannot flag candidates")
@@ -116,7 +119,8 @@ def fit_count_model(
     with pm.Model():
         intercept = pm.Normal("intercept", mu=-4, sigma=2)
         beta = pm.Normal("beta", mu=0, sigma=1, shape=2)
-        alpha = pm.HalfNormal("alpha", sigma=10)
+        if likelihood == "negative_binomial":
+            alpha = pm.HalfNormal("alpha", sigma=10)
         fixed = np.log(exposure) + intercept + pm.math.dot(design, beta)
         reference = pm.Deterministic("reference_mu", pm.math.exp(fixed))
         effect = 0
@@ -130,19 +134,22 @@ def fit_count_model(
                 pm.math.sqrt(rho) * pm.math.dot(basis, z) + pm.math.sqrt(1 - rho) * theta
             )
         mu = reference if variant == "NB" else pm.math.exp(fixed + effect)
-        pm.NegativeBinomial("bookings", mu=mu[training], alpha=alpha, observed=y[training])
+        if likelihood == "negative_binomial":
+            pm.NegativeBinomial("bookings", mu=mu[training], alpha=alpha, observed=y[training])
+        else:
+            pm.Poisson("bookings", mu=mu[training], observed=y[training])
         trace = pm.sample(
             draws=config.draws,
             tune=config.tune,
             chains=config.chains,
-            cores=1,
+            cores=config.cores,
             random_seed=config.seed,
-            target_accept=0.95,
+            target_accept=config.target_accept,
             progressbar=False,
             compute_convergence_checks=True,
             return_inferencedata=True,
         )
-    names = ["intercept", "beta", "alpha"]
+    names = ["intercept", "beta"] + (["alpha"] if likelihood == "negative_binomial" else [])
     if variant != "NB":
         names += ["sigma", "rho", "spatial_z", "unstructured"]
     rhat_parts = [az.rhat(trace, var_names=[name])[name].values for name in names]
@@ -193,10 +200,12 @@ def fit_count_model(
         "graph_review": graph_review if variant != "NB" else None,
         "prediction_scope": "HELDOUT_ONLY",
         "reference": "need covariates/exposure with area effect set to zero",
+        "likelihood": likelihood,
+        "target_accept": config.target_accept,
         "priors": {
             "intercept": "Normal(-4,2)",
             "beta": "Normal(0,1)",
-            "alpha": "HalfNormal(10)",
+            **({"alpha": "HalfNormal(10)"} if likelihood == "negative_binomial" else {}),
             "rho": "Beta(0.5,0.5)",
             "sigma": "HalfNormal(0.5)" if variant == "BYM2_SHRINKAGE" else "HalfNormal(1)",
         },

@@ -309,3 +309,59 @@ def test_screen_handles_a_mix_of_eligible_and_blocked_areas():
     blocked = next(r for r in result["rows"] if r["ward_id"] == "BLOCKED")
     assert blocked["status"] == "DATA_REVIEW_REQUIRED"
     assert blocked["model_scores"] == {}
+
+
+def test_model_settings_default_to_the_original_specification():
+    from app.config.underserved import UNDERSERVED_CONFIG
+
+    assert UNDERSERVED_CONFIG.bym2_likelihood in ("negative_binomial", "poisson")
+    assert 0.8 <= UNDERSERVED_CONFIG.target_accept < 1
+    assert UNDERSERVED_CONFIG.cores >= 1
+
+
+def test_poisson_bym2_smoke_on_synthetic_data():
+    """Riebler et al. (2016) BYM2 uses a Poisson count model; the BYM2 random effects carry
+    the extra variation, so there is no separate overdispersion parameter."""
+    config = UnderservedConfig(
+        minimum_areas=8,
+        peer_count=3,
+        chains=2,
+        draws=60,
+        tune=60,
+        max_rhat=20,
+        minimum_bulk_ess=1,
+        seed=412,
+        bym2_likelihood="poisson",
+    )
+    areas = cohort(config=config)
+    import pytensor
+
+    if __import__("os").name == "nt":
+        pytensor.config.cxx = ""
+    edges = tuple((f"W{i:02}", f"W{i + 1:02}") for i in range(len(areas) - 1))
+    review = {
+        "status": "REVIEWED",
+        "geography_version": config.geography_version,
+        "reviewer": "synthetic-test-only",
+        "source_sha256": "a" * 64,
+    }
+    result = fit_count_model(
+        areas,
+        edges=edges,
+        variant="BYM2",
+        config=config,
+        holdout_ids=("W00",),
+        graph_review=review,
+    )
+    assert result["likelihood"] == "poisson"
+    assert "alpha" not in result["priors"]
+    assert set(result["scores"]) == {"W00"}
+    with pytest.raises(ValueError, match="likelihood"):
+        fit_count_model(
+            areas,
+            edges=edges,
+            variant="BYM2",
+            config=replace(config, bym2_likelihood="gaussian"),
+            holdout_ids=("W00",),
+            graph_review=review,
+        )
