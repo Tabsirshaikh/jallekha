@@ -37,6 +37,14 @@ EVENT_TYPES = frozenset(
         "weights_changed",
         "issue_status_changed",
         "ward_reviewed",
+        # T3 delivery proof (F12)
+        "delivery_started",
+        "geofence_checked",
+        "otp_attempted",
+        "residents_sampled",
+        "resident_replied",
+        "delivery_outcome",
+        "outside_tries_exceeded",
     }
 )
 
