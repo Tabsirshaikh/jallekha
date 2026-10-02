@@ -535,3 +535,21 @@ The pull-request description must summarize the same information and link to thi
   - Candidates only mean "send someone to check".
   - The Bayesian models (NB/BYM2) are not run in the build (peer-median only).
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/43
+
+## `feat/a6-debt` — A6 water debt in litres (F11)
+
+- **Owner / date:** P2, 2026-10-02.
+- **Purpose:** keep track of entitled water that did not arrive, so the planner (A7) can serve long-missed groups first and officers see long shortfalls.
+- **What we built:** `services/water_debt.py`.
+  - `settle_day(account, day, entitled, deliveries, ledger, now)` applies `D' = min(cap, max(0, D + entitled - confirmed delivered))` once per account per day, in order.
+  - Only deliveries T3 counts (`delivery.counts_toward_debt`: Confirmed) reduce debt. Disputed, Unconfirmed and Failed do not.
+  - Outage relief (A5) never reduces debt.
+  - Extra water does not bank credit.
+  - `credit_from_delivery` turns a closed T3 delivery into a credit.
+  - Cap = `water_debt_cap_days` (7, ASSUMED) x the account's daily entitlement. The cut is logged.
+  - Debt outstanding `water_debt_alert_days` (3) days in a row raises one alert per debt run. DERIVED from HMWSSB's "1 tanker in two days" rule; the margin is ASSUMED.
+  - Every change or alert is one `water_debt_changed` ledger entry with ids and numbers only (`entity_type = water_debt_account`). A day that changes nothing writes nothing.
+- **Decided here:** `trust.unresolved_delivery_changes_shortfall` (left open by T3) means "an Unconfirmed delivery reduces debt". It stays False, per F11.
+- **Validation:** 19 tests in `tests/test_a6_water_debt.py`, written first and failing first (module missing). A mutation check (counting outage water) makes the outage test fail. `python tasks.py test`: 453 pass. `python tasks.py lint` passes.
+- **Known limitations:** an account is any unit carrying an entitlement (booking group or ward). A7 chooses the unit, feeds daily entitlements and closed deliveries, and stores accounts. Debt does not yet change queue order; that is A7.
+- **Pull request:** (added after opening)
