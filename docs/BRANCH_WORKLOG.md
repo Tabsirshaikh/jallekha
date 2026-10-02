@@ -614,4 +614,4 @@ The pull-request description must summarize the same information and link to thi
   - P2: consider a code plus a text hash in A2's `override_event` payload instead of free text; A7 to store `DebtAccount`s.
   - P4: review the wording; show `no_census_data` wards and counterfactuals as returned.
   - T10: routes for explanations and contests.
-- **Pull request:** pending.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/46
