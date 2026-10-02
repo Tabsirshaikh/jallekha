@@ -22,8 +22,18 @@ if __name__ == "__main__":
             raise SystemExit(f"E5 output differs: {relative}; rebuild and review")
     result = json.loads(expected[ROWS])
     summary = json.loads(expected[SUMMARY])
-    if len(result["data_review_queue"]) != 145 or result["field_check_list"]:
-        raise SystemExit("E5 fail-closed checks differ from the current E1/E2 evidence state")
-    if summary["eligible_count"] != 0 or summary["field_check_count"] != 0:
-        raise SystemExit("E5 unexpectedly screened unvalidated real-world inputs")
-    print("P1:E5 verified: inputs, output hashes, 145 review rows, zero unsupported field flags")
+    if len(result["rows"]) != 145:
+        raise SystemExit("E5 must report every one of the 145 wards")
+    if summary["eligible_count"] + len(result["data_review_queue"]) != 145:
+        raise SystemExit("E5 eligible and review counts do not add up")
+    candidates = [r for r in result["rows"] if r["field_check_candidate"]]
+    if len(candidates) != summary["field_check_count"] or any(
+        "APPROXIMATE_BOOKING_TRANSFER" not in r["input_notes"] for r in candidates
+    ):
+        raise SystemExit("E5 field-check candidates are inconsistent or unlabelled")
+    if any(r["field_check_candidate"] is not None for r in result["data_review_queue"]):
+        raise SystemExit("A ward in data review cannot be a field-check candidate")
+    print(
+        f"P1:E5 verified: inputs, output hashes, {summary['eligible_count']} screened wards, "
+        f"{summary['field_check_count']} labelled field-check candidates"
+    )

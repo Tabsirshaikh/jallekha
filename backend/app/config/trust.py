@@ -25,8 +25,9 @@ class TrustConfig:
     # the cap only stops ledger flooding. Try cap+1 writes one outside_tries_exceeded entry,
     # later tries write nothing. 10 is a proposal.
     outside_tries_max: int = 10
-    # No source in docs/JALLEKHA_FINAL_SOLUTION.md. Related rule, F11: only Confirmed
-    # deliveries (F12) count. Meaning and value to be decided in T3 / A6.
+    # Decided in A6 (services/water_debt.py): True would let an Unconfirmed delivery (OTP done,
+    # residents silent) reduce water debt. Disputed and Failed never do. Source: F11 "only
+    # Confirmed deliveries (F12) count", so False.
     unresolved_delivery_changes_shortfall: bool = False
     # Environment: LEDGER_HMAC_KEY (F18 "SHA-256 hash chain with HMAC"). No default: the
     # ledger must refuse to write without a key. Hidden from repr so it is never logged.

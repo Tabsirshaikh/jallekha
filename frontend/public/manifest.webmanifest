@@ -1,0 +1,13 @@
+{
+  "name": "JalLekha Resident",
+  "short_name": "JalLekha",
+  "description": "Report and track local water service issues.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f8f6",
+  "theme_color": "#104f46",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
