@@ -161,4 +161,4 @@ The pull-request description must summarize the same information and link to thi
   - P1 reviews the method and decides whether E5 should accept approximate locations.
   - P1 should fix the D1 district/mandal files (points, not polygons).
   - A2 uses the eligible wards with `review_required` as the officer-check flag.
-- **Pull request:** pending
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/24
