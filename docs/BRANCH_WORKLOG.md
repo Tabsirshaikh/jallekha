@@ -77,6 +77,38 @@ The pull-request description must summarize the same information and link to thi
 - **Handoff / next step:** U4 preview scope is complete. Integrate the real route / arrival / OTP endpoints when available, preserving server-side geofence and outcome decisions.
 - **Pull request:** pending.
 
+## `feat/u5-evidence` — `U5`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Give officers an atlas for historical water-access and growth evidence, booking equity, and under-served field-check hypotheses.
+- **What we found:** Merged E2–E6 outputs include ward evidence and historical polygons, but the Census join is approximate, the ward geography is incomplete and historical, section-to-ward booking placement is approximate, and field-check flags are hypotheses rather than ground truth. T10 is not needed to render this local snapshot.
+- **What we changed:** Replaced the officer Water Access placeholder with a localized, lazy-loaded evidence experience. It includes a selectable 145-polygon historical ward map, ward search and evidence details, Census 2011 water-access context, Open Buildings 2016–2023 building-change signals, exact section-level booking concentration, approximate ward booking rates, and E5 field-check candidates with reason values and thresholds. `scripts/frontend/build_u5_snapshot.py` regenerates the local JSON snapshot from merged E2–E6 outputs.
+- **Validation:** Frontend lint, production build, and `git diff --check` pass. The production build splits U5 into a separate evidence chunk. Added `.github/workflows/p4-u5.yml` to repeat lint and build in CI.
+- **Known limitations:** The map is the incomplete `GHMC_2016_150` historical scheme, not current boundaries. Census values use an approximate 2009-to-2016 crosswalk and refer to 2011. Open Buildings indicates building change only, not population growth. Citywide section booking totals are exact; ward rates use approximate section placement. Field-check flags are screening hypotheses and do not establish unmet need, neglect, or entitlement. Snapshot data must be regenerated when source outputs change; no live T10 integration is included.
+- **Handoff / next step:** Refresh the generated snapshot from reviewed E2–E6 outputs and connect T10 when its API contract is ready. Keep unavailable metrics null and preserve the historical/approximate labels.
+- **Pull request:** pending.
+
+## `feat/u6-forecast` — `U6`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Show observed tanker demand, forecast ranges and shortage warning signals to officers.
+- **What we found:** The Telangana Open Data Portal tanker files contain monthly city totals from January 2022 through August 2026, with December 2022 empty. T2 and T8 remain TODO; the repository records seasonal-naive backtest errors of 21.9% city MAPE and 35.1% section WAPE but does not document the exact protocol. GHMC groundwater station coverage and extraction/licence are unconfirmed; no verified reservoir series is available.
+- **What we changed:** Added a localized officer screen with a real monthly demand chart, latest/peak actuals, the documented baseline benchmark and accuracy caveat, plus 80%/90% illustrative range fixtures and demo-capacity shortage scenarios. The UI labels history REAL, benchmark DERIVED, and projections/capacity SIMULATION. `scripts/frontend/build_u6_snapshot.py` regenerates the snapshot from the portal CSVs and records the missing month as null. Added `.github/workflows/p4-u6.yml`.
+- **Validation:** Frontend lint, production build, and `git diff --check` pass. CI workflow repeats frontend lint and build. No tests were run.
+- **Known limitations:** Demo forecast intervals are not calibrated outputs, the capacity threshold is illustrative, and shortage cards are not operational warnings. Accuracy benchmarks are historical and their protocol is undocumented. Groundwater and reservoir inputs are unavailable; T2/T8 APIs are not connected.
+- **Handoff / next step:** Replace fixtures with T2 forecast and backtest results plus T8 risk output when those tasks land. Confirm groundwater coverage/licence and fleet trip capacity before showing operational risk.
+- **Pull request:** pending.
+
+## `feat/u7-plan` — `U7`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Let an officer review the daily allocation queue, scheduled trips, priority weights, confidence flags, and a reason-gated approval.
+- **What we changed:** Added a four-language officer plan screen with a synthetic queue and schedule, adjustable need/service-gap/debt weights, an explicit “who gains” comparison, a flagged group that requires a manual review tick, and an approval reason field. The approval confirmation is local to the preview; no API, dispatch, entitlement, or ledger is changed. Connected the view to officer navigation and added a dedicated CI workflow.
+- **Validation:** Frontend lint and production build pass; `git diff --check` passes. No tests were run.
+- **Known limitations:** T10 plan/approval API integration is not available. All groups, values, trips, schedule, scores and resulting approval are SIMULATION fixtures; weighting is not a validated policy. Translation strings need native-speaker review.
+- **Handoff / next step:** Replace preview fixtures with A7/T10 responses when the API is available. Preserve server-side confidence/approval gates and ledger behavior.
+- **Pull request:** pending.
+
 ## `research/p1` — `R-P1`
 
 - **Owner / date:** P1 (Yaseer), 2026-10-01.
