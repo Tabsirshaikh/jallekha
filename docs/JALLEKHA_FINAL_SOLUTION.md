@@ -54,7 +54,7 @@ HMWSSB delivers almost every tanker that is booked (1,316,215 bookings and 1,315
 | D4 | Census 2011 PCA + HH-14, GHMC wards in Rangareddy (NADA catalogs 6728, 9835) | **REAL** | F1 west/north |
 | D5 | District/mandal boundaries plus official 2025-26 notices for 300 wards and the three-corporation reorganisation | **TO FETCH**; current machine-readable ward boundaries/crosswalk not verified | F1 geography versioning |
 | D6 | **Google Open Buildings 2.5D Temporal** (2016-2023) plus WorldPop and GHS-POP 100 m population grids | **TO FETCH**, verified; modelled sources with documented uncertainty | F2 growth sensitivity |
-| D7 | **Groundwater level, Telangana GW Dept**: telemetry (six-hourly) and manual quarterly wells, National Water Data Portal, CSV | **TO FETCH**, verified to exist | F5 covariate, F6 |
+| D7 | **Groundwater level, CGWB / Telangana GW Dept**: manual wells (four times a year) and telemetric stations, via India-WRIS time-series extraction (CSV mirror on India Data Portal); GHMC station coverage and licence to confirm | **TO FETCH**, verified to exist | F5 covariate, F6 |
 | D8 | Daily weather 2022-2026, Open-Meteo | **REAL** | F5 |
 | D9 | OSM hospitals, clinics, UPHCs, schools, care homes (885 / 310 / 350 / 399 / 59) | **REAL**, verified | F1, F8 tier 0, F10 |
 | D10 | OSM HMWSSB tanks, reservoirs, works (~38) as stand-in filling points | **TO FETCH**; use as filling stations is **ASSUMED** | routing |
@@ -84,7 +84,7 @@ HMWSSB delivers almost every tanker that is booked (1,316,215 bookings and 1,315
 
 **F4 Under-served Area Detector (upgraded method).** Start with a negative-binomial expected-booking baseline using need-side covariates only (population/growth range, WAD and non-tap share) and a peer-median sensitivity check. Evaluate an optional BYM2 spatial random effect separately using a verified adjacency graph and documented priors; BYM2 follows Riebler et al. 2016, while Agostini et al. 2024 motivates the broader latent under-reporting problem. Flag only when results are stable across configured variants. Output: observed/expected range, uncertainty, plain-language reasons and a **field-check list**. A flag means "send someone to check", never "proven neglect"; it cannot change entitlement automatically. Field-check outcomes are the only operational ground truth.
 
-**F5 Surge Forecast and Capacity Planner.** Monthly bookings per section and city, 12 months ahead. Baseline seasonal naive (measured: 21.9% city MAPE, 35.1% section WAPE); candidates seasonal naive × YoY growth, gradient boosting with month, lag-12, trend, weather (D8) and groundwater depth (D7); hierarchical reconciliation section→city; split-conformal intervals checked for coverage in a rolling-origin backtest. Only a model that beats the baseline is used; if none does, say so. Capacity: trips needed vs fleet × trips/day (ASSUMED, labelled).
+**F5 Surge Forecast and Capacity Planner.** Monthly bookings per section and city, 12 months ahead. Baseline seasonal naive (measured: 21.9% city MAPE, 35.1% section WAPE); candidates seasonal naive × YoY growth, one global gradient-boosting model pooled over all sections with month, lag-12, trend, weather (D8) and groundwater depth (D7); Chronos-2 as a backtest-only candidate (owner decision pending: allowed only if it clearly beats seasonal naive and the owner confirms it is consistent with the no-LLM rule); hierarchical reconciliation section→city; split-conformal intervals from residuals pooled across sections after scaling by each section's seasonal-naive error (80% and 90% only: 13 scorable months per section are too few for 95%), checked for coverage in a rolling-origin backtest. Only a model that beats the baseline is used; if none does, say so. Capacity: trips needed vs fleet × trips/day (ASSUMED, labelled).
 
 **F6 Shortage Early Warning (new, QE3).** Per section, monthly: forecast demand (F5) vs assumed capacity, plus groundwater-level anomaly (D7) for the mandal (falling water tables drive borewell failure and tanker demand). Output: "shortage risk" list 1-3 months ahead with the reason. Reservoir levels added only if D15 is verified.
 
@@ -108,7 +108,7 @@ HMWSSB delivers almost every tanker that is booked (1,316,215 bookings and 1,315
 
 **F13 Duplicate engine (calibrated).** Location/time rule calibrated on real Chicago duplicates: 95% within 106 m; no-water duplicates 90% within 20 h; leaks 90% within about 9 days. Rule: 100 m radius, 48 h window for no-water / tanker-missed / dirty water, 7 days for leaks and other; same household id matches first. Text: multilingual sentence embeddings (e.g. LaBSE) as a secondary signal, marked untested on Indian data. Duplicate **rate per area** is kept as a reporting-activity signal (Liu et al. 2023).
 
-**F14 Unified multilingual intake.** Resident PWA and field-worker mode (offline queue, sync later), SMS, missed-call/IVR, voice notes. Languages: **Telugu, Urdu, Hindi, English**. Speech-to-text with **AI4Bharat IndicConformer** (open, MIT, Telugu and Hindi models) running on the server; fallback: voice note saved for a human. Text ≥ 16 px, touch targets ≥ 48 px.
+**F14 Unified multilingual intake.** Resident PWA and field-worker mode (offline queue, sync later), SMS, missed-call/IVR, voice notes. Languages: **Telugu, Urdu, Hindi, English**. Speech-to-text with **AI4Bharat IndicConformer-600M multilingual** (open, MIT; covers Telugu, Hindi and Urdu; runs with `transformers` + ONNX Runtime, no NeMo) on the server; no Telugu/Urdu error rate is published, so we measure it on a small labelled set; fallback: voice note saved for a human. Text ≥ 16 px, touch targets ≥ 48 px.
 
 **F15 Supply-notice feed (new).** Official HMWSSB interruption notices are entered (or parsed when machine-readable) as outage events with area and hours, shown to residents in their language and fed to F10.
 
@@ -116,7 +116,7 @@ HMWSSB delivers almost every tanker that is booked (1,316,215 bookings and 1,315
 
 **F17 Confidence and defer-to-officer.** Signals: Census join quality, data age, section-location uncertainty, forecast interval width, evidence age. Low confidence → the ward stays in the plan but needs an officer's "checked". Threshold chosen on the replay so a stated share of auto-committed decisions match the full-information plan.
 
-**F18 Tamper-evident ledger.** SHA-256 hash chain with HMAC; every allocation-affecting change (plan, override, weights, delivery outcome, debt, contest) is an entry. "Tamper-evident, not blockchain."
+**F18 Tamper-evident ledger.** SHA-256 hash chain with HMAC; every allocation-affecting change (plan, override, weights, delivery outcome, debt, contest) is an entry. Each entry carries a sequence number (gaps are detected) and a `key_id` (HMAC key rotation); the head hash is published daily (ward report card / SMS) so the key holder cannot silently rewrite history. "Tamper-evident, not blockchain."
 
 **F19 Policy sandbox and Impact page.** Replay the real Mar-Jul 2023 section totals (daily arrivals SYNTHETIC, monthly totals exact) under capacity limits. Policies: B1 FCFS (today), B2 nearest filling point, B3 largest bookers first, B4 minimum cost, B5 need-weighted, JL (F8 + F9). 30+ seeds. Four PS11 measures vs B1: unmet need share and waiting days; tanker km and km per litre; duplicate merge share; Gini, Jain index and worst-ward fill rate. Real baselines (booking Gini 0.78 sections / 0.86 wards) shown separately. Every number on the Impact page has a badge REAL / DERIVED / SIMULATION; state where JL is worse (usually km).
 
@@ -133,7 +133,7 @@ Trust:  driver PWA ─► F12 OTP + geofence + resident SMS ─► outcome ─�
 Access: F14 intake (app, SMS, IVR, voice, field worker, offline) ─► F13 duplicates ─► complaints / outages
 ```
 
-**Stack:** FastAPI + SQLAlchemy (SQLite locally, PostgreSQL/PostGIS in Docker), React + TypeScript PWAs, TanStack Query, Leaflet, OR-Tools, OSRM with cached legs, pandas / scikit-learn / statsmodels, optional PyMC or CmdStan for evaluated spatial models, shapely, MAPIE or own split-conformal, IndicConformer (NeMo). No LLM in any scoring, allocation or explanation step.
+**Stack:** FastAPI + SQLAlchemy (SQLite locally, PostgreSQL/PostGIS in Docker), React + TypeScript PWAs, TanStack Query, Leaflet, OR-Tools, OSRM with cached legs, pandas / scikit-learn / statsmodels, optional PyMC or CmdStan for evaluated spatial models, shapely, MAPIE or own split-conformal, Nixtla hierarchicalforecast (reconciliation), IndicConformer (`transformers` + ONNX Runtime). No LLM in any scoring, allocation or explanation step.
 
 **Code rules:** business logic in pure, unit-tested services; thin routers; every weight and threshold in config with its source; every data column with a basis; external services (OSRM, ASR) have offline fallbacks; synthetic data labelled on screen.
 
@@ -166,13 +166,13 @@ New repository, new structure. These v1 modules are **copied with their tests** 
 | Source | Status |
 |---|---|
 | Kontokosta & Hong (2021), *Sustainable Cities and Society*, "Bias in smart city governance" | Verified (NYU Scholars) |
-| Liu, Bhandaram & Garg (2023), *Nature Computational Science*, "Quantifying spatial under-reporting disparities in resident crowdsourcing" (arXiv 2204.08620) | Verified |
+| Liu, Bhandaram & Garg, "Quantifying spatial under-reporting disparities in resident crowdsourcing" (arXiv 2204.08620) | Method and Chicago Water Management data verified (R-P3); journal venue **not confirmed** |
 | Agostini, Pierson & Garg (2024), AAAI 38(20):21888-21896, Bayesian spatial model for under-reporting; code github.com/gsagostini/networks_underreporting | Verified |
 | Gao, Iravani & Sinclair (2026), "Sequential Fair Allocation and Routing in Nonprofit Operations", arXiv 2606.19278 | Verified |
 | Obermeyer et al. (2019), *Science*; Shreedhar & Varghese (1996), deficit round robin; Grinsztajn et al. (2022), NeurIPS; Wickramasuriya et al. (2019), *JASA*; Holguín-Veras et al. (2013), *J. Operations Management*; Chow (1970); Angelopoulos et al. (2022), conformal risk control; Wachter et al. (2017); Riebler et al. (2016), BYM2; Jain, Chiu & Hawe (1984) | Standard references; titles and years checked in the 22 Sep audit (R-01 to R-10) or well established |
 | Google Open Buildings 2.5D Temporal; WorldPop India 100 m; EC/JRC GHS-POP R2023A | Verified modelled spatial sources; use for sensitivity, not direct water-access measurement |
 | Telangana GW Dept groundwater levels, National Water Data Portal (nwdp.nwic.gov.in) | Verified to exist (telemetry 2021-2025, quarterly manual) |
-| AI4Bharat IndicConformer (github.com/AI4Bharat/IndicConformerASR; Hugging Face), MIT | Verified |
+| AI4Bharat IndicConformer (github.com/AI4Bharat/IndicConformerASR; Hugging Face ai4bharat/indic-conformer-600m-multilingual), MIT, 22 languages incl. Telugu, Hindi, Urdu | Verified (R-P3) |
 | Sphere 2018; JMP service ladder; CPHEEO 1999 Table 2.1 (secondary copy) | Verified / secondary |
 | HMWSSB data (OpenCity), DataMeet wards, Census 2011 (OpenCity, NADA), Chicago 311 (v6vf-nfxy) | Verified and recomputed 2026-09-30 |
 | GHMC/Telangana 2025-26 ward and corporation reorganisation notices | Verified; current machine-readable boundary/crosswalk still required |
