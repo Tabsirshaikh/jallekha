@@ -52,6 +52,8 @@ class TrustConfig:
     ledger_head_publish_time_local: str = "06:00"
     # Retries when two writers take the same sequence number at once. Technical, ASSUMED.
     ledger_append_retries: int = 20
+    # Largest page for the read-only ledger list endpoint. Technical, ASSUMED.
+    ledger_list_max_limit: int = 500
 
     # --- F13 duplicate engine (T1) ---
     # Source: F13 ("Rule: 100 m radius"), calibrated on Chicago duplicates ("95% within 106 m").
