@@ -534,4 +534,4 @@ The pull-request description must summarize the same information and link to thi
   - A ward with an unplaced section may be undercounted and look under-served (stated in limits).
   - Candidates only mean "send someone to check".
   - The Bayesian models (NB/BYM2) are not run in the build (peer-median only).
-- **Pull request:** pending
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/43
