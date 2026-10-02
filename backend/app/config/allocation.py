@@ -92,6 +92,15 @@ class AllocationConfig:
     outage_min_distinct_reports: int = 5
     outage_detection_window_hours: float = 6.0
 
+    # Water debt (A6, F11): D' = max(0, D + entitled - confirmed delivered), capped at this many
+    # days of the account's daily entitlement, so one long-missed group cannot claim the whole
+    # fleet the next day; the cut is logged. Basis: ASSUMED.
+    water_debt_cap_days: int = 7
+    # Debt outstanding this many days in a row raises an alert (once per debt run). HMWSSB's
+    # domestic rule is one tanker in two days (booking_caps above), so a third day in debt means
+    # a missed cycle. Basis: DERIVED from the REAL booking rule; the margin is ASSUMED.
+    water_debt_alert_days: int = 3
+
     # Booking replay windows (A1, F19). Source: docs/research/P2.md: summer 2025 is the latest
     # complete summer on the pre-Feb-2026 section map (977,933 bookings); 2023 kept for
     # continuity with the solution document. Month totals REAL; daily split SYNTHETIC.
