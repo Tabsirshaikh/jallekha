@@ -604,4 +604,4 @@ The pull-request description must summarize the same information and link to thi
   - Every A2 scheduled candidate is treated as officer-confirmed.
   - Km are not road-routed.
   - Water debt (A6) does not yet change queue order (A7).
-- **Pull request:** (added after opening)
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/47
