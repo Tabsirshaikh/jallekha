@@ -792,7 +792,7 @@ The pull-request description must summarize the same information and link to thi
   - A7's `ConfidenceGate` Protocol is sufficient: `build_plan` keeps flagged groups, `approve_plan` raises `PlanBlocked` until `mark_checked` (`ward_reviewed`). No planner change and no new ledger event needed.
   - Census 2011 is the year for every ward (data age cannot separate wards); no dated evidence exists (evidence age unavailable); T2 is not on `main` (forecast width unavailable).
   - Calibration on the replay (153 days, 152 groups, 17,363 group-days; full information vs every group on the A3 fallback entitlement): the 0.90 target is met with nothing flagged (0.9522 at threshold 0.00), and the match share does not rise with the threshold (0.73-0.96). Fallback and Census groups match at the same rate (0.950 / 0.953). The thresholds cannot be separated, so none is chosen.
-  - `main` moved from `73efb55` to `28b2661` (U5, frontend only) during the task.
+  - `main` moved from `73efb55` to `28b2661` (U5) during the task; merged without conflicts (`319efd9`).
 - **What we changed:**
   - `docs/features.csv` / `docs/P3_FEATURES.md` status row: T9 IN_PROGRESS (own commit).
   - `backend/app/config/confidence.py`: per-signal rules, combination, target 0.90, PROVISIONAL threshold 0.50, candidates, rounding, tolerance; each with a source or ASSUMED / OPEN.
@@ -802,14 +802,18 @@ The pull-request description must summarize the same information and link to thi
   - No P1, P2 or P4 file was edited; no API route; no new ledger event type.
 - **Validation:**
   - 15 tests written first (`ModuleNotFoundError` before the code existed), including the done-when with A7's functions (flagged group, `PlanBlocked`, blank reason refused, `mark_checked` then approval, `plan_created` / `ward_reviewed` / `plan_approved` in the ledger, chain verifies), signal boundaries, missing signals listed, the weakest signal in the reason, the gate on the real files (counts read from the files), calibration on a hand-checkable fixture, and the committed calibration reproduced within 1e-4.
-  - `python tasks.py test`: 587 backend passed, 2 failed; frontend 1 failed; all P1 verifiers pass when run separately. **All 3 failures are inherited and none is in T9 files**; a clean `origin/main` at `28b2661` gives 572 passed with the same 2 failed and the same frontend failure:
-    - P4 `frontend/src/App.test.tsx`: `Unable to find an accessible element with the role "heading" and name "آج کا کام"`.
+  - After merging `main`: `python tasks.py test`: 587 backend passed, 2 failed; frontend 1 failed; all P1 verifiers pass when run separately. **All 3 failures are inherited and none is in T9 files**; a clean `origin/main` at `28b2661` gives 572 passed with the same 2 failed and the same frontend failure:
+    - P4 `frontend/src/App.test.tsx`: `Unable to find an accessible element with the role "heading" and name "آج کا کام"` (also red on `main`'s CI at `28b2661`; U5 did not touch the test or the string).
     - P2 `backend/tests/test_a8_build.py::test_stations_are_reproducible_committed_and_labelled` and `::test_one_seed_reproduces`: last-digit float differences on Windows (pass on Linux CI).
-  - `python tasks.py lint` exit 0. The `P3:T9` workflow regenerates the calibration on Linux and compares rounded values.
+  - `python tasks.py lint` exit 1, **inherited from U5**: `ruff format --check` would reformat P4's `scripts/frontend/build_u5_snapshot.py` (byte-identical to `main`; `main`'s CI stops at the frontend test before lint). Ruff check, the format check of every other file, frontend lint and typecheck pass. The `P3:T9` workflow regenerates the calibration on Linux and compares rounded values.
 - **Known limitations:**
-  - OPEN, owner to confirm: the threshold (PROVISIONAL 0.50, flags 60 of 152 groups: 45 fallback groups at 0 and 15 wards with Census join quality below 0.5), target 0.90, minimum combination, Census rule and review cap, location scores and outlier cap, per-group data age, interval-width rule.
+  - The done-when is met and tested, but the threshold is **not calibrated**: 0.50 is a placeholder (`not_separable`), accepted by Padmaja until P2 provides a per-group degraded scenario.
+  - At 0.50 the gate flags 60 of 152 groups (39%): about 38 of the ~113 groups with bookings on a replay day (33-43), against ~27 under A7's `ProvisionalGate`. An officer would have to check and give a reason for ~38 groups before each daily plan can be approved.
+  - 45 of the 60 are exactly the groups `ProvisionalGate` already flags (44 unplaced sections, 1 partial-Census ward). T9 adds 15 mixed-source wards (dominant 2009 source share 0.34-0.49), a reason naming the weakest signal with its value and basis, the list of signals used and unavailable, and a graded 0-1 confidence.
+  - Three of the five planned signals are unavailable: data age (Census 2011 for every ward), forecast interval width (waits for T2), evidence age (no dated data).
+  - OPEN, owner to confirm: the threshold, target 0.90, minimum combination, Census rule and review cap, location scores and outlier cap, per-group data age, interval-width rule.
   - One degraded scenario (every group at once), one seed; match judged on served and waiting counts per group.
 - **Handoff / next step:**
-  - P2: a replay scenario that degrades signals per group, so the calibration can separate thresholds.
+  - P2 (request, see `docs/worklogs/T9.md`): a replay that degrades a recorded, seeded subset of groups per run (entitlement to the fallback or scaled; a section unplaced or moved to its next-nearest ward), over many runs on the same days, writing served / waiting per run, day and group with the degraded flag, so the calibration can separate thresholds.
   - T2: provide an `IntervalWidthSource` after it merges. T10: expose the reason and the officer check.
 - **Pull request:** pending.
