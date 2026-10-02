@@ -56,6 +56,16 @@ The pull-request description must summarize the same information and link to thi
 - **Handoff / next step:** Coordinate with P3 on resident-facing delivery-code and ward-information API shapes; then connect the card to verified data.
 - **Pull request:** pending.
 
+## `feat/u3-field` — `U3`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Give field workers a multilingual way to record water issues for households and sync them after offline visits.
+- **What we changed:** Added a dedicated field-worker workspace with an issue form, household reference or explicitly shared location, report-language selection, sample report, and per-record IndexedDB sync queue. Online and manual retries post to T4's `/intake/batch` shape with stable client ids and original client timestamps. Until T10 authentication exists, the UI uses `DEMO-FW-01` and marks every submitted record `is_synthetic: true`.
+- **Validation:** Frontend lint and production build pass. `git diff --check` passes. No live field-worker authentication was available, so the endpoint contract is exercised only by the UI implementation and CI build checks.
+- **Known limitations:** Worker identity is a demo fixture; all submitted records are synthetic and must not be treated as operational reports. GPS is optional and requested only after the worker chooses it. Native-speaker review is still needed for translated wording.
+- **Handoff / next step:** Replace the demo identity with T10's authenticated worker identity before operational use; preserve the offline client id and sync state.
+- **Pull request:** pending.
+
 ## `feat/u4-driver` — `U4`
 
 - **Owner / date:** P4, 2026-10-02.

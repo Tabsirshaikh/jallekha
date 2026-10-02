@@ -34,7 +34,7 @@
 "T10","API for all screens","all","P3","feat/t10-api","E2 T2 A7 A8","API tests; shapes match P4 fixtures","TODO","","Agree shapes in week 1"
 "U1","i18n: Telugu / Urdu (RTL) / Hindi / English","F14","P4","feat/u1-i18n","S4 R-P4","All resident + driver strings in 4 languages","DONE","","Native language review required before release"
 "U2","Resident app with offline queue","F14","P4","feat/u2-resident","U1 T4","Report / track / delivery code / ward card","IN_PROGRESS","",""
-"U3","Field-worker mode","F14","P4","feat/u3-field","U2","Report for others; offline sync","TODO","",""
+"U3","Field-worker mode","F14","P4","feat/u3-field","U2","Report for others; offline sync","DONE","","Field-worker workspace supports household reports, per-record offline queue and retry sync; demo worker identity and payloads are marked SYNTHETIC pending authentication"
 "U4","Driver app (route / arrived / OTP)","F12","P4","feat/u4-driver","U1 T3","Four outcomes visible","DONE","","Interactive fixture preview demonstrates route, arrival, OTP and all four outcomes; live API integration remains pending"
 "U5","Atlas / Equity / Under-served screens","F1-F4","P4","feat/u5-evidence","T10","Census 2011 and growth labels; reasons shown","TODO","","Fixtures first"
 "U6","Forecast + shortage screen","F5 F6","P4","feat/u6-forecast","T10","Range + accuracy vs baseline","TODO","",""
