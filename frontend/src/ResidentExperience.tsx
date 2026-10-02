@@ -134,7 +134,10 @@ export default function ResidentExperience({ page, onNavigate }: { page: Residen
   const syncReportsRef = useRef(syncReports);
 
   useEffect(() => { syncReportsRef.current = syncReports; }, [syncReports]);
-  useEffect(() => { void refresh(); }, [refresh]);
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void refresh(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, [refresh]);
   useEffect(() => {
     const updateOnline = () => {
       const isOnline = navigator.onLine;
@@ -199,7 +202,7 @@ export default function ResidentExperience({ page, onNavigate }: { page: Residen
         {message && <p role="status" className="resident-status-message">{message}</p>}
         <button className="button button-dark" type="submit" disabled={!storageReady}>{words.submit}</button>
       </form></section>}
-      {page === "requests" && <section className="resident-list-section"><div className="resident-section-title"><div><p className="eyebrow">{t("residentRequests")}</p><h1>{words.requestsTitle}</h1></div><button className="button button-secondary" onClick={() => void syncReports()} disabled={syncing}>{syncing ? words.syncing : words.sync}</button></div>
+      {page === "requests" && <section className="resident-list-section"><div className="resident-section-title"><div><p className="eyebrow">{t("residentRequests")}</p><h1>{words.requestsTitle}</h1></div><button className="button button-secondary" onClick={() => void syncReports(reports)} disabled={syncing}>{syncing ? words.syncing : words.sync}</button></div>
         {reports.length === 0 ? <p className="resident-empty-state">{words.emptyRequests}</p> : <div className="resident-request-list">{reports.map((report) => <article className="resident-request-card" key={report.id}><div className="resident-request-card-head"><span className={`resident-request-state ${report.state}`}>{queueStatus(report, words)}</span><time dateTime={report.createdAt}>{new Date(report.createdAt).toLocaleDateString(locale)}</time></div><h2>{words[report.category === "no_water" ? "noWater" : report.category === "tanker_missed" ? "tankerMissed" : report.category === "dirty_water" ? "dirtyWater" : report.category === "leak" ? "leak" : "other"]}</h2>{report.areaLabel && <p>{words.areaCardIntro}: {report.areaLabel}</p>}{report.details && <p>{report.details}</p>}<div className="resident-request-meta">{report.complaintId && <span>{words.reportId}: {report.complaintId}</span>}<span>{words.deliveryCode}: <strong>{words.noDelivery}</strong></span></div><small>{report.state === "needs_location" ? words.needsLocation : report.state === "queued" ? words.savedOnDevice : report.error ?? words.deliveryUnavailable}</small></article>)}</div>}
       </section>}
       {page === "ward" && <section className="resident-ward-card"><p className="eyebrow">{words.wardCard}</p><h1>{latestArea ?? words.areaCardIntro}</h1><span className="resident-data-badge">{words.noData}</span><p>{latestArea ? words.wardUnavailable : words.noArea}</p><div className="resident-ward-placeholder"><span aria-hidden="true">⌖</span><strong>{words.deliveryCode}</strong><small>{words.deliveryUnavailable}</small></div><button className="button button-secondary" onClick={() => onNavigate("residentReport")}>{t("reportWaterIssue")}</button></section>}
