@@ -217,17 +217,13 @@ class ScheduledPlan:
     )
 
 
-def plan_scheduled_supply(
+def scheduled_demands(
     wards: list[ScheduledWard],
+    shares: dict[str, WardShare],
     registry: ServicePointRegistry,
-    tankers: list[vrp.Tanker],
-    stations: list[vrp.Station],
-    reserve_litres: float,
-    time_limit_s: float | None = None,
-    shift_start: str = "06:00",
-) -> ScheduledPlan:
+) -> tuple[dict[str, WardPlan], list[vrp.Demand], dict[str, ServicePoint]]:
+    """Ward plans and routing demands (one per registered point) for the shared reserve."""
     load = ALLOCATION_CONFIG.tanker_load_litres
-    shares = share_reserve(wards, reserve_litres)
     weights = {w.ward_id: w.need_weight for w in wards}
     top_weight = max(weights.values(), default=1.0)
     plans: dict[str, WardPlan] = {}
@@ -262,6 +258,20 @@ def plan_scheduled_supply(
                     mandatory_stops=floor_stops,
                 )
             )
+    return plans, demands, points_by_id
+
+
+def plan_scheduled_supply(
+    wards: list[ScheduledWard],
+    registry: ServicePointRegistry,
+    tankers: list[vrp.Tanker],
+    stations: list[vrp.Station],
+    reserve_litres: float,
+    time_limit_s: float | None = None,
+    shift_start: str = "06:00",
+) -> ScheduledPlan:
+    shares = share_reserve(wards, reserve_litres)
+    plans, demands, points_by_id = scheduled_demands(wards, shares, registry)
     routing = vrp.plan(demands, tankers, stations, time_limit_s=time_limit_s)
     start = datetime.strptime(shift_start, "%H:%M")
     timetable = [

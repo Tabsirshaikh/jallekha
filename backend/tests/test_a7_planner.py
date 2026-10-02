@@ -11,7 +11,8 @@ from datetime import UTC, date, datetime, timedelta
 import pytest
 
 from app.config.allocation import ALLOCATION_CONFIG
-from app.services import fair_queue, outage, planner
+from app.services import fair_queue, outage, planner, vrp
+from app.services import scheduled_supply as ss
 from app.services.ledger_port import InMemoryLedger
 from app.services.planner import PlanInputs, PlannerBooking, ProvisionalGate
 from app.services.scheduled_supply import ScheduledWard
@@ -252,3 +253,90 @@ def test_inputs_are_not_mutated(chain) -> None:
     planner.build_plan(data, ProvisionalGate(), chain, NOW)
     assert data.queue_states == {"S1": fair_queue.QueueState()}
     assert dataclasses.is_dataclass(data)
+
+
+# ---------------- routes for outage and scheduled deliveries ----------------
+
+DEPOT = (17.44, 78.40)
+
+
+def fleet(n: int = 2):
+    tankers = [vrp.Tanker(f"T{i}", LOAD, DEPOT) for i in range(n)]
+    return tankers, [vrp.Station("S1", DEPOT)]
+
+
+def registry(*points: tuple[str, str, float, float]) -> ss.ServicePointRegistry:
+    reg = ss.ServicePointRegistry()
+    for point_id, ward, lat, lng in points:
+        reg, _ = reg.register(
+            ss.ServicePoint(point_id, ward, f"Point {point_id}", lat, lng, "off-1", "Ward office"),
+            {ward},
+        )
+    return reg
+
+
+def special_inputs(**kw):
+    event, _ = outage.create_outage(
+        "O1",
+        ["W9"],
+        NOW - timedelta(hours=20),
+        None,
+        "officer",
+        "Burst",
+        "off-1",
+        {"W9"},
+        people_affected=400,
+    )
+    tankers, depots = fleet()
+    defaults = dict(
+        capacity={"S1": 40},
+        outages=(event,),
+        critical_stops=(outage.CriticalStop("H1", "Hospital", "W9", 4000),),
+        critical_locations={"H1": (17.45, 78.41)},
+        scheduled=(ScheduledWard("W5", people_off_premises=600.0, need_weight=1.5),),
+        registry=registry(("P9", "W9", 17.43, 78.42), ("P5", "W5", 17.42, 78.43)),
+        fleet=tankers,
+        depots=depots,
+        routing_seconds=2.0,
+    )
+    return defaults | kw
+
+
+def test_outage_and_scheduled_deliveries_are_routed_together(chain) -> None:
+    plan = build(chain, **special_inputs())
+    assert plan.routing is not None and plan.routing.status in ("OPTIMIZED", "FEASIBLE_RELAXED")
+    kinds = {s.kind for s in plan.special_stops}
+    assert kinds == {"critical", "outage", "scheduled"}
+    hospital = [s for s in plan.special_stops if s.place_id == "H1"]
+    # tier 0 is mandatory; the router delivers whole loads, so 4,000 l is one 5,000 l stop
+    assert len(hospital) == 1 and hospital[0].litres >= 4000
+    assert sum(s.litres for s in plan.special_stops) == plan.routing.total_litres
+    assert {s.tanker_id for s in plan.special_stops} <= {"T0", "T1"}
+    assert all(s.arrival[2] == ":" for s in plan.special_stops)
+    created = [e for e in chain.entries if e.event_type == "plan_created"][-1].payload
+    assert created["routed_stops"] == len(plan.special_stops) > 0
+    assert created["routing_status"] == plan.routing.status
+
+
+def test_deliveries_without_a_place_are_reported_not_skipped(chain) -> None:
+    plan = build(chain, **special_inputs(registry=ss.ServicePointRegistry(), critical_locations={}))
+    reasons = {(u.kind, u.place_id): u.reason for u in plan.unrouted}
+    assert reasons[("critical", "H1")] == "NEEDS_LOCATION"
+    assert reasons[("outage", "O1")] == "NEEDS_SERVICE_POINT"
+    assert reasons[("scheduled", "W5")] == "NEEDS_SERVICE_POINT"
+    assert plan.special_stops == ()
+
+
+def test_without_a_fleet_nothing_is_routed_but_every_need_is_listed(chain) -> None:
+    plan = build(chain, **special_inputs(fleet=(), depots=()))
+    assert plan.routing is None and plan.special_stops == ()
+    assert {u.reason for u in plan.unrouted} == {"NO_FLEET_GIVEN"}
+    assert {u.kind for u in plan.unrouted} == {"critical", "outage", "scheduled"}
+
+
+def test_special_routes_use_only_the_tankers_set_aside(chain) -> None:
+    tankers, depots = fleet(10)
+    plan = build(chain, **special_inputs(fleet=tankers, depots=depots))
+    needed = math.ceil((plan.outage_trips + plan.reserve_trips) / CFG.max_trips_per_tanker)
+    assert plan.special_tankers == tuple(sorted(t.id for t in tankers))[:needed]
+    assert {s.tanker_id for s in plan.special_stops} <= set(plan.special_tankers)
