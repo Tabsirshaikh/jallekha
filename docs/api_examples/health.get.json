@@ -1,0 +1,14 @@
+{
+  "_example": {
+    "endpoint": "GET /health",
+    "status": "ROUTE_ON_MAIN",
+    "basis": "REAL (live call)",
+    "built_from": "app/routers/system.py health()"
+  },
+  "request": null,
+  "response": {
+    "status": "ok",
+    "service": "JalLekha API",
+    "version": "0.1.0"
+  }
+}

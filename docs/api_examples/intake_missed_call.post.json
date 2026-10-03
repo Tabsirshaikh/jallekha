@@ -1,0 +1,25 @@
+{
+  "_example": {
+    "endpoint": "POST /intake/missed-call",
+    "status": "ROUTE_ON_MAIN",
+    "basis": "SYNTHETIC request; response from the real IntakeService",
+    "built_from": "app/routers/intake.py missed_call() -> IntakeService.receive_missed_call -> IntakeResult",
+    "notes": "Caller field names: config/intake.py CALLER_FIELDS. Category is ASSUMED no_water; the service asks back for the location."
+  },
+  "request": {
+    "caller": "<sender's number; never stored or echoed>"
+  },
+  "response": {
+    "status": "created",
+    "client_id": null,
+    "intake_id": "536c756e-6dc8-498c-b29e-784fd4a2f465",
+    "complaint_id": "80cf0abf-2508-4bdc-bdfe-50f0264ba33f",
+    "complaint_status": "awaiting_location",
+    "parent_id": null,
+    "category": "no_water",
+    "language": null,
+    "spam_score": 0.2,
+    "error": null,
+    "ledger_seq": 5
+  }
+}

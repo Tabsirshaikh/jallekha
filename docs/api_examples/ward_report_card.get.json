@@ -1,0 +1,67 @@
+{
+  "_example": {
+    "endpoint": "GET /wards/{ward_id}/report-card",
+    "status": "FROM_MAIN (data on main, route not built; deliveries, debt and schedule UNAVAILABLE)",
+    "basis": "need: REAL Census 2011 reweighted (DERIVED, HISTORICAL) + A2; bookings: REAL HMWSSB section records placed on wards (DERIVED_APPROXIMATE); deliveries / debt / schedule UNAVAILABLE",
+    "built_from": "ward_evidence.csv row + services/service_models.py build_ward_needs (WardNeed) + data/derived/equity/wards.csv + equity/monthly.csv (period)",
+    "notes": "Agreed with P4: need, bookings, deliveries, debt, schedule per ward with period, geography version, quality flags and basis; null with basis UNAVAILABLE where no store exists."
+  },
+  "request": {
+    "ward_id": "relation/7848824"
+  },
+  "response": {
+    "ward_id": "relation/7848824",
+    "ward_name": "Ward 105 Gachibowli",
+    "geography_version": "GHMC_2016_150",
+    "quality_flags": [
+      "HISTORICAL",
+      "FACILITIES_UNAVAILABLE",
+      "APPROX_AREAL_CROSSWALK"
+    ],
+    "need": {
+      "census_year": 2011,
+      "households": 12848,
+      "households_basis": "DERIVED",
+      "wad": 0.25867,
+      "wad_basis": "DERIVED",
+      "cad": 0.07542,
+      "cad_basis": "DERIVED",
+      "hardship": 0.123268,
+      "hardship_basis": "DERIVED",
+      "need_weight": 1.7160279999999999,
+      "need_basis": "DERIVED",
+      "entitlement": 22047.527744,
+      "entitlement_basis": "DERIVED",
+      "service_class": "piped_regularity_unknown",
+      "class_basis": "CENSUS_2011_RULE"
+    },
+    "bookings": {
+      "period": {
+        "from": "2022-01",
+        "to": "2024-02",
+        "missing_months": [
+          "2022-12"
+        ]
+      },
+      "bookings": 66431,
+      "bookings_per_1000": 1202.218723,
+      "basis": "DERIVED_APPROXIMATE",
+      "mapping_status": "APPROXIMATE_SECTION_POINT_IN_WARD"
+    },
+    "deliveries": {
+      "value": null,
+      "basis": "UNAVAILABLE",
+      "reason": "no delivery store on main"
+    },
+    "debt": {
+      "value": null,
+      "basis": "UNAVAILABLE",
+      "reason": "no debt accounts stored on main (A6 accounts are passed in by the caller)"
+    },
+    "schedule": {
+      "value": null,
+      "basis": "UNAVAILABLE",
+      "reason": "no plan store on main"
+    }
+  }
+}

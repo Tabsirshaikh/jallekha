@@ -1,0 +1,174 @@
+{
+  "_example": {
+    "endpoint": "GET /plans/{plan_id}/confidence",
+    "status": "PROPOSED, service not merged (T9 on feat/t9-confidence, local)",
+    "basis": "DERIVED from REAL P1 files; threshold PROVISIONAL (calibration not_separable, SIMULATION)",
+    "built_from": "feat/t9-confidence: services/confidence.py T9Gate.explain -> Combined (SignalScore); data/derived/confidence_calibration.csv selection row",
+    "notes": "Three groups of replay day 1: an unplaced section, a mixed-source ward, a ward above the threshold."
+  },
+  "request": {
+    "plan_id": "replay-2025-03-01"
+  },
+  "response": {
+    "threshold": 0.5,
+    "threshold_basis": "PROVISIONAL",
+    "calibration": {
+      "row_type": "selection",
+      "threshold": 0.5,
+      "group_days": 17363,
+      "unflagged_group_days": 11500,
+      "matched_unflagged": 10887,
+      "match_share": 0.9467,
+      "match_share_basis": "not_separable: target 0.90 already met with nothing flagged, so the replay cannot tell thresholds apart; PROVISIONAL threshold kept (OPEN, owner to confirm)",
+      "groups": 152,
+      "flagged_groups": 60,
+      "flagged_share": 0.3947,
+      "flagged_share_basis": "DERIVED; groups with T9 confidence below the threshold, over replay groups",
+      "status": "not_separable",
+      "label": "SIMULATION"
+    },
+    "groups": [
+      {
+        "group": "section:ADARSHNAGAR",
+        "confidence": 0.0,
+        "needs_check": true,
+        "reason": "weakest census_join_quality=0.0000 (section not placed on a ward: need is the A3 fallback); used: census_join_quality, section_location; unavailable: data_age, evidence_age, forecast_interval_width",
+        "used": [
+          "census_join_quality",
+          "section_location"
+        ],
+        "unavailable": [
+          "data_age",
+          "evidence_age",
+          "forecast_interval_width"
+        ],
+        "signals": [
+          {
+            "name": "census_join_quality",
+            "available": true,
+            "score": 0.0,
+            "basis": "section not placed on a ward: need is the A3 fallback"
+          },
+          {
+            "name": "section_location",
+            "available": true,
+            "score": 0.0,
+            "basis": "weakest of 1 section(s): ADARSHNAGAR: UNMAPPED_NO_RESULT (not placed)"
+          },
+          {
+            "name": "data_age",
+            "available": false,
+            "score": null,
+            "basis": "Census 2011, 15 years old (score 0.25); the same year for every ward, so it does not separate wards and is excluded. OPEN, owner to confirm: a per-group rule"
+          },
+          {
+            "name": "forecast_interval_width",
+            "available": false,
+            "score": null,
+            "basis": "T2 forecast not merged: no interval width"
+          },
+          {
+            "name": "evidence_age",
+            "available": false,
+            "score": null,
+            "basis": "no dated evidence in the repo (E5 field checks carry no dates)"
+          }
+        ]
+      },
+      {
+        "group": "ward:relation/7852805",
+        "confidence": 0.4796,
+        "needs_check": true,
+        "reason": "weakest census_join_quality=0.4796 (min(census_coverage 1.0000, dominant_source_share 0.4796)); used: census_join_quality, section_location; unavailable: data_age, evidence_age, forecast_interval_width",
+        "used": [
+          "census_join_quality",
+          "section_location"
+        ],
+        "unavailable": [
+          "data_age",
+          "evidence_age",
+          "forecast_interval_width"
+        ],
+        "signals": [
+          {
+            "name": "census_join_quality",
+            "available": true,
+            "score": 0.4796,
+            "basis": "min(census_coverage 1.0000, dominant_source_share 0.4796)"
+          },
+          {
+            "name": "section_location",
+            "available": true,
+            "score": 1.0,
+            "basis": "weakest of 1 section(s): SHAIKPET: INSIDE 1.0"
+          },
+          {
+            "name": "data_age",
+            "available": false,
+            "score": null,
+            "basis": "Census 2011, 15 years old (score 0.25); the same year for every ward, so it does not separate wards and is excluded. OPEN, owner to confirm: a per-group rule"
+          },
+          {
+            "name": "forecast_interval_width",
+            "available": false,
+            "score": null,
+            "basis": "T2 forecast not merged: no interval width"
+          },
+          {
+            "name": "evidence_age",
+            "available": false,
+            "score": null,
+            "basis": "no dated evidence in the repo (E5 field checks carry no dates)"
+          }
+        ]
+      },
+      {
+        "group": "ward:relation/7848824",
+        "confidence": 0.5,
+        "needs_check": false,
+        "reason": "weakest section_location=0.5000 (weakest of 4 section(s): MANIKONDA (DIV 18): NEAREST_500M 0.75, 9.01 km from division > 6.0 km cap); used: census_join_quality, section_location; unavailable: data_age, evidence_age, forecast_interval_width",
+        "used": [
+          "census_join_quality",
+          "section_location"
+        ],
+        "unavailable": [
+          "data_age",
+          "evidence_age",
+          "forecast_interval_width"
+        ],
+        "signals": [
+          {
+            "name": "census_join_quality",
+            "available": true,
+            "score": 0.9849,
+            "basis": "min(census_coverage 1.0000, dominant_source_share 0.9849)"
+          },
+          {
+            "name": "section_location",
+            "available": true,
+            "score": 0.5,
+            "basis": "weakest of 4 section(s): MANIKONDA (DIV 18): NEAREST_500M 0.75, 9.01 km from division > 6.0 km cap"
+          },
+          {
+            "name": "data_age",
+            "available": false,
+            "score": null,
+            "basis": "Census 2011, 15 years old (score 0.25); the same year for every ward, so it does not separate wards and is excluded. OPEN, owner to confirm: a per-group rule"
+          },
+          {
+            "name": "forecast_interval_width",
+            "available": false,
+            "score": null,
+            "basis": "T2 forecast not merged: no interval width"
+          },
+          {
+            "name": "evidence_age",
+            "available": false,
+            "score": null,
+            "basis": "no dated evidence in the repo (E5 field checks carry no dates)"
+          }
+        ]
+      }
+    ]
+  }
+}
