@@ -834,4 +834,35 @@ The pull-request description must summarize the same information and link to thi
   - P2: check `test_a8_build.py` on Windows.
   - P1: weather (D8), groundwater (D7) and a trips-per-day source. Owner: confirm the recovered protocol before 21.9% / 35.1% go on slides.
   - T8 builds on the forecast table.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/58
+
+## `feat/t9-confidence` — `T9`
+
+- **Owner / date:** P3, 2026-10-03.
+- **Purpose:** Confidence gate (F17): score each planner group's data quality, flag low confidence so it cannot auto-commit (officer check through A7), and choose the threshold on P2's A7 replay.
+- **What we found:**
+  - A7's `ConfidenceGate` Protocol is sufficient: `build_plan` keeps flagged groups, `approve_plan` raises `PlanBlocked` until `mark_checked` (`ward_reviewed`). No planner change and no new ledger event needed.
+  - Census 2011 is the year for every ward (data age cannot separate wards); no dated evidence exists (evidence age unavailable); T2 is not on `main` (forecast width unavailable).
+  - Calibration on the replay (153 days, 152 groups, 17,363 group-days; full information vs every group on the A3 fallback entitlement): the 0.90 target is met with nothing flagged (0.9522 at threshold 0.00), and the match share does not rise with the threshold (0.73-0.96). Fallback and Census groups match at the same rate (0.950 / 0.953). The thresholds cannot be separated, so none is chosen.
+  - `main` moved from `73efb55` to `28b2661` (`319efd9`) and then `d12e4fd`; both merged without conflicts. T2 merged as #58 (570d4b8).
+- **What we changed:**
+  - `docs/features.csv` / `docs/P3_FEATURES.md` status row: T9 IN_PROGRESS (own commit).
+  - `backend/app/config/confidence.py`: per-signal rules, combination, target 0.90, PROVISIONAL threshold 0.50, candidates, rounding, tolerance; each with a source or ASSUMED / OPEN.
+  - `backend/app/services/confidence.py`: Census join quality, section location, data age (excluded), forecast interval width (interface, unavailable), evidence age (unavailable); minimum of the available signals; `T9Gate` (A7 `ConfidenceGate`); `calibrate`.
+  - `scripts/trust/calibrate_confidence.py`; output `data/derived/confidence_calibration.csv` (SIMULATION, `_basis` columns; status `not_separable`, PROVISIONAL 0.50 kept).
+  - Tests `backend/tests/services/test_confidence.py`; workflow `.github/workflows/p3-t9.yml`; `docs/worklogs/T9.md`; T9 section of `docs/P3_FEATURES.md`.
+  - No P1, P2 or P4 file was edited; no API route; no new ledger event type.
+- **Validation:**
+  - 15 tests written first (`ModuleNotFoundError` before the code existed), including the done-when with A7's functions (flagged group, `PlanBlocked`, blank reason refused, `mark_checked` then approval, `plan_created` / `ward_reviewed` / `plan_approved` in the ledger, chain verifies), signal boundaries, missing signals listed, the weakest signal in the reason, the gate on the real files (counts read from the files), calibration on a hand-checkable fixture, and the committed calibration reproduced within 1e-4.
+  - After merging `main` (`570d4b8`, T2 #58): `python tasks.py test`: 610 backend passed, 2 failed; frontend 1 passed; all P1 verifiers pass. The 2 are inherited, none in T9 files: P2 `backend/tests/test_a8_build.py::test_stations_are_reproducible_committed_and_labelled` and `::test_one_seed_reproduces` (Windows float last digits; pass on Linux CI).
+  - `python tasks.py lint` exit 0. The `P3:T9` workflow regenerates the calibration on Linux and compares rounded values.
+- **Known limitations:**
+  - The done-when is met and tested, but the threshold is **not calibrated**: 0.50 is a placeholder (`not_separable`), accepted by Padmaja until P2 provides a per-group degraded scenario.
+  - At 0.50 the gate flags 60 of 152 groups (39%).
+  - Three of the five planned signals are unavailable: data age (Census 2011 for every ward), forecast interval width (waits for T2), evidence age (no dated data).
+  - OPEN, owner to confirm: the threshold, target 0.90, minimum combination, Census rule and review cap, location scores and outlier cap, per-group data age, interval-width rule.
+- **Handoff / next step:**
+  - P2 (request, see `docs/worklogs/T9.md`): degraded-scenario replay for threshold calibration.
+  - T10: expose the reason and the officer check.
 - **Pull request:** pending.
+
