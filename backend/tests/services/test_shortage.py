@@ -148,14 +148,17 @@ def test_risk_list_one_to_three_months_ahead_with_reasons(tmp_path: Path) -> Non
 
     origin = f"{y - (m == 1):04d}-{(m - 2) % 12 + 1:02d}"
     wanted = {_add_months(origin, k) for k in SHORTAGE_CONFIG.months_ahead}
-    target_sections = {
-        r["section"] for r in forecast if r["level"] == "section" and r["month"] in wanted
+    # T2 forecasts a section only where it had a value a year earlier, so the expected rows are
+    # exactly the forecast's section-months in the three target months (read from the table).
+    expected = {
+        (r["section"], r["month"])
+        for r in forecast
+        if r["level"] == "section" and r["month"] in wanted
     }
+    assert expected
     assert {r["months_ahead"] for r in rows} == {"1", "2", "3"}
-    assert {r["section"] for r in rows} == target_sections
-    # each section can appear for 1, 2 or 3 of the target months
-    assert len(rows) <= 3 * len(target_sections)
-    assert len(rows) > 0
+    assert {(r["section"], r["month"]) for r in rows} == expected
+    assert len(rows) == len(expected)
     for r in rows:
         assert r["risk"] in ("low", "medium", "high", "unknown")
         assert r["reason"] and "groundwater data unavailable" in r["reason"]
