@@ -15,7 +15,9 @@ from sqlalchemy import select
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
 
+from app.auth import get_api_config
 from app.config.access import ACCESS_CONFIG
+from app.config.api import ApiConfig
 from app.config.notices import ALERT_TEMPLATES, NOTICE_CONFIG
 from app.db import create_all, make_engine
 from app.main import app
@@ -378,12 +380,15 @@ def test_alert_wording_is_marked_open() -> None:
 
 def test_officer_entry_endpoint(service: nt.NoticeService) -> None:
     app.dependency_overrides[get_notice_service] = lambda: service
+    app.dependency_overrides[get_api_config] = lambda: ApiConfig(tokens={"test-token": "officer"})
     try:
-        client = TestClient(app)
+        client = TestClient(app, headers={"Authorization": "Bearer test-token"})
         body = client.post("/notices", json=_notice()).json()
         assert body["status"] == "created" and body["outage_id"]
-        bad = client.post("/notices", json=_notice(end="2026-10-02T00:00:00+05:30")).json()
-        assert bad["status"] == "invalid"
+        bad = client.post("/notices", json=_notice(end="2026-10-02T00:00:00+05:30"))
+        # T10, agreed with P4: an invalid notice is 422 in the shared error shape.
+        assert bad.status_code == 422
+        assert bad.json()["error"]["code"] == "validation_error"
     finally:
         app.dependency_overrides.clear()
 

@@ -10,6 +10,8 @@ from fastapi.testclient import TestClient
 from sqlalchemy import update
 from sqlalchemy.orm import Session
 
+from app.auth import get_api_config
+from app.config.api import ApiConfig
 from app.db import make_engine
 from app.main import app
 from app.models import LedgerEntryRecord
@@ -26,13 +28,14 @@ def store(tmp_path: Path) -> Iterator[StoredLedger]:
     for i in range(4):
         stored.record("override", {"entity_type": "plan", "entity_id": f"p{i}", "i": i}, "o-1")
     app.dependency_overrides[get_ledger_dependency] = lambda: stored
+    app.dependency_overrides[get_api_config] = lambda: ApiConfig(tokens={"test-token": "officer"})
     yield stored
     app.dependency_overrides.clear()
     engine.dispose()
 
 
 def test_list_entries_in_order_with_paging(store: StoredLedger) -> None:
-    client = TestClient(app)
+    client = TestClient(app, headers={"Authorization": "Bearer test-token"})
     body = client.get("/ledger/entries").json()
     assert [e["seq"] for e in body["entries"]] == [1, 2, 3, 4]
     first = body["entries"][0]
@@ -44,7 +47,7 @@ def test_list_entries_in_order_with_paging(store: StoredLedger) -> None:
 
 
 def test_verify_endpoint_reports_valid_and_broken(store: StoredLedger) -> None:
-    client = TestClient(app)
+    client = TestClient(app, headers={"Authorization": "Bearer test-token"})
     body = client.get("/ledger/verify").json()
     assert (body["valid"], body["checked"], body["head_seq"]) == (True, 4, 4)
     with Session(store.engine) as session, session.begin():
@@ -57,6 +60,6 @@ def test_verify_endpoint_reports_valid_and_broken(store: StoredLedger) -> None:
 
 @pytest.mark.parametrize("method", ["post", "put", "patch", "delete"])
 def test_no_write_endpoints(store: StoredLedger, method: str) -> None:
-    client = TestClient(app)
+    client = TestClient(app, headers={"Authorization": "Bearer test-token"})
     assert getattr(client, method)("/ledger/entries").status_code == 405
     assert getattr(client, method)("/ledger/entries/1").status_code in (404, 405)

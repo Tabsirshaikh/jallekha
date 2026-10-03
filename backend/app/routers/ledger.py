@@ -11,10 +11,13 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, Query
 
+from app.auth import require_roles
 from app.config.trust import TRUST_CONFIG
 from app.services.ledger_store import StoredLedger, get_ledger
 
-router = APIRouter(prefix="/ledger", tags=["ledger"])
+router = APIRouter(
+    prefix="/ledger", tags=["ledger"], dependencies=[Depends(require_roles("officer"))]
+)
 
 
 def get_ledger_dependency() -> StoredLedger:

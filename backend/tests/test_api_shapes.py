@@ -12,6 +12,8 @@ from typing import Any
 import pytest
 from fastapi.testclient import TestClient
 
+from app.auth import get_api_config
+from app.config.api import ApiConfig
 from app.db import create_all, make_engine
 from app.main import app
 from app.routers.intake import get_intake_service
@@ -81,6 +83,9 @@ def client(tmp_path: Path) -> Iterator[TestClient]:
     app.dependency_overrides[get_intake_service] = lambda: intake
     app.dependency_overrides[get_notice_service] = lambda: nt.NoticeService(engine, ledger=ledger)
     app.dependency_overrides[get_ledger_dependency] = lambda: ledger
+    app.dependency_overrides[get_api_config] = lambda: ApiConfig(
+        tokens={"t-officer": "officer", "t-resident": "resident"}, gateway_token="t-gateway"
+    )
     yield TestClient(app)
     app.dependency_overrides.clear()
     engine.dispose()
@@ -94,22 +99,28 @@ def _real(value: Any) -> Any:
 
 
 def test_documented_fields_of_merged_routes_match_what_they_return(client: TestClient) -> None:
+    officer = {"Authorization": "Bearer t-officer"}
     calls = [
-        ("health.get", "GET", "/health"),
-        ("intake_batch.post", "POST", "/intake/batch"),
-        ("intake_sms.post", "POST", "/intake/sms"),
-        ("intake_missed_call.post", "POST", "/intake/missed-call"),
-        ("notices.post", "POST", "/notices"),
-        ("ledger_entries.get", "GET", "/ledger/entries"),
-        ("ledger_verify.get", "GET", "/ledger/verify"),
+        ("health.get", "GET", "/health", {}),
+        ("intake_batch.post", "POST", "/intake/batch", {"Authorization": "Bearer t-resident"}),
+        ("intake_sms.post", "POST", "/intake/sms", {"X-Gateway-Token": "t-gateway"}),
+        (
+            "intake_missed_call.post",
+            "POST",
+            "/intake/missed-call",
+            {"X-Gateway-Token": "t-gateway"},
+        ),
+        ("notices.post", "POST", "/notices", officer),
+        ("ledger_entries.get", "GET", "/ledger/entries", officer),
+        ("ledger_verify.get", "GET", "/ledger/verify", officer),
     ]
-    for name, method, path in calls:
+    for name, method, path, headers in calls:
         example = _load(name)
         assert example["_example"]["status"] == "ROUTE_ON_MAIN", name
         if method == "POST":
-            response = client.post(path, json=_real(example["request"]))
+            response = client.post(path, json=_real(example["request"]), headers=headers)
         else:
-            response = client.get(path, params=example["request"] or {})
+            response = client.get(path, params=example["request"] or {}, headers=headers)
         assert response.status_code == 200, (name, response.text)
         assert _shape(response.json()) == _shape(example["response"]), name
 
