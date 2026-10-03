@@ -438,3 +438,34 @@ def test_icar_structure_drops_the_duplicate_unstructured_effect():
         "rho" not in result["priors"] and "unstructured" not in result["diagnostics_by_parameter"]
     )
     assert set(result["scores"]) == {"W00"}
+
+
+def test_nb_dispersion_can_be_sampled_on_the_inverse_sqrt_scale():
+    """Stan prior-choice recommendation for NB overdispersion: put the prior on 1/sqrt(alpha),
+    where 0 means Poisson, instead of a vague HalfNormal(10) on alpha itself."""
+    config = UnderservedConfig(
+        minimum_areas=8,
+        peer_count=3,
+        chains=2,
+        draws=60,
+        tune=60,
+        max_rhat=20,
+        minimum_bulk_ess=1,
+        seed=413,
+        nb_dispersion_prior="inv_sqrt",
+    )
+    areas = cohort(config=config)
+    import pytensor
+
+    if __import__("os").name == "nt":
+        pytensor.config.cxx = ""
+    result = fit_count_model(areas, variant="NB", config=config, holdout_ids=("W00",))
+    assert result["priors"]["alpha"] == "1/sqrt(alpha) ~ HalfNormal(1)"
+    assert "alpha" in result["diagnostics_by_parameter"]
+    assert set(result["scores"]) == {"W00"}
+
+
+def test_unknown_nb_dispersion_prior_is_refused():
+    config = UnderservedConfig(minimum_areas=8, peer_count=3, nb_dispersion_prior="wide")
+    with pytest.raises(ValueError, match="dispersion prior"):
+        fit_count_model(cohort(config=config), variant="NB", config=config, holdout_ids=("W00",))

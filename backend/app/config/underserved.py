@@ -41,6 +41,10 @@ class UnderservedConfig:
     # E5 spec) or "icar" = structured only. With a negative-binomial likelihood the unstructured
     # term duplicates alpha (per-ward extra variation); the E5 diagnosis found alpha unidentified.
     bym2_structure: str = "bym2"
+    # Prior on the NB overdispersion: "halfnormal" = HalfNormal(10) on alpha (original E5 spec) or
+    # "inv_sqrt" = HalfNormal(1) on 1/sqrt(alpha), where 0 = Poisson (Stan prior-choice
+    # recommendations). The E5 diagnosis found alpha the last parameter to mix.
+    nb_dispersion_prior: str = "halfnormal"
     geography_version: str = "GHMC_2016_150"
 
 

@@ -140,6 +140,8 @@ def fit_count_model(
     if config.bym2_structure not in ("bym2", "icar"):
         raise ValueError(f"Unknown BYM2 structure: {config.bym2_structure}")
     icar_only = variant != "NB" and config.bym2_structure == "icar"
+    if config.nb_dispersion_prior not in ("halfnormal", "inv_sqrt"):
+        raise ValueError(f"Unknown NB dispersion prior: {config.nb_dispersion_prior}")
     if config.bym2_rho_prior not in ("beta", "pc"):
         raise ValueError(f"Unknown BYM2 rho prior: {config.bym2_rho_prior}")
     if config.bym2_likelihood not in ("negative_binomial", "poisson"):
@@ -185,7 +187,11 @@ def fit_count_model(
     with pm.Model():
         intercept = pm.Normal("intercept", mu=-4, sigma=2)
         beta = pm.Normal("beta", mu=0, sigma=1, shape=2)
-        if likelihood == "negative_binomial":
+        if likelihood == "negative_binomial" and config.nb_dispersion_prior == "inv_sqrt":
+            # Sampled where 0 = Poisson; alpha itself is kept for the diagnostics
+            inv_sqrt_alpha = pm.HalfNormal("inv_sqrt_alpha", sigma=1)
+            alpha = pm.Deterministic("alpha", 1 / inv_sqrt_alpha**2)
+        elif likelihood == "negative_binomial":
             alpha = pm.HalfNormal("alpha", sigma=10)
         fixed = np.log(exposure) + intercept + pm.math.dot(design, beta)
         reference = pm.Deterministic("reference_mu", pm.math.exp(fixed))
@@ -299,7 +305,15 @@ def fit_count_model(
         "priors": {
             "intercept": "Normal(-4,2)",
             "beta": "Normal(0,1)",
-            **({"alpha": "HalfNormal(10)"} if likelihood == "negative_binomial" else {}),
+            **(
+                {
+                    "alpha": "1/sqrt(alpha) ~ HalfNormal(1)"
+                    if config.nb_dispersion_prior == "inv_sqrt"
+                    else "HalfNormal(10)"
+                }
+                if likelihood == "negative_binomial"
+                else {}
+            ),
             **(
                 {}
                 if icar_only or variant == "NB"
