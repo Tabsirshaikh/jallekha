@@ -14,7 +14,7 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 | T6 | F18 ledger | `feat/t6-ledger` | DONE ([PR #35](https://github.com/Tabsirshaikh/jallekha/pull/35) merged); rotation period and head-hash schedule OPEN |
 | T7 | F16 explanations + contest | `feat/t7-explain` | DONE ([PR #46](https://github.com/Tabsirshaikh/jallekha/pull/46) merged); reason / outcome codes, counterfactual limits, number removal, tier-counterfactual audience and wording OPEN |
 | T8 | F6 shortage warning | `feat/t8-shortage` | Blocked: T2, D1 |
-| T9 | F17 confidence gate | `feat/t9-confidence` | IN_PROGRESS (local, not pushed) |
+| T9 | F17 confidence gate | `feat/t9-confidence` | IN_REVIEW ([PR #59](https://github.com/Tabsirshaikh/jallekha/pull/59)); threshold PROVISIONAL 0.50 (`not_separable`), target and scoring rules OPEN |
 | T10 | API for all screens | `feat/t10-api` | Shapes to agree with P4 in week 1 |
 
 ---
