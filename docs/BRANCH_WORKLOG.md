@@ -835,3 +835,14 @@ The pull-request description must summarize the same information and link to thi
   - P1: weather (D8), groundwater (D7) and a trips-per-day source. Owner: confirm the recovered protocol before 21.9% / 35.1% go on slides.
   - T8 builds on the forecast table.
 - **Pull request:** pending.
+
+## `feat/t8-shortage` — `T8`
+
+- **Owner / date:** P3, 2026-10-03.
+- **Purpose:** F6 shortage early warning: risk list per section 1-3 months ahead, T2 forecast vs capacity, reasons from the numbers.
+- **What we found:** A8 on `main` has a usable capacity assumption (1,150 tankers x 9 trips per tanker per day, 90 stand-in stations); all 198 T2 sections match A8's sections, 195 have a station. T2 forecasts only sections with a value a year earlier (182 / 184 / 185). D7 groundwater and reservoir data are not in the repo.
+- **What we changed:** `ShortageConfig` in `config/forecast.py`; `services/shortage.py`; `scripts/forecast/run_shortage.py`; `data/derived/shortage_risk.csv` (551 rows, `_basis` on every derived column); tests `backend/tests/services/test_shortage.py`; workflow `.github/workflows/p3-t8.yml`; `docs/worklogs/T8.md`; T8 section of `docs/P3_FEATURES.md`; status rows. Cut from `feat/t2-forecast`.
+- **Validation:** 8 tests written first, including the done-when (risk list 1-3 months ahead with reasons) on the real files and the committed list reproducing. `python tasks.py test`: 599 backend passed, 2 failed (P2 `test_a8_build.py::test_stations_are_reproducible_committed_and_labelled` and `::test_one_seed_reproduces`, Windows only, pass on Linux CI, identical on `main`); frontend passed; lint exit 0. The `P3:T8` workflow commands pass locally.
+- **Known limitations:** OPEN, owner to confirm: risk ratios 1.0 / 0.85 and the 80% bound rule; A8's 2025 split and fleet used for 2026; one booking = one trip; forecast start (pre-re-cut names). No groundwater or reservoir signal ("groundwater data unavailable" in every reason).
+- **Handoff / next step:** Retarget to `main` after T2 merges. P1: D7. Owner: Q2 and OPEN values. T10: `GET /shortage`.
+- **Pull request:** pending.
