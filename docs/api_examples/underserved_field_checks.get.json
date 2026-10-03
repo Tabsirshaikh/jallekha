@@ -3,7 +3,7 @@
     "endpoint": "GET /underserved/field-checks",
     "status": "FROM_MAIN (data on main, route not built)",
     "basis": "each value's *_basis field (REAL inputs, DERIVED flags, UNAVAILABLE where missing)",
-    "built_from": "data/derived/underserved/field_checks.json: schema_version, summary, limitations, field_check_list, and rows (first row of the list shown)"
+    "built_from": "data/derived/underserved/field_checks.json: schema_version, summary, limitations, field_check_list, and rows (two rows shown: one with plain reasons, one whose reasons carry threshold and model; a row may also have no reasons)"
   },
   "request": null,
   "response": {
@@ -509,6 +509,42 @@
       }
     ],
     "rows": [
+      {
+        "action": "Review missing evidence",
+        "field_check_candidate": null,
+        "field_check_candidate_basis": "UNAVAILABLE",
+        "flagged_variants": [],
+        "geography_version": "GHMC_2016_150",
+        "growth_quality": "STABLE_TREND",
+        "growth_ratio_basis": "DERIVED",
+        "growth_ratio_context_only": 1.16877444,
+        "input_basis": "REAL",
+        "input_notes": [
+          "APPROXIMATE_BOOKING_TRANSFER",
+          "HISTORICAL_NEED_REFERENCE_2011",
+          "MODELLED_HOUSEHOLDS_2025"
+        ],
+        "model_scores": {},
+        "model_scores_basis": "UNAVAILABLE",
+        "observed_bookings": null,
+        "observed_bookings_basis": "UNAVAILABLE",
+        "reasons": [
+          {
+            "basis": "UNAVAILABLE",
+            "code": "UNVALIDATED_BOOKING_TRANSFER",
+            "value": null
+          },
+          {
+            "basis": "UNAVAILABLE",
+            "code": "WARD_BOOKINGS_UNAVAILABLE",
+            "value": null
+          }
+        ],
+        "stability_evaluated": false,
+        "status": "DATA_REVIEW_REQUIRED",
+        "ward_id": "relation/7848799",
+        "ward_name": "Ward 91 Khairatabad"
+      },
       {
         "action": "Send someone to check; no allocation or entitlement change",
         "field_check_candidate": true,

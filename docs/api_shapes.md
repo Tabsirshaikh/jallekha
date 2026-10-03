@@ -287,7 +287,7 @@ The T10 plan asks for JSON examples in the frontend fixtures folder; `frontend/`
 #### `GET /underserved/field-checks`
 
 - **Status:** **From main**: the service or file is on `main`; the route is not built (T10).
-- **Built from:** data/derived/underserved/field_checks.json: schema_version, summary, limitations, field_check_list, and rows (first row of the list shown)
+- **Built from:** data/derived/underserved/field_checks.json: schema_version, summary, limitations, field_check_list, and rows (two rows shown: one with plain reasons, one whose reasons carry threshold and model; a row may also have no reasons)
 - **Roles:** officer
 - **Request:** none (PROPOSED filter: `field_check_candidate=true`)
 - **Errors:** 401 `unauthorized` (no or bad token), 403 `forbidden` (wrong role), 404 `not_found`, 422 `validation_error` (malformed request); codes come from the HTTP status phrase in `app/errors.py`
@@ -348,10 +348,9 @@ The T10 plan asks for JSON examples in the frontend fixtures folder; `frontend/`
 | `rows` | array |  |
 | `rows[]` | object |  |
 | `rows[].action` | string |  |
-| `rows[].field_check_candidate` | boolean | `field_check_candidate_basis` |
+| `rows[].field_check_candidate` | boolean (nullable) | `field_check_candidate_basis` |
 | `rows[].field_check_candidate_basis` | string |  |
 | `rows[].flagged_variants` | array |  |
-| `rows[].flagged_variants[]` | string |  |
 | `rows[].geography_version` | string |  |
 | `rows[].growth_quality` | string |  |
 | `rows[].growth_ratio_basis` | string |  |
@@ -360,22 +359,23 @@ The T10 plan asks for JSON examples in the frontend fixtures folder; `frontend/`
 | `rows[].input_notes` | array |  |
 | `rows[].input_notes[]` | string |  |
 | `rows[].model_scores` | object | `model_scores_basis` |
-| `rows[].model_scores.PEER_MEDIAN` | object |  |
-| `rows[].model_scores.PEER_MEDIAN.expected` | number | see **Basis** |
-| `rows[].model_scores.PEER_MEDIAN.interval_kind` | string |  |
-| `rows[].model_scores.PEER_MEDIAN.peers` | array |  |
-| `rows[].model_scores.PEER_MEDIAN.peers[]` | string |  |
-| `rows[].model_scores.PEER_MEDIAN.ratio` | number | see **Basis** |
-| `rows[].model_scores.PEER_MEDIAN.ratio_lower` | null in the example (type: see the source dataclass) (nullable) |  |
-| `rows[].model_scores.PEER_MEDIAN.ratio_upper` | null in the example (type: see the source dataclass) (nullable) |  |
 | `rows[].model_scores_basis` | string |  |
-| `rows[].observed_bookings` | integer | `observed_bookings_basis` |
+| `rows[].observed_bookings` | integer (nullable) | `observed_bookings_basis` |
 | `rows[].observed_bookings_basis` | string |  |
 | `rows[].reasons` | array |  |
 | `rows[].reasons[]` | object |  |
 | `rows[].reasons[].basis` | string |  |
 | `rows[].reasons[].code` | string |  |
-| `rows[].reasons[].model` | string |  |
+| `rows[].reasons[].value` | number (nullable) | see **Basis** |
+| `rows[].stability_evaluated` | boolean |  |
+| `rows[].status` | string |  |
+| `rows[].ward_id` | string |  |
+| `rows[].ward_name` | string |  |
+| `rows[].flagged_variants[]` | string |  |
+| `rows[].model_scores.PEER_MEDIAN` | object |  |
+| `rows[].model_scores.PEER_MEDIAN.expected` | number | see **Basis** |
+| `rows[].model_scores.PEER_MEDIAN.interval_kind` | string |  |
+| `rows[].model_scores.PEER_MEDIAN.peers` | array |  |
 | … | | 7 more fields: see the example file |
 
 
