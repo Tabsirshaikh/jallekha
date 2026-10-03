@@ -1,0 +1,1654 @@
+{
+  "source": "data/derived/sandbox/results.csv",
+  "source_label": "SIMULATION",
+  "summary_source": "data/derived/sandbox/summary.json",
+  "real_baselines": {
+    "booking_gini_basis": "DERIVED",
+    "booking_gini_sections": 0.780329296,
+    "delivered_share": {
+      "jun_aug_2026": 0.911032,
+      "main_2025": 0.99878,
+      "secondary_2023": 0.998957
+    },
+    "label": "REAL",
+    "source": "HMWSSB tanker bookings, Telangana Open Data Portal (D1); E4 equity summary"
+  },
+  "rows": [
+    {
+      "replay": "main_2025",
+      "scenario": "fleet",
+      "policy": "B1",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.987123,
+          "min": 0.987065,
+          "max": 0.987194,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.012185,
+          "min": 0.012117,
+          "max": 0.012242,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.104619,
+          "min": 0.103165,
+          "max": 0.106221,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.014991,
+          "min": 0.014785,
+          "max": 0.015217,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.996767,
+          "min": 0.996717,
+          "max": 0.996805,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.61215,
+          "min": 0.61215,
+          "max": 0.61215,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.421752,
+          "min": 0.421745,
+          "max": 0.421759,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "main_2025",
+      "scenario": "fleet",
+      "policy": "B2",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.98704,
+          "min": 0.986984,
+          "max": 0.987117,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.012265,
+          "min": 0.012192,
+          "max": 0.012316,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.102477,
+          "min": 0.100721,
+          "max": 0.104279,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.015166,
+          "min": 0.014701,
+          "max": 0.015578,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.996756,
+          "min": 0.996707,
+          "max": 0.996804,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.61215,
+          "min": 0.61215,
+          "max": 0.61215,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.421503,
+          "min": 0.421486,
+          "max": 0.421516,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "main_2025",
+      "scenario": "fleet",
+      "policy": "B3",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.987052,
+          "min": 0.986991,
+          "max": 0.987119,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.012255,
+          "min": 0.012191,
+          "max": 0.012311,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.102832,
+          "min": 0.101053,
+          "max": 0.104613,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.015162,
+          "min": 0.014767,
+          "max": 0.015521,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.996757,
+          "min": 0.996708,
+          "max": 0.996805,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.61215,
+          "min": 0.61215,
+          "max": 0.61215,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.421512,
+          "min": 0.421492,
+          "max": 0.42153,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "main_2025",
+      "scenario": "fleet",
+      "policy": "B4",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.000204,
+          "min": 8.5e-05,
+          "max": 0.000336,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.437332,
+          "min": 0.437161,
+          "max": 0.437503,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "main_2025",
+      "scenario": "fleet",
+      "policy": "B5",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.987086,
+          "min": 0.987028,
+          "max": 0.987166,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.012218,
+          "min": 0.012141,
+          "max": 0.012274,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.103769,
+          "min": 0.102273,
+          "max": 0.105385,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.015585,
+          "min": 0.0151,
+          "max": 0.015982,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.996744,
+          "min": 0.996685,
+          "max": 0.996788,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.61215,
+          "min": 0.61215,
+          "max": 0.61215,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.421744,
+          "min": 0.421732,
+          "max": 0.421754,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "main_2025",
+      "scenario": "fleet",
+      "policy": "JL",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.984061,
+          "min": 0.983995,
+          "max": 0.984097,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.015104,
+          "min": 0.015068,
+          "max": 0.01517,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.11313,
+          "min": 0.11128,
+          "max": 0.114652,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.018249,
+          "min": 0.018042,
+          "max": 0.018454,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.995791,
+          "min": 0.995749,
+          "max": 0.99583,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.576141,
+          "min": 0.576141,
+          "max": 0.576141,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.421813,
+          "min": 0.421807,
+          "max": 0.42182,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "main_2025",
+      "scenario": "fleet",
+      "policy": "JL_F8",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.987096,
+          "min": 0.987038,
+          "max": 0.987171,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.012207,
+          "min": 0.012136,
+          "max": 0.012264,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.103826,
+          "min": 0.102323,
+          "max": 0.105455,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.015239,
+          "min": 0.015035,
+          "max": 0.015478,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.99675,
+          "min": 0.996699,
+          "max": 0.996786,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.61215,
+          "min": 0.61215,
+          "max": 0.61215,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.421759,
+          "min": 0.421752,
+          "max": 0.421763,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "main_2025",
+      "scenario": "fleet",
+      "policy": "JL_POOL",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.999696,
+          "min": 0.999637,
+          "max": 0.999732,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.000274,
+          "min": 0.000241,
+          "max": 0.000335,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.011139,
+          "min": 0.009586,
+          "max": 0.012922,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.001258,
+          "min": 0.001081,
+          "max": 0.001406,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.999888,
+          "min": 0.999843,
+          "max": 0.999922,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.889155,
+          "min": 0.866438,
+          "max": 0.907534,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.439646,
+          "min": 0.43951,
+          "max": 0.439741,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "main_2025",
+      "scenario": "tight",
+      "policy": "B1",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.900208,
+          "min": 0.900029,
+          "max": 0.90039,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.100391,
+          "min": 0.100192,
+          "max": 0.10059,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 1.014848,
+          "min": 1.005115,
+          "max": 1.026888,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.068486,
+          "min": 0.067755,
+          "max": 0.069148,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.978082,
+          "min": 0.977645,
+          "max": 0.978377,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.378093,
+          "min": 0.378093,
+          "max": 0.378093,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.422921,
+          "min": 0.422869,
+          "max": 0.422956,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "main_2025",
+      "scenario": "tight",
+      "policy": "B2",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.898376,
+          "min": 0.898187,
+          "max": 0.898569,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.101596,
+          "min": 0.101406,
+          "max": 0.101799,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.867803,
+          "min": 0.861227,
+          "max": 0.878791,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.098038,
+          "min": 0.096645,
+          "max": 0.099289,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.958778,
+          "min": 0.957756,
+          "max": 0.959725,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.003333,
+          "min": 0.0,
+          "max": 0.018182,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.420905,
+          "min": 0.420835,
+          "max": 0.420953,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "main_2025",
+      "scenario": "tight",
+      "policy": "B3",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.897601,
+          "min": 0.897451,
+          "max": 0.897835,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.10247,
+          "min": 0.10221,
+          "max": 0.102636,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.796796,
+          "min": 0.787328,
+          "max": 0.809678,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.107717,
+          "min": 0.10666,
+          "max": 0.109314,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.949376,
+          "min": 0.948162,
+          "max": 0.950365,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.003322,
+          "min": 0.0,
+          "max": 0.018182,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.4212,
+          "min": 0.421139,
+          "max": 0.421256,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "main_2025",
+      "scenario": "tight",
+      "policy": "B4",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.939689,
+          "min": 0.939446,
+          "max": 0.940045,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.060459,
+          "min": 0.060093,
+          "max": 0.060695,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.469143,
+          "min": 0.462089,
+          "max": 0.475983,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.050755,
+          "min": 0.049551,
+          "max": 0.051972,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.985016,
+          "min": 0.984375,
+          "max": 0.985739,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.39603,
+          "min": 0.354545,
+          "max": 0.432216,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.48059,
+          "min": 0.480053,
+          "max": 0.481296,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "main_2025",
+      "scenario": "tight",
+      "policy": "B5",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.898983,
+          "min": 0.898787,
+          "max": 0.899146,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.1009,
+          "min": 0.100721,
+          "max": 0.101113,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.911897,
+          "min": 0.903169,
+          "max": 0.922786,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.092533,
+          "min": 0.091966,
+          "max": 0.09345,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.959662,
+          "min": 0.959111,
+          "max": 0.960155,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.003333,
+          "min": 0.0,
+          "max": 0.018182,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.421954,
+          "min": 0.421927,
+          "max": 0.421982,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "main_2025",
+      "scenario": "tight",
+      "policy": "JL",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.873641,
+          "min": 0.873506,
+          "max": 0.87378,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.127716,
+          "min": 0.127595,
+          "max": 0.127848,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 1.073649,
+          "min": 1.064428,
+          "max": 1.08669,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.076087,
+          "min": 0.075671,
+          "max": 0.076499,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.973023,
+          "min": 0.972908,
+          "max": 0.973111,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.360088,
+          "min": 0.360088,
+          "max": 0.360088,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.423673,
+          "min": 0.423653,
+          "max": 0.423686,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "main_2025",
+      "scenario": "tight",
+      "policy": "JL_F8",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.899273,
+          "min": 0.899064,
+          "max": 0.899425,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.101357,
+          "min": 0.101183,
+          "max": 0.101583,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.900338,
+          "min": 0.891668,
+          "max": 0.911634,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.067689,
+          "min": 0.067203,
+          "max": 0.068135,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.976514,
+          "min": 0.976388,
+          "max": 0.976619,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.378093,
+          "min": 0.378093,
+          "max": 0.378093,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.423266,
+          "min": 0.423253,
+          "max": 0.423278,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "main_2025",
+      "scenario": "tight",
+      "policy": "JL_POOL",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.912446,
+          "min": 0.912315,
+          "max": 0.912559,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.089705,
+          "min": 0.089586,
+          "max": 0.089841,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.63524,
+          "min": 0.62849,
+          "max": 0.64368,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.051634,
+          "min": 0.051213,
+          "max": 0.052177,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.984877,
+          "min": 0.98466,
+          "max": 0.984993,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.468486,
+          "min": 0.463585,
+          "max": 0.471948,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.474787,
+          "min": 0.474504,
+          "max": 0.475197,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "secondary_2023",
+      "scenario": "fleet",
+      "policy": "B1",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.999961,
+          "min": 0.999947,
+          "max": 0.999967,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 3.4e-05,
+          "min": 2.8e-05,
+          "max": 4.6e-05,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.000739,
+          "min": 0.000558,
+          "max": 0.000948,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.000219,
+          "min": 0.000184,
+          "max": 0.000297,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.999995,
+          "min": 0.999991,
+          "max": 0.999996,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.977004,
+          "min": 0.96823,
+          "max": 0.980333,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.431817,
+          "min": 0.431817,
+          "max": 0.431818,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "secondary_2023",
+      "scenario": "fleet",
+      "policy": "B2",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.999957,
+          "min": 0.999945,
+          "max": 0.999967,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 3.8e-05,
+          "min": 2.8e-05,
+          "max": 4.9e-05,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.000711,
+          "min": 0.000548,
+          "max": 0.000927,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.00023,
+          "min": 0.000184,
+          "max": 0.000304,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.999995,
+          "min": 0.999991,
+          "max": 0.999996,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.977004,
+          "min": 0.96823,
+          "max": 0.980333,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.431813,
+          "min": 0.431807,
+          "max": 0.431817,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "secondary_2023",
+      "scenario": "fleet",
+      "policy": "B3",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.999957,
+          "min": 0.999945,
+          "max": 0.999967,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 3.8e-05,
+          "min": 2.8e-05,
+          "max": 4.9e-05,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.000711,
+          "min": 0.000548,
+          "max": 0.000927,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.00023,
+          "min": 0.000184,
+          "max": 0.000304,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.999995,
+          "min": 0.999991,
+          "max": 0.999996,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.977004,
+          "min": 0.96823,
+          "max": 0.980333,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.431813,
+          "min": 0.431807,
+          "max": 0.431817,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "secondary_2023",
+      "scenario": "fleet",
+      "policy": "B4",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.432002,
+          "min": 0.431965,
+          "max": 0.432046,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "secondary_2023",
+      "scenario": "fleet",
+      "policy": "B5",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.999961,
+          "min": 0.999947,
+          "max": 0.999967,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 3.4e-05,
+          "min": 2.8e-05,
+          "max": 4.6e-05,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.000738,
+          "min": 0.000558,
+          "max": 0.000948,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.00022,
+          "min": 0.000184,
+          "max": 0.000297,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.999995,
+          "min": 0.999991,
+          "max": 0.999996,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.977004,
+          "min": 0.96823,
+          "max": 0.980333,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.431817,
+          "min": 0.431817,
+          "max": 0.431818,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "secondary_2023",
+      "scenario": "fleet",
+      "policy": "JL",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.999961,
+          "min": 0.999947,
+          "max": 0.999967,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 3.4e-05,
+          "min": 2.8e-05,
+          "max": 4.6e-05,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.000775,
+          "min": 0.000591,
+          "max": 0.000975,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.00022,
+          "min": 0.000184,
+          "max": 0.000297,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.999995,
+          "min": 0.999991,
+          "max": 0.999996,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.977004,
+          "min": 0.96823,
+          "max": 0.980333,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.431817,
+          "min": 0.431817,
+          "max": 0.431818,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "secondary_2023",
+      "scenario": "fleet",
+      "policy": "JL_F8",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.999961,
+          "min": 0.999947,
+          "max": 0.999967,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 3.4e-05,
+          "min": 2.8e-05,
+          "max": 4.6e-05,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.000738,
+          "min": 0.000558,
+          "max": 0.000948,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.00022,
+          "min": 0.000184,
+          "max": 0.000297,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.999995,
+          "min": 0.999991,
+          "max": 0.999996,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.977004,
+          "min": 0.96823,
+          "max": 0.980333,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.431817,
+          "min": 0.431817,
+          "max": 0.431818,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "secondary_2023",
+      "scenario": "fleet",
+      "policy": "JL_POOL",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 2e-05,
+          "min": 3e-06,
+          "max": 3.8e-05,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.432011,
+          "min": 0.431975,
+          "max": 0.432044,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "secondary_2023",
+      "scenario": "tight",
+      "policy": "B1",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.900116,
+          "min": 0.899942,
+          "max": 0.900314,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.097268,
+          "min": 0.097065,
+          "max": 0.097475,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.898898,
+          "min": 0.883509,
+          "max": 0.909165,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.065773,
+          "min": 0.06508,
+          "max": 0.066405,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.980658,
+          "min": 0.980227,
+          "max": 0.981045,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.451937,
+          "min": 0.432243,
+          "max": 0.455621,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.433115,
+          "min": 0.433054,
+          "max": 0.433202,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "secondary_2023",
+      "scenario": "tight",
+      "policy": "B2",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.898384,
+          "min": 0.89815,
+          "max": 0.898585,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.098837,
+          "min": 0.098647,
+          "max": 0.09906,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.831022,
+          "min": 0.819438,
+          "max": 0.844866,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.088715,
+          "min": 0.08659,
+          "max": 0.090505,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.963712,
+          "min": 0.96226,
+          "max": 0.965079,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.002336,
+          "min": 0.0,
+          "max": 0.011682,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.430355,
+          "min": 0.430267,
+          "max": 0.430429,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "secondary_2023",
+      "scenario": "tight",
+      "policy": "B3",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.898327,
+          "min": 0.898138,
+          "max": 0.898492,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.098879,
+          "min": 0.098731,
+          "max": 0.099057,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.835084,
+          "min": 0.823701,
+          "max": 0.845933,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.090213,
+          "min": 0.088213,
+          "max": 0.091746,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.96373,
+          "min": 0.962603,
+          "max": 0.965298,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.017445,
+          "min": 0.0,
+          "max": 0.070093,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.431117,
+          "min": 0.430999,
+          "max": 0.431232,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "secondary_2023",
+      "scenario": "tight",
+      "policy": "B4",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.924913,
+          "min": 0.92462,
+          "max": 0.925173,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.073891,
+          "min": 0.073608,
+          "max": 0.074156,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.679992,
+          "min": 0.666205,
+          "max": 0.690737,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.0348,
+          "min": 0.033398,
+          "max": 0.036218,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.993936,
+          "min": 0.993635,
+          "max": 0.994198,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.607776,
+          "min": 0.604919,
+          "max": 0.611688,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.466063,
+          "min": 0.465469,
+          "max": 0.466525,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "secondary_2023",
+      "scenario": "tight",
+      "policy": "B5",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.899027,
+          "min": 0.898826,
+          "max": 0.899238,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.09797,
+          "min": 0.097777,
+          "max": 0.098152,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.851463,
+          "min": 0.838078,
+          "max": 0.862474,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.075661,
+          "min": 0.075001,
+          "max": 0.076371,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.971042,
+          "min": 0.970575,
+          "max": 0.971881,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.197344,
+          "min": 0.162088,
+          "max": 0.255495,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.433045,
+          "min": 0.43297,
+          "max": 0.433096,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "secondary_2023",
+      "scenario": "tight",
+      "policy": "JL",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.876832,
+          "min": 0.876629,
+          "max": 0.877016,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.121006,
+          "min": 0.120825,
+          "max": 0.121185,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 1.002059,
+          "min": 0.992892,
+          "max": 1.011117,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.068752,
+          "min": 0.068212,
+          "max": 0.069209,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.978673,
+          "min": 0.978515,
+          "max": 0.978855,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.381808,
+          "min": 0.375535,
+          "max": 0.392643,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.434247,
+          "min": 0.434206,
+          "max": 0.434303,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "secondary_2023",
+      "scenario": "tight",
+      "policy": "JL_F8",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.899496,
+          "min": 0.899309,
+          "max": 0.899658,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.097857,
+          "min": 0.097692,
+          "max": 0.098042,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.86751,
+          "min": 0.853981,
+          "max": 0.878643,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.062367,
+          "min": 0.061816,
+          "max": 0.062754,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.980874,
+          "min": 0.980714,
+          "max": 0.981072,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.381808,
+          "min": 0.375535,
+          "max": 0.392643,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.433734,
+          "min": 0.433691,
+          "max": 0.433798,
+          "basis": "SIMULATION"
+        }
+      }
+    },
+    {
+      "replay": "secondary_2023",
+      "scenario": "tight",
+      "policy": "JL_POOL",
+      "seed_count": 30,
+      "label": "SIMULATION",
+      "metrics": {
+        "served_share": {
+          "mean": 0.914037,
+          "min": 0.913637,
+          "max": 0.914439,
+          "basis": "SIMULATION"
+        },
+        "need_weighted_unmet_share": {
+          "mean": 0.08709,
+          "min": 0.08672,
+          "max": 0.087463,
+          "basis": "SIMULATION"
+        },
+        "mean_wait_days": {
+          "mean": 0.757439,
+          "min": 0.745718,
+          "max": 0.770517,
+          "basis": "SIMULATION"
+        },
+        "gini_fill_rate": {
+          "mean": 0.041471,
+          "min": 0.040615,
+          "max": 0.041964,
+          "basis": "SIMULATION"
+        },
+        "jain_fill_rate": {
+          "mean": 0.990423,
+          "min": 0.990189,
+          "max": 0.990816,
+          "basis": "SIMULATION"
+        },
+        "worst_group_fill_rate": {
+          "mean": 0.583615,
+          "min": 0.560651,
+          "max": 0.601369,
+          "basis": "SIMULATION"
+        },
+        "km_per_kl": {
+          "mean": 0.48243,
+          "min": 0.481836,
+          "max": 0.483338,
+          "basis": "SIMULATION"
+        }
+      }
+    }
+  ],
+  "unavailable": {
+    "duplicate_merge_rate": "NOT_AVAILABLE",
+    "reason": "The replay has no complaints and the local duplicate calibration is unavailable."
+  }
+}

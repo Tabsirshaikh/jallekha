@@ -50,10 +50,51 @@ The pull-request description must summarize the same information and link to thi
 - **Owner / date:** P4, 2026-10-02.
 - **Purpose:** Build the resident-facing reporting and tracking experience with an offline-first queue.
 - **What we found:** P3's T4 intake batch endpoint accepts app items with `client_id`, `channel`, `category`, `text`, `language_hint`, and `area_id`; it returns per-item outcomes. There is no resident-facing delivery-code or ward-information API in `main`. U1 is merged; T4's implementation is present via PR #37, though its tracker row remains `IN_REVIEW`.
-- **What we changed:** Added English, Telugu, Urdu and Hindi resident flows for issue reports, request tracking and an area card. Reports persist in IndexedDB, can include device location only after the resident opts in, and sync idempotently through T4's `/intake/batch` contract when online; the dev server proxies `/intake` to the local API. Added a web manifest and service worker for cached app-shell use. The UI explicitly identifies local-only reports and unavailable live delivery/ward data.
-- **Validation:** `git diff --check` passes. `.github/workflows/p4-u2.yml` runs frontend lint and production build. Local UI/test/build validation has not been run.
+- **What we changed:** Added English, Telugu, Urdu and Hindi resident flows for issue reports, request tracking and an area card. Reports persist in IndexedDB, can include device location only after the resident opts in, and sync idempotently through T4's `/intake/batch` contract when online; the dev server proxies `/intake` to the local API. Added a web manifest and service worker for cached app-shell use. U10 now supplies an explicitly synthetic sample ward card and SMS summary, and request tracking labels its demo delivery code as SIMULATION.
+- **Validation:** Frontend lint, typecheck and production build pass. `git diff --check` passes. No tests were run.
 - **Known limitations:** Live delivery-code assignment and verified ward service information need backend/API support. Intake submission also needs the API running and reachable at `/intake/batch`. All translations are drafts pending native-speaker review.
 - **Handoff / next step:** Coordinate with P3 on resident-facing delivery-code and ward-information API shapes; then connect the card to verified data.
+- **Pull request:** pending.
+
+## `feat/u8-explain` — `U8`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Show why a booking received its sample queue position and let residents file a contest for officer reply.
+- **What we found:** T7 explanation and contest services are present on `main`; T10 has not added their HTTP routes. The service's contest reason and reply outcome codes are therefore used as UI choices, but no service call is made.
+- **What we changed:** Added a four-language explanation and contest preview, with a synthetic booking rationale, a clearly illustrative counterfactual, contest form, and reason-required officer reply form. Preview contests persist in local browser storage only.
+- **Validation:** `python tasks.py lint`, frontend production build and `git diff --check` pass. The task workflow `.github/workflows/p4-u8-u10.yml` repeats frontend lint and build. No tests were added or run.
+- **Known limitations:** Queue values are synthetic and the counterfactual is explanatory copy, not calculated output. Contest filing/reply does not call T7 or update the ledger. Native-speaker review remains required.
+- **Handoff / next step:** Connect this screen to T10 explanation and contest routes when available; replace fixtures with T7 output.
+- **Pull request:** pending.
+
+## `feat/u9-impact` — `U9`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Compare policy-sandbox outcomes while showing the basis of every reported value.
+- **What we changed:** Added `scripts/frontend/build_u9_snapshot.py` and `frontend/src/data/u9Impact.json`, a compact summary of A8 `results.csv` grouped by replay, scenario and policy across seeds. The UI compares selected metrics and ranges, marks every result SIMULATION, and keeps duplicate-complaint impact UNAVAILABLE.
+- **Validation:** Snapshot generated from committed A8 results (32 replay/scenario/policy groups, 30 seeds each). `python tasks.py lint`, frontend production build and `git diff --check` pass. The task workflow `.github/workflows/p4-u8-u10.yml` repeats frontend lint and build. No tests were added or run.
+- **Known limitations:** The sandbox output is simulated, not observed field impact. Duplicate-complaint reduction cannot be measured from this replay. This screen does not claim that JalLekha improves outcomes over B1.
+- **Handoff / next step:** Refresh the snapshot when A8 results change; use validated field outcomes only after they are collected and reviewed.
+- **Pull request:** pending.
+
+## `feat/u10-cards` — `U10`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Give residents a simple ward summary and an SMS-sized version of the same information.
+- **What we changed:** Added two localized sample ward cards with need, monthly bookings, deliveries, waiting bookings, an example schedule and a copyable SMS summary. Every value and schedule carries a SIMULATION label. Added a clearly marked sample delivery code to U2 request tracking.
+- **Validation:** `python tasks.py lint`, frontend production build and `git diff --check` pass. `.github/workflows/p4-u8-u10.yml` repeats frontend lint and build. No tests were added or run.
+- **Known limitations:** T10 report-card route and verified ward schedule are unavailable. The displayed values are synthetic examples and must not be treated as local service information.
+- **Handoff / next step:** Replace sample wards with the T10 report-card response and approved SMS templates when available.
+- **Pull request:** pending.
+
+## `feat/x1-docs` — `X1`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Document the prototype, pitch/demo flow and release handoff.
+- **What we changed:** Updated the README status and added `docs/P4_DEMO.md` with a slide outline, three-minute demo script and run steps.
+- **Validation:** Documentation checked against current feature scope and explicit sample-data limits. Frontend build, `python tasks.py lint` and `git diff --check` pass. Release tag intentionally waits until the branch merges, required checks pass and the owner confirms a version.
+- **Known limitations:** The repository contains no PowerPoint deck to edit. The notes provide content for the deck. No release tag is created from an unmerged feature branch.
+- **Handoff / next step:** Apply the outline to the presentation, merge the branch, then create the owner-approved release tag from green `main`.
 - **Pull request:** pending.
 
 ## `feat/u3-field` — `U3`
