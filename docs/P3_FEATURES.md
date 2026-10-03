@@ -15,7 +15,7 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 | T7 | F16 explanations + contest | `feat/t7-explain` | DONE ([PR #46](https://github.com/Tabsirshaikh/jallekha/pull/46) merged); reason / outcome codes, counterfactual limits, number removal, tier-counterfactual audience and wording OPEN |
 | T8 | F6 shortage warning | `feat/t8-shortage` | Blocked: T2, D1 |
 | T9 | F17 confidence gate | `feat/t9-confidence` | IN_PROGRESS (local, not pushed) |
-| T10 | API for all screens | `feat/t10-api` | Shapes to agree with P4 in week 1 |
+| T10 | API for all screens | `feat/t10-api` | IN_PROGRESS (local; cut from `main` + local merges of T9 #59 and API shapes #57) |
 
 ---
 
