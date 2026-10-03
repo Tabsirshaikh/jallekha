@@ -899,4 +899,4 @@ The pull-request description must summarize the same information and link to thi
 - **Validation:** 32 API tests (every route conforms to its example; auth 401 / 403, dev token, gateway; approval without a reason 422; paging; CORS; OpenAPI current). `python tasks.py test`: 641 backend passed, 2 failed (P2 `test_a8_build.py::test_stations_are_reproducible_committed_and_labelled` and `::test_one_seed_reproduces`, Windows only, pass on Linux CI); frontend passed; lint exit 0.
 - **Known limitations:** OPEN: councillor role; voice upload (`python-multipart`); plan and delivery stores; SMS wording te / ur / hi; OTP key management. In-memory holders reset on restart.
 - **Handoff / next step:** merge #59 and #57 first. P2: plan store and daily job. P4: wire screens to the routes.
-- **Pull request:** pending.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/62
