@@ -864,5 +864,5 @@ The pull-request description must summarize the same information and link to thi
 - **Handoff / next step:**
   - P2 (request, see `docs/worklogs/T9.md`): degraded-scenario replay for threshold calibration.
   - T10: expose the reason and the officer check.
-- **Pull request:** pending.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/59
 
