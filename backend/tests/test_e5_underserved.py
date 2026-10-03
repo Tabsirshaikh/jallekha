@@ -469,3 +469,51 @@ def test_unknown_nb_dispersion_prior_is_refused():
     config = UnderservedConfig(minimum_areas=8, peer_count=3, nb_dispersion_prior="wide")
     with pytest.raises(ValueError, match="dispersion prior"):
         fit_count_model(cohort(config=config), variant="NB", config=config, holdout_ids=("W00",))
+
+
+def test_spatial_spread_can_use_a_pc_prior():
+    """Simpson et al. (2017) PC prior on the BYM2 spread: Exponential with P(sigma > U) = 0.01,
+    shrinking towards no area effect unless the data need one."""
+    config = UnderservedConfig(
+        minimum_areas=8,
+        peer_count=3,
+        chains=2,
+        draws=60,
+        tune=60,
+        max_rhat=20,
+        minimum_bulk_ess=1,
+        seed=414,
+        bym2_structure="icar",
+        bym2_sigma_prior="pc",
+    )
+    areas = cohort(config=config)
+    import pytensor
+
+    if __import__("os").name == "nt":
+        pytensor.config.cxx = ""
+    edges = tuple((f"W{i:02}", f"W{i + 1:02}") for i in range(len(areas) - 1))
+    review = {
+        "status": "REVIEWED",
+        "geography_version": config.geography_version,
+        "reviewer": "synthetic-test-only",
+        "source_sha256": "a" * 64,
+    }
+    result = fit_count_model(
+        areas, edges=edges, variant="BYM2", config=config, holdout_ids=("W00",), graph_review=review
+    )
+    assert result["priors"]["sigma"] == "PC: P(sigma > 1) = 0.01"
+    shrunk = fit_count_model(
+        areas,
+        edges=edges,
+        variant="BYM2_SHRINKAGE",
+        config=config,
+        holdout_ids=("W00",),
+        graph_review=review,
+    )
+    assert shrunk["priors"]["sigma"] == "PC: P(sigma > 0.5) = 0.01"
+
+
+def test_unknown_spatial_spread_prior_is_refused():
+    config = UnderservedConfig(minimum_areas=8, peer_count=3, bym2_sigma_prior="flat")
+    with pytest.raises(ValueError, match="spread prior"):
+        fit_count_model(cohort(config=config), variant="NB", config=config, holdout_ids=("W00",))

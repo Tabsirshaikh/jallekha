@@ -45,6 +45,10 @@ class UnderservedConfig:
     # "inv_sqrt" = HalfNormal(1) on 1/sqrt(alpha), where 0 = Poisson (Stan prior-choice
     # recommendations). The E5 diagnosis found alpha the last parameter to mix.
     nb_dispersion_prior: str = "halfnormal"
+    # Prior on the spatial spread sigma: "halfnormal" = HalfNormal(1), or HalfNormal(0.5) for the
+    # shrinkage variant (original E5 spec), or "pc" = Exponential with P(sigma > 1 or 0.5) = 0.01
+    # (Simpson et al. 2017). The E5 diagnosis found alpha and sigma trading off in one fold.
+    bym2_sigma_prior: str = "halfnormal"
     geography_version: str = "GHMC_2016_150"
 
 

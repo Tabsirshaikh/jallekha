@@ -126,6 +126,7 @@ if __name__ == "__main__":
     parser.add_argument("--islands-iid", action="store_true", default=None)
     parser.add_argument("--structure", choices=("bym2", "icar"))
     parser.add_argument("--nb-dispersion-prior", choices=("halfnormal", "inv_sqrt"))
+    parser.add_argument("--sigma-prior", choices=("halfnormal", "pc"))
     parser.add_argument("--output", default=RESULTS)
     args = parser.parse_args()
     overrides = {
@@ -142,6 +143,7 @@ if __name__ == "__main__":
             "bym2_islands_iid_only": args.islands_iid,
             "bym2_structure": args.structure,
             "nb_dispersion_prior": args.nb_dispersion_prior,
+            "bym2_sigma_prior": args.sigma_prior,
         }.items()
         if value is not None
     }

@@ -140,6 +140,8 @@ def fit_count_model(
     if config.bym2_structure not in ("bym2", "icar"):
         raise ValueError(f"Unknown BYM2 structure: {config.bym2_structure}")
     icar_only = variant != "NB" and config.bym2_structure == "icar"
+    if config.bym2_sigma_prior not in ("halfnormal", "pc"):
+        raise ValueError(f"Unknown BYM2 spread prior: {config.bym2_sigma_prior}")
     if config.nb_dispersion_prior not in ("halfnormal", "inv_sqrt"):
         raise ValueError(f"Unknown NB dispersion prior: {config.nb_dispersion_prior}")
     if config.bym2_rho_prior not in ("beta", "pc"):
@@ -198,7 +200,12 @@ def fit_count_model(
         effect = 0
         if variant != "NB":
             basis = scaled_icar_basis(ids, edges, islands_iid_only=config.bym2_islands_iid_only)
-            sigma = pm.HalfNormal("sigma", sigma=0.5 if variant == "BYM2_SHRINKAGE" else 1)
+            spread = 0.5 if variant == "BYM2_SHRINKAGE" else 1
+            if config.bym2_sigma_prior == "pc":
+                # PC prior (Simpson et al. 2017): P(sigma > spread) = 0.01
+                sigma = pm.Exponential("sigma", lam=-math.log(0.01) / spread)
+            else:
+                sigma = pm.HalfNormal("sigma", sigma=spread)
             z = pm.Normal("spatial_z", 0, 1, shape=basis.shape[1])
             if icar_only:
                 # NB alpha already carries per-ward extra variation; keep only the spatial part
@@ -323,7 +330,13 @@ def fit_count_model(
                     else "Beta(0.5,0.5)"
                 }
             ),
-            "sigma": "HalfNormal(0.5)" if variant == "BYM2_SHRINKAGE" else "HalfNormal(1)",
+            "sigma": (
+                f"PC: P(sigma > {0.5 if variant == 'BYM2_SHRINKAGE' else 1}) = 0.01"
+                if config.bym2_sigma_prior == "pc"
+                else "HalfNormal(0.5)"
+                if variant == "BYM2_SHRINKAGE"
+                else "HalfNormal(1)"
+            ),
         },
         "scores": scores,
     }
