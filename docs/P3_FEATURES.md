@@ -194,11 +194,19 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 
 ## T8: shortage early warning (F6)
 
-- **Implementation notes:** _to fill_
-- **Files:** _to fill_
-- **Tests and results:** _to fill_
-- **How to run:** _to fill_
-- **Status log:** _to fill_
+- **Implementation notes:** `services/shortage.py` (pure apart from reading A8's files), rules in `config/forecast.py` (`SHORTAGE_CONFIG`), `scripts/forecast/run_shortage.py` -> `data/derived/shortage_risk.csv`. No LLM, no API route (T10). Branch cut from `feat/t2-forecast` (T2 not merged); retarget to `main` after T2 merges.
+  - **Risk per section and month, 1-3 months after the forecast origin** (T2's table starts 2026-02, so 2026-02 to 2026-04): one booking = one trip (ASSUMED, as T2). `high` if the point forecast reaches 1.0 x capacity; `medium` if it reaches 0.85 x capacity or the upper 80% bound reaches capacity; `low` otherwise; `unknown` without a capacity. Ratios ASSUMED, OPEN.
+  - **Capacity reuses A8 on `main`** (P2's files read, not changed): the fleet scenario's station trips per day (1,150 tankers, REAL news, x 9 trips per tanker per day, DERIVED, split over 90 stand-in stations, `data/verification/sandbox_checks.json`), shared over each station's home sections by their Mar-Jul 2025 bookings (`data/derived/sandbox/section_points.csv`), x days in the month. Labelled ASSUMED in every row. 3 sections have no A8 station: capacity UNAVAILABLE, risk `unknown`.
+  - **Reasons are built from the row's numbers** (forecast, 80% bound, capacity, share of capacity, risk) and always end with "groundwater data unavailable": D7 is not in the repo and no value is invented. Reservoirs are behind `reservoirs_enabled` (off, Q2 not approved); switching it on without data raises an error.
+  - **Section label:** T2's pre-re-cut label is kept in `section_basis` (section names from before the Feb/Mar 2026 re-cut).
+  - **Result** (`shortage_risk.csv`, 551 rows: T2 forecasts 182 / 184 / 185 sections in the three months, only where a value a year earlier exists): 2026-02: 10 high, 28 medium, 142 low, 2 unknown; 2026-03: 18 high, 48 medium, 118 low; 2026-04: 18 high, 54 medium, 112 low, 1 unknown.
+  - **OPEN, owner to confirm. Not decided.** The risk ratios (1.0 / 0.85 and the 80% bound rule); using A8's 2025 station split and fleet for 2026 months; one booking = one trip; where the published forecast starts (T2's pre-re-cut names; the risk months are in the past relative to 2026-10). Q2 reservoirs. D7 groundwater source.
+  - **Known limits:** capacity per section depends on A8's ASSUMED stand-in stations and its 2025 booking split, so a section whose bookings grew since 2025 shows as risky partly by construction; no groundwater or reservoir signal; sections with no forecast for a month (no value a year earlier) are not listed for that month.
+- **Files:** `backend/app/config/forecast.py` (`ShortageConfig`), `backend/app/services/shortage.py`, `backend/tests/services/test_shortage.py`, `scripts/forecast/run_shortage.py`, `data/derived/shortage_risk.csv`, `.github/workflows/p3-t8.yml`, `docs/worklogs/T8.md`, `docs/features.csv`, `docs/P3_FEATURES.md`, `docs/BRANCH_WORKLOG.md`.
+- **Config keys:** `SHORTAGE_CONFIG`: `months_ahead` (1, 2, 3; source: T8 done-when), `risk_high_ratio` (1.0, OPEN), `risk_medium_ratio` (0.85, OPEN), `a8_checks_path`, `a8_sections_path`, `a8_replay` (`main_2025`), `a8_scenario` (`fleet`), `groundwater_note`, `reservoirs_enabled` (False), `section_label`, `forecast_table_path`, `output_path`.
+- **Tests and results (2026-10-03, Windows):** written first (`ImportError: cannot import name 'SHORTAGE_CONFIG'` before the code existed). 8 tests: risk boundaries (exactly at 1.0 and 0.85, the 80% bound at capacity, no / zero capacity); rules in config; capacity equals A8's station trips summed over home sections and the fleet total; reason built from the numbers and saying groundwater unavailable; reservoir flag off, and on without data refused; only 1-3 months ahead, unknown capacity; done-when on the real files (risk list 1-3 months ahead with reasons, label kept, `_basis` on every derived column); the committed list reproduces byte for byte. `python tasks.py test`: **599 backend passed, 2 failed** (P2's `test_a8_build.py` A8 tests, Windows only, inherited; pass on Linux CI), frontend 1 passed, all P1 verifiers pass; `python tasks.py lint` exit 0.
+- **How to run:** `.venv\Scripts\python -m pytest backend/tests/services/test_shortage.py`; `.venv\Scripts\python scripts/forecast/run_shortage.py` (writes `data/derived/shortage_risk.csv`).
+- **Status log:** 2026-10-03 config, service, script, output, tests and the `P3:T8` workflow committed on `feat/t8-shortage` (cut from `feat/t2-forecast`). Waiting for: T2 to merge; the owner on the OPEN items.
 
 ## T9: confidence gate (F17)
 
