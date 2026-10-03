@@ -51,11 +51,13 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - **[NOT BUILT]** The map screens (U5).
 
 ### F4 Under-served Field-Check Screen (E5)
-- 107 wards screened, **7 candidates**, 38 wards left in data review (37 have no placed section).
-- Peer-median screen only. **E5's done-when ("flags stable across model variants") is not met**, although the tracker says DONE: the output says `stability_evaluated: false`.
-  - The NB, BYM2 and BYM2-shrinkage models exist (`services/underserved_models.py`, PyMC, 5-fold out-of-fold) but `scripts/evidence/build_underserved.py` calls `screen(areas)` without model results. They were skipped when E5 was switched on (PR #43).
-  - BYM2 also needs a ward-adjacency graph with a named reviewer (by design); neither exists yet.
-  - Running the models may reduce the 7 candidates, since a candidate must agree across variants.
+- 107 wards screened, **6 candidates**, 38 wards left in data review (37 have no placed section).
+- **Only two of the four methods count.** The peer median and the negative-binomial model (NB) both run and pass every check, so a candidate must be flagged by both (`AGREED_FIELD_CHECK_CANDIDATE`; they agree on 6 of 7 flagged wards, Jaccard 0.86). Mailardevpally, flagged by the peer screen alone, is `MODEL_SENSITIVE_REVIEW`.
+  - **The two spatial models (BYM2, BYM2-shrinkage) did not converge**, so E5's done-when ("flags stable across model variants") is met only for peer + NB, and the output says `stability_evaluated: false`.
+  - Five rounds of fixes, each recorded in the commit history and `model_results.json`: sampler settings; Poisson likelihood; restricted spatial regression; PC prior on rho; islands without a structured effect; ICAR structure only; inverse-sqrt prior on the NB dispersion; PC prior on the spatial spread. The final setting passes 8 of 10 spatial folds. Fold 1 fails for every seed: without its 22 wards, ward-level variation (NB alpha) and spatial variation (sigma) cannot be told apart.
+  - The strict gate (R-hat at most 1.01, bulk ESS at least 100, no divergences in every fold) was kept, not relaxed.
+  - NB's expected bookings are far above the peer figure for the old-city candidates (Barkas: about 21,600 vs 1,193 from peers) because heavily booking western wards also have high WAD, so the model extrapolates; the flag holds either way (upper interval far below 1), but use the peer figure when quoting an expected count.
+- Models are fitted on Linux (WSL or CI) and committed; CI never re-samples. The GitHub Actions models job could not run in October 2026 because of an account billing block.
 - Low bookings cannot prove hidden demand. A candidate only means "send someone to check". No field check outcomes recorded (0 ground truth).
 - Thresholds are policy parameters.
 
@@ -160,7 +162,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 
 ## 6. Solution document statements that are now out of date
 
-- The E5 paragraph says zero candidates; it is now 7 (2025 inputs).
+- The E5 paragraph says zero candidates; it is now 6 (2025 inputs, peer and NB agreeing).
 - F2 says the growth ratio must not scale households; a modelled 2025 estimate now does.
 - F19 policy list lacks JL_F8 and JL_POOL.
 - D12 says "159 of 201 sections" geocoded; it is now 161 of 221.

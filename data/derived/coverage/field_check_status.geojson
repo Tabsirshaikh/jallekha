@@ -914,7 +914,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 152247,
@@ -1283,7 +1283,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 53890,
@@ -1628,7 +1628,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 49058,
@@ -1797,7 +1797,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 2786,
@@ -2010,16 +2010,11 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "PEER_ONLY_FIELD_CHECK",
-        "field_check_candidate": true,
+        "display_status": "MODEL_SENSITIVE_REVIEW",
+        "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 1263,
-        "reason_codes": [
-          "LOW_OBSERVED_REFERENCE_RATIO",
-          "WAD_ABOVE_COHORT_QUANTILE",
-          "CAD_ABOVE_COHORT_MEDIAN",
-          "HARDSHIP_ABOVE_COHORT_MEDIAN"
-        ],
+        "reason_codes": [],
         "value_basis": "DERIVED",
         "ward_id": "relation/7849357",
         "ward_name": "Ward 59 Mailardevpally"
@@ -2370,7 +2365,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 2618,
@@ -2699,7 +2694,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 44,
@@ -3086,7 +3081,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 2390,
@@ -3359,7 +3354,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 2798,
@@ -3756,7 +3751,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 1604,
@@ -4089,7 +4084,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 8229,
@@ -4496,7 +4491,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 385,
@@ -4661,7 +4656,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 2534,
@@ -4766,7 +4761,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 6893,
@@ -5323,7 +5318,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 8176,
@@ -5492,7 +5487,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 1468,
@@ -5689,7 +5684,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 2460,
@@ -5818,7 +5813,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 5562,
@@ -6019,7 +6014,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 35369,
@@ -6236,7 +6231,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 19295,
@@ -6401,7 +6396,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 1032,
@@ -6550,7 +6545,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 28444,
@@ -6707,7 +6702,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 2312,
@@ -6964,7 +6959,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 14130,
@@ -7449,7 +7444,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 4076,
@@ -7690,7 +7685,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 13268,
@@ -7859,7 +7854,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 28518,
@@ -8208,7 +8203,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 14904,
@@ -8561,7 +8556,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 177088,
@@ -8762,7 +8757,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 5281,
@@ -9775,7 +9770,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 140498,
@@ -10020,7 +10015,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 3509,
@@ -10129,7 +10124,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 28184,
@@ -10394,7 +10389,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 1989,
@@ -10519,7 +10514,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 743,
@@ -10652,7 +10647,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 8463,
@@ -10761,7 +10756,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 9022,
@@ -11074,7 +11069,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 531,
@@ -11187,7 +11182,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 4237,
@@ -11392,7 +11387,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 4744,
@@ -11637,7 +11632,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 2082,
@@ -11766,7 +11761,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 13,
@@ -12039,7 +12034,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 14,
@@ -12320,7 +12315,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 18,
@@ -12505,7 +12500,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 19,
@@ -12762,11 +12757,13 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "PEER_ONLY_FIELD_CHECK",
+        "display_status": "AGREED_FIELD_CHECK_CANDIDATE",
         "field_check_candidate": true,
         "layer_id": "field_check_status",
         "observed_bookings": 405,
         "reason_codes": [
+          "LOW_OBSERVED_REFERENCE_RATIO",
+          "WAD_ABOVE_COHORT_QUANTILE",
           "LOW_OBSERVED_REFERENCE_RATIO",
           "WAD_ABOVE_COHORT_QUANTILE",
           "CAD_ABOVE_COHORT_MEDIAN",
@@ -12940,11 +12937,13 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "PEER_ONLY_FIELD_CHECK",
+        "display_status": "AGREED_FIELD_CHECK_CANDIDATE",
         "field_check_candidate": true,
         "layer_id": "field_check_status",
         "observed_bookings": 24,
         "reason_codes": [
+          "LOW_OBSERVED_REFERENCE_RATIO",
+          "WAD_ABOVE_COHORT_QUANTILE",
           "LOW_OBSERVED_REFERENCE_RATIO",
           "WAD_ABOVE_COHORT_QUANTILE",
           "CAD_ABOVE_COHORT_MEDIAN",
@@ -13238,7 +13237,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 6,
@@ -13547,7 +13546,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 159,
@@ -13672,7 +13671,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 22,
@@ -14045,7 +14044,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 172,
@@ -14174,7 +14173,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 21,
@@ -14495,7 +14494,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 369,
@@ -14640,7 +14639,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 265,
@@ -14949,7 +14948,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 8114,
@@ -15086,7 +15085,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 1920,
@@ -15215,7 +15214,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 9029,
@@ -15580,7 +15579,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 6337,
@@ -15737,7 +15736,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 7080,
@@ -15914,7 +15913,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 539,
@@ -16119,7 +16118,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 810,
@@ -16432,7 +16431,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 40862,
@@ -16677,7 +16676,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 41795,
@@ -17150,7 +17149,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 22213,
@@ -17239,7 +17238,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 5223,
@@ -17360,7 +17359,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 26212,
@@ -17605,7 +17604,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 4333,
@@ -17934,7 +17933,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 483,
@@ -18343,7 +18342,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 3727,
@@ -18500,7 +18499,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 862,
@@ -18697,7 +18696,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 2293,
@@ -18898,7 +18897,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 18125,
@@ -19635,7 +19634,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 46109,
@@ -19780,7 +19779,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 6894,
@@ -19985,7 +19984,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 9862,
@@ -20290,7 +20289,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 1462,
@@ -20507,7 +20506,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 1454,
@@ -20864,7 +20863,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 88500,
@@ -21159,7 +21158,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 9073,
@@ -21396,7 +21395,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 530,
@@ -21689,7 +21688,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 6090,
@@ -22158,7 +22157,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 10764,
@@ -22955,7 +22954,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 3893,
@@ -23084,7 +23083,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 5111,
@@ -23233,7 +23232,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 5722,
@@ -23378,11 +23377,13 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "PEER_ONLY_FIELD_CHECK",
+        "display_status": "AGREED_FIELD_CHECK_CANDIDATE",
         "field_check_candidate": true,
         "layer_id": "field_check_status",
         "observed_bookings": 151,
         "reason_codes": [
+          "LOW_OBSERVED_REFERENCE_RATIO",
+          "WAD_ABOVE_COHORT_QUANTILE",
           "LOW_OBSERVED_REFERENCE_RATIO",
           "WAD_ABOVE_COHORT_QUANTILE",
           "CAD_ABOVE_COHORT_MEDIAN",
@@ -23532,7 +23533,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 1797,
@@ -23653,7 +23654,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 457,
@@ -23782,7 +23783,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 1088,
@@ -23939,7 +23940,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 2632,
@@ -24192,7 +24193,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 51,
@@ -24305,7 +24306,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 236,
@@ -24558,7 +24559,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 76,
@@ -24711,7 +24712,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 76,
@@ -24992,11 +24993,13 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "PEER_ONLY_FIELD_CHECK",
+        "display_status": "AGREED_FIELD_CHECK_CANDIDATE",
         "field_check_candidate": true,
         "layer_id": "field_check_status",
         "observed_bookings": 11,
         "reason_codes": [
+          "LOW_OBSERVED_REFERENCE_RATIO",
+          "WAD_ABOVE_COHORT_QUANTILE",
           "LOW_OBSERVED_REFERENCE_RATIO",
           "WAD_ABOVE_COHORT_QUANTILE",
           "CAD_ABOVE_COHORT_MEDIAN",
@@ -25210,7 +25213,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 8155,
@@ -25515,7 +25518,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 560,
@@ -25788,7 +25791,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 153,
@@ -26029,7 +26032,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 936,
@@ -26374,7 +26377,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 222,
@@ -26487,7 +26490,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 3349,
@@ -26852,11 +26855,13 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "PEER_ONLY_FIELD_CHECK",
+        "display_status": "AGREED_FIELD_CHECK_CANDIDATE",
         "field_check_candidate": true,
         "layer_id": "field_check_status",
         "observed_bookings": 11,
         "reason_codes": [
+          "LOW_OBSERVED_REFERENCE_RATIO",
+          "WAD_ABOVE_COHORT_QUANTILE",
           "LOW_OBSERVED_REFERENCE_RATIO",
           "WAD_ABOVE_COHORT_QUANTILE",
           "CAD_ABOVE_COHORT_MEDIAN",
@@ -27242,7 +27247,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 1750,
@@ -27407,7 +27412,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 36,
@@ -27592,7 +27597,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 4227,
@@ -28359,11 +28364,13 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "PEER_ONLY_FIELD_CHECK",
+        "display_status": "AGREED_FIELD_CHECK_CANDIDATE",
         "field_check_candidate": true,
         "layer_id": "field_check_status",
         "observed_bookings": 31,
         "reason_codes": [
+          "LOW_OBSERVED_REFERENCE_RATIO",
+          "WAD_ABOVE_COHORT_QUANTILE",
           "LOW_OBSERVED_REFERENCE_RATIO",
           "WAD_ABOVE_COHORT_QUANTILE",
           "CAD_ABOVE_COHORT_MEDIAN",
@@ -28501,7 +28508,7 @@
       },
       "properties": {
         "allocation_eligible": false,
-        "display_status": "NO_PEER_SCREENING_FLAG",
+        "display_status": "NO_SCREENING_FLAG",
         "field_check_candidate": false,
         "layer_id": "field_check_status",
         "observed_bookings": 640,

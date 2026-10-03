@@ -88,7 +88,12 @@ def test_real_screen_runs_on_2025_households_and_bookings():
     assert len(candidates) == summary["field_check_count"] == len(result["field_check_list"])
     assert 1 <= len(candidates) <= 0.25 * summary["eligible_count"]
     for row in candidates:
-        assert row["status"] == "PEER_ONLY_FIELD_CHECK"
+        assert set(row["agreement_methods"]) <= set(row["flagged_variants"])
+        assert row["status"] in {
+            "STABLE_FIELD_CHECK_CANDIDATE",
+            "AGREED_FIELD_CHECK_CANDIDATE",
+            "PEER_ONLY_FIELD_CHECK",
+        }
         assert {
             "APPROXIMATE_BOOKING_TRANSFER",
             "HISTORICAL_NEED_REFERENCE_2011",
@@ -190,6 +195,7 @@ def test_bayesian_models_smoke_on_synthetic_data(variant, edges):
         minimum_areas=8,
         peer_count=3,
         chains=2,
+        cores=1,
         draws=60,
         tune=60,
         max_rhat=20,
@@ -327,6 +333,7 @@ def test_poisson_bym2_smoke_on_synthetic_data():
         minimum_areas=8,
         peer_count=3,
         chains=2,
+        cores=1,
         draws=60,
         tune=60,
         max_rhat=20,
@@ -411,6 +418,7 @@ def test_icar_structure_drops_the_duplicate_unstructured_effect():
         minimum_areas=8,
         peer_count=3,
         chains=2,
+        cores=1,
         draws=60,
         tune=60,
         max_rhat=20,
@@ -447,6 +455,7 @@ def test_nb_dispersion_can_be_sampled_on_the_inverse_sqrt_scale():
         minimum_areas=8,
         peer_count=3,
         chains=2,
+        cores=1,
         draws=60,
         tune=60,
         max_rhat=20,
@@ -478,6 +487,7 @@ def test_spatial_spread_can_use_a_pc_prior():
         minimum_areas=8,
         peer_count=3,
         chains=2,
+        cores=1,
         draws=60,
         tune=60,
         max_rhat=20,
@@ -517,3 +527,62 @@ def test_unknown_spatial_spread_prior_is_refused():
     config = UnderservedConfig(minimum_areas=8, peer_count=3, bym2_sigma_prior="flat")
     with pytest.raises(ValueError, match="spread prior"):
         fit_count_model(cohort(config=config), variant="NB", config=config, holdout_ids=("W00",))
+
+
+def _model_scores(areas, low_ratio):
+    scores = {}
+    for area in areas:
+        ratio = low_ratio if area.ward_id == "W00" else 0.9
+        scores[area.ward_id] = {
+            "expected": area.bookings / ratio,
+            "ratio": ratio,
+            "ratio_lower": ratio - 0.02,
+            "ratio_upper": ratio + 0.02,
+            "interval_kind": "TEST_ONLY",
+        }
+    return scores
+
+
+def _with_failed_spatial_models(nb_scores):
+    return {
+        "NB": {"status": "COMPLETE", "prediction_scope": "OUT_OF_FOLD", "scores": nb_scores},
+        "BYM2": {"status": "DIAGNOSTICS_FAILED", "prediction_scope": "OUT_OF_FOLD", "scores": {}},
+        "BYM2_SHRINKAGE": {
+            "status": "DIAGNOSTICS_FAILED",
+            "prediction_scope": "OUT_OF_FOLD",
+            "scores": {},
+        },
+    }
+
+
+def test_failed_spatial_models_leave_peer_and_nb_to_agree():
+    """When the spatial models fail their diagnostics, a candidate must still agree across
+    every method that passed (peer and NB); full four-way stability is not claimed."""
+    areas = cohort()
+    result = screen(
+        areas,
+        model_results=_with_failed_spatial_models(_model_scores(areas, 0.1)),
+        config=TEST_CONFIG,
+    )
+    first = next(row for row in result["rows"] if row["ward_id"] == "W00")
+    assert first["status"] == "AGREED_FIELD_CHECK_CANDIDATE"
+    assert first["field_check_candidate"] is True
+    assert first["agreement_methods"] == ["NB", "PEER_MEDIAN"]
+    assert first["stability_evaluated"] is False
+    assert result["summary"]["stability_evaluated"] is False
+    assert result["summary"]["agreement_methods"] == ["NB", "PEER_MEDIAN"]
+    assert result["summary"]["methods_failed_diagnostics"] == ["BYM2", "BYM2_SHRINKAGE"]
+    assert set(result["pairwise_flag_jaccard"]) == {"NB:PEER_MEDIAN"}
+
+
+def test_a_peer_flag_without_nb_agreement_is_not_a_candidate():
+    areas = cohort()
+    result = screen(
+        areas,
+        model_results=_with_failed_spatial_models(_model_scores(areas, 1.5)),
+        config=TEST_CONFIG,
+    )
+    first = next(row for row in result["rows"] if row["ward_id"] == "W00")
+    assert first["flagged_variants"] == ["PEER_MEDIAN"]
+    assert first["field_check_candidate"] is False
+    assert first["status"] == "MODEL_SENSITIVE_REVIEW"

@@ -217,9 +217,15 @@ def screen(areas, model_results=None, config: UnderservedConfig = UNDERSERVED_CO
         flags[name], thresholds[name] = candidate_flags(eligible, values, config)
     required = {"PEER_MEDIAN", "NB", "BYM2", "BYM2_SHRINKAGE"}
     stability_available = required <= flags.keys()
+    # Without all four, a candidate must still agree across every method that passed its
+    # diagnostics, provided NB is among them; four-way stability is then not claimed.
+    agreement = sorted(flags) if {"PEER_MEDIAN", "NB"} <= flags.keys() else None
+    failed = sorted(
+        name for name, result in models.items() if result.get("status") == "DIAGNOSTICS_FAILED"
+    )
     pairwise = {}
-    if stability_available:
-        names = sorted(required)
+    if agreement:
+        names = agreement
         for i, first in enumerate(names):
             for second in names[i + 1 :]:
                 union = flags[first] | flags[second]
@@ -234,13 +240,16 @@ def screen(areas, model_results=None, config: UnderservedConfig = UNDERSERVED_CO
         voted = [name for name, values in flags.items() if area.ward_id in values]
         if missing:
             status, candidate = "DATA_REVIEW_REQUIRED", None
-        elif stability_available:
-            candidate = required <= set(voted)
-            status = (
-                "STABLE_FIELD_CHECK_CANDIDATE"
-                if candidate
-                else ("MODEL_SENSITIVE_REVIEW" if voted else "NO_SCREENING_FLAG")
-            )
+        elif agreement:
+            candidate = set(agreement) <= set(voted)
+            if candidate:
+                status = (
+                    "STABLE_FIELD_CHECK_CANDIDATE"
+                    if stability_available
+                    else "AGREED_FIELD_CHECK_CANDIDATE"
+                )
+            else:
+                status = "MODEL_SENSITIVE_REVIEW" if voted else "NO_SCREENING_FLAG"
         else:
             candidate = area.ward_id in flags.get("PEER_MEDIAN", set())
             status = "PEER_ONLY_FIELD_CHECK" if candidate else "NO_PEER_SCREENING_FLAG"
@@ -297,6 +306,7 @@ def screen(areas, model_results=None, config: UnderservedConfig = UNDERSERVED_CO
             else "UNAVAILABLE",
             "flagged_variants": voted,
             "stability_evaluated": stability_available,
+            "agreement_methods": agreement or (["PEER_MEDIAN"] if peer else []),
             "growth_ratio_context_only": area.growth_ratio,
             "growth_ratio_basis": "DERIVED" if area.growth_ratio is not None else "UNAVAILABLE",
             "growth_quality": area.growth_quality,
@@ -323,7 +333,7 @@ def screen(areas, model_results=None, config: UnderservedConfig = UNDERSERVED_CO
             for name, result in models.items()
         },
         "thresholds": thresholds,
-        "pairwise_flag_jaccard": pairwise if stability_available else None,
+        "pairwise_flag_jaccard": pairwise if agreement else None,
         "summary": {
             "area_count": len(rows),
             "eligible_count": len(eligible),
@@ -331,6 +341,8 @@ def screen(areas, model_results=None, config: UnderservedConfig = UNDERSERVED_CO
             "data_review_count": len(data_review),
             "field_check_count": len(field_checks),
             "stability_evaluated": stability_available,
+            "agreement_methods": agreement or (["PEER_MEDIAN"] if peer else []),
+            "methods_failed_diagnostics": failed,
             "real_world_accuracy": None,
             "ground_truth_count": 0,
         },

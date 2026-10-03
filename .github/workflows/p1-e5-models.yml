@@ -1,7 +1,7 @@
 name: "P1:E5-MODELS"
 # Fits the E5 NB / BYM2 / BYM2_SHRINKAGE models on Linux (PyMC needs a 64-bit C++ compiler for
 # practical speed) and uploads the results as artifacts. Results are reviewed and committed by
-# hand; other workflows never re-sample. The matrix runs diagnostic experiments side by side.
+# hand; other workflows never re-sample. Settings are the defaults in config/underserved.py.
 on:
   pull_request:
     paths:
@@ -15,17 +15,9 @@ permissions:
   contents: read
 jobs:
   fit:
-    name: "P1:E5-MODELS ${{ matrix.experiment }}"
+    name: "P1:E5-MODELS"
     runs-on: ubuntu-24.04
     timeout-minutes: 180
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - experiment: icar_invsqrt
-            args: --cores 2 --structure icar --islands-iid --nb-dispersion-prior inv_sqrt
-          - experiment: icar_invsqrt_long
-            args: --chains 4 --cores 4 --tune 2000 --draws 2000 --target-accept 0.99 --structure icar --islands-iid --nb-dispersion-prior inv_sqrt
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -33,10 +25,10 @@ jobs:
           python-version: "3.12"
       - run: sudo apt-get update && sudo apt-get install -y g++
       - run: pip install -e 'backend[dev,geo,models]'
-      - run: python scripts/evidence/fit_underserved_models.py ${{ matrix.args }} --output data/derived/underserved/model_results_${{ matrix.experiment }}.json
+      - run: python scripts/evidence/fit_underserved_models.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: e5-models-${{ matrix.experiment }}
-          path: data/derived/underserved/model_results_${{ matrix.experiment }}.json
+          name: e5-model-results
+          path: data/derived/underserved/model_results.json
           if-no-files-found: warn
