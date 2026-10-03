@@ -30,7 +30,7 @@
 "T6","Ledger wiring for every allocation-affecting change","F18","P3","feat/t6-ledger","S3","Tamper test catches edited entry","DONE","https://github.com/Tabsirshaikh/jallekha/pull/35",""
 "T7","Explanations per ward and per booking + counterfactual + contest","F16","P3","feat/t7-explain","E2 A3","Contest reply requires reason; both in ledger","DONE","https://github.com/Tabsirshaikh/jallekha/pull/46",""
 "T8","Shortage early warning (forecast vs capacity + groundwater anomaly)","F6","P3","feat/t8-shortage","T2 D1","Risk list 1-3 months ahead with reasons","TODO","","Reservoirs only if Q2 approved"
-"T9","Confidence gate with threshold chosen on replay","F17","P3","feat/t9-confidence","E2 A8","Low confidence cannot auto-commit","IN_REVIEW","","15 tests; threshold PROVISIONAL 0.50 not_separable; OPEN: calibration needs degraded-scenario replay from P2"
+"T9","Confidence gate with threshold chosen on replay","F17","P3","feat/t9-confidence","E2 A8","Low confidence cannot auto-commit","IN_REVIEW","https://github.com/Tabsirshaikh/jallekha/pull/59","15 tests; threshold PROVISIONAL 0.50 not_separable; OPEN: calibration needs degraded-scenario replay from P2"
 "T10","API for all screens","all","P3","feat/t10-api","E2 T2 A7 A8","API tests; shapes match P4 fixtures","IN_PROGRESS","","Agree shapes in week 1"
 "U1","i18n: Telugu / Urdu (RTL) / Hindi / English","F14","P4","feat/u1-i18n","S4 R-P4","All resident + driver strings in 4 languages","DONE","","Native language review required before release"
 "U2","Resident app with offline queue","F14","P4","feat/u2-resident","U1 T4","Report / track / delivery code / ward card","IN_PROGRESS","",""
