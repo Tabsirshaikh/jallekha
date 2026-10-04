@@ -3,7 +3,7 @@
     "endpoint": "GET /underserved/field-checks",
     "status": "FROM_MAIN (data on main, route not built)",
     "basis": "each value's *_basis field (REAL inputs, DERIVED flags, UNAVAILABLE where missing)",
-    "built_from": "data/derived/underserved/field_checks.json: schema_version, summary, limitations, field_check_list, and rows (two rows shown: one with plain reasons, one whose reasons carry threshold and model; a row may also have no reasons)"
+    "built_from": "data/derived/underserved/field_checks.json: schema_version, summary, limitations, field_check_list, and rows (two rows shown: one needing data review, one agreed candidate whose reasons carry threshold and model; a row may also have no reasons)"
   },
   "request": null,
   "response": {
@@ -12,11 +12,19 @@
       "area_count": 145,
       "data_review_count": 38,
       "eligible_count": 107,
-      "field_check_count": 7,
+      "field_check_count": 6,
       "ground_truth_count": 0,
       "real_world_accuracy": null,
       "screened_count": 107,
-      "stability_evaluated": false
+      "stability_evaluated": false,
+      "agreement_methods": [
+        "NB",
+        "PEER_MEDIAN"
+      ],
+      "methods_failed_diagnostics": [
+        "BYM2",
+        "BYM2_SHRINKAGE"
+      ]
     },
     "limitations": [
       "Low bookings cannot identify unmet need or a reporting probability.",
@@ -29,78 +37,15 @@
     "field_check_list": [
       {
         "action": "Send someone to check; no allocation or entitlement change",
+        "agreement_methods": [
+          "NB",
+          "PEER_MEDIAN"
+        ],
         "field_check_candidate": true,
         "field_check_candidate_basis": "DERIVED",
         "flagged_variants": [
-          "PEER_MEDIAN"
-        ],
-        "geography_version": "GHMC_2016_150",
-        "growth_quality": "STABLE_TREND",
-        "growth_ratio_basis": "DERIVED",
-        "growth_ratio_context_only": 1.45609699,
-        "input_basis": "REAL",
-        "input_notes": [
-          "APPROXIMATE_BOOKING_TRANSFER",
-          "HISTORICAL_NEED_REFERENCE_2011",
-          "MODELLED_HOUSEHOLDS_2025"
-        ],
-        "model_scores": {
-          "PEER_MEDIAN": {
-            "expected": 14337.969497160557,
-            "interval_kind": "UNAVAILABLE_PEER_MEDIAN_HAS_NO_POSTERIOR",
-            "peers": [
-              "relation/7853540",
-              "relation/7850229",
-              "relation/7858249",
-              "relation/7848859",
-              "relation/7858295"
-            ],
-            "ratio": 0.08808778678529901,
-            "ratio_lower": null,
-            "ratio_upper": null
-          }
-        },
-        "model_scores_basis": "DERIVED",
-        "observed_bookings": 1263,
-        "observed_bookings_basis": "REAL",
-        "reasons": [
-          {
-            "basis": "DERIVED",
-            "code": "LOW_OBSERVED_REFERENCE_RATIO",
-            "model": "PEER_MEDIAN",
-            "threshold": 0.11480323076416553,
-            "value": 0.08808778678529901
-          },
-          {
-            "basis": "REAL",
-            "code": "WAD_ABOVE_COHORT_QUANTILE",
-            "threshold": 0.107328,
-            "value": 0.122579
-          },
-          {
-            "basis": "REAL",
-            "code": "CAD_ABOVE_COHORT_MEDIAN",
-            "threshold": 0.07542,
-            "value": 0.159402
-          },
-          {
-            "basis": "REAL",
-            "code": "HARDSHIP_ABOVE_COHORT_MEDIAN",
-            "threshold": 0.114945,
-            "value": 0.201454
-          }
-        ],
-        "stability_evaluated": false,
-        "status": "PEER_ONLY_FIELD_CHECK",
-        "ward_id": "relation/7849357",
-        "ward_name": "Ward 59 Mailardevpally"
-      },
-      {
-        "action": "Send someone to check; no allocation or entitlement change",
-        "field_check_candidate": true,
-        "field_check_candidate_basis": "DERIVED",
-        "flagged_variants": [
-          "PEER_MEDIAN"
+          "PEER_MEDIAN",
+          "NB"
         ],
         "geography_version": "GHMC_2016_150",
         "growth_quality": "STABLE_TREND",
@@ -113,6 +58,13 @@
           "MODELLED_HOUSEHOLDS_2025"
         ],
         "model_scores": {
+          "NB": {
+            "expected": 41139.09651801187,
+            "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+            "ratio": 0.009844649841619582,
+            "ratio_lower": 0.002234276370467481,
+            "ratio_upper": 0.0393677797017752
+          },
           "PEER_MEDIAN": {
             "expected": 3684.87400023013,
             "interval_kind": "UNAVAILABLE_PEER_MEDIAN_HAS_NO_POSTERIOR",
@@ -140,6 +92,13 @@
             "value": 0.1099087784208379
           },
           {
+            "basis": "DERIVED",
+            "code": "LOW_OBSERVED_REFERENCE_RATIO",
+            "model": "NB",
+            "threshold": 0.0324495307406614,
+            "value": 0.009844649841619582
+          },
+          {
             "basis": "REAL",
             "code": "WAD_ABOVE_COHORT_QUANTILE",
             "threshold": 0.107328,
@@ -159,16 +118,21 @@
           }
         ],
         "stability_evaluated": false,
-        "status": "PEER_ONLY_FIELD_CHECK",
+        "status": "AGREED_FIELD_CHECK_CANDIDATE",
         "ward_id": "relation/7856362",
         "ward_name": "Ward 43 Chandrayangutta"
       },
       {
         "action": "Send someone to check; no allocation or entitlement change",
+        "agreement_methods": [
+          "NB",
+          "PEER_MEDIAN"
+        ],
         "field_check_candidate": true,
         "field_check_candidate_basis": "DERIVED",
         "flagged_variants": [
-          "PEER_MEDIAN"
+          "PEER_MEDIAN",
+          "NB"
         ],
         "geography_version": "GHMC_2016_150",
         "growth_quality": "STABLE_TREND",
@@ -182,6 +146,13 @@
           "ABSENT_SECTION_MONTH_COUNTED_AS_ZERO"
         ],
         "model_scores": {
+          "NB": {
+            "expected": 8638.21495473921,
+            "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+            "ratio": 0.0027783517998980403,
+            "ratio_lower": 0.0014922233660402276,
+            "ratio_upper": 0.004803549350160191
+          },
           "PEER_MEDIAN": {
             "expected": 1280.7796997455252,
             "interval_kind": "UNAVAILABLE_PEER_MEDIAN_HAS_NO_POSTERIOR",
@@ -209,6 +180,13 @@
             "value": 0.018738585569999664
           },
           {
+            "basis": "DERIVED",
+            "code": "LOW_OBSERVED_REFERENCE_RATIO",
+            "model": "NB",
+            "threshold": 0.0324495307406614,
+            "value": 0.0027783517998980403
+          },
+          {
             "basis": "REAL",
             "code": "WAD_ABOVE_COHORT_QUANTILE",
             "threshold": 0.107328,
@@ -228,16 +206,21 @@
           }
         ],
         "stability_evaluated": false,
-        "status": "PEER_ONLY_FIELD_CHECK",
+        "status": "AGREED_FIELD_CHECK_CANDIDATE",
         "ward_id": "relation/7856363",
         "ward_name": "Ward 46 Falaknuma"
       },
       {
         "action": "Send someone to check; no allocation or entitlement change",
+        "agreement_methods": [
+          "NB",
+          "PEER_MEDIAN"
+        ],
         "field_check_candidate": true,
         "field_check_candidate_basis": "DERIVED",
         "flagged_variants": [
-          "PEER_MEDIAN"
+          "PEER_MEDIAN",
+          "NB"
         ],
         "geography_version": "GHMC_2016_150",
         "growth_quality": "STABLE_TREND",
@@ -250,6 +233,13 @@
           "MODELLED_HOUSEHOLDS_2025"
         ],
         "model_scores": {
+          "NB": {
+            "expected": 9840.31623382913,
+            "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+            "ratio": 0.015345035646128654,
+            "ratio_lower": 0.00583969358658684,
+            "ratio_upper": 0.03404129773180639
+          },
           "PEER_MEDIAN": {
             "expected": 1451.332253430455,
             "interval_kind": "UNAVAILABLE_PEER_MEDIAN_HAS_NO_POSTERIOR",
@@ -277,6 +267,13 @@
             "value": 0.10404233740626066
           },
           {
+            "basis": "DERIVED",
+            "code": "LOW_OBSERVED_REFERENCE_RATIO",
+            "model": "NB",
+            "threshold": 0.0324495307406614,
+            "value": 0.015345035646128654
+          },
+          {
             "basis": "REAL",
             "code": "WAD_ABOVE_COHORT_QUANTILE",
             "threshold": 0.107328,
@@ -296,16 +293,21 @@
           }
         ],
         "stability_evaluated": false,
-        "status": "PEER_ONLY_FIELD_CHECK",
+        "status": "AGREED_FIELD_CHECK_CANDIDATE",
         "ward_id": "relation/7861521",
         "ward_name": "Ward 38 IS Sadan"
       },
       {
         "action": "Send someone to check; no allocation or entitlement change",
+        "agreement_methods": [
+          "NB",
+          "PEER_MEDIAN"
+        ],
         "field_check_candidate": true,
         "field_check_candidate_basis": "DERIVED",
         "flagged_variants": [
-          "PEER_MEDIAN"
+          "PEER_MEDIAN",
+          "NB"
         ],
         "geography_version": "GHMC_2016_150",
         "growth_quality": "STABLE_TREND",
@@ -319,6 +321,13 @@
           "ABSENT_SECTION_MONTH_COUNTED_AS_ZERO"
         ],
         "model_scores": {
+          "NB": {
+            "expected": 11917.337664916102,
+            "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+            "ratio": 0.0009230249507453486,
+            "ratio_lower": 0.0004353887725003781,
+            "ratio_upper": 0.0018680170409457542
+          },
           "PEER_MEDIAN": {
             "expected": 1253.528671828378,
             "interval_kind": "UNAVAILABLE_PEER_MEDIAN_HAS_NO_POSTERIOR",
@@ -346,6 +355,13 @@
             "value": 0.008775228079909466
           },
           {
+            "basis": "DERIVED",
+            "code": "LOW_OBSERVED_REFERENCE_RATIO",
+            "model": "NB",
+            "threshold": 0.0324495307406614,
+            "value": 0.0009230249507453486
+          },
+          {
             "basis": "REAL",
             "code": "WAD_ABOVE_COHORT_QUANTILE",
             "threshold": 0.107328,
@@ -365,16 +381,21 @@
           }
         ],
         "stability_evaluated": false,
-        "status": "PEER_ONLY_FIELD_CHECK",
+        "status": "AGREED_FIELD_CHECK_CANDIDATE",
         "ward_id": "relation/7861532",
         "ward_name": "Ward 41 Kanchanbagh"
       },
       {
         "action": "Send someone to check; no allocation or entitlement change",
+        "agreement_methods": [
+          "NB",
+          "PEER_MEDIAN"
+        ],
         "field_check_candidate": true,
         "field_check_candidate_basis": "DERIVED",
         "flagged_variants": [
-          "PEER_MEDIAN"
+          "PEER_MEDIAN",
+          "NB"
         ],
         "geography_version": "GHMC_2016_150",
         "growth_quality": "STABLE_TREND",
@@ -388,6 +409,13 @@
           "ABSENT_SECTION_MONTH_COUNTED_AS_ZERO"
         ],
         "model_scores": {
+          "NB": {
+            "expected": 12770.420183600665,
+            "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+            "ratio": 0.000861365551823855,
+            "ratio_lower": 0.0004614966085872982,
+            "ratio_upper": 0.0014384039848439002
+          },
           "PEER_MEDIAN": {
             "expected": 148.14371679218402,
             "interval_kind": "UNAVAILABLE_PEER_MEDIAN_HAS_NO_POSTERIOR",
@@ -415,6 +443,13 @@
             "value": 0.07425222100665126
           },
           {
+            "basis": "DERIVED",
+            "code": "LOW_OBSERVED_REFERENCE_RATIO",
+            "model": "NB",
+            "threshold": 0.0324495307406614,
+            "value": 0.000861365551823855
+          },
+          {
             "basis": "REAL",
             "code": "WAD_ABOVE_COHORT_QUANTILE",
             "threshold": 0.107328,
@@ -434,16 +469,21 @@
           }
         ],
         "stability_evaluated": false,
-        "status": "PEER_ONLY_FIELD_CHECK",
+        "status": "AGREED_FIELD_CHECK_CANDIDATE",
         "ward_id": "relation/7867246",
         "ward_name": "Ward 58 Shastripuram"
       },
       {
         "action": "Send someone to check; no allocation or entitlement change",
+        "agreement_methods": [
+          "NB",
+          "PEER_MEDIAN"
+        ],
         "field_check_candidate": true,
         "field_check_candidate_basis": "DERIVED",
         "flagged_variants": [
-          "PEER_MEDIAN"
+          "PEER_MEDIAN",
+          "NB"
         ],
         "geography_version": "GHMC_2016_150",
         "growth_quality": "STABLE_TREND",
@@ -457,6 +497,13 @@
           "ABSENT_SECTION_MONTH_COUNTED_AS_ZERO"
         ],
         "model_scores": {
+          "NB": {
+            "expected": 21604.06936768249,
+            "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+            "ratio": 0.0014349150950845734,
+            "ratio_lower": 0.00011372132471741573,
+            "ratio_upper": 0.019140855330688517
+          },
           "PEER_MEDIAN": {
             "expected": 1193.0722602677554,
             "interval_kind": "UNAVAILABLE_PEER_MEDIAN_HAS_NO_POSTERIOR",
@@ -484,6 +531,13 @@
             "value": 0.025983338170181596
           },
           {
+            "basis": "DERIVED",
+            "code": "LOW_OBSERVED_REFERENCE_RATIO",
+            "model": "NB",
+            "threshold": 0.0324495307406614,
+            "value": 0.0014349150950845734
+          },
+          {
             "basis": "REAL",
             "code": "WAD_ABOVE_COHORT_QUANTILE",
             "threshold": 0.107328,
@@ -503,7 +557,7 @@
           }
         ],
         "stability_evaluated": false,
-        "status": "PEER_ONLY_FIELD_CHECK",
+        "status": "AGREED_FIELD_CHECK_CANDIDATE",
         "ward_id": "relation/7867584",
         "ward_name": "Ward 42 Barkas"
       }
@@ -511,6 +565,10 @@
     "rows": [
       {
         "action": "Review missing evidence",
+        "agreement_methods": [
+          "NB",
+          "PEER_MEDIAN"
+        ],
         "field_check_candidate": null,
         "field_check_candidate_basis": "UNAVAILABLE",
         "flagged_variants": [],
@@ -547,39 +605,52 @@
       },
       {
         "action": "Send someone to check; no allocation or entitlement change",
+        "agreement_methods": [
+          "NB",
+          "PEER_MEDIAN"
+        ],
         "field_check_candidate": true,
         "field_check_candidate_basis": "DERIVED",
         "flagged_variants": [
-          "PEER_MEDIAN"
+          "PEER_MEDIAN",
+          "NB"
         ],
         "geography_version": "GHMC_2016_150",
         "growth_quality": "STABLE_TREND",
         "growth_ratio_basis": "DERIVED",
-        "growth_ratio_context_only": 1.45609699,
+        "growth_ratio_context_only": 1.40213313,
         "input_basis": "REAL",
         "input_notes": [
           "APPROXIMATE_BOOKING_TRANSFER",
           "HISTORICAL_NEED_REFERENCE_2011",
-          "MODELLED_HOUSEHOLDS_2025"
+          "MODELLED_HOUSEHOLDS_2025",
+          "ABSENT_SECTION_MONTH_COUNTED_AS_ZERO"
         ],
         "model_scores": {
+          "NB": {
+            "expected": 21604.06936768249,
+            "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+            "ratio": 0.0014349150950845734,
+            "ratio_lower": 0.00011372132471741573,
+            "ratio_upper": 0.019140855330688517
+          },
           "PEER_MEDIAN": {
-            "expected": 14337.969497160557,
+            "expected": 1193.0722602677554,
             "interval_kind": "UNAVAILABLE_PEER_MEDIAN_HAS_NO_POSTERIOR",
             "peers": [
-              "relation/7853540",
-              "relation/7850229",
-              "relation/7858249",
-              "relation/7848859",
-              "relation/7858295"
+              "relation/7853542",
+              "relation/7849545",
+              "relation/7856362",
+              "relation/7853545",
+              "relation/7867247"
             ],
-            "ratio": 0.08808778678529901,
+            "ratio": 0.025983338170181596,
             "ratio_lower": null,
             "ratio_upper": null
           }
         },
         "model_scores_basis": "DERIVED",
-        "observed_bookings": 1263,
+        "observed_bookings": 31,
         "observed_bookings_basis": "REAL",
         "reasons": [
           {
@@ -587,31 +658,38 @@
             "code": "LOW_OBSERVED_REFERENCE_RATIO",
             "model": "PEER_MEDIAN",
             "threshold": 0.11480323076416553,
-            "value": 0.08808778678529901
+            "value": 0.025983338170181596
+          },
+          {
+            "basis": "DERIVED",
+            "code": "LOW_OBSERVED_REFERENCE_RATIO",
+            "model": "NB",
+            "threshold": 0.0324495307406614,
+            "value": 0.0014349150950845734
           },
           {
             "basis": "REAL",
             "code": "WAD_ABOVE_COHORT_QUANTILE",
             "threshold": 0.107328,
-            "value": 0.122579
+            "value": 0.283957
           },
           {
             "basis": "REAL",
             "code": "CAD_ABOVE_COHORT_MEDIAN",
             "threshold": 0.07542,
-            "value": 0.159402
+            "value": 0.086133
           },
           {
             "basis": "REAL",
             "code": "HARDSHIP_ABOVE_COHORT_MEDIAN",
             "threshold": 0.114945,
-            "value": 0.201454
+            "value": 0.131887
           }
         ],
         "stability_evaluated": false,
-        "status": "PEER_ONLY_FIELD_CHECK",
-        "ward_id": "relation/7849357",
-        "ward_name": "Ward 59 Mailardevpally"
+        "status": "AGREED_FIELD_CHECK_CANDIDATE",
+        "ward_id": "relation/7867584",
+        "ward_name": "Ward 42 Barkas"
       }
     ],
     "rows_total": 145

@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import math
 from dataclasses import replace
 from pathlib import Path
 
@@ -87,7 +88,12 @@ def test_real_screen_runs_on_2025_households_and_bookings():
     assert len(candidates) == summary["field_check_count"] == len(result["field_check_list"])
     assert 1 <= len(candidates) <= 0.25 * summary["eligible_count"]
     for row in candidates:
-        assert row["status"] == "PEER_ONLY_FIELD_CHECK"
+        assert set(row["agreement_methods"]) <= set(row["flagged_variants"])
+        assert row["status"] in {
+            "STABLE_FIELD_CHECK_CANDIDATE",
+            "AGREED_FIELD_CHECK_CANDIDATE",
+            "PEER_ONLY_FIELD_CHECK",
+        }
         assert {
             "APPROXIMATE_BOOKING_TRANSFER",
             "HISTORICAL_NEED_REFERENCE_2011",
@@ -189,6 +195,7 @@ def test_bayesian_models_smoke_on_synthetic_data(variant, edges):
         minimum_areas=8,
         peer_count=3,
         chains=2,
+        cores=1,
         draws=60,
         tune=60,
         max_rhat=20,
@@ -309,3 +316,289 @@ def test_screen_handles_a_mix_of_eligible_and_blocked_areas():
     blocked = next(r for r in result["rows"] if r["ward_id"] == "BLOCKED")
     assert blocked["status"] == "DATA_REVIEW_REQUIRED"
     assert blocked["model_scores"] == {}
+
+
+def test_model_settings_default_to_the_original_specification():
+    from app.config.underserved import UNDERSERVED_CONFIG
+
+    assert UNDERSERVED_CONFIG.bym2_likelihood in ("negative_binomial", "poisson")
+    assert 0.8 <= UNDERSERVED_CONFIG.target_accept < 1
+    assert UNDERSERVED_CONFIG.cores >= 1
+
+
+def test_poisson_bym2_smoke_on_synthetic_data():
+    """Riebler et al. (2016) BYM2 uses a Poisson count model; the BYM2 random effects carry
+    the extra variation, so there is no separate overdispersion parameter."""
+    config = UnderservedConfig(
+        minimum_areas=8,
+        peer_count=3,
+        chains=2,
+        cores=1,
+        draws=60,
+        tune=60,
+        max_rhat=20,
+        minimum_bulk_ess=1,
+        seed=412,
+        bym2_likelihood="poisson",
+    )
+    areas = cohort(config=config)
+    import pytensor
+
+    if __import__("os").name == "nt":
+        pytensor.config.cxx = ""
+    edges = tuple((f"W{i:02}", f"W{i + 1:02}") for i in range(len(areas) - 1))
+    review = {
+        "status": "REVIEWED",
+        "geography_version": config.geography_version,
+        "reviewer": "synthetic-test-only",
+        "source_sha256": "a" * 64,
+    }
+    result = fit_count_model(
+        areas,
+        edges=edges,
+        variant="BYM2",
+        config=config,
+        holdout_ids=("W00",),
+        graph_review=review,
+    )
+    assert result["likelihood"] == "poisson"
+    assert "alpha" not in result["priors"]
+    assert set(result["scores"]) == {"W00"}
+    with pytest.raises(ValueError, match="likelihood"):
+        fit_count_model(
+            areas,
+            edges=edges,
+            variant="BYM2",
+            config=replace(config, bym2_likelihood="gaussian"),
+            holdout_ids=("W00",),
+            graph_review=review,
+        )
+
+
+def test_isolated_wards_get_no_spatial_component():
+    """Freni-Sterrantino et al. (2018): a ward with no neighbours has no structured effect."""
+    wards = ["A", "B", "C", "D"]
+    with_iid = scaled_icar_basis(wards, [("A", "B"), ("B", "C")], islands_iid_only=True)
+    assert with_iid.shape[1] == 2  # 3-ward chain gives 2 columns; island D gives none
+    assert np.allclose(with_iid[3], 0)
+    assert scaled_icar_basis(wards, [("A", "B"), ("B", "C")]).shape[1] == 3  # original spec
+
+
+def test_restricted_projection_removes_covariate_directions():
+    """Hodges & Reich (2010) restricted spatial regression: the spatial effect is projected
+    off the intercept and covariates, so it cannot absorb the need effect."""
+    rng = np.random.default_rng(0)
+    design = rng.normal(size=(12, 2))
+    proj = underserved_models.restricted_projection(design)
+    x = np.column_stack([np.ones(12), design])
+    assert np.allclose(proj @ x, 0, atol=1e-10)
+    assert np.allclose(proj @ proj, proj, atol=1e-10)
+
+
+def test_pc_prior_on_rho_matches_riebler_calibration():
+    """Riebler et al. (2016) PC prior on the BYM2 mixing parameter: P(rho < 0.5) = 2/3."""
+    wards = [f"W{i}" for i in range(8)]
+    edges = [(wards[i], wards[i + 1]) for i in range(7)]
+    basis = scaled_icar_basis(wards, edges)
+    rate, gammas, nulls = underserved_models.pc_rho_setup(basis, len(wards), u=0.5, alpha=2 / 3)
+    grid = np.linspace(1e-6, 1 - 1e-6, 200_001)
+    dens = np.exp(underserved_models.pc_rho_logdensity_numpy(grid, rate, gammas, nulls, len(wards)))
+    total = np.trapezoid(dens, grid)
+    below = np.trapezoid(dens[grid < 0.5], grid[grid < 0.5])
+    # PC prior mass up to phi is 1 - exp(-rate * d(phi)); some mass sits very close to 1
+    d_end = math.sqrt(2 * underserved_models._pc_kld(grid[-1], gammas, nulls, len(wards)))
+    assert total == pytest.approx(1 - math.exp(-rate * d_end), abs=0.005)
+    assert below == pytest.approx(2 / 3, abs=0.005)
+
+
+def test_icar_structure_drops_the_duplicate_unstructured_effect():
+    """With an NB likelihood, alpha already carries per-ward extra variation; the 'icar'
+    structure keeps only the spatial (neighbour) part, so nothing is estimated twice."""
+    config = UnderservedConfig(
+        minimum_areas=8,
+        peer_count=3,
+        chains=2,
+        cores=1,
+        draws=60,
+        tune=60,
+        max_rhat=20,
+        minimum_bulk_ess=1,
+        seed=412,
+        bym2_structure="icar",
+    )
+    areas = cohort(config=config)
+    import pytensor
+
+    if __import__("os").name == "nt":
+        pytensor.config.cxx = ""
+    edges = tuple((f"W{i:02}", f"W{i + 1:02}") for i in range(len(areas) - 1))
+    review = {
+        "status": "REVIEWED",
+        "geography_version": config.geography_version,
+        "reviewer": "synthetic-test-only",
+        "source_sha256": "a" * 64,
+    }
+    result = fit_count_model(
+        areas, edges=edges, variant="BYM2", config=config, holdout_ids=("W00",), graph_review=review
+    )
+    assert result["structure"] == "icar"
+    assert (
+        "rho" not in result["priors"] and "unstructured" not in result["diagnostics_by_parameter"]
+    )
+    assert set(result["scores"]) == {"W00"}
+
+
+def test_nb_dispersion_can_be_sampled_on_the_inverse_sqrt_scale():
+    """Stan prior-choice recommendation for NB overdispersion: put the prior on 1/sqrt(alpha),
+    where 0 means Poisson, instead of a vague HalfNormal(10) on alpha itself."""
+    config = UnderservedConfig(
+        minimum_areas=8,
+        peer_count=3,
+        chains=2,
+        cores=1,
+        draws=60,
+        tune=60,
+        max_rhat=20,
+        minimum_bulk_ess=1,
+        seed=413,
+        nb_dispersion_prior="inv_sqrt",
+    )
+    areas = cohort(config=config)
+    import pytensor
+
+    if __import__("os").name == "nt":
+        pytensor.config.cxx = ""
+    result = fit_count_model(areas, variant="NB", config=config, holdout_ids=("W00",))
+    assert result["priors"]["alpha"] == "1/sqrt(alpha) ~ HalfNormal(1)"
+    assert "alpha" in result["diagnostics_by_parameter"]
+    assert set(result["scores"]) == {"W00"}
+
+
+def test_unknown_nb_dispersion_prior_is_refused():
+    config = UnderservedConfig(minimum_areas=8, peer_count=3, nb_dispersion_prior="wide")
+    with pytest.raises(ValueError, match="dispersion prior"):
+        fit_count_model(cohort(config=config), variant="NB", config=config, holdout_ids=("W00",))
+
+
+def test_spatial_spread_can_use_a_pc_prior():
+    """Simpson et al. (2017) PC prior on the BYM2 spread: Exponential with P(sigma > U) = 0.01,
+    shrinking towards no area effect unless the data need one."""
+    config = UnderservedConfig(
+        minimum_areas=8,
+        peer_count=3,
+        chains=2,
+        cores=1,
+        draws=60,
+        tune=60,
+        max_rhat=20,
+        minimum_bulk_ess=1,
+        seed=414,
+        bym2_structure="icar",
+        bym2_sigma_prior="pc",
+    )
+    areas = cohort(config=config)
+    import pytensor
+
+    if __import__("os").name == "nt":
+        pytensor.config.cxx = ""
+    edges = tuple((f"W{i:02}", f"W{i + 1:02}") for i in range(len(areas) - 1))
+    review = {
+        "status": "REVIEWED",
+        "geography_version": config.geography_version,
+        "reviewer": "synthetic-test-only",
+        "source_sha256": "a" * 64,
+    }
+    result = fit_count_model(
+        areas, edges=edges, variant="BYM2", config=config, holdout_ids=("W00",), graph_review=review
+    )
+    assert result["priors"]["sigma"] == "PC: P(sigma > 1) = 0.01"
+    shrunk = fit_count_model(
+        areas,
+        edges=edges,
+        variant="BYM2_SHRINKAGE",
+        config=config,
+        holdout_ids=("W00",),
+        graph_review=review,
+    )
+    assert shrunk["priors"]["sigma"] == "PC: P(sigma > 0.5) = 0.01"
+
+
+def test_unknown_spatial_spread_prior_is_refused():
+    config = UnderservedConfig(minimum_areas=8, peer_count=3, bym2_sigma_prior="flat")
+    with pytest.raises(ValueError, match="spread prior"):
+        fit_count_model(cohort(config=config), variant="NB", config=config, holdout_ids=("W00",))
+
+
+def _model_scores(areas, low_ratio):
+    scores = {}
+    for area in areas:
+        ratio = low_ratio if area.ward_id == "W00" else 0.9
+        scores[area.ward_id] = {
+            "expected": area.bookings / ratio,
+            "ratio": ratio,
+            "ratio_lower": ratio - 0.02,
+            "ratio_upper": ratio + 0.02,
+            "interval_kind": "TEST_ONLY",
+        }
+    return scores
+
+
+def _with_failed_spatial_models(nb_scores):
+    return {
+        "NB": {"status": "COMPLETE", "prediction_scope": "OUT_OF_FOLD", "scores": nb_scores},
+        "BYM2": {"status": "DIAGNOSTICS_FAILED", "prediction_scope": "OUT_OF_FOLD", "scores": {}},
+        "BYM2_SHRINKAGE": {
+            "status": "DIAGNOSTICS_FAILED",
+            "prediction_scope": "OUT_OF_FOLD",
+            "scores": {},
+        },
+    }
+
+
+def test_failed_spatial_models_leave_peer_and_nb_to_agree():
+    """When the spatial models fail their diagnostics, a candidate must still agree across
+    every method that passed (peer and NB); full four-way stability is not claimed."""
+    areas = cohort()
+    result = screen(
+        areas,
+        model_results=_with_failed_spatial_models(_model_scores(areas, 0.1)),
+        config=TEST_CONFIG,
+    )
+    first = next(row for row in result["rows"] if row["ward_id"] == "W00")
+    assert first["status"] == "AGREED_FIELD_CHECK_CANDIDATE"
+    assert first["field_check_candidate"] is True
+    assert first["agreement_methods"] == ["NB", "PEER_MEDIAN"]
+    assert first["stability_evaluated"] is False
+    assert result["summary"]["stability_evaluated"] is False
+    assert result["summary"]["agreement_methods"] == ["NB", "PEER_MEDIAN"]
+    assert result["summary"]["methods_failed_diagnostics"] == ["BYM2", "BYM2_SHRINKAGE"]
+    assert set(result["pairwise_flag_jaccard"]) == {"NB:PEER_MEDIAN"}
+
+
+def test_a_peer_flag_without_nb_agreement_is_not_a_candidate():
+    areas = cohort()
+    result = screen(
+        areas,
+        model_results=_with_failed_spatial_models(_model_scores(areas, 1.5)),
+        config=TEST_CONFIG,
+    )
+    first = next(row for row in result["rows"] if row["ward_id"] == "W00")
+    assert first["flagged_variants"] == ["PEER_MEDIAN"]
+    assert first["field_check_candidate"] is False
+    assert first["status"] == "MODEL_SENSITIVE_REVIEW"
+
+
+def test_each_reason_appears_once_and_ratio_reasons_name_their_method():
+    areas = cohort()
+    result = screen(
+        areas,
+        model_results=_with_failed_spatial_models(_model_scores(areas, 0.1)),
+        config=TEST_CONFIG,
+    )
+    first = next(row for row in result["rows"] if row["ward_id"] == "W00")
+    keys = [(reason["code"], reason.get("model")) for reason in first["reasons"]]
+    assert len(keys) == len(set(keys))
+    assert [k for k in keys if k[0] == "WAD_ABOVE_COHORT_QUANTILE"] == [
+        ("WAD_ABOVE_COHORT_QUANTILE", None)
+    ]
+    assert {k[1] for k in keys if k[0] == "LOW_OBSERVED_REFERENCE_RATIO"} == {"PEER_MEDIAN", "NB"}

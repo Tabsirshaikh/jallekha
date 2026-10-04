@@ -50,10 +50,51 @@ The pull-request description must summarize the same information and link to thi
 - **Owner / date:** P4, 2026-10-02.
 - **Purpose:** Build the resident-facing reporting and tracking experience with an offline-first queue.
 - **What we found:** P3's T4 intake batch endpoint accepts app items with `client_id`, `channel`, `category`, `text`, `language_hint`, and `area_id`; it returns per-item outcomes. There is no resident-facing delivery-code or ward-information API in `main`. U1 is merged; T4's implementation is present via PR #37, though its tracker row remains `IN_REVIEW`.
-- **What we changed:** Added English, Telugu, Urdu and Hindi resident flows for issue reports, request tracking and an area card. Reports persist in IndexedDB, can include device location only after the resident opts in, and sync idempotently through T4's `/intake/batch` contract when online; the dev server proxies `/intake` to the local API. Added a web manifest and service worker for cached app-shell use. The UI explicitly identifies local-only reports and unavailable live delivery/ward data.
-- **Validation:** `git diff --check` passes. `.github/workflows/p4-u2.yml` runs frontend lint and production build. Local UI/test/build validation has not been run.
+- **What we changed:** Added English, Telugu, Urdu and Hindi resident flows for issue reports, request tracking and an area card. Reports persist in IndexedDB, can include device location only after the resident opts in, and sync idempotently through T4's `/intake/batch` contract when online; the dev server proxies `/intake` to the local API. Added a web manifest and service worker for cached app-shell use. U10 now supplies an explicitly synthetic sample ward card and SMS summary, and request tracking labels its demo delivery code as SIMULATION.
+- **Validation:** Frontend lint, typecheck and production build pass. `git diff --check` passes. No tests were run.
 - **Known limitations:** Live delivery-code assignment and verified ward service information need backend/API support. Intake submission also needs the API running and reachable at `/intake/batch`. All translations are drafts pending native-speaker review.
 - **Handoff / next step:** Coordinate with P3 on resident-facing delivery-code and ward-information API shapes; then connect the card to verified data.
+- **Pull request:** pending.
+
+## `feat/u8-explain` — `U8`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Show why a booking received its sample queue position and let residents file a contest for officer reply.
+- **What we found:** T7 explanation and contest services are present on `main`; T10 has not added their HTTP routes. The service's contest reason and reply outcome codes are therefore used as UI choices, but no service call is made.
+- **What we changed:** Added a four-language explanation and contest preview, with a synthetic booking rationale, a clearly illustrative counterfactual, contest form, and reason-required officer reply form. Preview contests persist in local browser storage only.
+- **Validation:** `python tasks.py lint`, frontend production build and `git diff --check` pass. The task workflow `.github/workflows/p4-u8-u10.yml` repeats frontend lint and build. No tests were added or run.
+- **Known limitations:** Queue values are synthetic and the counterfactual is explanatory copy, not calculated output. Contest filing/reply does not call T7 or update the ledger. Native-speaker review remains required.
+- **Handoff / next step:** Connect this screen to T10 explanation and contest routes when available; replace fixtures with T7 output.
+- **Pull request:** pending.
+
+## `feat/u9-impact` — `U9`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Compare policy-sandbox outcomes while showing the basis of every reported value.
+- **What we changed:** Added `scripts/frontend/build_u9_snapshot.py` and `frontend/src/data/u9Impact.json`, a compact summary of A8 `results.csv` grouped by replay, scenario and policy across seeds. The UI compares selected metrics and ranges, marks every result SIMULATION, and keeps duplicate-complaint impact UNAVAILABLE.
+- **Validation:** Snapshot generated from committed A8 results (32 replay/scenario/policy groups, 30 seeds each). `python tasks.py lint`, frontend production build and `git diff --check` pass. The task workflow `.github/workflows/p4-u8-u10.yml` repeats frontend lint and build. No tests were added or run.
+- **Known limitations:** The sandbox output is simulated, not observed field impact. Duplicate-complaint reduction cannot be measured from this replay. This screen does not claim that JalLekha improves outcomes over B1.
+- **Handoff / next step:** Refresh the snapshot when A8 results change; use validated field outcomes only after they are collected and reviewed.
+- **Pull request:** pending.
+
+## `feat/u10-cards` — `U10`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Give residents a simple ward summary and an SMS-sized version of the same information.
+- **What we changed:** Added two localized sample ward cards with need, monthly bookings, deliveries, waiting bookings, an example schedule and a copyable SMS summary. Every value and schedule carries a SIMULATION label. Added a clearly marked sample delivery code to U2 request tracking.
+- **Validation:** `python tasks.py lint`, frontend production build and `git diff --check` pass. `.github/workflows/p4-u8-u10.yml` repeats frontend lint and build. No tests were added or run.
+- **Known limitations:** T10 report-card route and verified ward schedule are unavailable. The displayed values are synthetic examples and must not be treated as local service information.
+- **Handoff / next step:** Replace sample wards with the T10 report-card response and approved SMS templates when available.
+- **Pull request:** pending.
+
+## `feat/x1-docs` — `X1`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Document the prototype, pitch/demo flow and release handoff.
+- **What we changed:** Updated the README status and added `docs/P4_DEMO.md` with a slide outline, three-minute demo script and run steps.
+- **Validation:** Documentation checked against current feature scope and explicit sample-data limits. Frontend build, `python tasks.py lint` and `git diff --check` pass. Release tag intentionally waits until the branch merges, required checks pass and the owner confirms a version.
+- **Known limitations:** The repository contains no PowerPoint deck to edit. The notes provide content for the deck. No release tag is created from an unmerged feature branch.
+- **Handoff / next step:** Apply the outline to the presentation, merge the branch, then create the owner-approved release tag from green `main`.
 - **Pull request:** pending.
 
 ## `feat/u3-field` — `U3`
@@ -835,6 +876,53 @@ The pull-request description must summarize the same information and link to thi
   - P2: check `test_a8_build.py` on Windows.
   - P1: weather (D8), groundwater (D7) and a trips-per-day source. Owner: confirm the recovered protocol before 21.9% / 35.1% go on slides.
   - T8 builds on the forecast table.
+- **Pull request:** pending.
+
+## `fix/e5-models` — E5: run the NB / BYM2 models so field-check flags are checked across methods
+
+- **Owner / date:** P1 (work done by the repo owner), 2026-10-03.
+- **Why:** E5 was marked DONE, but `build_underserved.py` called `screen(areas)` without model results, so the done-when ("flags stable across model variants") was never evaluated. BYM2 also needed a reviewed ward-adjacency graph, which did not exist.
+- **What we changed:**
+  - `scripts/evidence/build_ward_adjacency.py`: rook adjacency (at least 50 m shared border, 10 m snap, UTM 44N), 145 wards and 364 edges, plus a review record checked by SHA-256. Owner-reviewed on automated evidence: 360 of 364 edges stable across 9 settings; live OSM agrees on 356 of 356 comparable edges; Wikipedia spot-check.
+  - `scripts/evidence/fit_underserved_models.py`: fits NB, BYM2 and BYM2_SHRINKAGE out of fold (5 folds) on the gated cohort and writes `data/derived/underserved/model_results.json` with a cohort fingerprint, graph hash, config and environment. Fitting runs on Linux (WSL or CI); tests never re-sample, and `build_underserved.py` refuses stale results.
+  - `services/underserved_models.py` and `config/underserved.py`: options added during the BYM2 diagnosis (likelihood, rho prior, restricted regression, island handling, ICAR-only structure, inverse-sqrt NB dispersion prior, PC prior on the spatial spread), each with its source. Defaults are now the settings of the committed results.
+  - `services/underserved.py`: when the spatial models fail their diagnostics, a candidate must still agree across every method that passed, which needs at least peer and NB (`AGREED_FIELD_CHECK_CANDIDATE`). Four-way stability is still only claimed when all four pass (`stability_evaluated`). The summary lists `agreement_methods` and `methods_failed_diagnostics`.
+  - `.github/workflows/p1-e5-models.yml`: Linux job that fits the models and uploads the results for review.
+  - Each candidate reason appears once; the WAD reason is no longer repeated per method, and ratio reasons name their method.
+  - U5 (after merging `main`): snapshot rebuilt (6 candidates); the field-check cards say "PEER + NB", label the NB ratio reason separately, and key reasons by code and method (no duplicate React keys). `docs/LIMITATIONS.md` updated for T2, U2-U6.
+- **Result:** NB passes every check in all folds. BYM2 and BYM2_SHRINKAGE pass 8 of 10 folds but fail fold 1 for every seed (NB alpha and spatial sigma cannot be separated without its 22 wards), so they are recorded as DIAGNOSTICS_FAILED; the strict gate was kept. Candidates: 7 peer-only → **6 agreed by peer and NB** (Jaccard 0.86); Mailardevpally becomes `MODEL_SENSITIVE_REVIEW`.
+- **Validation:** new tests written first and failing first (graph reproducibility and review, stale results refused, dispersion and spread priors, agreement across passing methods, peer-only flag not a candidate). `verify_underserved.py` passes. Full suite and lint: see the PR.
+- **Known limitations:**
+  - Four-way stability is not met; the spatial models did not converge (see `docs/LIMITATIONS.md` F4).
+  - GitHub Actions could not run the models job (account billing block, October 2026); the committed results come from WSL Ubuntu with the same pinned PyMC 5.25.1.
+  - No field-check outcomes are recorded yet (0 ground truth).
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/52
+
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/58
+
+## `docs/api-shapes` — API shapes draft for T10 (Part 7 item 1)
+
+- **Owner / date:** P3, 2026-10-03.
+- **Purpose:** Docs-only contract draft for P4: `docs/api_shapes.md` and one example JSON per endpoint (`docs/api_examples/`), from `docs/P3_BUILD_PLAN.md` Part 7 item 1 and T10 step 1. **Not a row in `docs/features.csv`**: no row was added or changed (Part 7 asks the owner to decide whether it gets one).
+- **What we found:**
+  - Routes on `main`: `GET /health`, `POST /intake/batch`, `/intake/sms`, `/intake/missed-call`, `POST /notices`, `GET /ledger/entries`, `/ledger/verify`. No auth, CORS or OpenAPI export yet. Intake, notices and contests answer a bad item with HTTP 200 and `status: "invalid"`; only malformed bodies use the shared error shape (`app/errors.py`, `code` from the HTTP status phrase).
+  - P4 mismatches: the U3 field-worker app reads `duplicate` (resent `client_id`) as `merged`; the U2 resident app shows `spam` as "Could not send"; U4 uses lowercase outcomes (`confirmed`) where T3 returns `Confirmed`, and takes resident feedback on the driver's screen where T3 uses SMS replies `1` / `2`; U3 sends `area_id` as free text; U5 / U6 snapshots use camelCase and renamed fields (`waterAccessDeficitShare` vs E2 `wad`); the U6 forecast fixture is hand-typed but labelled SIMULATION, shows city intervals T2 does not produce, and marks the 21.9% / 35.1% protocol `NOT_DOCUMENTED`.
+  - For P2 / P3: no plan store and no delivery store on `main`; an explanation's queue day must use the plan's `booked_trips` (capacity after the scheduled reserve), or it disagrees with the plan (checked on replay day 1, station ST19: 215 matches, raw 226 does not); A8's replay day holds bookings that arrive after the 05:00 plan time, so T7's `waiting_hours` can be negative; A8's `results.csv` / `summary.json` exist for a future Impact page.
+  - `main` moved to `26b47d9` (U6) before this branch was cut; U6 adds 9 E501 errors and a format failure in P4's `scripts/frontend/build_u6_snapshot.py`.
+- **What we changed:**
+  - `docs/api_shapes.md`: conventions, status legend, what exists today, 17 sections (36 endpoints) with method and path, request, response fields and types, basis, errors, roles, and open questions for P4. Status: 7 route on main, 22 from main (service or file on main, route not built), 3 PROPOSED (T2 forecast and backtest, T9 confidence, from the local branches' actual output), 4 NOT DESIGNED (shortage: T8 not started; report card, SMS summary, impact: P4 / P2 to propose).
+  - `docs/api_examples/*.json` (36): each produced by calling the real route, service or file (temporary databases; SYNTHETIC requests; P2's replay day 1 for the plan and booking examples, SIMULATION; real ward rows from `ward_evidence.csv`); each records its endpoint, status, basis and source in `_example`. No phone numbers (a placeholder is shown; the services never echo numbers) and no personal free text. Response-field tables in the doc are generated from these files. The generator scripts were kept out of the repo (docs-only scope).
+  - `backend/tests/test_api_shapes.py` (3 tests). No backend code, routes or frontend files changed.
+  - P4 answers applied (2026-10-03): duplicate = "already sent", merged = linked to existing complaint; spam = received and flagged; four delivery outcomes, pending until reply window closes; stable ward_id + section_id; snake_case; null/UNAVAILABLE; SYNTHETIC demo forecasts; roles officer/driver/resident/field_worker + gateway; offset/limit/total + after_seq/limit; structured codes; needs_check; per-item batch status; ISO 8601 with offset; ward report card; impact section. Councillor role OPEN.
+- **Validation:**
+  - 3 tests: examples valid/labelled JSON without phone numbers; merged routes return documented fields; file-based examples match source rows.
+  - After merging `main` (`570d4b8`, T2 #58): `python tasks.py test`: ~613 backend passed, 2 failed; frontend 1 passed. Inherited failures same as T2/T9.
+  - `python tasks.py lint` exit 0.
+- **Known limitations:** Roles, auth, pagination and language handling are proposals for T10 to implement. Councillor role OPEN.
+- **Handoff / next step:** T10 builds the routes from the agreed shapes. P4: no further questions open.
+- **Update after P4's review (2026-10-03):** P4's answers applied in `docs/api_shapes.md` (section **Agreed with P4**): intake wording (`duplicate` = already sent, `merged` = linked to an existing complaint, `spam` = flagged for review); the four delivery outcome codes with `outcome_status` `pending` until the reply window closes; `ward_id` + `section_id` instead of free-text `area_id`; snake_case; missing numbers `null` + `UNAVAILABLE`; demo forecasts SYNTHETIC; roles `officer`, `driver`, `resident`, `field_worker` plus a gateway credential; `offset` / `limit` / `total` (ledger `after_seq` / `limit`); codes and structured values for the UI, SMS built on the server with English fallback; `needs_check` with signals; per-item batch status and 4xx for malformed requests; ISO 8601, UTC. Ward report card, SMS summary and impact designed from files on `main` (deliveries, debt, schedule and duplicate-merge share UNAVAILABLE). The example test's phone pattern no longer matches digits inside decimals. The under-served example now shows both reason kinds (found by T10's contract test). Still OPEN: councillor role; SMS wording in te / ur / hi.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/57
+
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/58
 
 ## `feat/t9-confidence` — `T9`
@@ -867,28 +955,16 @@ The pull-request description must summarize the same information and link to thi
   - T10: expose the reason and the officer check.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/59
 
-## `docs/api-shapes` — API shapes draft for T10 (Part 7 item 1)
+## `feat/t8-shortage` — `T8`
 
 - **Owner / date:** P3, 2026-10-03.
-- **Purpose:** Docs-only contract draft for P4: `docs/api_shapes.md` and one example JSON per endpoint (`docs/api_examples/`), from `docs/P3_BUILD_PLAN.md` Part 7 item 1 and T10 step 1. **Not a row in `docs/features.csv`**: no row was added or changed (Part 7 asks the owner to decide whether it gets one).
-- **What we found:**
-  - Routes on `main`: `GET /health`, `POST /intake/batch`, `/intake/sms`, `/intake/missed-call`, `POST /notices`, `GET /ledger/entries`, `/ledger/verify`. No auth, CORS or OpenAPI export yet. Intake, notices and contests answer a bad item with HTTP 200 and `status: "invalid"`; only malformed bodies use the shared error shape (`app/errors.py`, `code` from the HTTP status phrase).
-  - P4 mismatches: the U3 field-worker app reads `duplicate` (resent `client_id`) as `merged`; the U2 resident app shows `spam` as "Could not send"; U4 uses lowercase outcomes (`confirmed`) where T3 returns `Confirmed`, and takes resident feedback on the driver's screen where T3 uses SMS replies `1` / `2`; U3 sends `area_id` as free text; U5 / U6 snapshots use camelCase and renamed fields (`waterAccessDeficitShare` vs E2 `wad`); the U6 forecast fixture is hand-typed but labelled SIMULATION, shows city intervals T2 does not produce, and marks the 21.9% / 35.1% protocol `NOT_DOCUMENTED`.
-  - For P2 / P3: no plan store and no delivery store on `main`; an explanation's queue day must use the plan's `booked_trips` (capacity after the scheduled reserve), or it disagrees with the plan (checked on replay day 1, station ST19: 215 matches, raw 226 does not); A8's replay day holds bookings that arrive after the 05:00 plan time, so T7's `waiting_hours` can be negative; A8's `results.csv` / `summary.json` exist for a future Impact page.
-  - `main` moved to `26b47d9` (U6) before this branch was cut; U6 adds 9 E501 errors and a format failure in P4's `scripts/frontend/build_u6_snapshot.py`.
-- **What we changed:**
-  - `docs/api_shapes.md`: conventions, status legend, what exists today, 17 sections (36 endpoints) with method and path, request, response fields and types, basis, errors, roles, and open questions for P4. Status: 7 route on main, 22 from main (service or file on main, route not built), 3 PROPOSED (T2 forecast and backtest, T9 confidence, from the local branches' actual output), 4 NOT DESIGNED (shortage: T8 not started; report card, SMS summary, impact: P4 / P2 to propose).
-  - `docs/api_examples/*.json` (36): each produced by calling the real route, service or file (temporary databases; SYNTHETIC requests; P2's replay day 1 for the plan and booking examples, SIMULATION; real ward rows from `ward_evidence.csv`); each records its endpoint, status, basis and source in `_example`. No phone numbers (a placeholder is shown; the services never echo numbers) and no personal free text. Response-field tables in the doc are generated from these files. The generator scripts were kept out of the repo (docs-only scope).
-  - `backend/tests/test_api_shapes.py` (3 tests). No backend code, routes or frontend files changed.
-  - P4 answers applied (2026-10-03): duplicate = "already sent", merged = linked to existing complaint; spam = received and flagged; four delivery outcomes, pending until reply window closes; stable ward_id + section_id; snake_case; null/UNAVAILABLE; SYNTHETIC demo forecasts; roles officer/driver/resident/field_worker + gateway; offset/limit/total + after_seq/limit; structured codes; needs_check; per-item batch status; ISO 8601 with offset; ward report card; impact section. Councillor role OPEN.
-- **Validation:**
-  - 3 tests: examples valid/labelled JSON without phone numbers; merged routes return documented fields; file-based examples match source rows.
-  - After merging `main` (`570d4b8`, T2 #58): `python tasks.py test`: ~613 backend passed, 2 failed; frontend 1 passed. Inherited failures same as T2/T9.
-  - `python tasks.py lint` exit 0.
-- **Known limitations:** Roles, auth, pagination and language handling are proposals for T10 to implement. Councillor role OPEN.
-- **Handoff / next step:** T10 builds the routes from the agreed shapes. P4: no further questions open.
-- **Update after P4's review (2026-10-03):** P4's answers applied in `docs/api_shapes.md` (section **Agreed with P4**): intake wording (`duplicate` = already sent, `merged` = linked to an existing complaint, `spam` = flagged for review); the four delivery outcome codes with `outcome_status` `pending` until the reply window closes; `ward_id` + `section_id` instead of free-text `area_id`; snake_case; missing numbers `null` + `UNAVAILABLE`; demo forecasts SYNTHETIC; roles `officer`, `driver`, `resident`, `field_worker` plus a gateway credential; `offset` / `limit` / `total` (ledger `after_seq` / `limit`); codes and structured values for the UI, SMS built on the server with English fallback; `needs_check` with signals; per-item batch status and 4xx for malformed requests; ISO 8601, UTC. Ward report card, SMS summary and impact designed from files on `main` (deliveries, debt, schedule and duplicate-merge share UNAVAILABLE). The example test's phone pattern no longer matches digits inside decimals. The under-served example now shows both reason kinds (found by T10's contract test). Still OPEN: councillor role; SMS wording in te / ur / hi.
-- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/57
+- **Purpose:** F6 shortage early warning: risk list per section 1-3 months ahead, T2 forecast vs capacity, reasons from the numbers.
+- **What we found:** A8 on `main` has a usable capacity assumption (1,150 tankers x 9 trips per tanker per day, 90 stand-in stations); all 198 T2 sections match A8's sections, 195 have a station. T2 forecasts only sections with a value a year earlier (182 / 184 / 185). D7 groundwater and reservoir data are not in the repo.
+- **What we changed:** `ShortageConfig` in `config/forecast.py`; `services/shortage.py`; `scripts/forecast/run_shortage.py`; `data/derived/shortage_risk.csv` (551 rows, `_basis` on every derived column); tests `backend/tests/services/test_shortage.py`; workflow `.github/workflows/p3-t8.yml`; `docs/worklogs/T8.md`; T8 section of `docs/P3_FEATURES.md`; status rows. Cut from `feat/t2-forecast`.
+- **Validation:** 8 tests written first, including the done-when (risk list 1-3 months ahead with reasons) on the real files, with the expected rows read from the forecast table (every section-month T2 forecasts in the three months: 551 today), and the committed list reproducing. Some edits to `services/shortage.py`, the test and `scripts/forecast/run_shortage.py` were made by another P3 session; they were reviewed and kept. `python tasks.py test`: 599 backend passed, 2 failed (P2 `test_a8_build.py::test_stations_are_reproducible_committed_and_labelled` and `::test_one_seed_reproduces`, Windows only, pass on Linux CI, identical on `main`); frontend passed; lint exit 0. The `P3:T8` workflow commands pass locally.
+- **Known limitations:** OPEN, owner to confirm: risk ratios 1.0 / 0.85 and the 80% bound rule; A8's 2025 split and fleet used for 2026; one booking = one trip; forecast start (pre-re-cut names). No groundwater or reservoir signal ("groundwater data unavailable" in every reason).
+- **Handoff / next step:** Retarget to `main` after T2 merges. P1: D7. Owner: Q2 and OPEN values. T10: `GET /shortage`.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/61
 
 ## `feat/t10-api` — `T10`
 
