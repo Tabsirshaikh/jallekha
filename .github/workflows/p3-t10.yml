@@ -1,0 +1,61 @@
+name: "P3:T10"
+
+# T10 API for all screens: contract tests against docs/api_examples/, auth (roles, dev token,
+# gateway credential), error shape, paging, CORS, OpenAPI export current, merged-route tests.
+on:
+  push:
+    branches: [feat/t10-api]
+  pull_request:
+    branches: [main]
+    paths:
+      - "backend/app/main.py"
+      - "backend/app/auth.py"
+      - "backend/app/errors.py"
+      - "backend/app/config/api.py"
+      - "backend/app/routers/**"
+      - "backend/app/services/**"
+      - "backend/tests/api/**"
+      - "backend/tests/test_api_shapes.py"
+      - "backend/tests/test_intake_models_router.py"
+      - "backend/tests/test_ledger_router.py"
+      - "backend/tests/services/test_notices.py"
+      - "docs/api_examples/**"
+      - "docs/openapi.json"
+      - "scripts/api/export_openapi.py"
+      - ".github/workflows/p3-t10.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  api:
+    name: "P3:T10"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -e 'backend[dev,geo]'
+      - name: API contract, auth and merged-route tests
+        run: >-
+          pytest backend/tests/api backend/tests/test_api_shapes.py
+          backend/tests/test_intake_models_router.py backend/tests/test_ledger_router.py
+          backend/tests/services/test_notices.py
+      - name: OpenAPI export is current
+        run: |
+          cp docs/openapi.json "$RUNNER_TEMP/openapi.committed.json"
+          python scripts/api/export_openapi.py
+          git diff --exit-code -- docs/openapi.json
+      - name: Lint T10 files
+        run: >-
+          ruff check --config backend/pyproject.toml
+          backend/app/main.py backend/app/auth.py backend/app/config/api.py backend/app/routers
+          backend/tests/api scripts/api
+      - name: Format check T10 files
+        run: >-
+          ruff format --check --config backend/pyproject.toml
+          backend/app/main.py backend/app/auth.py backend/app/config/api.py backend/app/routers
+          backend/tests/api scripts/api

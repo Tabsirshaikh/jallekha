@@ -526,16 +526,32 @@ The T10 plan asks for JSON examples in the frontend fixtures folder; `frontend/`
 
 #### `GET /shortage`
 
-- **Status:** **NOT DESIGNED, P3 (T8).**
-- **Built from:** nothing yet
+- **Status:** **Route on main** (T10), reading T8's `data/derived/shortage_risk.csv`.
+- **Built from:** data/derived/shortage_risk.csv (T8, `scripts/forecast/run_shortage.py`): T2 forecast against the A8 capacity assumption, one row per section and month, 1 to 3 months after the forecast origin.
 - **Roles:** officer
-- **Request:** not designed
-- **Errors:** not designed
-- **Basis:** not designed
-- **Example:** [`docs/api_examples/shortage.get.json`](api_examples/shortage.get.json) (placeholder)
-- **Notes:** T8 not merged; see the T8 branch.
+- **Request:** `offset`, `limit` (paging); no filters yet
+- **Errors:** 401 `unauthorized` (no or bad token), 403 `forbidden` (wrong role), 422 `validation_error` (malformed paging)
+- **Basis:** DERIVED forecast against ASSUMED capacity; groundwater (D7) and reservoirs are UNAVAILABLE and every reason says so
+- **Example:** [`docs/api_examples/shortage.get.json`](api_examples/shortage.get.json) (two rows from the real route)
+- **Notes:** Sections are named as before the Feb/Mar 2026 re-cut, so they do not match current HMWSSB sections one to one. Before `shortage_risk.csv` exists the route answers an empty list with basis UNAVAILABLE.
 
-_No fields: not designed._
+| Field | Type | Basis of numbers |
+|---|---|---|
+| `items[].section` | string | REAL HMWSSB section name, from before the Feb/Mar 2026 re-cut |
+| `items[].section_basis` | string |  |
+| `items[].month` | string (YYYY-MM) |  |
+| `items[].months_ahead` | integer | 1 to 3 months after the forecast origin |
+| `items[].forecast_bookings` | number | DERIVED (T2 forecast) |
+| `items[].upper_80` | number | DERIVED (80% upper bound) |
+| `items[].capacity_trips` | number | null | ASSUMED (A8 fleet scenario); null when the section has no station |
+| `items[].capacity_ratio` | number | null | DERIVED |
+| `items[].risk` | string | low, medium, high or unknown |
+| `items[].reason` | string | built from the row's own numbers |
+| `items[].groundwater_status` | string | UNAVAILABLE: D7 is not in the repo |
+| `items[].reservoir_status` | string | off until Q2 is approved |
+| `items[].label` | string |  |
+| `total` | integer | all rows, not only this page |
+| `basis` | string | DERIVED |
 
 
 ## 8. Plan (queue, schedule, outage)

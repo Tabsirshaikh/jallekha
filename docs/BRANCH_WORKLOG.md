@@ -965,3 +965,14 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:** OPEN, owner to confirm: risk ratios 1.0 / 0.85 and the 80% bound rule; A8's 2025 split and fleet used for 2026; one booking = one trip; forecast start (pre-re-cut names). No groundwater or reservoir signal ("groundwater data unavailable" in every reason).
 - **Handoff / next step:** Retarget to `main` after T2 merges. P1: D7. Owner: Q2 and OPEN values. T10: `GET /shortage`.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/61
+
+## `feat/t10-api` — `T10`
+
+- **Owner / date:** P3, 2026-10-03.
+- **Purpose:** API for all screens (thin routers, shapes agreed with P4 in `docs/api_shapes.md`), token auth by role, one error shape, paging, CORS, OpenAPI export.
+- **What we found:** no plan store or delivery store on `main` (in-memory holders, empty until filled; routes 404); `python-multipart` not installed (voice upload not built); the under-served example lacked the plain-reason row (fixed on `docs/api-shapes`).
+- **What we changed:** `app/auth.py`, `config/api.py`, new routers (evidence, forecast, plans, contests, deliveries, common, stores), auth / 422 / ward and section ids on the merged intake, notices and ledger routers, CORS in `main.py`, `scripts/api/export_openapi.py`, `docs/openapi.json`, `.env.example` (empty token variables), tests `backend/tests/api/`, P3's own router tests updated for auth (an invalid notice is now 422), workflow `.github/workflows/p3-t10.yml`, docs. Branch = `main` + local merges of #59 and #57.
+- **Validation:** 32 API tests (every route conforms to its example; auth 401 / 403, dev token, gateway; approval without a reason 422; paging; CORS; OpenAPI current). `python tasks.py test`: 641 backend passed, 2 failed (P2 `test_a8_build.py::test_stations_are_reproducible_committed_and_labelled` and `::test_one_seed_reproduces`, Windows only, pass on Linux CI); frontend passed; lint exit 0.
+- **Known limitations:** OPEN: councillor role; voice upload (`python-multipart`); plan and delivery stores; SMS wording te / ur / hi; OTP key management. In-memory holders reset on restart.
+- **Handoff / next step:** merge #59 and #57 first. P2: plan store and daily job. P4: wire screens to the routes.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/62
