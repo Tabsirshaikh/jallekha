@@ -835,6 +835,28 @@ The pull-request description must summarize the same information and link to thi
   - P2: check `test_a8_build.py` on Windows.
   - P1: weather (D8), groundwater (D7) and a trips-per-day source. Owner: confirm the recovered protocol before 21.9% / 35.1% go on slides.
   - T8 builds on the forecast table.
+- **Pull request:** pending.
+
+## `fix/e5-models` — E5: run the NB / BYM2 models so field-check flags are checked across methods
+
+- **Owner / date:** P1 (work done by the repo owner), 2026-10-03.
+- **Why:** E5 was marked DONE, but `build_underserved.py` called `screen(areas)` without model results, so the done-when ("flags stable across model variants") was never evaluated. BYM2 also needed a reviewed ward-adjacency graph, which did not exist.
+- **What we changed:**
+  - `scripts/evidence/build_ward_adjacency.py`: rook adjacency (at least 50 m shared border, 10 m snap, UTM 44N), 145 wards and 364 edges, plus a review record checked by SHA-256. Owner-reviewed on automated evidence: 360 of 364 edges stable across 9 settings; live OSM agrees on 356 of 356 comparable edges; Wikipedia spot-check.
+  - `scripts/evidence/fit_underserved_models.py`: fits NB, BYM2 and BYM2_SHRINKAGE out of fold (5 folds) on the gated cohort and writes `data/derived/underserved/model_results.json` with a cohort fingerprint, graph hash, config and environment. Fitting runs on Linux (WSL or CI); tests never re-sample, and `build_underserved.py` refuses stale results.
+  - `services/underserved_models.py` and `config/underserved.py`: options added during the BYM2 diagnosis (likelihood, rho prior, restricted regression, island handling, ICAR-only structure, inverse-sqrt NB dispersion prior, PC prior on the spatial spread), each with its source. Defaults are now the settings of the committed results.
+  - `services/underserved.py`: when the spatial models fail their diagnostics, a candidate must still agree across every method that passed, which needs at least peer and NB (`AGREED_FIELD_CHECK_CANDIDATE`). Four-way stability is still only claimed when all four pass (`stability_evaluated`). The summary lists `agreement_methods` and `methods_failed_diagnostics`.
+  - `.github/workflows/p1-e5-models.yml`: Linux job that fits the models and uploads the results for review.
+  - Each candidate reason appears once; the WAD reason is no longer repeated per method, and ratio reasons name their method.
+  - U5 (after merging `main`): snapshot rebuilt (6 candidates); the field-check cards say "PEER + NB", label the NB ratio reason separately, and key reasons by code and method (no duplicate React keys). `docs/LIMITATIONS.md` updated for T2, U2-U6.
+- **Result:** NB passes every check in all folds. BYM2 and BYM2_SHRINKAGE pass 8 of 10 folds but fail fold 1 for every seed (NB alpha and spatial sigma cannot be separated without its 22 wards), so they are recorded as DIAGNOSTICS_FAILED; the strict gate was kept. Candidates: 7 peer-only → **6 agreed by peer and NB** (Jaccard 0.86); Mailardevpally becomes `MODEL_SENSITIVE_REVIEW`.
+- **Validation:** new tests written first and failing first (graph reproducibility and review, stale results refused, dispersion and spread priors, agreement across passing methods, peer-only flag not a candidate). `verify_underserved.py` passes. Full suite and lint: see the PR.
+- **Known limitations:**
+  - Four-way stability is not met; the spatial models did not converge (see `docs/LIMITATIONS.md` F4).
+  - GitHub Actions could not run the models job (account billing block, October 2026); the committed results come from WSL Ubuntu with the same pinned PyMC 5.25.1.
+  - No field-check outcomes are recorded yet (0 ground truth).
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/52
+
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/58
 
 ## `docs/api-shapes` — API shapes draft for T10 (Part 7 item 1)

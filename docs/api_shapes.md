@@ -287,7 +287,7 @@ The T10 plan asks for JSON examples in the frontend fixtures folder; `frontend/`
 #### `GET /underserved/field-checks`
 
 - **Status:** **From main**: the service or file is on `main`; the route is not built (T10).
-- **Built from:** data/derived/underserved/field_checks.json: schema_version, summary, limitations, field_check_list, and rows (two rows shown: one with plain reasons, one whose reasons carry threshold and model; a row may also have no reasons)
+- **Built from:** data/derived/underserved/field_checks.json: schema_version, summary, limitations, field_check_list, and rows (two rows shown: one needing data review, one agreed candidate whose reasons carry threshold and model; a row may also have no reasons)
 - **Roles:** officer
 - **Request:** none (PROPOSED filter: `field_check_candidate=true`)
 - **Errors:** 401 `unauthorized` (no or bad token), 403 `forbidden` (wrong role), 404 `not_found`, 422 `validation_error` (malformed request); codes come from the HTTP status phrase in `app/errors.py`
@@ -306,6 +306,8 @@ The T10 plan asks for JSON examples in the frontend fixtures folder; `frontend/`
 | `summary.real_world_accuracy` | null in the example (type: see the source dataclass) (nullable) |  |
 | `summary.screened_count` | integer | see **Basis** |
 | `summary.stability_evaluated` | boolean |  |
+| `summary.agreement_methods` | string[] |  |
+| `summary.methods_failed_diagnostics` | string[] |  |
 | `limitations` | array |  |
 | `limitations[]` | string |  |
 | `field_check_list` | array |  |
@@ -342,6 +344,7 @@ The T10 plan asks for JSON examples in the frontend fixtures folder; `frontend/`
 | `field_check_list[].reasons[].threshold` | number | see **Basis** |
 | `field_check_list[].reasons[].value` | number | see **Basis** |
 | `field_check_list[].stability_evaluated` | boolean |  |
+| `field_check_list[].agreement_methods` | string[] |  |
 | `field_check_list[].status` | string |  |
 | `field_check_list[].ward_id` | string |  |
 | `field_check_list[].ward_name` | string |  |
@@ -368,6 +371,7 @@ The T10 plan asks for JSON examples in the frontend fixtures folder; `frontend/`
 | `rows[].reasons[].code` | string |  |
 | `rows[].reasons[].value` | number (nullable) | see **Basis** |
 | `rows[].stability_evaluated` | boolean |  |
+| `rows[].agreement_methods` | string[] |  |
 | `rows[].status` | string |  |
 | `rows[].ward_id` | string |  |
 | `rows[].ward_name` | string |  |

@@ -11,3 +11,4 @@
 
 # Last matching rule wins: preserve downloaded source bytes exactly.
 data/raw/** -text
+*.json text eol=lf

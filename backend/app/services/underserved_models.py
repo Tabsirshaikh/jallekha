@@ -11,7 +11,7 @@ from app.config.underserved import UNDERSERVED_CONFIG
 from app.services.underserved import blockers, validate_cohort
 
 
-def scaled_icar_basis(ward_ids, edges):
+def scaled_icar_basis(ward_ids, edges, islands_iid_only=False):
     if len(set(ward_ids)) != len(ward_ids):
         raise ValueError("Graph has duplicate identifiers")
     if not ward_ids or any(not isinstance(ward, str) or not ward for ward in ward_ids):
@@ -42,6 +42,10 @@ def scaled_icar_basis(ward_ids, edges):
     columns = []
     for component in components:
         if len(component) == 1:
+            if islands_iid_only:
+                # Freni-Sterrantino et al. (2018): an island has no structured effect; its
+                # variation is carried by the unstructured term alone.
+                continue
             column = np.zeros(len(ward_ids))
             column[component[0]] = 1  # Singleton gets unit Normal, not an undefined ICAR prior.
             columns.append(column)
@@ -60,6 +64,63 @@ def scaled_icar_basis(ward_ids, edges):
     return np.column_stack(columns) if columns else np.zeros((len(ward_ids), 0))
 
 
+def restricted_projection(design):
+    """I - X(X'X)^-1 X' for X = [1, design]: restricted spatial regression (Hodges & Reich
+    2010). Area effects are projected off the intercept and need covariates, so they cannot
+    absorb the need effect that the reference is built from."""
+    x = np.column_stack([np.ones(len(design)), design])
+    return np.eye(len(design)) - x @ np.linalg.pinv(x)
+
+
+def pc_rho_setup(basis, n_areas, u=0.5, alpha=2 / 3):
+    """Riebler et al. (2016) PC prior on the BYM2 mixing parameter. Returns the rate and the
+    non-zero eigenvalues of the scaled generalised inverse Q*^- = B B' (B = scaled basis)."""
+    gammas = np.linalg.svd(basis, compute_uv=False) ** 2 if basis.shape[1] else np.zeros(0)
+    gammas = gammas[gammas > 1e-10]
+    nulls = n_areas - len(gammas)
+    distance = math.sqrt(2 * _pc_kld(u, gammas, nulls, n_areas))
+    return -math.log(1 - alpha) / distance, gammas, nulls
+
+
+def _pc_kld(phi, gammas, nulls, n_areas):
+    return 0.5 * (
+        phi * gammas.sum()
+        - phi * n_areas
+        - np.log(1 - phi + phi * gammas).sum()
+        - nulls * math.log(1 - phi)
+    )
+
+
+def pc_rho_logdensity_numpy(phi, rate, gammas, nulls, n_areas):
+    phi = np.asarray(phi, dtype=float)[..., None]
+    kld = 0.5 * (
+        phi[..., 0] * gammas.sum()
+        - phi[..., 0] * n_areas
+        - np.log(1 - phi + phi * gammas).sum(-1)
+        - nulls * np.log(1 - phi[..., 0])
+    )
+    dkld = 0.5 * (
+        gammas.sum()
+        - n_areas
+        - ((gammas - 1) / (1 - phi + phi * gammas)).sum(-1)
+        + nulls / (1 - phi[..., 0])
+    )
+    d = np.sqrt(2 * np.maximum(kld, 1e-300))
+    return np.log(rate) - rate * d + np.log(np.abs(dkld / d))
+
+
+def _pc_rho_logdensity_tensor(rho, rate, gammas, nulls, n_areas):
+    import pytensor.tensor as pt
+
+    g = pt.constant(gammas)
+    kld = 0.5 * (
+        rho * g.sum() - rho * n_areas - pt.log(1 - rho + rho * g).sum() - nulls * pt.log(1 - rho)
+    )
+    dkld = 0.5 * (g.sum() - n_areas - ((g - 1) / (1 - rho + rho * g)).sum() + nulls / (1 - rho))
+    d = pt.sqrt(2 * pt.maximum(kld, 1e-300))
+    return np.log(rate) - rate * d + pt.log(pt.abs(dkld / d))
+
+
 def fit_count_model(
     areas,
     edges=(),
@@ -76,6 +137,18 @@ def fit_count_model(
         raise ValueError("Invalid model cohort")
     if variant not in ("NB", "BYM2", "BYM2_SHRINKAGE"):
         raise ValueError("Unknown model variant")
+    if config.bym2_structure not in ("bym2", "icar"):
+        raise ValueError(f"Unknown BYM2 structure: {config.bym2_structure}")
+    icar_only = variant != "NB" and config.bym2_structure == "icar"
+    if config.bym2_sigma_prior not in ("halfnormal", "pc"):
+        raise ValueError(f"Unknown BYM2 spread prior: {config.bym2_sigma_prior}")
+    if config.nb_dispersion_prior not in ("halfnormal", "inv_sqrt"):
+        raise ValueError(f"Unknown NB dispersion prior: {config.nb_dispersion_prior}")
+    if config.bym2_rho_prior not in ("beta", "pc"):
+        raise ValueError(f"Unknown BYM2 rho prior: {config.bym2_rho_prior}")
+    if config.bym2_likelihood not in ("negative_binomial", "poisson"):
+        raise ValueError(f"Unknown BYM2 likelihood: {config.bym2_likelihood}")
+    likelihood = "negative_binomial" if variant == "NB" else config.bym2_likelihood
     ids = [a.ward_id for a in areas]
     if not holdout_ids:
         raise ValueError("Held-out areas are required; in-sample scores cannot flag candidates")
@@ -116,40 +189,76 @@ def fit_count_model(
     with pm.Model():
         intercept = pm.Normal("intercept", mu=-4, sigma=2)
         beta = pm.Normal("beta", mu=0, sigma=1, shape=2)
-        alpha = pm.HalfNormal("alpha", sigma=10)
+        if likelihood == "negative_binomial" and config.nb_dispersion_prior == "inv_sqrt":
+            # Sampled where 0 = Poisson; alpha itself is kept for the diagnostics
+            inv_sqrt_alpha = pm.HalfNormal("inv_sqrt_alpha", sigma=1)
+            alpha = pm.Deterministic("alpha", 1 / inv_sqrt_alpha**2)
+        elif likelihood == "negative_binomial":
+            alpha = pm.HalfNormal("alpha", sigma=10)
         fixed = np.log(exposure) + intercept + pm.math.dot(design, beta)
         reference = pm.Deterministic("reference_mu", pm.math.exp(fixed))
         effect = 0
         if variant != "NB":
-            basis = scaled_icar_basis(ids, edges)
-            sigma = pm.HalfNormal("sigma", sigma=0.5 if variant == "BYM2_SHRINKAGE" else 1)
-            rho = pm.Beta("rho", alpha=0.5, beta=0.5)
+            basis = scaled_icar_basis(ids, edges, islands_iid_only=config.bym2_islands_iid_only)
+            spread = 0.5 if variant == "BYM2_SHRINKAGE" else 1
+            if config.bym2_sigma_prior == "pc":
+                # PC prior (Simpson et al. 2017): P(sigma > spread) = 0.01
+                sigma = pm.Exponential("sigma", lam=-math.log(0.01) / spread)
+            else:
+                sigma = pm.HalfNormal("sigma", sigma=spread)
             z = pm.Normal("spatial_z", 0, 1, shape=basis.shape[1])
-            theta = pm.Normal("unstructured", 0, 1, shape=len(areas))
-            effect = sigma * (
-                pm.math.sqrt(rho) * pm.math.dot(basis, z) + pm.math.sqrt(1 - rho) * theta
-            )
+            if icar_only:
+                # NB alpha already carries per-ward extra variation; keep only the spatial part
+                effect = sigma * pm.math.dot(basis, z)
+            else:
+                if config.bym2_rho_prior == "pc":
+                    rate, gammas, nulls = pc_rho_setup(basis, len(areas))
+                    rho = pm.Uniform("rho", 0, 1)
+                    pm.Potential(
+                        "rho_pc_prior",
+                        _pc_rho_logdensity_tensor(rho, rate, gammas, nulls, len(areas)),
+                    )
+                else:
+                    rho = pm.Beta("rho", alpha=0.5, beta=0.5)
+                theta = pm.Normal("unstructured", 0, 1, shape=len(areas))
+                effect = sigma * (
+                    pm.math.sqrt(rho) * pm.math.dot(basis, z) + pm.math.sqrt(1 - rho) * theta
+                )
+            if config.bym2_restricted:
+                effect = pm.math.dot(restricted_projection(design), effect)
         mu = reference if variant == "NB" else pm.math.exp(fixed + effect)
-        pm.NegativeBinomial("bookings", mu=mu[training], alpha=alpha, observed=y[training])
+        if likelihood == "negative_binomial":
+            pm.NegativeBinomial("bookings", mu=mu[training], alpha=alpha, observed=y[training])
+        else:
+            pm.Poisson("bookings", mu=mu[training], observed=y[training])
         trace = pm.sample(
             draws=config.draws,
             tune=config.tune,
             chains=config.chains,
-            cores=1,
+            cores=config.cores,
             random_seed=config.seed,
-            target_accept=0.95,
+            target_accept=config.target_accept,
             progressbar=False,
             compute_convergence_checks=True,
             return_inferencedata=True,
         )
-    names = ["intercept", "beta", "alpha"]
+    names = ["intercept", "beta"] + (["alpha"] if likelihood == "negative_binomial" else [])
     if variant != "NB":
-        names += ["sigma", "rho", "spatial_z", "unstructured"]
+        names += (
+            ["sigma", "spatial_z"] if icar_only else ["sigma", "rho", "spatial_z", "unstructured"]
+        )
     rhat_parts = [az.rhat(trace, var_names=[name])[name].values for name in names]
     ess_parts = [az.ess(trace, var_names=[name], method="bulk")[name].values for name in names]
     defined = all(
         values.size > 0 and np.all(np.isfinite(values)) for values in [*rhat_parts, *ess_parts]
     )
+    by_parameter = {
+        name: {
+            "max_rhat": float(r.max()) if r.size and np.all(np.isfinite(r)) else None,
+            "min_bulk_ess": float(e.min()) if e.size and np.all(np.isfinite(e)) else None,
+        }
+        for name, r, e in zip(names, rhat_parts, ess_parts, strict=True)
+    }
     rhat = max(float(values.max()) for values in rhat_parts) if defined else None
     ess = min(float(values.min()) for values in ess_parts) if defined else None
     divergences = int(trace.sample_stats.diverging.sum())
@@ -193,12 +302,41 @@ def fit_count_model(
         "graph_review": graph_review if variant != "NB" else None,
         "prediction_scope": "HELDOUT_ONLY",
         "reference": "need covariates/exposure with area effect set to zero",
+        "likelihood": likelihood,
+        "diagnostics_by_parameter": by_parameter,
+        "structure": None if variant == "NB" else config.bym2_structure,
+        "rho_prior": None if variant == "NB" else config.bym2_rho_prior,
+        "restricted": None if variant == "NB" else config.bym2_restricted,
+        "islands_iid_only": None if variant == "NB" else config.bym2_islands_iid_only,
+        "target_accept": config.target_accept,
         "priors": {
             "intercept": "Normal(-4,2)",
             "beta": "Normal(0,1)",
-            "alpha": "HalfNormal(10)",
-            "rho": "Beta(0.5,0.5)",
-            "sigma": "HalfNormal(0.5)" if variant == "BYM2_SHRINKAGE" else "HalfNormal(1)",
+            **(
+                {
+                    "alpha": "1/sqrt(alpha) ~ HalfNormal(1)"
+                    if config.nb_dispersion_prior == "inv_sqrt"
+                    else "HalfNormal(10)"
+                }
+                if likelihood == "negative_binomial"
+                else {}
+            ),
+            **(
+                {}
+                if icar_only or variant == "NB"
+                else {
+                    "rho": "PC(U=0.5, alpha=2/3)"
+                    if config.bym2_rho_prior == "pc"
+                    else "Beta(0.5,0.5)"
+                }
+            ),
+            "sigma": (
+                f"PC: P(sigma > {0.5 if variant == 'BYM2_SHRINKAGE' else 1}) = 0.01"
+                if config.bym2_sigma_prior == "pc"
+                else "HalfNormal(0.5)"
+                if variant == "BYM2_SHRINKAGE"
+                else "HalfNormal(1)"
+            ),
         },
         "scores": scores,
     }

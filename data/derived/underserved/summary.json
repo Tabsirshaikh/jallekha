@@ -1,4 +1,8 @@
 {
+  "agreement_methods": [
+    "NB",
+    "PEER_MEDIAN"
+  ],
   "area_count": 145,
   "blocking_reason_counts": {
     "CAD_AND_HARDSHIP_UNAVAILABLE": 2,
@@ -17,7 +21,7 @@
   "e3_growth_context_only": true,
   "e3_noisy_trend_review_flags": 0,
   "eligible_count": 107,
-  "field_check_count": 7,
+  "field_check_count": 6,
   "field_check_outcomes_recorded": 0,
   "ground_truth_count": 0,
   "household_exposure": "2025 modelled central estimate (data/derived/population)",
@@ -36,6 +40,27 @@
     "This screen cannot identify who did not report or infer reporting propensity from counts alone.",
     "A candidate means 'send someone to check'; it never changes allocation, eligibility, or entitlement."
   ],
+  "methods_failed_diagnostics": [
+    "BYM2",
+    "BYM2_SHRINKAGE"
+  ],
+  "models": {
+    "adjacency_sha256": "d02002994668ddf6368d94125da119849b80a129e093dd5be3ef776474385b4a",
+    "environment": {
+      "arviz": "0.22.0",
+      "numpy": "2.2.6",
+      "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+      "pymc": "5.25.1",
+      "pytensor": "2.31.7",
+      "python": "3.12.3"
+    },
+    "status": "MODEL_RESULTS_LOADED",
+    "variants": {
+      "BYM2": "DIAGNOSTICS_FAILED",
+      "BYM2_SHRINKAGE": "DIAGNOSTICS_FAILED",
+      "NB": "COMPLETE"
+    }
+  },
   "period": "2025 (12 months)",
   "real_world_accuracy": null,
   "reporting_probability": null,
