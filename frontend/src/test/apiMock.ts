@@ -10,15 +10,23 @@ export function apiError(status: number, code = status === 401 ? "unauthorized" 
 
 type Handler = Response | ((body: unknown, url: URL) => Response);
 
+function matches(pattern: string, key: string): boolean {
+  const want = pattern.split("/");
+  const got = key.split("/");
+  return want.length === got.length && want.every((part, index) => part === "*" || part === got[index]);
+}
+
 /**
- * A fetch stand-in keyed by "METHOD /path" (query ignored). A handler is a Response factory result
- * or a function of the parsed JSON body; unknown routes answer 404 in the shared error shape.
+ * A fetch stand-in keyed by "METHOD /path" (query ignored; a `*` path segment matches any one
+ * segment). A handler is a Response or a function of the parsed JSON body and URL; unknown
+ * routes answer 404 in the shared error shape.
  */
 export function routedFetch(routes: Record<string, () => Handler>) {
   return vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = new URL(String(input), "http://localhost");
     const key = `${init?.method ?? "GET"} ${url.pathname}`;
-    const make = routes[key];
+    const pattern = Object.keys(routes).find((candidate) => matches(candidate, key));
+    const make = pattern === undefined ? undefined : routes[pattern];
     if (!make) return apiError(404, "not_found", `No route ${key}`);
     const handler = make();
     if (handler instanceof Response) return handler;
@@ -27,10 +35,10 @@ export function routedFetch(routes: Record<string, () => Handler>) {
   });
 }
 
-/** Headers and parsed body of every call to `path` made through the mock. */
+/** Headers and parsed body of every call to `path` (same `*` rule) made through the mock. */
 export function callsTo(mock: ReturnType<typeof routedFetch>, method: string, path: string) {
   return mock.mock.calls
-    .filter(([input, init]) => (init?.method ?? "GET") === method && new URL(String(input), "http://localhost").pathname === path)
+    .filter(([input, init]) => (init?.method ?? "GET") === method && matches(`${method} ${path}`, `${method} ${new URL(String(input), "http://localhost").pathname}`))
     .map(([input, init]) => ({
       url: new URL(String(input), "http://localhost"),
       headers: (init?.headers ?? {}) as Record<string, string>,
