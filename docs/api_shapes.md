@@ -31,7 +31,7 @@ The T10 plan asks for JSON examples in the frontend fixtures folder; `frontend/`
 ## What exists today
 
 - **Routes on main:** `GET /health`, `POST /intake/batch`, `POST /intake/sms`, `POST /intake/missed-call`, `POST /notices`, `GET /ledger/entries`, `GET /ledger/verify`. No authentication, no CORS settings, no `docs/openapi.json` yet.
-- **P4 screens:** U2 resident (`frontend/src/ResidentExperience.tsx`) and U3 field worker (`frontend/src/FieldWorkerExperience.tsx`) post to `/intake/batch` (or `VITE_INTAKE_URL`); U4 driver (`frontend/src/DriverExperience.tsx`) is a local preview (demo OTP `123456`, three demo stops); U5 (`frontend/src/EvidenceExperience.tsx`, `frontend/src/data/u5Evidence.json`, `u5Geometry.json`, built by `scripts/frontend/build_u5_snapshot.py` from E2 / growth / equity / E5 / coverage files) and U6 (`frontend/src/ForecastExperience.tsx`, `frontend/src/data/u6Forecast.json`, built by `scripts/frontend/build_u6_snapshot.py`) read committed snapshots, not an API.
+- **P4 screens (2026-10-04):** every officer and field screen (U2 to U9) now calls the API through `frontend/src/api.ts` (bearer token, shared error shape) and shows a labelled committed snapshot or sample when nobody is signed in or the API is unreachable. U10 (ward cards) still shows sample cards. Routes added after this document was written (POST/GET `/plans`, `/stops`, GET `/deliveries`, `/auth/me`, GET `/contests`, councillor role) are described in `docs/api_additions/`.
 - The mismatches found here were answered by P4 on 2026-10-03; see **Agreed with P4** at the end.
 
 ## 1. System

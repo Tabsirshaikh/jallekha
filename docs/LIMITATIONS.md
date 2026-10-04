@@ -20,7 +20,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 6. **Daily data is synthetic.** HMWSSB publishes monthly totals only. Daily arrivals, times of day, complaints, outages and delivery confirmations in the demo are SYNTHETIC (monthly totals stay exact).
 7. **Filling stations are stand-ins.** The count (90) is REAL, the positions are ASSUMED (booking-weighted k-means). HMWSSB publishes no station list with coordinates.
 8. **Fleet, trips and capacity are from news reports**, not official data [ASSUMED].
-9. **The API exists but most screens do not call it.** T10 is merged (34 routes, bearer-token roles officer, driver, resident and field worker, tokens from the environment only). Only the resident and field-worker screens call it; the atlas, forecast, plan, explanation, impact and report-card screens still read committed snapshots or labelled sample data, so there is no live end-to-end path from every screen. Plans and deliveries are held in memory (no plan store); the councillor role is [OPEN].
+9. **Most officer and field screens now use the live API, with a labelled fallback.** T10 is merged (bearer-token roles officer, driver, resident, field worker and councillor; tokens, optionally bound to a user id, come from the environment only). The atlas, equity and field-check (U5), forecast and shortage (U6), impact (U9), plan (U7), explanation and contest (U8), driver (U4), field-worker (U3) and resident (U2) intake screens call it when someone is signed in with the right role and the API answers; otherwise they show the committed snapshot or sample data with a "Saved snapshot" chip and the reason. The ward report card and SMS summary (U10) still show sample cards. Nobody signs in with a password: a token is pasted in the top bar. Screens were tested with mocked and real API calls, but have not been looked at in a browser by a person.
 10. **Translations are drafts.** Telugu, Urdu and Hindi wording needs native-speaker review. Alert and explanation wording is [OPEN].
 11. **No migrations.** New database columns need a fresh database or a manual column add.
 12. **Third-party warnings.** OR-Tools prints SWIG deprecation warnings on import (upstream).
@@ -34,7 +34,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - The **critical facilities column is empty** (`FACILITIES_UNAVAILABLE`): hospitals, clinics and schools (D9) were never loaded into the ward table.
 - 2 wards have partial Census coverage; Census for 2009 wards 115 and 116 (in Medak district) is not loaded.
 - Share of households away from water is a Census snapshot, not today's observation.
-- The Atlas screen (U5) reads a local snapshot (`frontend/src/data/u5Evidence.json`), not the live API (`GET /atlas/wards` exists). Rebuild it with `scripts/frontend/build_u5_snapshot.py` whenever E2-E6 outputs change.
+- The Atlas screen (U5) calls the API (`/atlas/wards`, `/equity/*`, `/underserved/field-checks`, `/coverage/layers/...`) when an officer is signed in and all five answers are complete, and otherwise shows the committed snapshot (`frontend/src/data/u5Evidence.json`, rebuilt by `scripts/frontend/build_u5_snapshot.py`). Building change per ward comes from the field-check rows, so it is available only where the screen has them.
 
 ### F2 Growth signal and 2025 population (E3, POP)
 - Buildings are not households or people. Office and mall growth inflates building trends (buildings +3.2%/yr, GHS-POP +1.2%/yr, HMWSSB connections +2.18%/yr).
@@ -48,7 +48,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - Bookings per 1,000 connections: one connection can serve many flats.
 - The Gini of 0.78 is exact at section level but depends on section definitions that were re-cut in 2026.
 - There is no "people within 500 m of a public tap" layer: public tap locations are not available.
-- The map screens (U5) use the same local snapshot; the coverage routes exist but the screen does not call them.
+- The map screens (U5) follow the same live-or-snapshot rule.
 
 ### F4 Under-served Field-Check Screen (E5)
 - 107 wards screened, **6 candidates**, 38 wards left in data review (37 have no placed section).
@@ -60,7 +60,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - Models are fitted on Linux (WSL or CI) and committed; CI never re-samples. The GitHub Actions models job could not run in October 2026 because of an account billing block.
 - Low bookings cannot prove hidden demand. A candidate only means "send someone to check". No field check outcomes recorded (0 ground truth).
 - Thresholds are policy parameters.
-- The U5 field-check cards show these candidates from the local snapshot, with each method's ratio listed separately.
+- The U5 field-check cards show these candidates, live or from the snapshot, with each method's ratio listed separately.
 
 ### F5 Surge Forecast and Capacity Planner (T2)
 - **Built (T2, PR #58): baseline, backtest, reconciliation, intervals and capacity check.** The seasonal-naive baseline is reproduced (21.89% city MAPE, 35.12% section WAPE on the 2022-24 files). The protocol was recovered by reproduction, not from the lost review file, so the owner should confirm it before the numbers go on slides.
@@ -68,7 +68,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - **[NOT BUILT]** The gradient-boosting model with weather and groundwater: no scikit-learn or LightGBM dependency is agreed, and weather (D8) and groundwater (D7) data are not in the repo.
 - [OPEN] trips per tanker per day (the capacity planner refuses to run without it), the model-selection rule, and Chronos-2.
 - Short series (13 scored months per section, too few for 95% intervals); section names are not mapped across years, and the Feb/Mar 2026 re-cut breaks section-by-section comparison.
-- `GET /forecast` and `/forecast/backtest` serve the table. The U6 screen still shows real monthly totals, a seasonal-naive benchmark and SIMULATION fixtures for the forecast and capacity panels.
+- `GET /forecast` and `/forecast/backtest` serve the table, and the U6 screen shows them live (city forecast DERIVED with no city interval, section forecast with intervals, backtest accuracy per model) with the committed real history and SIMULATION fixtures as the fallback.
 
 ### F6 Shortage Early Warning (T8)
 - **Built (T8, PR #61):** 551 rows (section x month, 1 to 3 months after the forecast origin), each with a risk (low, medium, high, unknown) and a reason from its own numbers. `GET /shortage` serves it.
@@ -105,7 +105,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - The 7-day cap, 3-day alert and the weight of debt in the queue are [ASSUMED].
 
 ### Daily planner (A7), station sharing, sandbox (A8)
-- The planner still defaults to the stand-in `ProvisionalGate` (it flags only groups with no Census need data). T9's gate is merged and served by `GET /plans/{id}/confidence`, but is not yet the planner's default.
+- Plans built through the API (`POST /plans`) use T9's gate. The offline replay script and `build_plan`'s own default still use the stand-in `ProvisionalGate` (it flags only groups with no Census need data), so the committed A8 replay outputs are unchanged and an API plan's digest differs from the replay CSV's for the same day.
 - Routing needs officer-registered service points and critical-stop locations. Without a fleet, needs are listed as `unrouted`. Booked trips are single loads, not routed.
 - **Station trip sharing** (3 km) is a new operating idea. No source shows HMWSSB lending trips between stations [OPEN]. Radius 0 switches it off.
 - The sandbox uses 90 stand-in stations; straight-line km times 1.35 plus an in-section allowance, not real roads.
@@ -120,7 +120,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 ## 4. Layer C: Trust and access
 
 ### F12 Delivery proof (T3)
-- The driver app (U4) is an interactive fixture preview (route, arrival, OTP, all four outcomes); live API integration is pending. Geofence radius (150 m) and the majority margin are [OPEN].
+- The driver app (U4) runs the live flow (start, send code, verify with the device position, outcome) when signed in as a driver and stops are registered; otherwise it shows its fixture preview. Stops are registered by an officer (`POST /stops`); no stop exists until then. Geofence radius (150 m) and the majority margin are [OPEN].
 - Silent residents count for nothing; unresolved deliveries never reduce debt (decided in A6).
 
 ### F13 Duplicate engine (T1)
@@ -137,7 +137,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 ### F16 Explanations and contest (T7)
 - Counterfactuals change one input at a time. Reason and outcome codes and template wording are [OPEN].
 - Debt appears in explanations only when a `DebtAccount` is supplied.
-- The explanation and contest screen (U8) uses synthetic examples and keeps contests in the browser (`localStorage`); the API routes (`/explain/...`, `/contests`) exist but the screen does not call them.
+- The explanation and contest screen (U8) is live for officer, resident and councillor tokens (ward and booking explanations with the counterfactual, filing, the own-contest list, the officer's reply with a required reason); otherwise it shows sample explanations and browser-only contests labelled "not sent to the server". A resident or councillor token with no bound user id can read explanations but cannot file or list contests.
 
 ### F17 Confidence and defer-to-officer (T9)
 - **Built (T9, PR #59), threshold not calibrated.** Confidence is the minimum of the available signals (Census join quality and section location); low confidence keeps a group in the plan but flagged, and `approve_plan` refuses until an officer marks it checked.
@@ -150,10 +150,10 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - Needs `LEDGER_HMAC_KEY`; with no key the ledger refuses to write.
 
 ### F19 Policy sandbox and Impact page
-- See sandbox limits in section 3. The impact page (U9) shows the A8 results with REAL / DERIVED / SIMULATION badges, from a committed snapshot; `GET /impact` exists.
+- See sandbox limits in section 3. The impact page (U9) reads `GET /impact` when an officer is signed in (badges taken from the API: SIMULATION) and the committed A8 snapshot otherwise.
 
 ### F20 Open ward report cards
-- The ward report card and SMS summary routes exist (`/wards/{id}/report-card`, `/sms-summary`) and the screen shows sample cards labelled as simulated. Deliveries, water debt and schedule are "not available yet" in the card because no plan or delivery store exists. SMS wording is English only; Telugu, Urdu and Hindi fall back to English until native speakers review them.
+- The ward report card and SMS summary routes exist (`/wards/{id}/report-card`, `/sms-summary`); the U10 screen still shows sample cards labelled as simulated and does not call them. Deliveries, water debt and schedule are "not available yet" in the card, because deliveries are stored now but are not yet joined to wards and water debt. SMS wording is English only; Telugu, Urdu and Hindi fall back to English until native speakers review them.
 
 ---
 
@@ -163,14 +163,24 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 |---|---|---|
 | X1 release tag | P4 | README, slide outline and demo script are written; the tag waits for green CI and version approval |
 | Green CI | owner | GitHub Actions has not run since the account billing block (jobs fail in seconds with "recent account payments have failed"); everything merged was checked locally instead |
-| Screens wired to the live API | P4 | atlas, forecast, plan, explanation, impact and report-card screens use snapshots or sample data |
-| Plan and delivery stores | P3 | plans and deliveries live in memory, so nothing survives a restart and the report card cannot show deliveries, debt or schedule |
+| Ward report cards (U10 screen) live, with deliveries, debt and schedule | P3/P4 | deliveries and plans are stored, but nothing yet joins a delivery's outcome to a ward and its water debt (A6), so the card cannot show them |
+| Plans from today's bookings | P2/P3 | `POST /plans` builds plans from the committed Mar-Jul 2025 replay (SIMULATION) only; no job builds a plan from live bookings |
 | Gradient-boosting forecast | P3 | no agreed dependency; weather (D8) and groundwater (D7) data missing |
-| T9 threshold calibration | P2/P3 | needs a degraded-signal replay scenario from P2 |
+| T9 threshold calibration | P2/P3 | needs a degraded-signal replay scenario from P2; the threshold is a provisional 0.50 |
 | Spatial models for E5 | P1 | BYM2 did not converge (see F4); peer + NB are used |
 | Hospital and school data (D9) in the ward table | P1 | critical-facility column is empty, so F1 tier 0 and F10 have no facility counts |
 | Filling-point and reservoir decisions (Q1, Q2) | owner | ON_HOLD |
 | Telugu, Urdu and Hindi wording review | native speakers | drafts only |
+| Passwords or single sign-on | owner | sign-in is a pasted token from the environment; there is no user database |
+
+### Limits of the live wiring
+- **Concurrent writes** to one plan or delivery are last-writer-wins (two simultaneous wrong OTP tries or checks can lose one). A race between two starts of the same delivery can end in a 500 instead of a 409.
+- **Plans are stored as a rebuild recipe**, not a copy. The first build or rebuild after a restart takes about 12 s, and the explain-booking route can take up to about 30 s after a restart when many plans are stored. If the inputs or gate change after a plan is stored, loading it fails with 409 (digest mismatch) rather than showing a different plan.
+- A plan view is about 1.1 MB (every station and booking). It is refetched after each check or approval.
+- The ledger entry for a check or approval is written before the database save, and for a new plan after it; a failure between the two leaves one without the other.
+- A representative id cannot be reused at another stop. `GET /deliveries` loads every matching delivery before paging.
+- The live schedule shows ward ids and litres, not ward names or time windows, because the API has none; the plan screen's priority-weight sliders exist only in the sample.
+- The shortage screen loads at most 600 rows; API reason texts and bases are English only in every language.
 
 ## 6. Solution document statements that are now out of date
 
