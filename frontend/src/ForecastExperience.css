@@ -1,0 +1,55 @@
+/* Live (T2 / T8) parts of the forecast screen; the shared forecast styles stay in styles.css. */
+.forecast-heading-tags { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; }
+.forecast-heading-tags .data-source-chip { min-height: 32px; font-size: 16px; }
+.forecast-live-reason { margin: 0; padding: 12px 14px; border: 1px dashed #c9d6cf; border-radius: 12px; background: #f7faf8; color: #3f5d50; font-size: 16px; line-height: 1.5; }
+.forecast-area { display: grid; gap: 6px; max-width: 420px; color: #536a5e; font-size: 16px; font-weight: 700; }
+.forecast-area select { min-height: 48px; padding: 8px 10px; border: 1px solid #d9e2dc; border-radius: 8px; background: #fff; color: #315547; font: inherit; font-weight: 400; }
+.forecast-area select:focus { outline: 3px solid #b8dfcf; outline-offset: 1px; }
+.forecast-panel-status { margin: 14px 0 4px; color: #5f7368; font-size: 16px; }
+.capacity-line { fill: none; stroke: #7d6aa8; stroke-width: 2; stroke-dasharray: 3 4; vector-effect: non-scaling-stroke; }
+.capacity-key { height: 3px !important; background: #7d6aa8; }
+
+.forecast-table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+.forecast-backtest-table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 16px; }
+.forecast-backtest-table caption { padding: 12px 14px 4px; color: #5f7368; text-align: start; }
+.forecast-backtest-table th, .forecast-backtest-table td { padding: 10px 14px; border-top: 1px solid #edf0ed; text-align: start; vertical-align: top; }
+.forecast-backtest-table th { color: #5f7368; font-weight: 700; }
+.forecast-backtest-table td { color: #2f5143; font-variant-numeric: tabular-nums; }
+.forecast-backtest-table td small { display: block; color: #6f7f76; font-size: 16px; }
+
+.forecast-groundwater-note { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0; padding: 12px 14px; border: 1px solid #e4e7e3; border-radius: 12px; background: #f8f9f7; color: #4f6357; font-size: 16px; line-height: 1.5; }
+.forecast-groundwater-note .source-tag { color: #7a817b; background: #f1f2ef; }
+
+.risk-filter { display: flex; flex-wrap: wrap; gap: 8px; }
+.risk-filter button { min-height: 48px; padding: 0 16px; border: 1px solid #d9e2dc; border-radius: 999px; background: #fff; color: #405e50; cursor: pointer; font: inherit; font-size: 16px; font-weight: 700; }
+.risk-filter button.active { border-color: #24745f; background: #e7f4ef; color: #1f5a49; }
+.risk-filter button:focus-visible { outline: 3px solid #b8dfcf; outline-offset: 1px; }
+
+.shortage-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.shortage-item { display: grid; gap: 10px; min-width: 0; padding: 14px 15px; border: 1px solid var(--line); border-inline-start-width: 5px; border-radius: 13px; background: #fff; }
+.shortage-item.risk-high { border-inline-start-color: #b3412b; }
+.shortage-item.risk-medium { border-inline-start-color: #c58a2a; }
+.shortage-item.risk-low { border-inline-start-color: #5d9a7c; }
+.shortage-item.risk-unknown { border-inline-start-color: #8d958f; }
+.shortage-item-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.shortage-item-head h3 { margin: 0; color: #2f4c40; font-size: 18px; overflow-wrap: anywhere; }
+.shortage-when { color: #5f7368; font-size: 16px; }
+.risk-pill { padding: 4px 12px; border-radius: 999px; font-size: 16px; font-weight: 800; }
+.risk-pill.risk-high { background: #fbe5df; color: #8e2f1c; }
+.risk-pill.risk-medium { background: #fbefd9; color: #7d5512; }
+.risk-pill.risk-low { background: #e7f4ef; color: #2a6a4e; }
+.risk-pill.risk-unknown { background: #eef0ee; color: #4f5a53; }
+.shortage-figures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; margin: 0; padding: 11px; border-radius: 9px; background: #faf8f3; }
+.shortage-figures div { display: grid; gap: 4px; min-width: 0; }
+.shortage-figures dt { color: #5f7368; font-size: 16px; line-height: 1.35; }
+.shortage-figures dt b { font-size: 16px; letter-spacing: .04em; color: #6d6a5e; }
+.shortage-figures dd { margin: 0; color: #2f5143; font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.shortage-figures dd small { color: #5f7368; font-size: 16px; font-weight: 400; }
+.shortage-reason { margin: 0; color: #4f6357; font-size: 16px; line-height: 1.5; }
+.shortage-more { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; color: #5f7368; font-size: 16px; }
+.shortage-more .button { min-height: 48px; }
+
+@media (max-width: 620px) {
+  .forecast-heading-tags { justify-content: flex-start; }
+  .shortage-figures { grid-template-columns: 1fr; }
+}
