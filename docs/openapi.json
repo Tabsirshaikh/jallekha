@@ -1332,7 +1332,7 @@
           "forecast"
         ],
         "summary": "Shortage",
-        "description": "T8's risk list once it is on `main`; until then an empty, UNAVAILABLE answer.",
+        "description": "T8's risk list; an empty, UNAVAILABLE answer only if its file is missing.",
         "operationId": "shortage_shortage_get",
         "parameters": [
           {

@@ -1,12 +1,65 @@
 {
   "_example": {
     "endpoint": "GET /shortage",
-    "status": "NOT DESIGNED",
-    "owner": "P3 (T8)",
-    "notes": "T8 not merged; see the T8 branch.",
-    "basis": null,
-    "built_from": null
+    "status": "ROUTE_ON_MAIN",
+    "owner": "P3 (T8, T10)",
+    "notes": "Two of the risk rows (limit=2); total is the full count. Risk is low, medium, high or unknown; every row carries its reason and a _basis for each derived value.",
+    "basis": "DERIVED (T2 forecast vs ASSUMED A8 capacity); groundwater and reservoirs UNAVAILABLE",
+    "built_from": "data/derived/shortage_risk.csv (T8, scripts/forecast/run_shortage.py)"
   },
-  "request": null,
-  "response": null
+  "request": {
+    "limit": 2
+  },
+  "response": {
+    "items": [
+      {
+        "section": "40 MLD STP ATTAPUR",
+        "section_basis": "REAL HMWSSB section; pre-re-cut section name (Feb/Mar 2026): section names are from before the Feb/Mar 2026 re-cut, so Feb 2026 onwards cannot be compared section by section with current HMWSSB sections",
+        "month": "2026-04",
+        "months_ahead": 3,
+        "forecast_bookings": 1.0,
+        "forecast_bookings_basis": "DERIVED: seasonal_naive on noofbookings through 2026-01; section names are from before the Feb/Mar 2026 re-cut, so Feb 2026 onwards cannot be compared section by section with current HMWSSB sections",
+        "upper_80": 2.6,
+        "upper_80_basis": "DERIVED: split-conformal, section-scaled pooled residuals of the seasonal_naive backtest",
+        "capacity_trips": null,
+        "capacity_trips_basis": "UNAVAILABLE",
+        "capacity_ratio": null,
+        "capacity_ratio_basis": "UNAVAILABLE",
+        "risk": "unknown",
+        "risk_basis": "DERIVED: config rules (high >= 1 x capacity; medium >= 0.85 x capacity or upper 80% >= capacity; ASSUMED, OPEN)",
+        "reason": "Forecast 1 bookings (80% bound up to 3) in 2026-04; capacity unavailable (no A8 filling station for this section), so the risk is unknown; groundwater data unavailable.",
+        "reason_basis": "DERIVED: built from the numbers in this row",
+        "groundwater_status": "UNAVAILABLE",
+        "groundwater_status_basis": "UNAVAILABLE: D7 groundwater data not in the repo",
+        "reservoir_status": "NOT_USED",
+        "reservoir_status_basis": "flag off: reservoirs only if Q2 is approved",
+        "label": "DERIVED forecast vs ASSUMED capacity"
+      },
+      {
+        "section": "ADARSHNAGAR",
+        "section_basis": "REAL HMWSSB section; pre-re-cut section name (Feb/Mar 2026): section names are from before the Feb/Mar 2026 re-cut, so Feb 2026 onwards cannot be compared section by section with current HMWSSB sections",
+        "month": "2026-02",
+        "months_ahead": 1,
+        "forecast_bookings": 36.0,
+        "forecast_bookings_basis": "DERIVED: seasonal_naive on noofbookings through 2026-01; section names are from before the Feb/Mar 2026 re-cut, so Feb 2026 onwards cannot be compared section by section with current HMWSSB sections",
+        "upper_80": 69.7,
+        "upper_80_basis": "DERIVED: split-conformal, section-scaled pooled residuals of the seasonal_naive backtest",
+        "capacity_trips": 165.9,
+        "capacity_trips_basis": "ASSUMED: A8 main_2025 fleet capacity of ST29 (71 trips/day; REAL fleet x DERIVED trips per tanker) x the section's share of the station's Mar-Jul 2025 bookings (0.0835); x 28 days",
+        "capacity_ratio": 0.217,
+        "capacity_ratio_basis": "DERIVED: forecast / capacity",
+        "risk": "low",
+        "risk_basis": "DERIVED: config rules (high >= 1 x capacity; medium >= 0.85 x capacity or upper 80% >= capacity; ASSUMED, OPEN)",
+        "reason": "Forecast 36 bookings (80% bound up to 70) in 2026-02 against capacity 166 trips (A8 fleet split, ASSUMED): 22% of capacity, risk low; groundwater data unavailable.",
+        "reason_basis": "DERIVED: built from the numbers in this row",
+        "groundwater_status": "UNAVAILABLE",
+        "groundwater_status_basis": "UNAVAILABLE: D7 groundwater data not in the repo",
+        "reservoir_status": "NOT_USED",
+        "reservoir_status_basis": "flag off: reservoirs only if Q2 is approved",
+        "label": "DERIVED forecast vs ASSUMED capacity"
+      }
+    ],
+    "total": 551,
+    "basis": "DERIVED"
+  }
 }

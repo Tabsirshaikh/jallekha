@@ -177,8 +177,16 @@ def test_delivery_routes_match_their_examples(client: TestClient) -> None:
     assert "+91" not in str(final)
 
 
-def test_shortage_is_unavailable_until_t8_merges(client: TestClient) -> None:
-    body = client.get("/shortage", headers=auth("officer")).json()
-    assert body["total"] == len(body["items"])
-    if body["total"] == 0:
-        assert body["basis"] == "UNAVAILABLE" and body["reason"]
+def test_shortage_serves_t8_risk_list_with_reasons_and_pages(client: TestClient) -> None:
+    first = client.get("/shortage", params={"limit": 5}, headers=auth("officer")).json()
+    assert first["basis"] == "DERIVED"
+    assert first["total"] > 5 and len(first["items"]) == 5
+    for row in first["items"]:
+        assert row["risk"] in {"low", "medium", "high", "unknown"}
+        assert row["reason"] and row["risk_basis"]
+    second = client.get(
+        "/shortage", params={"limit": 5, "offset": 5}, headers=auth("officer")
+    ).json()
+    assert second["total"] == first["total"]
+    assert second["items"] != first["items"]
+    assert client.get("/shortage").status_code == 401

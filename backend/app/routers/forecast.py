@@ -1,4 +1,4 @@
-"""Forecast endpoints (T10): T2's forecast table and backtest; shortage until T8 merges.
+"""Forecast endpoints (T10): T2's forecast table and backtest, and T8's shortage list.
 
 Shapes as in docs/api_shapes.md sections 6 and 7.
 """
@@ -51,7 +51,7 @@ def backtest(offset: Offset = 0, limit: Limit = ApiConfig.default_limit) -> dict
 
 @router.get("/shortage", dependencies=[Officer])
 def shortage(offset: Offset = 0, limit: Limit = ApiConfig.default_limit) -> dict[str, Any]:
-    """T8's risk list once it is on `main`; until then an empty, UNAVAILABLE answer."""
+    """T8's risk list; an empty, UNAVAILABLE answer only if its file is missing."""
     if not (REPO_ROOT / SHORTAGE).exists():
         return {
             "items": [],
