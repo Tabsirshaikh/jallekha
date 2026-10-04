@@ -55,7 +55,9 @@ LEDGER_PAYLOAD_KEYS = frozenset(
     }
 )
 _PERSON_ID = re.compile(r"^[A-Za-z][A-Za-z0-9_.:-]{0,63}$")  # starts with a letter: no phone
-_TARGET_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:/-]{0,79}$")
+# A ward id (`relation/7848799`) or a booking id as the planner writes it
+# (`2025-04-29:MANIKONDA (DIV 18):00387`: HMWSSB section names have spaces and brackets).
+_TARGET_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9 _.:/()-]{0,79}$")
 _PHONE_LIKE = re.compile(r"^\+?\d{10,15}$")
 # Indian mobile numbers (with +91 / 91 / 0 prefix) and any run of 10+ digits.
 _PHONE_IN_TEXT = re.compile(r"(?:\+?91[\s-]?|0)?[6-9]\d{9}(?!\d)|\d{10,}")
@@ -157,6 +159,8 @@ class ContestService:
                 not isinstance(target_id, str)
                 or not _TARGET_ID.match(target_id)
                 or _PHONE_LIKE.match(target_id)
+                # spaces and dots no longer break a number apart: "98765 43210" is a phone
+                or _PHONE_IN_TEXT.search(re.sub(r"[\s.-]", "", target_id))
             ):
                 raise ValueError("target_id must be a ward or booking id")
             reason_code = data.get("reason_code")

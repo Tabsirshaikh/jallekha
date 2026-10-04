@@ -233,3 +233,45 @@ def test_a_ledger_failure_keeps_the_rows_and_marks_them(engine: Engine) -> None:
         "contest": "no_ledger_entry",
         "reply": "no_ledger_entry",
     }
+
+
+# --- booking ids as the planner writes them ----------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "booking_id",
+    [
+        "2025-04-29:MANIKONDA (DIV 18):00387",
+        "2025-05-01:40 MLD STP ATTAPUR (DIV 3):00012",
+        "2025-05-01:B.N. REDDY NAGAR:00001",
+    ],
+)
+def test_a_contest_can_name_a_real_booking_id_with_spaces_and_brackets(
+    service: ct.ContestService, booking_id: str
+) -> None:
+    result = service.file(_contest(target_type="booking", target_id=booking_id))
+    assert result.status == "filed", result.error
+    stored = service.get_contest(result.contest_id)
+    assert stored is not None and stored["target_id"] == booking_id
+
+
+@pytest.mark.parametrize(
+    "bad",
+    [
+        "9876543210",
+        "+919876543210",
+        "2025-05-01:98765 43210:00001",  # a phone number hidden inside a booking-looking id
+        "2025-05-01:SECTION 9876543210:00001",
+        " leading-space",
+        "(starts-with-bracket)",
+        "x" * 81,
+        "ward\nid",
+        "ward;drop",
+    ],
+)
+def test_a_target_id_that_is_a_phone_number_or_not_an_id_is_still_refused(
+    service: ct.ContestService, engine: Engine, bad: str
+) -> None:
+    result = service.file(_contest(target_type="booking", target_id=bad))
+    assert result.status == "invalid" and "target_id" in (result.error or "")
+    assert _rows(engine, Contest) == []
