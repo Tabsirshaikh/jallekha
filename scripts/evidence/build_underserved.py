@@ -20,8 +20,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "backend"))
 
+from app.config.underserved import UNDERSERVED_CONFIG  # noqa: E402
 from app.services import hmwssb  # noqa: E402
-from app.services.underserved import AreaEvidence, screen  # noqa: E402
+from app.services.underserved import AreaEvidence, blockers, screen  # noqa: E402
 
 INPUTS = (
     "data/derived/evidence/ward_evidence.csv",
@@ -35,6 +36,9 @@ INPUTS = (
     "data/derived/crosswalk/section_to_ward_2016.csv",
 )
 TANKERS = "data/raw/hmwssb_tankers_portal"
+# Out-of-fold NB / BYM2 / BYM2_SHRINKAGE results (scripts/evidence/fit_underserved_models.py,
+# run on Linux CI). Read, never re-sampled, here.
+MODEL_RESULTS = "data/derived/underserved/model_results.json"
 PERIOD_YEAR = 2025  # last complete year before the Feb/Mar 2026 section re-cut
 INPUT_NOTES = (
     "APPROXIMATE_BOOKING_TRANSFER",
@@ -129,9 +133,50 @@ def load_areas(root: Path = ROOT) -> list[AreaEvidence]:
     return areas
 
 
+def screening_cohort(root: Path = ROOT) -> list[AreaEvidence]:
+    """The wards the screen scores (all gates pass), in ward-id order; the models fit these."""
+    return sorted(
+        (a for a in load_areas(root) if not blockers(a, UNDERSERVED_CONFIG)),
+        key=lambda a: a.ward_id,
+    )
+
+
+def cohort_fingerprint(cohort: list[AreaEvidence]) -> str:
+    """SHA-256 of every model input, so stale model results are refused."""
+    rows = [
+        [a.ward_id, a.bookings, a.households, a.wad, a.non_tap_share, a.period_months]
+        for a in cohort
+    ]
+    return hashlib.sha256(json.dumps(rows, separators=(",", ":")).encode()).hexdigest()
+
+
+def load_model_results(root: Path, areas: list[AreaEvidence]) -> tuple[dict, dict]:
+    """Committed model results for the current cohort, and their status per variant.
+
+    No file: no model results (the screen stays peer-only). A file for another cohort is
+    refused, so a changed input can never be screened with old model scores."""
+    path = root / MODEL_RESULTS
+    if not path.is_file():
+        return {}, {"status": "MODEL_RESULTS_MISSING"}
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    cohort = sorted(
+        (a for a in areas if not blockers(a, UNDERSERVED_CONFIG)), key=lambda a: a.ward_id
+    )
+    if doc["cohort_fingerprint"] != cohort_fingerprint(cohort):
+        raise ValueError(f"{MODEL_RESULTS} is stale (cohort changed); refit the models")
+    status = {
+        "status": "MODEL_RESULTS_LOADED",
+        "variants": {name: r["status"] for name, r in sorted(doc["results"].items())},
+        "environment": doc["environment"],
+        "adjacency_sha256": doc["adjacency_sha256"],
+    }
+    return doc["results"], status
+
+
 def build(root: Path = ROOT) -> dict[str, bytes]:
     areas = load_areas(root)
-    result = screen(areas)
+    model_results, model_status = load_model_results(root, areas)
+    result = screen(areas, model_results)
     _, months, _ = ward_bookings(root)
     for row in result["rows"] + result["field_check_list"] + result["data_review_queue"]:
         row["input_notes"] = list(INPUT_NOTES) + (
@@ -153,6 +198,7 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
         "e3_growth_context_only": True,
         "e3_noisy_trend_review_flags": growth_summary["noisy_trend_review_flags"],
         "booking_transfer": "APPROXIMATE_SECTION_POINT_IN_WARD",
+        "models": model_status,
         "period": f"{PERIOD_YEAR} (12 months)",
         "household_exposure": "2025 modelled central estimate (data/derived/population)",
         "input_notes": list(INPUT_NOTES),
@@ -203,7 +249,9 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
     checks = {
         "schema_version": "E5-2",
         "inputs_sha256": {
-            path: hashlib.sha256((root / path).read_bytes()).hexdigest() for path in INPUTS
+            path: hashlib.sha256((root / path).read_bytes()).hexdigest()
+            for path in (*INPUTS, MODEL_RESULTS)
+            if (root / path).is_file()
         },
         "outputs_sha256": {
             path: hashlib.sha256(value).hexdigest() for path, value in artifacts.items()

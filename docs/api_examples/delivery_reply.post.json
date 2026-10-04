@@ -1,0 +1,50 @@
+{
+  "_example": {
+    "endpoint": "POST /deliveries/{delivery_id}/replies (SMS reply webhook)",
+    "status": "FROM_MAIN (service on main, route not built)",
+    "basis": "SYNTHETIC residents and replies; real T3 sampling and reply parsing",
+    "built_from": "services/delivery.py send_resident_check, parse_reply, record_response -> (DeliveryState, counted)",
+    "notes": "Resident ids only; the webhook would map the sender's number to a resident id server-side. A reply is one digit: 1 = yes, 2 = no, in any script; here 1, Telugu 1 and 2."
+  },
+  "request": {
+    "delivery_id": "dlv-0001",
+    "from": "<sender's number; never stored or echoed>",
+    "text": "1"
+  },
+  "response": {
+    "replies": [
+      {
+        "resident_id": "res-01",
+        "text": "1",
+        "counted": true
+      },
+      {
+        "resident_id": "res-03",
+        "text": "౧",
+        "counted": true
+      },
+      {
+        "resident_id": "res-02",
+        "text": "2",
+        "counted": true
+      }
+    ],
+    "delivery": {
+      "delivery_id": "dlv-0001",
+      "stop_id": "stop-0001",
+      "driver_id": "driver-03",
+      "started_at": "2026-10-03T06:00:00+00:00",
+      "geofence_radius_m": null,
+      "otp_issued": true,
+      "otp_expires_at": "2026-10-03T06:10:00+00:00",
+      "otp_digits": 6,
+      "wrong_attempts": 0,
+      "outside_tries": 1,
+      "otp_verified": true,
+      "sampled_residents": 3,
+      "replies": 3,
+      "outcome_status": "pending",
+      "outcome": null
+    }
+  }
+}

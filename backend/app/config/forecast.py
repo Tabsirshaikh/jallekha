@@ -9,19 +9,93 @@ class ForecastConfig:
     # Source: F5 (seasonal-naive baseline; lag-12 feature). Monthly data, yearly season.
     seasonal_period_months: int = 12
     # Source: F5 ("measured: 21.9% city MAPE, 35.1% section WAPE") and docs/features.csv T2
-    # done-when ("reproduces 21.9% / 35.1% within 0.1 pp"). Basis: DERIVED (earlier backtest);
-    # the exact protocol is not yet documented in the repo.
+    # done-when ("reproduces 21.9% / 35.1% within 0.1 pp"). Basis: DERIVED.
     baseline_city_mape_pct: float = 21.9
     baseline_section_wape_pct: float = 35.1
     baseline_tolerance_pp: float = 0.1
+    # The protocol behind 21.9% / 35.1%. V-VERIFY_REVIEW.md, which recorded it, was never
+    # found (data/verification/SOURCES.md). The protocol was recovered by reproduction on
+    # 2026-10-03 (21.89% / 35.12% on the S2 files) and confirmed by Padmaja the same day.
+    baseline_column: str = "noofbookings"
+    baseline_recovered_on: str = "2026-10-03"
+    baseline_protocol: str = (
+        "Recovered by reproduction on 2026-10-03 (V-VERIFY_REVIEW.md was never found): "
+        "forecast noofbookings; seasonal naive = same month one year earlier; Dec 2022 is "
+        "missing, not zero, so Dec 2023 is not scored (13 scored months, Jan 2023 - Feb 2024); "
+        "all sections present in either month, a missing section value counted as 0; city "
+        "MAPE = mean of monthly absolute percentage errors of city totals; section WAPE = sum "
+        "of absolute errors / sum of actuals, pooled over all section-months. 'delivered' "
+        "instead of noofbookings, and only sections present in both years, also land within "
+        "0.1 pp, so the data does not distinguish them."
+    )
     # Source: docs/research/P3.md F5 (13 scorable months per section: 80% and 90% only).
     interval_levels: tuple[float, ...] = (0.8, 0.9)
+    # Split-conformal on the rolling backtest: the first half of the scored origins calibrate,
+    # the rest test. Below these month counts no coverage is reported. Basis: ASSUMED.
+    min_calibration_months: int = 6
+    min_test_months: int = 6
+    # Seasonal naive x year-on-year growth: growth = city total of the most recent N months
+    # (each with a value a year earlier) / the same months a year earlier. Basis: ASSUMED.
+    growth_window_months: int = 3
     # Source: docs/JALLEKHA_FINAL_SOLUTION.md D17 ("577 tankers early 2024; 1,123 in 2026,
     # news"). Basis: ASSUMED; label on screen.
     fleet_tankers_early_2024: int = 577
     fleet_tankers_2026: int = 1123
-    # Trips per tanker per day (F5 capacity, "ASSUMED, labelled") has no source in the
-    # solution doc yet; T2 must add one with its source before using capacity.
+    # Trips per tanker per day: no source. OPEN, owner to confirm. No default: the capacity
+    # planner refuses to run until a sourced value is given.
+    trips_per_tanker_per_day: float | None = None
+    # Portal data (D1b) is used up to the month before the Feb/Mar 2026 section re-cut.
+    portal_through: tuple[int, int] = (2026, 1)
+    # Label on the 12-month forecast built from the portal data through Jan 2026.
+    # OPEN, owner to confirm: where the published forecast should start.
+    forecast_table_note: str = (
+        "section names are from before the Feb/Mar 2026 re-cut, so Feb 2026 onwards cannot "
+        "be compared section by section with current HMWSSB sections"
+    )
+    # Model choice. docs/P3_BUILD_PLAN.md T2 says only that a model must beat the baseline; it
+    # does not say which metric decides. OPEN, owner to confirm. Rule applied: a model is used
+    # only if it beats seasonal naive on both city MAPE and section WAPE in both backtest runs
+    # (S2 and portal); otherwise seasonal naive is used.
+    model_selection_rule: str = (
+        "a model is used only if it beats seasonal naive on both city MAPE and section WAPE in "
+        "both backtest runs (S2 and portal); otherwise seasonal naive (OPEN)"
+    )
+    # Covariates for a later model (weather D8, groundwater D7): not in the repo yet.
+    covariates: tuple[str, ...] = ()
 
 
 FORECAST_CONFIG = ForecastConfig()
+
+
+@dataclass(frozen=True)
+class ShortageConfig:
+    """T8 shortage early warning (F6): T2 forecast versus capacity, per section and month."""
+
+    # Source: docs/features.csv T8 done-when ("Risk list 1-3 months ahead with reasons").
+    months_ahead: tuple[int, ...] = (1, 2, 3)
+    # Risk rules, on bookings forecast / capacity trips (one booking = one trip, ASSUMED as in
+    # T2). high: the point forecast reaches risk_high_ratio x capacity; medium: the point
+    # reaches risk_medium_ratio x capacity, or the upper 80% bound reaches capacity; low
+    # otherwise; unknown without a capacity. Ratios ASSUMED, OPEN, owner to confirm.
+    risk_high_ratio: float = 1.0
+    risk_medium_ratio: float = 0.85
+    # Capacity: A8's fleet scenario on main (P2), reused: 1,150 tankers (REAL, news) x 9 trips
+    # per tanker per day (DERIVED) split over 90 stand-in stations in proportion to their
+    # bookings (data/verification/sandbox_checks.json); each station's trips are shared over
+    # its home sections in proportion to their Mar-Jul 2025 bookings (section_points.csv).
+    # The split and its use for 2026 months are ASSUMED.
+    a8_checks_path: str = "data/verification/sandbox_checks.json"
+    a8_sections_path: str = "data/derived/sandbox/section_points.csv"
+    a8_replay: str = "main_2025"
+    a8_scenario: str = "fleet"
+    # Groundwater (D7) is not in the repo: the reason says so, no value is invented.
+    groundwater_note: str = "groundwater data unavailable"
+    # Reservoir levels: only if Q2 is approved (docs/features.csv T8 note). Off; no data.
+    reservoirs_enabled: bool = False
+    # T2's label: section names are from before the Feb/Mar 2026 re-cut.
+    section_label: str = "pre-re-cut section name (Feb/Mar 2026)"
+    forecast_table_path: str = "data/derived/forecast_table.csv"
+    output_path: str = "data/derived/shortage_risk.csv"
+
+
+SHORTAGE_CONFIG = ShortageConfig()

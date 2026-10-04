@@ -1,0 +1,49 @@
+{
+  "_example": {
+    "endpoint": "POST /plans/{plan_id}/groups/{group}/check",
+    "status": "FROM_MAIN (service on main, route not built)",
+    "basis": "SIMULATION plan (replay day 1); SYNTHETIC officer reason",
+    "built_from": "services/planner.py mark_checked -> DailyPlan.checked; ledger event ward_reviewed (reason stored as sha256 + length only)"
+  },
+  "request": {
+    "plan_id": "replay-2025-03-01",
+    "group": "section:ADARSHNAGAR",
+    "officer_id": "officer-7",
+    "reason": "Checked the section's address list on site"
+  },
+  "response": {
+    "plan_id": "replay-2025-03-01",
+    "group": "section:ADARSHNAGAR",
+    "checked": true,
+    "unchecked_flags": [
+      "section:AMEENPUR (PD 8)",
+      "section:ASMANGARH",
+      "section:BACHUPALLY (PD 7)",
+      "section:BHAGATSINGH NAGAR",
+      "section:BOATS CLUB",
+      "section:CHANUKYAPURI",
+      "section:CHERLAPALLY",
+      "section:DEEPTHISRI NAGAR",
+      "section:DEFENCE COLONY",
+      "section:DOYENS SECTION",
+      "section:FATHER BALAIAHNAGAR (DIV13)",
+      "section:GODE-KI-KABAR",
+      "section:HINDI NAGAR",
+      "section:HOUSING BOARD",
+      "section:HUSSAINSAGAR",
+      "section:MARUTHINAGAR (DIV 10)",
+      "section:PEERJADIGUDA (DIV 19)",
+      "section:PRAGATHINAGAR (PD 7)",
+      "section:SAHEBNAGAR (DIV 10)",
+      "section:SHAPOORNAGAR",
+      "section:TAPPA CHABUTRA",
+      "section:THATTIKHANA",
+      "section:VAISHALINAGAR (DIV 10)",
+      "section:VAJPAYEE NAGAR",
+      "section:VIGYANPURI",
+      "ward:relation/7867250"
+    ],
+    "ledger_seq": 2,
+    "ledger_event": "ward_reviewed"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "status": "REVIEWED",
+  "geography_version": "GHMC_2016_150",
+  "reviewer": "Tabsirshaikh (owner)",
+  "reviewed_on": "2026-10-03",
+  "source": "data/derived/underserved/ward_adjacency.json",
+  "source_sha256": "d02002994668ddf6368d94125da119849b80a129e093dd5be3ef776474385b4a",
+  "method": "Automated verification approved by the owner: 9-setting robustness, live OSM comparison, web spot-check. Not a local-knowledge review.",
+  "evidence": {
+    "robustness": {
+      "settings": "snap 5/10/20 m x minimum shared border 25/50/100 m",
+      "edges": 364,
+      "edges_in_all_settings": 360,
+      "borderline_edges_kept": [
+        "Ward 100 Sanath Nagar - Ward 117 Moosapet (102 m)",
+        "Ward 9 Ramanthapur - Ward 83 Amberpet (60 m)",
+        "Ward 86 Musheerabad - Ward 145 Seethaphalmandi (62 m)",
+        "Ward 100 Sanath Nagar - Ward 99 Vengal Rao Nagar (59 m)"
+      ],
+      "corner_touches_excluded": 26
+    },
+    "live_osm_comparison": {
+      "osm_timestamp": "2026-10-02T21:16:21Z",
+      "comparable_edges_agreeing": "356 of 356",
+      "differences": "4 committed edges of Ward 106 Serilingampally could not be compared: the live OSM relations for Ward 105 Gachibowli and Ward 106 Serilingampally do not form closed rings (zero area); the committed DataMeet copy has 49.1 and 11.6 km2."
+    },
+    "web_spot_check": {
+      "source": "https://en.wikipedia.org/wiki/Serilingampally",
+      "result": "Neighbours named there (Kondapur, Gachibowli, Hafeezpet, Chandanagar) are all edges of Ward 106 in the graph."
+    },
+    "known_gaps": "Historical 2016 layer; wards 3, 4, 11, 13, 31 and 113 are missing from the source, so their neighbours have fewer edges than on the ground."
+  }
+}

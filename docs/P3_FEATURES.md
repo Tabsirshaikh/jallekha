@@ -7,14 +7,14 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 | R-P3 | Research note | `research/p3` | DONE ([PR #7](https://github.com/Tabsirshaikh/jallekha/pull/7) merged) |
 | S1 fix | Skeleton gaps T1-T10 need | `fix/s1-review` | DONE ([PR #15](https://github.com/Tabsirshaikh/jallekha/pull/15) merged) |
 | T1 | F13 duplicate engine | `feat/t1-dedup` | DONE ([PR #19](https://github.com/Tabsirshaikh/jallekha/pull/19) merged); calibration run waits for D13 |
-| T2 | F5 forecast + backtest | `feat/t2-forecast` | Blocked: 21.9% / 35.1% protocol (`V-VERIFY_REVIEW.md`) missing |
+| T2 | F5 forecast + backtest | `feat/t2-forecast` | IN_PROGRESS (local, not pushed) |
 | T3 | F12 delivery proof | `feat/t3-delivery` | DONE ([PR #26](https://github.com/Tabsirshaikh/jallekha/pull/26) merged); decisions (a) and (b) OPEN |
 | T4 | F14 intake + voice | `feat/t4-intake` | DONE ([PR #37](https://github.com/Tabsirshaikh/jallekha/pull/37) and ledger-wiring follow-up [PR #42](https://github.com/Tabsirshaikh/jallekha/pull/42) merged); keyword lists, offline report time, phone registry and ASR revision OPEN |
 | T5 | F15 notices | `feat/t5-notices` | DONE ([PR #44](https://github.com/Tabsirshaikh/jallekha/pull/44) merged); people-affected rule, exact-only matching and alert wording OPEN |
 | T6 | F18 ledger | `feat/t6-ledger` | DONE ([PR #35](https://github.com/Tabsirshaikh/jallekha/pull/35) merged); rotation period and head-hash schedule OPEN |
-| T7 | F16 explanations + contest | `feat/t7-explain` | IN_REVIEW ([PR #46](https://github.com/Tabsirshaikh/jallekha/pull/46)); reason / outcome codes, counterfactual limits, number removal, tier-counterfactual audience and wording OPEN |
-| T8 | F6 shortage warning | `feat/t8-shortage` | Blocked: T2, D1 |
-| T9 | F17 confidence gate | `feat/t9-confidence` | Blocked: E2, A8 |
+| T7 | F16 explanations + contest | `feat/t7-explain` | DONE ([PR #46](https://github.com/Tabsirshaikh/jallekha/pull/46) merged); reason / outcome codes, counterfactual limits, number removal, tier-counterfactual audience and wording OPEN |
+| T8 | F6 shortage warning | `feat/t8-shortage` | IN_REVIEW ([PR #61](https://github.com/Tabsirshaikh/jallekha/pull/61)); risk ratios, A8 capacity for 2026, Q2 reservoirs, D7 groundwater OPEN |
+| T9 | F17 confidence gate | `feat/t9-confidence` | IN_REVIEW ([PR #59](https://github.com/Tabsirshaikh/jallekha/pull/59)); threshold PROVISIONAL 0.50 (`not_separable`), target and scoring rules OPEN |
 | T10 | API for all screens | `feat/t10-api` | Shapes to agree with P4 in week 1 |
 
 ---
@@ -63,11 +63,38 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 
 ## T2: forecast + backtest (F5)
 
-- **Implementation notes:** _to fill_
-- **Files:** _to fill_
-- **Tests and results:** _to fill_
-- **How to run:** _to fill_
-- **Status log:** _to fill_
+- **Implementation notes:** `services/forecast.py` (pure, standard library only), `scripts/forecast/run_backtest.py`, `config/forecast.py`. No LLM; no new library; no API route (T10).
+  - **Baseline protocol (recovered by reproduction on 2026-10-03; confirmed by Padmaja):** `V-VERIFY_REVIEW.md`, which recorded how 21.9% / 35.1% were computed, was never found (`data/verification/SOURCES.md`). On the S2 files (`data/raw/hmwssb_tankers`): forecast `noofbookings`; seasonal naive = same month one year earlier; Dec 2022 is **missing, not zero**, so Dec 2023 is not scored (13 scored months, Jan 2023 - Feb 2024); all sections present in either month, a missing section value counted as 0; city MAPE = mean of monthly absolute percentage errors of city totals; section WAPE = sum of absolute errors / sum of actuals, pooled over all section-months. Result: **21.89% / 35.12%**. `delivered` instead of `noofbookings`, and only sections present in both years, also land within 0.1 pp, so the data does not distinguish them; Dec 2022 as zero (27.47%) and per-month-averaged WAPE (35.52%) do not reproduce.
+  - **Data:** P2's `hmwssb.read_rows` (unchanged); a month whose file has no rows stays missing.
+  - **Models:** (a) seasonal naive; (b) seasonal naive x year-on-year growth (city total of the 3 most recent months that have a value a year earlier, over the same months a year earlier; ASSUMED window). (c) A global gradient-boosting model is **not run**: it needs scikit-learn or lightgbm, neither installed by setup; team decision on the dependency pending; covariates D7 and D8 not in the repo. Chronos-2 is not run (owner decision pending). Weather (D8) and groundwater (D7) are not in the repo; `ForecastConfig.covariates` is the place to add them later.
+  - **No leakage:** every model refuses training data at or after its target month; the backtest trains on months strictly before each origin (one-step-ahead, rolling).
+  - **Reconciliation:** bottom-up; the city forecast is the sum of the section forecasts.
+  - **Intervals:** split-conformal at 80% and 90%: absolute errors scaled by each section's calibration error (median positive scale as fallback), pooled across sections; the first half of the scored months calibrates, the rest tests. Lower bounds are cut at 0. Coverage is reported only with at least 6 calibration and 6 test months (ASSUMED); otherwise the result says "insufficient" with the month counts. City rows have no interval: section intervals do not add up.
+  - **Longer history:** the D1b portal files up to Jan 2026 (before the Feb/Mar 2026 section re-cut) are a second, separately labelled run. Section names do not line up across years (for example 8 appear and 5 disappear in 2023, 7 appear and 14 disappear in 2025); no mapping is applied: a missing section counts as 0.
+  - **Backtest results** (`data/derived/forecast_backtest.csv`; the two models compared on the origins they share):
+
+    | Run | Model | Origins | City MAPE | Section WAPE | Coverage 80% / 90% |
+    |---|---|---|---|---|---|
+    | S2, Jan 2022 - Feb 2024 | seasonal naive | 13 (all) | 21.89 | 35.12 | 0.86 / 0.91 (7 test months) |
+    | S2 | seasonal naive | 10 (Apr 2023 - Feb 2024) | 15.09 | 31.38 | |
+    | S2 | naive x growth | 10 | 25.32 | 40.59 | insufficient (5 + 5 months) |
+    | Portal, Jan 2022 - Jan 2026 | seasonal naive | 36 (all) | 27.80 | 47.65 | 0.77 / 0.87 (18 test months) |
+    | Portal | seasonal naive | 33 (Apr 2023 - Jan 2026) | 26.28 | 47.67 | |
+    | Portal | naive x growth | 33 | 19.77 | 48.90 | 0.77 / 0.85 (17 test months) |
+
+  - **Model choice (rule OPEN):** a model is used only if it beats seasonal naive on both city MAPE and section WAPE in both backtest runs (S2 and portal); otherwise seasonal naive is used (`model_selection_rule`; the plan does not say which metric decides). None does: naive x growth beats the baseline on portal city MAPE (19.77 vs 26.28) but not on section WAPE (48.90 vs 47.67), and is worse on both in S2, so it is not selected and **seasonal naive is used**.
+  - **Honest notes:** on the longer portal history (to Jan 2026) seasonal naive scores **26.28% city MAPE / 47.67% section WAPE** (33 shared origins; 27.80 / 47.65 over all 36), well above the 21.9% / 35.1% from the S2 window; the 80% interval covers only **0.77** (90%: 0.87) on the portal run, so the intervals are too narrow there.
+  - **Forecast table** (`data/derived/forecast_table.csv`): section and city rows for 12 months after the portal run's last month (Feb 2026 - Jan 2027), with 80% / 90% section intervals and a `_basis` per derived column. **Label (also in each row's `_basis`):** section names are from before the Feb/Mar 2026 re-cut, so Feb 2026 onwards cannot be compared section by section with current HMWSSB sections.
+  - **Capacity planner** (`capacity_plan`): trips needed (one booking = one trip, ASSUMED) versus fleet (ASSUMED, D17) x trips per tanker per day x days. Trips per day has **no source**: it is a required input with no default (OPEN), and the script writes no capacity file without it.
+  - **OPEN, owner to confirm. Not decided.** Trips per tanker per day; the model selection rule (which metric decides); the scikit-learn / lightgbm dependency for gradient boosting (team decision); Chronos-2 (no-LLM rule); where the published 12-month forecast starts (the table uses pre-re-cut section names). ASSUMED: growth window 3 months, minimum 6 + 6 months for coverage, scale fallback, one booking = one trip, fleet figures.
+  - **Known limits:** 13 scored months on S2 (and 36 on the portal run) is short; coverage is pooled over sections and months that are not independent, so it is indicative; portal coverage is under target (0.77 at 80%, 0.87 at 90%); section names change between years and are not mapped; no weather or groundwater covariates; the forecast table uses pre-re-cut section names.
+  - **Not done:** the global gradient-boosting model (dependency decision pending; D7 / D8 covariates not in the repo); weather and groundwater covariates; the capacity plan (no sourced trips per day).
+  - **Failures inherited from `main` (not in T2 files):** after merging `main` at `d12e4fd`, only P2 `backend/tests/test_a8_build.py::test_stations_are_reproducible_committed_and_labelled` and `::test_one_seed_reproduces` fail on Windows only (last-digit float differences, e.g. BACHUPALLY (PD 7) lat 17.49872903654913 committed vs 17.498729036549125 rebuilt; B1 tanker_km 775397.417 vs 775397.417003; Windows 10.0.26200, Python 3.11.9, shapely 2.1.2 / GEOS 3.13.1) and pass on Linux CI; identical on a clean checkout of `main`; not edited, skipped or marked.
+- **Files:** `backend/app/config/forecast.py`, `backend/app/services/forecast.py`, `backend/tests/services/test_forecast.py`, `scripts/forecast/run_backtest.py`, `data/derived/forecast_backtest.csv`, `data/derived/forecast_table.csv`, `.github/workflows/p3-t2.yml`, `docs/worklogs/T2.md`, `docs/features.csv`, `docs/P3_FEATURES.md`, `docs/BRANCH_WORKLOG.md`.
+- **Config keys:** `FORECAST_CONFIG`: `horizon_months`, `seasonal_period_months`, `baseline_city_mape_pct`, `baseline_section_wape_pct`, `baseline_tolerance_pp`, `baseline_column`, `baseline_recovered_on`, `baseline_protocol`, `interval_levels`, `min_calibration_months`, `min_test_months`, `growth_window_months`, `fleet_tankers_early_2024`, `fleet_tankers_2026`, `trips_per_tanker_per_day` (OPEN, None), `portal_through`, `forecast_table_note`, `model_selection_rule` (OPEN), `covariates`.
+- **Tests and results (2026-10-03, Windows):** written first (`ImportError` before the code existed). Done-when: seasonal naive on the S2 files reproduces 21.9% / 35.1% within 0.1 pp, with the scored months read from the files. Also: every row of the files in the panel; Dec 2022 missing, never zero; the protocol recorded in config; models refuse future data and future values never change a forecast (no leakage); seasonal naive and naive x growth on hand-checkable fixtures; backtest naive equals the baseline; gradient boosting reported as not run; a section that appears or disappears counts as 0; section changes between years read from the portal files; section forecasts sum to the city forecast; conformal quantile and coverage on a tiny fixture; coverage reported or "insufficient"; model choice; the capacity planner refusing to run without trips per day; the script writing both files with `_basis` columns; the re-cut label in the table basis. 19 new tests (22 with the config tests). After merging `main` (`d12e4fd`): `python tasks.py test`: **591 backend passed, 2 failed** (P2's A8 tests, Windows only, inherited; see above), frontend 1 passed; all P1 verifiers pass when run separately; `python tasks.py lint` exit 0; the `P3:T2` workflow commands pass locally.
+- **How to run:** `.venv\Scripts\python -m pytest backend/tests/services/test_forecast.py`; `.venv\Scripts\python scripts/forecast/run_backtest.py` (writes `data/derived/forecast_backtest.csv` and `forecast_table.csv`; add `--trips-per-day N` only with a sourced value).
+- **Status log:** 2026-10-03 protocol recovered and confirmed; config, service, script, outputs, tests and the `P3:T2` workflow committed locally on `feat/t2-forecast`; not pushed. Merged `main` (A7 #49 #50, A8 #47 #48, U2 #41, U4 #51). To push after `main` is green. Waiting for: P4's frontend fix and P2's check of the A8 Windows result; a team decision on scikit-learn / lightgbm; the owner on trips per day, Chronos-2 and the forecast start; P1 on weather (D8) and groundwater (D7).
 
 ## T3: delivery proof (F12)
 
@@ -167,19 +194,66 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 
 ## T8: shortage early warning (F6)
 
-- **Implementation notes:** _to fill_
-- **Files:** _to fill_
-- **Tests and results:** _to fill_
-- **How to run:** _to fill_
-- **Status log:** _to fill_
+- **Implementation notes:** `services/shortage.py` (pure apart from reading A8's files), rules in `config/forecast.py` (`SHORTAGE_CONFIG`), `scripts/forecast/run_shortage.py` -> `data/derived/shortage_risk.csv`. No LLM, no API route (T10). Branch cut from `feat/t2-forecast` (T2 not merged); retarget to `main` after T2 merges.
+  - **Risk per section and month, 1-3 months after the forecast origin** (T2's table starts 2026-02, so 2026-02 to 2026-04): one booking = one trip (ASSUMED, as T2). `high` if the point forecast reaches 1.0 x capacity; `medium` if it reaches 0.85 x capacity or the upper 80% bound reaches capacity; `low` otherwise; `unknown` without a capacity. Ratios ASSUMED, OPEN.
+  - **Capacity reuses A8 on `main`** (P2's files read, not changed): the fleet scenario's station trips per day (1,150 tankers, REAL news, x 9 trips per tanker per day, DERIVED, split over 90 stand-in stations, `data/verification/sandbox_checks.json`), shared over each station's home sections by their Mar-Jul 2025 bookings (`data/derived/sandbox/section_points.csv`), x days in the month. Labelled ASSUMED in every row. 3 sections have no A8 station: capacity UNAVAILABLE, risk `unknown`.
+  - **Reasons are built from the row's numbers** (forecast, 80% bound, capacity, share of capacity, risk) and always end with "groundwater data unavailable": D7 is not in the repo and no value is invented. Reservoirs are behind `reservoirs_enabled` (off, Q2 not approved); switching it on without data raises an error.
+  - **Section label:** T2's pre-re-cut label is kept in `section_basis` (section names from before the Feb/Mar 2026 re-cut).
+  - **Result** (`shortage_risk.csv`, 551 rows: T2 forecasts 182 / 184 / 185 sections in the three months, only where a value a year earlier exists): 2026-02: 10 high, 28 medium, 142 low, 2 unknown; 2026-03: 18 high, 48 medium, 118 low; 2026-04: 18 high, 54 medium, 112 low, 1 unknown.
+  - **OPEN, owner to confirm. Not decided.** The risk ratios (1.0 / 0.85 and the 80% bound rule); using A8's 2025 station split and fleet for 2026 months; one booking = one trip; where the published forecast starts (T2's pre-re-cut names; the risk months are in the past relative to 2026-10). Q2 reservoirs. D7 groundwater source.
+  - **Known limits:** capacity per section depends on A8's ASSUMED stand-in stations and its 2025 booking split, so a section whose bookings grew since 2025 shows as risky partly by construction; no groundwater or reservoir signal; sections with no forecast for a month (no value a year earlier) are not listed for that month.
+- **Files:** `backend/app/config/forecast.py` (`ShortageConfig`), `backend/app/services/shortage.py`, `backend/tests/services/test_shortage.py`, `scripts/forecast/run_shortage.py`, `data/derived/shortage_risk.csv`, `.github/workflows/p3-t8.yml`, `docs/worklogs/T8.md`, `docs/features.csv`, `docs/P3_FEATURES.md`, `docs/BRANCH_WORKLOG.md`.
+- **Config keys:** `SHORTAGE_CONFIG`: `months_ahead` (1, 2, 3; source: T8 done-when), `risk_high_ratio` (1.0, OPEN), `risk_medium_ratio` (0.85, OPEN), `a8_checks_path`, `a8_sections_path`, `a8_replay` (`main_2025`), `a8_scenario` (`fleet`), `groundwater_note`, `reservoirs_enabled` (False), `section_label`, `forecast_table_path`, `output_path`.
+- **Tests and results (2026-10-03, Windows):** written first (`ImportError: cannot import name 'SHORTAGE_CONFIG'` before the code existed). 8 tests: risk boundaries (exactly at 1.0 and 0.85, the 80% bound at capacity, no / zero capacity); rules in config; capacity equals A8's station trips summed over home sections and the fleet total; reason built from the numbers and saying groundwater unavailable; reservoir flag off, and on without data refused; only 1-3 months ahead, unknown capacity; done-when on the real files (risk list 1-3 months ahead with reasons, label kept, `_basis` on every derived column); the committed list reproduces byte for byte. `python tasks.py test`: **599 backend passed, 2 failed** (P2's `test_a8_build.py` A8 tests, Windows only, inherited; pass on Linux CI), frontend 1 passed, all P1 verifiers pass; `python tasks.py lint` exit 0.
+- **How to run:** `.venv\Scripts\python -m pytest backend/tests/services/test_shortage.py`; `.venv\Scripts\python scripts/forecast/run_shortage.py` (writes `data/derived/shortage_risk.csv`).
+- **Status log:** 2026-10-03 config, service, script, output, tests and the `P3:T8` workflow committed on `feat/t8-shortage` (cut from `feat/t2-forecast`). Waiting for: T2 to merge; the owner on the OPEN items.
 
 ## T9: confidence gate (F17)
 
-- **Implementation notes:** _to fill_
-- **Files:** _to fill_
-- **Tests and results:** _to fill_
-- **How to run:** _to fill_
-- **Status log:** _to fill_
+- **Implementation notes:** `services/confidence.py` (pure, standard library only), `config/confidence.py`, `scripts/trust/calibrate_confidence.py`. No LLM; no API route (T10); no new ledger event type (the officer check is A7's `ward_reviewed`); no edit to `planner.py` or any P1 / P2 / P4 file.
+  - **Gate:** `T9Gate` implements A7's `ConfidenceGate` (`assess(groups) -> {group: Assessment(confidence, needs_check, reason, basis)}`). `confidence < threshold` -> the group stays in the plan, flagged; `approve_plan` raises `PlanBlocked` until an officer's `mark_checked` (reason required, ledger `ward_reviewed`). There is no automatic commit path.
+  - **Signals** (each 0-1 with a basis, or unavailable):
+    1. Census join quality (`ward_evidence.csv`): 0 for a section group, a ward not in the file, or a ward that is not `allocation_eligible` or whose `join_status` is not `AREAL_2009_CROSSWALK` (need is the A3 fallback); otherwise `min(census_coverage, dominant_source_share)`, capped at 0.5 when `review_required`.
+    2. Section location (`section_to_ward_2016.csv`): an unplaced section group scores 0; a ward takes its weakest section: INSIDE 1.0, NEAREST_500M 0.75, WARD_NAME 0.5, OSM_NEAR_DIVISION 0.5, capped at 0.5 when `division_distance_km` > 6.0 (P1's `outlier_km`, read-checked against `section_to_ward_summary.json` by a test).
+    3. Data age: computed (Census year to today, linear to 0 at 20 years) but **excluded**: Census 2011 is the year for every ward, so it does not separate wards.
+    4. Forecast interval width (T2): behind `IntervalWidthSource`; **unavailable** until T2 merges (decision (b)). Rule when available: 1 - relative 80% width / 2.0.
+    5. Evidence age: **unavailable** (no dated evidence in the repo; E5 field checks carry no dates).
+  - **Combination:** minimum of the available signals; a missing signal is excluded and listed ("unavailable: ..."), never scored 0; the reason names the weakest signal and its value. No available signal -> confidence 0 (a check).
+  - **Calibration on the A7 replay** (`data/derived/confidence_calibration.csv`, SIMULATION): P2's replay (main_2025, tight, seed 0; committed files, A8 not rebuilt), 153 days, 152 groups, 17,363 group-days, run under full information and under the one degraded scenario P2's replay supports (every group on the A3 fallback entitlement). A group-day matches when its served and waiting counts are equal in both plans. Thresholds 0.00-1.00 in 0.05 steps:
+
+    | Threshold | Match share (unflagged) | Groups flagged | Share flagged |
+    |---|---|---|---|
+    | 0.00 | 0.9522 | 0 | 0.0000 |
+    | 0.05-0.30 | 0.9529 | 45 | 0.2961 |
+    | 0.35 | 0.9530 | 46 | 0.3026 |
+    | 0.40 | 0.9515 | 50 | 0.3289 |
+    | 0.45 | 0.9515 | 51 | 0.3355 |
+    | 0.50 | 0.9467 | 60 | 0.3947 |
+    | 0.55 | 0.9473 | 96 | 0.6316 |
+    | 0.60 | 0.9471 | 104 | 0.6842 |
+    | 0.65 | 0.9511 | 109 | 0.7171 |
+    | 0.70 | 0.9635 | 117 | 0.7697 |
+    | 0.75 | 0.9590 | 122 | 0.8026 |
+    | 0.80 | 0.9492 | 127 | 0.8355 |
+    | 0.85 | 0.9304 | 137 | 0.9013 |
+    | 0.90 | 0.9070 | 141 | 0.9276 |
+    | 0.95 | 0.8484 | 146 | 0.9605 |
+    | 1.00 | 0.7320 | 151 | 0.9934 |
+
+  - **Result: no threshold chosen (`not_separable`).** The 0.90 target is already met with nothing flagged (0.9522 at 0.00), and the match share does not rise with the threshold: confidence does not predict which group-days change in this scenario (fallback groups match 3,882 / 4,087 = 0.950, Census groups 12,651 / 13,276 = 0.953). The degraded scenario changes every group's entitlement at once, so it measures sensitivity to entitlement, not data-quality error. The **PROVISIONAL threshold 0.50** stays (labelled in config and in the file's selection row).
+  - **On real data at 0.50** the gate flags **60 of 152** groups: 45 at confidence 0 (44 unplaced section groups and 1 ward with partial Census coverage, the A3 fallback groups) and 15 wards with Census join quality 0.34-0.49 (dominant 2009 source share below 0.5). Location is never the weakest signal below 0.5. Groups at exactly 0.5 (review cap, outlier cap, WARD_NAME) pass (strict `<`).
+  - **Limits, in plain words:**
+    - **The done-when is met and tested, but the threshold is not calibrated.** Low confidence cannot auto-commit (A7's `approve_plan` refuses until an officer checks the group). The 0.50 the gate uses is a placeholder: the replay could not choose a value (`not_separable`). Accepted by Padmaja on 2026-10-03 until P2 provides a per-group degraded scenario.
+    - **At 0.50 the gate flags 60 of 152 groups (39%).** On a replay day about 113 groups have bookings (106-120) and about 38 of them are flagged (33-43), against about 27 (22-31) under A7's `ProvisionalGate`. Before each daily plan can be approved, an officer would have to open about 38 groups and write a reason for each (`mark_checked`, a `ward_reviewed` ledger entry), about 11 more per day than today. That is a heavy daily load; it is one reason the threshold must be calibrated before real use.
+    - **45 of the 60 are the groups `ProvisionalGate` already flags**: the 44 sections not placed on a ward and the 1 ward with partial Census coverage, whose need is the A3 fallback. T9 gives them confidence 0 (a test checks the sets are equal). **What T9 adds beyond `ProvisionalGate`:** (a) 15 more wards flagged, whose Census figures mix 2009 source wards (dominant source share 0.34-0.49), about 12 of them with bookings on a given day; (b) a reason per group naming the weakest signal, its value and basis (for example `census_join_quality=0.4577 (min(census_coverage 1.0000, dominant_source_share 0.4577))`) instead of `NO_CENSUS_NEED_DATA` / `OK`; (c) the list of signals used and unavailable; (d) a graded confidence (0-1) instead of 0 or 1, and a location signal that flags nothing at 0.50 but would at higher thresholds.
+    - **Three of the five planned signals are unavailable:** data age cannot separate wards (Census 2011 for every ward); forecast interval width waits for T2; evidence age has no dated data. Confidence today rests on Census join quality and section location only.
+  - **OPEN, owner to confirm. Not decided.** The threshold (provisional 0.50; the replay cannot select one); the target match share 0.90; the minimum combination; the Census rule (min of coverage and dominant share) and the review cap 0.5; the location method scores and the outlier cap 0.5; any per-group data-age rule; the interval-width rule (when T2 merges); a degraded scenario that perturbs signals per group (P2), which the calibration needs to separate thresholds. ASSUMED: thresholds in 0.05 steps, data age zero at 20 years, interval width zero at 2.0.
+  - **Known limits:** one degraded scenario only, applied to every group; match judged per group on served and waiting counts, not on which bookings; one seed and one replay window; Census 2011 on a historical map; evidence age and forecast width not yet scored.
+- **Files:** `backend/app/config/confidence.py`, `backend/app/services/confidence.py`, `backend/tests/services/test_confidence.py`, `scripts/trust/calibrate_confidence.py`, `data/derived/confidence_calibration.csv`, `.github/workflows/p3-t9.yml`, `docs/worklogs/T9.md`, `docs/features.csv`, `docs/P3_FEATURES.md`, `docs/BRANCH_WORKLOG.md`.
+- **Config keys:** `CONFIDENCE_CONFIG`: `evidence_path`, `sections_path`, `section_summary_path`, `replay_groups_path`, `calibration_path`, `census_ok_join_status`, `census_review_cap` (OPEN), `location_method_scores` (OPEN), `location_outlier_km` (P1, 6.0), `location_outlier_cap` (OPEN), `data_age_include` (False), `data_age_zero_at_years` (ASSUMED), `interval_width_zero_at` (OPEN), `combination` (OPEN), `target_match_share` (0.90, OPEN), `provisional_threshold` (0.50), `threshold` (0.50, PROVISIONAL), `threshold_basis`, `candidate_thresholds`, `confidence_decimals` (4), `threshold_decimals` (2), `reproduce_tolerance` (1e-4).
+- **Tests and results (2026-10-03, Windows):** written first (`ModuleNotFoundError: app.config.confidence` before the code existed). 15 tests: the done-when with A7's own functions (`build_plan` flags the low-confidence group; `approve_plan` raises `PlanBlocked`; a blank reason is refused; `mark_checked` then `approve_plan` succeeds; `plan_created`, `ward_reviewed`, `plan_approved` in the ledger and the chain verifies); each signal's boundaries; data age not separating wards; width and evidence age unavailable, width scored when a source exists; missing signals excluded and listed, the reason naming the weakest; no signal -> check; A7 `Assessment`s; the gate on the real files (every replay fallback group at 0 and flagged, every eligible ward above 0, counts read from the files); calibration on a hand-checkable fixture (chosen, unreachable, not separable); P1's outlier distance; the committed selection is provisional; the calibration regenerated and compared within 1e-4. After merging `main` (`d12e4fd`): `python tasks.py test`: **587 backend passed, 2 failed**, frontend 1 passed; all P1 verifiers pass. The 2 failures are inherited, none in T9 files: P2 `backend/tests/test_a8_build.py::test_stations_are_reproducible_committed_and_labelled` and `::test_one_seed_reproduces` (Windows float last digits; pass on Linux CI; identical on a clean `origin/main`, 572 passed + the same 2). `python tasks.py lint` exit 0.
+- **How to run:** `.venv\Scripts\python -m pytest backend/tests/services/test_confidence.py`; `.venv\Scripts\python scripts/trust/calibrate_confidence.py` (about 35 s; writes `data/derived/confidence_calibration.csv`).
+- **Status log:** 2026-10-03 config, service, gate, calibration, tests and the `P3:T9` workflow committed locally on `feat/t9-confidence` (cut from `73efb55`); `main` (`28b2661`, then `d12e4fd`) merged without conflicts; PROVISIONAL 0.50 with `not_separable` accepted by Padmaja until P2's per-group scenario. Waiting for: the owner on the threshold, target and scoring rules; P2 on a per-group degraded scenario; T2 for the interval width.
 
 ## T10: API for all screens
 

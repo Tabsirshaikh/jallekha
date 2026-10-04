@@ -1,0 +1,60 @@
+{
+  "_example": {
+    "endpoint": "GET /explain/wards/{ward_id}",
+    "status": "FROM_MAIN (service on main, route not built)",
+    "basis": "REAL ward_evidence.csv row; need and entitlement DERIVED (A2); *_basis per value",
+    "built_from": "services/explain.py explain_ward -> WardExplanation (codes and values; the UI translates)",
+    "input_row": {
+      "file": "data/derived/evidence/ward_evidence.csv",
+      "key_column": "ward_id",
+      "keys": [
+        "relation/7848799"
+      ]
+    }
+  },
+  "request": {
+    "ward_id": "relation/7848799"
+  },
+  "response": {
+    "explanation": {
+      "ward_id": "relation/7848799",
+      "ward_name": "Ward 91 Khairatabad",
+      "status": "census",
+      "service_class": "piped_regularity_unknown",
+      "class_basis": "CENSUS_2011_RULE",
+      "join_status": "AREAL_2009_CROSSWALK",
+      "allocation_eligible": true,
+      "review_required": true,
+      "quality_flags": [
+        "HISTORICAL",
+        "FACILITIES_UNAVAILABLE",
+        "APPROX_AREAL_CROSSWALK",
+        "MIXED_2009_SOURCES"
+      ],
+      "check_reasons": [
+        "E2_REVIEW_REQUIRED"
+      ],
+      "census_label": "Census 2011 / historical 2016 geography",
+      "need_weight": 1.354999,
+      "need_basis": "DERIVED",
+      "wad": 0.078268,
+      "wad_basis": "DERIVED",
+      "cad": 0.082556,
+      "cad_basis": "DERIVED",
+      "hardship": 0.115907,
+      "hardship_basis": "DERIVED",
+      "households": 12959,
+      "households_basis": "DERIVED",
+      "entitlement": 17559.432041,
+      "critical_facilities": null,
+      "critical_facilities_basis": "UNAVAILABLE",
+      "debt": {
+        "available": false,
+        "account_id": null,
+        "debt_litres": null,
+        "cap_litres": null,
+        "in_debt_since": null
+      }
+    }
+  }
+}

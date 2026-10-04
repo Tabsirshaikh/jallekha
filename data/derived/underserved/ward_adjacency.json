@@ -1,0 +1,2277 @@
+{
+  "basis": "DERIVED (geometry); thresholds ASSUMED",
+  "components": [
+    [
+      "relation/7848799",
+      "relation/7848824",
+      "relation/7848844",
+      "relation/7848859",
+      "relation/7849315",
+      "relation/7849357",
+      "relation/7849439",
+      "relation/7849497",
+      "relation/7849498",
+      "relation/7849545",
+      "relation/7849614",
+      "relation/7850095",
+      "relation/7850118",
+      "relation/7850180",
+      "relation/7850229",
+      "relation/7850230",
+      "relation/7850268",
+      "relation/7852324",
+      "relation/7852364",
+      "relation/7852365",
+      "relation/7852446",
+      "relation/7852447",
+      "relation/7852804",
+      "relation/7852805",
+      "relation/7852863",
+      "relation/7852864",
+      "relation/7852865",
+      "relation/7852866",
+      "relation/7852867",
+      "relation/7852868",
+      "relation/7852869",
+      "relation/7853538",
+      "relation/7853539",
+      "relation/7853540",
+      "relation/7853541",
+      "relation/7853542",
+      "relation/7853543",
+      "relation/7853544",
+      "relation/7853545",
+      "relation/7854080",
+      "relation/7854081",
+      "relation/7854082",
+      "relation/7854083",
+      "relation/7854084",
+      "relation/7854085",
+      "relation/7854086",
+      "relation/7854087",
+      "relation/7854088",
+      "relation/7854089",
+      "relation/7854090",
+      "relation/7854091",
+      "relation/7856356",
+      "relation/7856357",
+      "relation/7856358",
+      "relation/7856359",
+      "relation/7856360",
+      "relation/7856361",
+      "relation/7856362",
+      "relation/7856363",
+      "relation/7856364",
+      "relation/7856365",
+      "relation/7856366",
+      "relation/7856367",
+      "relation/7856368",
+      "relation/7856369",
+      "relation/7856370",
+      "relation/7856371",
+      "relation/7857543",
+      "relation/7857544",
+      "relation/7857545",
+      "relation/7857546",
+      "relation/7857547",
+      "relation/7857548",
+      "relation/7857549",
+      "relation/7857550",
+      "relation/7857551",
+      "relation/7857552",
+      "relation/7857553",
+      "relation/7857554",
+      "relation/7857793",
+      "relation/7857794",
+      "relation/7857795",
+      "relation/7857796",
+      "relation/7857797",
+      "relation/7857798",
+      "relation/7857799",
+      "relation/7857800",
+      "relation/7857838",
+      "relation/7857839",
+      "relation/7857840",
+      "relation/7858226",
+      "relation/7858244",
+      "relation/7858245",
+      "relation/7858246",
+      "relation/7858247",
+      "relation/7858248",
+      "relation/7858249",
+      "relation/7858250",
+      "relation/7858294",
+      "relation/7858295",
+      "relation/7858296",
+      "relation/7858403",
+      "relation/7858404",
+      "relation/7858671",
+      "relation/7858672",
+      "relation/7858673",
+      "relation/7858674",
+      "relation/7858675",
+      "relation/7858676",
+      "relation/7858677",
+      "relation/7861517",
+      "relation/7861518",
+      "relation/7861519",
+      "relation/7861520",
+      "relation/7861521",
+      "relation/7861522",
+      "relation/7861523",
+      "relation/7861524",
+      "relation/7861525",
+      "relation/7861526",
+      "relation/7861527",
+      "relation/7861528",
+      "relation/7861529",
+      "relation/7861530",
+      "relation/7861531",
+      "relation/7861532",
+      "relation/7865918",
+      "relation/7865919",
+      "relation/7865920",
+      "relation/7865921",
+      "relation/7865922",
+      "relation/7865924",
+      "relation/7865925",
+      "relation/7866626",
+      "relation/7866627",
+      "relation/7866628",
+      "relation/7867246",
+      "relation/7867247",
+      "relation/7867248",
+      "relation/7867249",
+      "relation/7867250",
+      "relation/7867251",
+      "relation/7867252",
+      "relation/7867584",
+      "relation/7867585"
+    ]
+  ],
+  "edge_count": 364,
+  "edges": [
+    {
+      "a": "relation/7848799",
+      "b": "relation/7852804",
+      "shared_border_m": 1751.0
+    },
+    {
+      "a": "relation/7848799",
+      "b": "relation/7852805",
+      "shared_border_m": 2155.7
+    },
+    {
+      "a": "relation/7848799",
+      "b": "relation/7854080",
+      "shared_border_m": 1398.3
+    },
+    {
+      "a": "relation/7848799",
+      "b": "relation/7857794",
+      "shared_border_m": 254.5
+    },
+    {
+      "a": "relation/7848799",
+      "b": "relation/7857795",
+      "shared_border_m": 3729.7
+    },
+    {
+      "a": "relation/7848799",
+      "b": "relation/7857839",
+      "shared_border_m": 1757.8
+    },
+    {
+      "a": "relation/7848799",
+      "b": "relation/7857840",
+      "shared_border_m": 4038.1
+    },
+    {
+      "a": "relation/7848799",
+      "b": "relation/7858226",
+      "shared_border_m": 2140.9
+    },
+    {
+      "a": "relation/7848799",
+      "b": "relation/7865918",
+      "shared_border_m": 1827.2
+    },
+    {
+      "a": "relation/7848824",
+      "b": "relation/7853544",
+      "shared_border_m": 7812.8
+    },
+    {
+      "a": "relation/7848824",
+      "b": "relation/7853545",
+      "shared_border_m": 4414.3
+    },
+    {
+      "a": "relation/7848824",
+      "b": "relation/7857543",
+      "shared_border_m": 832.4
+    },
+    {
+      "a": "relation/7848824",
+      "b": "relation/7867251",
+      "shared_border_m": 1486.0
+    },
+    {
+      "a": "relation/7848844",
+      "b": "relation/7849357",
+      "shared_border_m": 7338.8
+    },
+    {
+      "a": "relation/7848844",
+      "b": "relation/7857554",
+      "shared_border_m": 249.9
+    },
+    {
+      "a": "relation/7848844",
+      "b": "relation/7867246",
+      "shared_border_m": 1028.0
+    },
+    {
+      "a": "relation/7848844",
+      "b": "relation/7867247",
+      "shared_border_m": 3488.5
+    },
+    {
+      "a": "relation/7848844",
+      "b": "relation/7867249",
+      "shared_border_m": 3790.4
+    },
+    {
+      "a": "relation/7848859",
+      "b": "relation/7852804",
+      "shared_border_m": 5616.4
+    },
+    {
+      "a": "relation/7848859",
+      "b": "relation/7852805",
+      "shared_border_m": 896.9
+    },
+    {
+      "a": "relation/7848859",
+      "b": "relation/7853541",
+      "shared_border_m": 1745.3
+    },
+    {
+      "a": "relation/7848859",
+      "b": "relation/7853545",
+      "shared_border_m": 4279.9
+    },
+    {
+      "a": "relation/7848859",
+      "b": "relation/7857543",
+      "shared_border_m": 2437.4
+    },
+    {
+      "a": "relation/7848859",
+      "b": "relation/7857551",
+      "shared_border_m": 200.4
+    },
+    {
+      "a": "relation/7848859",
+      "b": "relation/7857795",
+      "shared_border_m": 573.2
+    },
+    {
+      "a": "relation/7848859",
+      "b": "relation/7857796",
+      "shared_border_m": 3648.9
+    },
+    {
+      "a": "relation/7848859",
+      "b": "relation/7857799",
+      "shared_border_m": 646.1
+    },
+    {
+      "a": "relation/7849315",
+      "b": "relation/7849614",
+      "shared_border_m": 4153.7
+    },
+    {
+      "a": "relation/7849315",
+      "b": "relation/7850095",
+      "shared_border_m": 2457.2
+    },
+    {
+      "a": "relation/7849315",
+      "b": "relation/7852446",
+      "shared_border_m": 1469.8
+    },
+    {
+      "a": "relation/7849315",
+      "b": "relation/7858671",
+      "shared_border_m": 2427.5
+    },
+    {
+      "a": "relation/7849357",
+      "b": "relation/7867246",
+      "shared_border_m": 4720.1
+    },
+    {
+      "a": "relation/7849439",
+      "b": "relation/7849498",
+      "shared_border_m": 928.5
+    },
+    {
+      "a": "relation/7849439",
+      "b": "relation/7852866",
+      "shared_border_m": 4532.4
+    },
+    {
+      "a": "relation/7849439",
+      "b": "relation/7858296",
+      "shared_border_m": 3852.5
+    },
+    {
+      "a": "relation/7849497",
+      "b": "relation/7849498",
+      "shared_border_m": 6035.7
+    },
+    {
+      "a": "relation/7849497",
+      "b": "relation/7849545",
+      "shared_border_m": 5486.2
+    },
+    {
+      "a": "relation/7849497",
+      "b": "relation/7858673",
+      "shared_border_m": 128.8
+    },
+    {
+      "a": "relation/7849497",
+      "b": "relation/7858676",
+      "shared_border_m": 253.9
+    },
+    {
+      "a": "relation/7849498",
+      "b": "relation/7858676",
+      "shared_border_m": 2035.5
+    },
+    {
+      "a": "relation/7849498",
+      "b": "relation/7858677",
+      "shared_border_m": 1110.7
+    },
+    {
+      "a": "relation/7849545",
+      "b": "relation/7858673",
+      "shared_border_m": 3025.9
+    },
+    {
+      "a": "relation/7849614",
+      "b": "relation/7852324",
+      "shared_border_m": 2824.8
+    },
+    {
+      "a": "relation/7849614",
+      "b": "relation/7858671",
+      "shared_border_m": 367.4
+    },
+    {
+      "a": "relation/7850095",
+      "b": "relation/7850118",
+      "shared_border_m": 1699.8
+    },
+    {
+      "a": "relation/7850095",
+      "b": "relation/7852446",
+      "shared_border_m": 2222.7
+    },
+    {
+      "a": "relation/7850118",
+      "b": "relation/7852365",
+      "shared_border_m": 1788.9
+    },
+    {
+      "a": "relation/7850118",
+      "b": "relation/7852446",
+      "shared_border_m": 1577.2
+    },
+    {
+      "a": "relation/7850118",
+      "b": "relation/7852447",
+      "shared_border_m": 2460.8
+    },
+    {
+      "a": "relation/7850180",
+      "b": "relation/7850268",
+      "shared_border_m": 2708.8
+    },
+    {
+      "a": "relation/7850180",
+      "b": "relation/7852365",
+      "shared_border_m": 344.6
+    },
+    {
+      "a": "relation/7850180",
+      "b": "relation/7861520",
+      "shared_border_m": 575.4
+    },
+    {
+      "a": "relation/7850229",
+      "b": "relation/7850230",
+      "shared_border_m": 1780.1
+    },
+    {
+      "a": "relation/7850229",
+      "b": "relation/7850268",
+      "shared_border_m": 2300.2
+    },
+    {
+      "a": "relation/7850229",
+      "b": "relation/7861522",
+      "shared_border_m": 1890.0
+    },
+    {
+      "a": "relation/7850229",
+      "b": "relation/7861532",
+      "shared_border_m": 1761.3
+    },
+    {
+      "a": "relation/7850230",
+      "b": "relation/7850268",
+      "shared_border_m": 2315.7
+    },
+    {
+      "a": "relation/7850268",
+      "b": "relation/7861520",
+      "shared_border_m": 686.8
+    },
+    {
+      "a": "relation/7852324",
+      "b": "relation/7858671",
+      "shared_border_m": 2372.9
+    },
+    {
+      "a": "relation/7852324",
+      "b": "relation/7858673",
+      "shared_border_m": 2999.4
+    },
+    {
+      "a": "relation/7852324",
+      "b": "relation/7858674",
+      "shared_border_m": 824.9
+    },
+    {
+      "a": "relation/7852324",
+      "b": "relation/7858675",
+      "shared_border_m": 1058.0
+    },
+    {
+      "a": "relation/7852324",
+      "b": "relation/7858676",
+      "shared_border_m": 1569.8
+    },
+    {
+      "a": "relation/7852324",
+      "b": "relation/7858677",
+      "shared_border_m": 2148.7
+    },
+    {
+      "a": "relation/7852364",
+      "b": "relation/7852365",
+      "shared_border_m": 3346.2
+    },
+    {
+      "a": "relation/7852364",
+      "b": "relation/7861519",
+      "shared_border_m": 2458.5
+    },
+    {
+      "a": "relation/7852364",
+      "b": "relation/7861520",
+      "shared_border_m": 824.3
+    },
+    {
+      "a": "relation/7852365",
+      "b": "relation/7861518",
+      "shared_border_m": 2320.0
+    },
+    {
+      "a": "relation/7852365",
+      "b": "relation/7861519",
+      "shared_border_m": 720.3
+    },
+    {
+      "a": "relation/7852365",
+      "b": "relation/7861520",
+      "shared_border_m": 365.9
+    },
+    {
+      "a": "relation/7852446",
+      "b": "relation/7852447",
+      "shared_border_m": 4232.7
+    },
+    {
+      "a": "relation/7852446",
+      "b": "relation/7854082",
+      "shared_border_m": 170.2
+    },
+    {
+      "a": "relation/7852446",
+      "b": "relation/7858671",
+      "shared_border_m": 320.0
+    },
+    {
+      "a": "relation/7852446",
+      "b": "relation/7866626",
+      "shared_border_m": 2542.1
+    },
+    {
+      "a": "relation/7852447",
+      "b": "relation/7861518",
+      "shared_border_m": 2207.3
+    },
+    {
+      "a": "relation/7852447",
+      "b": "relation/7866626",
+      "shared_border_m": 60.4
+    },
+    {
+      "a": "relation/7852804",
+      "b": "relation/7852805",
+      "shared_border_m": 3370.3
+    },
+    {
+      "a": "relation/7852804",
+      "b": "relation/7857795",
+      "shared_border_m": 1856.7
+    },
+    {
+      "a": "relation/7852805",
+      "b": "relation/7857551",
+      "shared_border_m": 1097.9
+    },
+    {
+      "a": "relation/7852805",
+      "b": "relation/7865918",
+      "shared_border_m": 779.7
+    },
+    {
+      "a": "relation/7852805",
+      "b": "relation/7867585",
+      "shared_border_m": 3174.8
+    },
+    {
+      "a": "relation/7852863",
+      "b": "relation/7852864",
+      "shared_border_m": 1796.8
+    },
+    {
+      "a": "relation/7852863",
+      "b": "relation/7852865",
+      "shared_border_m": 1812.9
+    },
+    {
+      "a": "relation/7852863",
+      "b": "relation/7852869",
+      "shared_border_m": 2457.8
+    },
+    {
+      "a": "relation/7852863",
+      "b": "relation/7858248",
+      "shared_border_m": 691.5
+    },
+    {
+      "a": "relation/7852863",
+      "b": "relation/7858250",
+      "shared_border_m": 974.6
+    },
+    {
+      "a": "relation/7852864",
+      "b": "relation/7852869",
+      "shared_border_m": 620.0
+    },
+    {
+      "a": "relation/7852864",
+      "b": "relation/7858249",
+      "shared_border_m": 1464.1
+    },
+    {
+      "a": "relation/7852864",
+      "b": "relation/7858250",
+      "shared_border_m": 1894.6
+    },
+    {
+      "a": "relation/7852865",
+      "b": "relation/7852868",
+      "shared_border_m": 1328.7
+    },
+    {
+      "a": "relation/7852865",
+      "b": "relation/7852869",
+      "shared_border_m": 715.2
+    },
+    {
+      "a": "relation/7852865",
+      "b": "relation/7858246",
+      "shared_border_m": 2605.2
+    },
+    {
+      "a": "relation/7852865",
+      "b": "relation/7858403",
+      "shared_border_m": 2715.6
+    },
+    {
+      "a": "relation/7852866",
+      "b": "relation/7852867",
+      "shared_border_m": 4977.1
+    },
+    {
+      "a": "relation/7852866",
+      "b": "relation/7858296",
+      "shared_border_m": 140.2
+    },
+    {
+      "a": "relation/7852866",
+      "b": "relation/7858403",
+      "shared_border_m": 3029.8
+    },
+    {
+      "a": "relation/7852867",
+      "b": "relation/7852868",
+      "shared_border_m": 5498.5
+    },
+    {
+      "a": "relation/7852867",
+      "b": "relation/7858403",
+      "shared_border_m": 824.8
+    },
+    {
+      "a": "relation/7852868",
+      "b": "relation/7852869",
+      "shared_border_m": 6336.2
+    },
+    {
+      "a": "relation/7853538",
+      "b": "relation/7853539",
+      "shared_border_m": 1093.6
+    },
+    {
+      "a": "relation/7853538",
+      "b": "relation/7853541",
+      "shared_border_m": 4721.9
+    },
+    {
+      "a": "relation/7853538",
+      "b": "relation/7857798",
+      "shared_border_m": 186.8
+    },
+    {
+      "a": "relation/7853538",
+      "b": "relation/7857799",
+      "shared_border_m": 1646.6
+    },
+    {
+      "a": "relation/7853538",
+      "b": "relation/7858244",
+      "shared_border_m": 1305.6
+    },
+    {
+      "a": "relation/7853538",
+      "b": "relation/7858404",
+      "shared_border_m": 4300.4
+    },
+    {
+      "a": "relation/7853539",
+      "b": "relation/7853541",
+      "shared_border_m": 6358.3
+    },
+    {
+      "a": "relation/7853539",
+      "b": "relation/7858249",
+      "shared_border_m": 2637.0
+    },
+    {
+      "a": "relation/7853539",
+      "b": "relation/7858404",
+      "shared_border_m": 4083.1
+    },
+    {
+      "a": "relation/7853540",
+      "b": "relation/7853541",
+      "shared_border_m": 1698.3
+    },
+    {
+      "a": "relation/7853540",
+      "b": "relation/7853542",
+      "shared_border_m": 1134.2
+    },
+    {
+      "a": "relation/7853540",
+      "b": "relation/7853543",
+      "shared_border_m": 3927.0
+    },
+    {
+      "a": "relation/7853540",
+      "b": "relation/7858249",
+      "shared_border_m": 1183.2
+    },
+    {
+      "a": "relation/7853541",
+      "b": "relation/7853542",
+      "shared_border_m": 2277.0
+    },
+    {
+      "a": "relation/7853541",
+      "b": "relation/7853545",
+      "shared_border_m": 6949.4
+    },
+    {
+      "a": "relation/7853541",
+      "b": "relation/7857799",
+      "shared_border_m": 645.0
+    },
+    {
+      "a": "relation/7853542",
+      "b": "relation/7853543",
+      "shared_border_m": 3673.7
+    },
+    {
+      "a": "relation/7853542",
+      "b": "relation/7853544",
+      "shared_border_m": 2623.9
+    },
+    {
+      "a": "relation/7853542",
+      "b": "relation/7853545",
+      "shared_border_m": 1179.9
+    },
+    {
+      "a": "relation/7853543",
+      "b": "relation/7853544",
+      "shared_border_m": 2021.9
+    },
+    {
+      "a": "relation/7853543",
+      "b": "relation/7867250",
+      "shared_border_m": 2098.8
+    },
+    {
+      "a": "relation/7853544",
+      "b": "relation/7853545",
+      "shared_border_m": 6008.9
+    },
+    {
+      "a": "relation/7853544",
+      "b": "relation/7867251",
+      "shared_border_m": 685.7
+    },
+    {
+      "a": "relation/7853545",
+      "b": "relation/7857543",
+      "shared_border_m": 663.1
+    },
+    {
+      "a": "relation/7854080",
+      "b": "relation/7854081",
+      "shared_border_m": 2878.6
+    },
+    {
+      "a": "relation/7854080",
+      "b": "relation/7858226",
+      "shared_border_m": 315.5
+    },
+    {
+      "a": "relation/7854080",
+      "b": "relation/7861527",
+      "shared_border_m": 428.4
+    },
+    {
+      "a": "relation/7854080",
+      "b": "relation/7865918",
+      "shared_border_m": 1311.5
+    },
+    {
+      "a": "relation/7854080",
+      "b": "relation/7865919",
+      "shared_border_m": 3294.6
+    },
+    {
+      "a": "relation/7854080",
+      "b": "relation/7865920",
+      "shared_border_m": 264.5
+    },
+    {
+      "a": "relation/7854080",
+      "b": "relation/7866627",
+      "shared_border_m": 137.6
+    },
+    {
+      "a": "relation/7854080",
+      "b": "relation/7866628",
+      "shared_border_m": 1361.5
+    },
+    {
+      "a": "relation/7854080",
+      "b": "relation/7867252",
+      "shared_border_m": 925.2
+    },
+    {
+      "a": "relation/7854081",
+      "b": "relation/7854086",
+      "shared_border_m": 960.7
+    },
+    {
+      "a": "relation/7854081",
+      "b": "relation/7858226",
+      "shared_border_m": 1276.4
+    },
+    {
+      "a": "relation/7854081",
+      "b": "relation/7866628",
+      "shared_border_m": 1146.3
+    },
+    {
+      "a": "relation/7854082",
+      "b": "relation/7854083",
+      "shared_border_m": 1666.1
+    },
+    {
+      "a": "relation/7854082",
+      "b": "relation/7866626",
+      "shared_border_m": 1448.6
+    },
+    {
+      "a": "relation/7854082",
+      "b": "relation/7866627",
+      "shared_border_m": 597.4
+    },
+    {
+      "a": "relation/7854083",
+      "b": "relation/7854084",
+      "shared_border_m": 1442.0
+    },
+    {
+      "a": "relation/7854083",
+      "b": "relation/7854085",
+      "shared_border_m": 801.0
+    },
+    {
+      "a": "relation/7854083",
+      "b": "relation/7866627",
+      "shared_border_m": 1290.0
+    },
+    {
+      "a": "relation/7854083",
+      "b": "relation/7866628",
+      "shared_border_m": 754.6
+    },
+    {
+      "a": "relation/7854084",
+      "b": "relation/7854085",
+      "shared_border_m": 1417.3
+    },
+    {
+      "a": "relation/7854084",
+      "b": "relation/7854087",
+      "shared_border_m": 926.7
+    },
+    {
+      "a": "relation/7854084",
+      "b": "relation/7854088",
+      "shared_border_m": 454.1
+    },
+    {
+      "a": "relation/7854085",
+      "b": "relation/7854086",
+      "shared_border_m": 1770.1
+    },
+    {
+      "a": "relation/7854085",
+      "b": "relation/7854087",
+      "shared_border_m": 787.3
+    },
+    {
+      "a": "relation/7854085",
+      "b": "relation/7854089",
+      "shared_border_m": 642.4
+    },
+    {
+      "a": "relation/7854085",
+      "b": "relation/7866628",
+      "shared_border_m": 495.2
+    },
+    {
+      "a": "relation/7854086",
+      "b": "relation/7854089",
+      "shared_border_m": 1066.3
+    },
+    {
+      "a": "relation/7854086",
+      "b": "relation/7858226",
+      "shared_border_m": 1481.9
+    },
+    {
+      "a": "relation/7854087",
+      "b": "relation/7854088",
+      "shared_border_m": 1262.1
+    },
+    {
+      "a": "relation/7854087",
+      "b": "relation/7854089",
+      "shared_border_m": 663.8
+    },
+    {
+      "a": "relation/7854087",
+      "b": "relation/7854090",
+      "shared_border_m": 62.3
+    },
+    {
+      "a": "relation/7854087",
+      "b": "relation/7854091",
+      "shared_border_m": 922.6
+    },
+    {
+      "a": "relation/7854088",
+      "b": "relation/7854090",
+      "shared_border_m": 1201.5
+    },
+    {
+      "a": "relation/7854089",
+      "b": "relation/7854091",
+      "shared_border_m": 814.3
+    },
+    {
+      "a": "relation/7854089",
+      "b": "relation/7858226",
+      "shared_border_m": 1649.7
+    },
+    {
+      "a": "relation/7854090",
+      "b": "relation/7854091",
+      "shared_border_m": 1115.4
+    },
+    {
+      "a": "relation/7854090",
+      "b": "relation/7858671",
+      "shared_border_m": 717.9
+    },
+    {
+      "a": "relation/7854090",
+      "b": "relation/7858672",
+      "shared_border_m": 1385.7
+    },
+    {
+      "a": "relation/7854091",
+      "b": "relation/7857838",
+      "shared_border_m": 1522.4
+    },
+    {
+      "a": "relation/7854091",
+      "b": "relation/7857839",
+      "shared_border_m": 843.8
+    },
+    {
+      "a": "relation/7854091",
+      "b": "relation/7858226",
+      "shared_border_m": 283.7
+    },
+    {
+      "a": "relation/7854091",
+      "b": "relation/7858672",
+      "shared_border_m": 796.9
+    },
+    {
+      "a": "relation/7856356",
+      "b": "relation/7856357",
+      "shared_border_m": 1687.9
+    },
+    {
+      "a": "relation/7856356",
+      "b": "relation/7856359",
+      "shared_border_m": 686.3
+    },
+    {
+      "a": "relation/7856356",
+      "b": "relation/7861531",
+      "shared_border_m": 1087.5
+    },
+    {
+      "a": "relation/7856356",
+      "b": "relation/7861532",
+      "shared_border_m": 1770.4
+    },
+    {
+      "a": "relation/7856357",
+      "b": "relation/7856358",
+      "shared_border_m": 540.2
+    },
+    {
+      "a": "relation/7856357",
+      "b": "relation/7856359",
+      "shared_border_m": 952.8
+    },
+    {
+      "a": "relation/7856357",
+      "b": "relation/7861529",
+      "shared_border_m": 158.1
+    },
+    {
+      "a": "relation/7856357",
+      "b": "relation/7861530",
+      "shared_border_m": 169.6
+    },
+    {
+      "a": "relation/7856357",
+      "b": "relation/7861531",
+      "shared_border_m": 439.5
+    },
+    {
+      "a": "relation/7856357",
+      "b": "relation/7865925",
+      "shared_border_m": 1046.9
+    },
+    {
+      "a": "relation/7856358",
+      "b": "relation/7856359",
+      "shared_border_m": 1042.6
+    },
+    {
+      "a": "relation/7856358",
+      "b": "relation/7856360",
+      "shared_border_m": 1119.8
+    },
+    {
+      "a": "relation/7856358",
+      "b": "relation/7856361",
+      "shared_border_m": 1322.5
+    },
+    {
+      "a": "relation/7856358",
+      "b": "relation/7856368",
+      "shared_border_m": 1328.9
+    },
+    {
+      "a": "relation/7856358",
+      "b": "relation/7865925",
+      "shared_border_m": 405.2
+    },
+    {
+      "a": "relation/7856359",
+      "b": "relation/7856360",
+      "shared_border_m": 1079.5
+    },
+    {
+      "a": "relation/7856359",
+      "b": "relation/7856362",
+      "shared_border_m": 1376.5
+    },
+    {
+      "a": "relation/7856359",
+      "b": "relation/7861532",
+      "shared_border_m": 243.8
+    },
+    {
+      "a": "relation/7856360",
+      "b": "relation/7856361",
+      "shared_border_m": 1996.3
+    },
+    {
+      "a": "relation/7856360",
+      "b": "relation/7856362",
+      "shared_border_m": 471.9
+    },
+    {
+      "a": "relation/7856360",
+      "b": "relation/7856363",
+      "shared_border_m": 1247.5
+    },
+    {
+      "a": "relation/7856360",
+      "b": "relation/7856364",
+      "shared_border_m": 301.4
+    },
+    {
+      "a": "relation/7856361",
+      "b": "relation/7856364",
+      "shared_border_m": 709.0
+    },
+    {
+      "a": "relation/7856361",
+      "b": "relation/7856365",
+      "shared_border_m": 1333.8
+    },
+    {
+      "a": "relation/7856361",
+      "b": "relation/7856367",
+      "shared_border_m": 300.6
+    },
+    {
+      "a": "relation/7856361",
+      "b": "relation/7856368",
+      "shared_border_m": 364.9
+    },
+    {
+      "a": "relation/7856361",
+      "b": "relation/7856369",
+      "shared_border_m": 283.2
+    },
+    {
+      "a": "relation/7856361",
+      "b": "relation/7856371",
+      "shared_border_m": 713.7
+    },
+    {
+      "a": "relation/7856362",
+      "b": "relation/7856363",
+      "shared_border_m": 1193.0
+    },
+    {
+      "a": "relation/7856362",
+      "b": "relation/7861532",
+      "shared_border_m": 3584.1
+    },
+    {
+      "a": "relation/7856362",
+      "b": "relation/7867246",
+      "shared_border_m": 660.2
+    },
+    {
+      "a": "relation/7856362",
+      "b": "relation/7867584",
+      "shared_border_m": 3662.9
+    },
+    {
+      "a": "relation/7856363",
+      "b": "relation/7856364",
+      "shared_border_m": 1564.5
+    },
+    {
+      "a": "relation/7856363",
+      "b": "relation/7867246",
+      "shared_border_m": 2389.1
+    },
+    {
+      "a": "relation/7856364",
+      "b": "relation/7856365",
+      "shared_border_m": 1676.1
+    },
+    {
+      "a": "relation/7856364",
+      "b": "relation/7867246",
+      "shared_border_m": 716.0
+    },
+    {
+      "a": "relation/7856365",
+      "b": "relation/7856366",
+      "shared_border_m": 1950.3
+    },
+    {
+      "a": "relation/7856365",
+      "b": "relation/7856367",
+      "shared_border_m": 1063.9
+    },
+    {
+      "a": "relation/7856365",
+      "b": "relation/7867246",
+      "shared_border_m": 940.8
+    },
+    {
+      "a": "relation/7856366",
+      "b": "relation/7856367",
+      "shared_border_m": 2002.0
+    },
+    {
+      "a": "relation/7856366",
+      "b": "relation/7867246",
+      "shared_border_m": 215.5
+    },
+    {
+      "a": "relation/7856366",
+      "b": "relation/7867248",
+      "shared_border_m": 3278.8
+    },
+    {
+      "a": "relation/7856367",
+      "b": "relation/7856369",
+      "shared_border_m": 1605.9
+    },
+    {
+      "a": "relation/7856367",
+      "b": "relation/7865922",
+      "shared_border_m": 178.3
+    },
+    {
+      "a": "relation/7856367",
+      "b": "relation/7867248",
+      "shared_border_m": 814.4
+    },
+    {
+      "a": "relation/7856368",
+      "b": "relation/7856370",
+      "shared_border_m": 1082.7
+    },
+    {
+      "a": "relation/7856368",
+      "b": "relation/7856371",
+      "shared_border_m": 458.2
+    },
+    {
+      "a": "relation/7856368",
+      "b": "relation/7865925",
+      "shared_border_m": 1337.1
+    },
+    {
+      "a": "relation/7856369",
+      "b": "relation/7856371",
+      "shared_border_m": 2199.0
+    },
+    {
+      "a": "relation/7856369",
+      "b": "relation/7865922",
+      "shared_border_m": 524.5
+    },
+    {
+      "a": "relation/7856370",
+      "b": "relation/7856371",
+      "shared_border_m": 1569.3
+    },
+    {
+      "a": "relation/7856370",
+      "b": "relation/7861529",
+      "shared_border_m": 1494.6
+    },
+    {
+      "a": "relation/7856370",
+      "b": "relation/7865920",
+      "shared_border_m": 663.0
+    },
+    {
+      "a": "relation/7856370",
+      "b": "relation/7865925",
+      "shared_border_m": 799.0
+    },
+    {
+      "a": "relation/7856370",
+      "b": "relation/7867252",
+      "shared_border_m": 1699.0
+    },
+    {
+      "a": "relation/7856371",
+      "b": "relation/7865920",
+      "shared_border_m": 837.4
+    },
+    {
+      "a": "relation/7856371",
+      "b": "relation/7865921",
+      "shared_border_m": 1175.4
+    },
+    {
+      "a": "relation/7857543",
+      "b": "relation/7857551",
+      "shared_border_m": 1090.8
+    },
+    {
+      "a": "relation/7857543",
+      "b": "relation/7857552",
+      "shared_border_m": 2247.0
+    },
+    {
+      "a": "relation/7857543",
+      "b": "relation/7857554",
+      "shared_border_m": 661.5
+    },
+    {
+      "a": "relation/7857544",
+      "b": "relation/7857545",
+      "shared_border_m": 955.2
+    },
+    {
+      "a": "relation/7857544",
+      "b": "relation/7857547",
+      "shared_border_m": 1066.8
+    },
+    {
+      "a": "relation/7857544",
+      "b": "relation/7857548",
+      "shared_border_m": 250.0
+    },
+    {
+      "a": "relation/7857544",
+      "b": "relation/7865918",
+      "shared_border_m": 1394.4
+    },
+    {
+      "a": "relation/7857544",
+      "b": "relation/7865919",
+      "shared_border_m": 1097.7
+    },
+    {
+      "a": "relation/7857545",
+      "b": "relation/7857546",
+      "shared_border_m": 1697.8
+    },
+    {
+      "a": "relation/7857545",
+      "b": "relation/7857548",
+      "shared_border_m": 464.8
+    },
+    {
+      "a": "relation/7857545",
+      "b": "relation/7865919",
+      "shared_border_m": 181.2
+    },
+    {
+      "a": "relation/7857545",
+      "b": "relation/7865921",
+      "shared_border_m": 1808.9
+    },
+    {
+      "a": "relation/7857545",
+      "b": "relation/7865922",
+      "shared_border_m": 486.0
+    },
+    {
+      "a": "relation/7857545",
+      "b": "relation/7865924",
+      "shared_border_m": 305.3
+    },
+    {
+      "a": "relation/7857546",
+      "b": "relation/7857548",
+      "shared_border_m": 874.4
+    },
+    {
+      "a": "relation/7857546",
+      "b": "relation/7857550",
+      "shared_border_m": 270.0
+    },
+    {
+      "a": "relation/7857546",
+      "b": "relation/7865924",
+      "shared_border_m": 1123.4
+    },
+    {
+      "a": "relation/7857547",
+      "b": "relation/7857548",
+      "shared_border_m": 862.4
+    },
+    {
+      "a": "relation/7857547",
+      "b": "relation/7857549",
+      "shared_border_m": 1569.7
+    },
+    {
+      "a": "relation/7857547",
+      "b": "relation/7857551",
+      "shared_border_m": 622.4
+    },
+    {
+      "a": "relation/7857547",
+      "b": "relation/7865918",
+      "shared_border_m": 2377.2
+    },
+    {
+      "a": "relation/7857547",
+      "b": "relation/7867585",
+      "shared_border_m": 2042.8
+    },
+    {
+      "a": "relation/7857548",
+      "b": "relation/7857549",
+      "shared_border_m": 1182.6
+    },
+    {
+      "a": "relation/7857548",
+      "b": "relation/7857550",
+      "shared_border_m": 2165.6
+    },
+    {
+      "a": "relation/7857549",
+      "b": "relation/7857550",
+      "shared_border_m": 1693.1
+    },
+    {
+      "a": "relation/7857549",
+      "b": "relation/7857551",
+      "shared_border_m": 1596.9
+    },
+    {
+      "a": "relation/7857550",
+      "b": "relation/7857551",
+      "shared_border_m": 1473.7
+    },
+    {
+      "a": "relation/7857550",
+      "b": "relation/7857553",
+      "shared_border_m": 755.6
+    },
+    {
+      "a": "relation/7857550",
+      "b": "relation/7865924",
+      "shared_border_m": 3944.6
+    },
+    {
+      "a": "relation/7857551",
+      "b": "relation/7857552",
+      "shared_border_m": 689.9
+    },
+    {
+      "a": "relation/7857551",
+      "b": "relation/7857553",
+      "shared_border_m": 2038.6
+    },
+    {
+      "a": "relation/7857551",
+      "b": "relation/7867585",
+      "shared_border_m": 2128.9
+    },
+    {
+      "a": "relation/7857552",
+      "b": "relation/7857553",
+      "shared_border_m": 4655.9
+    },
+    {
+      "a": "relation/7857552",
+      "b": "relation/7857554",
+      "shared_border_m": 974.8
+    },
+    {
+      "a": "relation/7857553",
+      "b": "relation/7857554",
+      "shared_border_m": 3208.6
+    },
+    {
+      "a": "relation/7857553",
+      "b": "relation/7865924",
+      "shared_border_m": 317.8
+    },
+    {
+      "a": "relation/7857554",
+      "b": "relation/7865924",
+      "shared_border_m": 592.0
+    },
+    {
+      "a": "relation/7857554",
+      "b": "relation/7867249",
+      "shared_border_m": 1607.3
+    },
+    {
+      "a": "relation/7857793",
+      "b": "relation/7857794",
+      "shared_border_m": 1934.1
+    },
+    {
+      "a": "relation/7857793",
+      "b": "relation/7857798",
+      "shared_border_m": 1682.3
+    },
+    {
+      "a": "relation/7857793",
+      "b": "relation/7857800",
+      "shared_border_m": 59.3
+    },
+    {
+      "a": "relation/7857793",
+      "b": "relation/7858244",
+      "shared_border_m": 101.6
+    },
+    {
+      "a": "relation/7857793",
+      "b": "relation/7858245",
+      "shared_border_m": 3084.5
+    },
+    {
+      "a": "relation/7857794",
+      "b": "relation/7857795",
+      "shared_border_m": 2910.2
+    },
+    {
+      "a": "relation/7857794",
+      "b": "relation/7857800",
+      "shared_border_m": 1048.8
+    },
+    {
+      "a": "relation/7857794",
+      "b": "relation/7857840",
+      "shared_border_m": 2521.6
+    },
+    {
+      "a": "relation/7857794",
+      "b": "relation/7858245",
+      "shared_border_m": 293.4
+    },
+    {
+      "a": "relation/7857795",
+      "b": "relation/7857796",
+      "shared_border_m": 1518.3
+    },
+    {
+      "a": "relation/7857795",
+      "b": "relation/7857800",
+      "shared_border_m": 644.5
+    },
+    {
+      "a": "relation/7857796",
+      "b": "relation/7857797",
+      "shared_border_m": 1686.9
+    },
+    {
+      "a": "relation/7857796",
+      "b": "relation/7857800",
+      "shared_border_m": 2142.9
+    },
+    {
+      "a": "relation/7857797",
+      "b": "relation/7857798",
+      "shared_border_m": 1118.0
+    },
+    {
+      "a": "relation/7857797",
+      "b": "relation/7857799",
+      "shared_border_m": 1050.9
+    },
+    {
+      "a": "relation/7857797",
+      "b": "relation/7857800",
+      "shared_border_m": 782.6
+    },
+    {
+      "a": "relation/7857798",
+      "b": "relation/7857799",
+      "shared_border_m": 379.8
+    },
+    {
+      "a": "relation/7857798",
+      "b": "relation/7857800",
+      "shared_border_m": 2350.5
+    },
+    {
+      "a": "relation/7857798",
+      "b": "relation/7858244",
+      "shared_border_m": 3029.1
+    },
+    {
+      "a": "relation/7857838",
+      "b": "relation/7857839",
+      "shared_border_m": 1082.9
+    },
+    {
+      "a": "relation/7857838",
+      "b": "relation/7857840",
+      "shared_border_m": 546.3
+    },
+    {
+      "a": "relation/7857838",
+      "b": "relation/7858672",
+      "shared_border_m": 151.4
+    },
+    {
+      "a": "relation/7857838",
+      "b": "relation/7858674",
+      "shared_border_m": 2944.1
+    },
+    {
+      "a": "relation/7857839",
+      "b": "relation/7857840",
+      "shared_border_m": 3614.1
+    },
+    {
+      "a": "relation/7857839",
+      "b": "relation/7858226",
+      "shared_border_m": 736.6
+    },
+    {
+      "a": "relation/7857840",
+      "b": "relation/7858245",
+      "shared_border_m": 2115.5
+    },
+    {
+      "a": "relation/7858244",
+      "b": "relation/7858245",
+      "shared_border_m": 1327.6
+    },
+    {
+      "a": "relation/7858244",
+      "b": "relation/7858404",
+      "shared_border_m": 2204.1
+    },
+    {
+      "a": "relation/7858245",
+      "b": "relation/7858247",
+      "shared_border_m": 3918.3
+    },
+    {
+      "a": "relation/7858245",
+      "b": "relation/7858248",
+      "shared_border_m": 591.0
+    },
+    {
+      "a": "relation/7858245",
+      "b": "relation/7858404",
+      "shared_border_m": 824.1
+    },
+    {
+      "a": "relation/7858246",
+      "b": "relation/7858247",
+      "shared_border_m": 3122.6
+    },
+    {
+      "a": "relation/7858246",
+      "b": "relation/7858248",
+      "shared_border_m": 1308.9
+    },
+    {
+      "a": "relation/7858246",
+      "b": "relation/7858403",
+      "shared_border_m": 638.7
+    },
+    {
+      "a": "relation/7858247",
+      "b": "relation/7858248",
+      "shared_border_m": 2207.2
+    },
+    {
+      "a": "relation/7858247",
+      "b": "relation/7858403",
+      "shared_border_m": 1498.7
+    },
+    {
+      "a": "relation/7858248",
+      "b": "relation/7858250",
+      "shared_border_m": 2895.4
+    },
+    {
+      "a": "relation/7858248",
+      "b": "relation/7858404",
+      "shared_border_m": 1527.3
+    },
+    {
+      "a": "relation/7858249",
+      "b": "relation/7858250",
+      "shared_border_m": 386.9
+    },
+    {
+      "a": "relation/7858249",
+      "b": "relation/7858404",
+      "shared_border_m": 811.3
+    },
+    {
+      "a": "relation/7858250",
+      "b": "relation/7858404",
+      "shared_border_m": 1377.3
+    },
+    {
+      "a": "relation/7858294",
+      "b": "relation/7858295",
+      "shared_border_m": 3518.6
+    },
+    {
+      "a": "relation/7858295",
+      "b": "relation/7858296",
+      "shared_border_m": 4733.1
+    },
+    {
+      "a": "relation/7858671",
+      "b": "relation/7858672",
+      "shared_border_m": 1688.5
+    },
+    {
+      "a": "relation/7858671",
+      "b": "relation/7858674",
+      "shared_border_m": 876.0
+    },
+    {
+      "a": "relation/7858672",
+      "b": "relation/7858674",
+      "shared_border_m": 3573.3
+    },
+    {
+      "a": "relation/7858673",
+      "b": "relation/7858676",
+      "shared_border_m": 2907.4
+    },
+    {
+      "a": "relation/7858674",
+      "b": "relation/7858675",
+      "shared_border_m": 1558.0
+    },
+    {
+      "a": "relation/7858675",
+      "b": "relation/7858677",
+      "shared_border_m": 2181.2
+    },
+    {
+      "a": "relation/7858676",
+      "b": "relation/7858677",
+      "shared_border_m": 3576.8
+    },
+    {
+      "a": "relation/7861517",
+      "b": "relation/7861518",
+      "shared_border_m": 1481.9
+    },
+    {
+      "a": "relation/7861517",
+      "b": "relation/7861519",
+      "shared_border_m": 1901.6
+    },
+    {
+      "a": "relation/7861517",
+      "b": "relation/7861524",
+      "shared_border_m": 386.1
+    },
+    {
+      "a": "relation/7861517",
+      "b": "relation/7861525",
+      "shared_border_m": 1129.9
+    },
+    {
+      "a": "relation/7861518",
+      "b": "relation/7861519",
+      "shared_border_m": 368.2
+    },
+    {
+      "a": "relation/7861518",
+      "b": "relation/7861525",
+      "shared_border_m": 1038.5
+    },
+    {
+      "a": "relation/7861519",
+      "b": "relation/7861520",
+      "shared_border_m": 2022.0
+    },
+    {
+      "a": "relation/7861520",
+      "b": "relation/7861521",
+      "shared_border_m": 1021.2
+    },
+    {
+      "a": "relation/7861520",
+      "b": "relation/7861522",
+      "shared_border_m": 2317.8
+    },
+    {
+      "a": "relation/7861521",
+      "b": "relation/7861522",
+      "shared_border_m": 3147.2
+    },
+    {
+      "a": "relation/7861521",
+      "b": "relation/7861524",
+      "shared_border_m": 2084.8
+    },
+    {
+      "a": "relation/7861521",
+      "b": "relation/7861530",
+      "shared_border_m": 499.0
+    },
+    {
+      "a": "relation/7861521",
+      "b": "relation/7861531",
+      "shared_border_m": 496.9
+    },
+    {
+      "a": "relation/7861522",
+      "b": "relation/7861531",
+      "shared_border_m": 610.8
+    },
+    {
+      "a": "relation/7861523",
+      "b": "relation/7861524",
+      "shared_border_m": 1982.1
+    },
+    {
+      "a": "relation/7861523",
+      "b": "relation/7861525",
+      "shared_border_m": 804.6
+    },
+    {
+      "a": "relation/7861523",
+      "b": "relation/7861526",
+      "shared_border_m": 1057.4
+    },
+    {
+      "a": "relation/7861523",
+      "b": "relation/7861527",
+      "shared_border_m": 843.8
+    },
+    {
+      "a": "relation/7861523",
+      "b": "relation/7861528",
+      "shared_border_m": 1442.1
+    },
+    {
+      "a": "relation/7861524",
+      "b": "relation/7861525",
+      "shared_border_m": 1412.3
+    },
+    {
+      "a": "relation/7861524",
+      "b": "relation/7861528",
+      "shared_border_m": 113.1
+    },
+    {
+      "a": "relation/7861524",
+      "b": "relation/7861530",
+      "shared_border_m": 679.1
+    },
+    {
+      "a": "relation/7861525",
+      "b": "relation/7861526",
+      "shared_border_m": 1691.2
+    },
+    {
+      "a": "relation/7861525",
+      "b": "relation/7866626",
+      "shared_border_m": 994.2
+    },
+    {
+      "a": "relation/7861526",
+      "b": "relation/7861527",
+      "shared_border_m": 799.5
+    },
+    {
+      "a": "relation/7861526",
+      "b": "relation/7866627",
+      "shared_border_m": 2836.5
+    },
+    {
+      "a": "relation/7861527",
+      "b": "relation/7861528",
+      "shared_border_m": 1061.7
+    },
+    {
+      "a": "relation/7861527",
+      "b": "relation/7866627",
+      "shared_border_m": 355.2
+    },
+    {
+      "a": "relation/7861527",
+      "b": "relation/7867252",
+      "shared_border_m": 1700.4
+    },
+    {
+      "a": "relation/7861528",
+      "b": "relation/7861529",
+      "shared_border_m": 509.6
+    },
+    {
+      "a": "relation/7861528",
+      "b": "relation/7861530",
+      "shared_border_m": 1169.6
+    },
+    {
+      "a": "relation/7861528",
+      "b": "relation/7867252",
+      "shared_border_m": 731.6
+    },
+    {
+      "a": "relation/7861529",
+      "b": "relation/7861530",
+      "shared_border_m": 918.0
+    },
+    {
+      "a": "relation/7861529",
+      "b": "relation/7865925",
+      "shared_border_m": 274.0
+    },
+    {
+      "a": "relation/7861529",
+      "b": "relation/7867252",
+      "shared_border_m": 1107.7
+    },
+    {
+      "a": "relation/7861530",
+      "b": "relation/7861531",
+      "shared_border_m": 2134.2
+    },
+    {
+      "a": "relation/7861531",
+      "b": "relation/7861532",
+      "shared_border_m": 412.5
+    },
+    {
+      "a": "relation/7861532",
+      "b": "relation/7867584",
+      "shared_border_m": 434.0
+    },
+    {
+      "a": "relation/7865918",
+      "b": "relation/7865919",
+      "shared_border_m": 545.9
+    },
+    {
+      "a": "relation/7865918",
+      "b": "relation/7867585",
+      "shared_border_m": 500.2
+    },
+    {
+      "a": "relation/7865919",
+      "b": "relation/7865920",
+      "shared_border_m": 950.6
+    },
+    {
+      "a": "relation/7865919",
+      "b": "relation/7865921",
+      "shared_border_m": 1038.2
+    },
+    {
+      "a": "relation/7865920",
+      "b": "relation/7865921",
+      "shared_border_m": 2918.7
+    },
+    {
+      "a": "relation/7865920",
+      "b": "relation/7867252",
+      "shared_border_m": 698.8
+    },
+    {
+      "a": "relation/7865921",
+      "b": "relation/7865922",
+      "shared_border_m": 159.4
+    },
+    {
+      "a": "relation/7865922",
+      "b": "relation/7865924",
+      "shared_border_m": 2228.5
+    },
+    {
+      "a": "relation/7865922",
+      "b": "relation/7867248",
+      "shared_border_m": 2197.6
+    },
+    {
+      "a": "relation/7865924",
+      "b": "relation/7867249",
+      "shared_border_m": 1680.7
+    },
+    {
+      "a": "relation/7866626",
+      "b": "relation/7866627",
+      "shared_border_m": 1430.3
+    },
+    {
+      "a": "relation/7866627",
+      "b": "relation/7866628",
+      "shared_border_m": 2019.4
+    },
+    {
+      "a": "relation/7867246",
+      "b": "relation/7867247",
+      "shared_border_m": 2561.8
+    },
+    {
+      "a": "relation/7867247",
+      "b": "relation/7867249",
+      "shared_border_m": 1864.9
+    },
+    {
+      "a": "relation/7867248",
+      "b": "relation/7867249",
+      "shared_border_m": 2401.2
+    },
+    {
+      "a": "relation/7867250",
+      "b": "relation/7867251",
+      "shared_border_m": 1771.2
+    }
+  ],
+  "geography_version": "GHMC_2016_150",
+  "method": "rook-style contiguity: shared border >= 50 m after a 10 m snap tolerance, in UTM 44N (EPSG:32644)",
+  "min_shared_border_m": 50.0,
+  "neighbour_count": {
+    "relation/7848799": 9,
+    "relation/7848824": 4,
+    "relation/7848844": 5,
+    "relation/7848859": 9,
+    "relation/7849315": 4,
+    "relation/7849357": 2,
+    "relation/7849439": 3,
+    "relation/7849497": 4,
+    "relation/7849498": 4,
+    "relation/7849545": 2,
+    "relation/7849614": 3,
+    "relation/7850095": 3,
+    "relation/7850118": 4,
+    "relation/7850180": 3,
+    "relation/7850229": 4,
+    "relation/7850230": 2,
+    "relation/7850268": 4,
+    "relation/7852324": 7,
+    "relation/7852364": 3,
+    "relation/7852365": 6,
+    "relation/7852446": 7,
+    "relation/7852447": 4,
+    "relation/7852804": 4,
+    "relation/7852805": 6,
+    "relation/7852863": 5,
+    "relation/7852864": 4,
+    "relation/7852865": 5,
+    "relation/7852866": 4,
+    "relation/7852867": 3,
+    "relation/7852868": 3,
+    "relation/7852869": 4,
+    "relation/7853538": 6,
+    "relation/7853539": 4,
+    "relation/7853540": 4,
+    "relation/7853541": 7,
+    "relation/7853542": 5,
+    "relation/7853543": 4,
+    "relation/7853544": 5,
+    "relation/7853545": 6,
+    "relation/7854080": 10,
+    "relation/7854081": 4,
+    "relation/7854082": 4,
+    "relation/7854083": 5,
+    "relation/7854084": 4,
+    "relation/7854085": 6,
+    "relation/7854086": 4,
+    "relation/7854087": 6,
+    "relation/7854088": 3,
+    "relation/7854089": 5,
+    "relation/7854090": 5,
+    "relation/7854091": 7,
+    "relation/7856356": 4,
+    "relation/7856357": 7,
+    "relation/7856358": 6,
+    "relation/7856359": 6,
+    "relation/7856360": 6,
+    "relation/7856361": 8,
+    "relation/7856362": 6,
+    "relation/7856363": 4,
+    "relation/7856364": 5,
+    "relation/7856365": 5,
+    "relation/7856366": 4,
+    "relation/7856367": 6,
+    "relation/7856368": 5,
+    "relation/7856369": 4,
+    "relation/7856370": 6,
+    "relation/7856371": 6,
+    "relation/7857543": 6,
+    "relation/7857544": 5,
+    "relation/7857545": 7,
+    "relation/7857546": 4,
+    "relation/7857547": 6,
+    "relation/7857548": 6,
+    "relation/7857549": 4,
+    "relation/7857550": 6,
+    "relation/7857551": 9,
+    "relation/7857552": 4,
+    "relation/7857553": 5,
+    "relation/7857554": 6,
+    "relation/7857793": 5,
+    "relation/7857794": 6,
+    "relation/7857795": 6,
+    "relation/7857796": 4,
+    "relation/7857797": 4,
+    "relation/7857798": 6,
+    "relation/7857799": 5,
+    "relation/7857800": 6,
+    "relation/7857838": 5,
+    "relation/7857839": 5,
+    "relation/7857840": 5,
+    "relation/7858226": 7,
+    "relation/7858244": 5,
+    "relation/7858245": 7,
+    "relation/7858246": 4,
+    "relation/7858247": 4,
+    "relation/7858248": 6,
+    "relation/7858249": 5,
+    "relation/7858250": 5,
+    "relation/7858294": 1,
+    "relation/7858295": 2,
+    "relation/7858296": 3,
+    "relation/7858403": 5,
+    "relation/7858404": 7,
+    "relation/7858671": 7,
+    "relation/7858672": 5,
+    "relation/7858673": 4,
+    "relation/7858674": 5,
+    "relation/7858675": 3,
+    "relation/7858676": 5,
+    "relation/7858677": 4,
+    "relation/7861517": 4,
+    "relation/7861518": 5,
+    "relation/7861519": 5,
+    "relation/7861520": 7,
+    "relation/7861521": 5,
+    "relation/7861522": 4,
+    "relation/7861523": 5,
+    "relation/7861524": 6,
+    "relation/7861525": 6,
+    "relation/7861526": 4,
+    "relation/7861527": 6,
+    "relation/7861528": 6,
+    "relation/7861529": 6,
+    "relation/7861530": 6,
+    "relation/7861531": 6,
+    "relation/7861532": 6,
+    "relation/7865918": 7,
+    "relation/7865919": 6,
+    "relation/7865920": 6,
+    "relation/7865921": 5,
+    "relation/7865922": 6,
+    "relation/7865924": 7,
+    "relation/7865925": 5,
+    "relation/7866626": 5,
+    "relation/7866627": 7,
+    "relation/7866628": 5,
+    "relation/7867246": 8,
+    "relation/7867247": 3,
+    "relation/7867248": 4,
+    "relation/7867249": 5,
+    "relation/7867250": 2,
+    "relation/7867251": 3,
+    "relation/7867252": 6,
+    "relation/7867584": 2,
+    "relation/7867585": 4
+  },
+  "snap_m": 10.0,
+  "source": "data/raw/geography/datameet/ghmc-wards.geojson",
+  "source_sha256": "3fdfef8e787ed543d816fee36a6097c350c4dff2423aae7fa203bb49cbd6edc2",
+  "ward_count": 145,
+  "ward_names": {
+    "relation/7848799": "Ward 91 Khairatabad",
+    "relation/7848824": "Ward 105 Gachibowli",
+    "relation/7848844": "Ward 60 Rajendra Nagar",
+    "relation/7848859": "Ward 95 Jubilee Hills",
+    "relation/7849315": "Ward 6 Nacharam",
+    "relation/7849357": "Ward 59 Mailardevpally",
+    "relation/7849439": "Ward 133 Macha Bolarum",
+    "relation/7849497": "Ward 1 Kapra",
+    "relation/7849498": "Ward 136 Neredmet",
+    "relation/7849545": "Ward 2 Dr A S Rao Nagar",
+    "relation/7849614": "Ward 5 Mallapur",
+    "relation/7850095": "Ward 7 Chilka Nagar",
+    "relation/7850118": "Ward 10 Uppal",
+    "relation/7850180": "Ward 12 Mansoorabad",
+    "relation/7850229": "Ward 16 Hasthinapuram",
+    "relation/7850230": "Ward 14 BN Reddy Nagar",
+    "relation/7850268": "Ward 15 Vanasthalipuram",
+    "relation/7852324": "Ward 139 East Anand Bagh",
+    "relation/7852364": "Ward 20 RK Puram",
+    "relation/7852365": "Ward 21 Kothapet",
+    "relation/7852446": "Ward 8 Habsiguda",
+    "relation/7852447": "Ward 9 Ramanthapur",
+    "relation/7852804": "Ward 92 Venkateshwara Colony",
+    "relation/7852805": "Ward 93 Banjara Hills",
+    "relation/7852863": "Ward 126 Jagathgirigutta",
+    "relation/7852864": "Ward 124 Alwyn Colony",
+    "relation/7852865": "Ward 128 Chintal",
+    "relation/7852866": "Ward 132 Jeedimetla",
+    "relation/7852867": "Ward 130 Subash Nagar",
+    "relation/7852868": "Ward 129 Suraram",
+    "relation/7852869": "Ward 125 Gajularamaram",
+    "relation/7853538": "Ward 116 Allapur",
+    "relation/7853539": "Ward 114 KPHB Colony",
+    "relation/7853540": "Ward 108 Miyapur",
+    "relation/7853541": "Ward 107 Madhapur",
+    "relation/7853542": "Ward 109 Hafeezpet",
+    "relation/7853543": "Ward 110 Chandanagar",
+    "relation/7853544": "Ward 106 Serilingampally",
+    "relation/7853545": "Ward 104 Kondapur",
+    "relation/7854080": "Ward 78 Gunfoundry",
+    "relation/7854081": "Ward 79 Himayath Nagar",
+    "relation/7854082": "Ward 84 Bagh Amberpet",
+    "relation/7854083": "Ward 81 Nallakunta",
+    "relation/7854084": "Ward 85 Adikmet",
+    "relation/7854085": "Ward 87 Ramnagar",
+    "relation/7854086": "Ward 89 Gandhinagar",
+    "relation/7854087": "Ward 86 Musheerabad",
+    "relation/7854088": "Ward 146 Boudha Nagar",
+    "relation/7854089": "Ward 88 Bholakpur",
+    "relation/7854090": "Ward 145 Seethaphalmandi",
+    "relation/7854091": "Ward 147 Bansilapet",
+    "relation/7856356": "Ward 40 Riyasat Nagar",
+    "relation/7856357": "Ward 36 Lalithabagh",
+    "relation/7856358": "Ward 35 Gowlipura",
+    "relation/7856359": "Ward 44 Uppuguda",
+    "relation/7856360": "Ward 45 Jangammet",
+    "relation/7856361": "Ward 48 Shalibanda",
+    "relation/7856362": "Ward 43 Chandrayangutta",
+    "relation/7856363": "Ward 46 Falaknuma",
+    "relation/7856364": "Ward 47 Nawab Saheb Kunta",
+    "relation/7856365": "Ward 54 Jahanuma",
+    "relation/7856366": "Ward 55 Ramnaspura",
+    "relation/7856367": "Ward 53 Doodh Bowli",
+    "relation/7856368": "Ward 33 Moghalpura",
+    "relation/7856369": "Ward 52 Puranapool",
+    "relation/7856370": "Ward 32 Patthergatti",
+    "relation/7856371": "Ward 49 Ghansi Bazar",
+    "relation/7857543": "Ward 94 Shaikpet",
+    "relation/7857544": "Ward 76 Mallepally",
+    "relation/7857545": "Ward 63 Mangalhat",
+    "relation/7857546": "Ward 64 Dattatreya Nagar",
+    "relation/7857547": "Ward 73 Vijay Nagar Colony",
+    "relation/7857548": "Ward 72 Asif Nagar",
+    "relation/7857549": "Ward 70 Mehdipatnam",
+    "relation/7857550": "Ward 71 Gudimalkapur",
+    "relation/7857551": "Ward 69 Nanal Nagar",
+    "relation/7857552": "Ward 68 Tolichowki",
+    "relation/7857553": "Ward 67 Golconda",
+    "relation/7857554": "Ward 66 Langar Houz",
+    "relation/7857793": "Ward 100 Sanath Nagar",
+    "relation/7857794": "Ward 98 Ameerpet",
+    "relation/7857795": "Ward 97 Somajiguda",
+    "relation/7857796": "Ward 96 Yousufguda",
+    "relation/7857797": "Ward 102 Rahmath Nagar",
+    "relation/7857798": "Ward 101 Erragadda",
+    "relation/7857799": "Ward 103 Borabanda",
+    "relation/7857800": "Ward 99 Vengal Rao Nagar",
+    "relation/7857838": "Ward 150 Monda Market",
+    "relation/7857839": "Ward 148 Ramgopalpet",
+    "relation/7857840": "Ward 149 Begumpet",
+    "relation/7858226": "Ward 90 Kavadiguda",
+    "relation/7858244": "Ward 117 Moosapet",
+    "relation/7858245": "Ward 118 Fateh Nagar",
+    "relation/7858246": "Ward 127 Rangareddy Nagar",
+    "relation/7858247": "Ward 120 Balanagar",
+    "relation/7858248": "Ward 121 Kukatpally",
+    "relation/7858249": "Ward 123 Hydernagar",
+    "relation/7858250": "Ward 122 Vivekananda Nagar Colony",
+    "relation/7858294": "Ward 119 Old Bowenpally",
+    "relation/7858295": "Ward 135 Venkatapuram",
+    "relation/7858296": "Ward 134 Alwal",
+    "relation/7858403": "Ward 131 Quthbullapur",
+    "relation/7858404": "Ward 115 Balaji Nagar",
+    "relation/7858671": "Ward 143 Tarnaka",
+    "relation/7858672": "Ward 144 Mettuguda",
+    "relation/7858673": "Ward 138 Moula Ali",
+    "relation/7858674": "Ward 142 Addagutta",
+    "relation/7858675": "Ward 141 Gautham Nagar",
+    "relation/7858676": "Ward 137 Vinayak Nagar",
+    "relation/7858677": "Ward 140 Malkajgiri",
+    "relation/7861517": "Ward 23 Gaddiannaram",
+    "relation/7861518": "Ward 22 Chaitanyapuri",
+    "relation/7861519": "Ward 19 Saroornagar",
+    "relation/7861520": "Ward 18 Lingojiguda",
+    "relation/7861521": "Ward 38 IS Sadan",
+    "relation/7861522": "Ward 17 Champapet",
+    "relation/7861523": "Ward 27 Akbarbagh",
+    "relation/7861524": "Ward 24 Saidabad",
+    "relation/7861525": "Ward 25 Moosarambagh",
+    "relation/7861526": "Ward 26 Old Malakpet",
+    "relation/7861527": "Ward 28 Azampura",
+    "relation/7861528": "Ward 29 Chawni",
+    "relation/7861529": "Ward 37 Rein Bazar",
+    "relation/7861530": "Ward 37 Kurmaguda",
+    "relation/7861531": "Ward 39 Santhosh Nagar",
+    "relation/7861532": "Ward 41 Kanchanbagh",
+    "relation/7865918": "Ward 75 Red Hills",
+    "relation/7865919": "Ward 77 Jambagh",
+    "relation/7865920": "Ward 50 Begum Bazar",
+    "relation/7865921": "Ward 51 Goshamahal",
+    "relation/7865922": "Ward 62 Ziaguda",
+    "relation/7865924": "Ward 65 Karwan",
+    "relation/7865925": "Ward 34 Talab Chanchalam",
+    "relation/7866626": "Ward 83 Amberpet",
+    "relation/7866627": "Ward 82 Golnaka",
+    "relation/7866628": "Ward 80 Kachiguda",
+    "relation/7867246": "Ward 58 Shastripuram",
+    "relation/7867247": "Ward 57 Suleman Nagar",
+    "relation/7867248": "Ward 56 Kishanbagh",
+    "relation/7867249": "Ward 61 Attapur",
+    "relation/7867250": "Ward 112 Ramachandrapuram",
+    "relation/7867251": "Ward 111 Bharati Nagar",
+    "relation/7867252": "Ward 30 Dabeerpura",
+    "relation/7867584": "Ward 42 Barkas",
+    "relation/7867585": "Ward 74 Ahmed Nagar"
+  },
+  "wards_without_neighbours": []
+}
