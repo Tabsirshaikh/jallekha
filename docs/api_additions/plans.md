@@ -113,3 +113,6 @@ The effect is usually small: daily capacity and the round-robin limit how far we
 trips (for example, 6 groups change, by at most 8 trips, for the strongest water-access setting
 on 2025-05-01).
 
+
+`GET /plans` rows also carry `weights`: `null` for a default plan, or `{wad, cad, hardship}` for a
+weighted one, so a list can label weighted plans without opening each.

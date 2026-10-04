@@ -154,3 +154,11 @@ def test_compare_needs_a_weighted_plan_and_an_officer(api: TestClient) -> None:
 
 def _ledger():  # type: ignore[no-untyped-def]
     return app.dependency_overrides[plans.get_plan_ledger]()
+
+
+def test_the_plan_list_says_which_plans_are_weighted(api: TestClient) -> None:
+    _post(api, {"day": DAY})
+    _post(api, {"day": DAY, "weights": WEIGHTS})
+    items = {p["plan_id"]: p for p in api.get("/plans", headers=auth("officer")).json()["items"]}
+    assert items[DEFAULT_ID]["weights"] is None
+    assert items[WEIGHTED_ID]["weights"] == WEIGHTS

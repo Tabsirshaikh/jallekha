@@ -180,6 +180,7 @@ class PlanStore:
                     "status": r.plan.status,
                     "basis": r.basis,
                     "flags_total": len(r.plan.flags),
+                    "weights": (r.recipe or {}).get("weights"),
                     "checked_total": len(r.plan.checked),
                     "created_at": self._created[r.plan.plan_id].isoformat(),
                 }
@@ -196,6 +197,7 @@ class PlanStore:
                 "status": row.status,
                 "basis": json.loads(row.basis_json),
                 "flags_total": row.flags_total,
+                "weights": json.loads(row.recipe_json).get("weights"),
                 "checked_total": len(json.loads(row.checked_json)),
                 "created_at": _utc(row.created_at).isoformat(),
             }

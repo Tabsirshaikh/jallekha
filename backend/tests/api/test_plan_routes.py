@@ -112,7 +112,8 @@ def test_list_pages_the_stored_plans(api: TestClient, db: Engine) -> None:
     assert [i["plan_id"] for i in body["items"]] == [PLAN_ID, "replay-2025-03-02"]
     item = body["items"][0]
     assert set(item) == {
-        "plan_id", "day", "status", "basis", "flags_total", "checked_total", "created_at"
+        "plan_id", "day", "status", "basis", "flags_total", "checked_total", "created_at",
+        "weights",
     }  # fmt: skip
     assert item["status"] == "DRAFT" and item["checked_total"] == 0 and item["flags_total"] > 0
     page = api.get("/plans", params={"offset": 1, "limit": 1}, headers=auth("officer")).json()
