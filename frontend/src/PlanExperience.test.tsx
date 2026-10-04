@@ -4,7 +4,7 @@ import { setToken } from "./api";
 import { AuthProvider } from "./auth";
 import { LocaleProvider } from "./i18n";
 import PlanExperience from "./PlanExperience";
-import { apiError, json, planServer, WEIGHTED_ID } from "./test/planFixtures";
+import { apiError, json, planServer, SUPPLIED_ID, WEIGHTED_ID } from "./test/planFixtures";
 
 const CHECKS = "/plans/replay-2025-05-01/groups/";
 
@@ -313,5 +313,66 @@ describe("PlanExperience (sample fallback)", () => {
     fireEvent.click(screen.getByRole("button", { name: "Build plan" }));
     expect(await screen.findByText("The comparison could not be loaded.")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Flagged groups to check" })).toBeInTheDocument();
+  });
+
+  describe("plans from supplied bookings", () => {
+    const CSV = "booking_id,section,arrived_at\nB-1,ADARSHNAGAR,2026-10-03T05:30:00+05:30\nB-2,BAHADURPURA,2026-10-03T06:00:00+05:30\n";
+
+    async function paste(csv: string, day = "2026-10-03") {
+      await screen.findByRole("button", { name: "Open plan 2025-05-01" });
+      fireEvent.change(screen.getByLabelText("Day of these bookings"), { target: { value: day } });
+      fireEvent.change(screen.getByLabelText("Bookings (CSV)"), { target: { value: csv } });
+      fireEvent.click(screen.getByRole("button", { name: "Build plan from bookings" }));
+    }
+
+    it("builds a plan from pasted bookings and says where it came from", async () => {
+      setToken("t-officer");
+      const server = planServer();
+      vi.stubGlobal("fetch", vi.fn().mockImplementation(server.fetchMock));
+      renderScreen();
+      await paste(CSV);
+      expect(await screen.findByRole("heading", { name: "Flagged groups to check" })).toBeInTheDocument();
+      const post = server.calls.find((c) => c.method === "POST" && c.path === "/plans");
+      expect(post?.body).toEqual({
+        day: "2026-10-03",
+        weights: { wad: 2, cad: 1, hardship: 1 },
+        bookings: [
+          { booking_id: "B-1", section: "ADARSHNAGAR", arrived_at: "2026-10-03T05:30:00+05:30" },
+          { booking_id: "B-2", section: "BAHADURPURA", arrived_at: "2026-10-03T06:00:00+05:30" },
+        ],
+      });
+      expect(await screen.findByText("Built from 2 bookings supplied for 2026-10-03, not the replay. The bookings are as supplied (not verified here); capacity is an ASSUMED fleet scenario.")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Open plan 2026-10-03 built from supplied bookings" })).toBeInTheDocument();
+      expect(server.calls.some((c) => c.path === `/plans/${SUPPLIED_ID}`)).toBe(true);
+    });
+
+    it("shows a problem in the CSV with its line and does not call the server", async () => {
+      setToken("t-officer");
+      const server = planServer();
+      vi.stubGlobal("fetch", vi.fn().mockImplementation(server.fetchMock));
+      renderScreen();
+      await paste("booking_id,section,arrived_at\nB-1,ADARSHNAGAR,2026-10-03T05:30:00+05:30\nB-2,BAHADURPURA\n");
+      expect(await screen.findByText("Line 3: expected 3 values but found 2.")).toBeInTheDocument();
+      expect(server.calls.some((c) => c.method === "POST")).toBe(false);
+    });
+
+    it("shows the server's list of problems", async () => {
+      setToken("t-officer");
+      vi.stubGlobal("fetch", vi.fn().mockImplementation(planServer().fetchMock));
+      renderScreen();
+      await paste("booking_id,section,arrived_at\nB-1,BAD,2026-10-03T05:30:00+05:30\n");
+      expect(await screen.findByText(/booking 1: section is not an HMWSSB section/)).toBeInTheDocument();
+    });
+
+    it("asks for at least one booking and for a day", async () => {
+      setToken("t-officer");
+      const server = planServer();
+      vi.stubGlobal("fetch", vi.fn().mockImplementation(server.fetchMock));
+      renderScreen();
+      await screen.findByRole("button", { name: "Open plan 2025-05-01" });
+      fireEvent.click(screen.getByRole("button", { name: "Build plan from bookings" }));
+      expect(await screen.findByText("Choose the day of the bookings and paste at least one booking.")).toBeInTheDocument();
+      expect(server.calls.some((c) => c.method === "POST")).toBe(false);
+    });
   });
 });

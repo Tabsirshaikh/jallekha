@@ -102,3 +102,9 @@
 .plan-gains-list li { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 48px; }
 .plan-gain { color: #1f5d43; font-size: 1rem; }
 .plan-loss { color: #a3341f; font-size: 1rem; }
+
+/* Plans from supplied bookings: paste box, file picker, problem list */
+.plan-supplied { margin-top: 18px; }
+.plan-supplied textarea { width: 100%; min-height: 144px; font-family: ui-monospace, Consolas, monospace; font-size: 1rem; padding: 10px 12px; }
+.plan-supplied input[type="date"], .plan-supplied input[type="file"] { min-height: 48px; font-size: 1rem; }
+.plan-supplied .plan-message ul { margin: 0; padding-inline-start: 20px; }

@@ -11,7 +11,7 @@ export const REPLAY_LAST_DAY = "2025-07-31";
 
 /** The three need weights (F7): water access, phone access, hardship. */
 export type Weights = { wad: number; cad: number; hardship: number };
-export type PlanSummary = { id: string; day: string; status: string; flagsTotal: number | null; checkedTotal: number | null; simulation: boolean; weights: Weights | null };
+export type PlanSummary = { id: string; day: string; status: string; flagsTotal: number | null; checkedTotal: number | null; simulation: boolean; weights: Weights | null; source: string | null };
 /** `defaultWeights` and `maxWeight` are what the server will use and allow; null when it did not say. */
 export type PlanList = { total: number; items: PlanSummary[]; defaultWeights: Weights | null; maxWeight: number | null };
 
@@ -29,6 +29,9 @@ export type LivePlan = {
   weights: (Weights & { isDefault: boolean }) | null;
   /** A readable name per group (ward name or section name); null where none is known. */
   names: Record<string, string | null>;
+  /** planner_replay (the committed replay) or supplied_bookings; null when the answer does not say. */
+  source: string | null;
+  bookingsSupplied: number | null;
   trips: number | null; reserveTrips: number | null; outageTrips: number | null; served: number | null; waiting: number | null; stationsTotal: number | null;
   queue: QueueRow[]; flags: FlagRow[]; flagsTotal: number; checkedTotal: number; unchecked: string[];
   schedule: ScheduleRow[]; scheduledTotal: number | null; unroutedTotal: number | null;
@@ -79,6 +82,7 @@ export function adaptPlanList(raw: unknown): PlanList | null {
         checkedTotal: num(item.checked_total),
         simulation: isRow(item.basis) && (text(item.basis.plan) ?? "").startsWith("SIMULATION"),
         weights: weightsOf(item.weights),
+        source: text(item.source),
       }))
       .sort((a, b) => b.day.localeCompare(a.day)),
   };
@@ -154,6 +158,8 @@ export function adaptLivePlan(rawPlan: unknown, rawConfidence: unknown): LivePla
     basis: { plan: text(basis.plan), entitlement: text(basis.effective_entitlement), flags: text(basis.flags), weights: text(basis.weights) },
     weights: planWeights && isRow(rawPlan.weights) ? { ...planWeights, isDefault: rawPlan.weights.is_default === true } : null,
     names,
+    source: text(rawPlan.source),
+    bookingsSupplied: num(rawPlan.bookings_supplied),
     trips: stations.length ? sum(stations.map((station) => num(station.trips))) : null,
     reserveTrips: num(rawPlan.reserve_trips),
     outageTrips: num(rawPlan.outage_trips),

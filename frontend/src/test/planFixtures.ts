@@ -10,6 +10,7 @@ const BASIS = {
 
 export const WEIGHTED_ID = "replay-2025-05-01-w5-0-0";
 export const WEIGHTS = { wad: 5, cad: 0, hardship: 0 };
+export const SUPPLIED_ID = "plan-2026-10-03-ab12cd34";
 const NAMES: Record<string, string | null> = { "ward:relation/7848824": "Ward 105 Gachibowli", "ward:relation/7852805": "Ward 76 Serilingampally", "section:ADARSHNAGAR": "ADARSHNAGAR", "ward:relation/9999999": null };
 
 const FLAG_BASIS = "DERIVED; min of available signals; threshold 0.50";
@@ -20,12 +21,14 @@ function served(group: string, count: number, start: number) {
   return Array.from({ length: count }, (_, i) => ({ booking_id: `2025-04-29:X:${String(start + i).padStart(5, "0")}`, group, position: start + i, reason: "DRR", lender: null }));
 }
 
-export function planBody(checked: Record<string, string> = {}, status: "DRAFT" | "APPROVED" = "DRAFT", approval: { by: string; reason: string } | null = null, weighted = false) {
+export function planBody(checked: Record<string, string> = {}, status: "DRAFT" | "APPROVED" = "DRAFT", approval: { by: string; reason: string } | null = null, weighted = false, supplied = 0) {
   return {
-    plan_id: weighted ? WEIGHTED_ID : "replay-2025-05-01",
+    plan_id: supplied ? SUPPLIED_ID : weighted ? WEIGHTED_ID : "replay-2025-05-01",
+    source: supplied ? "supplied_bookings" : "planner_replay",
+    bookings_supplied: supplied || null,
     weights: weighted ? { ...WEIGHTS, is_default: false } : { wad: 2, cad: 1, hardship: 1, is_default: true },
     group_names: NAMES,
-    day: "2025-05-01",
+    day: supplied ? "2026-10-03" : "2025-05-01",
     status,
     digest: "ef7b720b266de246534bd366618796bc81a17548900ecaff51bada0ca250a298",
     reserve_trips: 325,
@@ -92,9 +95,10 @@ export const confidenceBody = {
   groups: [group("section:ADARSHNAGAR", 0.0, true), group("ward:relation/7848824", 0.5, false), group("ward:relation/7852805", 0.25, true)],
 };
 
-export function listBody(checkedTotal = 0, status: "DRAFT" | "APPROVED" = "DRAFT", withWeighted = false) {
-  const item = (id: string, weights: typeof WEIGHTS | null) => ({ plan_id: id, day: "2025-05-01", status, basis: BASIS, flags_total: 2, checked_total: checkedTotal, created_at: "2026-10-04T15:17:45.312034+00:00", weights });
+export function listBody(checkedTotal = 0, status: "DRAFT" | "APPROVED" = "DRAFT", withWeighted = false, withSupplied = false) {
+  const item = (id: string, weights: typeof WEIGHTS | null, source = "planner_replay", day = "2025-05-01") => ({ plan_id: id, day, status, basis: BASIS, flags_total: 2, checked_total: checkedTotal, created_at: "2026-10-04T15:17:45.312034+00:00", weights, source });
   const items = withWeighted ? [item("replay-2025-05-01", null), item(WEIGHTED_ID, WEIGHTS)] : [item("replay-2025-05-01", null)];
+  if (withSupplied) items.push(item(SUPPLIED_ID, null, "supplied_bookings", "2026-10-03"));
   return { total: items.length, offset: 0, limit: 200, items, default_weights: { wad: 2, cad: 1, hardship: 1 }, max_weight: 5 };
 }
 
@@ -122,6 +126,7 @@ export function planServer(options: { userId?: string | null; plans?: boolean; a
   let approval: { by: string; reason: string } | null = null;
   let stored = options.plans ?? true;
   let weightedStored = false;
+  let suppliedCount = 0;
   const fetchMock = (url: string, init?: RequestInit): Promise<Response> => {
     const parsed = new URL(url, "http://localhost");
     const path = decodeURIComponent(parsed.pathname);
@@ -129,9 +134,15 @@ export function planServer(options: { userId?: string | null; plans?: boolean; a
     const body = typeof init?.body === "string" ? JSON.parse(init.body) : undefined;
     calls.push({ method, path: parsed.pathname, body });
     if (path === "/auth/me") return Promise.resolve(json({ role: "officer", user_id: options.userId === undefined ? "off-1" : options.userId }));
-    if (path === "/plans" && method === "GET") return Promise.resolve(json(stored ? listBody(Object.keys(checked).length, approval ? "APPROVED" : "DRAFT", weightedStored) : { total: 0, offset: 0, limit: 200, items: [] }));
+    if (path === "/plans" && method === "GET") return Promise.resolve(json(stored ? listBody(Object.keys(checked).length, approval ? "APPROVED" : "DRAFT", weightedStored, suppliedCount > 0) : { total: 0, offset: 0, limit: 200, items: [] }));
     if (path === "/plans" && method === "POST") {
       const day = (body as { day?: string }).day;
+      const bookings = (body as { bookings?: { section: string }[] }).bookings;
+      if (bookings) {
+        if (bookings.some((b) => b.section === "BAD")) return Promise.resolve(apiError(422, "validation_error", "booking 1: section is not an HMWSSB section with a station and need data"));
+        suppliedCount = bookings.length;
+        return Promise.resolve(json(planBody(checked, "DRAFT", null, false, suppliedCount), 201));
+      }
       const weights = (body as { weights?: typeof WEIGHTS }).weights;
       if (weights && (weights.wad !== 2 || weights.cad !== 1 || weights.hardship !== 1)) {
         const existedW = weightedStored;
@@ -144,6 +155,8 @@ export function planServer(options: { userId?: string | null; plans?: boolean; a
       stored = true;
       return Promise.resolve(json(planBody(checked), existed ? 200 : 201));
     }
+    if (path === `/plans/${SUPPLIED_ID}` && suppliedCount) return Promise.resolve(json(planBody({ ...checked }, "DRAFT", null, false, suppliedCount)));
+    if (path === `/plans/${SUPPLIED_ID}/confidence` && suppliedCount) return Promise.resolve(json(confidenceBody));
     if (path === `/plans/${WEIGHTED_ID}` && weightedStored) return Promise.resolve(json(planBody({ ...checked }, "DRAFT", null, true)));
     if (path === `/plans/${WEIGHTED_ID}/confidence` && weightedStored) return Promise.resolve(json(confidenceBody));
     if (path === `/plans/${WEIGHTED_ID}/compare` && weightedStored) return Promise.resolve(options.compare ?? json(compareBody));

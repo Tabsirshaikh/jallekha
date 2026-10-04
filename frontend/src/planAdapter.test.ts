@@ -10,7 +10,7 @@ describe("adaptPlanList", () => {
       total: 1,
       defaultWeights: { wad: 2, cad: 1, hardship: 1 },
       maxWeight: 5,
-      items: [{ id: "replay-2025-05-01", day: "2025-05-01", status: "DRAFT", flagsTotal: 2, checkedTotal: 1, simulation: true, weights: null }],
+      items: [{ id: "replay-2025-05-01", day: "2025-05-01", status: "DRAFT", flagsTotal: 2, checkedTotal: 1, simulation: true, weights: null, source: "planner_replay" }],
     });
   });
 
@@ -151,3 +151,23 @@ describe("weights and names", () => {
     expect(adaptCompare({ ...compareBody, losers: [{ group: "x" }] })).toBeNull();
   });
 });
+
+describe("where a plan came from", () => {
+  it("reads the source and the number of supplied bookings", () => {
+    const replay = adaptLivePlan(planBody(), confidenceBody);
+    expect(replay).toMatchObject({ source: "planner_replay", bookingsSupplied: null });
+    const supplied = adaptLivePlan(planBody({}, "DRAFT", null, false, 40), confidenceBody);
+    expect(supplied).toMatchObject({ id: "plan-2026-10-03-ab12cd34", day: "2026-10-03", source: "supplied_bookings", bookingsSupplied: 40 });
+  });
+
+  it("marks supplied plans in the list", () => {
+    const list = adaptPlanList(listBody(0, "DRAFT", false, true));
+    expect(list?.items.map((item) => item.source)).toEqual(["supplied_bookings", "planner_replay"]); // newest day first
+  });
+
+  it("keeps the source null when the answer does not say", () => {
+    const old = Object.fromEntries(Object.entries(planBody()).filter(([key]) => key !== "source" && key !== "bookings_supplied"));
+    expect(adaptLivePlan(old, confidenceBody)).toMatchObject({ source: null, bookingsSupplied: null });
+  });
+});
+
