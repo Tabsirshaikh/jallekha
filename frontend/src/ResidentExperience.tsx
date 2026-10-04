@@ -35,6 +35,18 @@ const copy: Record<Locale, Record<string, string>> = {
   },
 };
 
+const cardCopy = {
+  en:{title:"Sample ward card",intro:"A simple summary of need and tanker service for residents.",choose:"Choose sample ward",need:"Water need",bookings:"Bookings this month",delivered:"Deliveries recorded",waiting:"Bookings still waiting",schedule:"Example service window",sms:"SMS summary",copy:"Copy SMS text",copied:"Copied",copyFailed:"Could not copy. Select and copy the text below.",note:"SYNTHETIC demonstration only. These values and the service window are not live ward information."},
+  te:{title:"నమూనా వార్డు కార్డు",intro:"నివాసుల కోసం నీటి అవసరం, ట్యాంకర్ సేవల సంక్షిప్త సమాచారం.",choose:"నమూనా వార్డును ఎంచుకోండి",need:"నీటి అవసరం",bookings:"ఈ నెల బుకింగ్‌లు",delivered:"నమోదైన పంపిణీలు",waiting:"ఇంకా వేచి ఉన్న బుకింగ్‌లు",schedule:"ఉదాహరణ సేవా సమయం",sms:"SMS సారాంశం",copy:"SMS వాక్యాన్ని కాపీ చేయండి",copied:"కాపీ అయింది",copyFailed:"కాపీ కాలేదు. క్రింది వాక్యాన్ని ఎంచుకుని కాపీ చేయండి.",note:"కల్పిత ప్రదర్శన మాత్రమే. ఈ విలువలు, సేవా సమయం ప్రత్యక్ష వార్డు సమాచారం కాదు."},
+  ur:{title:"نمونہ وارڈ کارڈ",intro:"رہائشیوں کے لیے ضرورت اور ٹینکر سروس کا مختصر خلاصہ۔",choose:"نمونہ وارڈ منتخب کریں",need:"پانی کی ضرورت",bookings:"اس ماہ کی بکنگ",delivered:"درج شدہ ترسیل",waiting:"ابھی انتظار میں بکنگ",schedule:"مثالی سروس کا وقت",sms:"SMS خلاصہ",copy:"SMS متن نقل کریں",copied:"نقل ہوگیا",copyFailed:"متن نقل نہ ہوسکا۔ نیچے سے منتخب کرکے نقل کریں۔",note:"صرف مصنوعی نمائش۔ یہ معلومات اور وقت حقیقی وارڈ کی تازہ معلومات نہیں۔"},
+  hi:{title:"नमूना वार्ड कार्ड",intro:"निवासियों के लिए ज़रूरत और टैंकर सेवा का छोटा सार।",choose:"नमूना वार्ड चुनें",need:"पानी की ज़रूरत",bookings:"इस महीने की बुकिंग",delivered:"दर्ज डिलीवरी",waiting:"अभी प्रतीक्षा में बुकिंग",schedule:"उदाहरण सेवा समय",sms:"SMS सारांश",copy:"SMS पाठ कॉपी करें",copied:"कॉपी हुआ",copyFailed:"कॉपी नहीं हो सका। नीचे का पाठ चुनकर कॉपी करें।",note:"केवल सिंथेटिक प्रदर्शन। ये आँकड़े और समय लाइव वार्ड जानकारी नहीं हैं।"},
+} satisfies Record<Locale, Record<string,string>>;
+
+const sampleWards = [
+  { id:"ward-12", names:{en:"Sample Ward 12",te:"నమూనా వార్డు 12",ur:"نمونہ وارڈ 12",hi:"नमूना वार्ड 12"}, need:{en:"High",te:"ఎక్కువ",ur:"زیادہ",hi:"अधिक"}, bookings:42, delivered:31, schedule:"Thu 10:00–12:00" },
+  { id:"ward-20", names:{en:"Sample Ward 20",te:"నమూనా వార్డు 20",ur:"نمونہ وارڈ 20",hi:"नमूना वार्ड 20"}, need:{en:"Moderate",te:"మధ్యస్థం",ur:"درمیانی",hi:"मध्यम"}, bookings:27, delivered:24, schedule:"Fri 09:00–11:00" },
+];
+
 function openDatabase(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(databaseName, 1);
@@ -86,6 +98,9 @@ export default function ResidentExperience({ page, onNavigate }: { page: Residen
   const [storageReady, setStorageReady] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [online, setOnline] = useState(() => typeof navigator === "undefined" || navigator.onLine);
+  const cardWords = cardCopy[locale];
+  const [sampleWardId, setSampleWardId] = useState("ward-12");
+  const [copyState, setCopyState] = useState("");
 
   const refresh = useCallback(async () => {
     try {
@@ -184,6 +199,23 @@ export default function ResidentExperience({ page, onNavigate }: { page: Residen
   }
 
   const latestArea = reports.find((report) => report.areaLabel)?.areaLabel;
+  const sampleWard = sampleWards.find((ward) => ward.id === sampleWardId) ?? sampleWards[0];
+  const outstanding = sampleWard.bookings - sampleWard.delivered;
+  const smsText = locale === "te"
+    ? `${sampleWard.names[locale]}: ఈ నెల ${sampleWard.bookings} బుకింగ్‌లు, ${sampleWard.delivered} పంపిణీలు, ${outstanding} ఇంకా వేచి ఉన్నాయి. నమూనా సమయం ${sampleWard.schedule}. కల్పిత సమాచారం.`
+    : locale === "ur"
+      ? `${sampleWard.names[locale]}: اس ماہ ${sampleWard.bookings} بکنگ، ${sampleWard.delivered} ترسیل، ${outstanding} انتظار میں۔ نمونہ وقت ${sampleWard.schedule}۔ مصنوعی معلومات۔`
+      : locale === "hi"
+        ? `${sampleWard.names[locale]}: इस महीने ${sampleWard.bookings} बुकिंग, ${sampleWard.delivered} डिलीवरी, ${outstanding} प्रतीक्षा में। नमूना समय ${sampleWard.schedule}। सिंथेटिक जानकारी।`
+        : `${sampleWard.names[locale]}: ${sampleWard.bookings} bookings, ${sampleWard.delivered} deliveries, ${outstanding} still waiting this month. Sample window ${sampleWard.schedule}. Synthetic information.`;
+  async function copySms() {
+    try {
+      await navigator.clipboard.writeText(smsText);
+      setCopyState(cardWords.copied);
+    } catch {
+      setCopyState(cardWords.copyFailed);
+    }
+  }
   return (
     <div className="resident-page resident-experience">
       <div className="resident-state-row"><span className={online ? "resident-connectivity online" : "resident-connectivity offline"}><i />{online ? words.online : words.offline}</span><span>{words.savedOnDevice}</span></div>
@@ -203,9 +235,9 @@ export default function ResidentExperience({ page, onNavigate }: { page: Residen
         <button className="button button-dark" type="submit" disabled={!storageReady}>{words.submit}</button>
       </form></section>}
       {page === "requests" && <section className="resident-list-section"><div className="resident-section-title"><div><p className="eyebrow">{t("residentRequests")}</p><h1>{words.requestsTitle}</h1></div><button className="button button-secondary" onClick={() => void syncReports(reports)} disabled={syncing}>{syncing ? words.syncing : words.sync}</button></div>
-        {reports.length === 0 ? <p className="resident-empty-state">{words.emptyRequests}</p> : <div className="resident-request-list">{reports.map((report) => <article className="resident-request-card" key={report.id}><div className="resident-request-card-head"><span className={`resident-request-state ${report.state}`}>{queueStatus(report, words)}</span><time dateTime={report.createdAt}>{new Date(report.createdAt).toLocaleDateString(locale)}</time></div><h2>{words[report.category === "no_water" ? "noWater" : report.category === "tanker_missed" ? "tankerMissed" : report.category === "dirty_water" ? "dirtyWater" : report.category === "leak" ? "leak" : "other"]}</h2>{report.areaLabel && <p>{words.areaCardIntro}: {report.areaLabel}</p>}{report.details && <p>{report.details}</p>}<div className="resident-request-meta">{report.complaintId && <span>{words.reportId}: {report.complaintId}</span>}<span>{words.deliveryCode}: <strong>{words.noDelivery}</strong></span></div><small>{report.state === "needs_location" ? words.needsLocation : report.state === "queued" ? words.savedOnDevice : report.error ?? words.deliveryUnavailable}</small></article>)}</div>}
+        {reports.length === 0 ? <p className="resident-empty-state">{words.emptyRequests}</p> : <div className="resident-request-list">{reports.map((report) => <article className="resident-request-card" key={report.id}><div className="resident-request-card-head"><span className={`resident-request-state ${report.state}`}>{queueStatus(report, words)}</span><time dateTime={report.createdAt}>{new Date(report.createdAt).toLocaleDateString(locale)}</time></div><h2>{words[report.category === "no_water" ? "noWater" : report.category === "tanker_missed" ? "tankerMissed" : report.category === "dirty_water" ? "dirtyWater" : report.category === "leak" ? "leak" : "other"]}</h2>{report.areaLabel && <p>{words.areaCardIntro}: {report.areaLabel}</p>}{report.details && <p>{report.details}</p>}<div className="resident-request-meta">{report.complaintId && <span>{words.reportId}: {report.complaintId}</span>}<span>{words.deliveryCode}: <strong>DEMO-123456 · SIMULATION</strong></span></div><small>{report.state === "needs_location" ? words.needsLocation : report.state === "queued" ? words.savedOnDevice : report.error ?? words.deliveryUnavailable}</small></article>)}</div>}
       </section>}
-      {page === "ward" && <section className="resident-ward-card"><p className="eyebrow">{words.wardCard}</p><h1>{latestArea ?? words.areaCardIntro}</h1><span className="resident-data-badge">{words.noData}</span><p>{latestArea ? words.wardUnavailable : words.noArea}</p><div className="resident-ward-placeholder"><span aria-hidden="true">⌖</span><strong>{words.deliveryCode}</strong><small>{words.deliveryUnavailable}</small></div><button className="button button-secondary" onClick={() => onNavigate("residentReport")}>{t("reportWaterIssue")}</button></section>}
+      {page === "ward" && <section className="resident-ward-card"><p className="eyebrow">F20 · {cardWords.title}</p><h1>{sampleWard.names[locale]}</h1><p>{cardWords.intro}</p><label className="u10-ward-picker">{cardWords.choose}<select value={sampleWardId} onChange={(event)=>{setSampleWardId(event.target.value);setCopyState("");}}>{sampleWards.map((ward)=><option value={ward.id} key={ward.id}>{ward.names[locale]}</option>)}</select></label><div className="u10-data-grid"><article><span>{cardWords.need}</span><strong>{sampleWard.need[locale]}</strong><small className="source-tag simulation">SIMULATION</small></article><article><span>{cardWords.bookings}</span><strong>{new Intl.NumberFormat(locale).format(sampleWard.bookings)}</strong><small className="source-tag simulation">SIMULATION</small></article><article><span>{cardWords.delivered}</span><strong>{new Intl.NumberFormat(locale).format(sampleWard.delivered)}</strong><small className="source-tag simulation">SIMULATION</small></article><article><span>{cardWords.waiting}</span><strong>{new Intl.NumberFormat(locale).format(outstanding)}</strong><small className="source-tag simulation">SIMULATION</small></article><article><span>{cardWords.schedule}</span><strong>{sampleWard.schedule}</strong><small className="source-tag simulation">SIMULATION</small></article></div><div className="u10-sms"><div><p className="eyebrow">{cardWords.sms} · SIMULATION</p><p>{smsText}</p></div><button className="button button-secondary" onClick={()=>void copySms()}>{copyState || cardWords.copy}</button></div><p className="resident-privacy-note">{cardWords.note}</p><div className="resident-ward-placeholder"><span aria-hidden="true">⌖</span><strong>{words.deliveryCode}: DEMO-123456 · SIMULATION</strong><small>{words.deliveryUnavailable}</small></div><button className="button button-secondary" onClick={() => onNavigate("residentReport")}>{t("reportWaterIssue")}</button></section>}
       <p className="resident-honesty-note">{words.demoNotice}</p>
     </div>
   );

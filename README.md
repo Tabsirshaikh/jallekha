@@ -4,7 +4,7 @@ Fair, explainable sharing of tanker water in Hyderabad, built only on data that 
 
 JalLekha measures water need independently of requests (Census water access, building growth), compares it with who actually gets tankers (real HMWSSB bookings), and recommends a fair allocation of limited tankers by need, previous service and fairness over time. Every decision is explained, contestable and logged.
 
-> Status: planning. The code is built from scratch by a team of four; see the team plan.
+> Status: interactive prototype. Some screens use committed evidence snapshots; screens with missing services use clearly labelled sample data. See `docs/features.csv` and the [P4 demo notes](docs/P4_DEMO.md) for scope and limitations.
 
 ## Documents
 
@@ -14,6 +14,7 @@ JalLekha measures water need independently of requests (Census water access, bui
 | [docs/TEAM_PLAN.md](docs/TEAM_PLAN.md) | Who builds what, research step, branches, how to push and merge, timeline |
 | [docs/features.csv](docs/features.csv) | Task tracker: owner, branch, dependencies, done-when, status |
 | [docs/BRANCH_WORKLOG.md](docs/BRANCH_WORKLOG.md) | Per-branch findings, changes, validation, limitations and handoffs |
+| [docs/P4_DEMO.md](docs/P4_DEMO.md) | P4 slide outline, three-minute demo script and run steps |
 
 
 ## Developer setup
