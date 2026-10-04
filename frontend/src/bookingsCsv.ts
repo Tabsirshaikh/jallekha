@@ -57,7 +57,7 @@ function records(text: string): Record[] {
 }
 
 export function parseBookingsCsv(raw: string): { rows: BookingRow[]; errors: CsvProblem[] } {
-  const all = records(raw.replace(/^﻿/, ""));
+  const all = records(raw.replace(/^\uFEFF/, ""));
   if (all.length === 0) return { rows: [], errors: [] };
   const header = all[0].cells.map((name) => name.trim());
   const errors: CsvProblem[] = [];
