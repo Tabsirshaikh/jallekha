@@ -9,8 +9,11 @@ import { reasonForError, type FallbackReason } from "./evidenceAdapter";
 export const REPLAY_FIRST_DAY = "2025-03-01";
 export const REPLAY_LAST_DAY = "2025-07-31";
 
-export type PlanSummary = { id: string; day: string; status: string; flagsTotal: number | null; checkedTotal: number | null; simulation: boolean };
-export type PlanList = { total: number; items: PlanSummary[] };
+/** The three need weights (F7): water access, phone access, hardship. */
+export type Weights = { wad: number; cad: number; hardship: number };
+export type PlanSummary = { id: string; day: string; status: string; flagsTotal: number | null; checkedTotal: number | null; simulation: boolean; weights: Weights | null };
+/** `defaultWeights` and `maxWeight` are what the server will use and allow; null when it did not say. */
+export type PlanList = { total: number; items: PlanSummary[]; defaultWeights: Weights | null; maxWeight: number | null };
 
 export type FlagRow = { group: string; confidence: number | null; reason: string | null; checked: boolean; checkReason: string | null };
 /** One booking group in the day's queue. `served` is null when the server cut a station's list short. */
@@ -21,12 +24,20 @@ export type ConfidenceView = { threshold: number | null; thresholdBasis: string 
 
 export type LivePlan = {
   id: string; day: string; status: string; approved: boolean; approvedBy: string | null; approvalReason: string | null;
-  basis: { plan: string | null; entitlement: string | null; flags: string | null };
+  basis: { plan: string | null; entitlement: string | null; flags: string | null; weights: string | null };
+  /** The need weights the plan was built with; null when the answer has none (never invented). */
+  weights: (Weights & { isDefault: boolean }) | null;
+  /** A readable name per group (ward name or section name); null where none is known. */
+  names: Record<string, string | null>;
   trips: number | null; reserveTrips: number | null; outageTrips: number | null; served: number | null; waiting: number | null; stationsTotal: number | null;
   queue: QueueRow[]; flags: FlagRow[]; flagsTotal: number; checkedTotal: number; unchecked: string[];
   schedule: ScheduleRow[]; scheduledTotal: number | null; unroutedTotal: number | null;
   outage: OutageView; confidence: ConfidenceView;
 };
+
+/** One group that gains or loses booked trips under a plan's weights. */
+export type CompareRow = { group: string; name: string | null; servedDefault: number; servedWeighted: number; change: number };
+export type CompareView = { against: string; weights: Weights; defaultWeights: Weights; gainers: CompareRow[]; losers: CompareRow[] };
 
 export type { FallbackReason };
 
@@ -37,6 +48,14 @@ const num = (value: unknown): number | null => (typeof value === "number" && Num
 const text = (value: unknown): string | null => (typeof value === "string" ? value : null);
 const count = (value: unknown): number | null => (Array.isArray(value) ? value.length : null);
 const rows = (value: unknown): Row[] => (Array.isArray(value) ? value.filter(isRow) : []);
+
+function weightsOf(value: unknown): Weights | null {
+  if (!isRow(value)) return null;
+  const wad = num(value.wad);
+  const cad = num(value.cad);
+  const hardship = num(value.hardship);
+  return wad === null || cad === null || hardship === null ? null : { wad, cad, hardship };
+}
 
 /** Sum of numbers; null as soon as one is unavailable. */
 function sum(values: (number | null)[]): number | null {
@@ -49,6 +68,8 @@ export function adaptPlanList(raw: unknown): PlanList | null {
   if (items.some((item) => typeof item.plan_id !== "string" || typeof item.day !== "string")) return null;
   return {
     total: num(raw.total) ?? items.length,
+    defaultWeights: weightsOf(raw.default_weights),
+    maxWeight: num(raw.max_weight),
     items: items
       .map((item) => ({
         id: item.plan_id as string,
@@ -57,6 +78,7 @@ export function adaptPlanList(raw: unknown): PlanList | null {
         flagsTotal: num(item.flags_total),
         checkedTotal: num(item.checked_total),
         simulation: isRow(item.basis) && (text(item.basis.plan) ?? "").startsWith("SIMULATION"),
+        weights: weightsOf(item.weights),
       }))
       .sort((a, b) => b.day.localeCompare(a.day)),
   };
@@ -117,6 +139,10 @@ export function adaptLivePlan(rawPlan: unknown, rawConfidence: unknown): LivePla
 
   const outage = rawPlan.outage;
   const basis = isRow(rawPlan.basis) ? rawPlan.basis : {};
+  const planWeights = weightsOf(rawPlan.weights);
+  const names = isRow(rawPlan.group_names)
+    ? Object.fromEntries(Object.entries(rawPlan.group_names).map(([group, name]) => [group, typeof name === "string" ? name : null]))
+    : {};
   const status = text(rawPlan.status) ?? "UNKNOWN";
   return {
     id: rawPlan.plan_id,
@@ -125,7 +151,9 @@ export function adaptLivePlan(rawPlan: unknown, rawConfidence: unknown): LivePla
     approved: status === "APPROVED",
     approvedBy: text(rawPlan.approved_by),
     approvalReason: text(rawPlan.approval_reason),
-    basis: { plan: text(basis.plan), entitlement: text(basis.effective_entitlement), flags: text(basis.flags) },
+    basis: { plan: text(basis.plan), entitlement: text(basis.effective_entitlement), flags: text(basis.flags), weights: text(basis.weights) },
+    weights: planWeights && isRow(rawPlan.weights) ? { ...planWeights, isDefault: rawPlan.weights.is_default === true } : null,
+    names,
     trips: stations.length ? sum(stations.map((station) => num(station.trips))) : null,
     reserveTrips: num(rawPlan.reserve_trips),
     outageTrips: num(rawPlan.outage_trips),
@@ -154,4 +182,28 @@ export function adaptLivePlan(rawPlan: unknown, rawConfidence: unknown): LivePla
 /** Why the sample plan is shown instead of live plans (same rules as the atlas screen). */
 export function planReason(error: ApiError): FallbackReason {
   return reasonForError(error);
+}
+
+function compareRows(value: unknown): CompareRow[] | null {
+  if (!Array.isArray(value)) return null;
+  const out: CompareRow[] = [];
+  for (const item of rows(value)) {
+    const servedDefault = num(item.served_default);
+    const servedWeighted = num(item.served_weighted);
+    const change = num(item.change);
+    if (typeof item.group !== "string" || servedDefault === null || servedWeighted === null || change === null) return null;
+    out.push({ group: item.group, name: text(item.name), servedDefault, servedWeighted, change });
+  }
+  return out.length === value.length ? out : null;
+}
+
+/** GET /plans/{id}/compare: who gains and who loses booked trips under a plan's weights. */
+export function adaptCompare(raw: unknown): CompareView | null {
+  if (!isRow(raw) || typeof raw.against !== "string") return null;
+  const weights = weightsOf(raw.weights);
+  const defaultWeights = weightsOf(raw.default_weights);
+  const gainers = compareRows(raw.gainers);
+  const losers = compareRows(raw.losers);
+  if (!weights || !defaultWeights || !gainers || !losers) return null;
+  return { against: raw.against, weights, defaultWeights, gainers, losers };
 }

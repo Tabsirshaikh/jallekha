@@ -20,6 +20,7 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, ConfigDict
 
 from app.auth import require_roles
+from app.config.allocation import ALLOCATION_CONFIG
 from app.config.api import ApiConfig
 from app.config.confidence import CONFIDENCE_CONFIG
 from app.config.env import REPO_ROOT
@@ -173,7 +174,12 @@ def create_plan(body: NewPlan, plans: Plans, ledger: Ledger, response: Response)
 def list_plans(
     plans: Plans, offset: evidence.Offset = 0, limit: evidence.Limit = ApiConfig.default_limit
 ) -> dict[str, Any]:
-    return page(plans.summaries(), offset, limit)
+    # The sliders of a screen start at the defaults and stop at the largest allowed weight.
+    return {
+        **page(plans.summaries(), offset, limit),
+        "default_weights": NeedWeights.default().as_dict(),
+        "max_weight": ALLOCATION_CONFIG.need_weight_max,
+    }
 
 
 @router.get("/plans/{plan_id}/compare", dependencies=[Officer])

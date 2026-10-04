@@ -1,14 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { ApiError } from "./api";
-import { adaptLivePlan, adaptPlanList, planReason } from "./planAdapter";
-import { confidenceBody, listBody, planBody } from "./test/planFixtures";
+import { adaptCompare, adaptLivePlan, adaptPlanList, planReason } from "./planAdapter";
+import { compareBody, confidenceBody, listBody, planBody } from "./test/planFixtures";
 
 describe("adaptPlanList", () => {
   it("maps the stored plans and keeps the total", () => {
     const list = adaptPlanList(listBody(1));
     expect(list).toEqual({
       total: 1,
-      items: [{ id: "replay-2025-05-01", day: "2025-05-01", status: "DRAFT", flagsTotal: 2, checkedTotal: 1, simulation: true }],
+      defaultWeights: { wad: 2, cad: 1, hardship: 1 },
+      maxWeight: 5,
+      items: [{ id: "replay-2025-05-01", day: "2025-05-01", status: "DRAFT", flagsTotal: 2, checkedTotal: 1, simulation: true, weights: null }],
     });
   });
 
@@ -109,5 +111,43 @@ describe("planReason", () => {
     expect(planReason(new ApiError(403, "forbidden", "x"))).toBe("forbidden");
     expect(planReason(new ApiError(0, "network_error", "x"))).toBe("unreachable");
     expect(planReason(new ApiError(500, "internal", "x"))).toBe("serverError");
+  });
+});
+
+
+describe("weights and names", () => {
+  it("reads the weights a plan was built with, and the names of its groups", () => {
+    const plan = adaptLivePlan(planBody(), confidenceBody);
+    expect(plan?.weights).toEqual({ wad: 2, cad: 1, hardship: 1, isDefault: true });
+    expect(plan?.names).toMatchObject({ "ward:relation/7848824": "Ward 105 Gachibowli", "section:ADARSHNAGAR": "ADARSHNAGAR", "ward:relation/9999999": null });
+    expect(plan?.basis.weights).toContain("ASSUMED");
+    const weighted = adaptLivePlan(planBody({}, "DRAFT", null, true), confidenceBody);
+    expect(weighted?.weights).toEqual({ wad: 5, cad: 0, hardship: 0, isDefault: false });
+    expect(weighted?.id).toBe("replay-2025-05-01-w5-0-0");
+  });
+
+  it("keeps weights null when the answer has none, instead of inventing the defaults", () => {
+    const old = Object.fromEntries(Object.entries(planBody()).filter(([key]) => key !== "weights" && key !== "group_names"));
+    const plan = adaptLivePlan(old, confidenceBody);
+    expect(plan?.weights).toBeNull();
+    expect(plan?.names).toEqual({});
+  });
+
+  it("marks list rows that are weighted", () => {
+    const list = adaptPlanList(listBody(0, "DRAFT", true));
+    expect(list?.items.map((item) => item.weights)).toEqual([null, { wad: 5, cad: 0, hardship: 0 }]);
+  });
+
+  it("maps who gains and who loses, keeping an unknown name null", () => {
+    const view = adaptCompare(compareBody);
+    expect(view).toMatchObject({ against: "replay-2025-05-01", weights: { wad: 5, cad: 0, hardship: 0 }, defaultWeights: { wad: 2, cad: 1, hardship: 1 } });
+    expect(view?.gainers[0]).toEqual({ group: "ward:relation/7848824", name: "Ward 105 Gachibowli", servedDefault: 192, servedWeighted: 200, change: 8 });
+    expect(view?.losers[0]).toMatchObject({ group: "ward:relation/7852805", name: null, change: -8 });
+  });
+
+  it("rejects a comparison that is not one", () => {
+    expect(adaptCompare(null)).toBeNull();
+    expect(adaptCompare({ ...compareBody, gainers: "no" })).toBeNull();
+    expect(adaptCompare({ ...compareBody, losers: [{ group: "x" }] })).toBeNull();
   });
 });

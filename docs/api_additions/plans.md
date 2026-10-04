@@ -116,3 +116,8 @@ on 2025-05-01).
 
 `GET /plans` rows also carry `weights`: `null` for a default plan, or `{wad, cad, hardship}` for a
 weighted one, so a list can label weighted plans without opening each.
+
+`GET /plans` also returns `default_weights` (`{wad, cad, hardship}`, the configured policy weights)
+and `max_weight` (the largest weight a request may use), so a screen can start its sliders at the
+defaults and stop them at the maximum without copying the configuration.
+

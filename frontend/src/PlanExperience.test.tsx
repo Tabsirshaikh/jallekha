@@ -4,7 +4,7 @@ import { setToken } from "./api";
 import { AuthProvider } from "./auth";
 import { LocaleProvider } from "./i18n";
 import PlanExperience from "./PlanExperience";
-import { apiError, json, planServer } from "./test/planFixtures";
+import { apiError, json, planServer, WEIGHTED_ID } from "./test/planFixtures";
 
 const CHECKS = "/plans/replay-2025-05-01/groups/";
 
@@ -29,9 +29,9 @@ function checkPanel() {
 
 async function checkBoth(reason = "Compared with the field map") {
   fireEvent.change(screen.getByLabelText("Check reason (used for each group you mark)"), { target: { value: reason } });
-  fireEvent.click(checkPanel().getByRole("button", { name: "Mark section:ADARSHNAGAR checked" }));
+  fireEvent.click(checkPanel().getByRole("button", { name: "Mark ADARSHNAGAR checked" }));
   expect(await screen.findByText("1 of 2 checked")).toBeInTheDocument();
-  fireEvent.click(checkPanel().getByRole("button", { name: "Mark ward:relation/7852805 checked" }));
+  fireEvent.click(checkPanel().getByRole("button", { name: "Mark Ward 76 Serilingampally checked" }));
   expect(await screen.findByText("2 of 2 checked")).toBeInTheDocument();
 }
 
@@ -60,7 +60,7 @@ describe("PlanExperience (live API)", () => {
     expect(screen.getAllByText(/SIMULATION/).length).toBeGreaterThan(0);
     // Queue rows carry each group's own confidence state.
     const queue = within(screen.getByRole("region", { name: "Groups in today's queue" }));
-    expect(queue.getByText("ward:relation/7848824")).toBeInTheDocument();
+    expect(queue.getByText("Ward 105 Gachibowli")).toBeInTheDocument();
     expect(queue.getAllByText("Needs check")).toHaveLength(2);
     expect(queue.getByText("Above threshold")).toBeInTheDocument();
     // Schedule: unavailable litres stay blank, never zero; unrouted wards are named.
@@ -84,7 +84,7 @@ describe("PlanExperience (live API)", () => {
     fireEvent.click(screen.getByRole("button", { name: "Build plan" }));
 
     expect(await screen.findByText("Plan for 2025-05-01 built and opened.")).toBeInTheDocument();
-    expect(server.calls).toContainEqual({ method: "POST", path: "/plans", body: { day: "2025-05-01" } });
+    expect(server.calls).toContainEqual({ method: "POST", path: "/plans", body: { day: "2025-05-01", weights: { wad: 2, cad: 1, hardship: 1 } } });
     expect(await screen.findByRole("heading", { name: "Flagged groups to check" })).toBeInTheDocument();
   });
 
@@ -104,7 +104,7 @@ describe("PlanExperience (live API)", () => {
     // The server's 404 (no replay data for the day) gives the same message.
     fireEvent.change(screen.getByLabelText("Build plan for a day"), { target: { value: "2025-06-01" } });
     fireEvent.click(screen.getByRole("button", { name: "Build plan" }));
-    await waitFor(() => expect(server.calls).toContainEqual({ method: "POST", path: "/plans", body: { day: "2025-06-01" } }));
+    await waitFor(() => expect(server.calls).toContainEqual({ method: "POST", path: "/plans", body: { day: "2025-06-01", weights: { wad: 2, cad: 1, hardship: 1 } } }));
     expect(await screen.findByText(outside)).toBeInTheDocument();
   });
 
@@ -115,7 +115,7 @@ describe("PlanExperience (live API)", () => {
     renderScreen();
     await openPlan();
 
-    const mark = checkPanel().getByRole("button", { name: "Mark section:ADARSHNAGAR checked" });
+    const mark = checkPanel().getByRole("button", { name: "Mark ADARSHNAGAR checked" });
     expect(mark).toBeDisabled();
     fireEvent.change(screen.getByLabelText("Check reason (used for each group you mark)"), { target: { value: "  Section placed by hand on the field map " } });
     expect(mark).toBeEnabled();
@@ -123,7 +123,7 @@ describe("PlanExperience (live API)", () => {
 
     expect(await screen.findByText("1 of 2 checked")).toBeInTheDocument();
     expect(server.calls).toContainEqual({ method: "POST", path: CHECKS + "section%3AADARSHNAGAR/check", body: { officer_id: "off-1", reason: "Section placed by hand on the field map" } });
-    expect(checkPanel().queryByRole("button", { name: "Mark section:ADARSHNAGAR checked" })).not.toBeInTheDocument();
+    expect(checkPanel().queryByRole("button", { name: "Mark ADARSHNAGAR checked" })).not.toBeInTheDocument();
     expect(await screen.findByText("1 of 2 flagged groups checked")).toBeInTheDocument();
   });
 
@@ -179,7 +179,7 @@ describe("PlanExperience (live API)", () => {
     const officer = screen.getByLabelText("Officer id");
     expect(officer).toBeRequired();
     fireEvent.change(screen.getByLabelText("Check reason (used for each group you mark)"), { target: { value: "Checked" } });
-    const mark = checkPanel().getByRole("button", { name: "Mark section:ADARSHNAGAR checked" });
+    const mark = checkPanel().getByRole("button", { name: "Mark ADARSHNAGAR checked" });
     expect(mark).toBeDisabled();
     fireEvent.change(officer, { target: { value: "off-9" } });
     expect(mark).toBeEnabled();
@@ -228,5 +228,90 @@ describe("PlanExperience (sample fallback)", () => {
     renderScreen();
     expect(await screen.findByText("This account cannot open officer plans. Showing the sample plan.")).toBeInTheDocument();
     expect(screen.getAllByText("Sample Ward A").length).toBeGreaterThan(0);
+  });
+
+  it("shows ward and section names, and the id only where no name is known", async () => {
+    setToken("t-officer");
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(planServer().fetchMock));
+    renderScreen();
+    await openPlan();
+    expect(screen.getAllByText("Ward 105 Gachibowli").length).toBeGreaterThan(0);
+    expect(checkPanel().getByRole("button", { name: "Mark ADARSHNAGAR checked" })).toBeInTheDocument();
+    expect(checkPanel().getByRole("button", { name: "Mark Ward 76 Serilingampally checked" })).toBeInTheDocument();
+  });
+
+  it("offers the three need weights at their defaults and sends the chosen ones", async () => {
+    setToken("t-officer");
+    const server = planServer();
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(server.fetchMock));
+    renderScreen();
+    await screen.findByRole("button", { name: "Open plan 2025-05-01" });
+    const wad = screen.getByLabelText("Water access") as HTMLInputElement;
+    const cad = screen.getByLabelText("Phone access") as HTMLInputElement;
+    const hardship = screen.getByLabelText("Hardship") as HTMLInputElement;
+    expect([wad.value, cad.value, hardship.value]).toEqual(["2", "1", "1"]);
+    expect(screen.getByText(/can move only a few trips/i)).toBeInTheDocument();
+    fireEvent.change(wad, { target: { value: "5" } });
+    fireEvent.change(cad, { target: { value: "0" } });
+    fireEvent.change(hardship, { target: { value: "0" } });
+    fireEvent.change(screen.getByLabelText("Build plan for a day"), { target: { value: "2025-05-01" } });
+    fireEvent.click(screen.getByRole("button", { name: "Build plan" }));
+    await screen.findByRole("heading", { name: "Flagged groups to check" });
+    const build = server.calls.find((c) => c.method === "POST" && c.path === "/plans");
+    expect(build?.body).toEqual({ day: "2025-05-01", weights: { wad: 5, cad: 0, hardship: 0 } });
+  });
+
+  it("resets the weights to the defaults", async () => {
+    setToken("t-officer");
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(planServer().fetchMock));
+    renderScreen();
+    await screen.findByRole("button", { name: "Open plan 2025-05-01" });
+    const wad = screen.getByLabelText("Water access") as HTMLInputElement;
+    fireEvent.change(wad, { target: { value: "4.5" } });
+    expect(wad.value).toBe("4.5");
+    fireEvent.click(screen.getByRole("button", { name: "Reset weights" }));
+    expect(wad.value).toBe("2");
+  });
+
+  it("labels a weighted plan in the list and shows who gains and who loses when it is open", async () => {
+    setToken("t-officer");
+    const server = planServer();
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(server.fetchMock));
+    renderScreen();
+    await screen.findByRole("button", { name: "Open plan 2025-05-01" });
+    fireEvent.change(screen.getByLabelText("Water access"), { target: { value: "5" } });
+    fireEvent.change(screen.getByLabelText("Phone access"), { target: { value: "0" } });
+    fireEvent.change(screen.getByLabelText("Hardship"), { target: { value: "0" } });
+    fireEvent.change(screen.getByLabelText("Build plan for a day"), { target: { value: "2025-05-01" } });
+    fireEvent.click(screen.getByRole("button", { name: "Build plan" }));
+    const panel = await screen.findByRole("region", { name: "Who gains and who loses" });
+    expect(await within(panel).findByText("Ward 105 Gachibowli")).toBeInTheDocument();
+    expect(within(panel).getByText("+8")).toBeInTheDocument();
+    expect(within(panel).getByText("ward:relation/7852805")).toBeInTheDocument(); // no name known
+    expect(within(panel).getByText("\u22128")).toBeInTheDocument();
+    expect(within(panel).getByText(/SIMULATION/)).toBeInTheDocument();
+    expect(screen.getByText("Weights 5 / 0 / 0")).toBeInTheDocument();
+    expect(server.calls.some((c) => c.path === `/plans/${WEIGHTED_ID}/compare`)).toBe(true);
+  });
+
+  it("shows no comparison for a default plan", async () => {
+    setToken("t-officer");
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(planServer().fetchMock));
+    renderScreen();
+    await openPlan();
+    expect(screen.queryByRole("region", { name: "Who gains and who loses" })).not.toBeInTheDocument();
+  });
+
+  it("says so when the comparison cannot load, and still shows the plan", async () => {
+    setToken("t-officer");
+    const failing = planServer({ compare: apiError(500, "internal_error", "boom") });
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(failing.fetchMock));
+    renderScreen();
+    await screen.findByRole("button", { name: "Open plan 2025-05-01" });
+    fireEvent.change(screen.getByLabelText("Water access"), { target: { value: "5" } });
+    fireEvent.change(screen.getByLabelText("Build plan for a day"), { target: { value: "2025-05-01" } });
+    fireEvent.click(screen.getByRole("button", { name: "Build plan" }));
+    expect(await screen.findByText("The comparison could not be loaded.")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Flagged groups to check" })).toBeInTheDocument();
   });
 });

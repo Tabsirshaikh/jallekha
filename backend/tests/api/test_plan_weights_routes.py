@@ -162,3 +162,14 @@ def test_the_plan_list_says_which_plans_are_weighted(api: TestClient) -> None:
     items = {p["plan_id"]: p for p in api.get("/plans", headers=auth("officer")).json()["items"]}
     assert items[DEFAULT_ID]["weights"] is None
     assert items[WEIGHTED_ID]["weights"] == WEIGHTS
+
+
+def test_the_plan_list_reports_the_default_weights_and_the_largest_allowed(api: TestClient) -> None:
+    body = api.get("/plans", headers=auth("officer")).json()
+    cfg = ALLOCATION_CONFIG
+    assert body["default_weights"] == {
+        "wad": cfg.need_weight_wad,
+        "cad": cfg.need_weight_cad,
+        "hardship": cfg.need_weight_hardship,
+    }
+    assert body["max_weight"] == cfg.need_weight_max
