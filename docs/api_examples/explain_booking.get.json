@@ -1,0 +1,75 @@
+{
+  "_example": {
+    "endpoint": "GET /explain/bookings/{booking_id}",
+    "status": "FROM_MAIN (service on main, route not built)",
+    "basis": "SIMULATION booking (A8 replay day 1; SYNTHETIC arrival, REAL monthly total); explanation DERIVED from A3",
+    "built_from": "services/explain.py explain_booking -> BookingExplanation; find_counterfactual -> Counterfactual (Change); codes and values; the UI translates",
+    "notes": "Queue of filling station ST19 on 2025-03-01 with capacity = the plan's booked_trips (215, after the scheduled reserve; raw capacity 226), A3 state at its start; the served set equals the plan's. waiting_hours is negative because the replay's 05:00 plan already holds bookings that arrive later that day (finding for P2 / T7, not a display rule)."
+  },
+  "request": {
+    "booking_id": "2025-03-01:HAFEEZPET:00173"
+  },
+  "response": {
+    "explanation": {
+      "booking_id": "2025-03-01:HAFEEZPET:00173",
+      "status": "waiting",
+      "group": "ward:relation/7853541",
+      "tier": 2,
+      "arrived_at": "2025-03-01T17:12:52+05:30",
+      "place": 216,
+      "position": null,
+      "reason": null,
+      "arrival_rank": null,
+      "entitlement": null,
+      "quantum": null,
+      "deficit_before": null,
+      "capacity": 215,
+      "cap_reason": null,
+      "waiting_hours": -12.2144,
+      "debt": {
+        "available": false,
+        "account_id": null,
+        "debt_litres": null,
+        "cap_litres": null,
+        "in_debt_since": null
+      }
+    },
+    "counterfactual": {
+      "booking_id": "2025-03-01:HAFEEZPET:00173",
+      "status": "found",
+      "before_place": 216,
+      "changes": [
+        {
+          "input": "tier",
+          "amount": 1,
+          "step": 1,
+          "from_value": 2,
+          "to_value": 1,
+          "after_place": 1
+        },
+        {
+          "input": "arrival",
+          "amount": 15,
+          "step": 15,
+          "from_value": "2025-03-01T17:12:52+05:30",
+          "to_value": "2025-03-01T16:57:52+05:30",
+          "after_place": 212
+        },
+        {
+          "input": "group_entitlement",
+          "amount": 1.4,
+          "step": 0.05,
+          "from_value": 22104.372402,
+          "to_value": 53050.4937648,
+          "after_place": 215
+        }
+      ],
+      "not_inputs": [
+        [
+          "water_debt",
+          "not part of today's ordering"
+        ]
+      ]
+    }
+  }
+}

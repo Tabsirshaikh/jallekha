@@ -1,0 +1,60 @@
+{
+  "_example": {
+    "endpoint": "GET /explain/wards/{ward_id} (ward without Census data)",
+    "status": "FROM_MAIN (service on main, route not built)",
+    "basis": "REAL ward_evidence.csv row with empty Census values",
+    "built_from": "explain_ward -> WardExplanation(status=no_census_data)",
+    "input_row": {
+      "file": "data/derived/evidence/ward_evidence.csv",
+      "key_column": "ward_id",
+      "keys": [
+        "relation/7867250"
+      ]
+    }
+  },
+  "request": {
+    "ward_id": "relation/7867250"
+  },
+  "response": {
+    "explanation": {
+      "ward_id": "relation/7867250",
+      "ward_name": "Ward 112 Ramachandrapuram",
+      "status": "no_census_data",
+      "service_class": "piped_regularity_unknown",
+      "class_basis": "UNAVAILABLE",
+      "join_status": "PARTIAL_CENSUS_COVERAGE",
+      "allocation_eligible": false,
+      "review_required": true,
+      "quality_flags": [
+        "HISTORICAL",
+        "FACILITIES_UNAVAILABLE",
+        "APPROX_AREAL_CROSSWALK"
+      ],
+      "check_reasons": [
+        "CENSUS_UNAVAILABLE",
+        "E2_REVIEW_REQUIRED"
+      ],
+      "census_label": "Census 2011 / historical 2016 geography",
+      "need_weight": null,
+      "need_basis": null,
+      "wad": null,
+      "wad_basis": null,
+      "cad": null,
+      "cad_basis": null,
+      "hardship": null,
+      "hardship_basis": null,
+      "households": null,
+      "households_basis": null,
+      "entitlement": null,
+      "critical_facilities": null,
+      "critical_facilities_basis": "UNAVAILABLE",
+      "debt": {
+        "available": false,
+        "account_id": null,
+        "debt_litres": null,
+        "cap_litres": null,
+        "in_debt_since": null
+      }
+    }
+  }
+}

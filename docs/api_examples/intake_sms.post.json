@@ -1,0 +1,27 @@
+{
+  "_example": {
+    "endpoint": "POST /intake/sms",
+    "status": "ROUTE_ON_MAIN",
+    "basis": "SYNTHETIC request; response from the real IntakeService",
+    "built_from": "app/routers/intake.py sms_webhook() -> IntakeService.receive_sms -> IntakeResult",
+    "notes": "Sender field names accepted: config/intake.py SMS_SENDER_FIELDS / SMS_TEXT_FIELDS / SMS_TIME_FIELDS. The example was generated with an all-zero placeholder number."
+  },
+  "request": {
+    "from": "<sender's number; never stored or echoed>",
+    "text": "no water in our lane",
+    "timestamp": "2026-10-03T11:20:00+05:30"
+  },
+  "response": {
+    "status": "created",
+    "client_id": null,
+    "intake_id": "ed9aa3dd-162d-42e0-8cb8-51136410a028",
+    "complaint_id": "4cdc202a-32f9-498e-b1ab-e04b465371a8",
+    "complaint_status": "awaiting_location",
+    "parent_id": null,
+    "category": "no_water",
+    "language": "en",
+    "spam_score": 0.2,
+    "error": null,
+    "ledger_seq": 4
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "_example": {
+    "endpoint": "GET /shortage",
+    "status": "NOT DESIGNED",
+    "owner": "P3 (T8)",
+    "notes": "T8 not merged; see the T8 branch.",
+    "basis": null,
+    "built_from": null
+  },
+  "request": null,
+  "response": null
+}
