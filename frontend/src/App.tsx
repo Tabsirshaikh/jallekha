@@ -3,6 +3,7 @@ import { localeNames, supportedLocales, useLocale, type MessageKey } from "./i18
 import DriverExperience from "./DriverExperience";
 import ResidentExperience from "./ResidentExperience";
 import FieldWorkerExperience from "./FieldWorkerExperience";
+import SignIn from "./SignIn";
 const EvidenceExperience = lazy(() => import("./EvidenceExperience"));
 const ForecastExperience = lazy(() => import("./ForecastExperience"));
 const PlanExperience = lazy(() => import("./PlanExperience"));
@@ -161,7 +162,7 @@ export default function App() {
     <div className="app-frame" dir={direction} lang={locale}>
       <Sidebar workspace={workspace} activeItem={activeItem} onNavigate={setActiveItem} />
       <div className="main-column">
-        <header className="topbar"><div className="mobile-brand"><Brand /></div><div className="topbar-context"><span className="topbar-kicker">JALLEKHA 2.0</span><span className="topbar-divider">/</span><span>{t(meta.title)}</span></div><WorkspaceSwitcher value={workspace} onChange={changeWorkspace} /><button className="help-button" aria-label={t("help")}><Icon name="help" size={20} /></button></header>
+        <header className="topbar"><div className="mobile-brand"><Brand /></div><div className="topbar-context"><span className="topbar-kicker">JALLEKHA 2.0</span><span className="topbar-divider">/</span><span>{t(meta.title)}</span></div><WorkspaceSwitcher value={workspace} onChange={changeWorkspace} /><SignIn /><button className="help-button" aria-label={t("help")}><Icon name="help" size={20} /></button></header>
         <MobileNavigation workspace={workspace} activeItem={activeItem} onNavigate={setActiveItem} />
         <main className={`page-content ${workspace}-content ${workspace === "officer" && activeItem === "officerWaterAccess" ? "officer-evidence-content" : workspace === "officer" && activeItem === "officerForecast" ? "officer-forecast-content" : workspace === "officer" && activeItem === "officerAllocationPlan" ? "officer-plan-content" : ""}`}>
           <div className="page-title-mobile"><p className="eyebrow">{t(meta.eyebrow)}</p><h1>{t(meta.title)}</h1><p className="muted">{t(meta.description)}</p></div>

@@ -1,13 +1,20 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { setToken } from "./api";
 import App from "./App";
+import { AuthProvider } from "./auth";
 import { LocaleProvider } from "./i18n";
 
 describe("App", () => {
+  beforeEach(() => setToken(null));
+  afterEach(() => vi.unstubAllGlobals());
+
   it("translates resident and driver shells and applies Urdu right-to-left direction", () => {
     const { container } = render(
       <LocaleProvider>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </LocaleProvider>,
     );
 
@@ -26,5 +33,38 @@ describe("App", () => {
 
     fireEvent.change(languagePicker, { target: { value: "hi" } });
     expect(screen.getByRole("heading", { name: "आज का मार्ग" })).toBeInTheDocument();
+  });
+
+  it("signs in with a token and shows the role the server reports", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ role: "officer", user_id: "off-1" }), { status: 200, headers: { "Content-Type": "application/json" } })));
+    render(
+      <LocaleProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </LocaleProvider>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
+    fireEvent.change(screen.getByLabelText("Access token"), { target: { value: "t-officer" } });
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    await waitFor(() => expect(screen.getByText(/Signed in as/)).toBeInTheDocument());
+    expect(screen.getByText(/off-1/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
+    expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument();
+  });
+
+  it("says so when a token is rejected", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ error: { code: "unauthorized", message: "Unknown token" } }), { status: 401, headers: { "Content-Type": "application/json" } })));
+    render(
+      <LocaleProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </LocaleProvider>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
+    fireEvent.change(screen.getByLabelText("Access token"), { target: { value: "bad" } });
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("That token was not accepted."));
   });
 });
