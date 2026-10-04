@@ -4,7 +4,7 @@
     "status": "FROM_MAIN (service on main, route and plan store not built)",
     "basis": "SIMULATION: A7 build_plan on the first day of P2's committed planner replay",
     "built_from": "services/planner.py build_plan -> DailyPlan (StationPlan, ServedBooking, Transfer, WardShare, OutageResponse, Assessment, Unrouted, SpecialStop); scripts/sandbox/build_planner_replay.py replay(max_days=1)",
-    "notes": "Lists are cut to the first items; *_total fields give the full counts. queue_states is internal and not shown. `weights` is the need weights the plan was built with (is_default true unless an officer chose others at POST /plans); `group_names` gives each group a readable name (ward name, or the HMWSSB section name; null when unknown)."
+    "notes": "Lists are cut to the first items; *_total fields give the full counts. queue_states is internal and not shown. `weights` is the need weights the plan was built with (is_default true unless an officer chose others at POST /plans); `group_names` gives each group a readable name (ward name, or the HMWSSB section name; null when unknown). `source` is planner_replay (the committed replay) or supplied_bookings (bookings an officer supplied); `bookings_supplied` is their number, or null for a replay plan."
   },
   "request": {
     "plan_id": "replay-2025-03-01"
@@ -25,6 +25,8 @@
       "hardship": 1.0,
       "is_default": true
     },
+    "source": "planner_replay",
+    "bookings_supplied": null,
     "group_names": {
       "section:40 MLD STP ATTAPUR": "40 MLD STP ATTAPUR",
       "section:ADARSHNAGAR": "ADARSHNAGAR",

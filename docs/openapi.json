@@ -1467,7 +1467,7 @@
           "plans"
         ],
         "summary": "Create Plan",
-        "description": "Build and store the plan for a replay day (T9 gate). Idempotent: if that day's plan is\nalready stored, it is returned as stored (200) and nothing is built or logged again.",
+        "description": "Build and store a plan (T9 gate): from the bookings supplied in the request, or, without\nthem, for a day of the committed replay. Idempotent: if the same plan is already stored it\nis returned as stored (200) and nothing is built or logged again.",
         "operationId": "create_plan_plans_post",
         "parameters": [
           {
@@ -3074,6 +3074,21 @@
                 "type": "null"
               }
             ]
+          },
+          "bookings": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bookings"
           }
         },
         "type": "object",

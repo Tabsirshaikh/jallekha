@@ -114,6 +114,7 @@ def test_list_pages_the_stored_plans(api: TestClient, db: Engine) -> None:
     assert set(item) == {
         "plan_id", "day", "status", "basis", "flags_total", "checked_total", "created_at",
         "weights",
+        "source",
     }  # fmt: skip
     assert item["status"] == "DRAFT" and item["checked_total"] == 0 and item["flags_total"] > 0
     page = api.get("/plans", params={"offset": 1, "limit": 1}, headers=auth("officer")).json()

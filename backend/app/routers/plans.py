@@ -77,6 +77,9 @@ class WeightsIn(BaseModel):
 class NewPlan(BaseModel):
     day: date  # a day of the replay window (YYYY-MM-DD)
     weights: WeightsIn | None = None  # absent: the configured default weights
+    # The day's bookings, supplied by an officer (see docs/api_additions/plans.md). Absent: the
+    # plan is built from the committed replay, which needs a day inside its window.
+    bookings: list[dict[str, Any]] | None = None
 
 
 def _record(plans: PlanStore, plan_id: str) -> PlanRecord:
@@ -112,10 +115,13 @@ def plan_view(record: PlanRecord) -> dict[str, Any]:
             "special_tankers", "approved_by", "approval_reason",
         )
     }  # fmt: skip
-    weights = (record.recipe or {}).get("weights")
+    recipe = record.recipe or {}
+    weights = recipe.get("weights")
     shown = NeedWeights(**weights) if weights else NeedWeights.default()
     view.update(
         {
+            "source": recipe.get("source", plan_builder.SOURCE),
+            "bookings_supplied": len(recipe["bookings"]) if "bookings" in recipe else None,
             "weights": {**shown.as_dict(), "is_default": weights is None},
             "group_names": plan_builder.group_names(list(full["effective_entitlement"])),
             "stations": stations,
@@ -141,13 +147,22 @@ def plan_view(record: PlanRecord) -> dict[str, Any]:
 
 @router.post("/plans", dependencies=[Officer], status_code=201)
 def create_plan(body: NewPlan, plans: Plans, ledger: Ledger, response: Response) -> dict[str, Any]:
-    """Build and store the plan for a replay day (T9 gate). Idempotent: if that day's plan is
-    already stored, it is returned as stored (200) and nothing is built or logged again."""
+    """Build and store a plan (T9 gate): from the bookings supplied in the request, or, without
+    them, for a day of the committed replay. Idempotent: if the same plan is already stored it
+    is returned as stored (200) and nothing is built or logged again."""
     try:
         weights = NeedWeights(**body.weights.model_dump()).validated() if body.weights else None
     except ValueError as exc:
         return invalid(str(exc))
-    plan_id = plan_builder.plan_id_for(body.day, weights)
+    supplied = body.bookings is not None
+    try:
+        plan_id = (
+            plan_builder.supplied_plan_id(body.day, body.bookings, weights)
+            if body.bookings is not None
+            else plan_builder.plan_id_for(body.day, weights)
+        )
+    except plan_builder.InvalidBookings as exc:
+        return invalid(str(exc))
     try:
         existing = plans.get(plan_id)
     except plan_builder.PlanRebuildError as exc:
@@ -156,7 +171,13 @@ def create_plan(body: NewPlan, plans: Plans, ledger: Ledger, response: Response)
         response.status_code = 200
         return plan_view(existing)
     try:
-        built = plan_builder.build_replay_plan(body.day, weights=weights)
+        built = (
+            plan_builder.build_supplied_plan(body.day, body.bookings, weights=weights)
+            if body.bookings is not None
+            else plan_builder.build_replay_plan(body.day, weights=weights)
+        )
+    except plan_builder.InvalidBookings as exc:
+        return invalid(str(exc))
     except plan_builder.ReplayDayUnavailable as exc:
         raise HTTPException(404, str(exc)) from exc
     record = PlanRecord(built.inputs, built.plan, built.basis, built.recipe)
@@ -164,6 +185,12 @@ def create_plan(body: NewPlan, plans: Plans, ledger: Ledger, response: Response)
         response.status_code = 200
         return plan_view(_record(plans, built.plan.plan_id))
     for entry_type, payload, actor in built.events:  # plan_created, once
+        if supplied:  # say where the bookings came from
+            payload = {
+                **payload,
+                "source": plan_builder.SUPPLIED,
+                "bookings": len(built.recipe["bookings"]),
+            }
         if "weights" in built.recipe:  # every weight change is a ledger entry
             payload = {**payload, "weights": built.recipe["weights"]}
         ledger.append(entry_type, payload, actor)

@@ -19,30 +19,40 @@ after the plan is stored (a rebuild never writes it again).
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
+import json
+import re
 import sys
 import threading
 from collections import Counter, OrderedDict
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, replace
-from datetime import date, timedelta
+from datetime import UTC, date, datetime, timedelta, timezone
 from functools import lru_cache
 from types import ModuleType
 from typing import Any
 
+from app.config.allocation import ALLOCATION_CONFIG
 from app.config.confidence import CONFIDENCE_CONFIG
 from app.config.env import REPO_ROOT
 from app.config.plans import PLAN_STORE_CONFIG
-from app.services import booking_groups, confidence, planner, service_models
+from app.services import booking_groups, confidence, fair_queue, planner, service_models
 from app.services.service_models import NeedWeights
 
 SOURCE = "planner_replay"
+SUPPLIED = "supplied_bookings"
+IST = timezone(timedelta(hours=5, minutes=30))
 GATE = "T9"
 _MODULE = "jallekha_planner_replay"  # private name: tests load the script under its own name
 
 
 class ReplayDayUnavailable(LookupError):
     """The day is outside the replay window: there is no data to plan it from."""
+
+
+class InvalidBookings(ValueError):
+    """The supplied bookings cannot be planned; the message lists what is wrong."""
 
 
 class PlanRebuildError(RuntimeError):
@@ -162,11 +172,19 @@ def t9_gate(threshold: float) -> confidence.T9Gate:
     return confidence.T9Gate(tables, threshold=threshold)
 
 
-def _basis(threshold: float, weights: NeedWeights | None = None) -> dict[str, str]:
+def _basis(
+    threshold: float, weights: NeedWeights | None = None, supplied: int | None = None
+) -> dict[str, str]:
     script = _script()
     chosen = weights or NeedWeights.default()
     return {
         "plan": (
+            f"Plan from {supplied} bookings supplied for the day, not the replay: bookings as "
+            "supplied (not verified here); capacity ASSUMED (A8 fleet scenario "
+            f"{script.REPLAY}, {script.SCENARIO}); need DERIVED from Census 2011"
+        )
+        if supplied is not None
+        else (
             f"SIMULATION (A7 replay {script.REPLAY}, {script.SCENARIO}, seed {script.SEED}; "
             "daily arrivals SYNTHETIC, monthly totals REAL)"
         ),
@@ -184,8 +202,12 @@ def _basis(threshold: float, weights: NeedWeights | None = None) -> dict[str, st
     }
 
 
+def _weight_suffix(weights: NeedWeights) -> str:
+    return f"-w{weights.wad:g}-{weights.cad:g}-{weights.hardship:g}"
+
+
 def _weighted_id(day: date, weights: NeedWeights) -> str:
-    return f"replay-{day.isoformat()}-w{weights.wad:g}-{weights.cad:g}-{weights.hardship:g}"
+    return f"replay-{day.isoformat()}{_weight_suffix(weights)}"
 
 
 def plan_id_for(day: date, weights: NeedWeights | None = None) -> str:
@@ -205,6 +227,8 @@ def _recipe_weights(recipe: Mapping[str, Any]) -> NeedWeights | None:
 
 
 def _build(recipe: dict[str, Any]) -> BuiltPlan:
+    if recipe.get("source") == SUPPLIED:
+        return _build_supplied(recipe)
     day = date.fromisoformat(recipe["day"])
     first, last = replay_window()
     if not first <= day <= last:
@@ -248,13 +272,15 @@ def build_replay_plan(
 def rebuild(recipe: Mapping[str, Any]) -> BuiltPlan:
     """Rebuild a stored plan from its recipe. Only recipes this module wrote can be rebuilt."""
     script = _script()
+    supplied = recipe.get("source") == SUPPLIED
     expected = {
-        "source": SOURCE,
+        "source": SUPPLIED if supplied else SOURCE,
         "replay": script.REPLAY,
         "scenario": script.SCENARIO,
-        "seed": script.SEED,
         "gate": GATE,
     }
+    if not supplied:
+        expected["seed"] = script.SEED
     differs = sorted(k for k, v in expected.items() if recipe.get(k) != v)
     try:
         _recipe_weights(recipe)
@@ -265,7 +291,10 @@ def rebuild(recipe: Mapping[str, Any]) -> BuiltPlan:
             f"Plan recipe cannot be rebuilt here (fields {differs or ['day', 'threshold']}); "
             f"this build makes {expected}"
         )
-    return _build(dict(recipe))
+    try:
+        return _build(dict(recipe))
+    except InvalidBookings as exc:
+        raise PlanRebuildError(f"Stored bookings can no longer be planned: {exc}") from exc
 
 
 def _served(plan: planner.DailyPlan) -> Counter[str]:
@@ -304,7 +333,7 @@ def compare_to_default(built: BuiltPlan, top: int = 10) -> dict[str, Any]:
     for the same day. Same trips, redistributed, so the changes sum to zero."""
     if _recipe_weights(built.recipe) is None:
         raise ValueError("This plan uses the default weights: there is nothing to compare")
-    default = build_replay_plan(date.fromisoformat(built.recipe["day"]), built.recipe["threshold"])
+    default = _build({k: v for k, v in built.recipe.items() if k != "weights"})
     before, after = _served(default.plan), _served(built.plan)
     names = group_names(sorted(set(before) | set(after)))
     rows = [
@@ -328,3 +357,177 @@ def compare_to_default(built: BuiltPlan, top: int = 10) -> dict[str, Any]:
         "all_changes": rows,
         "basis": "SIMULATION (same replay day, same trips; only the need weights differ)",
     }
+
+
+# --- plans from supplied bookings -------------------------------------------------------------
+
+_BOOKING_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9 _.:/()#-]{0,79}$")
+_FIELDS = {"booking_id", "section", "arrived_at", "consumer_id", "category", "tier"}
+_SHOWN_PROBLEMS = 10
+_ISO_HINT = "arrived_at must be an ISO date and time, for example 2026-10-03T05:30:00+05:30"
+
+
+def normalise_bookings(day: date, raw: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    """Check supplied bookings and put them in one canonical order, so the same bookings in any
+    order are the same plan. Raises InvalidBookings listing what is wrong (up to 10 problems)."""
+    top = PLAN_STORE_CONFIG.max_supplied_bookings
+    if not isinstance(raw, Sequence) or isinstance(raw, str | bytes) or len(raw) == 0:
+        raise InvalidBookings("Supply at least one booking")
+    if len(raw) > top:
+        raise InvalidBookings(f"Supply at most {top} bookings for one plan (got {len(raw)})")
+    setup = _setup()
+    home, mapping, entitlement = setup.ctx.network.home, setup.ctx.mapping, setup.ctx.entitlement
+    categories = sorted(ALLOCATION_CONFIG.booking_caps)
+    problems: list[str] = []
+    seen: set[str] = set()
+    rows: list[tuple[datetime, str, dict[str, Any]]] = []
+    for number, item in enumerate(raw, 1):
+        found: list[str] = []
+        if not isinstance(item, Mapping):
+            problems.append(f"booking {number}: not an object")
+            continue
+        extra = sorted(set(item) - _FIELDS)
+        if extra:
+            found.append(f"unknown field {', '.join(extra)}")
+        booking_id = item.get("booking_id")
+        if not isinstance(booking_id, str) or not _BOOKING_ID.match(booking_id):
+            found.append("booking_id must be 1 to 80 letters, digits, spaces or _ . : / ( ) # -")
+        elif booking_id in seen:
+            found.append(f"booking_id {booking_id} appears twice")
+        else:
+            seen.add(booking_id)
+        section = item.get("section")
+        if (
+            not isinstance(section, str)
+            or section not in home
+            or booking_groups.group_for(section, mapping) not in entitlement
+        ):
+            found.append("section is not an HMWSSB section with a station and need data")
+        arrived_at = item.get("arrived_at")
+        moment: datetime | None = None
+        if not isinstance(arrived_at, str):
+            found.append(_ISO_HINT)
+        else:
+            try:
+                moment = datetime.fromisoformat(arrived_at.replace("Z", "+00:00"))
+            except ValueError:
+                found.append(_ISO_HINT)
+            else:
+                if moment.tzinfo is None:
+                    found.append("arrived_at needs a time zone, for example +05:30")
+                    moment = None
+                elif moment.astimezone(IST).date() > day:
+                    found.append(f"arrived_at is after the plan day {day.isoformat()}")
+        consumer = item.get("consumer_id", booking_id)
+        if not isinstance(consumer, str) or not 1 <= len(consumer) <= 64:
+            found.append("consumer_id must be 1 to 64 characters")
+        category = item.get("category", "domestic")
+        if category not in ALLOCATION_CONFIG.booking_caps:
+            found.append(f"category must be one of {', '.join(categories)}")
+        tier = item.get("tier", 2)
+        if isinstance(tier, bool) or tier not in (0, 1, 2):
+            found.append("tier must be 0 (critical facility), 1 (no water on premises) or 2")
+        if found:
+            problems.append(f"booking {number}: " + "; ".join(found))
+        elif moment is not None:
+            rows.append(
+                (
+                    moment.astimezone(UTC),
+                    booking_id,
+                    {
+                        "booking_id": booking_id,
+                        "section": section,
+                        "arrived_at": moment.isoformat(),
+                        "consumer_id": consumer,
+                        "category": category,
+                        "tier": tier,
+                    },
+                )
+            )
+    if problems:
+        more = len(problems) - _SHOWN_PROBLEMS
+        shown = problems[:_SHOWN_PROBLEMS]
+        if more > 0:
+            shown.append(f"and {more} more bookings with problems")
+        raise InvalidBookings(" | ".join(shown))
+    rows.sort(key=lambda r: (r[0], r[1]))
+    return [r[2] for r in rows]
+
+
+def supplied_plan_id(
+    day: date, bookings: Sequence[Mapping[str, Any]], weights: NeedWeights | None = None
+) -> str:
+    """`plan-<day>-<8 hex of the bookings>`, plus the weights when they are not the defaults."""
+    rows = normalise_bookings(day, bookings)
+    blob = json.dumps(rows, sort_keys=True, separators=(",", ":")).encode()
+    plan_id = f"plan-{day.isoformat()}-{hashlib.sha256(blob).hexdigest()[:8]}"
+    weights = weights.validated() if weights is not None else None
+    if weights is not None and weights != NeedWeights.default():
+        plan_id += _weight_suffix(weights)
+    return plan_id
+
+
+def build_supplied_plan(
+    day: date,
+    bookings: Sequence[Mapping[str, Any]],
+    threshold: float | None = None,
+    weights: NeedWeights | None = None,
+) -> BuiltPlan:
+    """The DRAFT plan for the bookings an officer supplies for a day, gated by T9.
+
+    Capacity is the same ASSUMED fleet scenario as the replay (there is no live capacity feed),
+    need is Census 2011, and nothing carries over from an earlier day."""
+    script = _script()
+    recipe: dict[str, Any] = {
+        "source": SUPPLIED,
+        "replay": script.REPLAY,
+        "scenario": script.SCENARIO,
+        "day": day.isoformat(),
+        "gate": GATE,
+        "threshold": CONFIDENCE_CONFIG.threshold if threshold is None else threshold,
+        "bookings": normalise_bookings(day, bookings),
+    }
+    if weights is not None:
+        weights = weights.validated()
+        if weights != NeedWeights.default():
+            recipe["weights"] = weights.as_dict()
+    return _build_supplied(recipe)
+
+
+def _build_supplied(recipe: dict[str, Any]) -> BuiltPlan:
+    day = date.fromisoformat(recipe["day"])
+    threshold = float(recipe["threshold"])
+    weights = _recipe_weights(recipe)
+    rows = normalise_bookings(day, recipe["bookings"])
+    setup = _setup()
+    ctx = setup.ctx
+    pending = [
+        planner.PlannerBooking(
+            fair_queue.QueueBooking(
+                booking_id=row["booking_id"],
+                group=booking_groups.group_for(row["section"], ctx.mapping),
+                arrived_at=datetime.fromisoformat(row["arrived_at"]),
+                tier=row["tier"],
+                consumer_id=row["consumer_id"],
+                category=row["category"],
+            ),
+            ctx.network.home[row["section"]],
+        )
+        for row in rows
+    ]
+    inputs = planner.PlanInputs(
+        plan_id=supplied_plan_id(day, rows, weights),
+        day=day,
+        capacity=setup.capacity,
+        pending=pending,
+        entitlement=_entitlement(weights) or ctx.entitlement,
+        queue_states={},
+        scheduled=ctx.scheduled,
+        station_km=ctx.network.station_km,
+    )
+    events = _Events()
+    plan = planner.build_plan(inputs, t9_gate(threshold), events, _script().planner_now(day))
+    stored = {**recipe, "bookings": rows}
+    return BuiltPlan(
+        inputs, plan, _basis(threshold, weights, len(rows)), stored, tuple(events.events)
+    )

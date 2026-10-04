@@ -129,6 +129,7 @@ def test_summaries_come_from_the_rows(db: Engine) -> None:
     assert set(rows[0]) == {
         "plan_id", "day", "status", "basis", "flags_total", "checked_total", "created_at",
         "weights",
+        "source",
     }  # fmt: skip
     assert rows[0]["flags_total"] == len(first.plan.flags) and rows[0]["checked_total"] == 0
 

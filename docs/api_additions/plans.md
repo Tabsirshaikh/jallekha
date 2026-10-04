@@ -121,3 +121,34 @@ weighted one, so a list can label weighted plans without opening each.
 and `max_weight` (the largest weight a request may use), so a screen can start its sliders at the
 defaults and stop them at the maximum without copying the configuration.
 
+## Plans from supplied bookings (added 2026-10-04)
+
+There is no live booking feed (HMWSSB publishes monthly totals only), so an officer, or a later
+import job, supplies the day's bookings.
+
+### `POST /plans` with `bookings`
+`{"day": "2026-10-03", "bookings": [{"booking_id": "B-1", "section": "ADARSHNAGAR", "arrived_at":
+"2026-10-03T05:30:00+05:30"}, ...], "weights": {...}}` (`weights` optional, as above). Each booking:
+- `booking_id`: 1 to 80 letters, digits, spaces or `_ . : / ( ) # -`, unique in the request.
+- `section`: an HMWSSB section with a filling station and need data (the sections of
+  `data/derived/sandbox/section_station_km.csv`).
+- `arrived_at`: ISO date and time **with a time zone**, on or before the plan day (India time).
+- optional `consumer_id` (1 to 64 characters; default the booking id), `category` (`domestic`,
+  `apartment_5_24`, `apartment_25_200` or `commercial`; default `domestic`) and `tier` (0 critical
+  facility, 1 no water on premises, 2 other; default 2). Unknown fields are refused.
+
+At least 1 and at most 10,000 bookings (`max_supplied_bookings`). The day may be any day (no replay
+window). Capacity is the same ASSUMED fleet scenario as the replay (there is no live capacity feed),
+need comes from Census 2011, and nothing carries over from an earlier day. The plan id is
+`plan-<day>-<8 hex of the bookings>` (plus the weights suffix), so the same bookings in any order
+are the same plan: a repeat returns the stored plan (200) and logs nothing. Unusable bookings: 422
+with the problems listed (up to 10, by booking number), nothing stored. The plan_created ledger
+entry carries `source` and the number of bookings. The bookings are kept in the plan's recipe, so
+the plan rebuilds exactly after a restart. `POST /plans` without `bookings` still needs a day of
+the replay (404 otherwise).
+
+### Plan view and list: `source`, `bookings_supplied`
+`source` is `planner_replay` or `supplied_bookings`; `bookings_supplied` is the number of supplied
+bookings, or `null` for a replay plan. List rows also carry `source`. `basis.plan` says the
+bookings are as supplied and not verified here.
+
