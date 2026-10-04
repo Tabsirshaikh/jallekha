@@ -142,7 +142,7 @@ def test_delivery_routes_match_their_examples(client: TestClient) -> None:
     conforms(otp.json(), example("delivery_otp_request.post")["response"])
     assert "code" not in otp.text and "nonce" not in otp.text
     store = client.app.dependency_overrides[get_delivery_store]()
-    code = dl.issued_code(store.deliveries["dlv-1"], OTP_KEY)
+    code = dl.issued_code(store.get_delivery("dlv-1"), OTP_KEY)
     verify_examples = example("delivery_otp_verify.post")["response"]
     far = client.post(
         "/deliveries/dlv-1/otp/verify",
@@ -160,8 +160,8 @@ def test_delivery_routes_match_their_examples(client: TestClient) -> None:
     assert near["result"] == "verified" and near["delivery"]["sampled_residents"] > 0
     pending = client.get("/deliveries/dlv-1", headers=auth("officer")).json()
     assert pending["outcome_status"] == "pending"
-    state = store.deliveries["dlv-1"]
-    phones = {r.id: r.phone for r in store.stops["stop-0001"].residents}
+    state = store.get_delivery("dlv-1")
+    phones = {r.id: r.phone for r in store.get_stop("stop-0001").residents}
     for i, rid in enumerate(state.sampled_resident_ids):
         reply = client.post(
             "/deliveries/dlv-1/replies",

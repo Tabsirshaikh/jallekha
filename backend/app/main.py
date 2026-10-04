@@ -14,6 +14,7 @@ from app.routers import (
     ledger,
     notices,
     plans,
+    stops,
     system,
 )
 
@@ -36,3 +37,4 @@ app.include_router(forecast.router)
 app.include_router(plans.router)
 app.include_router(contests.router)
 app.include_router(deliveries.router)
+app.include_router(stops.router)

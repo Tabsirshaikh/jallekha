@@ -10,7 +10,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from app.services import delivery, planner
+from app.db import create_all, make_engine
+from app.services import planner
+from app.services.delivery_store import DeliveryStore
+from app.services.delivery_store import Stop as Stop  # re-exported for the routers and tests
 
 
 @dataclass
@@ -28,28 +31,21 @@ class PlanStore:
         self.plans[record.plan.plan_id] = record
 
 
-@dataclass(frozen=True)
-class Stop:
-    stop_id: str
-    lat: float
-    lon: float
-    representatives: tuple[delivery.Representative, ...]
-    residents: tuple[delivery.Resident, ...]
-
-
-@dataclass
-class DeliveryStore:
-    stops: dict[str, Stop] = field(default_factory=dict)
-    deliveries: dict[str, delivery.DeliveryState] = field(default_factory=dict)
-
-
 _PLANS = PlanStore()
-_DELIVERIES = DeliveryStore()
 
 
 def get_plan_store() -> PlanStore:
     return _PLANS
 
 
+# Stops and deliveries live in the database (services/delivery_store.py); re-exported here.
+_DELIVERIES: DeliveryStore | None = None
+
+
 def get_delivery_store() -> DeliveryStore:
+    global _DELIVERIES
+    if _DELIVERIES is None:
+        engine = make_engine()
+        create_all(engine)
+        _DELIVERIES = DeliveryStore(engine)
     return _DELIVERIES
