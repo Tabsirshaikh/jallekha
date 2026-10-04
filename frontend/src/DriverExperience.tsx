@@ -234,7 +234,7 @@ function LiveProof({ words, lw, locale, stops, driverId, stopId, onStopChange, p
       </>}
       {proof.error && <p role="alert" className="driver-feedback">{proof.error}</p>}
       {outcome && <section className={`driver-preview-outcome ${decided ?? ""}`} aria-label={lw.outcomeHeading}>
-        <small>{lw.outcomeHeading}</small>
+        <span>{lw.outcomeHeading}</span>
         <strong>{decided ? words[decided] : lw.pending}</strong>
         {decided && <span>{outcomes.find((row) => row.id === decided)?.rule}</span>}
         <span>{fill(lw.replies, { replies: number(outcome.replies), sampled: number(outcome.sampled_residents) })}</span>
