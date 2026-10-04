@@ -8,6 +8,7 @@ from app.models.delivery import Delivery
 from app.models.delivery_outcome import DeliveryOutcome
 from app.models.delivery_roster import DeliveryRoster
 from app.models.delivery_stop import DeliveryStop
+from app.models.delivery_version import DeliveryVersion
 from app.models.duplicate_link import DuplicateLink
 from app.models.intake_item import IntakeItemRecord
 from app.models.ledger_entry import LedgerEntryRecord
@@ -28,6 +29,7 @@ __all__ = [
     "DeliveryOutcome",
     "DeliveryRoster",
     "DeliveryStop",
+    "DeliveryVersion",
     "DuplicateLink",
     "IdTimestampMixin",
     "IntakeItemRecord",

@@ -10,6 +10,8 @@ replied).
 from __future__ import annotations
 
 import re
+from collections.abc import Iterator
+from contextlib import contextmanager
 from dataclasses import asdict
 from datetime import UTC, datetime
 from typing import Annotated, Any, Literal
@@ -23,6 +25,8 @@ from app.routers.common import invalid, not_found, page
 from app.routers.stores import DeliveryStore, Stop, get_delivery_store
 from app.services import delivery as dl
 from app.services import ledger_store
+from app.services.delivery_store import DeliveryConflict
+from app.services.keyed_lock import KeyedLocks
 from app.services.ledger_store import StoredLedger
 from app.services.sms import SmsSender, get_sms_sender
 
@@ -31,6 +35,21 @@ router = APIRouter(prefix="/deliveries", tags=["deliveries"])
 Driver = Depends(require_roles("driver"))
 Reader = Depends(require_roles("officer", "driver"))
 Store = Annotated[DeliveryStore, Depends(get_delivery_store)]
+
+# One change at a time per delivery inside this process (so a change and its ledger entry are
+# never half-applied); the stored version refuses a stale write from another process (409).
+_locks = KeyedLocks()
+
+
+@contextmanager
+def _guarded(delivery_id: str) -> Iterator[None]:
+    with _locks.hold(delivery_id):
+        try:
+            yield
+        except DeliveryConflict as exc:
+            raise HTTPException(409, str(exc)) from exc
+
+
 Offset = Annotated[int, Query(ge=0)]
 Limit = Annotated[int, Query(ge=1, le=ApiConfig.max_limit)]
 OutcomeStatus = Literal["pending", "Confirmed", "Disputed", "Unconfirmed", "Failed"]
@@ -108,52 +127,57 @@ def _otp_key(config: Any) -> str:
 @router.post("", dependencies=[Driver])
 def start(body: Start, store: Store, ledger: Ledger) -> Any:
     stop = _stop(store, body.stop_id)
-    if store.has_delivery(body.delivery_id):
-        raise HTTPException(409, f"Delivery {body.delivery_id} already exists")
-    try:
-        state = dl.start_delivery(
-            body.delivery_id, stop.stop_id, stop.lat, stop.lon, body.driver_id,
-            stop.representatives, ledger, datetime.now(UTC),
-        )  # fmt: skip
-    except ValueError as exc:
-        return invalid(str(exc))
-    store.put_delivery(state)
-    return view(state)
+    with _guarded(body.delivery_id):
+        if store.has_delivery(body.delivery_id):
+            raise HTTPException(409, f"Delivery {body.delivery_id} already exists")
+        try:
+            state = dl.start_delivery(
+                body.delivery_id, stop.stop_id, stop.lat, stop.lon, body.driver_id,
+                stop.representatives, ledger, datetime.now(UTC),
+            )  # fmt: skip
+        except ValueError as exc:
+            return invalid(str(exc))
+        store.put_delivery(state)
+        return view(state)
 
 
 @router.post("/{delivery_id}/otp", dependencies=[Driver])
 def request_otp(
     delivery_id: str, body: OtpRequest, store: Store, ledger: Ledger, sms: Sms, config: Config
 ) -> Any:
-    state = _state(store, delivery_id)
-    try:
-        state = dl.request_otp(
-            state, body.representative_id, _otp_key(config), sms, ledger, datetime.now(UTC)
-        )
-    except ValueError as exc:
-        return invalid(str(exc))
-    store.put_delivery(state)
-    return view(state)
+    key = _otp_key(config)
+    with _guarded(delivery_id):
+        state = _state(store, delivery_id)
+        try:
+            state = dl.request_otp(
+                state, body.representative_id, key, sms, ledger, datetime.now(UTC)
+            )
+        except ValueError as exc:
+            return invalid(str(exc))
+        store.put_delivery(state)
+        return view(state)
 
 
 @router.post("/{delivery_id}/otp/verify", dependencies=[Driver])
 def verify_otp(
     delivery_id: str, body: OtpVerify, store: Store, ledger: Ledger, sms: Sms, config: Config
 ) -> dict[str, Any]:
-    state = _state(store, delivery_id)
-    now = datetime.now(UTC)
-    state, result = dl.verify_otp(
-        state, body.code, body.lat, body.lon, _otp_key(config), ledger, now
-    )
-    if result == "verified":  # the resident check goes out as soon as the OTP is verified
-        stop = _stop(store, state.stop_id)
-        state = dl.send_resident_check(state, stop.residents, state.delivery_id, sms, ledger, now)
-    store.put_delivery(state)
-    return {
-        "result": result,
-        "location": asdict(dl.locate(state, body.lat, body.lon)),
-        "delivery": view(state),
-    }
+    key = _otp_key(config)
+    with _guarded(delivery_id):
+        state = _state(store, delivery_id)
+        now = datetime.now(UTC)
+        state, result = dl.verify_otp(state, body.code, body.lat, body.lon, key, ledger, now)
+        if result == "verified":  # the resident check goes out as soon as the OTP is verified
+            stop = _stop(store, state.stop_id)
+            state = dl.send_resident_check(
+                state, stop.residents, state.delivery_id, sms, ledger, now
+            )
+        store.put_delivery(state)
+        return {
+            "result": result,
+            "location": asdict(dl.locate(state, body.lat, body.lon)),
+            "delivery": view(state),
+        }
 
 
 def phone_key(phone: str) -> str:
@@ -167,27 +191,43 @@ def resident_reply(delivery_id: str, payload: dict[str, Any], store: Store, ledg
     sender, text = payload.get("from"), payload.get("text")
     if not isinstance(sender, str) or not isinstance(text, str):
         return invalid("A reply needs `from` and `text`")
-    state = _state(store, delivery_id)
-    stop = _stop(store, state.stop_id)
-    resident = next((r for r in stop.residents if phone_key(r.phone) == phone_key(sender)), None)
-    counted = False
-    if resident is not None:
-        state, counted = dl.record_response(state, resident.id, text, ledger, datetime.now(UTC))
-        store.put_delivery(state)
-    return {
-        "replies": [
-            {"resident_id": resident.id if resident else None, "text": text, "counted": counted}
-        ],
-        "delivery": view(state),
-    }
+    with _guarded(delivery_id):
+        state = _state(store, delivery_id)
+        stop = _stop(store, state.stop_id)
+        resident = next(
+            (r for r in stop.residents if phone_key(r.phone) == phone_key(sender)), None
+        )
+        counted = False
+        if resident is not None:
+            state, counted = dl.record_response(state, resident.id, text, ledger, datetime.now(UTC))
+            store.put_delivery(state)
+        return {
+            "replies": [
+                {
+                    "resident_id": resident.id if resident else None,
+                    "text": text,
+                    "counted": counted,
+                }
+            ],
+            "delivery": view(state),
+        }
 
 
 def _closed(store: DeliveryStore, state: dl.DeliveryState, ledger: Ledger) -> dl.DeliveryState:
-    """Decide the outcome if it can be decided now, and save it (once)."""
-    closed = dl.close_delivery(state, ledger, datetime.now(UTC))
-    if closed != state:
-        store.put_delivery(closed)
-    return closed
+    """Decide the outcome if it can be decided now, and save it (once).
+
+    Read again inside the lock, so a reply that arrived since `state` was read is not lost. If
+    another process saved first, the stored delivery is shown and the outcome is decided on a
+    later read."""
+    with _locks.hold(state.delivery_id):
+        fresh = store.get_delivery(state.delivery_id) or state
+        closed = dl.close_delivery(fresh, ledger, datetime.now(UTC))
+        if closed != fresh:
+            try:
+                store.put_delivery(closed)
+            except DeliveryConflict:
+                return store.get_delivery(state.delivery_id) or fresh
+        return closed
 
 
 @router.get("", dependencies=[Reader])

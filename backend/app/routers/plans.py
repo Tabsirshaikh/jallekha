@@ -9,6 +9,7 @@ plan is 404, a stored plan that no longer rebuilds to its digest is 409.
 from __future__ import annotations
 
 from collections.abc import Iterator
+from contextlib import contextmanager
 from dataclasses import asdict
 from datetime import UTC, date, datetime
 from functools import lru_cache
@@ -24,8 +25,9 @@ from app.config.confidence import CONFIDENCE_CONFIG
 from app.config.env import REPO_ROOT
 from app.routers import evidence
 from app.routers.common import csv_rows, invalid, not_found, page, typed
-from app.routers.stores import PlanRecord, PlanStore, get_plan_store
+from app.routers.stores import PlanConflict, PlanRecord, PlanStore, get_plan_store
 from app.services import confidence, explain, fair_queue, ledger_store, plan_builder, planner
+from app.services.keyed_lock import KeyedLocks
 from app.services.ledger_store import StoredLedger
 
 router = APIRouter(tags=["plans"])
@@ -40,6 +42,20 @@ def get_plan_ledger() -> StoredLedger:
 
 
 Ledger = Annotated[StoredLedger, Depends(get_plan_ledger)]
+
+
+# One change at a time per plan inside this process, so a check or approval and its ledger entry
+# are never half-applied; the stored version refuses a stale write from another process (409).
+_locks = KeyedLocks()
+
+
+@contextmanager
+def _guarded(plan_id: str) -> Iterator[None]:
+    with _locks.hold(plan_id):
+        try:
+            yield
+        except PlanConflict as exc:
+            raise HTTPException(409, str(exc)) from exc
 
 
 class Decision(BaseModel):
@@ -182,43 +198,45 @@ def plan_confidence(plan_id: str, plans: Plans) -> dict[str, Any]:
 
 @router.post("/plans/{plan_id}/groups/{group:path}/check", dependencies=[Officer])
 def check_group(plan_id: str, group: str, body: Decision, plans: Plans, ledger: Ledger) -> Any:
-    record = _record(plans, plan_id)
-    try:
-        checked = planner.mark_checked(
-            record.plan, group, body.officer_id, body.reason, ledger, datetime.now(UTC)
-        )
-    except ValueError as exc:
-        return invalid(str(exc))
-    record.plan = checked
-    plans.save(record)
-    entry = ledger.entries[-1]
-    return {
-        "plan_id": plan_id,
-        "group": group,
-        "checked": True,
-        "unchecked_flags": sorted(set(checked.flags) - set(checked.checked)),
-        "ledger_seq": entry.seq,
-        "ledger_event": entry.event_type,
-    }
+    with _guarded(plan_id):
+        record = _record(plans, plan_id)
+        try:
+            checked = planner.mark_checked(
+                record.plan, group, body.officer_id, body.reason, ledger, datetime.now(UTC)
+            )
+        except ValueError as exc:
+            return invalid(str(exc))
+        record.plan = checked
+        plans.save(record)
+        entry = ledger.entries[-1]
+        return {
+            "plan_id": plan_id,
+            "group": group,
+            "checked": True,
+            "unchecked_flags": sorted(set(checked.flags) - set(checked.checked)),
+            "ledger_seq": entry.seq,
+            "ledger_event": entry.event_type,
+        }
 
 
 @router.post("/plans/{plan_id}/approve", dependencies=[Officer])
 def approve(plan_id: str, body: Decision, plans: Plans, ledger: Ledger) -> Any:
-    record = _record(plans, plan_id)
-    if record.plan.status == "APPROVED":
-        raise HTTPException(409, f"Plan {plan_id} is already approved")
-    if not body.reason.strip():
-        return invalid("A reason is required")
-    try:
-        record.plan = planner.approve_plan(
-            record.plan, body.officer_id, body.reason, ledger, datetime.now(UTC)
-        )
-    except planner.PlanBlocked as exc:
-        raise HTTPException(409, str(exc)) from exc
-    except ValueError as exc:
-        return invalid(str(exc))
-    plans.save(record)
-    return plan_view(record)
+    with _guarded(plan_id):
+        record = _record(plans, plan_id)
+        if record.plan.status == "APPROVED":
+            raise HTTPException(409, f"Plan {plan_id} is already approved")
+        if not body.reason.strip():
+            return invalid("A reason is required")
+        try:
+            record.plan = planner.approve_plan(
+                record.plan, body.officer_id, body.reason, ledger, datetime.now(UTC)
+            )
+        except planner.PlanBlocked as exc:
+            raise HTTPException(409, str(exc)) from exc
+        except ValueError as exc:
+            return invalid(str(exc))
+        plans.save(record)
+        return plan_view(record)
 
 
 # --- explanations (T7) ---------------------------------------------------------------------------
