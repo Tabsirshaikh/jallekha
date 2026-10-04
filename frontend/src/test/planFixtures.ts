@@ -118,6 +118,7 @@ export function planServer(options: { userId?: string | null; plans?: boolean; a
     if (path === "/plans" && method === "GET") return Promise.resolve(json(stored ? listBody(Object.keys(checked).length, approval ? "APPROVED" : "DRAFT") : { total: 0, offset: 0, limit: 200, items: [] }));
     if (path === "/plans" && method === "POST") {
       const day = (body as { day?: string }).day;
+      // Only 2025-05-01 has replay data in this stand-in; any other day answers like a day outside the window.
       if (day !== "2025-05-01") return Promise.resolve(apiError(404, "not_found", `No replay data for ${day}: the replay covers 2025-03-01 to 2025-07-31`));
       const existed = stored;
       stored = true;
