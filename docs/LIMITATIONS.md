@@ -1,6 +1,6 @@
 # JalLekha 2.0: known limitations
 
-Status on `main` as of 2026-10-03 (after PRs #58 and #52). One section per feature of
+Status on `main` as of 2026-10-04 (after PRs #52, #57, #59, #60, #61 and #62). One section per feature of
 `docs/JALLEKHA_FINAL_SOLUTION.md`, then limits that cut across features, then what is not built yet.
 Sources: `docs/BRANCH_WORKLOG.md` ("Known limitations" of each branch), the solution document's
 Section 8, and the 2026-10-03 verification of the repo against the document.
@@ -20,7 +20,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 6. **Daily data is synthetic.** HMWSSB publishes monthly totals only. Daily arrivals, times of day, complaints, outages and delivery confirmations in the demo are SYNTHETIC (monthly totals stay exact).
 7. **Filling stations are stand-ins.** The count (90) is REAL, the positions are ASSUMED (booking-weighted k-means). HMWSSB publishes no station list with coordinates.
 8. **Fleet, trips and capacity are from news reports**, not official data [ASSUMED].
-9. **No authentication or API yet.** Roles (officer, driver, resident) arrive with T10. There is no live end-to-end path from a screen to the planner.
+9. **The API exists but most screens do not call it.** T10 is merged (34 routes, bearer-token roles officer, driver, resident and field worker, tokens from the environment only). Only the resident and field-worker screens call it; the atlas, forecast, plan, explanation, impact and report-card screens still read committed snapshots or labelled sample data, so there is no live end-to-end path from every screen. Plans and deliveries are held in memory (no plan store); the councillor role is [OPEN].
 10. **Translations are drafts.** Telugu, Urdu and Hindi wording needs native-speaker review. Alert and explanation wording is [OPEN].
 11. **No migrations.** New database columns need a fresh database or a manual column add.
 12. **Third-party warnings.** OR-Tools prints SWIG deprecation warnings on import (upstream).
@@ -34,7 +34,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - The **critical facilities column is empty** (`FACILITIES_UNAVAILABLE`): hospitals, clinics and schools (D9) were never loaded into the ward table.
 - 2 wards have partial Census coverage; Census for 2009 wards 115 and 116 (in Medak district) is not loaded.
 - Share of households away from water is a Census snapshot, not today's observation.
-- The Atlas screen (U5) reads a local snapshot (`frontend/src/data/u5Evidence.json`), not a live API (T10). Rebuild it with `scripts/frontend/build_u5_snapshot.py` whenever E2-E6 outputs change.
+- The Atlas screen (U5) reads a local snapshot (`frontend/src/data/u5Evidence.json`), not the live API (`GET /atlas/wards` exists). Rebuild it with `scripts/frontend/build_u5_snapshot.py` whenever E2-E6 outputs change.
 
 ### F2 Growth signal and 2025 population (E3, POP)
 - Buildings are not households or people. Office and mall growth inflates building trends (buildings +3.2%/yr, GHS-POP +1.2%/yr, HMWSSB connections +2.18%/yr).
@@ -48,7 +48,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - Bookings per 1,000 connections: one connection can serve many flats.
 - The Gini of 0.78 is exact at section level but depends on section definitions that were re-cut in 2026.
 - There is no "people within 500 m of a public tap" layer: public tap locations are not available.
-- The map screens (U5) use the same local snapshot; no live API (T10).
+- The map screens (U5) use the same local snapshot; the coverage routes exist but the screen does not call them.
 
 ### F4 Under-served Field-Check Screen (E5)
 - 107 wards screened, **6 candidates**, 38 wards left in data review (37 have no placed section).
@@ -63,15 +63,18 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - The U5 field-check cards show these candidates from the local snapshot, with each method's ratio listed separately.
 
 ### F5 Surge Forecast and Capacity Planner (T2)
-- **In progress (T2, PR #58).** The seasonal-naive baseline is reproduced (21.89% city MAPE, 35.12% section WAPE on the 2022-24 files); the protocol was recovered by reproduction and needs the owner's confirmation before the numbers go on slides.
-- On the longer portal history (to Jan 2026) seasonal naive scores 26.28% / 47.67% and the 80% interval covers only 0.77. Naive × growth is not selected (it does not beat the baseline on both measures).
-- **[NOT BUILT]** The gradient-boosting model: no scikit-learn or LightGBM dependency is agreed, and weather (D8) and groundwater (D7) data are not in the repo.
-- [OPEN] trips per tanker per day (the capacity check refuses to run without it), the model-selection rule, and Chronos-2.
+- **Built (T2, PR #58): baseline, backtest, reconciliation, intervals and capacity check.** The seasonal-naive baseline is reproduced (21.89% city MAPE, 35.12% section WAPE on the 2022-24 files). The protocol was recovered by reproduction, not from the lost review file, so the owner should confirm it before the numbers go on slides.
+- On the longer portal history (to Jan 2026) seasonal naive scores 26.28% / 47.67% and the 80% interval covers only 0.77. Naive x growth does not beat the baseline on both measures, so no candidate is selected: **nothing beats the baseline**.
+- **[NOT BUILT]** The gradient-boosting model with weather and groundwater: no scikit-learn or LightGBM dependency is agreed, and weather (D8) and groundwater (D7) data are not in the repo.
+- [OPEN] trips per tanker per day (the capacity planner refuses to run without it), the model-selection rule, and Chronos-2.
 - Short series (13 scored months per section, too few for 95% intervals); section names are not mapped across years, and the Feb/Mar 2026 re-cut breaks section-by-section comparison.
-- The U6 screen shows real monthly totals and a seasonal-naive benchmark; its forecast and capacity panels are SIMULATION fixtures until T2/T8 are wired through T10.
+- `GET /forecast` and `/forecast/backtest` serve the table. The U6 screen still shows real monthly totals, a seasonal-naive benchmark and SIMULATION fixtures for the forecast and capacity panels.
 
 ### F6 Shortage Early Warning (T8)
-- **[NOT BUILT]** Needs T2, groundwater data, and reservoir levels (D15, [OPEN]: only if a machine-readable source exists).
+- **Built (T8, PR #61):** 551 rows (section x month, 1 to 3 months after the forecast origin), each with a risk (low, medium, high, unknown) and a reason from its own numbers. `GET /shortage` serves it.
+- **Groundwater (D7) is not in the repo**, so every reason says "groundwater data unavailable" and the warning is a forecast-against-capacity warning only. Reservoir levels are off until Q2 is approved.
+- Capacity is ASSUMED (A8 fleet scenario: 1,150 tankers x 9 trips a day, 90 stand-in stations). 3 sections have no station, so their risk is `unknown`. Risk ratios (1.0 and 0.85) and the 80% bound rule are [OPEN].
+- Built on T2's forecast, which is a seasonal-naive baseline from before the Feb/Mar 2026 re-cut, so it inherits those limits.
 
 ---
 
@@ -102,7 +105,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - The 7-day cap, 3-day alert and the weight of debt in the queue are [ASSUMED].
 
 ### Daily planner (A7), station sharing, sandbox (A8)
-- The planner's **confidence gate is a stand-in** (`ProvisionalGate`): it flags only groups with no Census need data. The real gate is T9.
+- The planner still defaults to the stand-in `ProvisionalGate` (it flags only groups with no Census need data). T9's gate is merged and served by `GET /plans/{id}/confidence`, but is not yet the planner's default.
 - Routing needs officer-registered service points and critical-stop locations. Without a fleet, needs are listed as `unrouted`. Booked trips are single loads, not routed.
 - **Station trip sharing** (3 km) is a new operating idea. No source shows HMWSSB lending trips between stations [OPEN]. Radius 0 switches it off.
 - The sandbox uses 90 stand-in stations; straight-line km times 1.35 plus an in-section allowance, not real roads.
@@ -134,36 +137,40 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 ### F16 Explanations and contest (T7)
 - Counterfactuals change one input at a time. Reason and outcome codes and template wording are [OPEN].
 - Debt appears in explanations only when a `DebtAccount` is supplied.
-- **[NOT BUILT]** Explanation and contest screens (U8). No API (T10).
+- The explanation and contest screen (U8) uses synthetic examples and keeps contests in the browser (`localStorage`); the API routes (`/explain/...`, `/contests`) exist but the screen does not call them.
 
 ### F17 Confidence and defer-to-officer (T9)
-- **[NOT BUILT]** Only the stand-in gate exists. The target share (for example 90%) is [OPEN] with the owner.
+- **Built (T9, PR #59), threshold not calibrated.** Confidence is the minimum of the available signals (Census join quality and section location); low confidence keeps a group in the plan but flagged, and `approve_plan` refuses until an officer marks it checked.
+- The threshold is **PROVISIONAL 0.50**: on P2's replay the 0.90 target is met with nothing flagged and the match share does not rise with the threshold (`not_separable`), so no threshold can be chosen from that replay. P2 must supply a degraded-signal scenario.
+- At 0.50 the gate flags 60 of 152 groups (39%), about 38 a day for officers to check.
+- Three of the five planned signals are unavailable: data age, forecast interval width and evidence age.
 
 ### F18 Tamper-evident ledger (S3, T6)
 - Removing the last entry cannot be detected without a published head hash.
 - Needs `LEDGER_HMAC_KEY`; with no key the ledger refuses to write.
 
 ### F19 Policy sandbox and Impact page
-- See sandbox limits in section 3. **[NOT BUILT]** Impact page (U9).
+- See sandbox limits in section 3. The impact page (U9) shows the A8 results with REAL / DERIVED / SIMULATION badges, from a committed snapshot; `GET /impact` exists.
 
 ### F20 Open ward report cards
-- **[NOT BUILT]** No backend and no screen. In the tracker only U10 covers it, and it depends on T10.
+- The ward report card and SMS summary routes exist (`/wards/{id}/report-card`, `/sms-summary`) and the screen shows sample cards labelled as simulated. Deliveries, water debt and schedule are "not available yet" in the card because no plan or delivery store exists. SMS wording is English only; Telugu, Urdu and Hindi fall back to English until native speakers review them.
 
 ---
 
-## 5. Not built yet (from the 2026-10-03 verification)
+## 5. Not finished (2026-10-04)
 
-| Item | Owner | Blocks |
+| Item | Owner | Why |
 |---|---|---|
-| T2 gradient-boosting model and capacity check (in progress); T8 shortage warning | P3 | U6 live data |
-| T9 confidence gate | P3 | A7's real gate |
-| T10 API for all screens | P3 | U5, U6, U7, U10 |
-| U2 resident app (in progress); U3 and U4 built on fixtures, not live | P4 | demo steps 7 and 8 |
-| U7 plan screen (in progress), U8, U9, U10 screens; U5 and U6 built on snapshots/fixtures, not live | P4 | demo |
-| X1 README, slides, demo script, release tag | P4 | submission |
-| F20 report-card backend | unassigned | U10 |
-| Hospital and school data (D9) in the ward table | P1 area | F1 tier 0 and F10 |
-| Weather (D8) and groundwater (D7) data | P1/P3 | T2, T8 |
+| X1 release tag | P4 | README, slide outline and demo script are written; the tag waits for green CI and version approval |
+| Green CI | owner | GitHub Actions has not run since the account billing block (jobs fail in seconds with "recent account payments have failed"); everything merged was checked locally instead |
+| Screens wired to the live API | P4 | atlas, forecast, plan, explanation, impact and report-card screens use snapshots or sample data |
+| Plan and delivery stores | P3 | plans and deliveries live in memory, so nothing survives a restart and the report card cannot show deliveries, debt or schedule |
+| Gradient-boosting forecast | P3 | no agreed dependency; weather (D8) and groundwater (D7) data missing |
+| T9 threshold calibration | P2/P3 | needs a degraded-signal replay scenario from P2 |
+| Spatial models for E5 | P1 | BYM2 did not converge (see F4); peer + NB are used |
+| Hospital and school data (D9) in the ward table | P1 | critical-facility column is empty, so F1 tier 0 and F10 have no facility counts |
+| Filling-point and reservoir decisions (Q1, Q2) | owner | ON_HOLD |
+| Telugu, Urdu and Hindi wording review | native speakers | drafts only |
 
 ## 6. Solution document statements that are now out of date
 
