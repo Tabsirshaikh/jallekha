@@ -27,7 +27,7 @@ from app.services.ledger_store import StoredLedger
 router = APIRouter(tags=["plans"])
 
 Officer = Depends(require_roles("officer"))
-Reader = Depends(require_roles("officer", "resident"))
+Reader = Depends(require_roles("officer", "resident", "councillor"))
 Plans = Annotated[PlanStore, Depends(get_plan_store)]
 
 

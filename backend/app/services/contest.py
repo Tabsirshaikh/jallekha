@@ -19,10 +19,10 @@ import re
 import uuid
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
-from sqlalchemy import select, update
+from sqlalchemy import func, select, update
 from sqlalchemy.engine import Engine
 
 from app.config.explain import (
@@ -98,6 +98,35 @@ def _text(value: Any, name: str) -> tuple[str, str]:
     if len(cleaned) > EXPLAIN_CONFIG.max_reason_chars:
         raise ValueError(f"The {name} is longer than {EXPLAIN_CONFIG.max_reason_chars} characters")
     return cleaned, text_hash(cleaned)
+
+
+def _utc_iso(moment: datetime) -> str:
+    """ISO time in UTC; SQLite returns the stored UTC time without its zone."""
+    return (moment if moment.tzinfo else moment.replace(tzinfo=UTC)).isoformat()
+
+
+def _contest_view(row: Contest) -> dict[str, Any]:
+    return {
+        "contest_id": row.id,
+        "created_at": _utc_iso(row.created_at),
+        "filed_by": row.filed_by,
+        "role": row.role,
+        "target_type": row.target_type,
+        "target_id": row.target_id,
+        "reason_code": row.reason_code,
+        "reason_text": row.reason_text,
+        "status": row.status,
+    }
+
+
+def _reply_view(row: ContestReply) -> dict[str, Any]:
+    return {
+        "reply_id": row.id,
+        "created_at": _utc_iso(row.created_at),
+        "officer_id": row.officer_id,
+        "outcome_code": row.outcome_code,
+        "reason_text": row.reason_text,
+    }
 
 
 class ContestService:
@@ -228,6 +257,52 @@ class ContestService:
             reply_id,
         )
         return ContestResult("replied", contest_id, reply_id, seq)
+
+    # --- reading ---------------------------------------------------------------------------
+
+    def list_contests(
+        self,
+        *,
+        status: str | None = None,
+        target_type: str | None = None,
+        target_id: str | None = None,
+        filed_by: str | None = None,
+        offset: int = 0,
+        limit: int = 50,
+    ) -> tuple[list[dict[str, Any]], int]:
+        """Contests, newest first, narrowed by the given filters: (page of items, total).
+        The stored text is returned as stored (phone-like runs were removed when it was filed)."""
+        filters = [
+            (Contest.status, status),
+            (Contest.target_type, target_type),
+            (Contest.target_id, target_id),
+            (Contest.filed_by, filed_by),
+        ]
+        where = [column == value for column, value in filters if value is not None]
+        with self._sessions() as session:
+            total = session.scalar(select(func.count()).select_from(Contest).where(*where)) or 0
+            rows = session.scalars(
+                select(Contest)
+                .where(*where)
+                .order_by(Contest.created_at.desc(), Contest.id)
+                .offset(offset)
+                .limit(limit)
+            ).all()
+            return [_contest_view(row) for row in rows], total
+
+    def get_contest(self, contest_id: str) -> dict[str, Any] | None:
+        """One contest with its reply (`reply` is None while open); None if there is no such
+        contest."""
+        with self._sessions() as session:
+            contest = session.get(Contest, contest_id)
+            if contest is None:
+                return None
+            reply = session.scalars(
+                select(ContestReply).where(ContestReply.contest_id == contest_id)
+            ).first()
+            view = _contest_view(contest)
+            view["reply"] = _reply_view(reply) if reply else None
+            return view
 
     # --- ledger ----------------------------------------------------------------------------
 

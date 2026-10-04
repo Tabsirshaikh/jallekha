@@ -27,12 +27,14 @@ Config = Annotated[ApiConfig, Depends(get_api_config)]
 @dataclass(frozen=True)
 class Principal:
     role: str  # one of ROLES, "dev" or "gateway"
+    user_id: str | None = None  # from `API_TOKENS` role:token:user_id; None if the token has none
 
 
 def _match(token: str, candidates: dict[str, str]) -> str | None:
-    for known, role in candidates.items():
+    """The configured token equal to `token`, compared in constant time."""
+    for known in candidates:
         if hmac.compare_digest(token.encode(), known.encode()):
-            return role
+            return known
     return None
 
 
@@ -56,12 +58,13 @@ def require_roles(*roles: str) -> Callable[..., Principal]:
             raise HTTPException(401, "A bearer token is required")
         if config.dev_token and hmac.compare_digest(token.encode(), config.dev_token.encode()):
             return Principal("dev")
-        role = _match(token, config.tokens)
-        if role is None:
+        known = _match(token, config.tokens)
+        if known is None:
             raise HTTPException(401, "Unknown token")
+        role = config.tokens[known]
         if role not in roles:
             raise HTTPException(403, f"Role {role} may not call this endpoint")
-        return Principal(role)
+        return Principal(role, config.token_users.get(known))
 
     return dependency
 

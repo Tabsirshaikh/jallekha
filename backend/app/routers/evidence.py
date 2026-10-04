@@ -42,7 +42,7 @@ LAYERS = "data/derived/coverage/layers.json"
 IMPACT = "data/derived/sandbox/summary.json"
 
 Officer = Depends(require_roles("officer"))
-Reader = Depends(require_roles("officer", "resident"))
+Reader = Depends(require_roles("officer", "resident", "councillor"))
 Offset = Annotated[int, Query(ge=0)]
 Limit = Annotated[int, Query(ge=1, le=ApiConfig.max_limit)]
 
