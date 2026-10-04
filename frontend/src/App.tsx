@@ -1,13 +1,20 @@
-import { useState, type ReactNode } from "react";
+import { lazy, Suspense, useState, type ReactNode } from "react";
 import { localeNames, supportedLocales, useLocale, type MessageKey } from "./i18n";
+import DriverExperience from "./DriverExperience";
+import ResidentExperience from "./ResidentExperience";
+import FieldWorkerExperience from "./FieldWorkerExperience";
+const EvidenceExperience = lazy(() => import("./EvidenceExperience"));
+const ForecastExperience = lazy(() => import("./ForecastExperience"));
+const PlanExperience = lazy(() => import("./PlanExperience"));
 
-type Workspace = "officer" | "resident" | "driver";
+type Workspace = "officer" | "resident" | "fieldWorker" | "driver";
 type IconName = "overview" | "atlas" | "plan" | "impact" | "help" | "water" | "report" | "route" | "proof" | "settings" | "arrow" | "location" | "check";
 
 const navByWorkspace: Record<Workspace, { key: MessageKey; icon: IconName }[]> = {
   officer: [
     { key: "officerOverview", icon: "overview" },
     { key: "officerWaterAccess", icon: "atlas" },
+    { key: "officerForecast", icon: "impact" },
     { key: "officerAllocationPlan", icon: "plan" },
     { key: "officerImpact", icon: "impact" },
   ],
@@ -16,6 +23,10 @@ const navByWorkspace: Record<Workspace, { key: MessageKey; icon: IconName }[]> =
     { key: "residentRequests", icon: "water" },
     { key: "residentReport", icon: "report" },
     { key: "residentUpdates", icon: "impact" },
+  ],
+  fieldWorker: [
+    { key: "fieldWorkerNewReport", icon: "report" },
+    { key: "fieldWorkerQueue", icon: "water" },
   ],
   driver: [
     { key: "driverRoute", icon: "route" },
@@ -47,6 +58,7 @@ function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
 const workspaceNames: Record<Workspace, { title: MessageKey; description: MessageKey; eyebrow: MessageKey }> = {
   officer: { title: "officerConsole", description: "officerDescription", eyebrow: "operationsWorkspace" },
   resident: { title: "residentApp", description: "residentDescription", eyebrow: "communityAccess" },
+  fieldWorker: { title: "fieldWorkerApp", description: "fieldWorkerDescription", eyebrow: "fieldOperations" },
   driver: { title: "driverApp", description: "driverDescription", eyebrow: "fieldOperations" },
 };
 
@@ -57,13 +69,13 @@ function Brand() {
 
 function WorkspaceSwitcher({ value, onChange }: { value: Workspace; onChange: (workspace: Workspace) => void }) {
   const { t, locale, setLocale } = useLocale();
-  const workspaceLabel: Record<Workspace, MessageKey> = { officer: "officer", resident: "resident", driver: "driver" };
+  const workspaceLabel: Record<Workspace, MessageKey> = { officer: "officer", resident: "resident", fieldWorker: "fieldWorker", driver: "driver" };
   return (
     <div className="topbar-controls">
     <label className="language-picker"><span className="sr-only">{t("language")}</span><select aria-label={t("language")} value={locale} onChange={(event) => setLocale(event.target.value as (typeof supportedLocales)[number])}>{supportedLocales.map((item) => <option key={item} value={item}>{localeNames[item]}</option>)}</select></label>
-    <label className="mobile-workspace-picker"><span className="sr-only">{t("chooseWorkspace")}</span><select aria-label={t("chooseWorkspace")} value={value} onChange={(event) => onChange(event.target.value as Workspace)}>{(["officer", "resident", "driver"] as const).map((workspace) => <option key={workspace} value={workspace}>{t(workspaceLabel[workspace])}</option>)}</select></label>
+    <label className="mobile-workspace-picker"><span className="sr-only">{t("chooseWorkspace")}</span><select aria-label={t("chooseWorkspace")} value={value} onChange={(event) => onChange(event.target.value as Workspace)}>{(["officer", "resident", "fieldWorker", "driver"] as const).map((workspace) => <option key={workspace} value={workspace}>{t(workspaceLabel[workspace])}</option>)}</select></label>
     <div className="workspace-switcher" role="group" aria-label={t("chooseWorkspace")}>
-      {(["officer", "resident", "driver"] as const).map((workspace) => (
+      {(["officer", "resident", "fieldWorker", "driver"] as const).map((workspace) => (
         <button key={workspace} className={value === workspace ? "workspace-tab active" : "workspace-tab"} onClick={() => onChange(workspace)} aria-pressed={value === workspace}>
           {t(workspaceLabel[workspace])}
         </button>
@@ -90,7 +102,7 @@ function Sidebar({ workspace, activeItem, onNavigate }: { workspace: Workspace; 
       </nav>
       <div className="sidebar-bottom">
         <div className="offline-chip"><span className="status-dot" />{t("demoWorkspace")}</div>
-        <button className="profile-button"><span className="avatar">JL</span><span className="profile-copy"><strong>{t(workspace === "resident" ? "yourAccount" : workspace === "driver" ? "driverProfile" : "officerProfile")}</strong><small>{t("hyderabadTelangana")}</small></span><Icon name="settings" size={18} /></button>
+        <button className="profile-button"><span className="avatar">JL</span><span className="profile-copy"><strong>{t(workspace === "resident" ? "yourAccount" : workspace === "fieldWorker" ? "fieldWorkerProfile" : workspace === "driver" ? "driverProfile" : "officerProfile")}</strong><small>{t("hyderabadTelangana")}</small></span><Icon name="settings" size={18} /></button>
       </div>
     </aside>
   );
@@ -110,7 +122,7 @@ function SourceTag({ kind }: { kind: "REAL" | "DERIVED" | "SIMULATION" }) {
   return <span className={`source-tag ${kind.toLowerCase()}`}>{kind}</span>;
 }
 
-function OfficerHome() {
+function OfficerHome({ onNavigate }: { onNavigate: (key: MessageKey) => void }) {
   const { t } = useLocale();
   return (
     <>
@@ -123,43 +135,11 @@ function OfficerHome() {
         <article className="metric-card"><div className="metric-top"><span className="metric-icon amber"><Icon name="plan" /></span><SourceTag kind="SIMULATION" /></div><p className="metric-label">{t("allocationWorkspace")}</p><strong className="metric-value">{t("noPlanPending")}</strong><p className="metric-note">{t("officerReviewPlan")}</p></article>
       </div>
       <div className="content-grid">
-        <section className="panel focus-panel"><div className="panel-heading"><div><p className="eyebrow">{t("startHere")}</p><h2>{t("buildFairPicture")}</h2></div><span className="panel-mark"><Icon name="atlas" size={21} /></span></div><p className="panel-copy">{t("fairPictureCopy")}</p><button className="text-button">{t("openWaterAccess")} <Icon name="arrow" size={17} /></button><div className="mini-legend"><span><i className="legend-dot teal-dot" />{t("accessNeed")}</span><span><i className="legend-dot blue-dot" />{t("serviceHistory")}</span><span><i className="legend-dot amber-dot" />{t("needsReview")}</span></div></section>
+        <section className="panel focus-panel"><div className="panel-heading"><div><p className="eyebrow">{t("startHere")}</p><h2>{t("buildFairPicture")}</h2></div><span className="panel-mark"><Icon name="atlas" size={21} /></span></div><p className="panel-copy">{t("fairPictureCopy")}</p><button className="text-button" onClick={() => onNavigate("officerWaterAccess")}>{t("openWaterAccess")} <Icon name="arrow" size={17} /></button><div className="mini-legend"><span><i className="legend-dot teal-dot" />{t("accessNeed")}</span><span><i className="legend-dot blue-dot" />{t("serviceHistory")}</span><span><i className="legend-dot amber-dot" />{t("needsReview")}</span></div></section>
         <section className="panel checklist-panel"><div className="panel-heading"><div><p className="eyebrow">{t("yourWorkflow")}</p><h2>{t("planningChecklist")}</h2></div><span className="quiet-count">{t("checklistCount")}</span></div><ol className="checklist"><li className="complete"><span className="step-check"><Icon name="check" size={14} /></span><span><strong>{t("reviewEvidence")}</strong><small>{t("understandData")}</small></span></li><li><span className="step-number">2</span><span><strong>{t("comparePatterns")}</strong><small>{t("fieldCheckPrompt")}</small></span></li><li><span className="step-number">3</span><span><strong>{t("reviewProposedPlan")}</strong><small>{t("approvalReason")}</small></span></li></ol></section>
       </div>
       <p className="honesty-note"><span className="honesty-mark">i</span>{t("historicalApproximate")} {t("flagNotProof")}</p>
     </>
-  );
-}
-
-function ResidentHome() {
-  const { t } = useLocale();
-  return (
-    <div className="resident-page">
-      <section className="resident-hero"><div className="resident-hero-copy"><p className="eyebrow">{t("neighbourhoodHyderabad")}</p><h1>{t("waterSupportTitle")}</h1><p>{t("residentIntro")}</p><button className="button button-dark">{t("getHelp")} <Icon name="arrow" size={18} /></button></div><div className="water-art" aria-hidden="true"><span className="sun-orb" /><span className="water-drop"><Icon name="water" size={70} /></span><span className="art-ripple ripple-one" /><span className="art-ripple ripple-two" /></div></section>
-      <div className="resident-notice"><span className="notice-icon"><Icon name="location" size={18} /></span><span><strong>{t("chooseWardTitle")}</strong><small>{t("chooseWardDescription")}</small></span><button className="text-button">{t("chooseWard")} <Icon name="arrow" size={17} /></button></div>
-      <div className="section-heading resident-section-heading"><div><h2>{t("whatToDo")}</h2><p className="muted">{t("chooseOption")}</p></div></div>
-      <div className="action-grid">
-        <button className="action-card"><span className="action-icon teal"><Icon name="water" size={23} /></span><span className="action-copy"><strong>{t("trackRequest")}</strong><small>{t("trackRequestDescription")}</small></span><Icon name="arrow" size={18} /></button>
-        <button className="action-card"><span className="action-icon coral"><Icon name="report" size={23} /></span><span className="action-copy"><strong>{t("reportWaterIssue")}</strong><small>{t("reportWaterDescription")}</small></span><Icon name="arrow" size={18} /></button>
-        <button className="action-card"><span className="action-icon blue"><Icon name="impact" size={23} /></span><span className="action-copy"><strong>{t("seeWardUpdates")}</strong><small>{t("wardUpdatesDescription")}</small></span><Icon name="arrow" size={18} /></button>
-      </div>
-      <div className="human-help"><span className="help-avatar"><Icon name="help" size={21} /></span><span><strong>{t("speakToSomeone")}</strong><small>{t("fieldWorkerHelp")}</small></span><button className="button button-secondary">{t("askForHelp")}</button></div>
-      <p className="prototype-note">{t("residentDemoNotice")}</p>
-    </div>
-  );
-}
-
-function DriverHome() {
-  const { t } = useLocale();
-  return (
-    <div className="driver-page">
-      <div className="driver-heading"><div><p className="eyebrow">{t("driverWorkspace")}</p><h1>{t("yourWorkday")}</h1><p className="muted">{t("driverIntro")}</p></div><span className="driver-status"><span className="status-dot" />{t("ready")}</span></div>
-      <section className="driver-route-card"><div className="route-card-top"><div><span className="route-label">{t("todaysRoute")}</span><h2>{t("noRouteAssigned")}</h2></div><span className="route-icon"><Icon name="route" size={23} /></span></div><p>{t("routeWaitDescription")}</p><div className="route-summary"><div><small>{t("stops")}</small><strong>—</strong></div><div><small>{t("firstStop")}</small><strong>—</strong></div><div><small>{t("routeStatus")}</small><strong>{t("waiting")}</strong></div></div></section>
-      <div className="driver-section-title"><h2>{t("atEachStop")}</h2><p className="muted">{t("stopIntro")}</p></div>
-      <div className="driver-steps"><article className="driver-step"><span className="driver-step-icon"><Icon name="location" /></span><div><strong>{t("arriveAtStop")}</strong><p>{t("confirmLocation")}</p></div><span className="step-number">1</span></article><article className="driver-step"><span className="driver-step-icon"><Icon name="proof" /></span><div><strong>{t("confirmDeliveryOtp")}</strong><p>{t("askRepresentative")}</p></div><span className="step-number">2</span></article><article className="driver-step"><span className="driver-step-icon"><Icon name="check" /></span><div><strong>{t("recordOutcome")}</strong><p>{t("saveOutcome")}</p></div><span className="step-number">3</span></article></div>
-      <div className="driver-footer-note"><Icon name="help" size={18} /><span>{t("gpsHelp")}</span><button className="text-button">{t("getHelp")}</button></div>
-      <p className="prototype-note">{t("driverDemoNotice")}</p>
-    </div>
   );
 }
 
@@ -180,9 +160,9 @@ export default function App() {
       <div className="main-column">
         <header className="topbar"><div className="mobile-brand"><Brand /></div><div className="topbar-context"><span className="topbar-kicker">JALLEKHA 2.0</span><span className="topbar-divider">/</span><span>{t(meta.title)}</span></div><WorkspaceSwitcher value={workspace} onChange={changeWorkspace} /><button className="help-button" aria-label={t("help")}><Icon name="help" size={20} /></button></header>
         <MobileNavigation workspace={workspace} activeItem={activeItem} onNavigate={setActiveItem} />
-        <main className={`page-content ${workspace}-content`}>
+        <main className={`page-content ${workspace}-content ${workspace === "officer" && activeItem === "officerWaterAccess" ? "officer-evidence-content" : workspace === "officer" && activeItem === "officerForecast" ? "officer-forecast-content" : workspace === "officer" && activeItem === "officerAllocationPlan" ? "officer-plan-content" : ""}`}>
           <div className="page-title-mobile"><p className="eyebrow">{t(meta.eyebrow)}</p><h1>{t(meta.title)}</h1><p className="muted">{t(meta.description)}</p></div>
-          {activeItem !== navByWorkspace[workspace][0].key ? <PlaceholderPage workspace={workspace} pageKey={activeItem} /> : workspace === "officer" ? <OfficerHome /> : workspace === "resident" ? <ResidentHome /> : <DriverHome />}
+          {workspace === "driver" ? <DriverExperience page={activeItem === "driverProof" ? "proof" : activeItem === "help" ? "help" : "route"} onNavigate={setActiveItem} /> : workspace === "resident" ? <ResidentExperience page={activeItem === "residentReport" ? "report" : activeItem === "residentRequests" ? "requests" : activeItem === "residentUpdates" ? "ward" : "home"} onNavigate={setActiveItem} /> : workspace === "fieldWorker" ? <FieldWorkerExperience page={activeItem === "fieldWorkerQueue" ? "queue" : "report"} onNavigate={setActiveItem} /> : activeItem === "officerWaterAccess" ? <Suspense fallback={<p className="muted" role="status">{t("loadingEvidence")}</p>}><EvidenceExperience /></Suspense> : activeItem === "officerForecast" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><ForecastExperience /></Suspense> : activeItem === "officerAllocationPlan" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><PlanExperience /></Suspense> : activeItem !== navByWorkspace[workspace][0].key ? <PlaceholderPage workspace={workspace} pageKey={activeItem} /> : <OfficerHome onNavigate={setActiveItem} />}
         </main>
         <footer className="app-footer"><span>JalLekha <span className="footer-separator">·</span> {t("footerTagline")}</span><span>{t("footerPromise")}</span></footer>
       </div>

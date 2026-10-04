@@ -3,12 +3,12 @@
     "data/derived/equity/summary.json": "6daec4e3e762a0b02074086fbca73e5e64bad001f30baf487d308a1230d1768e",
     "data/derived/equity/wards.csv": "ca868e6b2a1493da88ac1ac8fdf070ff94667ad569e367869ff3a163ff9dc7c1",
     "data/derived/evidence/ward_evidence.csv": "55283537df47923deca25f8347c46e4d9c5455089527a36f3e6632ab4e2cc54c",
-    "data/derived/underserved/field_checks.json": "9a1e2a003159085f229561c1c1f458cfe2b5bc6171767d0b19fecfcb006453e7",
+    "data/derived/underserved/field_checks.json": "c671768f230d81fffcff8baa8969299f731e2a4577dc7773eb4414fc0f12217e",
     "data/raw/geography/datameet/ghmc-wards.geojson": "3fdfef8e787ed543d816fee36a6097c350c4dff2423aae7fa203bb49cbd6edc2"
   },
   "outputs_sha256": {
     "data/derived/coverage/booking_coverage.geojson": "2a9088bf18cdec2f6a468c011cca8be5fec67b21a7ab9d7f004964ea844bac00",
-    "data/derived/coverage/field_check_status.geojson": "b8b69d2f68bbced8a1b29d964c49e0d94e91e5bc0f90dbd0ebdf38c9ccec144b",
+    "data/derived/coverage/field_check_status.geojson": "1e8abc6b6590e90a64a3e34ddcd0d6616004d8d03cee61514a40c528b6cf087d",
     "data/derived/coverage/layers.json": "932eea0d2d5d9856562af1cc5f8dae19baba59479dda3310acddb62705618c67",
     "data/derived/coverage/water_access_evidence.geojson": "0437fce078a105419d056ed28daed884cf1ac37f796304b4dc9333290fa782ab"
   },

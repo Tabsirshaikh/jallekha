@@ -1665,12 +1665,6 @@
           "value": 0.1099087784208379
         },
         {
-          "basis": "REAL",
-          "code": "WAD_ABOVE_COHORT_QUANTILE",
-          "threshold": 0.107328,
-          "value": 0.170883
-        },
-        {
           "basis": "DERIVED",
           "code": "LOW_OBSERVED_REFERENCE_RATIO",
           "model": "NB",
@@ -1759,12 +1753,6 @@
           "value": 0.018738585569999664
         },
         {
-          "basis": "REAL",
-          "code": "WAD_ABOVE_COHORT_QUANTILE",
-          "threshold": 0.107328,
-          "value": 0.145994
-        },
-        {
           "basis": "DERIVED",
           "code": "LOW_OBSERVED_REFERENCE_RATIO",
           "model": "NB",
@@ -1850,12 +1838,6 @@
           "model": "PEER_MEDIAN",
           "threshold": 0.11480323076416553,
           "value": 0.10404233740626066
-        },
-        {
-          "basis": "REAL",
-          "code": "WAD_ABOVE_COHORT_QUANTILE",
-          "threshold": 0.107328,
-          "value": 0.199238
         },
         {
           "basis": "DERIVED",
@@ -1946,12 +1928,6 @@
           "value": 0.008775228079909466
         },
         {
-          "basis": "REAL",
-          "code": "WAD_ABOVE_COHORT_QUANTILE",
-          "threshold": 0.107328,
-          "value": 0.109871
-        },
-        {
           "basis": "DERIVED",
           "code": "LOW_OBSERVED_REFERENCE_RATIO",
           "model": "NB",
@@ -2040,12 +2016,6 @@
           "value": 0.07425222100665126
         },
         {
-          "basis": "REAL",
-          "code": "WAD_ABOVE_COHORT_QUANTILE",
-          "threshold": 0.107328,
-          "value": 0.167472
-        },
-        {
           "basis": "DERIVED",
           "code": "LOW_OBSERVED_REFERENCE_RATIO",
           "model": "NB",
@@ -2132,12 +2102,6 @@
           "model": "PEER_MEDIAN",
           "threshold": 0.11480323076416553,
           "value": 0.025983338170181596
-        },
-        {
-          "basis": "REAL",
-          "code": "WAD_ABOVE_COHORT_QUANTILE",
-          "threshold": 0.107328,
-          "value": 0.283957
         },
         {
           "basis": "DERIVED",
@@ -6399,12 +6363,6 @@
           "value": 0.1099087784208379
         },
         {
-          "basis": "REAL",
-          "code": "WAD_ABOVE_COHORT_QUANTILE",
-          "threshold": 0.107328,
-          "value": 0.170883
-        },
-        {
           "basis": "DERIVED",
           "code": "LOW_OBSERVED_REFERENCE_RATIO",
           "model": "NB",
@@ -6491,12 +6449,6 @@
           "model": "PEER_MEDIAN",
           "threshold": 0.11480323076416553,
           "value": 0.018738585569999664
-        },
-        {
-          "basis": "REAL",
-          "code": "WAD_ABOVE_COHORT_QUANTILE",
-          "threshold": 0.107328,
-          "value": 0.145994
         },
         {
           "basis": "DERIVED",
@@ -9208,12 +9160,6 @@
           "value": 0.10404233740626066
         },
         {
-          "basis": "REAL",
-          "code": "WAD_ABOVE_COHORT_QUANTILE",
-          "threshold": 0.107328,
-          "value": 0.199238
-        },
-        {
           "basis": "DERIVED",
           "code": "LOW_OBSERVED_REFERENCE_RATIO",
           "model": "NB",
@@ -9791,12 +9737,6 @@
           "value": 0.008775228079909466
         },
         {
-          "basis": "REAL",
-          "code": "WAD_ABOVE_COHORT_QUANTILE",
-          "threshold": 0.107328,
-          "value": 0.109871
-        },
-        {
           "basis": "DERIVED",
           "code": "LOW_OBSERVED_REFERENCE_RATIO",
           "model": "NB",
@@ -10352,12 +10292,6 @@
           "value": 0.07425222100665126
         },
         {
-          "basis": "REAL",
-          "code": "WAD_ABOVE_COHORT_QUANTILE",
-          "threshold": 0.107328,
-          "value": 0.167472
-        },
-        {
           "basis": "DERIVED",
           "code": "LOW_OBSERVED_REFERENCE_RATIO",
           "model": "NB",
@@ -10778,12 +10712,6 @@
           "model": "PEER_MEDIAN",
           "threshold": 0.11480323076416553,
           "value": 0.025983338170181596
-        },
-        {
-          "basis": "REAL",
-          "code": "WAD_ABOVE_COHORT_QUANTILE",
-          "threshold": 0.107328,
-          "value": 0.283957
         },
         {
           "basis": "DERIVED",

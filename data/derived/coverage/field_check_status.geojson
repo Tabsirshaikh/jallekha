@@ -12763,7 +12763,6 @@
         "observed_bookings": 405,
         "reason_codes": [
           "LOW_OBSERVED_REFERENCE_RATIO",
-          "WAD_ABOVE_COHORT_QUANTILE",
           "LOW_OBSERVED_REFERENCE_RATIO",
           "WAD_ABOVE_COHORT_QUANTILE",
           "CAD_ABOVE_COHORT_MEDIAN",
@@ -12943,7 +12942,6 @@
         "observed_bookings": 24,
         "reason_codes": [
           "LOW_OBSERVED_REFERENCE_RATIO",
-          "WAD_ABOVE_COHORT_QUANTILE",
           "LOW_OBSERVED_REFERENCE_RATIO",
           "WAD_ABOVE_COHORT_QUANTILE",
           "CAD_ABOVE_COHORT_MEDIAN",
@@ -23383,7 +23381,6 @@
         "observed_bookings": 151,
         "reason_codes": [
           "LOW_OBSERVED_REFERENCE_RATIO",
-          "WAD_ABOVE_COHORT_QUANTILE",
           "LOW_OBSERVED_REFERENCE_RATIO",
           "WAD_ABOVE_COHORT_QUANTILE",
           "CAD_ABOVE_COHORT_MEDIAN",
@@ -24999,7 +24996,6 @@
         "observed_bookings": 11,
         "reason_codes": [
           "LOW_OBSERVED_REFERENCE_RATIO",
-          "WAD_ABOVE_COHORT_QUANTILE",
           "LOW_OBSERVED_REFERENCE_RATIO",
           "WAD_ABOVE_COHORT_QUANTILE",
           "CAD_ABOVE_COHORT_MEDIAN",
@@ -26861,7 +26857,6 @@
         "observed_bookings": 11,
         "reason_codes": [
           "LOW_OBSERVED_REFERENCE_RATIO",
-          "WAD_ABOVE_COHORT_QUANTILE",
           "LOW_OBSERVED_REFERENCE_RATIO",
           "WAD_ABOVE_COHORT_QUANTILE",
           "CAD_ABOVE_COHORT_MEDIAN",
@@ -28370,7 +28365,6 @@
         "observed_bookings": 31,
         "reason_codes": [
           "LOW_OBSERVED_REFERENCE_RATIO",
-          "WAD_ABOVE_COHORT_QUANTILE",
           "LOW_OBSERVED_REFERENCE_RATIO",
           "WAD_ABOVE_COHORT_QUANTILE",
           "CAD_ABOVE_COHORT_MEDIAN",

@@ -45,6 +45,70 @@ The pull-request description must summarize the same information and link to thi
 - **Handoff / next step:** After U1 review/merge, start U2 once P3 T4 (intake) is ready. U3 follows U2; U4 also waits for P3 T3 delivery proof.
 - **Pull request:** pending.
 
+## `feat/u2-resident` — `U2`
+
+- **Owner / date:** P4, 2026-10-02.
+- **Purpose:** Build the resident-facing reporting and tracking experience with an offline-first queue.
+- **What we found:** P3's T4 intake batch endpoint accepts app items with `client_id`, `channel`, `category`, `text`, `language_hint`, and `area_id`; it returns per-item outcomes. There is no resident-facing delivery-code or ward-information API in `main`. U1 is merged; T4's implementation is present via PR #37, though its tracker row remains `IN_REVIEW`.
+- **What we changed:** Added English, Telugu, Urdu and Hindi resident flows for issue reports, request tracking and an area card. Reports persist in IndexedDB, can include device location only after the resident opts in, and sync idempotently through T4's `/intake/batch` contract when online; the dev server proxies `/intake` to the local API. Added a web manifest and service worker for cached app-shell use. The UI explicitly identifies local-only reports and unavailable live delivery/ward data.
+- **Validation:** `git diff --check` passes. `.github/workflows/p4-u2.yml` runs frontend lint and production build. Local UI/test/build validation has not been run.
+- **Known limitations:** Live delivery-code assignment and verified ward service information need backend/API support. Intake submission also needs the API running and reachable at `/intake/batch`. All translations are drafts pending native-speaker review.
+- **Handoff / next step:** Coordinate with P3 on resident-facing delivery-code and ward-information API shapes; then connect the card to verified data.
+- **Pull request:** pending.
+
+## `feat/u3-field` — `U3`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Give field workers a multilingual way to record water issues for households and sync them after offline visits.
+- **What we changed:** Added a dedicated field-worker workspace with an issue form, household reference or explicitly shared location, report-language selection, sample report, and per-record IndexedDB sync queue. Online and manual retries post to T4's `/intake/batch` shape with stable client ids and original client timestamps. Until T10 authentication exists, the UI uses `DEMO-FW-01` and marks every submitted record `is_synthetic: true`.
+- **Validation:** Frontend lint and production build pass. `git diff --check` passes. No live field-worker authentication was available, so the endpoint contract is exercised only by the UI implementation and CI build checks.
+- **Known limitations:** Worker identity is a demo fixture; all submitted records are synthetic and must not be treated as operational reports. GPS is optional and requested only after the worker chooses it. Native-speaker review is still needed for translated wording.
+- **Handoff / next step:** Replace the demo identity with T10's authenticated worker identity before operational use; preserve the offline client id and sync state.
+- **Pull request:** pending.
+
+## `feat/u4-driver` — `U4`
+
+- **Owner / date:** P4, 2026-10-02.
+- **Purpose:** Build the driver route, arrival and delivery-proof screens.
+- **What we found:** T3's service exposes server-side geofence and OTP verification and four outcomes (`Confirmed`, `Disputed`, `Unconfirmed`, `Failed`), but main has no driver or delivery API router. R-P4 requires clear synthetic labels and no false claims about live service.
+- **What we changed:** Added English, Telugu, Urdu and Hindi driver route and delivery-proof screens, with three visibly synthetic stops and a preview-only arrival action. A local fixture flow uses the displayed demo OTP (`123456`) and a selectable simulated resident response to demonstrate all four T3 outcomes; the code is cleared and nothing is sent or persisted.
+- **Validation:** Frontend lint and production build pass. `.github/workflows/p4-u4.yml` repeats both checks. UI and test suite have not been run locally.
+- **Known limitations:** This is a fixture-backed demonstration, not live route assignment, GPS geofence confirmation, OTP verification, resident messaging or ledger persistence. Live API integration remains a follow-up after P3 provides endpoints.
+- **Handoff / next step:** U4 preview scope is complete. Integrate the real route / arrival / OTP endpoints when available, preserving server-side geofence and outcome decisions.
+- **Pull request:** pending.
+
+## `feat/u5-evidence` — `U5`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Give officers an atlas for historical water-access and growth evidence, booking equity, and under-served field-check hypotheses.
+- **What we found:** Merged E2–E6 outputs include ward evidence and historical polygons, but the Census join is approximate, the ward geography is incomplete and historical, section-to-ward booking placement is approximate, and field-check flags are hypotheses rather than ground truth. T10 is not needed to render this local snapshot.
+- **What we changed:** Replaced the officer Water Access placeholder with a localized, lazy-loaded evidence experience. It includes a selectable 145-polygon historical ward map, ward search and evidence details, Census 2011 water-access context, Open Buildings 2016–2023 building-change signals, exact section-level booking concentration, approximate ward booking rates, and E5 field-check candidates with reason values and thresholds. `scripts/frontend/build_u5_snapshot.py` regenerates the local JSON snapshot from merged E2–E6 outputs.
+- **Validation:** Frontend lint, production build, and `git diff --check` pass. The production build splits U5 into a separate evidence chunk. Added `.github/workflows/p4-u5.yml` to repeat lint and build in CI.
+- **Known limitations:** The map is the incomplete `GHMC_2016_150` historical scheme, not current boundaries. Census values use an approximate 2009-to-2016 crosswalk and refer to 2011. Open Buildings indicates building change only, not population growth. Citywide section booking totals are exact; ward rates use approximate section placement. Field-check flags are screening hypotheses and do not establish unmet need, neglect, or entitlement. Snapshot data must be regenerated when source outputs change; no live T10 integration is included.
+- **Handoff / next step:** Refresh the generated snapshot from reviewed E2–E6 outputs and connect T10 when its API contract is ready. Keep unavailable metrics null and preserve the historical/approximate labels.
+- **Pull request:** pending.
+
+## `feat/u6-forecast` — `U6`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Show observed tanker demand, forecast ranges and shortage warning signals to officers.
+- **What we found:** The Telangana Open Data Portal tanker files contain monthly city totals from January 2022 through August 2026, with December 2022 empty. T2 and T8 remain TODO; the repository records seasonal-naive backtest errors of 21.9% city MAPE and 35.1% section WAPE but does not document the exact protocol. GHMC groundwater station coverage and extraction/licence are unconfirmed; no verified reservoir series is available.
+- **What we changed:** Added a localized officer screen with a real monthly demand chart, latest/peak actuals, the documented baseline benchmark and accuracy caveat, plus 80%/90% illustrative range fixtures and demo-capacity shortage scenarios. The UI labels history REAL, benchmark DERIVED, and projections/capacity SIMULATION. `scripts/frontend/build_u6_snapshot.py` regenerates the snapshot from the portal CSVs and records the missing month as null. Added `.github/workflows/p4-u6.yml`.
+- **Validation:** Frontend lint, production build, and `git diff --check` pass. CI workflow repeats frontend lint and build. No tests were run.
+- **Known limitations:** Demo forecast intervals are not calibrated outputs, the capacity threshold is illustrative, and shortage cards are not operational warnings. Accuracy benchmarks are historical and their protocol is undocumented. Groundwater and reservoir inputs are unavailable; T2/T8 APIs are not connected.
+- **Handoff / next step:** Replace fixtures with T2 forecast and backtest results plus T8 risk output when those tasks land. Confirm groundwater coverage/licence and fleet trip capacity before showing operational risk.
+- **Pull request:** pending.
+
+## `feat/u7-plan` — `U7`
+
+- **Owner / date:** P4, 2026-10-03.
+- **Purpose:** Let an officer review the daily allocation queue, scheduled trips, priority weights, confidence flags, and a reason-gated approval.
+- **What we changed:** Added a four-language officer plan screen with a synthetic queue and schedule, adjustable need/service-gap/debt weights, an explicit “who gains” comparison, a flagged group that requires a manual review tick, and an approval reason field. The approval confirmation is local to the preview; no API, dispatch, entitlement, or ledger is changed. Connected the view to officer navigation and added a dedicated CI workflow.
+- **Validation:** Frontend lint and production build pass; `git diff --check` passes. No tests were run.
+- **Known limitations:** T10 plan/approval API integration is not available. All groups, values, trips, schedule, scores and resulting approval are SIMULATION fixtures; weighting is not a validated policy. Translation strings need native-speaker review.
+- **Handoff / next step:** Replace preview fixtures with A7/T10 responses when the API is available. Preserve server-side confidence/approval gates and ledger behavior.
+- **Pull request:** pending.
+
 ## `research/p1` — `R-P1`
 
 - **Owner / date:** P1 (Yaseer), 2026-10-01.
@@ -741,6 +805,37 @@ The pull-request description must summarize the same information and link to thi
   - Routing needs registered service points (the registry starts empty) and officer-entered locations for critical stops.
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/50
 
+## `feat/t2-forecast` — `T2`
+
+- **Owner / date:** P3, 2026-10-03.
+- **Purpose:** Forecast and backtest (F5): monthly HMWSSB bookings per section and city, 12 months ahead, with a reproduced seasonal-naive baseline, a rolling-origin backtest, bottom-up reconciliation, split-conformal intervals and a capacity check.
+- **What we found:**
+  - `V-VERIFY_REVIEW.md`, which recorded how 21.9% / 35.1% were computed, was never found. The protocol was recovered by reproduction on 2026-10-03 and confirmed by Padmaja: `noofbookings`; seasonal naive (same month a year earlier); Dec 2022 missing, not zero, so Dec 2023 is not scored (13 months, Jan 2023 - Feb 2024); all sections, missing = 0; city MAPE = mean of monthly errors; section WAPE pooled. Result 21.89% / 35.12% on the S2 files. `delivered` and both-years sections also land within 0.1 pp; Dec 2022 as zero and per-month WAPE do not.
+  - On the longer D1b portal history (to Jan 2026, before the Feb/Mar 2026 re-cut) seasonal naive scores 26.28% / 47.67%, well above the S2 window; the 80% interval covers only 0.77 there. Section names change every year (no mapping applied).
+  - Naive x growth beats the baseline on portal city MAPE (19.77 vs 26.28) but not on section WAPE (48.90 vs 47.67), and is worse on both in S2, so it is not selected.
+  - `tasks.py setup` installs no scikit-learn or lightgbm, and weather (D7) / groundwater (D8) data are not in the repo, so the global gradient-boosting model is not run.
+  - `main` at `d12e4fd` is green on CI; locally (Windows) P2's two A8 tests fail (see Validation).
+- **What we changed:**
+  - `docs/features.csv` / `docs/P3_FEATURES.md` status rows: T7 DONE, T2 IN_PROGRESS (own commit).
+  - `backend/app/config/forecast.py`: the recovered protocol with its date; T2 settings (growth window, coverage minimums, `forecast_table_note`, `model_selection_rule` OPEN); `trips_per_tanker_per_day` OPEN with no default.
+  - `backend/app/services/forecast.py`: panel loader (P2's `hmwssb.read_rows`, unchanged), baseline protocol, seasonal naive, naive x growth, leak-proof rolling backtest, bottom-up reconciliation, split-conformal intervals, model selection, capacity planner, forecast table.
+  - `scripts/forecast/run_backtest.py`; outputs `data/derived/forecast_backtest.csv` and `data/derived/forecast_table.csv` (every derived column has a `_basis`; the table is labelled as using section names from before the Feb/Mar 2026 re-cut, so Feb 2026 onwards cannot be compared section by section with current HMWSSB sections).
+  - Tests `backend/tests/services/test_forecast.py`; workflow `.github/workflows/p3-t2.yml`; `docs/worklogs/T2.md`.
+  - No P1, P2 or P4 file was edited.
+- **Validation:**
+  - 19 tests written first (`ImportError` before the code existed), including the done-when (21.9% / 35.1% within 0.1 pp on the S2 files, scored months read from the files), no leakage, reconciliation sums, coverage on a hand-checkable fixture, Dec 2022 never zero, sections appearing / disappearing, and the capacity planner refusing to run without trips per day.
+  - After merging `main` (`d12e4fd`): `python tasks.py test`: 591 backend passed, 2 failed; frontend 1 passed. The 2 are inherited, none in T2 files: P2 `backend/tests/test_a8_build.py::test_stations_are_reproducible_committed_and_labelled` and `::test_one_seed_reproduces` fail on Windows only (last-digit float differences, e.g. BACHUPALLY (PD 7) lat 17.49872903654913 committed vs 17.498729036549125 rebuilt; B1 tanker_km 775397.417 vs 775397.417003; Windows 10.0.26200, Python 3.11.9, shapely 2.1.2 / GEOS 3.13.1) and pass on Linux CI; identical on a clean checkout of `main`; not edited, skipped or marked.
+  - All P1 verifiers pass when run separately. `python tasks.py lint` exit 0. The `P3:T2` workflow commands pass locally (22 tests, baseline line, ruff).
+- **Known limitations:**
+  - OPEN, owner to confirm: trips per tanker per day; the model selection rule; the scikit-learn / lightgbm dependency (team); Chronos-2 (no-LLM rule); where the published forecast starts (pre-re-cut section names).
+  - Short series (13 scored months on S2); coverage is pooled over months and sections that are not independent; portal coverage under target (0.77 / 0.87); no weather or groundwater covariates; section names not mapped across years.
+- **Handoff / next step:**
+  - Follow-up: a global gradient-boosting model once the team decides the dependency and D7 / D8 exist.
+  - P2: check `test_a8_build.py` on Windows.
+  - P1: weather (D8), groundwater (D7) and a trips-per-day source. Owner: confirm the recovered protocol before 21.9% / 35.1% go on slides.
+  - T8 builds on the forecast table.
+- **Pull request:** pending.
+
 ## `fix/e5-models` — E5: run the NB / BYM2 models so field-check flags are checked across methods
 
 - **Owner / date:** P1 (work done by the repo owner), 2026-10-03.
@@ -751,6 +846,8 @@ The pull-request description must summarize the same information and link to thi
   - `services/underserved_models.py` and `config/underserved.py`: options added during the BYM2 diagnosis (likelihood, rho prior, restricted regression, island handling, ICAR-only structure, inverse-sqrt NB dispersion prior, PC prior on the spatial spread), each with its source. Defaults are now the settings of the committed results.
   - `services/underserved.py`: when the spatial models fail their diagnostics, a candidate must still agree across every method that passed, which needs at least peer and NB (`AGREED_FIELD_CHECK_CANDIDATE`). Four-way stability is still only claimed when all four pass (`stability_evaluated`). The summary lists `agreement_methods` and `methods_failed_diagnostics`.
   - `.github/workflows/p1-e5-models.yml`: Linux job that fits the models and uploads the results for review.
+  - Each candidate reason appears once; the WAD reason is no longer repeated per method, and ratio reasons name their method.
+  - U5 (after merging `main`): snapshot rebuilt (6 candidates); the field-check cards say "PEER + NB", label the NB ratio reason separately, and key reasons by code and method (no duplicate React keys). `docs/LIMITATIONS.md` updated for T2, U2-U6.
 - **Result:** NB passes every check in all folds. BYM2 and BYM2_SHRINKAGE pass 8 of 10 folds but fail fold 1 for every seed (NB alpha and spatial sigma cannot be separated without its 22 wards), so they are recorded as DIAGNOSTICS_FAILED; the strict gate was kept. Candidates: 7 peer-only → **6 agreed by peer and NB** (Jaccard 0.86); Mailardevpally becomes `MODEL_SENSITIVE_REVIEW`.
 - **Validation:** new tests written first and failing first (graph reproducibility and review, stale results refused, dispersion and spread priors, agreement across passing methods, peer-only flag not a candidate). `verify_underserved.py` passes. Full suite and lint: see the PR.
 - **Known limitations:**

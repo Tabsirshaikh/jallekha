@@ -1,6 +1,6 @@
 # JalLekha 2.0: known limitations
 
-Status on `main` as of 2026-10-03 (after PR #50). One section per feature of
+Status on `main` as of 2026-10-03 (after PRs #58 and #52). One section per feature of
 `docs/JALLEKHA_FINAL_SOLUTION.md`, then limits that cut across features, then what is not built yet.
 Sources: `docs/BRANCH_WORKLOG.md` ("Known limitations" of each branch), the solution document's
 Section 8, and the 2026-10-03 verification of the repo against the document.
@@ -34,7 +34,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - The **critical facilities column is empty** (`FACILITIES_UNAVAILABLE`): hospitals, clinics and schools (D9) were never loaded into the ward table.
 - 2 wards have partial Census coverage; Census for 2009 wards 115 and 116 (in Medak district) is not loaded.
 - Share of households away from water is a Census snapshot, not today's observation.
-- **[NOT BUILT]** The Atlas screen (U5). The data exists in `data/derived/evidence/`.
+- The Atlas screen (U5) reads a local snapshot (`frontend/src/data/u5Evidence.json`), not a live API (T10). Rebuild it with `scripts/frontend/build_u5_snapshot.py` whenever E2-E6 outputs change.
 
 ### F2 Growth signal and 2025 population (E3, POP)
 - Buildings are not households or people. Office and mall growth inflates building trends (buildings +3.2%/yr, GHS-POP +1.2%/yr, HMWSSB connections +2.18%/yr).
@@ -48,7 +48,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - Bookings per 1,000 connections: one connection can serve many flats.
 - The Gini of 0.78 is exact at section level but depends on section definitions that were re-cut in 2026.
 - There is no "people within 500 m of a public tap" layer: public tap locations are not available.
-- **[NOT BUILT]** The map screens (U5).
+- The map screens (U5) use the same local snapshot; no live API (T10).
 
 ### F4 Under-served Field-Check Screen (E5)
 - 107 wards screened, **6 candidates**, 38 wards left in data review (37 have no placed section).
@@ -60,10 +60,15 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - Models are fitted on Linux (WSL or CI) and committed; CI never re-samples. The GitHub Actions models job could not run in October 2026 because of an account billing block.
 - Low bookings cannot prove hidden demand. A candidate only means "send someone to check". No field check outcomes recorded (0 ground truth).
 - Thresholds are policy parameters.
+- The U5 field-check cards show these candidates from the local snapshot, with each method's ratio listed separately.
 
 ### F5 Surge Forecast and Capacity Planner (T2)
-- **[NOT BUILT]** Only `config/forecast.py` exists. Weather (D8) and groundwater (D7) data were never downloaded; the raw folders hold only retrieval logs.
-- Planned limits: 13 scorable months per section is too few for 95% intervals; a model is used only if it beats seasonal naive.
+- **In progress (T2, PR #58).** The seasonal-naive baseline is reproduced (21.89% city MAPE, 35.12% section WAPE on the 2022-24 files); the protocol was recovered by reproduction and needs the owner's confirmation before the numbers go on slides.
+- On the longer portal history (to Jan 2026) seasonal naive scores 26.28% / 47.67% and the 80% interval covers only 0.77. Naive × growth is not selected (it does not beat the baseline on both measures).
+- **[NOT BUILT]** The gradient-boosting model: no scikit-learn or LightGBM dependency is agreed, and weather (D8) and groundwater (D7) data are not in the repo.
+- [OPEN] trips per tanker per day (the capacity check refuses to run without it), the model-selection rule, and Chronos-2.
+- Short series (13 scored months per section, too few for 95% intervals); section names are not mapped across years, and the Feb/Mar 2026 re-cut breaks section-by-section comparison.
+- The U6 screen shows real monthly totals and a seasonal-naive benchmark; its forecast and capacity panels are SIMULATION fixtures until T2/T8 are wired through T10.
 
 ### F6 Shortage Early Warning (T8)
 - **[NOT BUILT]** Needs T2, groundwater data, and reservoir levels (D15, [OPEN]: only if a machine-readable source exists).
@@ -112,7 +117,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 ## 4. Layer C: Trust and access
 
 ### F12 Delivery proof (T3)
-- The driver app (U4) is **[NOT BUILT]**. Geofence radius (150 m) and the majority margin are [OPEN].
+- The driver app (U4) is an interactive fixture preview (route, arrival, OTP, all four outcomes); live API integration is pending. Geofence radius (150 m) and the majority margin are [OPEN].
 - Silent residents count for nothing; unresolved deliveries never reduce debt (decided in A6).
 
 ### F13 Duplicate engine (T1)
@@ -121,7 +126,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 ### F14 Unified multilingual intake (T4)
 - No Telugu or Urdu speech error rate is published; it must be measured on a small labelled set. Failed items are saved for a human.
 - Items marked `ledger_missing` are not retried automatically.
-- **[NOT BUILT]** Resident app with offline queue (U2, PR #41 has failing checks) and field-worker mode (U3).
+- The resident app (U2) is merged but still in progress; field-worker mode (U3) is built with a SYNTHETIC demo identity pending authentication. Neither has a live API (T10).
 
 ### F15 Supply-notice feed (T5)
 - See F10: officer entry only, exact area matching, alert wording [OPEN].
@@ -150,11 +155,11 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 
 | Item | Owner | Blocks |
 |---|---|---|
-| T2 forecast, T8 shortage warning | P3 | U6 |
+| T2 gradient-boosting model and capacity check (in progress); T8 shortage warning | P3 | U6 live data |
 | T9 confidence gate | P3 | A7's real gate |
 | T10 API for all screens | P3 | U5, U6, U7, U10 |
-| U2 resident app (PR #41 failing), U3, U4 | P4 | demo steps 7 and 8 |
-| U5, U6, U7, U8, U9, U10 screens | P4 | demo |
+| U2 resident app (in progress); U3 and U4 built on fixtures, not live | P4 | demo steps 7 and 8 |
+| U7 plan screen (in progress), U8, U9, U10 screens; U5 and U6 built on snapshots/fixtures, not live | P4 | demo |
 | X1 README, slides, demo script, release tag | P4 | submission |
 | F20 report-card backend | unassigned | U10 |
 | Hospital and school data (D9) in the ward table | P1 area | F1 tier 0 and F10 |

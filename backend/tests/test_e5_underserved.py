@@ -586,3 +586,19 @@ def test_a_peer_flag_without_nb_agreement_is_not_a_candidate():
     assert first["flagged_variants"] == ["PEER_MEDIAN"]
     assert first["field_check_candidate"] is False
     assert first["status"] == "MODEL_SENSITIVE_REVIEW"
+
+
+def test_each_reason_appears_once_and_ratio_reasons_name_their_method():
+    areas = cohort()
+    result = screen(
+        areas,
+        model_results=_with_failed_spatial_models(_model_scores(areas, 0.1)),
+        config=TEST_CONFIG,
+    )
+    first = next(row for row in result["rows"] if row["ward_id"] == "W00")
+    keys = [(reason["code"], reason.get("model")) for reason in first["reasons"]]
+    assert len(keys) == len(set(keys))
+    assert [k for k in keys if k[0] == "WAD_ABOVE_COHORT_QUANTILE"] == [
+        ("WAD_ABOVE_COHORT_QUANTILE", None)
+    ]
+    assert {k[1] for k in keys if k[0] == "LOW_OBSERVED_REFERENCE_RATIO"} == {"PEER_MEDIAN", "NB"}

@@ -12,7 +12,7 @@
     "data/verification/source_manifest.csv": "32955b71b8c2162e89bcfc0dfb3e49d934d62951bb9a4d59d39557e0c53cdc37"
   },
   "outputs_sha256": {
-    "data/derived/underserved/field_checks.json": "9a1e2a003159085f229561c1c1f458cfe2b5bc6171767d0b19fecfcb006453e7",
+    "data/derived/underserved/field_checks.json": "c671768f230d81fffcff8baa8969299f731e2a4577dc7773eb4414fc0f12217e",
     "data/derived/underserved/summary.json": "26617c4f24391ad125820c26c56e8758ec80672d942da4a02cd470058134fe2c"
   },
   "schema_version": "E5-2"

@@ -259,23 +259,24 @@ def screen(areas, model_results=None, config: UnderservedConfig = UNDERSERVED_CO
         reasons = [{"code": code, "value": None, "basis": "UNAVAILABLE"} for code in missing]
         if candidate:
             for name in voted:
-                reasons.extend(
-                    [
-                        {
-                            "code": "LOW_OBSERVED_REFERENCE_RATIO",
-                            "model": name,
-                            "value": per_model[name]["ratio"],
-                            "threshold": thresholds[name]["ratio"],
-                            "basis": "SIMULATED" if area.basis == "SIMULATED" else "DERIVED",
-                        },
-                        {
-                            "code": "WAD_ABOVE_COHORT_QUANTILE",
-                            "value": area.wad,
-                            "threshold": thresholds[name]["wad"],
-                            "basis": area.basis,
-                        },
-                    ]
+                reasons.append(
+                    {
+                        "code": "LOW_OBSERVED_REFERENCE_RATIO",
+                        "model": name,
+                        "value": per_model[name]["ratio"],
+                        "threshold": thresholds[name]["ratio"],
+                        "basis": "SIMULATED" if area.basis == "SIMULATED" else "DERIVED",
+                    }
                 )
+            # The WAD threshold is a cohort quantile, the same for every method: report it once
+            reasons.append(
+                {
+                    "code": "WAD_ABOVE_COHORT_QUANTILE",
+                    "value": area.wad,
+                    "threshold": thresholds[voted[0]]["wad"],
+                    "basis": area.basis,
+                }
+            )
             for key in ("cad", "hardship"):
                 value = getattr(area, key)
                 medians = [t[key] for t in thresholds.values() if t[key] is not None]
