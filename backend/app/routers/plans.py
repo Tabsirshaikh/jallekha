@@ -17,7 +17,7 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Response
 from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from app.auth import require_roles
 from app.config.api import ApiConfig
@@ -29,6 +29,7 @@ from app.routers.stores import PlanConflict, PlanRecord, PlanStore, get_plan_sto
 from app.services import confidence, explain, fair_queue, ledger_store, plan_builder, planner
 from app.services.keyed_lock import KeyedLocks
 from app.services.ledger_store import StoredLedger
+from app.services.service_models import NeedWeights
 
 router = APIRouter(tags=["plans"])
 
@@ -63,8 +64,18 @@ class Decision(BaseModel):
     reason: str
 
 
+class WeightsIn(BaseModel):
+    """Need weights for one plan (F7): all three, each between 0 and the configured maximum."""
+
+    model_config = ConfigDict(extra="forbid")
+    wad: float  # water-access deficit
+    cad: float  # households with no phone
+    hardship: float
+
+
 class NewPlan(BaseModel):
     day: date  # a day of the replay window (YYYY-MM-DD)
+    weights: WeightsIn | None = None  # absent: the configured default weights
 
 
 def _record(plans: PlanStore, plan_id: str) -> PlanRecord:
@@ -100,8 +111,12 @@ def plan_view(record: PlanRecord) -> dict[str, Any]:
             "special_tankers", "approved_by", "approval_reason",
         )
     }  # fmt: skip
+    weights = (record.recipe or {}).get("weights")
+    shown = NeedWeights(**weights) if weights else NeedWeights.default()
     view.update(
         {
+            "weights": {**shown.as_dict(), "is_default": weights is None},
+            "group_names": plan_builder.group_names(list(full["effective_entitlement"])),
             "stations": stations,
             "stations_total": len(stations),
             "transfers": full["transfers"],
@@ -127,7 +142,11 @@ def plan_view(record: PlanRecord) -> dict[str, Any]:
 def create_plan(body: NewPlan, plans: Plans, ledger: Ledger, response: Response) -> dict[str, Any]:
     """Build and store the plan for a replay day (T9 gate). Idempotent: if that day's plan is
     already stored, it is returned as stored (200) and nothing is built or logged again."""
-    plan_id = f"replay-{body.day.isoformat()}"
+    try:
+        weights = NeedWeights(**body.weights.model_dump()).validated() if body.weights else None
+    except ValueError as exc:
+        return invalid(str(exc))
+    plan_id = plan_builder.plan_id_for(body.day, weights)
     try:
         existing = plans.get(plan_id)
     except plan_builder.PlanRebuildError as exc:
@@ -136,7 +155,7 @@ def create_plan(body: NewPlan, plans: Plans, ledger: Ledger, response: Response)
         response.status_code = 200
         return plan_view(existing)
     try:
-        built = plan_builder.build_replay_plan(body.day)
+        built = plan_builder.build_replay_plan(body.day, weights=weights)
     except plan_builder.ReplayDayUnavailable as exc:
         raise HTTPException(404, str(exc)) from exc
     record = PlanRecord(built.inputs, built.plan, built.basis, built.recipe)
@@ -144,6 +163,8 @@ def create_plan(body: NewPlan, plans: Plans, ledger: Ledger, response: Response)
         response.status_code = 200
         return plan_view(_record(plans, built.plan.plan_id))
     for entry_type, payload, actor in built.events:  # plan_created, once
+        if "weights" in built.recipe:  # every weight change is a ledger entry
+            payload = {**payload, "weights": built.recipe["weights"]}
         ledger.append(entry_type, payload, actor)
     return plan_view(record)
 
@@ -153,6 +174,20 @@ def list_plans(
     plans: Plans, offset: evidence.Offset = 0, limit: evidence.Limit = ApiConfig.default_limit
 ) -> dict[str, Any]:
     return page(plans.summaries(), offset, limit)
+
+
+@router.get("/plans/{plan_id}/compare", dependencies=[Officer])
+def compare_plan(plan_id: str, plans: Plans) -> dict[str, Any]:
+    """Who gains and who loses booked trips under this plan's weights, against the default
+    plan for the same day (SIMULATION). A plan with the default weights has no comparison."""
+    record = _record(plans, plan_id)
+    if not record.recipe:
+        raise not_found(f"Comparison for plan {plan_id}")
+    built = plan_builder.BuiltPlan(record.inputs, record.plan, record.basis, record.recipe, ())
+    try:
+        return plan_builder.compare_to_default(built)
+    except ValueError as exc:
+        raise HTTPException(404, str(exc)) from exc
 
 
 @router.get("/plans/{plan_id}", dependencies=[Officer])

@@ -65,6 +65,10 @@ class AllocationConfig:
     need_weight_wad: float = 2.0
     need_weight_cad: float = 1.0
     need_weight_hardship: float = 1.0
+    # Largest need weight an officer slider may set (a weight of 5 makes one indicator count
+    # five times its own value on top of the base 1). Basis: ASSUMED; keeps a typo from
+    # dominating the queue.
+    need_weight_max: float = 5.0
 
     # HMWSSB tanker booking caps per consumer category (A3, F8). Source: HMWSSB tanker booking
     # guidelines (hyderabadwater.gov.in, checked 2026-10-02; docs/research/P2.md): domestic

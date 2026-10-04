@@ -10,6 +10,9 @@ class PlanStoreConfig:
     # Rebuilt plans a store keeps in memory. A replay day holds about 7,000 pending bookings
     # (measured on main_2025 tight, 2026-10-04), so the cache is kept small. ASSUMED, OPEN.
     built_cache_size: int = 8
+    # Replay runs kept for officer-chosen need weights (the default run is one of them). Each holds
+    # one day's pending bookings and queue states in memory. ASSUMED, OPEN.
+    weighted_replays_kept: int = 3
 
 
 PLAN_STORE_CONFIG = PlanStoreConfig()

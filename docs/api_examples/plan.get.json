@@ -4,7 +4,7 @@
     "status": "FROM_MAIN (service on main, route and plan store not built)",
     "basis": "SIMULATION: A7 build_plan on the first day of P2's committed planner replay",
     "built_from": "services/planner.py build_plan -> DailyPlan (StationPlan, ServedBooking, Transfer, WardShare, OutageResponse, Assessment, Unrouted, SpecialStop); scripts/sandbox/build_planner_replay.py replay(max_days=1)",
-    "notes": "Lists are cut to the first items; *_total fields give the full counts. queue_states is internal and not shown."
+    "notes": "Lists are cut to the first items; *_total fields give the full counts. queue_states is internal and not shown. `weights` is the need weights the plan was built with (is_default true unless an officer chose others at POST /plans); `group_names` gives each group a readable name (ward name, or the HMWSSB section name; null when unknown)."
   },
   "request": {
     "plan_id": "replay-2025-03-01"
@@ -19,6 +19,17 @@
     "special_tankers": [],
     "approved_by": null,
     "approval_reason": null,
+    "weights": {
+      "wad": 2.0,
+      "cad": 1.0,
+      "hardship": 1.0,
+      "is_default": true
+    },
+    "group_names": {
+      "section:40 MLD STP ATTAPUR": "40 MLD STP ATTAPUR",
+      "section:ADARSHNAGAR": "ADARSHNAGAR",
+      "section:ADIBATLA (PD 1)": "ADIBATLA (PD 1)"
+    },
     "stations": {
       "ST01": {
         "station": "ST01",
@@ -195,7 +206,8 @@
     "basis": {
       "plan": "SIMULATION (A7 replay main_2025, tight, seed 0; daily arrivals SYNTHETIC, monthly totals REAL)",
       "effective_entitlement": "DERIVED (A2 Census 2011 need; A3 fallback median where flagged)",
-      "flags": "PROVISIONAL (A7 ProvisionalGate on main; T9 gate not merged)"
+      "flags": "DERIVED (T9 gate: min of available signals; threshold 0.50 PROVISIONAL, not calibrated)",
+      "weights": "ASSUMED policy weights (configured defaults): need weight = 1 + 2 x water-access deficit + 1 x no-phone share + 1 x hardship"
     }
   }
 }

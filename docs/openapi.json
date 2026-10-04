@@ -1595,6 +1595,67 @@
         }
       }
     },
+    "/plans/{plan_id}/compare": {
+      "get": {
+        "tags": [
+          "plans"
+        ],
+        "summary": "Compare Plan",
+        "description": "Who gains and who loses booked trips under this plan's weights, against the default\nplan for the same day (SIMULATION). A plan with the default weights has no comparison.",
+        "operationId": "compare_plan_plans__plan_id__compare_get",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Plan Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Compare Plan Plans  Plan Id  Compare Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/plans/{plan_id}": {
       "get": {
         "tags": [
@@ -3003,6 +3064,16 @@
             "type": "string",
             "format": "date",
             "title": "Day"
+          },
+          "weights": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WeightsIn"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -3120,6 +3191,31 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "WeightsIn": {
+        "properties": {
+          "wad": {
+            "type": "number",
+            "title": "Wad"
+          },
+          "cad": {
+            "type": "number",
+            "title": "Cad"
+          },
+          "hardship": {
+            "type": "number",
+            "title": "Hardship"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "wad",
+          "cad",
+          "hardship"
+        ],
+        "title": "WeightsIn",
+        "description": "Need weights for one plan (F7): all three, each between 0 and the configured maximum."
       }
     }
   }

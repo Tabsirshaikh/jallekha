@@ -85,3 +85,31 @@ Example item:
   "created_at": "2026-10-04T09:12:03.512345+00:00"
 }
 ```
+
+## Need weights, ward names and the comparison (added 2026-10-04)
+
+### `POST /plans`: optional `weights`
+`{"day": "2025-05-01", "weights": {"wad": 5, "cad": 0, "hardship": 0}}`. All three are required
+when `weights` is given, each between 0 and 5 (`need_weight_max`), no other fields (for example no
+debt weight: the replay has no debts). Weights equal to the configured defaults make the default
+plan. Other weights make a separate plan with its own replay run, id
+(`replay-<day>-w<wad>-<cad>-<hardship>`) and digest; the plan_created ledger entry carries the
+weights. A repeat with the same weights returns the stored plan (200). Out-of-range or malformed
+weights: 422, nothing stored.
+
+### Plan view: `weights` and `group_names`
+- `weights`: `{wad, cad, hardship, is_default}`, the weights this plan was built with.
+- `group_names`: a readable name for every group in `effective_entitlement` (ward name from the
+  Census evidence file, or the HMWSSB section name; `null` when unknown, never invented).
+- `basis.weights`: how the weights are labelled (ASSUMED policy weights; "chosen by an officer"
+  when not the defaults).
+
+### `GET /plans/{plan_id}/compare` (officer)
+Who gains and who loses booked trips under the plan's weights, against the default plan for the
+same day: `{against, day, weights, default_weights, gainers, losers, all_changes, basis}`. Each
+row is `{group, name, served_default, served_weighted, change}`. Same trips redistributed, so
+the changes sum to zero. A plan with the default weights (or an unknown plan) answers 404.
+The effect is usually small: daily capacity and the round-robin limit how far weights can move
+trips (for example, 6 groups change, by at most 8 trips, for the strongest water-access setting
+on 2025-05-01).
+
