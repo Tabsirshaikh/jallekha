@@ -19,10 +19,10 @@ import re
 import uuid
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
-from sqlalchemy import select, update
+from sqlalchemy import func, select, update
 from sqlalchemy.engine import Engine
 
 from app.config.explain import (
@@ -55,7 +55,9 @@ LEDGER_PAYLOAD_KEYS = frozenset(
     }
 )
 _PERSON_ID = re.compile(r"^[A-Za-z][A-Za-z0-9_.:-]{0,63}$")  # starts with a letter: no phone
-_TARGET_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:/-]{0,79}$")
+# A ward id (`relation/7848799`) or a booking id as the planner writes it
+# (`2025-04-29:MANIKONDA (DIV 18):00387`: HMWSSB section names have spaces and brackets).
+_TARGET_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9 _.:/()-]{0,79}$")
 _PHONE_LIKE = re.compile(r"^\+?\d{10,15}$")
 # Indian mobile numbers (with +91 / 91 / 0 prefix) and any run of 10+ digits.
 _PHONE_IN_TEXT = re.compile(r"(?:\+?91[\s-]?|0)?[6-9]\d{9}(?!\d)|\d{10,}")
@@ -100,6 +102,35 @@ def _text(value: Any, name: str) -> tuple[str, str]:
     return cleaned, text_hash(cleaned)
 
 
+def _utc_iso(moment: datetime) -> str:
+    """ISO time in UTC; SQLite returns the stored UTC time without its zone."""
+    return (moment if moment.tzinfo else moment.replace(tzinfo=UTC)).isoformat()
+
+
+def _contest_view(row: Contest) -> dict[str, Any]:
+    return {
+        "contest_id": row.id,
+        "created_at": _utc_iso(row.created_at),
+        "filed_by": row.filed_by,
+        "role": row.role,
+        "target_type": row.target_type,
+        "target_id": row.target_id,
+        "reason_code": row.reason_code,
+        "reason_text": row.reason_text,
+        "status": row.status,
+    }
+
+
+def _reply_view(row: ContestReply) -> dict[str, Any]:
+    return {
+        "reply_id": row.id,
+        "created_at": _utc_iso(row.created_at),
+        "officer_id": row.officer_id,
+        "outcome_code": row.outcome_code,
+        "reason_text": row.reason_text,
+    }
+
+
 class ContestService:
     def __init__(
         self,
@@ -128,6 +159,8 @@ class ContestService:
                 not isinstance(target_id, str)
                 or not _TARGET_ID.match(target_id)
                 or _PHONE_LIKE.match(target_id)
+                # spaces and dots no longer break a number apart: "98765 43210" is a phone
+                or _PHONE_IN_TEXT.search(re.sub(r"[\s.-]", "", target_id))
             ):
                 raise ValueError("target_id must be a ward or booking id")
             reason_code = data.get("reason_code")
@@ -228,6 +261,52 @@ class ContestService:
             reply_id,
         )
         return ContestResult("replied", contest_id, reply_id, seq)
+
+    # --- reading ---------------------------------------------------------------------------
+
+    def list_contests(
+        self,
+        *,
+        status: str | None = None,
+        target_type: str | None = None,
+        target_id: str | None = None,
+        filed_by: str | None = None,
+        offset: int = 0,
+        limit: int = 50,
+    ) -> tuple[list[dict[str, Any]], int]:
+        """Contests, newest first, narrowed by the given filters: (page of items, total).
+        The stored text is returned as stored (phone-like runs were removed when it was filed)."""
+        filters = [
+            (Contest.status, status),
+            (Contest.target_type, target_type),
+            (Contest.target_id, target_id),
+            (Contest.filed_by, filed_by),
+        ]
+        where = [column == value for column, value in filters if value is not None]
+        with self._sessions() as session:
+            total = session.scalar(select(func.count()).select_from(Contest).where(*where)) or 0
+            rows = session.scalars(
+                select(Contest)
+                .where(*where)
+                .order_by(Contest.created_at.desc(), Contest.id)
+                .offset(offset)
+                .limit(limit)
+            ).all()
+            return [_contest_view(row) for row in rows], total
+
+    def get_contest(self, contest_id: str) -> dict[str, Any] | None:
+        """One contest with its reply (`reply` is None while open); None if there is no such
+        contest."""
+        with self._sessions() as session:
+            contest = session.get(Contest, contest_id)
+            if contest is None:
+                return None
+            reply = session.scalars(
+                select(ContestReply).where(ContestReply.contest_id == contest_id)
+            ).first()
+            view = _contest_view(contest)
+            view["reply"] = _reply_view(reply) if reply else None
+            return view
 
     # --- ledger ----------------------------------------------------------------------------
 

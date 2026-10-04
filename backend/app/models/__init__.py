@@ -6,11 +6,15 @@ from app.models.contest import Contest
 from app.models.contest_reply import ContestReply
 from app.models.delivery import Delivery
 from app.models.delivery_outcome import DeliveryOutcome
+from app.models.delivery_roster import DeliveryRoster
+from app.models.delivery_stop import DeliveryStop
 from app.models.duplicate_link import DuplicateLink
 from app.models.intake_item import IntakeItemRecord
 from app.models.ledger_entry import LedgerEntryRecord
 from app.models.ledger_head import LedgerHead
+from app.models.plan_record import StoredPlan
 from app.models.representative import Representative
+from app.models.resident import Resident
 from app.models.resident_response import ResidentResponse
 from app.models.supply_notice import SupplyNotice
 from app.models.voice_note import VoiceNote
@@ -22,13 +26,17 @@ __all__ = [
     "ContestReply",
     "Delivery",
     "DeliveryOutcome",
+    "DeliveryRoster",
+    "DeliveryStop",
     "DuplicateLink",
     "IdTimestampMixin",
     "IntakeItemRecord",
     "LedgerEntryRecord",
     "LedgerHead",
     "Representative",
+    "Resident",
     "ResidentResponse",
+    "StoredPlan",
     "SupplyNotice",
     "VoiceNote",
     "new_id",

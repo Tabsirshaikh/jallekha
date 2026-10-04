@@ -1,14 +1,16 @@
 import { useMemo, useState } from "react";
 import snapshot from "./data/u9Impact.json";
+import { useAuth } from "./auth";
+import DataSourceChip from "./DataSource";
 import { useLocale, type Locale } from "./i18n";
+import { impactFromApi, METRICS, policyDifference, type ApiImpact, type ImpactRow, type Metric, type RealBaselines } from "./impactAdapter";
+import { canFetchOfficerData, liveReason, liveReasonCopy } from "./liveReason";
+import { useApi } from "./useApi";
 import "./ImpactExperience.css";
 
-type Metric = "served_share" | "need_weighted_unmet_share" | "mean_wait_days" | "gini_fill_rate" | "jain_fill_rate" | "worst_group_fill_rate" | "km_per_kl";
-type ImpactMetric = { mean: number | null; min: number | null; max: number | null; basis: string };
-type ImpactRow = { replay: string; scenario: string; policy: string; seed_count: number; label: string; metrics: Record<Metric, ImpactMetric> };
-type RealBaselines = { label:string; booking_gini_sections:number; booking_gini_basis:string; delivered_share:Record<string,number>; source:string };
-const rows = snapshot.rows as ImpactRow[];
-const metrics: Metric[] = ["served_share","need_weighted_unmet_share","mean_wait_days","gini_fill_rate","jain_fill_rate","worst_group_fill_rate","km_per_kl"];
+const snapshotRows = snapshot.rows as ImpactRow[];
+const snapshotBaselines = snapshot.real_baselines as RealBaselines;
+const replayOptions = [...new Set(snapshotRows.map((row)=>row.replay))];
 
 const basisCopy = {
   en:{title:"Observed data context",delivered:"Delivered / booked",recent:"Jun–Aug 2026",bookingGini:"Booking concentration (Gini)",source:"Source"},
@@ -26,29 +28,37 @@ const copy = {
 
 export default function ImpactExperience() {
   const { locale } = useLocale();
+  const { status, role } = useAuth();
   const w = copy[locale];
   const basisWords = basisCopy[locale];
-  const baselines = snapshot.real_baselines as RealBaselines;
-  const [replay,setReplay] = useState(rows[0]?.replay ?? "main_2025");
-  const [scenario,setScenario] = useState(rows[0]?.scenario ?? "fleet");
+  const [replay,setReplay] = useState(snapshotRows[0]?.replay ?? "main_2025");
+  const [scenario,setScenario] = useState(snapshotRows[0]?.scenario ?? "fleet");
   const [metric,setMetric] = useState<Metric>("served_share");
-  const availableScenarios = [...new Set(rows.filter((row)=>row.replay===replay).map((row)=>row.scenario))];
-  const selected = useMemo(()=>rows.filter((row)=>row.replay===replay&&row.scenario===scenario),[replay,scenario]);
+  // Live A8 results for this replay and scenario when an officer is signed in; the committed snapshot otherwise.
+  const api = useApi<ApiImpact>(canFetchOfficerData(status, role) ? `/impact?replay=${encodeURIComponent(replay)}&scenario=${encodeURIComponent(scenario)}` : null);
+  const liveView = useMemo(()=>api.live && api.data ? impactFromApi(api.data) : null,[api.live,api.data]);
+  const live = liveView !== null;
+  const reason = live ? null : liveReason(status, role, api.error);
+  const baselines = liveView?.baselines ?? snapshotBaselines;
+  const sourceText = live ? `GET /impact · ${snapshot.summary_source}` : snapshot.source;
+  const availableScenarios = [...new Set(snapshotRows.filter((row)=>row.replay===replay).map((row)=>row.scenario))];
+  const selected = useMemo(()=>liveView ? liveView.rows : snapshotRows.filter((row)=>row.replay===replay&&row.scenario===scenario),[liveView,replay,scenario]);
   const base = selected.find((row)=>row.policy==="B1");
   const replayDeliveredShare = baselines.delivered_share[replay] ?? null;
-  const percentFmt = (value:number|null) => value===null?"—":new Intl.NumberFormat(locale,{style:"percent",maximumFractionDigits:2}).format(value);
+  const percentFmt = (value:number|null|undefined) => value===null||value===undefined?"—":new Intl.NumberFormat(locale,{style:"percent",maximumFractionDigits:2}).format(value);
   const fmt = (value:number|null) => {
     if(value===null) return "—";
     const percent = ["served_share","need_weighted_unmet_share","gini_fill_rate","jain_fill_rate","worst_group_fill_rate"].includes(metric);
     return percent ? new Intl.NumberFormat(locale,{style:"percent",maximumFractionDigits:2}).format(value) : new Intl.NumberFormat(locale,{maximumFractionDigits:3}).format(value);
   };
   return <div className="impact-page">
-    <header className="impact-heading"><div><p className="eyebrow">F19 · A8</p><h1>{w.title}</h1><p className="muted">{w.intro}</p></div><span className="forecast-demo-badge">{w.demo}</span></header>
-    <div className="impact-notice"><strong>{w.caveat}</strong><span>{w.source}: {snapshot.source}</span></div>
-    <section className="impact-baseline"><div className="impact-baseline-heading"><h2>{basisWords.title}</h2><span>{basisWords.source}: {baselines.source}</span></div><div className="impact-baseline-grid"><article><span>{basisWords.delivered} · {replay==="main_2025"?w.replays.main_2025:w.replays.secondary_2023}</span><strong>{percentFmt(replayDeliveredShare)}</strong><small className="source-tag real">REAL</small></article><article><span>{basisWords.delivered} · {basisWords.recent}</span><strong>{percentFmt(baselines.delivered_share.jun_aug_2026)}</strong><small className="source-tag real">REAL</small></article><article><span>{basisWords.bookingGini}</span><strong>{baselines.booking_gini_sections.toFixed(3)}</strong><small className="source-tag derived">DERIVED</small></article></div></section>
-    <section className="impact-controls"><label>{w.replay}<select value={replay} onChange={(event)=>{const value=event.target.value;setReplay(value);const next=rows.find((row)=>row.replay===value)?.scenario;if(next)setScenario(next);}}>{[...new Set(rows.map((row)=>row.replay))].map((value)=><option value={value} key={value}>{w.replays[value as keyof typeof w.replays] ?? value}</option>)}</select></label><label>{w.scenario}<select value={scenario} onChange={(event)=>setScenario(event.target.value)}>{availableScenarios.map((value)=><option value={value} key={value}>{w.scenarios[value as keyof typeof w.scenarios] ?? value}</option>)}</select></label><label>{w.metric}<select value={metric} onChange={(event)=>setMetric(event.target.value as Metric)}>{metrics.map((value)=><option value={value} key={value}>{w.metricNames[value]}</option>)}</select></label></section>
-    <section className="impact-cards" aria-label={w.metricNames[metric]}>{selected.length===0?<p className="muted">{w.empty}</p>:selected.map((row)=><article className="impact-card" key={row.policy}><div className="impact-card-head"><h2>{row.policy}</h2><span className="source-tag simulation">SIMULATION</span></div><strong className="impact-value">{fmt(row.metrics[metric].mean)}</strong><span className="impact-metric-label">{w.metricNames[metric]}</span><div className="impact-range"><span>{w.range}</span><strong>{fmt(row.metrics[metric].min)} – {fmt(row.metrics[metric].max)}</strong></div><small>{row.seed_count} {w.seeds} · SIMULATION</small>{base&&row.policy!=="B1"&&<small>{w.difference}: {fmt((row.metrics[metric].mean??0)-(base.metrics[metric].mean??0))} · SIMULATION</small>}</article>)}</section>
-    <section className="impact-unavailable"><span className="source-tag">UNAVAILABLE</span><div><h2>{w.duplicates}</h2><p>{snapshot.unavailable.reason} {w.unavailableNote}</p></div></section>
-    <p className="impact-footer">{w.label} · {w.source}: <code>{snapshot.source}</code></p>
+    <header className="impact-heading"><div><p className="eyebrow">F19 · A8</p><h1>{w.title}</h1><p className="muted">{w.intro}</p></div><div className="impact-heading-tags"><DataSourceChip state={{ live, loading: status==="checking" || api.loading, error: api.error }} /><span className="forecast-demo-badge">{w.demo}</span></div></header>
+    {reason&&<p className="impact-live-reason" role="note">{liveReasonCopy[locale][reason]}</p>}
+    <div className="impact-notice"><strong>{w.caveat}</strong><span>{w.source}: {sourceText}</span></div>
+    <section className="impact-baseline"><div className="impact-baseline-heading"><h2>{basisWords.title}</h2><span>{basisWords.source}: {baselines.source}</span></div><div className="impact-baseline-grid"><article><span>{basisWords.delivered} · {replay==="main_2025"?w.replays.main_2025:w.replays.secondary_2023}</span><strong>{percentFmt(replayDeliveredShare)}</strong><small className="source-tag real">REAL</small></article><article><span>{basisWords.delivered} · {basisWords.recent}</span><strong>{percentFmt(baselines.delivered_share.jun_aug_2026)}</strong><small className="source-tag real">REAL</small></article><article><span>{basisWords.bookingGini}</span><strong>{baselines.booking_gini_sections===null?"—":baselines.booking_gini_sections.toFixed(3)}</strong><small className="source-tag derived">{baselines.booking_gini_basis}</small></article></div></section>
+    <section className="impact-controls"><label>{w.replay}<select value={replay} onChange={(event)=>{const value=event.target.value;setReplay(value);const next=snapshotRows.find((row)=>row.replay===value)?.scenario;if(next)setScenario(next);}}>{replayOptions.map((value)=><option value={value} key={value}>{w.replays[value as keyof typeof w.replays] ?? value}</option>)}</select></label><label>{w.scenario}<select value={scenario} onChange={(event)=>setScenario(event.target.value)}>{availableScenarios.map((value)=><option value={value} key={value}>{w.scenarios[value as keyof typeof w.scenarios] ?? value}</option>)}</select></label><label>{w.metric}<select value={metric} onChange={(event)=>setMetric(event.target.value as Metric)}>{METRICS.map((value)=><option value={value} key={value}>{w.metricNames[value]}</option>)}</select></label></section>
+    <section className="impact-cards" aria-label={w.metricNames[metric]}>{selected.length===0?<p className="muted">{w.empty}</p>:selected.map((row)=>{const value=row.metrics[metric];return <article className="impact-card" key={row.policy}><div className="impact-card-head"><h2>{row.policy}</h2><span className="source-tag simulation">{value.basis}</span></div>{liveView?.policies[row.policy]&&<p className="impact-policy">{liveView.policies[row.policy]}</p>}<strong className="impact-value">{fmt(value.mean)}</strong><span className="impact-metric-label">{w.metricNames[metric]}</span><div className="impact-range"><span>{w.range}</span><strong>{fmt(value.min)} – {fmt(value.max)}</strong></div><small>{row.seed_count ?? "—"} {w.seeds} · {value.basis}</small>{base&&row.policy!=="B1"&&<small>{w.difference}: {fmt(policyDifference(value.mean,base.metrics[metric].mean))} · {value.basis}</small>}</article>;})}</section>
+    <section className="impact-unavailable"><span className="source-tag">UNAVAILABLE</span><div><h2>{w.duplicates}</h2><p>{liveView ? liveView.unavailableReason : `${snapshot.unavailable.reason} ${w.unavailableNote}`}</p></div></section>
+    <p className="impact-footer">{w.label} · {w.source}: <code>{sourceText}</code></p>
   </div>;
 }

@@ -5,6 +5,7 @@ from app.config.api import ApiConfig
 from app.config.app import APP_CONFIG
 from app.errors import install_error_handlers
 from app.routers import (
+    auth_routes,
     contests,
     deliveries,
     evidence,
@@ -13,6 +14,7 @@ from app.routers import (
     ledger,
     notices,
     plans,
+    stops,
     system,
 )
 
@@ -26,6 +28,7 @@ app.add_middleware(
     allow_headers=["Authorization", "Content-Type", "X-Gateway-Token"],
 )
 app.include_router(system.router)
+app.include_router(auth_routes.router)
 app.include_router(intake.router)
 app.include_router(ledger.router)
 app.include_router(notices.router)
@@ -34,3 +37,4 @@ app.include_router(forecast.router)
 app.include_router(plans.router)
 app.include_router(contests.router)
 app.include_router(deliveries.router)
+app.include_router(stops.router)
