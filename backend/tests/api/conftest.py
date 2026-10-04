@@ -1,5 +1,5 @@
 """Fixtures for the T10 API tests: tokens from the environment, temporary databases, a small
-A7 plan and a T3 stop in the in-memory stores. All data here is SYNTHETIC."""
+A7 plan in the in-memory plan store and a T3 stop in the database. All data here is SYNTHETIC."""
 
 from __future__ import annotations
 
@@ -119,7 +119,8 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClie
         dl.Representative("rep-02", "stop-0001", "+919800000102", "ur"),
     )
     residents = tuple(dl.Resident(f"res-{i:02d}", f"+9198000002{i:02d}", "te") for i in range(1, 6))
-    delivery_store = DeliveryStore(stops={"stop-0001": Stop("stop-0001", *STOP, reps, residents)})
+    delivery_store = DeliveryStore(engine)
+    delivery_store.put_stop(Stop("stop-0001", *STOP, reps, residents, "SYNTHETIC"))
     overrides = {
         get_api_config: ApiConfig.from_env,
         intake.get_intake_service: lambda: intake_service,
