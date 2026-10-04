@@ -10,6 +10,7 @@ from app.models.duplicate_link import DuplicateLink
 from app.models.intake_item import IntakeItemRecord
 from app.models.ledger_entry import LedgerEntryRecord
 from app.models.ledger_head import LedgerHead
+from app.models.plan_record import StoredPlan
 from app.models.representative import Representative
 from app.models.resident_response import ResidentResponse
 from app.models.supply_notice import SupplyNotice
@@ -29,6 +30,7 @@ __all__ = [
     "LedgerHead",
     "Representative",
     "ResidentResponse",
+    "StoredPlan",
     "SupplyNotice",
     "VoiceNote",
     "new_id",
