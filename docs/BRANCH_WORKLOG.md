@@ -809,6 +809,7 @@ The pull-request description must summarize the same information and link to thi
 
 - **Owner / date:** P3, 2026-10-03.
 - **Purpose:** Forecast and backtest (F5): monthly HMWSSB bookings per section and city, 12 months ahead, with a reproduced seasonal-naive baseline, a rolling-origin backtest, bottom-up reconciliation, split-conformal intervals and a capacity check.
+
 - **What we found:**
   - `V-VERIFY_REVIEW.md`, which recorded how 21.9% / 35.1% were computed, was never found. The protocol was recovered by reproduction on 2026-10-03 and confirmed by Padmaja: `noofbookings`; seasonal naive (same month a year earlier); Dec 2022 missing, not zero, so Dec 2023 is not scored (13 months, Jan 2023 - Feb 2024); all sections, missing = 0; city MAPE = mean of monthly errors; section WAPE pooled. Result 21.89% / 35.12% on the S2 files. `delivered` and both-years sections also land within 0.1 pp; Dec 2022 as zero and per-month WAPE do not.
   - On the longer D1b portal history (to Jan 2026, before the Feb/Mar 2026 re-cut) seasonal naive scores 26.28% / 47.67%, well above the S2 window; the 80% interval covers only 0.77 there. Section names change every year (no mapping applied).
@@ -855,3 +856,28 @@ The pull-request description must summarize the same information and link to thi
   - GitHub Actions could not run the models job (account billing block, October 2026); the committed results come from WSL Ubuntu with the same pinned PyMC 5.25.1.
   - No field-check outcomes are recorded yet (0 ground truth).
 - **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/52
+
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/58
+
+## `docs/api-shapes` — API shapes draft for T10 (Part 7 item 1)
+
+- **Owner / date:** P3, 2026-10-03.
+- **Purpose:** Docs-only contract draft for P4: `docs/api_shapes.md` and one example JSON per endpoint (`docs/api_examples/`), from `docs/P3_BUILD_PLAN.md` Part 7 item 1 and T10 step 1. **Not a row in `docs/features.csv`**: no row was added or changed (Part 7 asks the owner to decide whether it gets one).
+- **What we found:**
+  - Routes on `main`: `GET /health`, `POST /intake/batch`, `/intake/sms`, `/intake/missed-call`, `POST /notices`, `GET /ledger/entries`, `/ledger/verify`. No auth, CORS or OpenAPI export yet. Intake, notices and contests answer a bad item with HTTP 200 and `status: "invalid"`; only malformed bodies use the shared error shape (`app/errors.py`, `code` from the HTTP status phrase).
+  - P4 mismatches: the U3 field-worker app reads `duplicate` (resent `client_id`) as `merged`; the U2 resident app shows `spam` as "Could not send"; U4 uses lowercase outcomes (`confirmed`) where T3 returns `Confirmed`, and takes resident feedback on the driver's screen where T3 uses SMS replies `1` / `2`; U3 sends `area_id` as free text; U5 / U6 snapshots use camelCase and renamed fields (`waterAccessDeficitShare` vs E2 `wad`); the U6 forecast fixture is hand-typed but labelled SIMULATION, shows city intervals T2 does not produce, and marks the 21.9% / 35.1% protocol `NOT_DOCUMENTED`.
+  - For P2 / P3: no plan store and no delivery store on `main`; an explanation's queue day must use the plan's `booked_trips` (capacity after the scheduled reserve), or it disagrees with the plan (checked on replay day 1, station ST19: 215 matches, raw 226 does not); A8's replay day holds bookings that arrive after the 05:00 plan time, so T7's `waiting_hours` can be negative; A8's `results.csv` / `summary.json` exist for a future Impact page.
+  - `main` moved to `26b47d9` (U6) before this branch was cut; U6 adds 9 E501 errors and a format failure in P4's `scripts/frontend/build_u6_snapshot.py`.
+- **What we changed:**
+  - `docs/api_shapes.md`: conventions, status legend, what exists today, 17 sections (36 endpoints) with method and path, request, response fields and types, basis, errors, roles, and open questions for P4. Status: 7 route on main, 22 from main (service or file on main, route not built), 3 PROPOSED (T2 forecast and backtest, T9 confidence, from the local branches' actual output), 4 NOT DESIGNED (shortage: T8 not started; report card, SMS summary, impact: P4 / P2 to propose).
+  - `docs/api_examples/*.json` (36): each produced by calling the real route, service or file (temporary databases; SYNTHETIC requests; P2's replay day 1 for the plan and booking examples, SIMULATION; real ward rows from `ward_evidence.csv`); each records its endpoint, status, basis and source in `_example`. No phone numbers (a placeholder is shown; the services never echo numbers) and no personal free text. Response-field tables in the doc are generated from these files. The generator scripts were kept out of the repo (docs-only scope).
+  - `backend/tests/test_api_shapes.py` (3 tests). No backend code, routes or frontend files changed.
+  - P4 answers applied (2026-10-03): duplicate = "already sent", merged = linked to existing complaint; spam = received and flagged; four delivery outcomes, pending until reply window closes; stable ward_id + section_id; snake_case; null/UNAVAILABLE; SYNTHETIC demo forecasts; roles officer/driver/resident/field_worker + gateway; offset/limit/total + after_seq/limit; structured codes; needs_check; per-item batch status; ISO 8601 with offset; ward report card; impact section. Councillor role OPEN.
+- **Validation:**
+  - 3 tests: examples valid/labelled JSON without phone numbers; merged routes return documented fields; file-based examples match source rows.
+  - After merging `main` (`570d4b8`, T2 #58): `python tasks.py test`: ~613 backend passed, 2 failed; frontend 1 passed. Inherited failures same as T2/T9.
+  - `python tasks.py lint` exit 0.
+- **Known limitations:** Roles, auth, pagination and language handling are proposals for T10 to implement. Councillor role OPEN.
+- **Handoff / next step:** T10 builds the routes from the agreed shapes. P4: no further questions open.
+- **Update after P4's review (2026-10-03):** P4's answers applied in `docs/api_shapes.md` (section **Agreed with P4**): intake wording (`duplicate` = already sent, `merged` = linked to an existing complaint, `spam` = flagged for review); the four delivery outcome codes with `outcome_status` `pending` until the reply window closes; `ward_id` + `section_id` instead of free-text `area_id`; snake_case; missing numbers `null` + `UNAVAILABLE`; demo forecasts SYNTHETIC; roles `officer`, `driver`, `resident`, `field_worker` plus a gateway credential; `offset` / `limit` / `total` (ledger `after_seq` / `limit`); codes and structured values for the UI, SMS built on the server with English fallback; `needs_check` with signals; per-item batch status and 4xx for malformed requests; ISO 8601, UTC. Ward report card, SMS summary and impact designed from files on `main` (deliveries, debt, schedule and duplicate-merge share UNAVAILABLE). The example test's phone pattern no longer matches digits inside decimals. The under-served example now shows both reason kinds (found by T10's contract test). Still OPEN: councillor role; SMS wording in te / ur / hi.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/57

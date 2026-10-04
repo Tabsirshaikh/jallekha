@@ -1,0 +1,201 @@
+{
+  "_example": {
+    "endpoint": "GET /plans/{plan_id}",
+    "status": "FROM_MAIN (service on main, route and plan store not built)",
+    "basis": "SIMULATION: A7 build_plan on the first day of P2's committed planner replay",
+    "built_from": "services/planner.py build_plan -> DailyPlan (StationPlan, ServedBooking, Transfer, WardShare, OutageResponse, Assessment, Unrouted, SpecialStop); scripts/sandbox/build_planner_replay.py replay(max_days=1)",
+    "notes": "Lists are cut to the first items; *_total fields give the full counts. queue_states is internal and not shown."
+  },
+  "request": {
+    "plan_id": "replay-2025-03-01"
+  },
+  "response": {
+    "plan_id": "replay-2025-03-01",
+    "day": "2025-03-01",
+    "status": "DRAFT",
+    "digest": "218914f20ecc1328342113313837597d4ab5a4cff88ab73ccda1a4e296dae40d",
+    "reserve_trips": 325,
+    "outage_trips": 0,
+    "special_tankers": [],
+    "approved_by": null,
+    "approval_reason": null,
+    "stations": {
+      "ST01": {
+        "station": "ST01",
+        "trips": 406,
+        "booked_trips": 386,
+        "lent": 0,
+        "borrowed": 0,
+        "served": [
+          {
+            "booking_id": "2025-03-01:MANIKONDA (DIV 18):00001",
+            "group": "ward:relation/7848824",
+            "position": 1,
+            "reason": "DRR",
+            "lender": null
+          },
+          {
+            "booking_id": "2025-03-01:MANIKONDA (DIV 18):00002",
+            "group": "ward:relation/7848824",
+            "position": 2,
+            "reason": "DRR",
+            "lender": null
+          },
+          {
+            "booking_id": "2025-03-01:MANIKONDA (DIV 18):00003",
+            "group": "ward:relation/7848824",
+            "position": 3,
+            "reason": "DRR",
+            "lender": null
+          }
+        ],
+        "waiting": [],
+        "served_total": 369,
+        "waiting_total": 0
+      },
+      "ST02": {
+        "station": "ST02",
+        "trips": 57,
+        "booked_trips": 54,
+        "lent": 0,
+        "borrowed": 18,
+        "served": [
+          {
+            "booking_id": "2025-03-01:GAJULARAMARAM:00001",
+            "group": "ward:relation/7852869",
+            "position": 1,
+            "reason": "DRR",
+            "lender": null
+          },
+          {
+            "booking_id": "2025-03-01:GAJULARAMARAM:00002",
+            "group": "ward:relation/7852869",
+            "position": 2,
+            "reason": "DRR",
+            "lender": null
+          },
+          {
+            "booking_id": "2025-03-01:GAJULARAMARAM:00003",
+            "group": "ward:relation/7852869",
+            "position": 3,
+            "reason": "DRR",
+            "lender": null
+          }
+        ],
+        "waiting": [
+          "2025-03-01:GAJULARAMARAM:00073",
+          "2025-03-01:GAJULARAMARAM:00074",
+          "2025-03-01:GAJULARAMARAM:00075"
+        ],
+        "served_total": 72,
+        "waiting_total": 34
+      }
+    },
+    "stations_total": 90,
+    "transfers": [
+      {
+        "lender": "ST88",
+        "borrower": "ST02",
+        "trips": 2,
+        "round_trip_km": 2.752
+      },
+      {
+        "lender": "ST68",
+        "borrower": "ST02",
+        "trips": 16,
+        "round_trip_km": 6.282
+      },
+      {
+        "lender": "ST85",
+        "borrower": "ST09",
+        "trips": 52,
+        "round_trip_km": 3.503
+      }
+    ],
+    "transfers_total": 39,
+    "scheduled": {
+      "relation/7848824": {
+        "ward_id": "relation/7848824",
+        "litres": 127542.41237198106,
+        "floor": 214399.92285,
+        "target": 214399.92285,
+        "status": "FLOOR_NOT_MET"
+      },
+      "relation/7848859": {
+        "ward_id": "relation/7848859",
+        "litres": 77653.76110203122,
+        "floor": 130536.65898000001,
+        "target": 130536.65898000001,
+        "status": "FLOOR_NOT_MET"
+      }
+    },
+    "scheduled_total": 20,
+    "outage": {
+      "critical": [],
+      "allocations": [],
+      "ended": [],
+      "unused_litres": 9735000,
+      "counts_toward_water_debt": false,
+      "basis": {
+        "people": "DERIVED (Census 2011 population via E2) or officer count",
+        "lpcd": "ASSUMED (F10 10-15 lpcd)",
+        "priority": "ASSUMED deprivation weight exp(hours / tau)"
+      }
+    },
+    "effective_entitlement": {
+      "section:40 MLD STP ATTAPUR": 13024.602141999998,
+      "section:ADARSHNAGAR": 13024.602141999998,
+      "section:ADIBATLA (PD 1)": 13024.602141999998
+    },
+    "flags": {
+      "section:ADARSHNAGAR": {
+        "confidence": 0.0,
+        "needs_check": true,
+        "reason": "NO_CENSUS_NEED_DATA",
+        "basis": "PROVISIONAL"
+      },
+      "section:AMEENPUR (PD 8)": {
+        "confidence": 0.0,
+        "needs_check": true,
+        "reason": "NO_CENSUS_NEED_DATA",
+        "basis": "PROVISIONAL"
+      },
+      "section:ASMANGARH": {
+        "confidence": 0.0,
+        "needs_check": true,
+        "reason": "NO_CENSUS_NEED_DATA",
+        "basis": "PROVISIONAL"
+      }
+    },
+    "flags_total": 27,
+    "checked": {},
+    "unrouted": [
+      {
+        "kind": "scheduled",
+        "place_id": "relation/7848824",
+        "litres": 127542.41237198106,
+        "reason": "NEEDS_SERVICE_POINT"
+      },
+      {
+        "kind": "scheduled",
+        "place_id": "relation/7848859",
+        "litres": 77653.76110203122,
+        "reason": "NEEDS_SERVICE_POINT"
+      },
+      {
+        "kind": "scheduled",
+        "place_id": "relation/7849439",
+        "litres": 82462.98091154556,
+        "reason": "NEEDS_SERVICE_POINT"
+      }
+    ],
+    "unrouted_total": 20,
+    "special_stops": [],
+    "routing": null,
+    "basis": {
+      "plan": "SIMULATION (A7 replay main_2025, tight, seed 0; daily arrivals SYNTHETIC, monthly totals REAL)",
+      "effective_entitlement": "DERIVED (A2 Census 2011 need; A3 fallback median where flagged)",
+      "flags": "PROVISIONAL (A7 ProvisionalGate on main; T9 gate not merged)"
+    }
+  }
+}
