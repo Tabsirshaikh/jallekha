@@ -1,0 +1,125 @@
+{
+  "_example": {
+    "endpoint": "POST /intake/batch",
+    "status": "ROUTE_ON_MAIN",
+    "basis": "SYNTHETIC request; response from the real IntakeService on a temporary database",
+    "built_from": "app/routers/intake.py batch() -> services/intake_pipeline.py IntakeService.receive_batch -> IntakeResult",
+    "notes": "Item 4 resends item 1's client_id (status duplicate); item 5 has an unknown channel (status invalid)."
+  },
+  "request": {
+    "items": [
+      {
+        "client_id": "device-7f3a-0001",
+        "channel": "app",
+        "category": "no_water",
+        "text": "No water since morning",
+        "language_hint": "en",
+        "lat": 17.44,
+        "lon": 78.4983,
+        "is_synthetic": true
+      },
+      {
+        "client_id": "device-7f3a-0002",
+        "channel": "field_worker",
+        "reporter_id": "DEMO-FW-01",
+        "household_id": "HH-DEMO-0042",
+        "category": "tanker_missed",
+        "text": "Tanker did not come",
+        "language_hint": "te",
+        "lat": 17.4402,
+        "lon": 78.4985,
+        "is_synthetic": true
+      },
+      {
+        "client_id": "device-7f3a-0003",
+        "channel": "app",
+        "category": "dirty_water",
+        "is_synthetic": true
+      },
+      {
+        "client_id": "device-7f3a-0001",
+        "channel": "app",
+        "category": "no_water",
+        "text": "No water since morning",
+        "language_hint": "en",
+        "lat": 17.44,
+        "lon": 78.4983,
+        "is_synthetic": true
+      },
+      {
+        "client_id": "device-7f3a-0004",
+        "channel": "fax",
+        "text": "no water"
+      }
+    ]
+  },
+  "response": {
+    "results": [
+      {
+        "status": "created",
+        "client_id": "device-7f3a-0001",
+        "intake_id": "02382ff7-a59a-47e2-ad19-de9c4025c504",
+        "complaint_id": "2d7daf39-6640-4f9d-aa5c-86e8b66838e5",
+        "complaint_status": "open",
+        "parent_id": null,
+        "category": "no_water",
+        "language": "en",
+        "spam_score": 0.0,
+        "error": null,
+        "ledger_seq": 1
+      },
+      {
+        "status": "created",
+        "client_id": "device-7f3a-0002",
+        "intake_id": "d729e674-89a2-4931-aef9-7e21855d0009",
+        "complaint_id": "48213801-ef4e-408d-856f-113e09cca3c9",
+        "complaint_status": "open",
+        "parent_id": null,
+        "category": "tanker_missed",
+        "language": "en",
+        "spam_score": 0.0,
+        "error": null,
+        "ledger_seq": 2
+      },
+      {
+        "status": "created",
+        "client_id": "device-7f3a-0003",
+        "intake_id": "195eb9db-6d8e-4b0c-b5bf-c6d67f113da5",
+        "complaint_id": "47be000e-30a1-4f69-bcd7-9f2c000c117f",
+        "complaint_status": "awaiting_location",
+        "parent_id": null,
+        "category": "dirty_water",
+        "language": null,
+        "spam_score": 0.2,
+        "error": null,
+        "ledger_seq": 3
+      },
+      {
+        "status": "duplicate",
+        "client_id": "device-7f3a-0001",
+        "intake_id": "02382ff7-a59a-47e2-ad19-de9c4025c504",
+        "complaint_id": "2d7daf39-6640-4f9d-aa5c-86e8b66838e5",
+        "complaint_status": "open",
+        "parent_id": null,
+        "category": "no_water",
+        "language": "en",
+        "spam_score": 0.0,
+        "error": null,
+        "ledger_seq": null
+      },
+      {
+        "status": "invalid",
+        "client_id": "device-7f3a-0004",
+        "intake_id": null,
+        "complaint_id": null,
+        "complaint_status": null,
+        "parent_id": null,
+        "category": null,
+        "language": null,
+        "spam_score": null,
+        "error": "Unknown channel: fax",
+        "ledger_seq": null
+      }
+    ]
+  }
+}

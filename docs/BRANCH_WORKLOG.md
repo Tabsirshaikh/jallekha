@@ -809,6 +809,7 @@ The pull-request description must summarize the same information and link to thi
 
 - **Owner / date:** P3, 2026-10-03.
 - **Purpose:** Forecast and backtest (F5): monthly HMWSSB bookings per section and city, 12 months ahead, with a reproduced seasonal-naive baseline, a rolling-origin backtest, bottom-up reconciliation, split-conformal intervals and a capacity check.
+
 - **What we found:**
   - `V-VERIFY_REVIEW.md`, which recorded how 21.9% / 35.1% were computed, was never found. The protocol was recovered by reproduction on 2026-10-03 and confirmed by Padmaja: `noofbookings`; seasonal naive (same month a year earlier); Dec 2022 missing, not zero, so Dec 2023 is not scored (13 months, Jan 2023 - Feb 2024); all sections, missing = 0; city MAPE = mean of monthly errors; section WAPE pooled. Result 21.89% / 35.12% on the S2 files. `delivered` and both-years sections also land within 0.1 pp; Dec 2022 as zero and per-month WAPE do not.
   - On the longer D1b portal history (to Jan 2026, before the Feb/Mar 2026 re-cut) seasonal naive scores 26.28% / 47.67%, well above the S2 window; the 80% interval covers only 0.77 there. Section names change every year (no mapping applied).
@@ -835,6 +836,83 @@ The pull-request description must summarize the same information and link to thi
   - P1: weather (D8), groundwater (D7) and a trips-per-day source. Owner: confirm the recovered protocol before 21.9% / 35.1% go on slides.
   - T8 builds on the forecast table.
 - **Pull request:** pending.
+
+## `fix/e5-models` — E5: run the NB / BYM2 models so field-check flags are checked across methods
+
+- **Owner / date:** P1 (work done by the repo owner), 2026-10-03.
+- **Why:** E5 was marked DONE, but `build_underserved.py` called `screen(areas)` without model results, so the done-when ("flags stable across model variants") was never evaluated. BYM2 also needed a reviewed ward-adjacency graph, which did not exist.
+- **What we changed:**
+  - `scripts/evidence/build_ward_adjacency.py`: rook adjacency (at least 50 m shared border, 10 m snap, UTM 44N), 145 wards and 364 edges, plus a review record checked by SHA-256. Owner-reviewed on automated evidence: 360 of 364 edges stable across 9 settings; live OSM agrees on 356 of 356 comparable edges; Wikipedia spot-check.
+  - `scripts/evidence/fit_underserved_models.py`: fits NB, BYM2 and BYM2_SHRINKAGE out of fold (5 folds) on the gated cohort and writes `data/derived/underserved/model_results.json` with a cohort fingerprint, graph hash, config and environment. Fitting runs on Linux (WSL or CI); tests never re-sample, and `build_underserved.py` refuses stale results.
+  - `services/underserved_models.py` and `config/underserved.py`: options added during the BYM2 diagnosis (likelihood, rho prior, restricted regression, island handling, ICAR-only structure, inverse-sqrt NB dispersion prior, PC prior on the spatial spread), each with its source. Defaults are now the settings of the committed results.
+  - `services/underserved.py`: when the spatial models fail their diagnostics, a candidate must still agree across every method that passed, which needs at least peer and NB (`AGREED_FIELD_CHECK_CANDIDATE`). Four-way stability is still only claimed when all four pass (`stability_evaluated`). The summary lists `agreement_methods` and `methods_failed_diagnostics`.
+  - `.github/workflows/p1-e5-models.yml`: Linux job that fits the models and uploads the results for review.
+  - Each candidate reason appears once; the WAD reason is no longer repeated per method, and ratio reasons name their method.
+  - U5 (after merging `main`): snapshot rebuilt (6 candidates); the field-check cards say "PEER + NB", label the NB ratio reason separately, and key reasons by code and method (no duplicate React keys). `docs/LIMITATIONS.md` updated for T2, U2-U6.
+- **Result:** NB passes every check in all folds. BYM2 and BYM2_SHRINKAGE pass 8 of 10 folds but fail fold 1 for every seed (NB alpha and spatial sigma cannot be separated without its 22 wards), so they are recorded as DIAGNOSTICS_FAILED; the strict gate was kept. Candidates: 7 peer-only → **6 agreed by peer and NB** (Jaccard 0.86); Mailardevpally becomes `MODEL_SENSITIVE_REVIEW`.
+- **Validation:** new tests written first and failing first (graph reproducibility and review, stale results refused, dispersion and spread priors, agreement across passing methods, peer-only flag not a candidate). `verify_underserved.py` passes. Full suite and lint: see the PR.
+- **Known limitations:**
+  - Four-way stability is not met; the spatial models did not converge (see `docs/LIMITATIONS.md` F4).
+  - GitHub Actions could not run the models job (account billing block, October 2026); the committed results come from WSL Ubuntu with the same pinned PyMC 5.25.1.
+  - No field-check outcomes are recorded yet (0 ground truth).
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/52
+
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/58
+
+## `docs/api-shapes` — API shapes draft for T10 (Part 7 item 1)
+
+- **Owner / date:** P3, 2026-10-03.
+- **Purpose:** Docs-only contract draft for P4: `docs/api_shapes.md` and one example JSON per endpoint (`docs/api_examples/`), from `docs/P3_BUILD_PLAN.md` Part 7 item 1 and T10 step 1. **Not a row in `docs/features.csv`**: no row was added or changed (Part 7 asks the owner to decide whether it gets one).
+- **What we found:**
+  - Routes on `main`: `GET /health`, `POST /intake/batch`, `/intake/sms`, `/intake/missed-call`, `POST /notices`, `GET /ledger/entries`, `/ledger/verify`. No auth, CORS or OpenAPI export yet. Intake, notices and contests answer a bad item with HTTP 200 and `status: "invalid"`; only malformed bodies use the shared error shape (`app/errors.py`, `code` from the HTTP status phrase).
+  - P4 mismatches: the U3 field-worker app reads `duplicate` (resent `client_id`) as `merged`; the U2 resident app shows `spam` as "Could not send"; U4 uses lowercase outcomes (`confirmed`) where T3 returns `Confirmed`, and takes resident feedback on the driver's screen where T3 uses SMS replies `1` / `2`; U3 sends `area_id` as free text; U5 / U6 snapshots use camelCase and renamed fields (`waterAccessDeficitShare` vs E2 `wad`); the U6 forecast fixture is hand-typed but labelled SIMULATION, shows city intervals T2 does not produce, and marks the 21.9% / 35.1% protocol `NOT_DOCUMENTED`.
+  - For P2 / P3: no plan store and no delivery store on `main`; an explanation's queue day must use the plan's `booked_trips` (capacity after the scheduled reserve), or it disagrees with the plan (checked on replay day 1, station ST19: 215 matches, raw 226 does not); A8's replay day holds bookings that arrive after the 05:00 plan time, so T7's `waiting_hours` can be negative; A8's `results.csv` / `summary.json` exist for a future Impact page.
+  - `main` moved to `26b47d9` (U6) before this branch was cut; U6 adds 9 E501 errors and a format failure in P4's `scripts/frontend/build_u6_snapshot.py`.
+- **What we changed:**
+  - `docs/api_shapes.md`: conventions, status legend, what exists today, 17 sections (36 endpoints) with method and path, request, response fields and types, basis, errors, roles, and open questions for P4. Status: 7 route on main, 22 from main (service or file on main, route not built), 3 PROPOSED (T2 forecast and backtest, T9 confidence, from the local branches' actual output), 4 NOT DESIGNED (shortage: T8 not started; report card, SMS summary, impact: P4 / P2 to propose).
+  - `docs/api_examples/*.json` (36): each produced by calling the real route, service or file (temporary databases; SYNTHETIC requests; P2's replay day 1 for the plan and booking examples, SIMULATION; real ward rows from `ward_evidence.csv`); each records its endpoint, status, basis and source in `_example`. No phone numbers (a placeholder is shown; the services never echo numbers) and no personal free text. Response-field tables in the doc are generated from these files. The generator scripts were kept out of the repo (docs-only scope).
+  - `backend/tests/test_api_shapes.py` (3 tests). No backend code, routes or frontend files changed.
+  - P4 answers applied (2026-10-03): duplicate = "already sent", merged = linked to existing complaint; spam = received and flagged; four delivery outcomes, pending until reply window closes; stable ward_id + section_id; snake_case; null/UNAVAILABLE; SYNTHETIC demo forecasts; roles officer/driver/resident/field_worker + gateway; offset/limit/total + after_seq/limit; structured codes; needs_check; per-item batch status; ISO 8601 with offset; ward report card; impact section. Councillor role OPEN.
+- **Validation:**
+  - 3 tests: examples valid/labelled JSON without phone numbers; merged routes return documented fields; file-based examples match source rows.
+  - After merging `main` (`570d4b8`, T2 #58): `python tasks.py test`: ~613 backend passed, 2 failed; frontend 1 passed. Inherited failures same as T2/T9.
+  - `python tasks.py lint` exit 0.
+- **Known limitations:** Roles, auth, pagination and language handling are proposals for T10 to implement. Councillor role OPEN.
+- **Handoff / next step:** T10 builds the routes from the agreed shapes. P4: no further questions open.
+- **Update after P4's review (2026-10-03):** P4's answers applied in `docs/api_shapes.md` (section **Agreed with P4**): intake wording (`duplicate` = already sent, `merged` = linked to an existing complaint, `spam` = flagged for review); the four delivery outcome codes with `outcome_status` `pending` until the reply window closes; `ward_id` + `section_id` instead of free-text `area_id`; snake_case; missing numbers `null` + `UNAVAILABLE`; demo forecasts SYNTHETIC; roles `officer`, `driver`, `resident`, `field_worker` plus a gateway credential; `offset` / `limit` / `total` (ledger `after_seq` / `limit`); codes and structured values for the UI, SMS built on the server with English fallback; `needs_check` with signals; per-item batch status and 4xx for malformed requests; ISO 8601, UTC. Ward report card, SMS summary and impact designed from files on `main` (deliveries, debt, schedule and duplicate-merge share UNAVAILABLE). The example test's phone pattern no longer matches digits inside decimals. The under-served example now shows both reason kinds (found by T10's contract test). Still OPEN: councillor role; SMS wording in te / ur / hi.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/57
+
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/58
+
+## `feat/t9-confidence` — `T9`
+
+- **Owner / date:** P3, 2026-10-03.
+- **Purpose:** Confidence gate (F17): score each planner group's data quality, flag low confidence so it cannot auto-commit (officer check through A7), and choose the threshold on P2's A7 replay.
+- **What we found:**
+  - A7's `ConfidenceGate` Protocol is sufficient: `build_plan` keeps flagged groups, `approve_plan` raises `PlanBlocked` until `mark_checked` (`ward_reviewed`). No planner change and no new ledger event needed.
+  - Census 2011 is the year for every ward (data age cannot separate wards); no dated evidence exists (evidence age unavailable); T2 is not on `main` (forecast width unavailable).
+  - Calibration on the replay (153 days, 152 groups, 17,363 group-days; full information vs every group on the A3 fallback entitlement): the 0.90 target is met with nothing flagged (0.9522 at threshold 0.00), and the match share does not rise with the threshold (0.73-0.96). Fallback and Census groups match at the same rate (0.950 / 0.953). The thresholds cannot be separated, so none is chosen.
+  - `main` moved from `73efb55` to `28b2661` (`319efd9`) and then `d12e4fd`; both merged without conflicts. T2 merged as #58 (570d4b8).
+- **What we changed:**
+  - `docs/features.csv` / `docs/P3_FEATURES.md` status row: T9 IN_PROGRESS (own commit).
+  - `backend/app/config/confidence.py`: per-signal rules, combination, target 0.90, PROVISIONAL threshold 0.50, candidates, rounding, tolerance; each with a source or ASSUMED / OPEN.
+  - `backend/app/services/confidence.py`: Census join quality, section location, data age (excluded), forecast interval width (interface, unavailable), evidence age (unavailable); minimum of the available signals; `T9Gate` (A7 `ConfidenceGate`); `calibrate`.
+  - `scripts/trust/calibrate_confidence.py`; output `data/derived/confidence_calibration.csv` (SIMULATION, `_basis` columns; status `not_separable`, PROVISIONAL 0.50 kept).
+  - Tests `backend/tests/services/test_confidence.py`; workflow `.github/workflows/p3-t9.yml`; `docs/worklogs/T9.md`; T9 section of `docs/P3_FEATURES.md`.
+  - No P1, P2 or P4 file was edited; no API route; no new ledger event type.
+- **Validation:**
+  - 15 tests written first (`ModuleNotFoundError` before the code existed), including the done-when with A7's functions (flagged group, `PlanBlocked`, blank reason refused, `mark_checked` then approval, `plan_created` / `ward_reviewed` / `plan_approved` in the ledger, chain verifies), signal boundaries, missing signals listed, the weakest signal in the reason, the gate on the real files (counts read from the files), calibration on a hand-checkable fixture, and the committed calibration reproduced within 1e-4.
+  - After merging `main` (`570d4b8`, T2 #58): `python tasks.py test`: 610 backend passed, 2 failed; frontend 1 passed; all P1 verifiers pass. The 2 are inherited, none in T9 files: P2 `backend/tests/test_a8_build.py::test_stations_are_reproducible_committed_and_labelled` and `::test_one_seed_reproduces` (Windows float last digits; pass on Linux CI).
+  - `python tasks.py lint` exit 0. The `P3:T9` workflow regenerates the calibration on Linux and compares rounded values.
+- **Known limitations:**
+  - The done-when is met and tested, but the threshold is **not calibrated**: 0.50 is a placeholder (`not_separable`), accepted by Padmaja until P2 provides a per-group degraded scenario.
+  - At 0.50 the gate flags 60 of 152 groups (39%).
+  - Three of the five planned signals are unavailable: data age (Census 2011 for every ward), forecast interval width (waits for T2), evidence age (no dated data).
+  - OPEN, owner to confirm: the threshold, target 0.90, minimum combination, Census rule and review cap, location scores and outlier cap, per-group data age, interval-width rule.
+- **Handoff / next step:**
+  - P2 (request, see `docs/worklogs/T9.md`): degraded-scenario replay for threshold calibration.
+  - T10: expose the reason and the officer check.
+- **Pull request:** https://github.com/Tabsirshaikh/jallekha/pull/59
 
 ## `feat/t8-shortage` — `T8`
 

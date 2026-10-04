@@ -1,0 +1,2173 @@
+{
+  "adjacency_sha256": "d02002994668ddf6368d94125da119849b80a129e093dd5be3ef776474385b4a",
+  "cohort_edges": 205,
+  "cohort_fingerprint": "936aac5275042e8ba894d312706ee85062e8f7ed266863e724ca1a58dcd4ffe4",
+  "cohort_size": 107,
+  "config": {
+    "bym2_islands_iid_only": true,
+    "bym2_likelihood": "negative_binomial",
+    "bym2_restricted": false,
+    "bym2_rho_prior": "beta",
+    "bym2_sigma_prior": "pc",
+    "bym2_structure": "icar",
+    "chains": 4,
+    "cores": 4,
+    "credible_mass": 0.95,
+    "draws": 2000,
+    "geography_version": "GHMC_2016_150",
+    "max_model_areas": 250,
+    "max_need_reference_age_years": 15,
+    "max_reference_age_years": 2,
+    "max_rhat": 1.01,
+    "minimum_areas": 20,
+    "minimum_bulk_ess": 100,
+    "nb_dispersion_prior": "inv_sqrt",
+    "peer_count": 5,
+    "ratio_quantile": 0.2,
+    "seed": 20261002,
+    "target_accept": 0.99,
+    "tune": 2000,
+    "wad_quantile": 0.75
+  },
+  "environment": {
+    "arviz": "0.22.0",
+    "numpy": "2.2.6",
+    "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "pymc": "5.25.1",
+    "pytensor": "2.31.7",
+    "python": "3.12.3"
+  },
+  "folds": 5,
+  "label": "DERIVED (model reference; not a reporting probability or ground truth)",
+  "results": {
+    "BYM2": {
+      "fold_diagnostics": [
+        {
+          "chains": 4,
+          "diagnostics_by_parameter": {
+            "alpha": {
+              "max_rhat": 1.0032934675760594,
+              "min_bulk_ess": 834.0870687500615
+            },
+            "beta": {
+              "max_rhat": 1.0007364058878454,
+              "min_bulk_ess": 3756.451869435288
+            },
+            "intercept": {
+              "max_rhat": 1.0013172765026324,
+              "min_bulk_ess": 1489.2491964771918
+            },
+            "sigma": {
+              "max_rhat": 1.0044781319376774,
+              "min_bulk_ess": 951.9046838168789
+            },
+            "spatial_z": {
+              "max_rhat": 1.0027283345442732,
+              "min_bulk_ess": 1814.4942969749209
+            }
+          },
+          "divergences": 0,
+          "draws_per_chain": 2000,
+          "graph_review": {
+            "evidence": {
+              "known_gaps": "Historical 2016 layer; wards 3, 4, 11, 13, 31 and 113 are missing from the source, so their neighbours have fewer edges than on the ground.",
+              "live_osm_comparison": {
+                "comparable_edges_agreeing": "356 of 356",
+                "differences": "4 committed edges of Ward 106 Serilingampally could not be compared: the live OSM relations for Ward 105 Gachibowli and Ward 106 Serilingampally do not form closed rings (zero area); the committed DataMeet copy has 49.1 and 11.6 km2.",
+                "osm_timestamp": "2026-10-02T21:16:21Z"
+              },
+              "robustness": {
+                "borderline_edges_kept": [
+                  "Ward 100 Sanath Nagar - Ward 117 Moosapet (102 m)",
+                  "Ward 9 Ramanthapur - Ward 83 Amberpet (60 m)",
+                  "Ward 86 Musheerabad - Ward 145 Seethaphalmandi (62 m)",
+                  "Ward 100 Sanath Nagar - Ward 99 Vengal Rao Nagar (59 m)"
+                ],
+                "corner_touches_excluded": 26,
+                "edges": 364,
+                "edges_in_all_settings": 360,
+                "settings": "snap 5/10/20 m x minimum shared border 25/50/100 m"
+              },
+              "web_spot_check": {
+                "result": "Neighbours named there (Kondapur, Gachibowli, Hafeezpet, Chandanagar) are all edges of Ward 106 in the graph.",
+                "source": "https://en.wikipedia.org/wiki/Serilingampally"
+              }
+            },
+            "geography_version": "GHMC_2016_150",
+            "method": "Automated verification approved by the owner: 9-setting robustness, live OSM comparison, web spot-check. Not a local-knowledge review.",
+            "reviewed_on": "2026-10-03",
+            "reviewer": "Tabsirshaikh (owner)",
+            "source": "data/derived/underserved/ward_adjacency.json",
+            "source_sha256": "d02002994668ddf6368d94125da119849b80a129e093dd5be3ef776474385b4a",
+            "status": "REVIEWED"
+          },
+          "holdout_ids": [
+            "relation/7849439",
+            "relation/7852804",
+            "relation/7853538",
+            "relation/7853540",
+            "relation/7853542",
+            "relation/7853545",
+            "relation/7854083",
+            "relation/7854084",
+            "relation/7854088",
+            "relation/7854089",
+            "relation/7857549",
+            "relation/7857554",
+            "relation/7857794",
+            "relation/7857799",
+            "relation/7857840",
+            "relation/7858671",
+            "relation/7858672",
+            "relation/7861522",
+            "relation/7861523",
+            "relation/7861525",
+            "relation/7865922",
+            "relation/7867247"
+          ],
+          "islands_iid_only": true,
+          "likelihood": "negative_binomial",
+          "max_rhat": 1.0044781319376774,
+          "minimum_bulk_ess": 834.0870687500615,
+          "prediction_scope": "HELDOUT_ONLY",
+          "priors": {
+            "alpha": "1/sqrt(alpha) ~ HalfNormal(1)",
+            "beta": "Normal(0,1)",
+            "intercept": "Normal(-4,2)",
+            "sigma": "PC: P(sigma > 1) = 0.01"
+          },
+          "reference": "need covariates/exposure with area effect set to zero",
+          "restricted": false,
+          "rho_prior": "beta",
+          "seed": 20261002,
+          "status": "COMPLETE",
+          "structure": "icar",
+          "target_accept": 0.99,
+          "tune": 2000,
+          "variant": "BYM2"
+        },
+        {
+          "chains": 4,
+          "diagnostics_by_parameter": {
+            "alpha": {
+              "max_rhat": 1.0171886637615555,
+              "min_bulk_ess": 197.1209415728183
+            },
+            "beta": {
+              "max_rhat": 1.0015189893298369,
+              "min_bulk_ess": 2830.2700803067005
+            },
+            "intercept": {
+              "max_rhat": 1.0120437838841727,
+              "min_bulk_ess": 310.84508943630186
+            },
+            "sigma": {
+              "max_rhat": 1.0074145304349706,
+              "min_bulk_ess": 306.0987595579603
+            },
+            "spatial_z": {
+              "max_rhat": 1.005876287269793,
+              "min_bulk_ess": 567.6528707601997
+            }
+          },
+          "divergences": 1,
+          "draws_per_chain": 2000,
+          "graph_review": {
+            "evidence": {
+              "known_gaps": "Historical 2016 layer; wards 3, 4, 11, 13, 31 and 113 are missing from the source, so their neighbours have fewer edges than on the ground.",
+              "live_osm_comparison": {
+                "comparable_edges_agreeing": "356 of 356",
+                "differences": "4 committed edges of Ward 106 Serilingampally could not be compared: the live OSM relations for Ward 105 Gachibowli and Ward 106 Serilingampally do not form closed rings (zero area); the committed DataMeet copy has 49.1 and 11.6 km2.",
+                "osm_timestamp": "2026-10-02T21:16:21Z"
+              },
+              "robustness": {
+                "borderline_edges_kept": [
+                  "Ward 100 Sanath Nagar - Ward 117 Moosapet (102 m)",
+                  "Ward 9 Ramanthapur - Ward 83 Amberpet (60 m)",
+                  "Ward 86 Musheerabad - Ward 145 Seethaphalmandi (62 m)",
+                  "Ward 100 Sanath Nagar - Ward 99 Vengal Rao Nagar (59 m)"
+                ],
+                "corner_touches_excluded": 26,
+                "edges": 364,
+                "edges_in_all_settings": 360,
+                "settings": "snap 5/10/20 m x minimum shared border 25/50/100 m"
+              },
+              "web_spot_check": {
+                "result": "Neighbours named there (Kondapur, Gachibowli, Hafeezpet, Chandanagar) are all edges of Ward 106 in the graph.",
+                "source": "https://en.wikipedia.org/wiki/Serilingampally"
+              }
+            },
+            "geography_version": "GHMC_2016_150",
+            "method": "Automated verification approved by the owner: 9-setting robustness, live OSM comparison, web spot-check. Not a local-knowledge review.",
+            "reviewed_on": "2026-10-03",
+            "reviewer": "Tabsirshaikh (owner)",
+            "source": "data/derived/underserved/ward_adjacency.json",
+            "source_sha256": "d02002994668ddf6368d94125da119849b80a129e093dd5be3ef776474385b4a",
+            "status": "REVIEWED"
+          },
+          "holdout_ids": [
+            "relation/7849497",
+            "relation/7849545",
+            "relation/7850180",
+            "relation/7850229",
+            "relation/7852364",
+            "relation/7852365",
+            "relation/7852868",
+            "relation/7854081",
+            "relation/7854091",
+            "relation/7856362",
+            "relation/7856367",
+            "relation/7856370",
+            "relation/7857553",
+            "relation/7857795",
+            "relation/7857798",
+            "relation/7857839",
+            "relation/7858244",
+            "relation/7858294",
+            "relation/7858675",
+            "relation/7861518",
+            "relation/7861531",
+            "relation/7861532"
+          ],
+          "islands_iid_only": true,
+          "likelihood": "negative_binomial",
+          "max_rhat": 1.0171886637615555,
+          "minimum_bulk_ess": 197.1209415728183,
+          "prediction_scope": "HELDOUT_ONLY",
+          "priors": {
+            "alpha": "1/sqrt(alpha) ~ HalfNormal(1)",
+            "beta": "Normal(0,1)",
+            "intercept": "Normal(-4,2)",
+            "sigma": "PC: P(sigma > 1) = 0.01"
+          },
+          "reference": "need covariates/exposure with area effect set to zero",
+          "restricted": false,
+          "rho_prior": "beta",
+          "seed": 20261003,
+          "status": "DIAGNOSTICS_FAILED",
+          "structure": "icar",
+          "target_accept": 0.99,
+          "tune": 2000,
+          "variant": "BYM2"
+        },
+        {
+          "chains": 4,
+          "diagnostics_by_parameter": {
+            "alpha": {
+              "max_rhat": 1.0065676902954641,
+              "min_bulk_ess": 981.9847592295486
+            },
+            "beta": {
+              "max_rhat": 1.0009827661399522,
+              "min_bulk_ess": 3403.87621523676
+            },
+            "intercept": {
+              "max_rhat": 1.0043837312703223,
+              "min_bulk_ess": 1327.7950841750228
+            },
+            "sigma": {
+              "max_rhat": 1.00605939743065,
+              "min_bulk_ess": 1151.7641091129356
+            },
+            "spatial_z": {
+              "max_rhat": 1.0031118295109533,
+              "min_bulk_ess": 2260.8535183490435
+            }
+          },
+          "divergences": 0,
+          "draws_per_chain": 2000,
+          "graph_review": {
+            "evidence": {
+              "known_gaps": "Historical 2016 layer; wards 3, 4, 11, 13, 31 and 113 are missing from the source, so their neighbours have fewer edges than on the ground.",
+              "live_osm_comparison": {
+                "comparable_edges_agreeing": "356 of 356",
+                "differences": "4 committed edges of Ward 106 Serilingampally could not be compared: the live OSM relations for Ward 105 Gachibowli and Ward 106 Serilingampally do not form closed rings (zero area); the committed DataMeet copy has 49.1 and 11.6 km2.",
+                "osm_timestamp": "2026-10-02T21:16:21Z"
+              },
+              "robustness": {
+                "borderline_edges_kept": [
+                  "Ward 100 Sanath Nagar - Ward 117 Moosapet (102 m)",
+                  "Ward 9 Ramanthapur - Ward 83 Amberpet (60 m)",
+                  "Ward 86 Musheerabad - Ward 145 Seethaphalmandi (62 m)",
+                  "Ward 100 Sanath Nagar - Ward 99 Vengal Rao Nagar (59 m)"
+                ],
+                "corner_touches_excluded": 26,
+                "edges": 364,
+                "edges_in_all_settings": 360,
+                "settings": "snap 5/10/20 m x minimum shared border 25/50/100 m"
+              },
+              "web_spot_check": {
+                "result": "Neighbours named there (Kondapur, Gachibowli, Hafeezpet, Chandanagar) are all edges of Ward 106 in the graph.",
+                "source": "https://en.wikipedia.org/wiki/Serilingampally"
+              }
+            },
+            "geography_version": "GHMC_2016_150",
+            "method": "Automated verification approved by the owner: 9-setting robustness, live OSM comparison, web spot-check. Not a local-knowledge review.",
+            "reviewed_on": "2026-10-03",
+            "reviewer": "Tabsirshaikh (owner)",
+            "source": "data/derived/underserved/ward_adjacency.json",
+            "source_sha256": "d02002994668ddf6368d94125da119849b80a129e093dd5be3ef776474385b4a",
+            "status": "REVIEWED"
+          },
+          "holdout_ids": [
+            "relation/7848859",
+            "relation/7849357",
+            "relation/7849498",
+            "relation/7852446",
+            "relation/7852447",
+            "relation/7852805",
+            "relation/7852864",
+            "relation/7852866",
+            "relation/7852869",
+            "relation/7854085",
+            "relation/7856360",
+            "relation/7856363",
+            "relation/7856365",
+            "relation/7857545",
+            "relation/7857548",
+            "relation/7857552",
+            "relation/7857800",
+            "relation/7861519",
+            "relation/7861528",
+            "relation/7865924",
+            "relation/7867585"
+          ],
+          "islands_iid_only": true,
+          "likelihood": "negative_binomial",
+          "max_rhat": 1.0065676902954641,
+          "minimum_bulk_ess": 981.9847592295486,
+          "prediction_scope": "HELDOUT_ONLY",
+          "priors": {
+            "alpha": "1/sqrt(alpha) ~ HalfNormal(1)",
+            "beta": "Normal(0,1)",
+            "intercept": "Normal(-4,2)",
+            "sigma": "PC: P(sigma > 1) = 0.01"
+          },
+          "reference": "need covariates/exposure with area effect set to zero",
+          "restricted": false,
+          "rho_prior": "beta",
+          "seed": 20261004,
+          "status": "COMPLETE",
+          "structure": "icar",
+          "target_accept": 0.99,
+          "tune": 2000,
+          "variant": "BYM2"
+        },
+        {
+          "chains": 4,
+          "diagnostics_by_parameter": {
+            "alpha": {
+              "max_rhat": 1.0091895551084762,
+              "min_bulk_ess": 518.5709092474857
+            },
+            "beta": {
+              "max_rhat": 1.0004481452616192,
+              "min_bulk_ess": 3666.0985851980854
+            },
+            "intercept": {
+              "max_rhat": 1.005487855317568,
+              "min_bulk_ess": 912.8852858468452
+            },
+            "sigma": {
+              "max_rhat": 1.0086983039872015,
+              "min_bulk_ess": 594.7351191131816
+            },
+            "spatial_z": {
+              "max_rhat": 1.0042067834736799,
+              "min_bulk_ess": 1045.4839679414554
+            }
+          },
+          "divergences": 0,
+          "draws_per_chain": 2000,
+          "graph_review": {
+            "evidence": {
+              "known_gaps": "Historical 2016 layer; wards 3, 4, 11, 13, 31 and 113 are missing from the source, so their neighbours have fewer edges than on the ground.",
+              "live_osm_comparison": {
+                "comparable_edges_agreeing": "356 of 356",
+                "differences": "4 committed edges of Ward 106 Serilingampally could not be compared: the live OSM relations for Ward 105 Gachibowli and Ward 106 Serilingampally do not form closed rings (zero area); the committed DataMeet copy has 49.1 and 11.6 km2.",
+                "osm_timestamp": "2026-10-02T21:16:21Z"
+              },
+              "robustness": {
+                "borderline_edges_kept": [
+                  "Ward 100 Sanath Nagar - Ward 117 Moosapet (102 m)",
+                  "Ward 9 Ramanthapur - Ward 83 Amberpet (60 m)",
+                  "Ward 86 Musheerabad - Ward 145 Seethaphalmandi (62 m)",
+                  "Ward 100 Sanath Nagar - Ward 99 Vengal Rao Nagar (59 m)"
+                ],
+                "corner_touches_excluded": 26,
+                "edges": 364,
+                "edges_in_all_settings": 360,
+                "settings": "snap 5/10/20 m x minimum shared border 25/50/100 m"
+              },
+              "web_spot_check": {
+                "result": "Neighbours named there (Kondapur, Gachibowli, Hafeezpet, Chandanagar) are all edges of Ward 106 in the graph.",
+                "source": "https://en.wikipedia.org/wiki/Serilingampally"
+              }
+            },
+            "geography_version": "GHMC_2016_150",
+            "method": "Automated verification approved by the owner: 9-setting robustness, live OSM comparison, web spot-check. Not a local-knowledge review.",
+            "reviewed_on": "2026-10-03",
+            "reviewer": "Tabsirshaikh (owner)",
+            "source": "data/derived/underserved/ward_adjacency.json",
+            "source_sha256": "d02002994668ddf6368d94125da119849b80a129e093dd5be3ef776474385b4a",
+            "status": "REVIEWED"
+          },
+          "holdout_ids": [
+            "relation/7848844",
+            "relation/7850230",
+            "relation/7854080",
+            "relation/7854086",
+            "relation/7856358",
+            "relation/7856361",
+            "relation/7856366",
+            "relation/7857551",
+            "relation/7857838",
+            "relation/7858250",
+            "relation/7858295",
+            "relation/7858296",
+            "relation/7861524",
+            "relation/7861527",
+            "relation/7865918",
+            "relation/7865920",
+            "relation/7866627",
+            "relation/7866628",
+            "relation/7867246",
+            "relation/7867248",
+            "relation/7867584"
+          ],
+          "islands_iid_only": true,
+          "likelihood": "negative_binomial",
+          "max_rhat": 1.0091895551084762,
+          "minimum_bulk_ess": 518.5709092474857,
+          "prediction_scope": "HELDOUT_ONLY",
+          "priors": {
+            "alpha": "1/sqrt(alpha) ~ HalfNormal(1)",
+            "beta": "Normal(0,1)",
+            "intercept": "Normal(-4,2)",
+            "sigma": "PC: P(sigma > 1) = 0.01"
+          },
+          "reference": "need covariates/exposure with area effect set to zero",
+          "restricted": false,
+          "rho_prior": "beta",
+          "seed": 20261005,
+          "status": "COMPLETE",
+          "structure": "icar",
+          "target_accept": 0.99,
+          "tune": 2000,
+          "variant": "BYM2"
+        },
+        {
+          "chains": 4,
+          "diagnostics_by_parameter": {
+            "alpha": {
+              "max_rhat": 1.0037347739187317,
+              "min_bulk_ess": 1324.8783177608252
+            },
+            "beta": {
+              "max_rhat": 1.0004765405674425,
+              "min_bulk_ess": 4259.233225485345
+            },
+            "intercept": {
+              "max_rhat": 1.002457717171897,
+              "min_bulk_ess": 2223.121817782676
+            },
+            "sigma": {
+              "max_rhat": 1.0058552526148983,
+              "min_bulk_ess": 1436.9639653759207
+            },
+            "spatial_z": {
+              "max_rhat": 1.002286422721091,
+              "min_bulk_ess": 2801.0992150232423
+            }
+          },
+          "divergences": 0,
+          "draws_per_chain": 2000,
+          "graph_review": {
+            "evidence": {
+              "known_gaps": "Historical 2016 layer; wards 3, 4, 11, 13, 31 and 113 are missing from the source, so their neighbours have fewer edges than on the ground.",
+              "live_osm_comparison": {
+                "comparable_edges_agreeing": "356 of 356",
+                "differences": "4 committed edges of Ward 106 Serilingampally could not be compared: the live OSM relations for Ward 105 Gachibowli and Ward 106 Serilingampally do not form closed rings (zero area); the committed DataMeet copy has 49.1 and 11.6 km2.",
+                "osm_timestamp": "2026-10-02T21:16:21Z"
+              },
+              "robustness": {
+                "borderline_edges_kept": [
+                  "Ward 100 Sanath Nagar - Ward 117 Moosapet (102 m)",
+                  "Ward 9 Ramanthapur - Ward 83 Amberpet (60 m)",
+                  "Ward 86 Musheerabad - Ward 145 Seethaphalmandi (62 m)",
+                  "Ward 100 Sanath Nagar - Ward 99 Vengal Rao Nagar (59 m)"
+                ],
+                "corner_touches_excluded": 26,
+                "edges": 364,
+                "edges_in_all_settings": 360,
+                "settings": "snap 5/10/20 m x minimum shared border 25/50/100 m"
+              },
+              "web_spot_check": {
+                "result": "Neighbours named there (Kondapur, Gachibowli, Hafeezpet, Chandanagar) are all edges of Ward 106 in the graph.",
+                "source": "https://en.wikipedia.org/wiki/Serilingampally"
+              }
+            },
+            "geography_version": "GHMC_2016_150",
+            "method": "Automated verification approved by the owner: 9-setting robustness, live OSM comparison, web spot-check. Not a local-knowledge review.",
+            "reviewed_on": "2026-10-03",
+            "reviewer": "Tabsirshaikh (owner)",
+            "source": "data/derived/underserved/ward_adjacency.json",
+            "source_sha256": "d02002994668ddf6368d94125da119849b80a129e093dd5be3ef776474385b4a",
+            "status": "REVIEWED"
+          },
+          "holdout_ids": [
+            "relation/7848824",
+            "relation/7849315",
+            "relation/7850095",
+            "relation/7850268",
+            "relation/7852863",
+            "relation/7852865",
+            "relation/7853541",
+            "relation/7854090",
+            "relation/7856356",
+            "relation/7856371",
+            "relation/7857544",
+            "relation/7857547",
+            "relation/7858226",
+            "relation/7858245",
+            "relation/7858249",
+            "relation/7858404",
+            "relation/7858673",
+            "relation/7861520",
+            "relation/7861521",
+            "relation/7861530",
+            "relation/7867249"
+          ],
+          "islands_iid_only": true,
+          "likelihood": "negative_binomial",
+          "max_rhat": 1.0058552526148983,
+          "minimum_bulk_ess": 1324.8783177608252,
+          "prediction_scope": "HELDOUT_ONLY",
+          "priors": {
+            "alpha": "1/sqrt(alpha) ~ HalfNormal(1)",
+            "beta": "Normal(0,1)",
+            "intercept": "Normal(-4,2)",
+            "sigma": "PC: P(sigma > 1) = 0.01"
+          },
+          "reference": "need covariates/exposure with area effect set to zero",
+          "restricted": false,
+          "rho_prior": "beta",
+          "seed": 20261006,
+          "status": "COMPLETE",
+          "structure": "icar",
+          "target_accept": 0.99,
+          "tune": 2000,
+          "variant": "BYM2"
+        }
+      ],
+      "folds": 5,
+      "prediction_scope": "OUT_OF_FOLD",
+      "scores": {},
+      "status": "DIAGNOSTICS_FAILED",
+      "variant": "BYM2"
+    },
+    "BYM2_SHRINKAGE": {
+      "fold_diagnostics": [
+        {
+          "chains": 4,
+          "diagnostics_by_parameter": {
+            "alpha": {
+              "max_rhat": 1.0024992480242798,
+              "min_bulk_ess": 1548.6878796537171
+            },
+            "beta": {
+              "max_rhat": 1.00038543240896,
+              "min_bulk_ess": 5296.410715025247
+            },
+            "intercept": {
+              "max_rhat": 1.0020383228675562,
+              "min_bulk_ess": 2461.0449471861384
+            },
+            "sigma": {
+              "max_rhat": 1.0031794843270143,
+              "min_bulk_ess": 1856.4980210458516
+            },
+            "spatial_z": {
+              "max_rhat": 1.0021109106716415,
+              "min_bulk_ess": 3273.943101343013
+            }
+          },
+          "divergences": 0,
+          "draws_per_chain": 2000,
+          "graph_review": {
+            "evidence": {
+              "known_gaps": "Historical 2016 layer; wards 3, 4, 11, 13, 31 and 113 are missing from the source, so their neighbours have fewer edges than on the ground.",
+              "live_osm_comparison": {
+                "comparable_edges_agreeing": "356 of 356",
+                "differences": "4 committed edges of Ward 106 Serilingampally could not be compared: the live OSM relations for Ward 105 Gachibowli and Ward 106 Serilingampally do not form closed rings (zero area); the committed DataMeet copy has 49.1 and 11.6 km2.",
+                "osm_timestamp": "2026-10-02T21:16:21Z"
+              },
+              "robustness": {
+                "borderline_edges_kept": [
+                  "Ward 100 Sanath Nagar - Ward 117 Moosapet (102 m)",
+                  "Ward 9 Ramanthapur - Ward 83 Amberpet (60 m)",
+                  "Ward 86 Musheerabad - Ward 145 Seethaphalmandi (62 m)",
+                  "Ward 100 Sanath Nagar - Ward 99 Vengal Rao Nagar (59 m)"
+                ],
+                "corner_touches_excluded": 26,
+                "edges": 364,
+                "edges_in_all_settings": 360,
+                "settings": "snap 5/10/20 m x minimum shared border 25/50/100 m"
+              },
+              "web_spot_check": {
+                "result": "Neighbours named there (Kondapur, Gachibowli, Hafeezpet, Chandanagar) are all edges of Ward 106 in the graph.",
+                "source": "https://en.wikipedia.org/wiki/Serilingampally"
+              }
+            },
+            "geography_version": "GHMC_2016_150",
+            "method": "Automated verification approved by the owner: 9-setting robustness, live OSM comparison, web spot-check. Not a local-knowledge review.",
+            "reviewed_on": "2026-10-03",
+            "reviewer": "Tabsirshaikh (owner)",
+            "source": "data/derived/underserved/ward_adjacency.json",
+            "source_sha256": "d02002994668ddf6368d94125da119849b80a129e093dd5be3ef776474385b4a",
+            "status": "REVIEWED"
+          },
+          "holdout_ids": [
+            "relation/7849439",
+            "relation/7852804",
+            "relation/7853538",
+            "relation/7853540",
+            "relation/7853542",
+            "relation/7853545",
+            "relation/7854083",
+            "relation/7854084",
+            "relation/7854088",
+            "relation/7854089",
+            "relation/7857549",
+            "relation/7857554",
+            "relation/7857794",
+            "relation/7857799",
+            "relation/7857840",
+            "relation/7858671",
+            "relation/7858672",
+            "relation/7861522",
+            "relation/7861523",
+            "relation/7861525",
+            "relation/7865922",
+            "relation/7867247"
+          ],
+          "islands_iid_only": true,
+          "likelihood": "negative_binomial",
+          "max_rhat": 1.0031794843270143,
+          "minimum_bulk_ess": 1548.6878796537171,
+          "prediction_scope": "HELDOUT_ONLY",
+          "priors": {
+            "alpha": "1/sqrt(alpha) ~ HalfNormal(1)",
+            "beta": "Normal(0,1)",
+            "intercept": "Normal(-4,2)",
+            "sigma": "PC: P(sigma > 0.5) = 0.01"
+          },
+          "reference": "need covariates/exposure with area effect set to zero",
+          "restricted": false,
+          "rho_prior": "beta",
+          "seed": 20261002,
+          "status": "COMPLETE",
+          "structure": "icar",
+          "target_accept": 0.99,
+          "tune": 2000,
+          "variant": "BYM2_SHRINKAGE"
+        },
+        {
+          "chains": 4,
+          "diagnostics_by_parameter": {
+            "alpha": {
+              "max_rhat": 1.0074631642876055,
+              "min_bulk_ess": 506.5964727711366
+            },
+            "beta": {
+              "max_rhat": 1.000391985329708,
+              "min_bulk_ess": 3813.0267899332225
+            },
+            "intercept": {
+              "max_rhat": 1.0046496773233404,
+              "min_bulk_ess": 786.468803382296
+            },
+            "sigma": {
+              "max_rhat": 1.0035717286251078,
+              "min_bulk_ess": 607.7701591767827
+            },
+            "spatial_z": {
+              "max_rhat": 1.0029122171575207,
+              "min_bulk_ess": 1043.9838190627129
+            }
+          },
+          "divergences": 5,
+          "draws_per_chain": 2000,
+          "graph_review": {
+            "evidence": {
+              "known_gaps": "Historical 2016 layer; wards 3, 4, 11, 13, 31 and 113 are missing from the source, so their neighbours have fewer edges than on the ground.",
+              "live_osm_comparison": {
+                "comparable_edges_agreeing": "356 of 356",
+                "differences": "4 committed edges of Ward 106 Serilingampally could not be compared: the live OSM relations for Ward 105 Gachibowli and Ward 106 Serilingampally do not form closed rings (zero area); the committed DataMeet copy has 49.1 and 11.6 km2.",
+                "osm_timestamp": "2026-10-02T21:16:21Z"
+              },
+              "robustness": {
+                "borderline_edges_kept": [
+                  "Ward 100 Sanath Nagar - Ward 117 Moosapet (102 m)",
+                  "Ward 9 Ramanthapur - Ward 83 Amberpet (60 m)",
+                  "Ward 86 Musheerabad - Ward 145 Seethaphalmandi (62 m)",
+                  "Ward 100 Sanath Nagar - Ward 99 Vengal Rao Nagar (59 m)"
+                ],
+                "corner_touches_excluded": 26,
+                "edges": 364,
+                "edges_in_all_settings": 360,
+                "settings": "snap 5/10/20 m x minimum shared border 25/50/100 m"
+              },
+              "web_spot_check": {
+                "result": "Neighbours named there (Kondapur, Gachibowli, Hafeezpet, Chandanagar) are all edges of Ward 106 in the graph.",
+                "source": "https://en.wikipedia.org/wiki/Serilingampally"
+              }
+            },
+            "geography_version": "GHMC_2016_150",
+            "method": "Automated verification approved by the owner: 9-setting robustness, live OSM comparison, web spot-check. Not a local-knowledge review.",
+            "reviewed_on": "2026-10-03",
+            "reviewer": "Tabsirshaikh (owner)",
+            "source": "data/derived/underserved/ward_adjacency.json",
+            "source_sha256": "d02002994668ddf6368d94125da119849b80a129e093dd5be3ef776474385b4a",
+            "status": "REVIEWED"
+          },
+          "holdout_ids": [
+            "relation/7849497",
+            "relation/7849545",
+            "relation/7850180",
+            "relation/7850229",
+            "relation/7852364",
+            "relation/7852365",
+            "relation/7852868",
+            "relation/7854081",
+            "relation/7854091",
+            "relation/7856362",
+            "relation/7856367",
+            "relation/7856370",
+            "relation/7857553",
+            "relation/7857795",
+            "relation/7857798",
+            "relation/7857839",
+            "relation/7858244",
+            "relation/7858294",
+            "relation/7858675",
+            "relation/7861518",
+            "relation/7861531",
+            "relation/7861532"
+          ],
+          "islands_iid_only": true,
+          "likelihood": "negative_binomial",
+          "max_rhat": 1.0074631642876055,
+          "minimum_bulk_ess": 506.5964727711366,
+          "prediction_scope": "HELDOUT_ONLY",
+          "priors": {
+            "alpha": "1/sqrt(alpha) ~ HalfNormal(1)",
+            "beta": "Normal(0,1)",
+            "intercept": "Normal(-4,2)",
+            "sigma": "PC: P(sigma > 0.5) = 0.01"
+          },
+          "reference": "need covariates/exposure with area effect set to zero",
+          "restricted": false,
+          "rho_prior": "beta",
+          "seed": 20261003,
+          "status": "DIAGNOSTICS_FAILED",
+          "structure": "icar",
+          "target_accept": 0.99,
+          "tune": 2000,
+          "variant": "BYM2_SHRINKAGE"
+        },
+        {
+          "chains": 4,
+          "diagnostics_by_parameter": {
+            "alpha": {
+              "max_rhat": 1.0027170447487763,
+              "min_bulk_ess": 1421.210342985504
+            },
+            "beta": {
+              "max_rhat": 1.0005237590971452,
+              "min_bulk_ess": 4480.453654077405
+            },
+            "intercept": {
+              "max_rhat": 1.0008406387139572,
+              "min_bulk_ess": 1889.350632279766
+            },
+            "sigma": {
+              "max_rhat": 1.0029577246092793,
+              "min_bulk_ess": 1517.4042694641423
+            },
+            "spatial_z": {
+              "max_rhat": 1.0018622946724203,
+              "min_bulk_ess": 2975.8857718049653
+            }
+          },
+          "divergences": 0,
+          "draws_per_chain": 2000,
+          "graph_review": {
+            "evidence": {
+              "known_gaps": "Historical 2016 layer; wards 3, 4, 11, 13, 31 and 113 are missing from the source, so their neighbours have fewer edges than on the ground.",
+              "live_osm_comparison": {
+                "comparable_edges_agreeing": "356 of 356",
+                "differences": "4 committed edges of Ward 106 Serilingampally could not be compared: the live OSM relations for Ward 105 Gachibowli and Ward 106 Serilingampally do not form closed rings (zero area); the committed DataMeet copy has 49.1 and 11.6 km2.",
+                "osm_timestamp": "2026-10-02T21:16:21Z"
+              },
+              "robustness": {
+                "borderline_edges_kept": [
+                  "Ward 100 Sanath Nagar - Ward 117 Moosapet (102 m)",
+                  "Ward 9 Ramanthapur - Ward 83 Amberpet (60 m)",
+                  "Ward 86 Musheerabad - Ward 145 Seethaphalmandi (62 m)",
+                  "Ward 100 Sanath Nagar - Ward 99 Vengal Rao Nagar (59 m)"
+                ],
+                "corner_touches_excluded": 26,
+                "edges": 364,
+                "edges_in_all_settings": 360,
+                "settings": "snap 5/10/20 m x minimum shared border 25/50/100 m"
+              },
+              "web_spot_check": {
+                "result": "Neighbours named there (Kondapur, Gachibowli, Hafeezpet, Chandanagar) are all edges of Ward 106 in the graph.",
+                "source": "https://en.wikipedia.org/wiki/Serilingampally"
+              }
+            },
+            "geography_version": "GHMC_2016_150",
+            "method": "Automated verification approved by the owner: 9-setting robustness, live OSM comparison, web spot-check. Not a local-knowledge review.",
+            "reviewed_on": "2026-10-03",
+            "reviewer": "Tabsirshaikh (owner)",
+            "source": "data/derived/underserved/ward_adjacency.json",
+            "source_sha256": "d02002994668ddf6368d94125da119849b80a129e093dd5be3ef776474385b4a",
+            "status": "REVIEWED"
+          },
+          "holdout_ids": [
+            "relation/7848859",
+            "relation/7849357",
+            "relation/7849498",
+            "relation/7852446",
+            "relation/7852447",
+            "relation/7852805",
+            "relation/7852864",
+            "relation/7852866",
+            "relation/7852869",
+            "relation/7854085",
+            "relation/7856360",
+            "relation/7856363",
+            "relation/7856365",
+            "relation/7857545",
+            "relation/7857548",
+            "relation/7857552",
+            "relation/7857800",
+            "relation/7861519",
+            "relation/7861528",
+            "relation/7865924",
+            "relation/7867585"
+          ],
+          "islands_iid_only": true,
+          "likelihood": "negative_binomial",
+          "max_rhat": 1.0029577246092793,
+          "minimum_bulk_ess": 1421.210342985504,
+          "prediction_scope": "HELDOUT_ONLY",
+          "priors": {
+            "alpha": "1/sqrt(alpha) ~ HalfNormal(1)",
+            "beta": "Normal(0,1)",
+            "intercept": "Normal(-4,2)",
+            "sigma": "PC: P(sigma > 0.5) = 0.01"
+          },
+          "reference": "need covariates/exposure with area effect set to zero",
+          "restricted": false,
+          "rho_prior": "beta",
+          "seed": 20261004,
+          "status": "COMPLETE",
+          "structure": "icar",
+          "target_accept": 0.99,
+          "tune": 2000,
+          "variant": "BYM2_SHRINKAGE"
+        },
+        {
+          "chains": 4,
+          "diagnostics_by_parameter": {
+            "alpha": {
+              "max_rhat": 1.0030949767066633,
+              "min_bulk_ess": 1055.2979662998293
+            },
+            "beta": {
+              "max_rhat": 1.0006989380248523,
+              "min_bulk_ess": 5671.018171528437
+            },
+            "intercept": {
+              "max_rhat": 1.001619518519243,
+              "min_bulk_ess": 1532.186126600967
+            },
+            "sigma": {
+              "max_rhat": 1.003754656054827,
+              "min_bulk_ess": 1236.3873128442165
+            },
+            "spatial_z": {
+              "max_rhat": 1.0020770924120819,
+              "min_bulk_ess": 2651.1363022040837
+            }
+          },
+          "divergences": 0,
+          "draws_per_chain": 2000,
+          "graph_review": {
+            "evidence": {
+              "known_gaps": "Historical 2016 layer; wards 3, 4, 11, 13, 31 and 113 are missing from the source, so their neighbours have fewer edges than on the ground.",
+              "live_osm_comparison": {
+                "comparable_edges_agreeing": "356 of 356",
+                "differences": "4 committed edges of Ward 106 Serilingampally could not be compared: the live OSM relations for Ward 105 Gachibowli and Ward 106 Serilingampally do not form closed rings (zero area); the committed DataMeet copy has 49.1 and 11.6 km2.",
+                "osm_timestamp": "2026-10-02T21:16:21Z"
+              },
+              "robustness": {
+                "borderline_edges_kept": [
+                  "Ward 100 Sanath Nagar - Ward 117 Moosapet (102 m)",
+                  "Ward 9 Ramanthapur - Ward 83 Amberpet (60 m)",
+                  "Ward 86 Musheerabad - Ward 145 Seethaphalmandi (62 m)",
+                  "Ward 100 Sanath Nagar - Ward 99 Vengal Rao Nagar (59 m)"
+                ],
+                "corner_touches_excluded": 26,
+                "edges": 364,
+                "edges_in_all_settings": 360,
+                "settings": "snap 5/10/20 m x minimum shared border 25/50/100 m"
+              },
+              "web_spot_check": {
+                "result": "Neighbours named there (Kondapur, Gachibowli, Hafeezpet, Chandanagar) are all edges of Ward 106 in the graph.",
+                "source": "https://en.wikipedia.org/wiki/Serilingampally"
+              }
+            },
+            "geography_version": "GHMC_2016_150",
+            "method": "Automated verification approved by the owner: 9-setting robustness, live OSM comparison, web spot-check. Not a local-knowledge review.",
+            "reviewed_on": "2026-10-03",
+            "reviewer": "Tabsirshaikh (owner)",
+            "source": "data/derived/underserved/ward_adjacency.json",
+            "source_sha256": "d02002994668ddf6368d94125da119849b80a129e093dd5be3ef776474385b4a",
+            "status": "REVIEWED"
+          },
+          "holdout_ids": [
+            "relation/7848844",
+            "relation/7850230",
+            "relation/7854080",
+            "relation/7854086",
+            "relation/7856358",
+            "relation/7856361",
+            "relation/7856366",
+            "relation/7857551",
+            "relation/7857838",
+            "relation/7858250",
+            "relation/7858295",
+            "relation/7858296",
+            "relation/7861524",
+            "relation/7861527",
+            "relation/7865918",
+            "relation/7865920",
+            "relation/7866627",
+            "relation/7866628",
+            "relation/7867246",
+            "relation/7867248",
+            "relation/7867584"
+          ],
+          "islands_iid_only": true,
+          "likelihood": "negative_binomial",
+          "max_rhat": 1.003754656054827,
+          "minimum_bulk_ess": 1055.2979662998293,
+          "prediction_scope": "HELDOUT_ONLY",
+          "priors": {
+            "alpha": "1/sqrt(alpha) ~ HalfNormal(1)",
+            "beta": "Normal(0,1)",
+            "intercept": "Normal(-4,2)",
+            "sigma": "PC: P(sigma > 0.5) = 0.01"
+          },
+          "reference": "need covariates/exposure with area effect set to zero",
+          "restricted": false,
+          "rho_prior": "beta",
+          "seed": 20261005,
+          "status": "COMPLETE",
+          "structure": "icar",
+          "target_accept": 0.99,
+          "tune": 2000,
+          "variant": "BYM2_SHRINKAGE"
+        },
+        {
+          "chains": 4,
+          "diagnostics_by_parameter": {
+            "alpha": {
+              "max_rhat": 1.002229007256035,
+              "min_bulk_ess": 1621.1174158653919
+            },
+            "beta": {
+              "max_rhat": 1.0000256212308167,
+              "min_bulk_ess": 5421.64802788088
+            },
+            "intercept": {
+              "max_rhat": 1.0023793769179428,
+              "min_bulk_ess": 2381.028610752976
+            },
+            "sigma": {
+              "max_rhat": 1.0023298027551646,
+              "min_bulk_ess": 1925.51520152133
+            },
+            "spatial_z": {
+              "max_rhat": 1.0029878743397502,
+              "min_bulk_ess": 4098.319874383809
+            }
+          },
+          "divergences": 0,
+          "draws_per_chain": 2000,
+          "graph_review": {
+            "evidence": {
+              "known_gaps": "Historical 2016 layer; wards 3, 4, 11, 13, 31 and 113 are missing from the source, so their neighbours have fewer edges than on the ground.",
+              "live_osm_comparison": {
+                "comparable_edges_agreeing": "356 of 356",
+                "differences": "4 committed edges of Ward 106 Serilingampally could not be compared: the live OSM relations for Ward 105 Gachibowli and Ward 106 Serilingampally do not form closed rings (zero area); the committed DataMeet copy has 49.1 and 11.6 km2.",
+                "osm_timestamp": "2026-10-02T21:16:21Z"
+              },
+              "robustness": {
+                "borderline_edges_kept": [
+                  "Ward 100 Sanath Nagar - Ward 117 Moosapet (102 m)",
+                  "Ward 9 Ramanthapur - Ward 83 Amberpet (60 m)",
+                  "Ward 86 Musheerabad - Ward 145 Seethaphalmandi (62 m)",
+                  "Ward 100 Sanath Nagar - Ward 99 Vengal Rao Nagar (59 m)"
+                ],
+                "corner_touches_excluded": 26,
+                "edges": 364,
+                "edges_in_all_settings": 360,
+                "settings": "snap 5/10/20 m x minimum shared border 25/50/100 m"
+              },
+              "web_spot_check": {
+                "result": "Neighbours named there (Kondapur, Gachibowli, Hafeezpet, Chandanagar) are all edges of Ward 106 in the graph.",
+                "source": "https://en.wikipedia.org/wiki/Serilingampally"
+              }
+            },
+            "geography_version": "GHMC_2016_150",
+            "method": "Automated verification approved by the owner: 9-setting robustness, live OSM comparison, web spot-check. Not a local-knowledge review.",
+            "reviewed_on": "2026-10-03",
+            "reviewer": "Tabsirshaikh (owner)",
+            "source": "data/derived/underserved/ward_adjacency.json",
+            "source_sha256": "d02002994668ddf6368d94125da119849b80a129e093dd5be3ef776474385b4a",
+            "status": "REVIEWED"
+          },
+          "holdout_ids": [
+            "relation/7848824",
+            "relation/7849315",
+            "relation/7850095",
+            "relation/7850268",
+            "relation/7852863",
+            "relation/7852865",
+            "relation/7853541",
+            "relation/7854090",
+            "relation/7856356",
+            "relation/7856371",
+            "relation/7857544",
+            "relation/7857547",
+            "relation/7858226",
+            "relation/7858245",
+            "relation/7858249",
+            "relation/7858404",
+            "relation/7858673",
+            "relation/7861520",
+            "relation/7861521",
+            "relation/7861530",
+            "relation/7867249"
+          ],
+          "islands_iid_only": true,
+          "likelihood": "negative_binomial",
+          "max_rhat": 1.0029878743397502,
+          "minimum_bulk_ess": 1621.1174158653919,
+          "prediction_scope": "HELDOUT_ONLY",
+          "priors": {
+            "alpha": "1/sqrt(alpha) ~ HalfNormal(1)",
+            "beta": "Normal(0,1)",
+            "intercept": "Normal(-4,2)",
+            "sigma": "PC: P(sigma > 0.5) = 0.01"
+          },
+          "reference": "need covariates/exposure with area effect set to zero",
+          "restricted": false,
+          "rho_prior": "beta",
+          "seed": 20261006,
+          "status": "COMPLETE",
+          "structure": "icar",
+          "target_accept": 0.99,
+          "tune": 2000,
+          "variant": "BYM2_SHRINKAGE"
+        }
+      ],
+      "folds": 5,
+      "prediction_scope": "OUT_OF_FOLD",
+      "scores": {},
+      "status": "DIAGNOSTICS_FAILED",
+      "variant": "BYM2_SHRINKAGE"
+    },
+    "NB": {
+      "fold_diagnostics": [
+        {
+          "chains": 4,
+          "diagnostics_by_parameter": {
+            "alpha": {
+              "max_rhat": 1.0007093914460214,
+              "min_bulk_ess": 5091.334159030651
+            },
+            "beta": {
+              "max_rhat": 1.0012178973601062,
+              "min_bulk_ess": 3692.3519534037523
+            },
+            "intercept": {
+              "max_rhat": 1.0008818419509535,
+              "min_bulk_ess": 5038.059269979665
+            }
+          },
+          "divergences": 0,
+          "draws_per_chain": 2000,
+          "graph_review": null,
+          "holdout_ids": [
+            "relation/7849439",
+            "relation/7852804",
+            "relation/7853538",
+            "relation/7853540",
+            "relation/7853542",
+            "relation/7853545",
+            "relation/7854083",
+            "relation/7854084",
+            "relation/7854088",
+            "relation/7854089",
+            "relation/7857549",
+            "relation/7857554",
+            "relation/7857794",
+            "relation/7857799",
+            "relation/7857840",
+            "relation/7858671",
+            "relation/7858672",
+            "relation/7861522",
+            "relation/7861523",
+            "relation/7861525",
+            "relation/7865922",
+            "relation/7867247"
+          ],
+          "islands_iid_only": null,
+          "likelihood": "negative_binomial",
+          "max_rhat": 1.0012178973601062,
+          "minimum_bulk_ess": 3692.3519534037523,
+          "prediction_scope": "HELDOUT_ONLY",
+          "priors": {
+            "alpha": "1/sqrt(alpha) ~ HalfNormal(1)",
+            "beta": "Normal(0,1)",
+            "intercept": "Normal(-4,2)",
+            "sigma": "PC: P(sigma > 1) = 0.01"
+          },
+          "reference": "need covariates/exposure with area effect set to zero",
+          "restricted": null,
+          "rho_prior": null,
+          "seed": 20261002,
+          "status": "COMPLETE",
+          "structure": null,
+          "target_accept": 0.99,
+          "tune": 2000,
+          "variant": "NB"
+        },
+        {
+          "chains": 4,
+          "diagnostics_by_parameter": {
+            "alpha": {
+              "max_rhat": 1.0001201278590566,
+              "min_bulk_ess": 4944.27715305981
+            },
+            "beta": {
+              "max_rhat": 1.0014841103541574,
+              "min_bulk_ess": 3626.810076553533
+            },
+            "intercept": {
+              "max_rhat": 1.0003693587998976,
+              "min_bulk_ess": 5233.097636708961
+            }
+          },
+          "divergences": 0,
+          "draws_per_chain": 2000,
+          "graph_review": null,
+          "holdout_ids": [
+            "relation/7849497",
+            "relation/7849545",
+            "relation/7850180",
+            "relation/7850229",
+            "relation/7852364",
+            "relation/7852365",
+            "relation/7852868",
+            "relation/7854081",
+            "relation/7854091",
+            "relation/7856362",
+            "relation/7856367",
+            "relation/7856370",
+            "relation/7857553",
+            "relation/7857795",
+            "relation/7857798",
+            "relation/7857839",
+            "relation/7858244",
+            "relation/7858294",
+            "relation/7858675",
+            "relation/7861518",
+            "relation/7861531",
+            "relation/7861532"
+          ],
+          "islands_iid_only": null,
+          "likelihood": "negative_binomial",
+          "max_rhat": 1.0014841103541574,
+          "minimum_bulk_ess": 3626.810076553533,
+          "prediction_scope": "HELDOUT_ONLY",
+          "priors": {
+            "alpha": "1/sqrt(alpha) ~ HalfNormal(1)",
+            "beta": "Normal(0,1)",
+            "intercept": "Normal(-4,2)",
+            "sigma": "PC: P(sigma > 1) = 0.01"
+          },
+          "reference": "need covariates/exposure with area effect set to zero",
+          "restricted": null,
+          "rho_prior": null,
+          "seed": 20261003,
+          "status": "COMPLETE",
+          "structure": null,
+          "target_accept": 0.99,
+          "tune": 2000,
+          "variant": "NB"
+        },
+        {
+          "chains": 4,
+          "diagnostics_by_parameter": {
+            "alpha": {
+              "max_rhat": 1.0009255715774232,
+              "min_bulk_ess": 5163.506562128139
+            },
+            "beta": {
+              "max_rhat": 1.0026849142003498,
+              "min_bulk_ess": 2906.5100000094117
+            },
+            "intercept": {
+              "max_rhat": 1.0005319680456537,
+              "min_bulk_ess": 4745.175314349993
+            }
+          },
+          "divergences": 0,
+          "draws_per_chain": 2000,
+          "graph_review": null,
+          "holdout_ids": [
+            "relation/7848859",
+            "relation/7849357",
+            "relation/7849498",
+            "relation/7852446",
+            "relation/7852447",
+            "relation/7852805",
+            "relation/7852864",
+            "relation/7852866",
+            "relation/7852869",
+            "relation/7854085",
+            "relation/7856360",
+            "relation/7856363",
+            "relation/7856365",
+            "relation/7857545",
+            "relation/7857548",
+            "relation/7857552",
+            "relation/7857800",
+            "relation/7861519",
+            "relation/7861528",
+            "relation/7865924",
+            "relation/7867585"
+          ],
+          "islands_iid_only": null,
+          "likelihood": "negative_binomial",
+          "max_rhat": 1.0026849142003498,
+          "minimum_bulk_ess": 2906.5100000094117,
+          "prediction_scope": "HELDOUT_ONLY",
+          "priors": {
+            "alpha": "1/sqrt(alpha) ~ HalfNormal(1)",
+            "beta": "Normal(0,1)",
+            "intercept": "Normal(-4,2)",
+            "sigma": "PC: P(sigma > 1) = 0.01"
+          },
+          "reference": "need covariates/exposure with area effect set to zero",
+          "restricted": null,
+          "rho_prior": null,
+          "seed": 20261004,
+          "status": "COMPLETE",
+          "structure": null,
+          "target_accept": 0.99,
+          "tune": 2000,
+          "variant": "NB"
+        },
+        {
+          "chains": 4,
+          "diagnostics_by_parameter": {
+            "alpha": {
+              "max_rhat": 1.0016052219450124,
+              "min_bulk_ess": 5087.01256331111
+            },
+            "beta": {
+              "max_rhat": 1.0010286799684167,
+              "min_bulk_ess": 3419.5677364225994
+            },
+            "intercept": {
+              "max_rhat": 1.000473663981933,
+              "min_bulk_ess": 5154.763042933851
+            }
+          },
+          "divergences": 0,
+          "draws_per_chain": 2000,
+          "graph_review": null,
+          "holdout_ids": [
+            "relation/7848844",
+            "relation/7850230",
+            "relation/7854080",
+            "relation/7854086",
+            "relation/7856358",
+            "relation/7856361",
+            "relation/7856366",
+            "relation/7857551",
+            "relation/7857838",
+            "relation/7858250",
+            "relation/7858295",
+            "relation/7858296",
+            "relation/7861524",
+            "relation/7861527",
+            "relation/7865918",
+            "relation/7865920",
+            "relation/7866627",
+            "relation/7866628",
+            "relation/7867246",
+            "relation/7867248",
+            "relation/7867584"
+          ],
+          "islands_iid_only": null,
+          "likelihood": "negative_binomial",
+          "max_rhat": 1.0016052219450124,
+          "minimum_bulk_ess": 3419.5677364225994,
+          "prediction_scope": "HELDOUT_ONLY",
+          "priors": {
+            "alpha": "1/sqrt(alpha) ~ HalfNormal(1)",
+            "beta": "Normal(0,1)",
+            "intercept": "Normal(-4,2)",
+            "sigma": "PC: P(sigma > 1) = 0.01"
+          },
+          "reference": "need covariates/exposure with area effect set to zero",
+          "restricted": null,
+          "rho_prior": null,
+          "seed": 20261005,
+          "status": "COMPLETE",
+          "structure": null,
+          "target_accept": 0.99,
+          "tune": 2000,
+          "variant": "NB"
+        },
+        {
+          "chains": 4,
+          "diagnostics_by_parameter": {
+            "alpha": {
+              "max_rhat": 1.000254152267397,
+              "min_bulk_ess": 4691.356113281226
+            },
+            "beta": {
+              "max_rhat": 1.0004129059490876,
+              "min_bulk_ess": 3494.353471890058
+            },
+            "intercept": {
+              "max_rhat": 1.0005298447067386,
+              "min_bulk_ess": 5007.800603421711
+            }
+          },
+          "divergences": 0,
+          "draws_per_chain": 2000,
+          "graph_review": null,
+          "holdout_ids": [
+            "relation/7848824",
+            "relation/7849315",
+            "relation/7850095",
+            "relation/7850268",
+            "relation/7852863",
+            "relation/7852865",
+            "relation/7853541",
+            "relation/7854090",
+            "relation/7856356",
+            "relation/7856371",
+            "relation/7857544",
+            "relation/7857547",
+            "relation/7858226",
+            "relation/7858245",
+            "relation/7858249",
+            "relation/7858404",
+            "relation/7858673",
+            "relation/7861520",
+            "relation/7861521",
+            "relation/7861530",
+            "relation/7867249"
+          ],
+          "islands_iid_only": null,
+          "likelihood": "negative_binomial",
+          "max_rhat": 1.0005298447067386,
+          "minimum_bulk_ess": 3494.353471890058,
+          "prediction_scope": "HELDOUT_ONLY",
+          "priors": {
+            "alpha": "1/sqrt(alpha) ~ HalfNormal(1)",
+            "beta": "Normal(0,1)",
+            "intercept": "Normal(-4,2)",
+            "sigma": "PC: P(sigma > 1) = 0.01"
+          },
+          "reference": "need covariates/exposure with area effect set to zero",
+          "restricted": null,
+          "rho_prior": null,
+          "seed": 20261006,
+          "status": "COMPLETE",
+          "structure": null,
+          "target_accept": 0.99,
+          "tune": 2000,
+          "variant": "NB"
+        }
+      ],
+      "folds": 5,
+      "prediction_scope": "OUT_OF_FOLD",
+      "scores": {
+        "relation/7848824": {
+          "expected": 33834.866939863445,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 4.499707367495352,
+          "ratio_lower": 1.5491065346935227,
+          "ratio_upper": 10.558013026502618
+        },
+        "relation/7848844": {
+          "expected": 18452.393551535846,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 2.9204883336504546,
+          "ratio_lower": 1.352191232998734,
+          "ratio_upper": 6.0409296345511665
+        },
+        "relation/7848859": {
+          "expected": 12416.697423690732,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 3.950970161260682,
+          "ratio_lower": 1.1846374901625454,
+          "ratio_upper": 12.192307408590134
+        },
+        "relation/7849315": {
+          "expected": 7557.861555406866,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.3686227907159229,
+          "ratio_lower": 0.235576316121749,
+          "ratio_upper": 0.5354829818463405
+        },
+        "relation/7849357": {
+          "expected": 12127.597220785046,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.10414264070921983,
+          "ratio_lower": 0.06446412253507298,
+          "ratio_upper": 0.15899900360874
+        },
+        "relation/7849439": {
+          "expected": 31888.603713561526,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.08209829848134395,
+          "ratio_lower": 0.03618405318246387,
+          "ratio_upper": 0.15231693803726382
+        },
+        "relation/7849497": {
+          "expected": 70950.88090657027,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.0006201473393831801,
+          "ratio_lower": 0.000193136109115893,
+          "ratio_upper": 0.0016163507991434306
+        },
+        "relation/7849498": {
+          "expected": 27392.373127852792,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.08725056452003638,
+          "ratio_lower": 0.047284824430965954,
+          "ratio_upper": 0.14766032030063464
+        },
+        "relation/7849545": {
+          "expected": 39097.14066197988,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.07156533641518242,
+          "ratio_lower": 0.024075972457879003,
+          "ratio_upper": 0.16816912876533774
+        },
+        "relation/7850095": {
+          "expected": 6425.046522658133,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.24964800168531298,
+          "ratio_lower": 0.1610571115842835,
+          "ratio_upper": 0.36856226590210805
+        },
+        "relation/7850180": {
+          "expected": 21693.42212000313,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.3793315773175358,
+          "ratio_lower": 0.20440586948576123,
+          "ratio_upper": 0.6691718554005227
+        },
+        "relation/7850229": {
+          "expected": 12242.784041941455,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.03144709558927726,
+          "ratio_lower": 0.02007547361219342,
+          "ratio_upper": 0.047109364161597465
+        },
+        "relation/7850230": {
+          "expected": 16663.04658005125,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.15207303128732047,
+          "ratio_lower": 0.09607999108135991,
+          "ratio_upper": 0.23096088784932065
+        },
+        "relation/7850268": {
+          "expected": 8441.170667053048,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.8165928959242881,
+          "ratio_lower": 0.5382435391698702,
+          "ratio_upper": 1.1634263154335658
+        },
+        "relation/7852364": {
+          "expected": 6399.110534674289,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 1.2776775707298922,
+          "ratio_lower": 0.8228957362054038,
+          "ratio_upper": 1.9066908337513209
+        },
+        "relation/7852365": {
+          "expected": 8049.111980197558,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.18238036739793956,
+          "ratio_lower": 0.11821252248622549,
+          "ratio_upper": 0.2716720391402267
+        },
+        "relation/7852446": {
+          "expected": 6783.415314772699,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.362649179945771,
+          "ratio_lower": 0.23276848967819574,
+          "ratio_upper": 0.5431131059111698
+        },
+        "relation/7852447": {
+          "expected": 6580.634448637191,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.8452072629082056,
+          "ratio_lower": 0.5555841362427847,
+          "ratio_upper": 1.227829032221222
+        },
+        "relation/7852804": {
+          "expected": 6038.01886711987,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 5.857716045435348,
+          "ratio_lower": 3.6010000477661723,
+          "ratio_upper": 8.939643561034567
+        },
+        "relation/7852805": {
+          "expected": 10319.493357516812,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 1.8697623369077596,
+          "ratio_lower": 1.1937594256310533,
+          "ratio_upper": 2.8072304483064605
+        },
+        "relation/7852863": {
+          "expected": 6456.762878850639,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.15983241443482474,
+          "ratio_lower": 0.10424173985743924,
+          "ratio_upper": 0.23252638751029886
+        },
+        "relation/7852864": {
+          "expected": 12638.799178492154,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 2.250530265867256,
+          "ratio_lower": 1.5544477225769249,
+          "ratio_upper": 3.096498241053613
+        },
+        "relation/7852865": {
+          "expected": 5824.125593314175,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.39696946157614954,
+          "ratio_lower": 0.2587759058694404,
+          "ratio_upper": 0.5755321862864196
+        },
+        "relation/7852866": {
+          "expected": 12173.713368269218,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 1.1606976090787868,
+          "ratio_lower": 0.7312855423674158,
+          "ratio_upper": 1.7625491087966043
+        },
+        "relation/7852868": {
+          "expected": 21436.406378801265,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.19014381227369903,
+          "ratio_lower": 0.10022880979456827,
+          "ratio_upper": 0.3457054709876898
+        },
+        "relation/7852869": {
+          "expected": 33434.067441312305,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.39684074107893097,
+          "ratio_lower": 0.2335610342672112,
+          "ratio_upper": 0.6077075031016126
+        },
+        "relation/7853538": {
+          "expected": 12056.932382491628,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 2.3652782564558583,
+          "ratio_lower": 1.5782517307340422,
+          "ratio_upper": 3.351806912473816
+        },
+        "relation/7853540": {
+          "expected": 12968.331261395304,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 1.1492612041382166,
+          "ratio_lower": 0.7054032417688685,
+          "ratio_upper": 1.692347976704908
+        },
+        "relation/7853541": {
+          "expected": 20401.27473244838,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 8.680241913396191,
+          "ratio_lower": 3.6158527879293643,
+          "ratio_upper": 17.573152439702238
+        },
+        "relation/7853542": {
+          "expected": 18939.01708588766,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.2788423510445719,
+          "ratio_lower": 0.0841522431834273,
+          "ratio_upper": 0.6926715109488093
+        },
+        "relation/7853545": {
+          "expected": 31197.53527676967,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 4.50349684702093,
+          "ratio_lower": 1.409628283035527,
+          "ratio_upper": 10.7806045785487
+        },
+        "relation/7854080": {
+          "expected": 6339.363480874923,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.5535256040717376,
+          "ratio_lower": 0.34684537768846924,
+          "ratio_upper": 0.829881170673702
+        },
+        "relation/7854081": {
+          "expected": 7333.902817553664,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 3.8429743108337577,
+          "ratio_lower": 2.2571064145939057,
+          "ratio_upper": 6.333399008153549
+        },
+        "relation/7854083": {
+          "expected": 5202.2572143771995,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.38233403656460274,
+          "ratio_lower": 0.227435631596095,
+          "ratio_upper": 0.6013982648806298
+        },
+        "relation/7854084": {
+          "expected": 3873.966276581924,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.1917931001426678,
+          "ratio_lower": 0.11787532610622589,
+          "ratio_upper": 0.292401049959519
+        },
+        "relation/7854085": {
+          "expected": 7443.563569875936,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 1.1369554339987116,
+          "ratio_lower": 0.7372069393118809,
+          "ratio_upper": 1.6684324712103926
+        },
+        "relation/7854086": {
+          "expected": 6585.477542843571,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 1.3699841763625673,
+          "ratio_lower": 0.8712129480995812,
+          "ratio_upper": 2.0280062744585905
+        },
+        "relation/7854088": {
+          "expected": 4945.886770447489,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.10736194090099002,
+          "ratio_lower": 0.06386470252860582,
+          "ratio_upper": 0.16981226847814926
+        },
+        "relation/7854089": {
+          "expected": 5650.875284407095,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.7497953479420646,
+          "ratio_lower": 0.42456969977936115,
+          "ratio_upper": 1.2220875679224406
+        },
+        "relation/7854090": {
+          "expected": 6461.950116005447,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.7341437050507311,
+          "ratio_lower": 0.4783682894718488,
+          "ratio_upper": 1.0812040371697247
+        },
+        "relation/7854091": {
+          "expected": 6376.677267885332,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.3265023326760151,
+          "ratio_lower": 0.21141812401087504,
+          "ratio_upper": 0.49026337115631935
+        },
+        "relation/7856356": {
+          "expected": 5269.148367379959,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.002467191884994279,
+          "ratio_lower": 0.0015597434575763023,
+          "ratio_upper": 0.0037106214539912065
+        },
+        "relation/7856358": {
+          "expected": 7666.9523949211425,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.0018260189028921256,
+          "ratio_lower": 0.00123094400293632,
+          "ratio_upper": 0.002559393781802986
+        },
+        "relation/7856360": {
+          "expected": 6311.487959986058,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.00285194238099477,
+          "ratio_lower": 0.001581944867184779,
+          "ratio_upper": 0.004871464675362912
+        },
+        "relation/7856361": {
+          "expected": 8256.126432713198,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.002301321346744922,
+          "ratio_lower": 0.001507381698347524,
+          "ratio_upper": 0.003319515469167973
+        },
+        "relation/7856362": {
+          "expected": 41139.09651801187,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.009844649841619582,
+          "ratio_lower": 0.002234276370467481,
+          "ratio_upper": 0.0393677797017752
+        },
+        "relation/7856363": {
+          "expected": 8638.21495473921,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.0027783517998980403,
+          "ratio_lower": 0.0014922233660402276,
+          "ratio_upper": 0.004803549350160191
+        },
+        "relation/7856365": {
+          "expected": 5639.078848894604,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.0010640035656289287,
+          "ratio_lower": 0.0006617862155730992,
+          "ratio_upper": 0.0016176336258934213
+        },
+        "relation/7856366": {
+          "expected": 5477.788913554439,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.029026310169363127,
+          "ratio_lower": 0.018335207914956363,
+          "ratio_upper": 0.04349377500522132
+        },
+        "relation/7856367": {
+          "expected": 4932.731734953741,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.004460003355920254,
+          "ratio_lower": 0.003030217325576839,
+          "ratio_upper": 0.006384110258842249
+        },
+        "relation/7856370": {
+          "expected": 6503.897042250515,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.02644568315513604,
+          "ratio_lower": 0.01629460475292189,
+          "ratio_upper": 0.041387927399485415
+        },
+        "relation/7856371": {
+          "expected": 6997.115834212933,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.0030012365871144807,
+          "ratio_lower": 0.0019581452566271107,
+          "ratio_upper": 0.004416486515886997
+        },
+        "relation/7857544": {
+          "expected": 7226.162836052192,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.05106444588136205,
+          "ratio_lower": 0.01845829899941364,
+          "ratio_upper": 0.12114062976702503
+        },
+        "relation/7857545": {
+          "expected": 6056.329200712144,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.04375587776249691,
+          "ratio_lower": 0.020395645804672194,
+          "ratio_upper": 0.08723190924664233
+        },
+        "relation/7857547": {
+          "expected": 7908.399143437515,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 1.0259977847789221,
+          "ratio_lower": 0.6447392038665722,
+          "ratio_upper": 1.548666071445927
+        },
+        "relation/7857548": {
+          "expected": 7977.053761562084,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.24069036761825124,
+          "ratio_lower": 0.14821722879161184,
+          "ratio_upper": 0.3708562999518566
+        },
+        "relation/7857549": {
+          "expected": 6892.133332663531,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 1.3100443018523757,
+          "ratio_lower": 0.7880110021146616,
+          "ratio_upper": 2.0206629572625987
+        },
+        "relation/7857551": {
+          "expected": 6678.153585890908,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.9489149837442281,
+          "ratio_lower": 0.633922519102169,
+          "ratio_upper": 1.349725816814768
+        },
+        "relation/7857552": {
+          "expected": 5895.744305872413,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 1.200866189693591,
+          "ratio_lower": 0.783043715500106,
+          "ratio_upper": 1.7487798918556974
+        },
+        "relation/7857553": {
+          "expected": 5738.617263012706,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.09392506527192018,
+          "ratio_lower": 0.06423302900656216,
+          "ratio_upper": 0.13349680067412548
+        },
+        "relation/7857554": {
+          "expected": 6132.046490044033,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.13209293202984373,
+          "ratio_lower": 0.08394749789276974,
+          "ratio_upper": 0.19703322574915622
+        },
+        "relation/7857794": {
+          "expected": 5050.636560187366,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 8.09046533883632,
+          "ratio_lower": 4.921888971680979,
+          "ratio_upper": 12.492926413379296
+        },
+        "relation/7857795": {
+          "expected": 4102.479036020255,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 10.18774249299775,
+          "ratio_lower": 6.775366760193296,
+          "ratio_upper": 14.848835612945448
+        },
+        "relation/7857798": {
+          "expected": 5367.14453526983,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 4.138699798684449,
+          "ratio_lower": 2.816503275416562,
+          "ratio_upper": 5.91651230449586
+        },
+        "relation/7857799": {
+          "expected": 4162.9721035085695,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 1.2546324766189247,
+          "ratio_lower": 0.7780828537104457,
+          "ratio_upper": 1.912115366205293
+        },
+        "relation/7857800": {
+          "expected": 7508.409828968641,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 3.4910189531921194,
+          "ratio_lower": 2.009278950810549,
+          "ratio_upper": 5.780625241276357
+        },
+        "relation/7857838": {
+          "expected": 10979.998395609648,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.3946266515583945,
+          "ratio_lower": 0.14856837086129174,
+          "ratio_upper": 0.8759977085130135
+        },
+        "relation/7857839": {
+          "expected": 4998.236754225551,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.09663407792603529,
+          "ratio_lower": 0.06027703362661658,
+          "ratio_upper": 0.15037872948210426
+        },
+        "relation/7857840": {
+          "expected": 8345.381815231765,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.4465943059950374,
+          "ratio_lower": 0.2806392515195005,
+          "ratio_upper": 0.6755165463280736
+        },
+        "relation/7858226": {
+          "expected": 7434.236079394401,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.11595004412884816,
+          "ratio_lower": 0.07268084740118809,
+          "ratio_upper": 0.1738041738366565
+        },
+        "relation/7858244": {
+          "expected": 6294.739803966439,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.3642724038501142,
+          "ratio_lower": 0.2541955917555948,
+          "ratio_upper": 0.5097427890885148
+        },
+        "relation/7858245": {
+          "expected": 8183.365099685108,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 2.214859123189729,
+          "ratio_lower": 1.1272697038976849,
+          "ratio_upper": 3.9305958743961025
+        },
+        "relation/7858249": {
+          "expected": 11976.203371663794,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 3.8500515330202814,
+          "ratio_lower": 2.642901559076721,
+          "ratio_upper": 5.323589737681357
+        },
+        "relation/7858250": {
+          "expected": 6687.001361855323,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 1.0309553797624995,
+          "ratio_lower": 0.642565970964094,
+          "ratio_upper": 1.5536535045773276
+        },
+        "relation/7858294": {
+          "expected": 9337.06185710799,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 1.056220913191094,
+          "ratio_lower": 0.6947939871084448,
+          "ratio_upper": 1.5528059127479574
+        },
+        "relation/7858295": {
+          "expected": 9728.539040648717,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.15027950177368632,
+          "ratio_lower": 0.09834386872326031,
+          "ratio_upper": 0.21548443502102307
+        },
+        "relation/7858296": {
+          "expected": 10675.996913726782,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.13619337023259173,
+          "ratio_lower": 0.08647378268502504,
+          "ratio_upper": 0.20024352711568041
+        },
+        "relation/7858404": {
+          "expected": 10510.680046467083,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 8.420007053269273,
+          "ratio_lower": 5.825487662870524,
+          "ratio_upper": 11.625322908558534
+        },
+        "relation/7858671": {
+          "expected": 7244.305063722291,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 1.2524320756974148,
+          "ratio_lower": 0.7401321944877685,
+          "ratio_upper": 1.974050740539699
+        },
+        "relation/7858672": {
+          "expected": 6089.545091169585,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.0870344168082364,
+          "ratio_lower": 0.04519544459666678,
+          "ratio_upper": 0.15365982856798968
+        },
+        "relation/7858673": {
+          "expected": 14731.282022567026,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.41340597676758395,
+          "ratio_lower": 0.17956513415138128,
+          "ratio_upper": 0.8175490021497037
+        },
+        "relation/7858675": {
+          "expected": 33877.84359640872,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.31772978612673863,
+          "ratio_lower": 0.138636627018639,
+          "ratio_upper": 0.6411119780830018
+        },
+        "relation/7861518": {
+          "expected": 6389.110475860336,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.6093179974752028,
+          "ratio_lower": 0.3878894033291647,
+          "ratio_upper": 0.9195267160129591
+        },
+        "relation/7861519": {
+          "expected": 6944.74249895675,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.7359524282436762,
+          "ratio_lower": 0.44892683145152723,
+          "ratio_upper": 1.1516996785853988
+        },
+        "relation/7861520": {
+          "expected": 8711.126010282353,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.6568611219417082,
+          "ratio_lower": 0.4210211858016593,
+          "ratio_upper": 0.9718287706823994
+        },
+        "relation/7861521": {
+          "expected": 9840.31623382913,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.015345035646128654,
+          "ratio_lower": 0.00583969358658684,
+          "ratio_upper": 0.03404129773180639
+        },
+        "relation/7861522": {
+          "expected": 6374.593831978288,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.28190031401510796,
+          "ratio_lower": 0.17236374151044215,
+          "ratio_upper": 0.43398154285309326
+        },
+        "relation/7861523": {
+          "expected": 3519.6188358248237,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.1298436056270999,
+          "ratio_lower": 0.07443007614422648,
+          "ratio_upper": 0.21258903830091316
+        },
+        "relation/7861524": {
+          "expected": 7009.407544390029,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.1552199712447823,
+          "ratio_lower": 0.10109464681364892,
+          "ratio_upper": 0.22388037948644293
+        },
+        "relation/7861525": {
+          "expected": 5573.390181526583,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.47224398818151136,
+          "ratio_lower": 0.30242551651322735,
+          "ratio_upper": 0.6972685634100725
+        },
+        "relation/7861527": {
+          "expected": 5126.93544766288,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.009947462869726306,
+          "ratio_lower": 0.0064756558509615125,
+          "ratio_upper": 0.014521904050077807
+        },
+        "relation/7861528": {
+          "expected": 4339.247465356588,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.05438731074856412,
+          "ratio_lower": 0.0331040073879453,
+          "ratio_upper": 0.08485418323375116
+        },
+        "relation/7861530": {
+          "expected": 5560.140451788306,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.013668719461676582,
+          "ratio_lower": 0.00874852254401784,
+          "ratio_upper": 0.020357868678414204
+        },
+        "relation/7861531": {
+          "expected": 4672.158536095163,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.016266571312294337,
+          "ratio_lower": 0.010746378787927719,
+          "ratio_upper": 0.023742239816285607
+        },
+        "relation/7861532": {
+          "expected": 11917.337664916102,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.0009230249507453486,
+          "ratio_lower": 0.0004353887725003781,
+          "ratio_upper": 0.0018680170409457542
+        },
+        "relation/7865918": {
+          "expected": 5993.593852455304,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 1.3606194122577495,
+          "ratio_lower": 0.9033858428987926,
+          "ratio_upper": 1.9384596602079878
+        },
+        "relation/7865920": {
+          "expected": 7400.317114174484,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.0756724329158749,
+          "ratio_lower": 0.04385319786592704,
+          "ratio_upper": 0.11967625006929977
+        },
+        "relation/7865922": {
+          "expected": 6097.64659059662,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.025091647799651347,
+          "ratio_lower": 0.013617627718896274,
+          "ratio_upper": 0.04217938179398972
+        },
+        "relation/7865924": {
+          "expected": 8610.703988271638,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.10870191502292217,
+          "ratio_lower": 0.06052676925014751,
+          "ratio_upper": 0.18458626609904683
+        },
+        "relation/7866627": {
+          "expected": 6088.986197562766,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.03645927134619789,
+          "ratio_lower": 0.023268575091011028,
+          "ratio_upper": 0.05406951107658187
+        },
+        "relation/7866628": {
+          "expected": 6264.190928835735,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.5346261054493946,
+          "ratio_lower": 0.3363086659964914,
+          "ratio_upper": 0.8024446214761235
+        },
+        "relation/7867246": {
+          "expected": 12770.420183600665,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.000861365551823855,
+          "ratio_lower": 0.0004614966085872982,
+          "ratio_upper": 0.0014384039848439002
+        },
+        "relation/7867247": {
+          "expected": 17379.625992072106,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.10069261581373437,
+          "ratio_lower": 0.04513052181504455,
+          "ratio_upper": 0.18393285225492761
+        },
+        "relation/7867248": {
+          "expected": 4627.292289122356,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.007779927817957215,
+          "ratio_lower": 0.005144576851539216,
+          "ratio_upper": 0.011088851160013622
+        },
+        "relation/7867249": {
+          "expected": 13151.776540409533,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.32140145170714496,
+          "ratio_lower": 0.15741186429105053,
+          "ratio_upper": 0.5737556260725736
+        },
+        "relation/7867584": {
+          "expected": 21604.06936768249,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.0014349150950845734,
+          "ratio_lower": 0.00011372132471741573,
+          "ratio_upper": 0.019140855330688517
+        },
+        "relation/7867585": {
+          "expected": 4569.510281904464,
+          "interval_kind": "POSTERIOR_REFERENCE_MEAN_RATIO_NOT_REPORTING_PROBABILITY",
+          "ratio": 0.1400587722828563,
+          "ratio_lower": 0.0926273217150262,
+          "ratio_upper": 0.2027010086025902
+        }
+      },
+      "status": "COMPLETE",
+      "variant": "NB"
+    }
+  },
+  "schema_version": "E5-MODELS-1"
+}

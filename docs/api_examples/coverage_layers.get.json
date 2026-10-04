@@ -1,0 +1,44 @@
+{
+  "_example": {
+    "endpoint": "GET /coverage/layers",
+    "status": "FROM_MAIN (data on main, route not built)",
+    "basis": "as stated per layer",
+    "built_from": "data/derived/coverage/layers.json (whole file)"
+  },
+  "request": null,
+  "response": {
+    "excluded_layers": [
+      {
+        "layer_id": "people_within_500m_public_tap",
+        "reason": "NO_VERIFIED_PUBLIC_TAP_LOCATION_OR_SERVICE_DATA"
+      }
+    ],
+    "feature_count": 145,
+    "geography_version": "GHMC_2016_150",
+    "interpretation": "These are evidence-status views. Null means unavailable and must never be rendered as zero. No layer establishes entitlement, neglect, or allocation priority.",
+    "layers": [
+      {
+        "feature_count": 145,
+        "file": "water_access_evidence.geojson",
+        "layer_id": "water_access_evidence",
+        "non_null_value_count": 143,
+        "operational_use": false
+      },
+      {
+        "feature_count": 145,
+        "file": "booking_coverage.geojson",
+        "layer_id": "booking_coverage",
+        "non_null_value_count": 103,
+        "operational_use": false
+      },
+      {
+        "feature_count": 145,
+        "file": "field_check_status.geojson",
+        "layer_id": "field_check_status",
+        "non_null_value_count": 107,
+        "operational_use": false
+      }
+    ],
+    "schema_version": "E6-1"
+  }
+}

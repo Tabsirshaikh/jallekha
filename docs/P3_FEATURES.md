@@ -14,7 +14,7 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 | T6 | F18 ledger | `feat/t6-ledger` | DONE ([PR #35](https://github.com/Tabsirshaikh/jallekha/pull/35) merged); rotation period and head-hash schedule OPEN |
 | T7 | F16 explanations + contest | `feat/t7-explain` | DONE ([PR #46](https://github.com/Tabsirshaikh/jallekha/pull/46) merged); reason / outcome codes, counterfactual limits, number removal, tier-counterfactual audience and wording OPEN |
 | T8 | F6 shortage warning | `feat/t8-shortage` | IN_REVIEW ([PR #61](https://github.com/Tabsirshaikh/jallekha/pull/61)); risk ratios, A8 capacity for 2026, Q2 reservoirs, D7 groundwater OPEN |
-| T9 | F17 confidence gate | `feat/t9-confidence` | Blocked: E2, A8 |
+| T9 | F17 confidence gate | `feat/t9-confidence` | IN_REVIEW ([PR #59](https://github.com/Tabsirshaikh/jallekha/pull/59)); threshold PROVISIONAL 0.50 (`not_separable`), target and scoring rules OPEN |
 | T10 | API for all screens | `feat/t10-api` | Shapes to agree with P4 in week 1 |
 
 ---
@@ -210,11 +210,50 @@ Owner: P3. One section per task, updated at the end of each task on that task's 
 
 ## T9: confidence gate (F17)
 
-- **Implementation notes:** _to fill_
-- **Files:** _to fill_
-- **Tests and results:** _to fill_
-- **How to run:** _to fill_
-- **Status log:** _to fill_
+- **Implementation notes:** `services/confidence.py` (pure, standard library only), `config/confidence.py`, `scripts/trust/calibrate_confidence.py`. No LLM; no API route (T10); no new ledger event type (the officer check is A7's `ward_reviewed`); no edit to `planner.py` or any P1 / P2 / P4 file.
+  - **Gate:** `T9Gate` implements A7's `ConfidenceGate` (`assess(groups) -> {group: Assessment(confidence, needs_check, reason, basis)}`). `confidence < threshold` -> the group stays in the plan, flagged; `approve_plan` raises `PlanBlocked` until an officer's `mark_checked` (reason required, ledger `ward_reviewed`). There is no automatic commit path.
+  - **Signals** (each 0-1 with a basis, or unavailable):
+    1. Census join quality (`ward_evidence.csv`): 0 for a section group, a ward not in the file, or a ward that is not `allocation_eligible` or whose `join_status` is not `AREAL_2009_CROSSWALK` (need is the A3 fallback); otherwise `min(census_coverage, dominant_source_share)`, capped at 0.5 when `review_required`.
+    2. Section location (`section_to_ward_2016.csv`): an unplaced section group scores 0; a ward takes its weakest section: INSIDE 1.0, NEAREST_500M 0.75, WARD_NAME 0.5, OSM_NEAR_DIVISION 0.5, capped at 0.5 when `division_distance_km` > 6.0 (P1's `outlier_km`, read-checked against `section_to_ward_summary.json` by a test).
+    3. Data age: computed (Census year to today, linear to 0 at 20 years) but **excluded**: Census 2011 is the year for every ward, so it does not separate wards.
+    4. Forecast interval width (T2): behind `IntervalWidthSource`; **unavailable** until T2 merges (decision (b)). Rule when available: 1 - relative 80% width / 2.0.
+    5. Evidence age: **unavailable** (no dated evidence in the repo; E5 field checks carry no dates).
+  - **Combination:** minimum of the available signals; a missing signal is excluded and listed ("unavailable: ..."), never scored 0; the reason names the weakest signal and its value. No available signal -> confidence 0 (a check).
+  - **Calibration on the A7 replay** (`data/derived/confidence_calibration.csv`, SIMULATION): P2's replay (main_2025, tight, seed 0; committed files, A8 not rebuilt), 153 days, 152 groups, 17,363 group-days, run under full information and under the one degraded scenario P2's replay supports (every group on the A3 fallback entitlement). A group-day matches when its served and waiting counts are equal in both plans. Thresholds 0.00-1.00 in 0.05 steps:
+
+    | Threshold | Match share (unflagged) | Groups flagged | Share flagged |
+    |---|---|---|---|
+    | 0.00 | 0.9522 | 0 | 0.0000 |
+    | 0.05-0.30 | 0.9529 | 45 | 0.2961 |
+    | 0.35 | 0.9530 | 46 | 0.3026 |
+    | 0.40 | 0.9515 | 50 | 0.3289 |
+    | 0.45 | 0.9515 | 51 | 0.3355 |
+    | 0.50 | 0.9467 | 60 | 0.3947 |
+    | 0.55 | 0.9473 | 96 | 0.6316 |
+    | 0.60 | 0.9471 | 104 | 0.6842 |
+    | 0.65 | 0.9511 | 109 | 0.7171 |
+    | 0.70 | 0.9635 | 117 | 0.7697 |
+    | 0.75 | 0.9590 | 122 | 0.8026 |
+    | 0.80 | 0.9492 | 127 | 0.8355 |
+    | 0.85 | 0.9304 | 137 | 0.9013 |
+    | 0.90 | 0.9070 | 141 | 0.9276 |
+    | 0.95 | 0.8484 | 146 | 0.9605 |
+    | 1.00 | 0.7320 | 151 | 0.9934 |
+
+  - **Result: no threshold chosen (`not_separable`).** The 0.90 target is already met with nothing flagged (0.9522 at 0.00), and the match share does not rise with the threshold: confidence does not predict which group-days change in this scenario (fallback groups match 3,882 / 4,087 = 0.950, Census groups 12,651 / 13,276 = 0.953). The degraded scenario changes every group's entitlement at once, so it measures sensitivity to entitlement, not data-quality error. The **PROVISIONAL threshold 0.50** stays (labelled in config and in the file's selection row).
+  - **On real data at 0.50** the gate flags **60 of 152** groups: 45 at confidence 0 (44 unplaced section groups and 1 ward with partial Census coverage, the A3 fallback groups) and 15 wards with Census join quality 0.34-0.49 (dominant 2009 source share below 0.5). Location is never the weakest signal below 0.5. Groups at exactly 0.5 (review cap, outlier cap, WARD_NAME) pass (strict `<`).
+  - **Limits, in plain words:**
+    - **The done-when is met and tested, but the threshold is not calibrated.** Low confidence cannot auto-commit (A7's `approve_plan` refuses until an officer checks the group). The 0.50 the gate uses is a placeholder: the replay could not choose a value (`not_separable`). Accepted by Padmaja on 2026-10-03 until P2 provides a per-group degraded scenario.
+    - **At 0.50 the gate flags 60 of 152 groups (39%).** On a replay day about 113 groups have bookings (106-120) and about 38 of them are flagged (33-43), against about 27 (22-31) under A7's `ProvisionalGate`. Before each daily plan can be approved, an officer would have to open about 38 groups and write a reason for each (`mark_checked`, a `ward_reviewed` ledger entry), about 11 more per day than today. That is a heavy daily load; it is one reason the threshold must be calibrated before real use.
+    - **45 of the 60 are the groups `ProvisionalGate` already flags**: the 44 sections not placed on a ward and the 1 ward with partial Census coverage, whose need is the A3 fallback. T9 gives them confidence 0 (a test checks the sets are equal). **What T9 adds beyond `ProvisionalGate`:** (a) 15 more wards flagged, whose Census figures mix 2009 source wards (dominant source share 0.34-0.49), about 12 of them with bookings on a given day; (b) a reason per group naming the weakest signal, its value and basis (for example `census_join_quality=0.4577 (min(census_coverage 1.0000, dominant_source_share 0.4577))`) instead of `NO_CENSUS_NEED_DATA` / `OK`; (c) the list of signals used and unavailable; (d) a graded confidence (0-1) instead of 0 or 1, and a location signal that flags nothing at 0.50 but would at higher thresholds.
+    - **Three of the five planned signals are unavailable:** data age cannot separate wards (Census 2011 for every ward); forecast interval width waits for T2; evidence age has no dated data. Confidence today rests on Census join quality and section location only.
+  - **OPEN, owner to confirm. Not decided.** The threshold (provisional 0.50; the replay cannot select one); the target match share 0.90; the minimum combination; the Census rule (min of coverage and dominant share) and the review cap 0.5; the location method scores and the outlier cap 0.5; any per-group data-age rule; the interval-width rule (when T2 merges); a degraded scenario that perturbs signals per group (P2), which the calibration needs to separate thresholds. ASSUMED: thresholds in 0.05 steps, data age zero at 20 years, interval width zero at 2.0.
+  - **Known limits:** one degraded scenario only, applied to every group; match judged per group on served and waiting counts, not on which bookings; one seed and one replay window; Census 2011 on a historical map; evidence age and forecast width not yet scored.
+- **Files:** `backend/app/config/confidence.py`, `backend/app/services/confidence.py`, `backend/tests/services/test_confidence.py`, `scripts/trust/calibrate_confidence.py`, `data/derived/confidence_calibration.csv`, `.github/workflows/p3-t9.yml`, `docs/worklogs/T9.md`, `docs/features.csv`, `docs/P3_FEATURES.md`, `docs/BRANCH_WORKLOG.md`.
+- **Config keys:** `CONFIDENCE_CONFIG`: `evidence_path`, `sections_path`, `section_summary_path`, `replay_groups_path`, `calibration_path`, `census_ok_join_status`, `census_review_cap` (OPEN), `location_method_scores` (OPEN), `location_outlier_km` (P1, 6.0), `location_outlier_cap` (OPEN), `data_age_include` (False), `data_age_zero_at_years` (ASSUMED), `interval_width_zero_at` (OPEN), `combination` (OPEN), `target_match_share` (0.90, OPEN), `provisional_threshold` (0.50), `threshold` (0.50, PROVISIONAL), `threshold_basis`, `candidate_thresholds`, `confidence_decimals` (4), `threshold_decimals` (2), `reproduce_tolerance` (1e-4).
+- **Tests and results (2026-10-03, Windows):** written first (`ModuleNotFoundError: app.config.confidence` before the code existed). 15 tests: the done-when with A7's own functions (`build_plan` flags the low-confidence group; `approve_plan` raises `PlanBlocked`; a blank reason is refused; `mark_checked` then `approve_plan` succeeds; `plan_created`, `ward_reviewed`, `plan_approved` in the ledger and the chain verifies); each signal's boundaries; data age not separating wards; width and evidence age unavailable, width scored when a source exists; missing signals excluded and listed, the reason naming the weakest; no signal -> check; A7 `Assessment`s; the gate on the real files (every replay fallback group at 0 and flagged, every eligible ward above 0, counts read from the files); calibration on a hand-checkable fixture (chosen, unreachable, not separable); P1's outlier distance; the committed selection is provisional; the calibration regenerated and compared within 1e-4. After merging `main` (`d12e4fd`): `python tasks.py test`: **587 backend passed, 2 failed**, frontend 1 passed; all P1 verifiers pass. The 2 failures are inherited, none in T9 files: P2 `backend/tests/test_a8_build.py::test_stations_are_reproducible_committed_and_labelled` and `::test_one_seed_reproduces` (Windows float last digits; pass on Linux CI; identical on a clean `origin/main`, 572 passed + the same 2). `python tasks.py lint` exit 0.
+- **How to run:** `.venv\Scripts\python -m pytest backend/tests/services/test_confidence.py`; `.venv\Scripts\python scripts/trust/calibrate_confidence.py` (about 35 s; writes `data/derived/confidence_calibration.csv`).
+- **Status log:** 2026-10-03 config, service, gate, calibration, tests and the `P3:T9` workflow committed locally on `feat/t9-confidence` (cut from `73efb55`); `main` (`28b2661`, then `d12e4fd`) merged without conflicts; PROVISIONAL 0.50 with `not_separable` accepted by Padmaja until P2's per-group scenario. Waiting for: the owner on the threshold, target and scoring rules; P2 on a per-group degraded scenario; T2 for the interval width.
 
 ## T10: API for all screens
 

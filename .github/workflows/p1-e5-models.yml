@@ -1,0 +1,34 @@
+name: "P1:E5-MODELS"
+# Fits the E5 NB / BYM2 / BYM2_SHRINKAGE models on Linux (PyMC needs a 64-bit C++ compiler for
+# practical speed) and uploads the results as artifacts. Results are reviewed and committed by
+# hand; other workflows never re-sample. Settings are the defaults in config/underserved.py.
+on:
+  pull_request:
+    paths:
+      - scripts/evidence/fit_underserved_models.py
+      - backend/app/services/underserved_models.py
+      - backend/app/config/underserved.py
+      - data/derived/underserved/ward_adjacency_review.json
+      - .github/workflows/p1-e5-models.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fit:
+    name: "P1:E5-MODELS"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get update && sudo apt-get install -y g++
+      - run: pip install -e 'backend[dev,geo,models]'
+      - run: python scripts/evidence/fit_underserved_models.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e5-model-results
+          path: data/derived/underserved/model_results.json
+          if-no-files-found: warn

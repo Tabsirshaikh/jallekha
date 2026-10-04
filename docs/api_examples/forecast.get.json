@@ -1,0 +1,97 @@
+{
+  "_example": {
+    "endpoint": "GET /forecast?level=city|section&section=",
+    "status": "PROPOSED, service not merged (T2 on feat/t2-forecast, local)",
+    "basis": "point_basis / lower_*_basis / upper_*_basis columns (DERIVED; city intervals UNAVAILABLE)",
+    "built_from": "feat/t2-forecast: data/derived/forecast_table.csv (scripts/forecast/run_backtest.py, services/forecast.py)",
+    "notes": "Rows typed by the CSV rule (see api_shapes.md); first 3 city rows and 2 section rows."
+  },
+  "request": {
+    "level": "city"
+  },
+  "response": {
+    "items": [
+      {
+        "level": "city",
+        "section": null,
+        "month": "2026-02",
+        "model": "seasonal_naive",
+        "point": 127725.0,
+        "point_basis": "DERIVED: sum of section points; section names are from before the Feb/Mar 2026 re-cut, so Feb 2026 onwards cannot be compared section by section with current HMWSSB sections",
+        "lower_80": null,
+        "upper_80": null,
+        "lower_80_basis": "UNAVAILABLE: section intervals do not add up",
+        "upper_80_basis": "UNAVAILABLE: section intervals do not add up",
+        "lower_90": null,
+        "upper_90": null,
+        "lower_90_basis": "UNAVAILABLE: section intervals do not add up",
+        "upper_90_basis": "UNAVAILABLE: section intervals do not add up"
+      },
+      {
+        "level": "city",
+        "section": null,
+        "month": "2026-03",
+        "model": "seasonal_naive",
+        "point": 203085.0,
+        "point_basis": "DERIVED: sum of section points; section names are from before the Feb/Mar 2026 re-cut, so Feb 2026 onwards cannot be compared section by section with current HMWSSB sections",
+        "lower_80": null,
+        "upper_80": null,
+        "lower_80_basis": "UNAVAILABLE: section intervals do not add up",
+        "upper_80_basis": "UNAVAILABLE: section intervals do not add up",
+        "lower_90": null,
+        "upper_90": null,
+        "lower_90_basis": "UNAVAILABLE: section intervals do not add up",
+        "upper_90_basis": "UNAVAILABLE: section intervals do not add up"
+      },
+      {
+        "level": "city",
+        "section": null,
+        "month": "2026-04",
+        "model": "seasonal_naive",
+        "point": 218200.0,
+        "point_basis": "DERIVED: sum of section points; section names are from before the Feb/Mar 2026 re-cut, so Feb 2026 onwards cannot be compared section by section with current HMWSSB sections",
+        "lower_80": null,
+        "upper_80": null,
+        "lower_80_basis": "UNAVAILABLE: section intervals do not add up",
+        "upper_80_basis": "UNAVAILABLE: section intervals do not add up",
+        "lower_90": null,
+        "upper_90": null,
+        "lower_90_basis": "UNAVAILABLE: section intervals do not add up",
+        "upper_90_basis": "UNAVAILABLE: section intervals do not add up"
+      },
+      {
+        "level": "section",
+        "section": "ADARSHNAGAR",
+        "month": "2026-02",
+        "model": "seasonal_naive",
+        "point": 36.0,
+        "point_basis": "DERIVED: seasonal_naive on noofbookings through 2026-01; section names are from before the Feb/Mar 2026 re-cut, so Feb 2026 onwards cannot be compared section by section with current HMWSSB sections",
+        "lower_80": 2.338797814207645,
+        "upper_80": 69.66120218579235,
+        "lower_80_basis": "DERIVED: split-conformal, section-scaled pooled residuals of the seasonal_naive backtest",
+        "upper_80_basis": "DERIVED: split-conformal, section-scaled pooled residuals of the seasonal_naive backtest",
+        "lower_90": 0.0,
+        "upper_90": 85.9074074074074,
+        "lower_90_basis": "DERIVED: split-conformal, section-scaled pooled residuals of the seasonal_naive backtest",
+        "upper_90_basis": "DERIVED: split-conformal, section-scaled pooled residuals of the seasonal_naive backtest"
+      },
+      {
+        "level": "section",
+        "section": "ADIBATLA (PD 1)",
+        "month": "2026-02",
+        "model": "seasonal_naive",
+        "point": 7.0,
+        "point_basis": "DERIVED: seasonal_naive on noofbookings through 2026-01; section names are from before the Feb/Mar 2026 re-cut, so Feb 2026 onwards cannot be compared section by section with current HMWSSB sections",
+        "lower_80": 1.9414519906323173,
+        "upper_80": 12.058548009367684,
+        "lower_80_basis": "DERIVED: split-conformal, section-scaled pooled residuals of the seasonal_naive backtest",
+        "upper_80_basis": "DERIVED: split-conformal, section-scaled pooled residuals of the seasonal_naive backtest",
+        "lower_90": 0.0,
+        "upper_90": 14.5,
+        "lower_90_basis": "DERIVED: split-conformal, section-scaled pooled residuals of the seasonal_naive backtest",
+        "upper_90_basis": "DERIVED: split-conformal, section-scaled pooled residuals of the seasonal_naive backtest"
+      }
+    ],
+    "total": 2172
+  }
+}

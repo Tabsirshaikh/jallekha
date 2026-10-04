@@ -1,0 +1,21 @@
+{
+  "_example": {
+    "endpoint": "POST /contests/{contest_id}/reply",
+    "status": "FROM_MAIN (service on main, route not built)",
+    "basis": "SYNTHETIC request; real ContestService",
+    "built_from": "ContestService.reply -> ContestResult; ledger contest_replied"
+  },
+  "request": {
+    "contest_id": "1e030438-fcb3-4f50-ac47-d8baec77a857",
+    "officer_id": "officer-7",
+    "outcome_code": "ranking_stands",
+    "reason_text": "Census 2011 shows piped water for most households; field check scheduled."
+  },
+  "response": {
+    "status": "replied",
+    "contest_id": "1e030438-fcb3-4f50-ac47-d8baec77a857",
+    "reply_id": "bddaa77e-58c9-4dc9-8cb9-93b071a32111",
+    "ledger_seq": 2,
+    "error": null
+  }
+}
