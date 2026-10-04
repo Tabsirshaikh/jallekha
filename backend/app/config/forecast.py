@@ -65,3 +65,37 @@ class ForecastConfig:
 
 
 FORECAST_CONFIG = ForecastConfig()
+
+
+@dataclass(frozen=True)
+class ShortageConfig:
+    """T8 shortage early warning (F6): T2 forecast versus capacity, per section and month."""
+
+    # Source: docs/features.csv T8 done-when ("Risk list 1-3 months ahead with reasons").
+    months_ahead: tuple[int, ...] = (1, 2, 3)
+    # Risk rules, on bookings forecast / capacity trips (one booking = one trip, ASSUMED as in
+    # T2). high: the point forecast reaches risk_high_ratio x capacity; medium: the point
+    # reaches risk_medium_ratio x capacity, or the upper 80% bound reaches capacity; low
+    # otherwise; unknown without a capacity. Ratios ASSUMED, OPEN, owner to confirm.
+    risk_high_ratio: float = 1.0
+    risk_medium_ratio: float = 0.85
+    # Capacity: A8's fleet scenario on main (P2), reused: 1,150 tankers (REAL, news) x 9 trips
+    # per tanker per day (DERIVED) split over 90 stand-in stations in proportion to their
+    # bookings (data/verification/sandbox_checks.json); each station's trips are shared over
+    # its home sections in proportion to their Mar-Jul 2025 bookings (section_points.csv).
+    # The split and its use for 2026 months are ASSUMED.
+    a8_checks_path: str = "data/verification/sandbox_checks.json"
+    a8_sections_path: str = "data/derived/sandbox/section_points.csv"
+    a8_replay: str = "main_2025"
+    a8_scenario: str = "fleet"
+    # Groundwater (D7) is not in the repo: the reason says so, no value is invented.
+    groundwater_note: str = "groundwater data unavailable"
+    # Reservoir levels: only if Q2 is approved (docs/features.csv T8 note). Off; no data.
+    reservoirs_enabled: bool = False
+    # T2's label: section names are from before the Feb/Mar 2026 re-cut.
+    section_label: str = "pre-re-cut section name (Feb/Mar 2026)"
+    forecast_table_path: str = "data/derived/forecast_table.csv"
+    output_path: str = "data/derived/shortage_risk.csv"
+
+
+SHORTAGE_CONFIG = ShortageConfig()
