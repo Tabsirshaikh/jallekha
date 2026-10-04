@@ -109,8 +109,9 @@ def main() -> None:
                 "ward placement is approximate."
             ),
             "fieldChecks": (
-                "E5 peer-median screening; flags are hypotheses for field review and do not "
-                "establish unmet need or entitlement."
+                "E5 screening: the peer median and a negative-binomial model must both flag a "
+                "ward (the spatial models did not converge); flags are hypotheses for field "
+                "review and do not establish unmet need or entitlement."
             ),
         },
         "summary": {
