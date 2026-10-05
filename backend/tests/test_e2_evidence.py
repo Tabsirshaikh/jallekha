@@ -86,13 +86,24 @@ def test_eligible_wards_have_complete_derived_values(built):
         assert row["join_status"] == "AREAL_2009_CROSSWALK"
         assert float(row["census_coverage"]) >= evidence.MIN_CENSUS_COVERAGE
         for key in evidence.METRICS:
-            if key == "critical_facilities":
-                assert row[key] == "" and row[key + "_basis"] == "UNAVAILABLE"
-            else:
-                assert row[key] != "" and row[key + "_basis"] == "DERIVED"
+            assert row[key] != "" and row[key + "_basis"] == "DERIVED"
     for row in rows:
         if row["allocation_eligible"] != "True":
             assert row["review_required"] == "True"
+
+
+def test_every_ward_gets_its_d9_facility_count(built):
+    """Facility counts do not depend on the Census join, so every ward has one (item 15)."""
+    with (ROOT / evidence.FACILITIES).open(encoding="utf-8", newline="") as handle:
+        d9 = {r["ward_id"]: r["critical_facilities"] for r in csv.DictReader(handle)}
+    rows = _rows(built)
+    for row in rows:
+        assert row["critical_facilities"] == d9[row["ward_id"]]
+        assert row["critical_facilities_basis"] == "DERIVED"
+        flags = row["quality_flags"].split(";")
+        assert "FACILITIES_UNAVAILABLE" not in flags
+        assert "FACILITIES_OSM_INCOMPLETE" in flags
+    assert evidence.FACILITIES in evidence.INPUTS
 
 
 def test_census_goes_to_the_right_place_not_the_same_number(built):
@@ -135,5 +146,8 @@ def test_hh_join_failure_never_invents_values(monkeypatch, candidate_count, stat
     rows = _rows(evidence.build())
     assert {r["join_status"] for r in rows} <= {status, "NO_CENSUS_ROW"}
     assert sum(r["join_status"] == status for r in rows) >= 140
-    assert all(r[k] == "" for r in rows for k in evidence.METRICS)
+    census = [k for k in evidence.METRICS if k != "critical_facilities"]
+    assert all(r[k] == "" for r in rows for k in census)
+    # Facility counts come from D9 (OSM), not the Census, so a failed join keeps them.
+    assert all(r["critical_facilities"] != "" for r in rows)
     assert all(r["allocation_eligible"] == "False" for r in rows)

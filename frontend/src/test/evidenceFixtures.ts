@@ -14,11 +14,13 @@ export const atlasPage = {
       ward_id: "relation/901", ward_name: "Ward 901 Testpur", geo_version: "GHMC_2016_150", census_year: 2011,
       review_required: false, allocation_eligible: true, population: 50000, population_basis: "DERIVED",
       households: 12000, households_basis: "DERIVED", wad: 0.21, wad_basis: "DERIVED",
+      critical_facilities: 12, critical_facilities_basis: "DERIVED",
     },
     {
       ward_id: "relation/902", ward_name: "Ward 902 Nullabad", geo_version: "GHMC_2016_150", census_year: null,
       review_required: true, allocation_eligible: false, population: null, population_basis: "UNAVAILABLE",
       households: null, households_basis: "UNAVAILABLE", wad: null, wad_basis: "UNAVAILABLE",
+      critical_facilities: 4, critical_facilities_basis: "DERIVED",
     },
     {
       ward_id: "relation/903", ward_name: "Ward 903 Plainville", geo_version: "GHMC_2016_150", census_year: 2011,

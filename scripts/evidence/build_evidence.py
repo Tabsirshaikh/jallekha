@@ -30,7 +30,10 @@ INPUTS = [
     "data/raw/census/rangareddy/hh14.xlsx",
     "data/verification/source_manifest.csv",
     "data/derived/crosswalk/ward2009_to_ghmc2016_weights.csv",
+    "data/derived/evidence/ward_facilities.csv",
 ]
+# D9 OSM facility counts per 2016 ward (scripts/evidence/build_facilities.py).
+FACILITIES = INPUTS[6]
 WARD2009_SUMMARY = "data/derived/ward2009/summary.json"
 # Share of a 2016 ward's buildings that must come from 2009 wards with usable Census rows.
 MIN_CENSUS_COVERAGE = 0.8
@@ -265,6 +268,7 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
     units = census_units(root, hh)
     provenance = {r["file_path"]: r["source_url"] for r in _read_csv(root / INPUTS[4])}
     hh_url = {"Hyderabad": provenance[INPUTS[2]], "Rangareddy": provenance[INPUTS[3]]}
+    facilities = {r["ward_id"]: int(r["critical_facilities"]) for r in _read_csv(root / FACILITIES)}
     pairs = defaultdict(list)
     for weight in _read_csv(root / INPUTS[5]):
         pairs[weight["target_ward_id"]].append(weight)
@@ -286,7 +290,7 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
             "location_status": "NO_2009_OVERLAP",
             "review_required": True,
             "allocation_eligible": False,
-            "quality_flags": "HISTORICAL;FACILITIES_UNAVAILABLE;APPROX_AREAL_CROSSWALK",
+            "quality_flags": "HISTORICAL;FACILITIES_OSM_INCOMPLETE;APPROX_AREAL_CROSSWALK",
             "crosswalk_method": "BUILDING_WEIGHTED_2009_MAP",
             "census_coverage": "",
             "dominant_source_share": "",
@@ -294,6 +298,9 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
         }
         for key in METRICS:
             row[key], row[key + "_basis"] = None, "UNAVAILABLE"
+        # OSM counts are REAL as mapped; placement on the ward is DERIVED, so the column is.
+        row["critical_facilities"] = facilities[target]
+        row["critical_facilities_basis"] = "DERIVED"
         # (2009 unit, building share of that unit, building index here, Census unit or None)
         contributions = [
             (
@@ -354,7 +361,8 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
             "The 2009 map is fitted from a PDF (median boundary error in crosswalk).",
             "2009 wards 115-116 were in Medak district; that Census table is not loaded.",
             "Census 2011 percentages are not current household observations.",
-            "No verified facilities source; counts remain empty.",
+            "Critical facilities are OSM hospitals, clinics, UPHCs, schools and care homes "
+            "placed by position (D9); OSM is incomplete, so zero mapped is not zero present.",
             "Hardship is a mean of overlapping proxies, not a household union.",
             "Non-tap weight requires approved policy; no composite WAD invented.",
         ],
@@ -363,7 +371,7 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
         OUTPUT: stream.getvalue().encode(),
         SUMMARY: (json.dumps(summary, indent=2, sort_keys=True) + "\n").encode(),
     }
-    text_inputs = (INPUTS[0], INPUTS[4], INPUTS[5])
+    text_inputs = (INPUTS[0], INPUTS[4], INPUTS[5], FACILITIES)
     checks = {
         "inputs_sha256": {
             p: hashlib.sha256(
@@ -374,7 +382,7 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
             for p in INPUTS
         },
         "outputs_sha256": {p: hashlib.sha256(b).hexdigest() for p, b in artifacts.items()},
-        "schema_version": "E2-2",
+        "schema_version": "E2-3",
         "normalized_lf_text_inputs": list(text_inputs),
     }
     artifacts[CHECKS] = (json.dumps(checks, indent=2, sort_keys=True) + "\n").encode()

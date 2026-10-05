@@ -1,0 +1,52 @@
+{
+  "categories": [
+    "hospitals",
+    "clinics",
+    "uphcs",
+    "schools",
+    "care_homes"
+  ],
+  "classified_in_bbox": {
+    "care_homes": 10,
+    "clinics": 358,
+    "hospitals": 1070,
+    "schools": 603,
+    "uphcs": 196
+  },
+  "in_hyderabad_district": {
+    "care_homes": 3,
+    "clinics": 119,
+    "hospitals": 487,
+    "schools": 204,
+    "uphcs": 115
+  },
+  "limitations": [
+    "OSM is incomplete and uneven: zero mapped is not zero present.",
+    "The original D9 snapshot and its query were never found; tag choices are ours, so totals differ from the solution document's.",
+    "Primary care (UPHC, PHC, Basti Dawakhana) is found by name, so unnamed or differently named centres count as clinics or hospitals.",
+    "Placed on the historical 2016 ward layer (145 polygons; six wards missing)."
+  ],
+  "outside_wards": {
+    "care_homes": 4,
+    "clinics": 64,
+    "hospitals": 129,
+    "schools": 164,
+    "uphcs": 22
+  },
+  "placed_in_wards": {
+    "care_homes": 6,
+    "clinics": 294,
+    "hospitals": 941,
+    "schools": 439,
+    "uphcs": 174
+  },
+  "solution_doc_totals": {
+    "care_homes": 59,
+    "clinics": 310,
+    "hospitals": 885,
+    "schools": 399,
+    "uphcs": 350
+  },
+  "source": "D9-OSM-FACILITIES (data/raw/d9_facilities/RETRIEVAL_LOG.md)",
+  "wards_with_none_mapped": 3
+}

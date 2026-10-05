@@ -1065,3 +1065,18 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:** the yes / partly / no values are a judgement against the solution document as written; update a row's value whenever its gap closes.
 - **Pull request:** see the PR for `docs/item-22-promise-column`.
 
+## `feat/d9-facilities` — hospitals, clinics, UPHCs, schools and care homes per ward (item 15)
+
+- **Owner / date:** P1 work done by the repo owner, 2026-10-06.
+- **Why:** the ward table's critical facilities column was empty (`FACILITIES_UNAVAILABLE`) because the verified D9 snapshot was never copied, so F1, F8 tier 0 and F10 had no facility data.
+- **What we changed:**
+  - `scripts/data/fetch_d9_facilities.py` pulls OSM features (Overpass, bounding box of the 2016 ward layer) into `data/raw/d9_facilities/` with a retrieval log and SHA-256; registered as D9-OSM-FACILITIES in the source manifest (`verify_manifest.py` counts it apart from the 33 S2 rows, like D13).
+  - `scripts/evidence/build_facilities.py` puts each feature in one category (UPHC by name, hospital, clinic, school, care home) and places it on the 2016 wards: `ward_facilities.csv` (counts), `facility_points.csv` (each feature with its ward), `facilities_summary.json` (totals beside the document's), checked by `verify_facilities.py` (added to `tasks.py test`).
+  - E2 fills `critical_facilities` for all 145 wards (DERIVED; flag `FACILITIES_OSM_INCOMPLETE`). The manifest and E2 checksums changed, so the E5, E6, population and A8 checks were rebuilt (only checksum lines changed; E5's model results are unaffected because their cohort fingerprint has no facility input).
+  - `GET /facilities/candidates?ward_id=` (officer): the ward's facilities as candidate critical stops, read-only (`docs/api_additions/facilities.md`).
+  - U5 atlas: the selected ward shows the OSM facility count with the "not everything is mapped" note, in all four languages; snapshot rebuilt.
+- **Results:** in the wards 941 hospitals, 294 clinics, 174 UPHCs, 439 schools, 6 care homes (document: 885 / 310 / 350 / 399 / 59). Close for hospitals, clinics and schools; UPHCs are found by name only; care homes are barely mapped in OSM.
+- **Validation:** tests written first and seen failing (classification, placement and shared edges, reproducible artifacts, E2 column, API route and roles, adapter and screen), then passing.
+- **Known limitations:** OSM is incomplete (zero mapped is not zero present); tag choices are ours; old 2016 ward map; no route creates outage critical stops from a candidate yet (`docs/LIMITATIONS.md` F1, F10).
+- **Pull request:** see the PR for `feat/d9-facilities`.
+

@@ -12,7 +12,7 @@ to-do list.
 | 12 | Gradient-boosting forecast | F5 | **done** (`feat/f5-gbm-forecast`); adoption is the owner's rule | — |
 | 13 | Voice error rate for Telugu and Urdu | F14 | us, after recordings | a small labelled voice set |
 | 14 | Reproduce the duplicate calibration (71% / 88%) | F13 | **done** (`feat/f13-dedup-calibration`); text-similarity test skipped by owner decision | — |
-| 15 | Hospital and school data (D9) in the ward table | F1, F8, F10 | us, now | nothing (OSM is open) |
+| 15 | Hospital and school data (D9) in the ward table | F1, F8, F10 | **done** (`feat/d9-facilities`) | — |
 | 16 | Weather data (D8) | F5 | **done** (with item 12) | — |
 | 17 | Groundwater data (D7) | F5, F6 | us, after registering | NWDP account |
 | 18 | Degraded-signal replay for the T9 threshold | F17 | us, now | nothing |
@@ -152,6 +152,8 @@ The Impact page's duplicate measure can then be filled in.
 ## Needs data from outside
 
 ### 15. Hospital and school data (D9) in the ward table (F1, F8 tier 0, F10)
+
+**Status: done** on `feat/d9-facilities`: logged OSM pull (2,242 features, `data/raw/d9_facilities/`), counts per ward in `ward_facilities.csv`, the E2 facilities column filled for all 145 wards (DERIVED), the U5 atlas shows the count, and `GET /facilities/candidates` lists each ward's facilities as candidate critical stops for an officer. Totals do not match the document's (941 / 294 / 174 / 439 / 6 against 885 / 310 / 350 / 399 / 59); `docs/LIMITATIONS.md` F1 explains why. The text below is the plan it followed.
 
 **What it is.** Counts of hospitals, clinics, urban health centres, schools and care homes per
 ward, from OpenStreetMap. The doc lists D9 as REAL and verified (885 / 310 / 350 / 399 / 59).

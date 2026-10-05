@@ -35,7 +35,7 @@
         "location_status": "APPROXIMATE_2009_MAP",
         "review_required": true,
         "allocation_eligible": true,
-        "quality_flags": "HISTORICAL;FACILITIES_UNAVAILABLE;APPROX_AREAL_CROSSWALK;MIXED_2009_SOURCES",
+        "quality_flags": "HISTORICAL;FACILITIES_OSM_INCOMPLETE;APPROX_AREAL_CROSSWALK;MIXED_2009_SOURCES",
         "crosswalk_method": "BUILDING_WEIGHTED_2009_MAP",
         "census_coverage": 1.0,
         "dominant_source_share": 0.4622,
@@ -58,8 +58,8 @@
         "no_assets_share_basis": "DERIVED",
         "hardship": 0.115907,
         "hardship_basis": "DERIVED",
-        "critical_facilities": null,
-        "critical_facilities_basis": "UNAVAILABLE"
+        "critical_facilities": 37,
+        "critical_facilities_basis": "DERIVED"
       },
       {
         "ward_id": "relation/7867250",
@@ -74,7 +74,7 @@
         "location_status": "APPROXIMATE_2009_MAP",
         "review_required": true,
         "allocation_eligible": false,
-        "quality_flags": "HISTORICAL;FACILITIES_UNAVAILABLE;APPROX_AREAL_CROSSWALK",
+        "quality_flags": "HISTORICAL;FACILITIES_OSM_INCOMPLETE;APPROX_AREAL_CROSSWALK",
         "crosswalk_method": "BUILDING_WEIGHTED_2009_MAP",
         "census_coverage": 0.0198,
         "dominant_source_share": null,
@@ -97,8 +97,8 @@
         "no_assets_share_basis": "UNAVAILABLE",
         "hardship": null,
         "hardship_basis": "UNAVAILABLE",
-        "critical_facilities": null,
-        "critical_facilities_basis": "UNAVAILABLE"
+        "critical_facilities": 14,
+        "critical_facilities_basis": "DERIVED"
       }
     ]
   }

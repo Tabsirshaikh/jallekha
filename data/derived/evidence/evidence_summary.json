@@ -19,7 +19,7 @@
     "The 2009 map is fitted from a PDF (median boundary error in crosswalk).",
     "2009 wards 115-116 were in Medak district; that Census table is not loaded.",
     "Census 2011 percentages are not current household observations.",
-    "No verified facilities source; counts remain empty.",
+    "Critical facilities are OSM hospitals, clinics, UPHCs, schools and care homes placed by position (D9); OSM is incomplete, so zero mapped is not zero present.",
     "Hardship is a mean of overlapping proxies, not a household union.",
     "Non-tap weight requires approved policy; no composite WAD invented."
   ],

@@ -1,0 +1,68 @@
+{
+  "_example": {
+    "endpoint": "GET /facilities/candidates?ward_id={ward_id}",
+    "status": "ROUTE_ON_MAIN (feat/d9-facilities, item 15)",
+    "basis": "counts REAL (as mapped in OpenStreetMap); ward placement DERIVED; every item is a candidate an officer must confirm by registering a stop",
+    "built_from": "data/derived/evidence/ward_facilities.csv (counts) + data/derived/evidence/facility_points.csv (items) for the same ward_id",
+    "roles": "officer",
+    "source": {
+      "file": "data/derived/evidence/facility_points.csv",
+      "key_column": "osm_ref",
+      "keys": [
+        "node/726165655",
+        "node/2052640886"
+      ]
+    }
+  },
+  "request": {
+    "ward_id": "relation/7848799",
+    "offset": 0,
+    "limit": 2
+  },
+  "response": {
+    "ward_id": "relation/7848799",
+    "ward_name": "Ward 91 Khairatabad",
+    "status": "CANDIDATE_OFFICER_CONFIRMATION_REQUIRED",
+    "counts": {
+      "hospitals": 31,
+      "clinics": 3,
+      "uphcs": 1,
+      "schools": 2,
+      "care_homes": 0
+    },
+    "counts_basis": "REAL",
+    "placement_basis": "DERIVED",
+    "note": "OpenStreetMap features placed on the 2016 wards by position; OSM is incomplete, so a ward may have facilities that are not listed. Register a stop to use one.",
+    "total": 37,
+    "offset": 0,
+    "limit": 2,
+    "items": [
+      {
+        "osm_ref": "node/726165655",
+        "osm_type": "node",
+        "osm_id": 726165655,
+        "osm_url": "https://www.openstreetmap.org/node/726165655",
+        "category": "hospitals",
+        "name": "Vasavi ENT Hospital",
+        "lat": 17.40681,
+        "lon": 78.4645023,
+        "basis": "REAL",
+        "ward_id": "relation/7848799",
+        "ward_basis": "DERIVED"
+      },
+      {
+        "osm_ref": "node/2052640886",
+        "osm_type": "node",
+        "osm_id": 2052640886,
+        "osm_url": "https://www.openstreetmap.org/node/2052640886",
+        "category": "hospitals",
+        "name": "Anu Test Tube Centre",
+        "lat": 17.4217792,
+        "lon": 78.4602059,
+        "basis": "REAL",
+        "ward_id": "relation/7848799",
+        "ward_basis": "DERIVED"
+      }
+    ]
+  }
+}
