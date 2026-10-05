@@ -27,7 +27,7 @@
       "review_required": true,
       "quality_flags": [
         "HISTORICAL",
-        "FACILITIES_UNAVAILABLE",
+        "FACILITIES_OSM_INCOMPLETE",
         "APPROX_AREAL_CROSSWALK"
       ],
       "check_reasons": [
@@ -46,8 +46,8 @@
       "households": null,
       "households_basis": null,
       "entitlement": null,
-      "critical_facilities": null,
-      "critical_facilities_basis": "UNAVAILABLE",
+      "critical_facilities": 14,
+      "critical_facilities_basis": "DERIVED",
       "debt": {
         "available": false,
         "account_id": null,

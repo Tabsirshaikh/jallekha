@@ -19,7 +19,7 @@ python scripts/data/verify_manifest.py
 
 ## Not included and why
 
-- **D9 OSM facilities:** the previously verified snapshot was not found. A fresh OSM query would be new D1 fetch work and would not be an unchanged S2 port.
+- **D9 OSM facilities:** the previously verified snapshot was not found. A fresh OSM pull was logged on 2026-10-05 (`data/raw/d9_facilities/`, manifest row D9-OSM-FACILITIES, `scripts/data/fetch_d9_facilities.py`); it is new fetch work, not an unchanged S2 port.
 - **D12 Nominatim section coordinates:** this was a derived file and the original queries/results were not found. It must be regenerated with per-match provenance and review during the spatial pipeline.
 - **D13 Chicago 311 calibration extract:** the exact prior query and frozen extract were not found. The live source changes over time, so a new download cannot be represented as the previous verified 31,098-row snapshot.
 - **`V-VERIFY_REVIEW.md`:** no source copy was found. Its reported checks are not reproduced or claimed here.

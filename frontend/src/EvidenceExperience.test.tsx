@@ -50,6 +50,13 @@ describe("EvidenceExperience", () => {
     expect(within(card).queryByText(/^0/)).not.toBeInTheDocument();
     expect(within(card).getByText("Unavailable")).toBeInTheDocument();
 
+    // OSM facility counts are shown with their source and the warning that the map is incomplete.
+    fireEvent.click(wardList(container).getByText("Ward 901 Testpur"));
+    const testpur = container.querySelector(".evidence-selected-card") as HTMLElement;
+    expect(within(testpur).getByText("Hospitals, clinics, schools, care homes · OSM")).toBeInTheDocument();
+    expect(within(testpur).getByText("12")).toBeInTheDocument();
+    expect(within(testpur).getByText(/facilities missing from the map are not counted/)).toBeInTheDocument();
+
     fireEvent.click(screen.getByRole("tab", { name: "Booking equity" }));
     expect(screen.getByText("Live: concentration of observed bookings, not unequal need")).toBeInTheDocument();
 

@@ -1,0 +1,2243 @@
+osm_type,osm_id,lat,lon,amenity,healthcare,social_facility,name
+node,349267517,17.4406857,78.3916647,hospital,hospital,,Vikram Hospitals
+node,349270023,17.4444337,78.3860746,hospital,hospital,,Image Hospitals
+node,513424892,17.4427279,78.4453558,school,,,Gautham Model School
+node,513439512,17.4417142,78.4478775,hospital,,,Ameerpet Government Hospital
+node,513439517,17.4422795,78.4480341,hospital,,,Sri Vijaya Hospitals
+node,538425761,17.4415414,78.4461255,hospital,,,Sree Priya Multi Speciality Hospital
+node,626897112,17.3672265,78.4859878,hospital,,,Rahmat Ali hospital
+node,634123608,17.4054551,78.5122245,school,,,S.V.E.S High School
+node,634123799,17.4075707,78.5135035,school,,,Jyothi Bala Mandir High School
+node,634123949,17.4075740,78.5121740,hospital,,,Satya Hospital
+node,635590614,17.4101591,78.5143831,clinic,,,Ananda Nursing Home
+node,665132280,17.4293162,78.5334520,hospital,,,Innova Children's Heart Hospital
+node,665132281,17.4290954,78.5333362,hospital,,,Apollo Clinic
+node,677300258,17.3957311,78.4884345,school,,,Jingle Bell School
+node,726146076,17.4004331,78.4883969,school,,,"Narayana Junior College, AIEEE"
+node,726165655,17.4068100,78.4645023,hospital,,,Vasavi ENT Hospital
+node,726240837,17.4036641,78.4570626,hospital,,,Mahavir Hospital and Research Centre
+node,726243304,17.4044020,78.4578133,school,,,Holy Mary Girls High School
+node,726274913,17.3937581,78.4524941,school,,,St.Josephs High School
+node,727180831,17.4015388,78.4848360,school,,,Goutham Model School
+node,727283253,17.3985586,78.4814113,hospital,,,Old Apollo Hospital
+node,728848279,17.4021334,78.4625295,hospital,,,Krishna Children's Hospital
+node,728911854,17.3947951,78.4730227,school,,,Sujatha High School
+node,728912657,17.3936380,78.4747540,school,,,Little Flower High School
+node,728915591,17.3925192,78.4740505,school,,,Little Flower Primary School
+node,739161413,17.4113728,78.4588295,school,,,Nasr School
+node,762994074,17.4404012,78.4865035,school,,,Wesley High School
+node,827576106,17.4301742,78.3937323,hospital,hospital,,Arogyasree Health care trust
+node,827576336,17.4412917,78.3914009,school,,,Sharada High
+node,845467748,17.4001040,78.5362094,school,,,Hyderabad Public School
+node,890303727,17.4135412,78.4445973,school,,,Springfields School
+node,893195080,17.3990359,78.4447966,hospital,,,Surojini Devi Eye Hospital
+node,894000353,17.4800428,78.5795251,school,,,MRR School
+node,894082495,17.4156911,78.4454609,hospital,,,Star Hospital
+node,894082503,17.4148145,78.4475692,hospital,,,Rainbow Hospitals
+node,898965110,17.3921498,78.4793651,hospital,,,Fernandez Hospital
+node,902311398,17.4556983,78.4984034,hospital,,,Oxygen Hospital
+node,1050786520,17.4693193,78.4778376,hospital,,,
+node,1050823743,17.4622983,78.4922542,clinic,clinic,,
+node,1050823750,17.4619298,78.4945931,school,,,Butterflies
+node,1050823766,17.4617866,78.4968247,school,,,Gunrock Enclave High School
+node,1050844412,17.4636217,78.4567398,hospital,hospital,,Remedy Hospitals
+node,1058611114,17.4260406,78.5346675,school,,,
+node,1066040554,17.4608187,78.4908297,doctors,doctor,,Ortho Care Centre
+node,1066040577,17.4619332,78.4910979,school,,,Sunflower School
+node,1070473380,17.4260413,78.5361627,school,,,Sandeepamn Vidyalaya
+node,1166215301,17.4665149,78.4270626,school,,,
+node,1215214084,17.4629614,78.3673949,hospital,hospital,,LEAF HOSPITAL
+node,1224523179,17.4535178,78.3640840,hospital,hospital,,Ambicare Hospital
+node,1271903169,17.5204725,78.5211267,school,,,Paul's School
+node,1360401090,17.4167468,78.5427381,school,,,Johnson Grammar School
+node,1360401092,17.4187133,78.5442130,school,,,Narayana Junior College
+node,1370770554,17.4593819,78.4573288,school,,,Institute of Aircraft Maintenance Engineering
+node,1435322433,17.4512881,78.5354859,hospital,,,L.K. Diagnostic
+node,1435322434,17.4510732,78.5334689,school,,,Balaji High School
+node,1435322435,17.4516847,78.5341421,school,,,Durga Bhavani High School
+node,1435322436,17.4505256,78.5340322,school,,,Zilla Parishad Boys High School
+node,1435322437,17.4504309,78.5333857,school,,,Zilla Parishad Girls high School
+node,1435322444,17.4509925,78.5334984,clinic,clinic,,"Primary Health Centre, Malkajgiri (Urban)"
+node,1435322445,17.4513853,78.5352525,hospital,,,L.K. Hospitals
+node,1437365108,17.4527246,78.5278602,school,,,Saraswati High School
+node,1437365125,17.4532108,78.5280050,school,,,Bhegas High School
+node,1438252866,17.4514350,78.5311968,hospital,,,Dental Hospital
+node,1447172299,17.3942194,78.4842629,school,,,
+node,1504756065,17.3688309,78.5301893,hospital,hospital,,Lakshmi Childrens Hospital
+node,1553576934,17.3993955,78.4792005,hospital,,,Apollo Emergency Hospital
+node,1553576940,17.3963780,78.4773556,school,,,St. Joseph's Girls High School
+node,1598149460,17.3684777,78.5387483,hospital,hospital,,Omni Hospital
+node,1693979525,17.4095337,78.4880547,school,,,St. Peter High School
+node,1693981322,17.4096560,78.4871622,school,,,Rockwoods High School
+node,1693981323,17.4100043,78.4849523,school,,,Rockwoods High School
+node,1702266641,17.4696017,78.3660584,hospital,hospital,,haritha hospitals
+node,1830862113,17.3328694,78.5687059,school,,,Lotus Lap School
+node,1842299885,17.4949726,78.4105957,school,,,DAV Public School
+node,1883475928,17.4206569,78.4481619,hospital,,,Care Clinic
+node,1891052141,17.3395118,78.5019168,school,,,"Kendriya Vidyalaya, DRDO, Kanchanbagh"
+node,1985544651,17.4856038,78.3903262,hospital,,,Anupama Hospital
+node,1985561843,17.4393096,78.3549913,school,,,Kendirya Vidyalaya
+node,2052640886,17.4217792,78.4602059,hospital,,,Anu Test Tube Centre
+node,2062757344,17.4293121,78.4379550,school,,,Siddhartha Residential School
+node,2066804022,17.4531263,78.4410265,school,,,Hindu Public School
+node,2090725114,17.4624493,78.3517334,school,,,Chirec Public School
+node,2177959720,17.4362507,78.4282993,school,,,government school
+node,2192962541,17.4064283,78.4738814,hospital,,,Hope Children's Hospital
+node,2208158646,17.3618384,78.4819749,school,,,Dharmavant High School
+node,2208162453,17.4291646,78.4567382,hospital,,,Swapna Health Care
+node,2217950116,17.3288112,78.6053328,,centre,,"Community Health Centre, Hayathnagar"
+node,2217950153,17.3594287,78.5450683,hospital,,,OZONE HOSPITALS
+node,2352095456,17.4211366,78.4566557,hospital,hospital,,Asian Institute of Gastroenterology
+node,2354679489,17.4068493,78.3922011,hospital,,,Matpathy Clinic
+node,2428125212,17.4979039,78.3911608,hospital,clinic,,Lucid Clinic
+node,2429955121,17.3746556,78.4998723,hospital,hospital,,Yashoda Super Speciality Hospital
+node,2583708951,17.4255371,78.5306786,hospital,,,Tarnaka Flyover;TGSRTC Hospital
+node,2607590422,17.4184365,78.4572640,hospital,,,Nova ENT Hospital
+node,2632328586,17.4888555,78.3959947,hospital,,,Mamata Nursing Home
+node,2653175510,17.4807281,78.5594102,school,,,St. Theresa High School
+node,2702443456,17.4086181,78.4898943,school,,,"narayana school,iit"
+node,2708233533,17.3977165,78.5123189,clinic,,,Shanti Homeo Clinic
+node,2710749446,17.3304618,78.5694074,school,,,siddhartha High School
+node,2710750541,17.3303492,78.5693859,school,,,Loyola Montessori House
+node,2710949939,17.4036074,78.4753627,hospital,hospital,,Kirloskar Hospital
+node,2712623077,17.4089088,78.4894972,hospital,,,ramesh eye care
+node,2712626758,17.4089994,78.4892653,school,,,eurokids ashok nagar
+node,2712662990,17.4118751,78.4888572,hospital,,,Tapadia Medical Centre's Eashwar Lakshmi Hospital
+node,2712702154,17.4135294,78.4946359,school,,,little gems play school/sri sai ram tutorial
+node,2715310633,17.4073049,78.4816422,hospital,hospital,,K Prakash Rao (eye specialist)
+node,2715310996,17.4069600,78.4821099,hospital,,,Radha Rani Nursing Home
+node,2779844594,17.4103854,78.4852768,hospital,,,Dental Care
+node,2835226156,17.4511937,78.4208721,hospital,hospital,,Sri Bhargavi Hospital
+node,2835658220,17.4510973,78.4224934,hospital,hospital,,Jaiswal Multi Speciality Hospitals
+node,2835659213,17.4480669,78.4337319,hospital,,,Government Ayurvedic Hospital
+node,2921475370,17.5355710,78.4412727,school,,,Rv model hight school
+node,3159027236,17.4388238,78.4420946,hospital,hospital,,Raghava Multi Speciality Hospital
+node,3159027238,17.4385124,78.4425646,hospital,hospital,,VCARE Hospitals
+node,3166260336,17.4390074,78.4406383,hospital,hospital,,Deepthi Diagnostics
+node,3200948738,17.3456980,78.5497630,hospital,hospital,,Healthcare Hospitals
+node,3200948976,17.3348812,78.5372101,hospital,hospital,,
+node,3207060834,17.4976626,78.3901045,hospital,hospital,,Cygnus Institute of Gastroenterology Centre
+node,3384202807,17.4668555,78.3786107,clinic,clinic,,medical clinic
+node,3384203436,17.3526774,78.5542584,hospital,,,hospital
+node,3388783469,17.4815671,78.5363894,clinic,,,sai krishna dental centre
+node,3388924697,17.4884992,78.4140886,clinic,,,
+node,3390837564,17.3940456,78.5104248,hospital,,,
+node,3390967828,17.5113399,78.4469461,hospital,,,Carewell Diabetes and General Hospital
+node,3391103941,17.5220823,78.4431753,hospital,hospital,,Sigma Hospitals
+node,3506878894,17.4416500,78.5218514,hospital,,,Meena Hospital
+node,3523097904,17.3999126,78.5632365,clinic,clinic,,"Urban Primary Health Centre, Gunti Jangaiah Nagar, Hayathnagar"
+node,3533084115,17.4289946,78.5120703,hospital,hospital,,Life Spring Hospitals
+node,3534837998,17.5439866,78.4333819,hospital,,,Malla Reddy Narayana Multispeciality Hospital
+node,3535107688,17.4195743,78.3525084,school,,,Nanakramguda Govt primary school
+node,3541446144,17.4160221,78.3916108,hospital,,,Saraswathi Nursing Home
+node,3598267888,17.4631717,78.4904751,hospital,,,Janapareddy Hospital
+node,3619348034,17.4599321,78.3660837,hospital,hospital,,Apoolo Clinic
+node,3628968549,17.4111108,78.5522256,clinic,,,NGRI Dispensary
+node,3640604684,17.5161190,78.4388993,hospital,hospital,,Childrens Hospital
+node,3847458511,17.4439245,78.4708230,clinic,,,"Dr. Prakash Bhatia, Dr. Chandra Bhatia"
+node,3943900977,17.3987660,78.4485950,hospital,,,ayurvedic clinic
+node,3943909643,17.3985187,78.4458137,hospital,,,The crescent hospital
+node,4199097091,17.4459719,78.4467421,doctors,,,Srinivasa Diagnostic
+node,4208628506,17.5197682,78.3628910,school,,,GRIET
+node,4208652689,17.4199188,78.4118610,school,,,Sri Chaitanya Junior College
+node,4265592189,17.4319663,78.4452586,school,,,Siddhartha Degree College
+node,4305666400,17.5426273,78.4652589,school,,,Zilla Parishath High School
+node,4305674392,17.5627646,78.4546378,school,,,DPEP PRIMARY SCHOOL
+node,4305674794,17.5463995,78.4692078,school,,,primary school
+node,4305735089,17.5644438,78.4500218,school,,,ST Peter's INTERNATIONAL SCHOOL
+node,4317218289,17.5636618,78.4735604,school,,,abhaya
+node,4366549489,17.4377225,78.5219760,hospital,hospital,,
+node,4377099191,17.4315389,78.4501990,school,,,cognizant collage of commerce
+node,4407845290,17.4020587,78.4985239,school,,,baghlingampally
+node,4413453793,17.3983822,78.4161649,hospital,hospital,,RELIEF HOSPITAL
+node,4416373791,17.4031097,78.4886592,school,,,St Anthony high school
+node,4416373792,17.4115391,78.4904614,hospital,,,Jagadamba Hospitals
+node,4416373794,17.4014253,78.4890028,school,,,Sri chaitanya high school
+node,4416393290,17.4018367,78.4871071,school,,,Howard school
+node,4417145293,17.4045834,78.4893402,hospital,,,med plus
+node,4418622009,17.4003618,78.4905945,school,,,Avanthi degree&pg college
+node,4419078503,17.4017724,78.4861487,school,,,Smiles indian school
+node,4419091498,17.4072675,78.4442572,hospital,,,Century hospital
+node,4422090693,17.4067264,78.4896361,clinic,,,Dishvitha dental clinic
+node,4422254585,17.4249205,78.4139937,hospital,hospital,,Blood Bank
+node,4431245790,17.4019162,78.4885635,school,,,St Anthony high school
+node,4431245791,17.4031177,78.4885756,school,,,St Anthony high school
+node,4431246690,17.4044822,78.4893121,hospital,,,Med plus
+node,4431247889,17.4040476,78.4888685,school,,,People's High school
+node,4431897994,17.4026174,78.4871893,school,,,"St Paul degree and pg college, St Joseph Jr college"
+node,4431984890,17.4030771,78.4885458,school,,,St Anthony high school
+node,4432327792,17.4067271,78.4896048,clinic,,,Dishvitha dental
+node,4432355392,17.3967553,78.5156444,school,,,Divyanjali High School.
+node,4432377490,17.4072495,78.4447338,hospital,,,CENTURY SUPER SPECIALITY HOSPITAL
+node,4436525395,17.4009037,78.4875706,hospital,,,"Vasan Healthcare Private Limited, Himayath Nagar"
+node,4451580789,17.4269993,78.4488484,hospital,,,
+node,4470095721,17.4188516,78.3838224,clinic,clinic,,Dr. KALYAN AYURVEDA SPECIALITIES
+node,4472320689,17.4104845,78.3937958,school,,,Safrani Memorial High School
+node,4475378924,17.4777723,78.5126865,school,,,Holy Family Girls High School
+node,4475381627,17.4769199,78.5127814,school,,,St. Joseph's High School
+node,4482541490,17.4166539,78.4534763,hospital,hospital,,Asian Institute of Nephrology and Urology
+node,4486660717,17.4396192,78.4507940,hospital,,,Challa Hospital
+node,4496471892,17.3223319,78.6034148,school,,,Zee School
+node,4508450990,17.4088082,78.4902875,clinic,,,Med plus
+node,4517094891,17.3451071,78.5537805,hospital,hospital,,Shresta Orange Hospitals
+node,4539335628,17.3978823,78.4540839,school,,,ST Anns School
+node,4576289992,17.3412305,78.5581563,hospital,hospital,,AMMA EYE CARE HOSPITAL
+node,4576325189,17.3416722,78.5576405,hospital,hospital,,OXYGEN AND Medicity Hospital
+node,4589173089,17.4306786,78.5468380,clinic,,,Dr Suman Kapoor
+node,4614311358,17.4444782,78.4694980,hospital,,,Pace Hospital
+node,4614442637,17.4398266,78.4841159,clinic,,,Dr Mirchandani
+node,4625163789,17.3418162,78.5588085,hospital,hospital,,Rainbow children Hospital
+node,4665371689,17.4955259,78.3322260,hospital,hospital,,Vasan Eye Care Hospital
+node,4674764891,17.4781366,78.3197135,clinic,clinic,,Sri Sai Santhoshi Superspeciality Dental Clinic
+node,4674771293,17.4790753,78.3177739,school,,,Pavithra International School
+node,4674823494,17.4895943,78.3142119,school,,,Triveni Talent Schools
+node,4679716389,17.4661470,78.3677443,hospital,hospital,,KIMS HOSPITAL
+node,4693614990,17.4928587,78.3279840,hospital,hospital,,Happy Children's Hospital
+node,4695632089,17.4921861,78.3275773,hospital,hospital,,Vanaja Hospital
+node,4703894689,17.4899292,78.6018320,hospital,,,SUDHA Hospital
+node,4706061489,17.4419194,78.3984172,school,,,Orchard
+node,4711614465,17.3289104,78.5638990,hospital,,,"Area Hospital, Vanasthalipuram"
+node,4713433190,17.4797782,78.3201181,doctors,doctor,,Sri Venkateshwara Poly Clinic & Diagnostic Center
+node,4715099192,17.4439091,78.5043433,hospital,hospital,,Pushpagiri Eye Institute
+node,4716995091,17.4959755,78.3374170,hospital,hospital,,Archana Hospital
+node,4739312650,17.3680742,78.5156883,school,,,St joseph's public school
+node,4747299322,17.4891585,78.3886658,school,,,Vignan Prabha High School
+node,4750918330,17.4870703,78.3199625,school,,,Mythri High School
+node,4764366298,17.4835926,78.3155659,doctors,doctor,,Ayu Raaga
+node,4769502021,17.4146274,78.4081844,school,,,BNR Brilliant High School
+node,4796530721,17.3593826,78.5045484,school,,,Sri Vidya vardhini high school
+node,4856641922,17.5214894,78.4323478,clinic,clinic,,Dr.Rao SRR Homeopathy
+node,4972310519,17.3448605,78.4599543,hospital,,,Health Care Clinic
+node,4972953421,17.3621596,78.5020934,school,,,Kare school
+node,5118590622,17.4172897,78.4947636,school,,,Anjuman High School
+node,5118590623,17.4169063,78.4946918,school,,,Anjuman Girls High School (Urdu Medium)
+node,5118590649,17.4153976,78.4979892,hospital,,,Guru Nanak Care Hospital
+node,5289033245,17.4389161,78.5031436,school,,,St. Mary's High School
+node,5324874933,17.4297764,78.4340161,hospital,hospital,,Tanvir Hospital
+node,5389639230,17.3940612,78.4514384,school,,,St Joseph high school (kindergarten block)
+node,5405055776,17.4422328,78.3587144,hospital,hospital,,Himagiri Hospital
+node,5464848598,17.5067372,78.5550126,school,,,Indus Universal School
+node,5465091377,17.4998062,78.5464957,school,,,St.Pauls Model School
+node,5532343399,17.5279933,78.2668438,school,,,Shishu vihar High School
+node,5537132616,17.4416821,78.3917014,school,,,Sharada School
+node,5538998266,17.4027495,78.5826543,hospital,,,Spark Hospitals
+node,5539039096,17.4057510,78.5871698,hospital,,,"Surya Hospital, Hyderabad"
+node,5539102501,17.5087613,78.3001470,hospital,hospital,,PANACEA MERIDIAN HOSPITAL
+node,5539327276,17.4197715,78.5178991,clinic,,,
+node,5539327277,17.4195168,78.5177549,clinic,,,
+node,5541528886,17.4056346,78.5866562,school,,,Sri Chaitanya High School
+node,5541532416,17.4036133,78.6064723,school,,,Bachpan High School
+node,5547446141,17.3936645,78.5944936,school,,,Peerzadiguda Government High School
+node,5547446144,17.3965645,78.5874769,school,,,Global Indian International School
+node,5563162635,17.4985377,78.3839858,school,,,Ravindra bharati school
+node,5563162636,17.4987620,78.3840270,hospital,,,S.V. Pooja Hospital
+node,5565535476,17.3944606,78.4382545,school,,,Sri chaitanya school
+node,5596353860,17.4387618,78.4856916,school,,,marvadi high school
+node,5608402071,17.4080743,78.5988119,hospital,,,APEX HOSPITAL
+node,5608460083,17.4227862,78.5165968,hospital,,,Sri Devi Maternity & Nursing Home
+node,5625674125,17.3918238,78.4373826,school,,,Tiny tots school
+node,5636923030,17.3136981,78.5087313,hospital,,,OM Sai Hospital
+node,5637353960,17.3506727,78.5078608,hospital,,,Sri Srinivasa Hospital
+node,5679345122,17.3497123,78.4707124,hospital,,,Sitara medical center
+node,5773420134,17.4461580,78.5383502,hospital,,,Anukrushna Hospitals
+node,5783995954,17.4943337,78.3448275,hospital,,,Raja Hospital
+node,5826309133,17.3311282,78.5791879,school,,,siddhartha model high school
+node,5873950225,17.4853105,78.3890658,clinic,,,Kerala Ayurveda & Spa
+node,5876735151,17.3140538,78.4045957,hospital,,,NIRD heatlth centre
+node,5969811186,17.4279469,78.4566424,school,,,zikra high
+node,5993045399,17.4524000,78.3889115,clinic,clinic,,IDEA Clinics
+node,6061219781,17.5454734,78.4326051,hospital,hospital,,Malla Reddy Health City (MRHC)
+node,6078227506,17.4564341,78.4388653,hospital,hospital,,Neelima - Sanath Nagar
+node,6078236947,17.4562810,78.4369269,hospital,hospital,,Poojitha Hospital
+node,6133853785,17.5363280,78.4885233,hospital,,,Surekha Hospital
+node,6151537449,17.4503845,78.3825608,hospital,hospital,,"Apollo Dental Clinic, Hitech City"
+node,6151537450,17.4503922,78.3825036,clinic,clinic,,Maxi vision eye clinic
+node,6177956183,17.4571109,78.5465732,hospital,hospital,,RAJUS DENTAL
+node,6191762119,17.4433217,78.3876457,clinic,clinic,,JN Clinic and diagnostics
+node,6195716886,17.3944441,78.4630680,clinic,,,Children Hospital
+node,6208287186,17.3834054,78.4793975,school,,,Viveka Vardhani School
+node,6212803089,17.4379741,78.4563758,hospital,hospital,,VINN Hospital
+node,6216425386,17.3948133,78.4525058,hospital,,,Mahatma Sriramachandra Centenary Memorial Hospital
+node,6216425387,17.3972385,78.4562128,hospital,,,Nice Hospital
+node,6217853185,17.4257981,78.4207625,hospital,hospital,,Red Cross Nature Cure Centre
+node,6218850786,17.4057018,78.4508868,hospital,,,Goodwill Kidney and Surgical Centre
+node,6219027188,17.3960512,78.4656063,clinic,,,Red Hills Poly Clinic
+node,6220365686,17.3946344,78.4519084,hospital,,,Rohan Hospital
+node,6222430886,17.3961077,78.4538397,school,,,Madarath Internation School
+node,6222433385,17.3979621,78.4543414,hospital,,,Primary Veternary Hospital
+node,6222447485,17.3984025,78.4660613,school,,,Goutham Model School
+node,6235740285,17.4858906,78.3875314,hospital,,,Sriven Hospital
+node,6237524890,17.4945170,78.3987600,hospital,hospital,,Vijaya Diagnostic Centre
+node,6244371387,17.4089621,78.4621491,clinic,,,Dr. P. Sudershan Reddy
+node,6246261938,17.4817165,78.5951467,hospital,hospital,,Vijaya Hospital
+node,6248330050,17.3306272,78.6087266,school,,,City Model High School
+node,6248864185,17.4949239,78.3969527,hospital,,,Medical Store
+node,6248961986,17.4729982,78.3872074,hospital,hospital,,Ankura Hospital for Women & Children
+node,6255304086,17.4879030,78.3911951,clinic,,,Vaidya Clinic
+node,6261444586,17.4731914,78.3872633,hospital,hospital,,Ankura Multispeciality clinic
+node,6267325686,17.4027274,78.4606817,clinic,,,SRL Diagnostics
+node,6268163768,17.4775297,78.5127640,school,,,
+node,6268163769,17.4778432,78.5130349,school,,,
+node,6268163781,17.4769503,78.5132267,school,,,S.T. Joseph's High School
+node,6269697486,17.4916940,78.3958249,hospital,,,Aurobindo Nethralaya
+node,6273893487,17.4943045,78.3984062,clinic,,,Bhadra Diagnostic Centre
+node,6308250717,17.3219367,78.6135963,school,,,
+node,6308262627,17.4116516,78.4921981,school,,,Surabhi high school
+node,6308287072,17.4103873,78.4844653,hospital,,,Sri Krishna
+node,6308345580,17.3286670,78.5993510,hospital,,,Krishnaveni Hospitals
+node,6308390571,17.4881621,78.3993588,school,,,
+node,6308390572,17.4878503,78.3998410,school,,,
+node,6352370686,17.4066776,78.3915335,clinic,,,Healing Hastha Physiotherapy Clinic
+node,6372428649,17.3709786,78.5425682,hospital,hospital,,sri sai womens hospital
+node,6375038695,17.3694191,78.5276043,school,,,Dilsukhnagar Public School
+node,6375038698,17.3703144,78.5276104,hospital,hospital,,Siva Eye Hospital
+node,6375038699,17.3707541,78.5264074,school,,,Goutham Model School
+node,6390378847,17.3694149,78.5226345,school,,,Brilliant School
+node,6400644686,17.3682666,78.5135597,hospital,hospital,,
+node,6406478621,17.5133930,78.3873505,school,,,crayons play school
+node,6414159438,17.4122513,78.3929359,school,,,
+node,6421264494,17.4154432,78.4891682,doctors,,,Dr Sudir G
+node,6429440288,17.4828970,78.4130340,school,,,Narayana high school
+node,6450769485,17.4288187,78.4983748,school,,,Government Boys High School
+node,6471883031,17.4248083,78.4225617,hospital,hospital,,Centre For Sight Superspecialty Eye Hospital
+node,6477199878,17.3455423,78.5226305,hospital,,,Vasan Eye Care Hospital
+node,6477257408,17.4451684,78.4721151,clinic,centre,,"CGHS Dispensary No.IV,Begumpet"
+node,6477289985,17.4238105,78.4498320,hospital,,,Pragna Hospital
+node,6477295602,17.4232839,78.4505488,hospital,,,Swarup Eye Centre
+node,6479934028,17.3969132,78.4722613,hospital,hospital,,Udai Omni Hospital
+node,6479941227,17.4911264,78.4010815,hospital,,,Udbhava Children's Hospital
+node,6479951769,17.4553191,78.5008281,hospital,,,"Rainbow Hospital for Women and Children, Secunderabad"
+node,6479961202,17.3913878,78.4369875,hospital,,,Apoorva Hospital
+node,6480023416,17.3503945,78.5105337,hospital,hospital,,Ankith Multi Speciality Hospital
+node,6480033798,17.4077141,78.4781628,hospital,,,Lions Club of Hyderabad Sadhuram Eye Hospital
+node,6480048646,17.4033637,78.4172847,hospital,,,Al-Noor Hospital
+node,6480067093,17.4041136,78.4611649,hospital,,,"Lotus Children's Hospital, Lakdikapul"
+node,6480099631,17.4760702,78.5640143,hospital,,,Aruna Hospital
+node,6480117503,17.4912927,78.3969096,hospital,,,Preeti Urology and Kidney Hospital
+node,6480130350,17.4444929,78.4662196,hospital,,,Vasan Healthcare Private Limited
+node,6481937416,17.4583690,78.5378788,hospital,,,ADR Hospital
+node,6481946699,17.3920174,78.4961598,hospital,,,Bristlecone Hospital
+node,6481950561,17.5007182,78.3825836,hospital,,,Abhaya Multi Speciality Hospital
+node,6481952537,17.3854315,78.4747114,hospital,,,"Care Hospital, Nampally"
+node,6481959033,17.3851141,78.4754102,hospital,,,Aarogya Hospital
+node,6481977030,17.5090143,78.5061926,Dispensary,centre,,"CGHS Dispensary No.IX, Alwal, Secunderabad"
+node,6481978987,17.3918945,78.4378043,hospital,,,Arvind Eye Hospital
+node,6482035085,17.3525175,78.5551161,hospital,,,Disha Children's Hospital
+node,6482049740,17.4311263,78.4266108,hospital,hospital,,Anvitha Hospital
+node,6482100116,17.4878467,78.5647274,hospital,,,New Life Line Multi Specialty Hospital
+node,6482108938,17.4432007,78.4796964,hospital,,,Homeocare International
+node,6482123599,17.5123618,78.4754596,hospital,,,Konark Hospitals
+node,6482123642,17.3676358,78.5404511,hospital,hospital,,Sree Netralaya Eye Hospital and Laser Centre
+node,6482129255,17.4252477,78.4537243,hospital,,,Leads Medical Centre
+node,6482139039,17.4966133,78.3398798,hospital,,,Pranaam Hospitals
+node,6482139577,17.4925267,78.3974900,hospital,,,Vignesh Nursing Home
+node,6482139683,17.3449190,78.5087555,hospital,hospital,,Sridhar Multi Speciality Hospital
+node,6484699042,17.4470620,78.5082445,hospital,,,Geetha Multi Speciality Hospital
+node,6484704654,17.3987452,78.5069785,hospital,,,Amar Maternity Nursing Home
+node,6484721973,17.3942929,78.4419228,hospital,,,Sai Preethi Life Line Hospital
+node,6484727717,17.4920608,78.4015616,hospital,,,Prasad Hospital
+node,6484730153,17.4372474,78.3942747,hospital,hospital,,Praanadah Hospital
+node,6484733793,17.4217805,78.5650029,social_facility,,nursing_home,Usha Maternity and Nursing Home
+node,6484735190,17.4691656,78.4773293,hospital,,,Dristi Netralaya Hospital
+node,6484754716,17.3919470,78.4969578,hospital,,,Geeta Clinic And Maternity Home
+node,6484770090,17.4064439,78.4643930,hospital,,,Vasavi Hospital
+node,6484770861,17.4876454,78.4000755,hospital,,,Sankhya Hospital
+node,6484775841,17.3452764,78.5282483,hospital,hospital,,Kiran Hospital
+node,6484856482,17.3644409,78.4731994,hospital,,,Smt. Bhagwan Devi Hospital
+node,6484867650,17.4593374,78.5004204,hospital,,,Nest Children's Hospital
+node,6484873593,17.4918932,78.3972265,hospital,,,V.M.R Hospital
+node,6484884147,17.4396489,78.4991692,hospital,hospital,,Mamata Fertility Hospital
+node,6484886609,17.3729437,78.4673019,hospital,,,Kishorechand Chordia Eye Centre
+node,6484888144,17.4073263,78.4928620,hospital,,,Praja Sai Hospital
+node,6484901165,17.5160805,78.4476453,hospital,hospital,,Ram Hospital
+node,6484905715,17.4738034,78.5692647,hospital,,,Soorya Orthopaedic Hospital
+node,6484931583,17.4298020,78.4487075,hospital,,,Smiline Dental Hospital
+node,6484947125,17.4943990,78.4020397,hospital,hospital,,Sushma Nursing Home
+node,6484947325,17.3534936,78.5068591,hospital,hospital,,Ratna Maternity and Nursing Home
+node,6484965004,17.3942993,78.5079373,hospital,,,Kishan Rao Hospital
+node,6485002885,17.4769771,78.5627764,hospital,,,Thatha Hospital
+node,6485021712,17.4142000,78.5021076,hospital,,,Sudarshan Hospital
+node,6485054519,17.4841162,78.4488925,hospital,,,Kid Care Children's Hospital
+node,6485054528,17.4956729,78.3250616,hospital,hospital,,Vijaya Nursing Home
+node,6485066503,17.4077787,78.4975089,hospital,,,Dangoria Maternity and Nursing Home
+node,6485092243,17.4390949,78.4406662,hospital,hospital,,Sainath Hospital
+node,6485092469,17.3908042,78.4965339,hospital,,,C.C. Shroff Memorial Hospital
+node,6485104985,17.3717457,78.5005935,hospital,hospital,,Hyderabad Kidney And Laparoscopic Centre
+node,6485134606,17.4406252,78.4242403,hospital,,,Sadanand Nursing Home
+node,6485236733,17.4500557,78.5115261,hospital,,,Tanvi Eye Center
+node,6485264332,17.3755381,78.4190255,hospital,,,Kosaraju Hospitals Private Ltd.
+node,6485316309,17.5160364,78.4472698,hospital,hospital,,Dr. Laxman's Children Hospital
+node,6485325429,17.4240881,78.4317076,hospital,hospital,,Maternal Health and Research Trust
+node,6485435755,17.4837017,78.5373142,hospital,,,Meda Hospital Pvt. Ltd
+node,6485441362,17.3944196,78.4626817,hospital,,,Nisha Hospital
+node,6485458540,17.4017218,78.5756557,hospital,,,"Aditya Hospital, Uppal"
+node,6485500890,17.3403283,78.5495599,hospital,,,Medicare Hospital
+node,6485550755,17.4956454,78.3558920,doctors,doctor,,Sri Shankara Nethralaya
+node,6485566735,17.4298167,78.4506487,hospital,hospital,,Dr.Agarwal's Eye Hospital
+node,6485587478,17.3818518,78.4727287,hospital,,,Goshamahal Hospital
+node,6485594351,17.3313005,78.4879965,hospital,,,Niyar Nursing Home
+node,6485603800,17.3925332,78.4957641,hospital,,,Shalini Hospitals
+node,6485621541,17.3598544,78.5044850,hospital,,,Vivek Hospital
+node,6485645255,17.4073909,78.4559655,hospital,,,Vijay Marie Hospital
+node,6485663642,17.4409578,78.5020941,hospital,hospital,,Madhava Nursing Home
+node,6485668057,17.3763924,78.4676445,hospital,,,Deepa Hospital
+node,6485763799,17.4767414,78.4798486,hospital,,,Vinciti Hospital
+node,6485786103,17.4932209,78.3271580,hospital,hospital,,Sandhya Nursing Home
+node,6485813857,17.3819369,78.4392936,clinic,clinic,,"Urban Primary Health Centre, Guddimalkapur"
+node,6485824573,17.3915772,78.4268716,hospital,,,Premier Hospital
+node,6485835298,17.4226373,78.4951296,hospital,,,Vasundhara Nursing Home
+node,6485848266,17.4391256,78.3958378,hospital,hospital,,L.V. Prasad Eye Institute
+node,6485852123,17.3979236,78.4175335,hospital,hospital,,Shamshad Children's Hospital
+node,6485868703,17.4059206,78.4606527,hospital,,,Curewell Hospital
+node,6485873602,17.4350761,78.5028817,hospital,hospital,,Saluja Hospital
+node,6485880627,17.4525697,78.4444669,hospital,,,Vijaya Krishna Nursing Home
+node,6485889000,17.3760040,78.4190007,hospital,,,Vasu Hospital
+node,6486018651,17.3703730,78.4871610,hospital,,,Jaferia Hospital
+node,6486037407,17.4595888,78.4780213,hospital,,,Cure Hospitals
+node,6486039380,17.3503388,78.4916899,hospital,,,Sravani Hospital
+node,6486047722,17.3652026,78.3969207,hospital,,,Sun City Nursing Home
+node,6486059355,17.4810002,78.5334009,hospital,,,Rishab Eye Centre
+node,6486149790,17.4570199,78.4784049,hospital,,,Raghavendra Orthopaedic and Diagnostic Centre
+node,6486930279,17.4940242,78.3985448,hospital,,,Micro Care Ent Hospital and Research Institute
+node,6486935781,17.4255423,78.5340929,hospital,,,Anand Vitreo Retina Institute Pvt Ltd
+node,6486941192,17.4775643,78.5529341,hospital,,,Vanaja Hospitals
+node,6486957243,17.4028902,78.5828997,hospital,,,"Ankura Hospital, Boduppal"
+node,6487033522,17.4812995,78.5563056,hospital,,,Geetanjali Test Tube Baby Centre
+node,6487092948,17.3673120,78.4826575,hospital,,,Princess Durru Shehvar Children's And General Hospital
+node,6487102159,17.3760514,78.5569091,hospital,,,"SRI LAXMI MULTI SPECIALITY HOSPITAL, LAPROSCOPIC AND RESEARCH CENTRE"
+node,6487115764,17.3768730,78.4903380,hospital,,,Thumbay Hospital New Life
+node,6487116810,17.4343967,78.4173229,hospital,hospital,,Srivision Super Speciality Eye Hospital
+node,6487122129,17.3974654,78.5366464,hospital,,,Anantha Lakshmi Kidney and Multi Specialty Hospital
+node,6487127620,17.4352974,78.4365799,hospital,hospital,,Susheela Hospital
+node,6487137845,17.3946180,78.4386519,hospital,hospital,,Jaya Bhushan Hospitals Pvt. Ltd
+node,6487162039,17.4216154,78.4556772,hospital,,,Asian E.N.T. Care Centre
+node,6487200705,17.3913379,78.4348029,hospital,,,Ayodhya Nursing Home
+node,6487263499,17.3178961,78.4453909,hospital,,,Sree Raghavendra Hospital
+node,6487281382,17.4502892,78.5099416,hospital,,,NephroPlus Dialysis Centre
+node,6487288564,17.3459580,78.5399126,hospital,blood_bank,,Aware gleneagles Global Hospital;Aware Gleneagles Global Hospital's Blood Bank
+node,6487305068,17.4941988,78.3240189,hospital,hospital,,Sai Siva Children’s Hospital
+node,6487326328,17.4232391,78.5163756,hospital,,,Sri Tirumala Maternity and Nursing Home
+node,6487365747,17.3292521,78.4787576,hospital,,,Marvel Maternity and Nursing Home
+node,6487452726,17.4034853,78.4924355,hospital,,,Akira Eye Surgical Annexe
+node,6487508103,17.4939308,78.3267166,hospital,hospital,,Kadimi Nursing Home
+node,6487508548,17.4850586,78.4471166,hospital,,,Jayasai Hospital For Women
+node,6487609803,17.4957541,78.3410724,hospital,,,Ragi Hospital
+node,6487635185,17.3682886,78.5220303,hospital,hospital,,SRESHTA SRI KAMALA HOSPITALS
+node,6487647064,17.4825166,78.5510686,hospital,,,Bhavan's Sarada Devi Hospital
+node,6487654694,17.4549634,78.5087728,hospital,,,Sree Maruthi Nursing Home
+node,6487663429,17.4019445,78.4776311,hospital,,,Sulochana Eye Centre
+node,6487670042,17.4565491,78.5014417,hospital,,,Parvathi Multispeciality Hospital
+node,6487670477,17.3751644,78.4898807,hospital,,,Muslim Maternity and Children's Hospital
+node,6487677480,17.3695416,78.5213698,hospital,hospital,,Shashi Hospital
+node,6487685466,17.5028854,78.5132843,hospital,,,Sundari Maternity and General Hospital
+node,6487777184,17.3771559,78.5570050,hospital,,,Bhavya Hospital
+node,6487866891,17.4371220,78.4272954,hospital,hospital,,Fehmi Care Hospital
+node,6487879316,17.4751261,78.5394748,hospital,,,Sriya Hospital
+node,6487886439,17.5044701,78.3564663,hospital,hospital,,Mirra Multi Specialty Hospital
+node,6487901010,17.4951472,78.5130295,hospital,,,Jayaprada Hospital
+node,6487920155,17.4217260,78.5041333,hospital,,,Pulse Hospitals
+node,6488469834,17.4467703,78.4504817,hospital,,,S.V. Hospital
+node,6488483046,17.3973433,78.5603427,hospital,,,Krishna Multi Speciality Hospital
+node,6488599602,17.4354676,78.4514661,hospital,,,Sri Sai Kidney Centre
+node,6488608462,17.3930464,78.4890948,hospital,,,Sunrise Superspeciality Children's Hospital
+node,6488677506,17.4747705,78.5678552,hospital,,,Raghavendra Hospital
+node,6489576234,17.4418419,78.4452461,hospital,,,GSN Hospital
+node,6489591500,17.4281872,78.4325190,hospital,hospital,,Challa Eye Care Centre
+node,6489607238,17.4121475,78.4569848,hospital,,,Royal Hospital For Dentistry and Facial Surgery
+node,6489610677,17.4002374,78.5405061,hospital,,,Matrix Hospital
+node,6489613991,17.4571396,78.5631077,hospital,,,M S Reddy Lions Eye Hospital
+node,6489688950,17.4229122,78.4521970,hospital,,,Santhigiri Auyrveda and Siddha Hospital
+node,6489762038,17.3971020,78.5319123,hospital,,,Shree Jaya Krishna Hospital
+node,6489782205,17.4091262,78.4592090,hospital,,,Allwin Hospital
+node,6489786900,17.4186198,78.4524223,hospital,,,Sai Institute Of Arthroscopy And Sports Injury
+node,6489790935,17.5185239,78.4822022,hospital,,,Sree Balaji Hospital
+node,6489835094,17.4012880,78.5648384,hospital,,,Sathya Hospital
+node,6489843355,17.4554163,78.4238099,hospital,,,Leela Hospital
+node,6489894585,17.3879656,78.4397234,hospital,,,Anusha Hospital
+node,6489964063,17.4954209,78.3226825,hospital,hospital,,RR Orthopedic Hospital
+node,6490004584,17.4059203,78.4793389,hospital,,,Partha Dental Clinic
+node,6490016089,17.3732170,78.5032857,hospital,hospital,,Susrutha Hospital
+node,6490029456,17.3905790,78.4911588,hospital,,,Venkatesh Borgaonker Nursing Home
+node,6490089435,17.5209250,78.4845310,hospital,,,Harsha Hospitals
+node,6490143313,17.3979338,78.4920640,hospital,,,Sri Sai Srinivasa Speciality Hospitals Pvt. Ltd
+node,6490181234,17.3899480,78.4959277,hospital,,,Sai Krishna Neuro Hospital
+node,6490329242,17.4156652,78.4988473,hospital,,,Sagar Lal Memorial Hospital and Matadin Goel Research Center
+node,6490770019,17.4274156,78.4607056,hospital,,,Matrika Hospital
+node,6490784114,17.4111077,78.4829680,hospital,,,Dr. Mohan's Diabetes Specialities Centre
+node,6490833350,17.4041430,78.4622929,hospital,,,Seha Hospital
+node,6490857331,17.4281006,78.5170508,hospital,hospital,,Krishna Maternity And Nursing Home
+node,6490864509,17.3646867,78.5441633,hospital,,,Sri Srinivasa Nursing Home
+node,6490913751,17.4912076,78.4011693,hospital,,,Global Eye Hospital
+node,6490973815,17.4174010,78.4577723,hospital,,,Kerala Sanjeevani Ayurvedic Centre
+node,6491342836,17.4107910,78.5434699,hospital,,,Rajagiri Hospitals
+node,6491348622,17.4364471,78.4961886,hospital,,,Aravind Nursing Home
+node,6491359724,17.4992600,78.5129283,hospital,,,G.N.R. Multispeciality Hospital
+node,6491362879,17.3937202,78.5095339,hospital,,,Ramana Maternity Nursing Home
+node,6491365368,17.4932836,78.4017017,hospital,,,Surakshaka Multi Speciality Hospital
+node,6493336766,17.3926842,78.4455183,hospital,,,Aries Maternity Hospital
+node,6493463498,17.5141839,78.4470136,hospital,hospital,,Ragani Children's Hospital
+node,6493489981,17.4047804,78.4821191,hospital,hospital,,Sathya Kidney Centre and Super Speciality Hospital
+node,6493547008,17.4593055,78.4785913,hospital,,,Chandana Hospitals
+node,6494135269,17.4711657,78.5050875,hospital,,,Pratibha Maternity Home
+node,6494235890,17.4312043,78.4553486,hospital,,,Vivekananda Hospital
+node,6494242172,17.4936289,78.4000562,hospital,hospital,,Ravi Hospital
+node,6494269592,17.3512003,78.5094488,hospital,hospital,,Nightingale Hospital
+node,6494384142,17.4078913,78.4426578,hospital,,,Eva Care The Every Woman's Clinic
+node,6494385067,17.4173069,78.5412021,hospital,,,Habsiguda Poly Clinic and Nursing Home
+node,6494411875,17.3962241,78.4889916,hospital,,,Unity Centre For Orthopaedics And Trauma
+node,6494412250,17.4937210,78.3983745,hospital,,,Merit Care Hospital
+node,6494422626,17.4458107,78.5049990,hospital,,,SECUNDERABAD NURSING HOME
+node,6494447237,17.3974917,78.5339528,hospital,,,Ramantapur Hospital
+node,6494458034,17.3608928,78.5432218,hospital,,,Sai Sanjeevini Hospital
+node,6494465425,17.4953109,78.4153770,hospital,,,Harsha Hospitals
+node,6494474204,17.4097327,78.5084336,hospital,,,Sowmya Hospital
+node,6494489670,17.3655046,78.4620085,hospital,,,Meds Hospital
+node,6494788582,17.4947840,78.3404388,hospital,,,Sarada Nursing Home
+node,6494810755,17.4404883,78.4978656,hospital,hospital,,"Vasan Healthcare Private Limited, Secunderabad"
+node,6494829945,17.4936174,78.5127834,hospital,,,Devi Maternity Home
+node,6494952509,17.4405861,78.4503195,hospital,,,Vatsalya Institute Of Pediatrics Hospital
+node,6494956566,17.4848210,78.3881754,hospital,,,Sandeep Nursing Home
+node,6495015780,17.4260772,78.4573750,hospital,,,Maa Ent Institute
+node,6495023719,17.4960630,78.4541865,hospital,,,Sanjeevani Children and General Hospital
+node,6495031117,17.3995642,78.4843923,hospital,,,Hyderabad Eye Centre
+node,6495079282,17.4466174,78.5360288,hospital,,,Santoshi Maternity Hospital
+node,6495246032,17.4954561,78.3208955,hospital,hospital,,Vishnu Hospital
+node,6495284151,17.3393852,78.5572883,hospital,,,Sai Sharan Hospital
+node,6495303036,17.3986300,78.4849159,hospital,,,Clear Vision Eye Hospital
+node,6495375554,17.3601882,78.5047261,hospital,,,Sai Nursing Home
+node,6496578004,17.4171112,78.5440868,hospital,,,Neo Vision Eye Care and Laser Center
+node,6496590575,17.4301078,78.4061931,hospital,hospital,,Stopiles
+node,6496690608,17.4066500,78.4759131,hospital,,,Centre For Sight - New Vision Laser Centers
+node,6496708723,17.4594590,78.5576695,hospital,,,Life Spring Maternity Hospital
+node,6496826427,17.4055917,78.4778255,clinic,centre,,"CGHS Dispensary No.V, Himayatnagar"
+node,6496837455,17.3863466,78.4942286,hospital,,,Sri Rama Krishna Hospital
+node,6496875044,17.3799780,78.4210190,hospital,,,Majestic Hospital
+node,6496877818,17.3446309,78.5546158,hospital,hospital,,Aruna Hospital
+node,6496885010,17.4917263,78.3970112,hospital,,,Eswar Eye Hospital
+node,6496903933,17.4782302,78.5558448,hospital,,,
+node,6496907674,17.3913737,78.4757126,hospital,,,Dr.Shantabai Nursing Home
+node,6496916240,17.4376427,78.4524706,hospital,hospital,,Apollo Spectra Hospitals
+node,6496940849,17.4348983,78.5429897,hospital,,,Manjary Multispeciality Hospital
+node,6496953497,17.4465502,78.5133715,hospital,,,Taraporewalla Nursing Home
+node,6496960846,17.4478066,78.5089150,hospital,,,Shenoy Nursing Home
+node,6496965130,17.4947378,78.3225725,hospital,hospital,,Kiran Swetha Children Clinic
+node,6496972191,17.3737769,78.4958902,hospital,hospital,,Dr. Zaibunnisa's Imtiyaz Hospital
+node,6496972211,17.3586618,78.4780816,hospital,,,Alpha Super Speciality Hospital
+node,6496997655,17.4007736,78.5668011,social_facility,,nursing_home,Sri Balaji Nursing Home
+node,6497026146,17.4982349,78.3144481,hospital,hospital,,Mythri Multi Speciality Hospital
+node,6497138970,17.4299888,78.4508921,clinic,,,L.V. Eye Care Centre
+node,6497172349,17.3692242,78.5189867,hospital,hospital,,Vasan Healthcare
+node,6497294673,17.4416577,78.4908745,hospital,hospital,,BSR ENT & Eye Nursing Home
+node,6497354554,17.4097647,78.5441056,hospital,,,Siris Hospital
+node,6497360893,17.4938323,78.5398865,hospital,,,Srinivasa Hospital
+node,6497362076,17.4373484,78.4462573,hospital,hospital,,ASTER PRIME HOSPITALS (SRI SAINATHA MULTISPECIALITY HOSPITAL PVT.LTD.)
+node,6497366546,17.3937938,78.5302003,hospital,,,Janani Hospital
+node,6497369555,17.4292454,78.4531264,hospital,,,Amrutha Diabetic Centre
+node,6497391583,17.3648685,78.4626402,hospital,,,Azam Hospital
+node,6497571978,17.3688485,78.5343739,hospital,hospital,,Oarchid Hospital
+node,6497577133,17.3446513,78.5167946,hospital,hospital,,Sri Venkateswara Multi Speciality Hospital
+node,6497611600,17.4359500,78.5425988,hospital,,,Sri Santosh Hospital
+node,6497614668,17.3910723,78.4267851,hospital,,,Dr. Sreedhar's Kidney & Infertility Hospital
+node,6497866894,17.3621837,78.4826327,hospital,,,G.M.C. Multi Speciality Dental Hospital
+node,6497913444,17.3682105,78.5203962,hospital,hospital,,Nikhil Hospital
+node,6498004164,17.4052775,78.4765770,hospital,,,Dr. Saxena Integrative Medicine Private Ltd.
+node,6498013229,17.4848900,78.4096652,hospital,,,Prerana Hospital
+node,6498031548,17.4381142,78.5049681,hospital,hospital,,Shubhodaya Nursing Home
+node,6498040562,17.4620995,78.5006364,hospital,,,Shekars Ent Hospital
+node,6498046738,17.4779001,78.5626893,hospital,,,Shreyas Hospital
+node,6502946680,17.3836628,78.4292413,hospital,,,Mythri Hospital
+node,6502966455,17.3948010,78.4990337,hospital,,,Rukkus Dental Hospital & Implant Center
+node,6503081897,17.3942462,78.4989743,hospital,,,Hyderabad Eye Hospital
+node,6503086685,17.4946701,78.3268218,hospital,hospital,,Sai Anurag Hosptial
+node,6503106727,17.4606974,78.4904668,hospital,,,Bloom Hospitals - Unit of Janapareddy Hospitals.
+node,6503145065,17.3709739,78.5147515,hospital,hospital,,Hedge Maternity and Nursing Home
+node,6503155785,17.4517957,78.4377721,hospital,,,St.Theresa's Hospitals
+node,6503195186,17.3502416,78.5121296,hospital,hospital,,Sunita Children's Hospital
+node,6503203211,17.3935545,78.4435281,hospital,,,Dr. Akbar Eye Hospital
+node,6503211364,17.3988488,78.4479502,hospital,hospital,,Medi Vision Eye Care Centre
+node,6503243743,17.4491013,78.5272627,clinic,,,Eashwar Clinic
+node,6503288232,17.4490629,78.4317237,hospital,,,Sunrich Hospital
+node,6503302425,17.3674854,78.5358477,hospital,hospital,,Induss Hospitals
+node,6503370083,17.4448064,78.4324291,hospital,,,J.J. Hospital
+node,6503384572,17.4660729,78.4832785,hospital,,,Lifespring Hospital
+node,6503394122,17.4820222,78.5525036,hospital,,,Ankura Children's Hospital
+node,6503410509,17.4713934,78.4849957,hospital,,,SKM Multi Speciality Hospital
+node,6503431340,17.3763547,78.4203096,hospital,,,Ambaa Hospitals
+node,6503431563,17.5119189,78.4465805,hospital,,,S.V.K. Hospital Private Ltd.
+node,6503438537,17.3935110,78.4568185,hospital,,,Mansoor Maternity And Childrens Hospital
+node,6503446084,17.4727007,78.5713568,hospital,,,Xenia Multi Speciality Hospital
+node,6503655627,17.4116829,78.4324009,hospital,,,Avis Ankura Hospital for Women & Children
+node,6503660417,17.4002489,78.5665409,hospital,hospital,,Ammaji Childrens Hospital
+node,6503669088,17.4748831,78.5709384,hospital,,,Tulasi Hospitals
+node,6503723809,17.3920533,78.4961564,hospital,,,Ashok Kumar Hospital
+node,6503747239,17.4075461,78.4496157,hospital,,,Banjara 12 Hospital
+node,6503755850,17.4943913,78.3232471,hospital,hospital,,Anitha Nursing Home
+node,6503794648,17.3453352,78.5492826,hospital,hospital,,Health Care Hospitals
+node,6504077179,17.3946084,78.5304907,hospital,,,Sri Krishna Swathi Children's Hospital
+node,6504097065,17.4514829,78.4244020,hospital,,,Manas Eye Hospital
+node,6504107685,17.4675850,78.4819903,hospital,,,Pavithra Hospital
+node,6504110557,17.4997851,78.3841534,hospital,,,Rainbow Childrens Hospital
+node,6504123689,17.3986780,78.5136256,hospital,,,Shantilal Navodaya Multi Speciality Hospital
+node,6504150659,17.3941335,78.5099286,hospital,hospital,,Tilaknagar ABHAYA-BBC HOSPITAL
+node,6504154905,17.4920026,78.4093373,hospital,hospital,,Sumana Hospital
+node,6504255627,17.4407735,78.4492117,hospital,,,Bhavika Nursing Home
+node,6504261883,17.4853224,78.3899282,hospital,,,Icon Hospital
+node,6504269305,17.4251451,78.4510457,hospital,,,Sree Srinivasa ENT Care and Research Institute
+node,6504284028,17.4941470,78.4053522,hospital,,,Kavya Nursing Home
+node,6504286989,17.4575848,78.4523016,hospital,,,Peoples Health Centre
+node,6505167632,17.4004716,78.5666549,hospital,hospital,,Shiva Sai Hospital
+node,6505170700,17.4947648,78.3600202,hospital,,,Shilpa Nursing Home
+node,6505184710,17.3978302,78.4842937,hospital,,,Dr. P. Siva Reddy Eye Hospital
+node,6505187568,17.3702559,78.5005438,hospital,hospital,,KIMS BIBI Hospital
+node,6505207797,17.3727325,78.5096580,hospital,hospital,,K.G.H The Family Hospital
+node,6505218409,17.4305671,78.4503329,hospital,,,Dr.Rao's ENT Super Speciality Hospital
+node,6505303419,17.3710405,78.5008154,hospital,hospital,,Pushpa Maternity and Nursing Home
+node,6505307085,17.4759595,78.4837787,hospital,,,Ramya Nursing Home
+node,6505322583,17.3452876,78.4567943,hospital,,,Care Well Hospital
+node,6505329556,17.3398185,78.5575941,hospital,,,Raksha Multi Speciality Hospital
+node,6505352702,17.3967872,78.4728447,hospital,,,Neo Retina Eye Care
+node,6505370525,17.3724317,78.5077295,hospital,hospital,,Spark Eye Care Hospital
+node,6505386986,17.3719492,78.5358806,hospital,,,Ganga Orthopaedic and Maternity Hospital
+node,6505444434,17.4948223,78.4016588,hospital,hospital,,Varsha Hospital
+node,6505447806,17.4776666,78.5630205,hospital,,,Vasan Eye Care
+node,6505485733,17.4858827,78.3890216,hospital,,,Sagar Hospital
+node,6505499664,17.3689017,78.5168678,hospital,hospital,,Midas ENT Head and Neck Super Speciality Hospital
+node,6505503898,17.4503500,78.5034782,hospital,,,Lions Patny Hospital
+node,6505507940,17.4299337,78.4271117,hospital,hospital,,Seethal Nursing Home
+node,6505516403,17.3837869,78.4367287,hospital,,,Dharani Hospital
+node,6505528362,17.3982154,78.4843661,hospital,,,Desai Nursing Home
+node,6505550308,17.5032550,78.5095681,hospital,,,Prashamsha Hospital
+node,6505551677,17.4155472,78.4897188,doctors,,,
+node,6505556901,17.4030515,78.5100617,hospital,,,NEO BBC Childrens Hospital
+node,6505570504,17.4591328,78.5007772,hospital,,,Soumya Multispeciality Hospital
+node,6505593241,17.3900901,78.5314000,hospital,,,Sri Gayatri Hospital
+node,6505593801,17.3855301,78.4801885,hospital,,,FMS Dental Hospital
+node,6505613357,17.4261322,78.5324286,hospital,,,Suraksha Childrens Hospital
+node,6505671806,17.4811326,78.5541297,hospital,,,Prema Eye Care Centre
+node,6506106769,17.4486471,78.4849052,hospital,,,J S Mahaveer Hospital
+node,6507398572,17.4952060,78.4027465,clinic,,,Aswini Diabetic Centre & Multi-Speciality Clinics
+node,6507570343,17.4422795,78.5043204,hospital,hospital,,The Dental Venue Multi Speciality Hospital (unit of Dr.Gowd’s)
+node,6507652189,17.4915108,78.4013115,hospital,,,Padmaavathi Netralaya
+node,6507797498,17.4004729,78.4914961,hospital,,,Mahesh Hospital And Research Foundation
+node,6507837294,17.3403386,78.5072333,hospital,hospital,,Deccan College Of Medical Sciences
+node,6508501597,17.3991381,78.4831510,hospital,,,CDR Hospitals
+node,6508963155,17.3758914,78.4971612,hospital,hospital,,Moosi Maternity and Genernal Hospital
+node,6510205415,17.3676268,78.5508728,hospital,,,Hyma Children's Hospital
+node,6510356260,17.4306004,78.4388973,hospital,,,Shree Hospital
+node,6510439880,17.3688313,78.5262736,social_facility,,nursing_home,Sri Venkata Sai Nursing Home
+node,6510472444,17.4466871,78.5027158,hospital,,,Sai Jyothi Eye Institute
+node,6510503879,17.4270433,78.4503530,hospital,,,Little Star Children's Hospital (A Unit Of Thirumala Child Health Services Pvt. Ltd)
+node,6510681486,17.5114641,78.4759629,school,,,Sherwood Public School
+node,6510681487,17.4995239,78.4755566,clinic,clinic,,Sri Krishna Prabha Homoeo Clinic
+node,6510820223,17.4505451,78.5032415,hospital,,,Basant Sahney Hospitals
+node,6511011214,17.5218368,78.4831209,hospital,,,RR Hospital
+node,6511165512,17.3450840,78.5288881,hospital,hospital,,Krishna Sai Multispeciality Hospital
+node,6511251151,17.3995348,78.4630345,hospital,,,Lazarus Hospitals
+node,6511672655,17.4473380,78.4378150,hospital,,,Sowmya Hospital
+node,6512526669,17.4900948,78.4481992,hospital,,,Pulse Hospital
+node,6512822726,17.3662637,78.4731350,hospital,,,Gupta Hospital
+node,6512969319,17.3497321,78.5151807,hospital,hospital,,Maruthi Hospital
+node,6513085407,17.3512682,78.5092865,hospital,hospital,,Himabindu Multi Speciality Hospital
+node,6513113356,17.4961817,78.4055095,hospital,hospital,,Tadla Eye Hospital
+node,6513234521,17.3854802,78.4752171,hospital,,,Kailash Diagnostic and Rehabilitation Center
+node,6513267731,17.4504779,78.5062201,hospital,,,Lions Dundoo Eye Institute
+node,6513323438,17.4314653,78.4466797,hospital,,,Image Hospital
+node,6513390629,17.4184778,78.5683957,social_facility,,nursing_home,Sri Aparajitha Nursing Home
+node,6513396181,17.4016591,78.3848655,hospital,,,Sri Balaji Hospital
+node,6513406843,17.4002182,78.4840006,hospital,,,Lakshmi Maternity and Nursing Home
+node,6518192361,17.4183783,78.5835349,hospital,hospital,,RBM Multi-Speciality Hospital
+node,6518281742,17.4232134,78.5840240,school,,,ZPHS Boduppal
+node,6518297217,17.4090144,78.5864131,hospital,hospital,,AVI Clinic
+node,6527671224,17.4322118,78.4490681,hospital,,,Disneys Medi-Kid Hospitals Pvt. Ltd
+node,6527832466,17.4174357,78.5118319,hospital,,,Akshaya Care Multi Speciality Hospital
+node,6527839627,17.4150148,78.5452451,hospital,,,Dr.Padmaja Fertility Centre and Nursing Home
+node,6527939380,17.4403693,78.4825905,clinic,,,VSM Day Eye Care Clinic
+node,6528159744,17.4498216,78.4306334,clinic,centre,,"CGHS Dispensary No.X,Ameerpet"
+node,6528174730,17.4266927,78.5322341,clinic,centre,,"CGHS Dispensary No.XIII, Tarnaka"
+node,6528257924,17.3473217,78.5195889,hospital,hospital,,Focus Hospital
+node,6528301302,17.5130968,78.5541491,hospital,,,Meenakshi Mother and Child Hospital
+node,6528552348,17.3701560,78.5320289,hospital,hospital,,Geeta Multispeciality Hospital
+node,6528554861,17.3210258,78.5201099,hospital,,,SV Multispeciality Hospital
+node,6528602779,17.3320827,78.5732733,hospital,hospital,,Lakshmi Health Care Hospital
+node,6528604456,17.3617057,78.5620603,hospital,,,Sri Sai Balaji Hospital
+node,6528608362,17.4227606,78.5469769,hospital,,,Bapuji Maternity and Nursing Home
+node,6528632311,17.3700395,78.5278568,hospital,hospital,,Abinav Orthopedic Hospital
+node,6530719501,17.3623277,78.4685625,hospital,,,Ganga Nursing Home
+node,6530722593,17.4951345,78.4024782,hospital,hospital,,Sujatha Nursing Home
+node,6530741984,17.5420919,78.4335503,hospital,,,Suguna Sree Nursing Home
+node,6530750454,17.3891213,78.4928083,hospital,hospital,,SVS Hospitals
+node,6530758515,17.3836896,78.4897466,hospital,,,Vishwa Medi Care and Diagnostic Centre
+node,6530772004,17.4524815,78.5685701,hospital,,,Dhanunjaya Nursing Home
+node,6530792770,17.4383029,78.3994983,hospital,hospital,,Live Life Hospital
+node,6531290879,17.3903338,78.4514802,hospital,,,Healing Touch Hospital
+node,6531328860,17.5019044,78.5405564,hospital,,,Jain Multi Speciality Hospital
+node,6531332945,17.4458529,78.4663644,hospital,,,Maxivision Eye Hospital
+node,6531352585,17.4273708,78.5517687,hospital,hospital,,Chandamama Hospital
+node,6531378729,17.4293887,78.4178258,hospital,hospital,,Avis Hospitals
+node,6531656648,17.3208562,78.5613281,hospital,,,Jaya Hospital
+node,6531706878,17.3312480,78.5882561,hospital,hospital,,Bhagyalatha Hospital
+node,6531743149,17.3309842,78.5780563,hospital,hospital,,Anusha Maternity and Nursing Home
+node,6531745861,17.3696120,78.5302386,hospital,hospital,,Lakshmi Children's Hospital
+node,6531874857,17.3692696,78.5346776,hospital,hospital,,G.B.R. Hospital
+node,6531924300,17.3369064,78.5699487,hospital,hospital,,Sri Mahalaxmi Eye Hospital
+node,6531941189,17.3362996,78.5692929,hospital,hospital,,Chaithanya Multi Speciality Hospital
+node,6532106149,17.5046076,78.3088705,hospital,doctor,,Sri Pallavi Hospital
+node,6532116388,17.3495087,78.5128967,hospital,hospital,,Sri Rohini Hospital
+node,6532260599,17.3696005,78.5292421,hospital,hospital,,Manju Sudha Multispeciality Hospital
+node,6532261279,17.3295126,78.5261227,hospital,,,Aruna Hospital
+node,6532267718,17.3444401,78.5298450,hospital,hospital,,Sai Venkateshwara Hospital
+node,6532274757,17.3693752,78.5209313,hospital,hospital,,TKR's IKON Hospital
+node,6532277404,17.3665529,78.5353670,hospital,hospital,,Sri JRD Hospital
+node,6532278196,17.5022005,78.3129877,hospital,hospital,,Sidhartha Nursing Home
+node,6532315949,17.3716433,78.5340057,hospital,,,Raghava Hospital
+node,6532327359,17.3681674,78.5267378,hospital,hospital,,Harsha Neuro and General Hospital
+node,6532327920,17.3471040,78.5213564,hospital,hospital,,Padmaja Hospital
+node,6532335482,17.3689234,78.5299851,hospital,hospital,,Anurag Orthopedic and Multispecial Hospital
+node,6532342640,17.3334758,78.5312980,hospital,hospital,,Krishna Hospital
+node,6532347117,17.3358644,78.5747552,hospital,hospital,,Rajya Lakshmi Hospital
+node,6532348899,17.3680300,78.5206215,hospital,hospital,,Sigma Hospitals
+node,6532378061,17.3286133,78.5685231,hospital,,,Sri Ramadevi Orthopaedic Hospital
+node,6532379590,17.3694424,78.5314201,hospital,hospital,,Goodlife Hospitals
+node,6536327470,17.4455011,78.5678539,hospital,,,Aashritha Hospital
+node,6536715096,17.4707013,78.3109143,hospital,hospital,,American Oncology Institute
+node,6536715097,17.4707742,78.3113113,hospital,hospital,,Citizens Specialty Hospital
+node,6536841915,17.5057043,78.3072115,hospital,hospital,,Maruthi Hospital
+node,6536842812,17.3642400,78.4275663,hospital,,,Usha Mohan Hospital
+node,6537106287,17.3389598,78.5226278,hospital,hospital,,Sri Sai Orthopaedic and Multi Speciality Hospital
+node,6537138789,17.3697132,78.5319766,hospital,hospital,,Swapna Hospital Private Limited
+node,6537169461,17.4840637,78.4487262,hospital,,,Ankura Kodali Hospital
+node,6537199550,17.3597254,78.5448767,hospital,,,Paramitha Children's Hospital
+node,6537210759,17.3445060,78.5296565,hospital,hospital,,Padmavathi Hospital
+node,6537306558,17.3740649,78.5409902,hospital,,,Sai Nikith Speciality Hospital And Laproscopic Centre
+node,6537308259,17.3314886,78.5721809,hospital,,,Jeevan Sai Hospitals
+node,6537312813,17.3279207,78.6017188,hospital,,,Sunrise Hospitals
+node,6537360032,17.4506967,78.3640308,hospital,hospital,,Rajitha Hospital
+node,6538735239,17.4204484,78.4576003,clinic,,,Urban Primary Health Centre
+node,6538834650,17.4481728,78.4404052,clinic,clinic,,"Urban Primary Health Centre, E.S.I"
+node,6538849589,17.3707739,78.5275000,hospital,hospital,,The Doctors Multi Speciality Hospital
+node,6538969996,17.3730052,78.4462666,,centre,,"Community Health Centre, Panipura"
+node,6538983692,17.3674272,78.5256520,clinic,clinic,,Sri Sairam Infertility Centre
+node,6539071275,17.3587987,78.5237382,hospital,,,Medi Sight Eye Care centre
+node,6539471941,17.5597632,78.3411462,clinic,,,"Primary Health Centre, Bollaram"
+node,6539594008,17.4795206,78.3208144,clinic,clinic,,Urban Primary Health Centre Serilingampally (Urban)
+node,6539622879,17.5112359,78.2848553,clinic,clinic,,Primary Health Centre RC Puram
+node,6539706675,17.4837363,78.5333164,,centre,,"Urban Health Centre, Vinayaknagar (Urban)"
+node,6539744263,17.4483298,78.5284817,,centre,,"Urban Health Centre, Ekalavya Nagar"
+node,6539869707,17.3652464,78.4592032,,centre,,"Urban Primary Health Centre, Puranapool-2"
+node,6540017243,17.3503478,78.4769820,,centre,,"Urban Primary Health Centre, Aliyabad"
+node,6541360048,17.3907517,78.4516820,,centre,,"Urban Primary Health Centre, Afzal Sagar"
+node,6541386989,17.3756392,78.5214543,clinic,clinic,,"Urban Primary Health Centre, Shalivahana Nagar"
+node,6541517719,17.4329329,78.5158499,clinic,,,"Urban Primary Health Centre, Mettuguda"
+node,6542325179,17.3673760,78.4892598,,centre,,"Community Health Centre, Dabeerpura"
+node,6542342933,17.3273586,78.4948904,,centre,,"Urban Primary Health Centre, Maisaram"
+node,6542441846,17.3922555,78.4631672,hospital,hospital,,"Area Hospital, Nampally"
+node,6542632840,17.4484974,78.4237723,,centre,,"Urban Health Centre, Rajeevnagar"
+node,6542657944,17.3552658,78.4731571,,centre,,"Urban Primary Health Centre, Charminar"
+node,6542667141,17.3015100,78.4648926,,centre,,"Urban Primary Health Centre, Bandlaguda"
+node,6542738096,17.3836001,78.4700498,doctors,doctor,,"Government Unani Dispesary, Agahapura"
+node,6542741912,17.3576147,78.5355768,clinic,,,"Primary Health Centre, Saroornagar"
+node,6542742042,17.3555387,78.5658661,,centre,,"Urban Health Centre, Mansoorabad (Urban)"
+node,6543744149,17.3509046,78.4610845,,centre,,"Urban Primary Health Centre, Chandulal Baradari"
+node,6543762746,17.3550840,78.4615204,clinic,,,"Urban Primary Health Centre, Doodbowli"
+node,6543789627,17.3360462,78.4115280,,centre,,"Community Health Centre, Rajendranagar"
+node,6543812599,17.3342065,78.4698338,hospital,hospital,,"Community Health Centre, Jangammet"
+node,6543931773,17.5016812,78.4585612,,centre,,"Urban Health Centre, Quthbullapur Village"
+node,6543981982,17.3584115,78.4953082,clinic,clinic,,"Urban Primary Health Centre, Yakhutpura-1"
+node,6543983153,17.4060677,78.4850715,clinic,,,"Urban Primary Health Centre, Domalguda"
+node,6544048034,17.3892851,78.5027459,,centre,,"Urban Primary Health Centre, Harrajpenta"
+node,6544062164,17.4375378,78.4758085,clinic,,,"Urban Primary Health Centre, Gareeb Nagar"
+node,6544352101,17.3771226,78.4681535,clinic,,,"Urban Primary Health Centre, Begum Bazar"
+node,6544448284,17.3270155,78.2705491,clinic,clinic,,"Primary Health Centre, Moinabad"
+node,6544510761,17.3916476,78.5208683,,centre,,"Community Health Centre, AMBERPET"
+node,6544591439,17.3961063,78.4990686,,centre,,"Urban Primary Health Centre, Tilak Nagar"
+node,6545205242,17.3852280,78.4025728,clinic,,,"Urban Primary Health Centre, Golconda"
+node,6545222298,17.4455855,78.5786068,,centre,,"Urban Health Centre, Mallapur (Urban)"
+node,6545241016,17.3861047,78.5282457,clinic,clinic,,Urban Primary Health Centre Venkatreddy Nagar (Urban)
+node,6545266305,17.5175525,78.5129142,clinic,,,"Primary Health Centre, Alwal"
+node,6545335606,17.4198207,78.4629862,clinic,,,"Urban Primary Health Centre, Khairtabad"
+node,6546357788,17.3842105,78.4383166,,centre,,"Urban Primary Health Centre, Guddimalkapur"
+node,6546613527,17.4200174,78.4874765,clinic,clinic,,"Urban Primary Health Centre, D.B.R.Mills"
+node,6546851783,17.3852587,78.4026083,hospital,,,"Area Hospital, Golconda"
+node,6546959634,17.4087384,78.4067537,clinic,clinic,,"Urban Primary Health Centre, Film Nagar"
+node,6546963215,17.4416743,78.4479015,,centre,,Urban Primary Health Centre
+node,6547141164,17.4559843,78.4006403,,centre,,"Urban Health Centre, Parvathnagar (Urban)"
+node,6547206093,17.3411496,78.5577590,hospital,hospital,,MEDISYS HOSPITALS (A UNIT OF OXYEN MEDICARE CANCER CARE PVT LTD )
+node,6547280120,17.4187260,78.4999068,,centre,,"Urban Primary Health Centre, Bholakpur"
+node,6547412463,17.3172726,78.4513709,,centre,,"Urban Health Centre, Mailardevpally"
+node,6547419629,17.3403283,78.4624196,,centre,,"Urban Primary Health Centre, Jahanuma"
+node,6547969014,17.4020034,78.5607594,clinic,centre,,"Primary Health Centre, Uppal (Urban)"
+node,6548055244,17.3660921,78.4580268,,centre,,"Urban Primary Health Centre, Kishan Bagh"
+node,6548781242,17.4926185,78.3964245,hospital,,,Sri Aurobindo Nethralaya
+node,6548782136,17.4464363,78.3786482,hospital,hospital,,MAXCURE SUYOSHA WOMAN & CHILD HOSPITAL
+node,6548786015,17.5066316,78.3842419,hospital,,,CALCIUM HOSPITAL
+node,6548789473,17.3452377,78.5276489,hospital,hospital,,MAAX LIFE HOSPITALS
+node,6548796448,17.4692890,78.4862155,hospital,,,KRUTI HOSPITAL ADVANCED EYE & DENTAL CARE
+node,6548797464,17.3253704,78.5576025,hospital,,,DELTA HOSPITALS
+node,6548807629,17.4391832,78.4425692,hospital,hospital,,NETHRA EYE INSTITUE
+node,6548823374,17.4832707,78.5523789,hospital,,,MAYFLOWER HOSPITAL FOR WOMEN & CHILDREN
+node,6548826056,17.4389273,78.5060866,hospital,hospital,,KASTURI MULTISPECIALITY HOSPITAL
+node,6548828778,17.3802341,78.4297081,hospital,,,RISE CHILDRENS HOSPITAL (A UNIT OF RISE HOSPITALS PVT. LTD.)
+node,6548833978,17.3658656,78.5522434,hospital,,,AVANI LASER EYE HOSPITAL
+node,6548846382,17.3739165,78.5521227,hospital,,,SANJEEVANI HOSPITAL
+node,6548854401,17.4497269,78.3672388,hospital,hospital,,Kakatiya Hospital
+node,6548859411,17.3158898,78.5250874,clinic,,,"Primary Health Centre, Balapur"
+node,6548861206,17.5254356,78.3709408,hospital,,,ARUNODAYA HOSPITAL
+node,6548866161,17.4962857,78.5960509,hospital,,,SUNLIFES HOSPITAL
+node,6548874152,17.4736870,78.5714360,hospital,,,SOLIS EYE CARE HOSPITALS PVT LTD
+node,6548877079,17.3270322,78.6032966,hospital,,,Shadow Hospitals
+node,6548877388,17.4256626,78.5184368,,centre,,"Community Health Centre, Seethaphalmandi"
+node,6548879008,17.3949495,78.4573924,hospital,,,SRISHTI EYE CENTRE
+node,6548891585,17.3360462,78.5762921,hospital,hospital,,LEGEND HOSPITAL
+node,6548893680,17.3254576,78.4787173,clinic,centre,,"Urban Primary Health Centre, Barkas"
+node,6548894505,17.3612589,78.4280745,hospital,,,SAI SURYA HOSPITAL
+node,6548903087,17.3985564,78.4143068,hospital,hospital,,Apple Multi Speciality Hospital
+node,6548906785,17.4195974,78.5804777,social_facility,,nursing_home,Vyshali Nursing Home
+node,6548910436,17.4657813,78.5389222,hospital,,,SUDHA HOSPITAL
+node,6548918441,17.3623879,78.5570419,hospital,hospital,,Nakshatra Hospitals
+node,6548950430,17.3392197,78.5708190,hospital,hospital,,EVYA HOSPITALS AND DIABETIC RESERACH CENTER
+node,6549022044,17.4344248,78.4897238,clinic,,,"Urban Primary Health Centre, Pan Bazar"
+node,6549027184,17.3694828,78.4814411,,centre,,"Urban Primary Health Centre, Darulshifa"
+node,6549028392,17.3932243,78.4819990,hospital,hospital,,"District Hospital, King Koti"
+node,6549034026,17.3618221,78.4653050,,centre,,"Urban Primary Health Centre, Taramaidan"
+node,6549047002,17.4251540,78.4366462,clinic,clinic,,"Urban Primary Health Centre, Showkath Nagar"
+node,6549100481,17.4333724,78.4874345,clinic,,,Dr.Paul Doss Maternity and Family Welfare Centre
+node,6549122751,17.4359040,78.4499786,hospital,hospital,,Wellness Hospital
+node,6549122919,17.5072656,78.4788038,hospital,,,Refracto Eye Hospital
+node,6549133126,17.3448357,78.4590373,hospital,,,FATIMA HOSPITAL
+node,6549138754,17.5246107,78.4827950,hospital,,,JANAPAREDDY HOSPITAL PVT LTD
+node,6549141042,17.4951101,78.3706122,hospital,,,ENT CARE HOSPITAL
+node,6549141640,17.4944322,78.3415653,hospital,,,NAIDU EYE HOSPITAL
+node,6549145505,17.3447550,78.5269153,hospital,hospital,,JEEVAN HOSPITAL
+node,6549145506,17.4205712,78.4416855,hospital,hospital,,Times Hospital
+node,6549150687,17.5162288,78.4472376,hospital,hospital,,MEDIVISION SUPER SPECIALTY HOSPITAL
+node,6549150740,17.4943210,78.3461505,hospital,,,HEALIX HOSPITAL
+node,6549152212,17.3632928,78.4284984,hospital,,,ZOI HOSPITALS
+node,6549158450,17.3203965,78.5173801,hospital,,,SRI RADHIKA MULTI SPECIALITY HOSPITAL
+node,6549159475,17.4366563,78.4399192,hospital,hospital,,RAJA HOSPITAL
+node,6549162107,17.4246755,78.4330910,hospital,hospital,,THE BIRTHPLACE
+node,6549162110,17.4055156,78.4801617,hospital,,,MANKINDD HOSPITAL
+node,6549172458,17.4262320,78.5322033,hospital,,,PADMVATI MEDICAL CENTRE
+node,6549176002,17.3696216,78.4273417,hospital,,,IRIS EYE HOSPITAL
+node,6549183267,17.5084337,78.4614305,hospital,,,Lakshmi Sailaja Hospiatal
+node,6549184413,17.4448396,78.3855052,hospital,hospital,,Oakridge Hospitals
+node,6549186461,17.3910435,78.4712635,hospital,,,RAMA EYE HOSPITAL
+node,6549189965,17.3893119,78.4422313,hospital,,,Sri Vijaya Hospitals
+node,6549190771,17.4921363,78.3480830,hospital,,,SRIKARA HOSPITALS
+node,6549196760,17.4885611,78.3915214,hospital,,,Amrita ENT Head & Neck Hospital
+node,6549197262,17.4185789,78.5179152,hospital,,,B.V.K. REDDY HOSPITAL
+node,6549197557,17.3529175,78.4180733,hospital,hospital,,Human Touch Hospital
+node,6549198596,17.4620023,78.3669068,hospital,hospital,,REFRACTO EYE HOSPITAL (A GROUP OF CREDIBLE HEALTH CARE PVT LTD )
+node,6549203906,17.3619565,78.4281778,hospital,,,GERMANTEN HOSPITALS
+node,6549206565,17.3230275,78.5572350,hospital,,,SHYAM HOSPITAL
+node,6549206566,17.4701180,78.5086575,hospital,,,STERLING HOSPITALS PVT LTD
+node,6549209512,17.4183281,78.5427846,hospital,,,ANAND EYE INSITUTE
+node,6549210041,17.3445080,78.5484628,hospital,,,SRI KARA HOSPITAL
+node,6549211440,17.4160331,78.4473536,hospital,,,HIGH SIGHT SUPER SPECILAITY EYE HOSPITAL
+node,6549215300,17.4555800,78.4981728,hospital,hospital,,NAVJEEVAN HOSPITAL
+node,6549219226,17.4288986,78.4398817,hospital,hospital,,SMART VISION EYE SPECIALITIES PRIVATE LIMITED
+node,6549219227,17.4691425,78.4777518,hospital,,,KS MULTISPECIALTY HOSPITAL
+node,6549236738,17.3985583,78.4847268,hospital,,,RAMESH LASIK & LASER CENTRE
+node,6549287021,17.4954081,78.3213112,hospital,hospital,,VIJAYA SREE HOSPITAL
+node,6549290634,17.3942641,78.4307253,hospital,,,ORIENT EYE HOSPITAL
+node,6549292101,17.3482504,78.5520463,hospital,,,SHINE CHILDREN'S HOSPITAL
+node,6549292128,17.4887428,78.4005457,hospital,,,Sri Sri Holistic Hospitals
+node,6549295174,17.3690962,78.5301608,hospital,hospital,,Saptagiri Hospital
+node,6549296470,17.3753068,78.4295377,hospital,,,SAFE KIDS HOSPITALS PRIVATE LIMITED
+node,6549298910,17.3542853,78.5470426,hospital,,,DR RAJASHEKAR REDDY LAPAROSCOPY HOSPITAL
+node,6549301063,17.3984982,78.5360710,hospital,,,ADRM HOSPITAL
+node,6549313395,17.5015719,78.5893062,hospital,,,SHRI ADITHYA HOSPITALS
+node,6549314900,17.4893785,78.4008153,hospital,,,Smart Vision Eye Hospitals Pvt Ltd
+node,6549315980,17.4058342,78.4754223,hospital,,,SOUTHERN GEM HOSPITAL
+node,6549320016,17.4714919,78.5676406,hospital,,,ARC HOSPITAL
+node,6549322814,17.5064398,78.5160054,hospital,,,Ozone Hospitals
+node,6549324353,17.3355392,78.5708083,hospital,hospital,,SHARADA EYE CARE
+node,6549328685,17.4635323,78.4562123,hospital,,,SREE ROYAL HOSPITAL
+node,6549328982,17.3466240,78.5211218,hospital,hospital,,SRI SIDDESHWARA HOSPITAL
+node,6549331502,17.4161502,78.4338641,hospital,,,NEPHROPLUS KIDNEY CARE HOSPITALS
+node,6549332628,17.3726148,78.5010025,hospital,hospital,,METRO CURE HOSPITAL
+node,6549335308,17.4915939,78.4096941,hospital,hospital,,Green Leaf Health Centre
+node,6549338256,17.4997723,78.4774970,hospital,,,RUSSH SUPER SPECIALITY HOSPITAL
+node,6549341748,17.4230318,78.5470144,hospital,,,SHREE POOJA HOSPITAL
+node,6549343859,17.4183012,78.4582441,hospital,,,Vascular Care Center
+node,6549348757,17.4925596,78.3977428,hospital,,,MCS NEURO HOSPITAL
+node,6549349841,17.4947571,78.3432363,hospital,,,HAPPY HOSPITAL
+node,6549350559,17.4992274,78.3880024,hospital,hospital,,Landmark Hospital
+node,6549356692,17.3198217,78.5198410,hospital,,,HIRANYAA MULTI SPECIALITY & CHILDREN'S HOSPITAL
+node,6549358302,17.4955297,78.4541658,hospital,,,NETRA EYE AND MULTI SPECIALITY HOSPITAL
+node,6549358836,17.4392005,78.4803766,hospital,,,SECUNDERABAD WOMENS HOSPITAL
+node,6549364392,17.3673811,78.5358068,hospital,hospital,,SBR Pulse Hospital
+node,6549366073,17.4137266,78.4244857,hospital,,,CITI NEURO CENTER
+node,6549371813,17.3681260,78.5308360,hospital,hospital,,Magnas ENT Hospital
+node,6549374700,17.3739817,78.4985831,hospital,hospital,,EYE CARE HYDERABAD
+node,6549378688,17.3458905,78.5292422,hospital,hospital,,SREE SREYAS HOSPITAL
+node,6549381430,17.4566496,78.4786342,hospital,,,SAI GURU RAGHAVENDRA ORTHOPEADIC & MULTISPECIALITY
+node,6549400717,17.4194759,78.3715081,hospital,hospital,,PACIFIC CLINICS (A Unit of Pacific Hospitals Pvt Ltd.)
+node,6549420102,17.4070512,78.4412871,hospital,,,STORK HOME FERNANDEZ HOSPITAL
+node,6549431958,17.4910196,78.3967075,hospital,,,Baabaji Nethralaya Eye Hospital
+node,6549437828,17.4960720,78.3452386,hospital,,,MOTHERHOOD FERTILITY CENTRE
+node,6549439100,17.3960244,78.5597040,hospital,hospital,,SUMITHRA HOSPITALS
+node,6549439330,17.4908150,78.3968510,hospital,,,MedWise Hospital (A unit of Chirayu Avigna Healthcare)
+node,6549440030,17.5171414,78.4449886,hospital,hospital,,SAI SIDDHARTHA HOSPITAL
+node,6552123431,17.5099953,78.2847266,clinic,centre,,"Sub Centre, R.C.Puram B"
+node,6559228898,17.5162813,78.4473006,hospital,hospital,,Sai Bhavani Super Speciality Hospital
+node,6559245433,17.3722481,78.5008469,hospital,hospital,,Apollo Emergency Centre
+node,6559309139,17.3918869,78.4406219,hospital,,,Amrutha Hospital For Health and Fitness
+node,6559338844,17.4401185,78.4236932,hospital,,,Pavithra Nursing Home
+node,6559691339,17.4231212,78.5041971,clinic,clinic,,"Urban Primary Health Centre, Gandhi"
+node,6559986603,17.4150151,78.4977020,clinic,clinic,,"Urban Primary Health Centre, Musheerabad"
+node,6560362897,17.4722792,78.5170314,hospital,,,Military Hospital
+node,6560524869,17.3728426,78.4740262,hospital,blood_bank,,Osmania General Hospital's Blood Bank
+node,6560815058,17.4562216,78.4256515,hospital,,,Neelima Hospital
+node,6561022554,17.3568423,78.4738019,hospital,,,
+node,6561161964,17.4303400,78.4370834,hospital,,,Nikhil Hospital
+node,6561169422,17.3349862,78.5706618,hospital,hospital,,Vijaya Nursing Home - Vanasthalipuram
+node,6561171891,17.4711388,78.5078877,hospital,,,Vamshi Hospital - Trimulgherry
+node,6561211170,17.3455135,78.5081814,hospital,hospital,,Dr.Agarwal's Eye Hospital - Santhosh Nagar
+node,6561341420,17.4963994,78.4523928,hospital,,,Happy Children Hospital - Chintal
+node,6561351099,17.3316717,78.5336658,hospital,hospital,,Vijaya Hospital - Ranga Reddy
+node,6562261140,17.4953327,78.3461183,hospital,,,Vijaya Hospital
+node,6562374170,17.3944702,78.4889225,hospital,,,Sri Venkateshwara Nursing Home - Narayanguda
+node,6562402576,17.3929299,78.4797553,hospital,,,Kamineni Fertility Centre
+node,6562454569,17.4835930,78.5580665,hospital,,,Asha Hospital
+node,6562677269,17.4300284,78.3742265,hospital,hospital,,Motherhood Clinic
+node,6562751438,17.5051697,78.5071749,hospital,,,Life Spring Maternity Hospital
+node,6563028513,17.3678054,78.5496034,hospital,,,Susheela Hospital - R.K Puram
+node,6563250152,17.4074076,78.4428254,hospital,,,Omni Hospital - Banjara Hills
+node,6563256137,17.3690898,78.5224923,hospital,hospital,,Dr.Agarwal's Eye Hospital - Dilsukhnagar
+node,6563279812,17.3710686,78.5069691,social_facility,,nursing_home,Anitha Nursing Home - Malakpet
+node,6566402827,17.5156654,78.3195499,school,,,Fusion International School
+node,6566862238,17.3369525,78.5507843,hospital,,,S.S Multi Speciality Hospital
+node,6567311932,17.3893491,78.4734696,hospital,,,Jayanti Maternity and Nursing Home
+node,6567338346,17.4186403,78.5420912,hospital,,,Whitus Hospital (A Unit Of Sri Shikhara Hospitals India Pvt Ltd)
+node,6570905622,17.4229052,78.5669397,doctors,yes,,Sri Venkataswara Arogya Nilayam
+node,6573966514,17.3696696,78.5142714,hospital,hospital,,SAFE CHLIDRENS HOSPITAL
+node,6582335068,17.4221565,78.5655819,clinic,clinic,,Dr Rajive Kumar Sureka
+node,6593421965,17.4209224,78.5644319,clinic,clinic,,Sree Raju's Polyclinic
+node,6593421967,17.4208935,78.5644232,clinic,clinic,,Dr. B. V. Shobba Family Physician
+node,6598228985,17.3636771,78.5262294,clinic,clinic,,Sri Sai Homeo Vaidyashala
+node,6598229185,17.3637171,78.5261774,clinic,clinic,,HARI AUM Physiotherapy & Pain Relief Clinic
+node,6616154446,17.4216119,78.5427439,clinic,,,IICT-CCMB Dispensary
+node,6632844432,17.4189151,78.5654264,hospital,hospital,,Satya Multi Speciality Hospital
+node,6639594095,17.5348949,78.5126207,,centre,,"SubCentre, Burton Guda"
+node,6639594097,17.5168913,78.5126057,,centre,,"SubCentre, Machabollaram"
+node,6639594099,17.4940638,78.5059559,,centre,,"SubCentre, Venkatapuram"
+node,6639594100,17.4857701,78.4933971,,centre,,"SubCentre, Naredmet"
+node,6639594102,17.4860630,78.5029055,,centre,,"SubCentre, Subhashnagar"
+node,6639594133,17.3280813,78.5669037,,centre,,"SubCentre, Vansthalipuram"
+node,6639594140,17.3009594,78.5860594,,centre,,"SubCentre, Injapur"
+node,6639594148,17.4070672,78.5904327,,centre,,"SubCentre, Peerzadiguda"
+node,6639594150,17.4321639,78.6029398,,centre,,"SubCentre, Chengicherla"
+node,6639602772,17.3438653,78.3076461,,centre,,"SubCentre, Himayathnagar"
+node,6639602779,17.3364148,78.3279705,,centre,,"SubCentre, Aziz Nagar"
+node,6652963085,17.3851320,78.4822810,hospital,hospital,,"Royal Ear, Nose and Throat (ENT) Hospital"
+node,6656722746,17.5107672,78.5616647,,centre,,"SubCentre, Balaji Nagar"
+node,6656722749,17.4561890,78.4505233,,centre,,"SubCentre, Harijan Basti (Urban)"
+node,6656722750,17.5651595,78.5230663,,centre,,"SubCentre, Devarayamjal"
+node,6656722753,17.4937370,78.5733638,,centre,,"SubCentre, Kapra- III (Urban)"
+node,6656722756,17.4814325,78.5628006,,centre,,"SubCentre, Gandhi Nagar (Urban)"
+node,6656722758,17.4743279,78.5694417,,centre,,"SubCentre, North Kamlanagar (Urban)"
+node,6656722759,17.4738507,78.5651220,,centre,,"SubCentre, Kamala Nagar - I (Urban)"
+node,6656722761,17.4047778,78.5614177,,centre,,"SubCentre, Beerappagadda"
+node,6656722762,17.3027264,78.5254696,,centre,,"SubCentre, Badangpet"
+node,6656722770,17.5201116,78.3782083,,centre,,"SubCentre, Nizampet"
+node,6656722772,17.5086643,78.4773123,,centre,,"SubCentre, Jeedimetla (Urban)"
+node,6656722773,17.5140969,78.4425250,,centre,,"SubCentre, Shapur Nagar (Urban)"
+node,6656722775,17.5015303,78.4726542,,centre,,"SubCentre, Quthubullapur - II (Urban)"
+node,6656722776,17.4949119,78.4455096,,centre,,"SubCentre, Bhagath Singh Nagar (Urban)"
+node,6656722779,17.5017298,78.4584804,,centre,,"SubCentre, Venkateshwar Nagar (Urban)"
+node,6656722780,17.4903685,78.5378963,,centre,,"SubCentre, Nirmal Nagar (Urban)"
+node,6656722781,17.4774082,78.5292569,,centre,,"SubCentre, Ramkirshnapuram (Urban)"
+node,6656722782,17.4681295,78.5425928,,centre,,"SubCentre, Vinayaknagar (Urban)"
+node,6656722785,17.4511637,78.5420457,,centre,,"SubCentre, S.P.Nager (Urban)"
+node,6656722788,17.4433135,78.5372478,,centre,,"SubCentre, Babu Jagjivan Ram Nagar (Urban)"
+node,6656722790,17.4951104,78.3286092,,centre,,"SubCentre, Chanda Nagar (Urban)"
+node,6656722793,17.4648135,78.3764368,,centre,,"SubCentre, Kothaguda (Urban)"
+node,6656722797,17.4021294,78.5658550,,centre,,"SubCentre, Uppal (Urban)"
+node,6656722798,17.3731178,78.5495253,,centre,,"SubCentre, Kothapaet-I (Urban)"
+node,6656722804,17.3669382,78.5256439,,centre,,"SubCentre, Gaddiannaram"
+node,6656722806,17.3605882,78.5328356,,centre,,"SubCentre, Vivekananadanagar"
+node,6656722807,17.3576492,78.5356325,,centre,,"SubCentre, Saroornagar"
+node,6656722810,17.3451903,78.5201669,,centre,,"SubCentre, Champapet"
+node,6656722811,17.3387998,78.5347820,,centre,,"SubCentre, Karmanghat"
+node,6656722812,17.3317767,78.5361810,,centre,,"SubCentre, Bhupeshgupta Nagar"
+node,6656722813,17.4034444,78.3771240,,centre,,"SubCentre, Manikonda"
+node,6656722815,17.3871158,78.3549026,clinic,clinic,,Urban Primary Health Centre Narsingi
+node,6656722824,17.3191406,78.4026995,,centre,,"SubCentre, Rajendranagar"
+node,6656722825,17.3187641,78.3926573,,centre,,"SubCentre, Budwel"
+node,6656722827,17.3983252,78.5648154,,centre,,"SubCentre, Vijayapuri colony (Urban)"
+node,6656722830,17.4605727,78.4492264,,centre,,"SubCentre, Fatehnagar (Urban)"
+node,6656722838,17.3088172,78.4942527,,centre,,"SubCentre, Kothapet"
+node,6656722840,17.5051853,78.4086511,,centre,,"SubCentre, VV Nagar (Urban)"
+node,6773025662,17.4250888,78.5149145,clinic,clinic,,
+node,6773884879,17.4235095,78.5160997,social_facility,,group_home,
+node,6776351524,17.4223532,78.5167156,clinic,clinic,,Vijaya Clinical Lab - Dr L Hanumayamma
+node,6779797471,17.3774807,78.4996403,hospital,hospital,,Dr.syed Ajaz hussain & Dr.syed mumtaz hussain
+node,6779938630,17.4926156,78.4076778,school,,,ZPHS school
+node,6810762245,17.4787974,78.5531084,school,,,Iris Florets
+node,6811748985,17.3429186,78.5414840,hospital,,,Apex Hospital
+node,6811748986,17.3911402,78.4803374,clinic,centre,,"Urban Primary Health Centre, Boggulakunta"
+node,6811748990,17.4420290,78.4407250,hospital,,,Shiva Homoeo Stores and clinic
+node,6811748991,17.4654430,78.4262620,clinic,,,Kidzee Children Clinic
+node,6811748992,17.4602725,78.4524033,clinic,,,Basa balram Clinic
+node,6811748993,17.4415056,78.4471316,clinic,,,Sathya Veda Super Speciality Clinic
+node,6811748994,17.4279239,78.3240814,hospital,,,Srija Hospital
+node,6811748996,17.4530410,78.4351390,doctors,doctor,,Dr. G. Sudarshan Reddy Skin Clinic
+node,6811748997,17.5438100,78.4385000,clinic,,,Sri Laxmi Clinic
+node,6811748999,17.4694970,78.4268480,doctors,,,Dr. Murthy's Clinic
+node,6811749001,17.4883940,78.3969600,hospital,,,Madhusudhan Hospital
+node,6811749002,17.4339300,78.4465110,doctors,,,Dr G Ram Mohan Reddy Clinic
+node,6811749003,17.4699379,78.4236187,clinic,,,Punarvasu Clinic
+node,6811749004,17.5198207,78.4427883,hospital,hospital,,Lions Club Of Hyderabad Multi Speciality Hospital
+node,6811749005,17.4915590,78.3973060,clinic,,,Abhi ENT Clinic
+node,6811749006,17.4898215,78.6018077,hospital,,,Pooja Hospital
+node,6811749010,17.4416790,78.4391240,clinic,,,"Srinivasa clinic, Vengal Rao Nagar"
+node,6811749012,17.4404574,78.4376110,clinic,,,"ENT Clinic, Madhura Naga"
+node,6811749013,17.4621913,78.4944027,clinic,clinic,,Archana Clinic
+node,6811749014,17.4684920,78.4576658,hospital,,,Vijaylaxmi Maternity Hospital
+node,6811749016,17.4692500,78.4225570,clinic,,,Jogratna Firstaid Centre
+node,6811749017,17.4423064,78.4416463,clinic,,,"Apple Diagnostic & Medical Centre, S.R nagar"
+node,6811749018,17.4396884,78.4415834,clinic,clinic,,Safe Cure Homeo Clinic
+node,6811749020,17.4632240,78.4525270,clinic,clinic,,Aparna Homeo Clinic
+node,6811749021,17.4186649,78.4418161,,centre,,"Urban Primary Health Centre, Banjara Hills"
+node,6811749022,17.4663588,78.4828594,clinic,,,Sneha Obesity Clinic
+node,6811749023,17.5391510,78.4337490,hospital,,,Health Care General Hospital
+node,6811749024,17.3724870,78.5229910,hospital,hospital,,Amma Hospitals
+node,6811749025,17.3609110,78.3893190,hospital,,,Cocoon Hospital
+node,6811749027,17.4932248,78.6045666,hospital,,,Keerthi Hospital
+node,6811749028,17.3824150,78.4939790,clinic,,,Chandsi Clinic
+node,6811749029,17.3548920,78.5324070,hospital,,,Saroornagar Hospital
+node,6811749031,17.3676440,78.5296540,hospital,hospital,,Srihitha Hospital
+node,6811749032,17.4761454,78.4818500,clinic,,,"Kalpataru Homoeopathy Clinic, Bowenpally,"
+node,6811749033,17.5121776,78.4458086,doctors,,,Dr. Sagar's Homeopathy Clinic
+node,6811749035,17.4691859,78.4224565,clinic,,,Narsimha Clinic
+node,6811749036,17.4640779,78.4271526,doctors,,,Dr. M. Prashanthi Homoeo Physician
+node,6811749037,17.5599860,78.4379617,clinic,,,Sri Akshith Clinic
+node,6811749039,17.4653760,78.4264010,doctors,,,Dr. E.Seetharam's Clinic
+node,6811749040,17.4003659,78.3894309,hospital,hospital,,Prolife Hospital
+node,6811749041,17.4934710,78.6048170,hospital,,,Lifeline Hospital
+node,6811749043,17.4903720,78.3967270,clinic,,,Tru Dental Care
+node,6811749045,17.4012253,78.4124091,hospital,,,Hayatt Hospital
+node,6811749046,17.4403130,78.4396890,clinic,,,Srinivasa poly clinic and diagnostics
+node,6811749047,17.4329564,78.4461388,hospital,,,Gutta Eye Clinic
+node,6811749048,17.4692770,78.4285070,clinic,,,Sai Sadan Skin & Gynecologist Clinic
+node,6811749049,17.4640910,78.4509240,clinic,clinic,,E.N.T Clinic
+node,6811749051,17.4390010,78.4406410,clinic,clinic,,Sai Orthopaedic Clinic
+node,6811749053,17.4930870,78.4096964,hospital,,,"Apple Diagnostic & Medical Centre, Kukatpally"
+node,6811749055,17.4365650,78.4370230,clinic,clinic,,SAAVI CLINICS
+node,6811749056,17.4897271,78.6017722,hospital,,,Janani Hospital for Women and Children
+node,6811749058,17.4404699,78.4375526,clinic,,,UMA clinic
+node,6811749059,17.5101637,78.2998532,hospital,hospital,,RM Hospital
+node,6811749062,17.4925170,78.4512270,hospital,,,Alavi Hospital
+node,6811749063,17.4713560,78.4195280,clinic,,,Clear Sight Eye Clinic
+node,6811749064,17.4390991,78.4356998,clinic,clinic,,Siva Homeo Care Clinic
+node,6811749065,17.4658400,78.4556120,clinic,,,Laxmi Sai Clinic
+node,6811749066,17.4694418,78.4256774,hospital,,,Chaitanya Hospital
+node,6811749067,17.5410080,78.4871350,clinic,,,Sanjeevani Thyroid Sugar and Hormones Clinic
+node,6811749069,17.4656090,78.4265650,clinic,,,Bharath Nagar Clinic
+node,6811749070,17.4277736,78.4573355,hospital,,,ZOI Hospital
+node,6811749072,17.4393100,78.4369590,clinic,clinic,,"Kalpataru Homoeopathy clinic, Madhuranagar"
+node,6811749073,17.4441950,78.4327090,doctors,,,"DR. Raja Sekar's Skin, hair & laser clinic"
+node,6811749074,17.5106180,78.2885300,clinic,clinic,,Sri Venkateshwara Childrens Clinic
+node,6811749075,17.3212190,78.5687120,hospital,,,Nadipathy Hospital
+node,6811749076,17.4694428,78.4223768,doctors,,,Dr. M. Krishna Rao's Clinic
+node,6811749078,17.3931830,78.4784290,doctors,,,Dr. Bajrang Pratap's Clinic
+node,6811749079,17.4374808,78.4402092,clinic,clinic,,Positive Homeopathy clinic
+node,6811749081,17.4640958,78.4511972,doctors,doctor,,Dr. Arunasree Clinic
+node,6811749082,17.4889369,78.4006671,hospital,,,Trichos Skin Care
+node,6811749083,17.4559294,78.4325983,clinic,,,"Padmavathi Clinic, Erragadda"
+node,6811749084,17.4958036,78.4524391,hospital,,,Harsha Dental Dantam Network Dental Hospitals
+node,6811749086,17.4985836,78.3946958,clinic,clinic,,Omega Clinics
+node,6811749087,17.5417588,78.4385404,clinic,,,Gopal Clinic
+node,6811749088,17.5314158,78.4875009,hospital,,,Srikara Hospital
+node,6811749092,17.4425450,78.4393580,clinic,,,Sai Krishna Teja Homoeo Clinic
+node,6811749093,17.4092386,78.4007023,hospital,,,JBI Hospital
+node,6811749094,17.4422882,78.4416320,clinic,,,Vaikhan Hospitals
+node,6811749096,17.4933988,78.3979717,hospital,,,J.K. Hospital
+node,6811749097,17.4897154,78.3960653,clinic,,,Amrutha Multi Speciality Clinics
+node,6811749098,17.4691720,78.4197470,,centre,,"Urban Primary Health Centre, Moosapet"
+node,6811749101,17.4412490,78.4336970,clinic,,,Ideal clinic
+node,6811749102,17.4319010,78.4463760,clinic,,,Alavi Eye Clinic
+node,6811749103,17.5320227,78.4444551,clinic,,,Chitlus Clinic
+node,6811749104,17.5398397,78.4363341,clinic,,,Siri Clinic
+node,6811749105,17.3353686,78.5311380,clinic,clinic,,Laxmi Cliniic
+node,6811749106,17.4021071,78.5583340,clinic,centre,,"CGHS Dispensary No.XIII,Tarnaka"
+node,6811749107,17.5410460,78.4868990,clinic,,,Shree Krushna Clinic
+node,6811749108,17.4485980,78.4319230,clinic,,,KSR Eye Clinic
+node,6811749109,17.4343870,78.4458990,clinic,clinic,,Best Clinics
+node,6811749110,17.4435305,78.4344642,clinic,,,Well being obesity & Pain Clinic
+node,6811749111,17.4737889,78.4244689,clinic,,,Sri Vibhav Health Care
+node,6811749112,17.5599256,78.4383837,clinic,,,Jyothi Clinic
+node,6811749113,17.3224340,78.4801000,hospital,,,Bakoban Hospital
+node,6811749114,17.4452339,78.4617537,hospital,,,Sri Sai Rama Clinic
+node,6811749115,17.5330429,78.4823216,clinic,,,Mysha Clinic & Diagnostics
+node,6811749116,17.4644450,78.4507616,doctors,doctor,,Dr. K. Rama Swamy Clinic
+node,6811749117,17.4874070,78.3958558,clinic,,,Sri Sai Clinic
+node,6811749118,17.3554702,78.4636083,hospital,,,Medicare Hospital
+node,6811749119,17.4447512,78.3884762,doctors,doctor,,Dr. B.Srinivas
+node,6811749120,17.3222518,78.4307242,hospital,,,Sri Lakshmi Hospital
+node,6811749122,17.4413950,78.4400810,doctors,,,Dr T Neelaveni Dental Clinic
+node,6811749123,17.4959670,78.3371880,clinic,clinic,,SV Care Poly Clinic
+node,6811749124,17.3291568,78.5930459,clinic,,,"Padmavathi Clinic, Hayathnagar"
+node,6811749125,17.4208100,78.5823300,clinic,,,Haritha Poly Clinic & Diagnostic Centre
+node,6811749126,17.4694346,78.4225055,clinic,,,Akhil Clinic
+node,6811749127,17.5170460,78.4804750,hospital,,,Suraksha Women And Children Hospital
+node,6811749128,17.4419120,78.4401810,clinic,,,Om sai poly clinic
+node,6811749129,17.4393315,78.4418317,clinic,clinic,,Genesis Clinics
+node,6811749130,17.3223098,78.4305647,hospital,,,Sujatha Hospital
+node,6811749131,17.4641198,78.4510823,clinic,clinic,,Neo Vision Eye Care Centre
+node,6811749132,17.5098690,78.2993670,hospital,hospital,,Eureka Hospital
+node,6811749133,17.4734790,78.4216730,hospital,,,Vasundhara Hospital
+node,6811749134,17.3921804,78.4264492,hospital,,,Salamah Hospital
+node,6811749135,17.3988756,78.4117886,clinic,,,Esani Diabetes & Multi Speciality Center
+node,6811749136,17.4325940,78.4275652,clinic,clinic,,Asha Clinic
+node,6811749138,17.4850890,78.3988909,clinic,,,Ishta Woman & Children Clinic
+node,6811749139,17.4691677,78.4275318,hospital,,,Aradhya Multi Speciality Hospital
+node,6811749140,17.4212889,78.5132666,,centre,,"Urban Primary Health Centre, Mohammedguda"
+node,6811749141,17.4956577,78.4532466,hospital,,,Raman Hospital
+node,6811749142,17.4436150,78.4346170,hospital,,,Skorts Multi Speciality Clinics
+node,6811749143,17.3957352,78.4175241,hospital,hospital,,IBM Hospital
+node,6811749144,17.3058624,78.4683878,hospital,,,Al Madina General Hospital
+node,6811749145,17.4657440,78.4724390,,centre,,"Urban Primary Health Centre, Bowenpally"
+node,6811749146,17.4795083,78.3202454,hospital,hospital,,Shreya Hospitals
+node,6811749148,17.4028303,78.5741446,hospital,,,Lakshmi Priya Nursing
+node,6811749149,17.4405490,78.4389260,clinic,,,Bhavani Poly Clinic
+node,6811749150,17.4003589,78.3825730,hospital,,,Shobha Hospital
+node,6811749151,17.4023438,78.5670163,hospital,,,SKIMS Hospital
+node,6811749152,17.4642455,78.4571122,hospital,hospital,,బిబిఆర్ సూపర్ స్పెషలిటీ హాస్పిటల్
+node,6811749153,17.4590400,78.6046777,clinic,,,Vision Eye Care Poly Clinic
+node,6811749154,17.4098270,78.6034800,clinic,,,Satya Dental Clinic & Implant Centre
+node,6811749155,17.4641501,78.4508102,clinic,clinic,,Keerthi Clinic
+node,6811749156,17.5449220,78.4382800,clinic,,,B.Gandhi First Aid Center
+node,6811749157,17.4655010,78.4267800,clinic,,,Sri Sai Krishna Polyclinic
+node,6811749158,17.4470116,78.4447795,clinic,,,Murthy nursing home
+node,6811749159,17.4442160,78.4327600,doctors,,,Dr.Vivek's Multispeciality Dental care
+node,6811749160,17.3240860,78.5568860,hospital,,,Sri Nitya Hospital
+node,6811749161,17.5432540,78.4383150,clinic,,,Manikanta Clinic
+node,6811749162,17.3950990,78.4801030,doctors,,,Dr. Asha Khivsara's Clinic
+node,6811749163,17.5123710,78.5577130,hospital,,,Sri Balaji Nagar Nursing Home
+node,6811749164,17.4648154,78.4499912,clinic,clinic,,Mamatha Clinic
+node,6811749165,17.4902119,78.3963174,doctors,,,Dr Pradeep Balli Diabetic Foot Clinic
+node,6811749166,17.4656820,78.4263670,clinic,,,Sushmitha Clinic
+node,6811749167,17.4695091,78.4262837,clinic,,,Raghu Gastero & Liver Clinic
+node,6811749169,17.5133570,78.5566070,hospital,,,Aditya Hospital
+node,6811749170,17.5160299,78.3819324,hospital,,,Sunray Hospital
+node,6811749172,17.4326090,78.4461980,clinic,,,G.K.Poly Clinic
+node,6811749173,17.2986297,78.4764546,clinic,,,A. H. Charitable Poly Clinic
+node,6811749175,17.5096642,78.2998449,clinic,clinic,,Neo Children's Clinic
+node,6811749177,17.5144350,78.4474850,clinic,clinic,,"Srinivasa Clinic, Chinthal"
+node,6811749178,17.3293045,78.5645447,hospital,,,Sakhi Hospital
+node,6811749179,17.4931970,78.3981150,clinic,,,"ENT Clinic, KPHB"
+node,6811749180,17.4934982,78.3209211,hospital,hospital,,Archana Multi Speciality Hospital
+node,6811749181,17.4180959,78.4999369,doctors,doctor,,"Government Homoeo Dispensary, CHIKKADPALLY"
+node,6811749182,17.3659362,78.5255259,hospital,hospital,,SAI RAM MULTI SPECIALITY HOSPITAL (ARK HEALTH CARE PVT LTD)
+node,6811749183,17.5266130,78.4824036,clinic,,,Apple Poly Clinic
+node,6811749184,17.3853842,78.4886376,,centre,,"Urban Primary Health Centre, Koti"
+node,6811749185,17.4004016,78.5656645,clinic,clinic,,Raghupathi Reddy Hospital
+node,6822125026,17.4942384,78.3995332,hospital,hospital,,SRU Facture & Plastic Surgery
+node,6822126491,17.4959701,78.3374513,school,,,Prachin Global School
+node,6822126493,17.4362600,78.4369070,school,,,Sri Chaitanya Techno School
+node,6822126547,17.4662690,78.4832250,school,,,Gowtham Model School
+node,6822126550,17.4694437,78.4257811,school,,,Panchaseela School
+node,6822126597,17.4929590,78.4096580,school,,,Geetanjali Olympiad Schools
+node,6822126637,17.4401330,78.4397470,school,,,Visva Bharati High School
+node,6825138366,17.5101190,78.3039722,clinic,clinic,,Nirog Clinic
+node,6825138367,17.5119263,78.3018446,clinic,clinic,,Mallikarjuna Clinic
+node,6825138572,17.4774152,78.2864910,,centre,,"Sub Centre, New MIG"
+node,6829483775,17.4715540,78.5375480,clinic,,,chandana clinic
+node,6830806688,17.4944955,78.3296853,hospital,hospital,,Gangaram Community Hall Health Sub Center
+node,6834326986,17.4406799,78.3634989,clinic,clinic,,Amar Dental Clinic
+node,6846152947,17.3732371,78.4464510,hospital,hospital,,"Community Health Centre, Panipura"
+node,6846152948,17.4509475,78.4235564,hospital,,,SHREYA HOSPITAL
+node,6846423887,17.4546149,78.4200095,hospital,,,DR NAVEEN REDDYS GENERAL HOSPITAL
+node,6846423892,17.3953666,78.4544152,hospital,,,Medicure Diagnostic and Research Center(Alekhya Scanning Center)
+node,6847914814,17.4391120,78.4341760,school,,,Ameri KIDS International & SWETCHA Schools
+node,6847914841,17.4437108,78.4335884,school,,,Papillon Play School
+node,6850830268,17.4650177,78.4278693,school,,,Vivekananda Convent High School
+node,6850830270,17.4693449,78.4253813,school,,,Zilla Parishad High School
+node,6850830284,17.4987339,78.3942688,school,,,Narayana High School
+node,6853049415,17.4925200,78.3482210,school,,,Gowtham Model School
+node,6853049461,17.4690438,78.4197439,school,,,S.M. Model School
+node,6855228385,17.4659669,78.3678073,hospital,hospital,,KIMS Cruddle
+node,6866161636,17.5028997,78.3887517,hospital,hospital,,srisri holistic
+node,6866161637,17.5029831,78.3887796,hospital,hospital,,
+node,6868572410,17.4234633,78.5478069,hospital,hospital,,Durga prasad
+node,6934778614,17.3745451,78.5455972,hospital,hospital,,
+node,6935199725,17.4485037,78.3916644,school,,,Cgr International School
+node,6935221549,17.4823299,78.4804090,school,,,
+node,6935221553,17.4797317,78.4807073,school,,,EURO PLAY SCHOOL
+node,6935247722,17.4496165,78.3871243,school,,,Narayana Techno School
+node,6935446192,17.4481069,78.3922831,school,,,Manthan international school.
+node,6935540196,17.4787553,78.4816433,hospital,hospital,,SHEKAR HOSPITAL
+node,6935545369,17.4497497,78.3920549,school,,,Swectha - The Complete School
+node,6935617683,17.4417857,78.5668286,school,,,Mudhra High School
+node,6935636797,17.4296390,78.5509227,school,,,St. Mathews High School
+node,6937779552,17.4594547,78.3659801,hospital,hospital,,Apollo
+node,6991428585,17.4401021,78.5004359,school,,,Seventh-day Adventist high school
+node,6997907785,17.4360987,78.4412212,clinic,clinic,,Nirmalam Lifestyle Clinic
+node,7002711028,17.4937687,78.3204071,school,,,Nagarjuna Grammar High School
+node,7002815271,17.4022481,78.3982147,school,,,shaikpet government high school
+node,7007970916,17.4947985,78.3402527,hospital,hospital,,Titan eye plus
+node,7008089080,17.5035172,78.4156543,hospital,hospital,,Mythri Clinic
+node,7008096298,17.4057490,78.3948017,school,,,Sakubhai memorial high school
+node,7008096301,17.4061906,78.4010392,school,,,Valli high school
+node,7021303614,17.4409254,78.3869638,school,,,ZPHS School
+node,7021303623,17.4416461,78.3879022,school,,,Govt Mandala Praja Parishad Primary School
+node,7021303724,17.4379379,78.3986744,school,,,Rock Well International School Activity Block
+node,7021303725,17.4351502,78.4046871,school,,,"Indus International primary school, Jubilee Hills"
+node,7021303762,17.4438542,78.3859419,clinic,clinic,,SVR Physiotherapy Clinic
+node,7021303763,17.4511935,78.3858327,clinic,clinic,,Dr.Rajetha's Mohana Skin & Hair Clinic
+node,7021303765,17.4430962,78.3918626,clinic,laboratory,,Crystal Vision Eye Care Center
+node,7021303767,17.4493090,78.3855162,clinic,clinic,,Shathayu Ayurveda Clinic
+node,7025820758,17.4406949,78.3943588,hospital,hospital,,Srinivasa Hospital
+node,7025820759,17.4393355,78.3949019,school,,,SR Digi School Jubilee Hills
+node,7025820774,17.4459249,78.3988488,school,,,Sri Chaitanya school
+node,7025820779,17.4442725,78.3977690,school,,,Kenedy World School
+node,7025820786,17.4458200,78.3924173,hospital,hospital,,lifespan hospitals
+node,7025820818,17.4487951,78.3921706,clinic,clinic,,Krithi Children Clinic
+node,7025820915,17.4413783,78.3880897,hospital,hospital,,Samanta Homeopathy
+node,7088336248,17.3529531,78.5070070,school,,,Angel's Convent High School
+node,7088862151,17.3290827,78.4276336,hospital,hospital,,
+node,7099403699,17.4216870,78.4525812,clinic,,,Department of Physiotherapy
+node,7113472885,17.4881204,78.3872787,school,,,Kids r Kids
+node,7113522185,17.4933644,78.3882049,school,,,Sharadha the school
+node,7113526785,17.4953658,78.3885666,school,,,Sri Chaitanya School
+node,7113615285,17.5325342,78.5161065,school,,,Zilla Parishad High School
+node,7113646686,17.4366221,78.4457432,hospital,hospital,,Shresta hospital
+node,7113728488,17.4380651,78.4492120,school,,,Slate The school
+node,7113870387,17.3622316,78.5077760,nursing_home,,,Jaya
+node,7135117060,17.4031750,78.3899818,clinic,,,Family Health Clinic
+node,7159770889,17.5164698,78.4411395,school,,,Sai Latha Model High School
+node,7160835585,17.5163430,78.4410790,school,,,Sailatha model high school
+node,7160835587,17.5150800,78.4393120,school,,,Good Shepherd High School
+node,7173822072,17.4400468,78.4579903,school,,,Gitanjali Primary School
+node,7173925863,17.3377100,78.3085868,school,,,swaminarayana  gurukul international school
+node,7173965132,17.4930680,78.4046109,school,,,Triveni Kids
+node,7173965139,17.5098021,78.3005066,school,,,Triveni Kids
+node,7174077374,17.5133146,78.3022088,hospital,hospital,,Tirumala Hospital
+node,7174132574,17.5137634,78.3005167,school,,,prachin Global School
+node,7178587088,17.4843860,78.3820660,school,,,Gayatri High School
+node,7180137991,17.5125500,78.3028054,school,,,M.P.C.R Memorial School
+node,7183609803,17.5027937,78.4293956,school,,,Sraddha concept school
+node,7243895530,17.3970103,78.5037892,school,,,Matrusi techno school
+node,7243946118,17.4907311,78.3580679,school,,,Janapriya Schools
+node,7243946121,17.4946264,78.3556961,school,,,Roa's Schools
+node,7243946129,17.4957622,78.3591655,school,,,St.Martins High School
+node,7243950725,17.3964354,78.5028158,school,,,mother's high school
+node,7243950726,17.3968972,78.5025045,school,,,Arya bhatta high school
+node,7243959583,17.4947296,78.3412440,hospital,hospital,,Ankura Children hospital
+node,7243976033,17.4873202,78.3960641,clinic,clinic,,
+node,7243983833,17.4120759,78.3963750,school,,,Oasis School
+node,7244020892,17.3263516,78.2750511,hospital,hospital,,Yousuf Memorial Hospital
+node,7244022648,17.5019507,78.4159810,clinic,clinic,,
+node,7244033606,17.3674335,78.5219518,school,,,ravindra bharathi school
+node,7244033607,17.3685916,78.5187388,hospital,hospital,,konark diagonistic center
+node,7244052167,17.4103807,78.4640961,hospital,hospital,,
+node,7244059229,17.5422595,78.4744910,hospital,hospital,,
+node,7244061153,17.5421951,78.4908778,school,,,krishnaveni talent school
+node,7244114885,17.4176317,78.5095004,doctors,doctor,,
+node,7244114889,17.4176605,78.5098124,school,,,
+node,7244117129,17.4052548,78.5157027,school,,,
+node,7244119613,17.3290067,78.2730863,clinic,clinic,,
+node,7244173374,17.3715101,78.5321014,school,,,
+node,7244196872,17.3979094,78.5024885,school,,,Arya bhatta primary school
+node,7244207444,17.3270095,78.5748358,school,,,Ravindra Bharati High School
+node,7244233148,17.5339615,78.2673539,school,,,Sree Vani High School
+node,7244233149,17.5337495,78.2715024,school,,,St.Josephs high school
+node,7244233151,17.5315904,78.2678404,school,,,Nobel High School
+node,7244238251,17.4096832,78.5086124,school,,,
+node,7244238273,17.3679229,78.5753678,clinic,clinic,,
+node,7244256673,17.4971032,78.3604199,school,,,Castletown School
+node,7244271144,17.4946932,78.3563015,school,,,castle town school
+node,7244280426,17.4625304,78.3665492,clinic,clinic,,
+node,7244280427,17.4623813,78.3663888,clinic,clinic,,
+node,7244398147,17.4939370,78.3516280,hospital,hospital,,Dr.agarwals
+node,7244480650,17.3945320,78.4352772,hospital,hospital,,Dr. Moinuddin clinic
+node,7244480673,17.3931364,78.4365999,school,,,G. Pulla Reddy High School
+node,7244480674,17.3941834,78.4365354,school,,,G. Pulla Reddy High School grounds
+node,7244480682,17.3946261,78.4384798,hospital,hospital,,Vijaya Diagnostic Centre
+node,7246464274,17.5232027,78.4159559,school,,,Montridge high school
+node,7246495528,17.3364058,78.5698990,hospital,hospital,,Vijaya diagnostics
+node,7246516890,17.5008159,78.4160561,clinic,clinic,,
+node,7246517948,17.4866535,78.3912724,hospital,hospital,,saidatha homeo stores and clinic
+node,7246526405,17.4095685,78.5065485,school,,,
+node,7246588705,17.4138534,78.5072533,school,,,
+node,7246588706,17.4136595,78.5069595,school,,,
+node,7246588742,17.4131508,78.5077226,school,,,
+node,7246815474,17.3753441,78.5394986,clinic,clinic,,
+node,7248877409,17.4122574,78.3950198,,hospital,,Aditya Hospital
+node,7248877410,17.4202507,78.3852445,,hospital,,KIMS Hospital
+node,7314522148,17.4176725,78.5476721,school,,,IICT - Zaheer Memorial High School
+node,7357914981,17.4012737,78.4275969,school,,,"Kendriya Vidyalaya No 2, Golconda"
+node,7357915007,17.3973860,78.4294337,hospital,hospital,,Govt Hospital
+node,7375397983,17.3898991,78.5097805,school,,,Bharati Vidya Bhavan High School
+node,7379950133,17.4028481,78.4693012,school,,,Moulana Azad Memorial High School
+node,7402256575,17.4695820,78.3095514,school,,,Indus Junior School Gachibowli
+node,7402256576,17.4691367,78.3091048,school,,,Sri Chaitanya school
+node,7463187078,17.4943790,78.4597765,school,,,Chanakya high school
+node,7465741954,17.4927243,78.4597249,school,,,Netaji High School
+node,7466867163,17.3956490,78.3771932,clinic,clinic,,Baby Shield
+node,7466867172,17.3952113,78.3729247,clinic,clinic,,Rush Clinic
+node,7527829347,17.3485030,78.5097698,school,,,Vidya Dayini Pre-Primary School
+node,7536707190,17.4764818,78.5195832,school,,,Kendriya Vidyalaya Tirumalagiri
+node,7538785258,17.4754791,78.5241136,school,,,Army Public School R.K.Puram
+node,7569508528,17.4733858,78.5143242,clinic,clinic,,ECHS Polyclinic Secunderabad
+node,7570562854,17.4735595,78.5111989,school,,,Gowtham Model School
+node,7612889827,17.4956423,78.3660387,school,,,
+node,7642406390,17.4420497,78.5030995,school,,,St. Ann's School
+node,7695301887,17.3863127,78.3347650,school,,,Rockwell International School
+node,7796316997,17.4998649,78.4089739,clinic,clinic,,Peoples clinic
+node,7836546005,17.4969681,78.3576715,school,,,Zilla Parishad High School
+node,7850705781,17.3606803,78.5447518,clinic,,,Genesis Fertility Clinic
+node,7863571044,17.4969958,78.3592905,,doctor,,Sudhir Children Hospital
+node,7925585585,17.5164400,78.4457420,hospital,hospital,,Bhaskara Hospital
+node,7944691258,17.4860899,78.4218974,school,,,Kennedy High - The Magnet School
+node,7944691259,17.4860720,78.4221791,school,,,Kennedy Sparks - The Play School
+node,7969238161,17.4709623,78.4782064,school,,,CMR International School
+node,8007022925,17.4998816,78.3574735,hospital,hospital,,Tirumala Nursing home
+node,8017971023,17.2892300,78.6104289,school,,,Zilla Parishad Unnatha Paatashaala
+node,8044148228,17.3591366,78.4945773,hospital,,,FAITH HOSIPTAL
+node,8077237916,17.3578720,78.5054576,school,,,سکسیس اسکول
+node,8077291599,17.4004152,78.4634462,clinic,,,نتیا ڈائگنوسٹک سینٹر
+node,8082315379,17.4044163,78.4838359,hospital,hospital,,Raaj Hospital
+node,8111129868,17.4136015,78.5709491,school,,,PRM memorial school
+node,8113825642,17.4173173,78.5704271,school,,,CamRitz Global school's
+node,8113828214,17.4025191,78.3769564,school,,,Manikonda govt school
+node,8113834531,17.4492625,78.4473693,hospital,hospital,,Bharati Nursing Home
+node,8146706773,17.3832875,78.5189191,school,,,Tajweed Ul Quran
+node,8151182017,17.4939690,78.5130360,hospital,,,Sri sanjeevini
+node,8230992868,17.2996609,78.5854994,hospital,hospital,,
+node,8231011730,17.5149626,78.5558279,school,,,holy zion
+node,8233040768,17.4127316,78.5603678,school,,,St. Gabriels High School
+node,8233048690,17.4591866,78.5007832,hospital,hospital,,
+node,8233132093,17.4376777,78.5220997,hospital,hospital,,
+node,8233701014,17.3715670,78.5037063,school,,,Petros high school
+node,8233804190,17.3088672,78.4942526,hospital,hospital,,
+node,8233811325,17.3713436,78.5018929,hospital,hospital,,Osmania clinic
+node,8236632956,17.4402772,78.4975865,hospital,hospital,,
+node,8259012752,17.3810630,78.4393913,school,,,newgen
+node,8265698598,17.5301238,78.3941500,clinic,clinic,,Vijaya Diagnostic Centre
+node,8266193280,17.4030446,78.5096907,clinic,clinic,,Dr Dilip M Babu MD DM - Best Nephrologist and Kidney Transplant Physician in Hyderabad
+node,8266512342,17.4961631,78.3971193,clinic,clinic,,DR. RADHAKRISHNA RAO SAGI
+node,8341875302,17.4295550,78.4316903,clinic,clinic,,Dr. K Saketh
+node,8386049770,17.4390615,78.4979440,school,,,Tagores Home High School
+node,8386091372,17.4548184,78.5024140,school,,,Gandhian School
+node,8386143361,17.4352252,78.4597969,school,,,Chinmaya Vidyalaya High School
+node,8386162815,17.5149211,78.3975763,hospital,hospital,,Holistic Hospital
+node,8386186345,17.4923402,78.4615753,school,,,RSK High School
+node,8386235346,17.5184630,78.3968731,hospital,hospital,,People's Hospital
+node,8386246338,17.4967073,78.3453066,school,,,St Anns High School
+node,8386256231,17.5361942,78.4362911,hospital,hospital,,People's health care
+node,8386384789,17.5043769,78.3954655,school,,,Little flower grammar high school
+node,8386525202,17.4971052,78.4628956,school,,,
+node,8386539547,17.4930291,78.4635424,school,,,
+node,8386541466,17.5181688,78.3961112,clinic,clinic,,Kranthi Clinic
+node,8386577634,17.5379838,78.4385741,school,,,Medha concept school
+node,8386577635,17.5362360,78.4386962,school,,,Kriti concept school
+node,8386601183,17.4912635,78.3339391,school,,,Vidhya Vani High School
+node,8386603390,17.4362602,78.4602771,school,,,Niraj Kindergarten and Primary school
+node,8386636997,17.4915601,78.3344980,school,,,NSV High School
+node,8386643937,17.5070065,78.3951680,hospital,hospital,,VITAL'S Hospital
+node,8386662024,17.4890009,78.4557313,school,,,Rainbow Model School
+node,8386662025,17.4897485,78.4575508,school,,,Little Scholars School
+node,8386696887,17.4435951,78.5644031,school,,,Sai Ganesh High school
+node,8386696888,17.4432797,78.5654201,school,,,Sri Nikathan high school
+node,8386760066,17.4092966,78.5863887,school,,,
+node,8387157871,17.3914914,78.5113902,hospital,,,yashoda
+node,8387157872,17.3935058,78.5106935,clinic,clinic,,Rebreath
+node,8387539872,17.3578890,78.4615836,school,,,kasturibhai girls high school
+node,8389404098,17.3622482,78.4226420,clinic,clinic,,kvr polyclinic
+node,8389425005,17.4599288,78.4772272,school,,,Janaki Model High School
+node,8707260790,17.4020111,78.3727889,school,,,Arkaas Vignan School
+node,8733329871,17.5309010,78.2703493,,centre,,"Primary Health Centre, Patancheruvu"
+node,8733731577,17.4982790,78.3146178,hospital,hospital,,"Medicover Hospital ,Chandanagar"
+node,8733734629,17.4943209,78.3168615,hospital,hospital,,"Preeti Urology & Kidney Hospital ,BHEL, Lingampally"
+node,8739430485,17.3988443,78.3652937,hospital,hospital,,AMVI Hospital
+node,8739449727,17.3987165,78.3653000,hospital,hospital,,Dr Shaivalini - Gynecologist
+node,8745836201,17.3614317,78.5539533,hospital,,,Kamineni Hospital
+node,8747916250,17.3347442,78.5530454,hospital,,,Aware Global Hospitals
+node,8747920907,17.4940216,78.3227858,hospital,hospital,,Archana Hospital
+node,8747950688,17.4446234,78.3846590,hospital,hospital,,Hegde Hospital
+node,8748429666,17.4554623,78.3720097,hospital,hospital,,Rainbow Children Hospital
+node,8748452003,17.3641376,78.3947106,hospital,hospital,,DIVA Multispeciality Clinics
+node,8748479530,17.4940229,78.3470745,hospital,,,"Pace Hospitals ,Madinaguda"
+node,8751713608,17.4121129,78.4229918,hospital,,,Uchvaas Hospital
+node,8751748313,17.3137197,78.5609740,hospital,,,Bhrungi Hospitals
+node,8751762404,17.3138528,78.5084604,hospital,,,Chavan Hospitals
+node,8751771666,17.4644176,78.3682452,hospital,hospital,,Health Valley Hospital
+node,8751844086,17.3401158,78.5218500,hospital,hospital,,Viswas Hospital
+node,8752438466,17.4452004,78.5176255,,centre,,"Primary Health Centre, Addagutta"
+node,8752462013,17.3550623,78.4805278,,centre,,"Primary Health Centre, Aman Nagar"
+node,8752488549,17.4069072,78.4544528,,centre,,"Primary Health Centre, Chinthal Basthi"
+node,8752524746,17.3529233,78.4995662,,centre,,"Government Dispensary, Maddanapet"
+node,8752558360,17.4030022,78.4400949,,centre,,"Primary Health Centre, Syed Nagar"
+node,8752581282,17.4553024,78.4439774,,centre,,"Primary Health Centre, Sanath nagar"
+node,8752599874,17.3375004,78.4944847,,centre,,"Primary Health Centre, Uppuguda"
+node,8752624623,17.3944324,78.4502336,,centre,,"Primary Health Centre, Shanthinagar"
+node,8752649349,17.4296433,78.4975401,,centre,,"Primary Health Centre, Bhoiguda"
+node,8752669079,17.3706770,78.5085998,,centre,,"Primary Health Centre, Malakpet"
+node,8752674109,17.3834977,78.4739283,,centre,,"Primary Health Centre, Maharajhgunj"
+node,8752675325,17.3619725,78.4781769,,centre,,"Primary Health Centre, Panje Shah"
+node,8752711610,17.4283522,78.4251697,,centre,,"Primary Health Centre, Jubili Hills"
+node,8752713729,17.3968204,78.5178870,,centre,,"Primary Health Centre, Bagh Amberpet"
+node,8752754940,17.3188282,78.4816034,clinic,clinic,,"Urban Primary Health Centre, Maisaram"
+node,8752771701,17.3607315,78.4896608,,centre,,"Primary Health Centre, Yakhutpura"
+node,8752914428,17.3938680,78.5226426,hospital,,,Tricolour Hospital
+node,8759154274,17.3902616,78.4952250,hospital,,,Prathima Hospitals
+node,8759163871,17.3845228,78.4820151,hospital,,,"Government ENT Hospital ,Koti"
+node,8759169871,17.4753103,78.4857756,hospital,,,SKS Hospital
+node,8759181367,17.4416653,78.4860599,hospital,,,Navodaya Hospital
+node,8759230773,17.4012471,78.5636616,hospital,,,Tapadia Diagnostics Centre
+node,8759239032,17.4109164,78.4325190,hospital,,,Brinnova rehabilation centre
+node,8759254022,17.4041507,78.4798720,hospital,,,"Vijaya Diagnostic Centre, Himayatnagar"
+node,8759273395,17.4419494,78.4899303,hospital,,,Oasis Fertility Centre
+node,8759287302,17.4444622,78.5048595,hospital,,,Basant Sahney Hospital
+node,8759295434,17.4473703,78.5035922,doctors,,,Dr RajKumar
+node,8759319675,17.4263881,78.4204343,hospital,hospital,,Oasis Fertility Centre
+node,8759335242,17.3632288,78.5449317,hospital,,,Vasavi Hospital
+node,8759356830,17.4387520,78.4505019,hospital,,,Partha Dental Skin Hair Clinic
+node,8759371402,17.4102165,78.4612280,hospital,,,S L Diagnostic Center
+node,8759381105,17.4507108,78.3631503,hospital,hospital,,"Praba's VCare Health Clinic (P) Ltd, Gachibowli"
+node,8759435760,17.3535608,78.4745425,hospital,,,"Government Hospital, Suraj Bhan"
+node,8759456779,17.3794943,78.4105142,doctors,doctor,,"Government Unani Dispesary, Golconda Fort"
+node,8759483529,17.3331721,78.4572040,,centre,,"Primary Health Centre, Teegala Kunta"
+node,8759531975,17.3730487,78.4838444,hospital,,,Mina multi speciality Hospital
+node,8759630720,17.4535446,78.4206489,hospital,,,Dr Naveen Reddy Hospital
+node,8759707780,17.3867056,78.4950359,hospital,,,"Railway Health Unit, Kachiguda"
+node,8759738256,17.4401505,78.4936257,hospital,,,Madhava Nursing Home
+node,8759793396,17.3751644,78.4584881,,centre,,"Primary Health Centre, Dhoolpet Karwan"
+node,8759914845,17.3879374,78.4532820,,centre,,"Primary Health Centre, Nilofer"
+node,8760116367,17.3366261,78.4735172,,centre,,"Primary Health Centre, Jangammet"
+node,8760246825,17.4272659,78.4143269,hospital,hospital,,MAA E.N.T. Hospitals
+node,8760465202,17.5060522,78.5027862,,centre,,"Primary Health Centre, Alwal"
+node,8760484662,17.5117795,78.5619973,,centre,,"Primary Health Centre, Jawahar Nagar"
+node,8760519952,17.3951785,78.5908847,,centre,,"Primary Health Centre, Peerzadiguda"
+node,8760531340,17.5029283,78.4600049,,centre,,"Primary Health Centre, Quthbullapur"
+node,8760556897,17.4839128,78.4121141,,centre,,"Primary Health Centre, Kukatpally"
+node,8760582164,17.4905470,78.5780738,,centre,,"Primary Health Centre, Kushaiguda"
+node,8760595032,17.5385472,78.3574721,hospital,,,Mamata Academy of Medical Sciences Hospital
+node,8760672940,17.4853838,78.4109567,hospital,,,OMNI Hospitals
+node,8760787195,17.4557195,78.4992805,hospital,hospital,,Rainbow Children's Medicare Pvt Ltd
+node,8760794581,17.4855041,78.3908053,hospital,,,Remedy Hospitals
+node,8760858403,17.4384053,78.5551261,hospital,,,"Prasad Hospitals ,Nacharam"
+node,8760895243,17.4888400,78.4083858,hospital,,,Sivananda Rehabilitation Home
+node,8760905236,17.4908668,78.3970173,hospital,,,Cosmo Derma
+node,8760926820,17.4869463,78.3994145,hospital,,,Padmaja Hospital
+node,8760933526,17.4447130,78.4691593,hospital,,,Pathcare Labs Pvt Ltd
+node,8760959031,17.4058368,78.5875386,hospital,,,Save Hospitals
+node,8760982633,17.5057005,78.4670243,hospital,,,Srujana Hospitals
+node,8761004351,17.3582035,78.5444422,hospital,,,Paramitha Children's Hospital
+node,8763113701,17.4957164,78.4525108,hospital,,,Tesla Diagnostics
+node,8763119685,17.4919994,78.3972386,hospital,,,K K Reddy Hospital
+node,8763123207,17.4928129,78.3979990,hospital,,,Goutam Neuro Care
+node,8763135141,17.4881237,78.3949721,hospital,,,Dr. Rao's ENT Super Speciality International Hospital
+node,8763259938,17.3931001,78.5575394,hospital,,,Centre for DNA Fingerprinting and Diagnostics
+node,8763260113,17.5380971,78.3638048,hospital,,,Sri Swastik Multispeciality Hospital
+node,8763276400,17.4867461,78.5540117,hospital,,,Nandini Hospital
+node,8763316074,17.4951229,78.3574077,hospital,,,"Udbhava Hospital ,Miyapur"
+node,8763392113,17.4897846,78.6019260,hospital,,,Sri Dharani Multispeciality Hospital
+node,8763411325,17.5079988,78.5022081,hospital,,,Excel Hospitals
+node,8763496906,17.4847174,78.4129804,hospital,,,Ananya Hospital
+node,8763519730,17.4829023,78.4134217,hospital,,,People's Hospital
+node,8763591483,17.5281685,78.3625871,hospital,,,SLG Hospitals
+node,8763598296,17.4009873,78.5794678,hospital,,,Shree Healthcare Multi Specialty Hospital
+node,8763654917,17.5282650,78.4167523,,centre,,"Primary Health Centre, Gajularamaram"
+node,8763659815,17.5100631,78.4080076,,centre,,"Primary Health Centre, Yellamma Banda"
+node,8763665695,17.4624334,78.5585989,,centre,,"Primary Health Centre, Moula Ali"
+node,8866621215,17.3723374,78.5144147,school,,,St.Domnics High School
+node,8891813172,17.4274056,78.4321671,hospital,hospital,,Ferticare IVF Asist
+node,8891813179,17.4322005,78.4358526,school,,,Queens International School
+node,8891813182,17.4335295,78.4367135,school,,,Bright High School
+node,8891813191,17.4335454,78.4455624,school,,,Goutham Model School
+node,8892679284,17.4552127,78.4241456,school,,,Seven Hills Primary School
+node,8909212369,17.4343506,78.4882962,clinic,,,Fit Life Physiotherapy
+node,8909248529,17.4452155,78.4324096,hospital,hospital,,DTC TB Unit Erragadda
+node,8909248534,17.4461906,78.4310812,school,,,Netaji High School
+node,8909248538,17.4472339,78.4326449,hospital,hospital,,Dr.Vivek's Multispeciality Dental care
+node,8909248549,17.4467489,78.4304897,school,,,St Alphonsas High School
+node,8911008864,17.3892953,78.5105136,school,,,Twin Cities High School
+node,8941597911,17.4410576,78.4492145,clinic,clinic,,KL HEALTH CENTRE CLINIC
+node,8941817855,17.4475965,78.5089418,hospital,hospital,,Shakti Ayurvedic Clinic
+node,8947827817,17.4914296,78.6013911,school,,,St. Mary's Bethany Convent Vidyalaya High School
+node,9034953268,17.4092904,78.5536369,school,,,
+node,9121973774,17.4916840,78.3973849,clinic,clinic,,Viha Ortho Care
+node,9131094943,17.4558871,78.5051143,school,,,FIITJEE WORLD SCHOOL
+node,9355590863,17.4801489,78.5121788,hospital,hospital,,
+node,9369549952,17.4527375,78.5648775,hospital,hospital,,Rahul Meidials
+node,9369555762,17.4527443,78.5647251,hospital,hospital,,Nandini
+node,9369819271,17.4632492,78.5615635,hospital,hospital,,vijaya diagonistics
+node,9369819272,17.4622327,78.5587486,hospital,hospital,,Government uphc
+node,9391261140,17.4274216,78.5517653,hospital,hospital,,
+node,9527080374,17.3532901,78.5589741,hospital,hospital,,kamineni
+node,9605300296,17.4871306,78.3154653,school,,,Narayana school
+node,9605387513,17.4881418,78.3165807,school,,,sainath grammar school
+node,9605389618,17.4940583,78.3212245,hospital,hospital,,Chenna reddy hospital
+node,9605465495,17.2975367,78.4460149,hospital,hospital,,
+node,9611895277,17.4380010,78.4563763,hospital,hospital,,
+node,9679093983,17.4366107,78.6038388,hospital,hospital,,Rikshith medical
+node,9679094420,17.4303963,78.6084753,school,,,St.petter's school
+node,9679094425,17.4313047,78.6086034,school,,,BMRS school
+node,9679249343,17.4161166,78.5176108,school,,,Sree Balaji High School
+node,9679249350,17.4221696,78.5172525,school,,,Kakatiya School
+node,9697294232,17.3325990,78.5735649,clinic,clinic,,Dr Jalapathi Reddy Mandala
+node,9708882625,17.3485722,78.5088044,school,,,bhashyam high school
+node,9713101785,17.4398892,78.3326889,school,,,goldcrest school
+node,9713299968,17.4862742,78.3176848,school,,,ZPHS School
+node,9728614166,17.5026194,78.4207649,hospital,hospital,,balaji hospital
+node,9729514460,17.5018342,78.4201827,school,,,
+node,9729514477,17.4999079,78.4198627,school,,,sri nagarjuna vidhyalaya high school
+node,9729514478,17.4993906,78.4194064,school,,,Akshara high school
+node,9821760031,17.5131429,78.5023071,school,,,
+node,9852600026,17.3646406,78.4286144,hospital,hospital,,PRAANAA PAIN CLINIC
+node,9870554869,17.4113015,78.5859926,hospital,hospital,,Vijaya Diagnostics Center
+node,9885051455,17.3758779,78.4882815,school,,,
+node,9885051475,17.3773268,78.4863801,school,,,Arya Samaj School
+node,9885108780,17.3506304,78.4730264,social_facility,,,Meeseva
+node,9887289837,17.5192200,78.3778869,school,,,
+node,9887289856,17.5249116,78.3583661,school,,,Surya The global School
+node,9903766083,17.5202442,78.4321214,school,,,CMR Model High School
+node,9903766085,17.5169514,78.4376703,clinic,clinic,,Shivaji clinic
+node,9903766092,17.5179644,78.4351629,school,,,Noori high school
+node,9903766094,17.5187323,78.4357834,clinic,clinic,,Bhavani clinic
+node,9903766095,17.5196726,78.4355488,school,,,Sadhana High School
+node,9903766101,17.5171310,78.4377964,clinic,clinic,,Kauser Clinic
+node,9903766102,17.5165730,78.4381809,clinic,clinic,,Dr.Anil Kumar Clinic
+node,9903794520,17.5134563,78.4419843,clinic,clinic,,Manasa Clinic
+node,9903794531,17.5182343,78.4361548,clinic,clinic,,First Aid Clinic
+node,9903794542,17.5147227,78.4350569,school,,,Zaamin High school
+node,9903887133,17.5134257,78.4258424,clinic,clinic,,
+node,9903887134,17.5135662,78.4260851,clinic,clinic,,
+node,9903887136,17.5136466,78.4260970,clinic,clinic,,
+node,9903919151,17.4287042,78.5182344,hospital,hospital,,
+node,9903987802,17.5020423,78.3889444,hospital,hospital,,sri sri holistic hospitals
+node,9913821024,17.3988385,78.4480873,school,,,Brilliant Grammar High School
+node,9913821065,17.3781457,78.4369801,school,,,Sri Gayatri School
+node,9913821067,17.3802769,78.4394986,school,,,Vivekananda School
+node,9918767489,17.5193550,78.4436707,clinic,clinic,,Shifa Clinic
+node,9919114778,17.4700540,78.4782916,doctors,doctor,,People's Hospital
+node,9923836905,17.4241607,78.5252336,clinic,clinic,,Health center
+node,9924565993,17.4434504,78.5461318,hospital,hospital,,Railway hospital
+node,10019985224,17.3697332,78.4231754,school,,,"Sri Chaitanya School, Hyderguda"
+node,10020074718,17.3739106,78.4518668,school,,,Bharathi Vidya Nikethan School
+node,10075681247,17.3302879,78.4868622,school,,,Vikas High School
+node,10087214571,17.3759689,78.4973599,hospital,,,آئی کیئر حیدرآباد (سپر اسپیشلٹی آئی ہسپتال)
+node,10112896286,17.3836203,78.4292848,hospital,,,Mythri Hospital
+node,10139228459,17.3932979,78.4261156,hospital,hospital,,Vinayaka Nethralaya Eye Hospital
+node,10150942414,17.4605484,78.3547514,hospital,hospital,,
+node,10171040905,17.3272568,78.5542394,school,,,
+node,10277755873,17.4628046,78.5619053,hospital,hospital,,
+node,10277927480,17.4359366,78.5426952,hospital,hospital,,hs
+node,10277936648,17.3063269,78.4396489,school,,,Sri Narayana School
+node,10279304203,17.3626729,78.4439258,school,,,newton mission high school
+node,10279481517,17.3597495,78.4415722,school,,,School Ground
+node,10279481519,17.3616764,78.4419501,school,,,Vidya Bharthi High School
+node,10279481534,17.3607193,78.4408817,hospital,hospital,,
+node,10279635962,17.3678395,78.5276888,school,,,
+node,10279859230,17.3304195,78.5685815,clinic,clinic,,Dr Jaipal Rao Hosiptal
+node,10707719605,17.4146159,78.4539247,hospital,,,Avinash child hospital
+node,10764939253,17.3779976,78.4480818,school,,,New Eden school
+node,10764939266,17.3748745,78.4489018,school,,,Jasmin Techno School
+node,10764943817,17.3770917,78.4479994,clinic,clinic,,Al-kahar clinic
+node,10764957371,17.5154432,78.4434380,school,,,ZPHS(Zilla parishath highh school)
+node,10790318146,17.4310175,78.3716983,hospital,hospital,,Dr Agarwals Eye Hospital
+node,10810253919,17.4913757,78.5991521,hospital,hospital,,Trinity Hospital
+node,10817244976,17.3625560,78.5224832,hospital,hospital,,
+node,10823515049,17.3550826,78.5574399,school,,,
+node,10836262027,17.3780049,78.4388440,school,,,Governament School
+node,10836262034,17.3803567,78.4397296,school,,,Newgen High School
+node,10898562903,17.4001540,78.5405264,hospital,hospital,,
+node,10903111577,17.3304340,78.5771314,clinic,clinic,,durga clinic
+node,10907520061,17.3502290,78.4928705,clinic,clinic,,"Urban Primary Health Centre, Edi Bazar"
+node,10959100965,17.4410992,78.5720791,hospital,hospital,,Sri rama clinic
+node,10959100988,17.4426793,78.5725688,school,,,Government school ground
+node,10960930967,17.3918203,78.5034232,clinic,clinic,,"Urban Primary Health Centre, Harrajpenta"
+node,10963348327,17.3185122,78.4516858,clinic,clinic,,"Primary Health Centre, Myladeverpally"
+node,10969295449,17.3726544,78.4988125,doctors,doctor,,"Government Unani Dispensary, Kachiguda"
+node,10969330843,17.4388301,78.5418700,hospital,hospital,,"Community Health Centre, Lalapet"
+node,10969445652,17.4802117,78.5114615,clinic,clinic,,"Urban Primary Health Centre, Trimulgherry"
+node,10970003770,17.3923182,78.4624848,hospital,hospital,,
+node,10977975644,17.4338580,78.5229604,doctors,doctor,,"Government Ayurvedic Dispensary, Chilakalguda"
+node,10978601404,17.4946616,78.3988543,clinic,clinic,,"Urban Primary Health Centre, Kukatpally"
+node,10979651240,17.4362942,78.4883948,clinic,clinic,,"Urban Primary Health Centre, Chuttalbasthi"
+node,10980671499,17.3558969,78.4616853,clinic,clinic,,"Urban Primary Health Centre, Doodbowli"
+node,10981832890,17.5183467,78.4360380,clinic,clinic,,"Urban Primary Health Centre, Gajula Ramaram"
+node,10981866571,17.3473818,78.5165311,doctors,doctor,,"Govt. Unani Dispensary, Champapet"
+node,10988874811,17.3751400,78.4704535,clinic,clinic,,"Urban Primary Health Centre, Begum Bazar"
+node,10989307976,17.3756469,78.4377868,doctors,doctor,,"Government Ayurvedic Dispensary, karwran"
+node,10989320886,17.4294258,78.4128852,clinic,clinic,,"Urban Primary Health Centre, Jubilee Hills"
+node,10989338873,17.4431993,78.5215310,clinic,clinic,,"Urban Primary Health Centre, Addagutta"
+node,10989359035,17.3921953,78.5178213,hospital,hospital,,"Community Health Centre, AMBERPET"
+node,10989394708,17.5269254,78.2674210,doctors,doctor,,"Government Homoeo Dispensary, Area Hospital, Patanchervu (NRHM)"
+node,10989937724,17.4445006,78.5324286,clinic,clinic,,"Primary Health Center, Malkajgiri"
+node,10991105550,17.3826702,78.4895569,doctors,doctor,,"Government Ayurvedic Dispensary, Esamayabazar"
+node,10991122259,17.3700946,78.4553151,clinic,clinic,,"Primary Health Centre, Batpally"
+node,10991125156,17.5062095,78.5051076,doctors,doctor,,"Government Unani Dispensary, Dundigal"
+node,10991133880,17.3631392,78.4772287,clinic,clinic,,"Urban Primary Health Centre, Panjesha-1"
+node,10991148282,17.3414205,78.4737962,clinic,clinic,,"Urban Primary Health Centre, Aliyabad"
+node,10991379681,17.5138189,78.2883202,clinic,clinic,,"Urban Primary Health Centre, Jadcherla"
+node,10991411820,17.3670329,78.5242157,clinic,clinic,,"Urban Primary Health Centre, Gaddianaram"
+node,10991419156,17.4761785,78.3582269,clinic,clinic,,"Urban Primary Health Centre, Warangal-1 (New Peddammagadda)"
+node,10992582390,17.4570001,78.3993991,clinic,clinic,,Urban Health Centre Parvathnagar (Urban)
+node,10993267945,17.3314694,78.5652052,hospital,hospital,,Area Hospital
+node,10994456803,17.4372081,78.4765585,clinic,clinic,,"Urban Primary Health Centre, Gareeb Nagar"
+node,10994481193,17.4273299,78.4992443,clinic,clinic,,"Urban Primary Health Centre, Bhoiguda"
+node,10994494527,17.4835981,78.3870904,clinic,clinic,,"Urban Primary Health Centre, Hasmathpet"
+node,10994567639,17.3639026,78.4595440,clinic,clinic,,"Urban Primary Health Centre, Puranapool-1"
+node,11001478580,17.4207555,78.4986489,clinic,clinic,,"Urban Primary Health Centre, Bholakpur"
+node,11001492840,17.4231539,78.4971130,doctors,doctor,,"Government Unani Dispensary, Secunderabad"
+node,11001495387,17.4302213,78.5107232,clinic,clinic,,"Urban Primary Health Centre, Chilakalguda"
+node,11001513668,17.4265349,78.5192979,hospital,hospital,,"Community Health Centre, Seethaphalmandi"
+node,11001517796,17.4340992,78.5232230,clinic,clinic,,"Urban Primary Health Centre, Mettuguda"
+node,11001518575,17.4214334,78.5115295,clinic,clinic,,"Urban Primary Health Centre, Mohammedguda"
+node,11001533718,17.4284047,78.4979703,clinic,clinic,,"Urban Primary Health Centre, Bible House"
+node,11001534025,17.4137227,78.4911923,hospital,hospital,,Sarojini Devi EYE Hospital
+node,11001535091,17.4328626,78.4871744,clinic,clinic,,"Urban Primary Health Centre, Dr.Paul Das"
+node,11001538902,17.4146415,78.4981553,clinic,clinic,,"Urban Primary Health Centre, Musheerabad"
+node,11001542598,17.4439108,78.5213253,clinic,clinic,,"Urban Primary Health Centre, Tukaramgate"
+node,11001543630,17.4348048,78.4901328,clinic,clinic,,"Urban Primary Health Centre, Pan Bazar"
+node,11001544010,17.4504805,78.5321201,hospital,hospital,,AREA HOSPITAL MALKAJGIRI
+node,11001545015,17.4343640,78.5015624,doctors,doctor,,"Government Homoeo Dispensary, OLD MLA Qtrs"
+node,11002043329,17.3589331,78.5482965,clinic,clinic,,"Urban Primary Health Centre, Krishna Nagar, Sarrornagar"
+node,11005197974,17.3979133,78.5310178,hospital,hospital,,"DK Govt Homoeopathic Hospital, Ramanthapur, Hyd"
+node,11005234819,17.4571819,78.5310394,clinic,clinic,,Urban Primatry Health Centre Ekalavya Nagar
+node,11005285178,17.4578291,78.5376106,clinic,clinic,,Primary Health Centre Malkajgiri (Urban)
+node,11005951281,17.4448127,78.4219109,hospital,hospital,,CHC KHAIRATABAD
+node,11005968512,17.4395184,78.4239332,doctors,doctor,,"Government Ayurveda Dispensary, Jawhar Nagar (NRHM)"
+node,11005968513,17.4485486,78.4248854,hospital,hospital,,"Community Health Centre, AMEERPET"
+node,11005970307,17.4492190,78.4230964,clinic,clinic,,"Urban Primary Health Centre, Sriram Nagar"
+node,11009821053,17.3500344,78.5598827,school,,,kakathiya techno School
+node,11010061589,17.4979765,78.4622633,clinic,clinic,,"Urban Primary Health Centre, Nagole"
+node,11010078416,17.4087397,78.5026775,doctors,doctor,,"Govt.Unani Dispensary, Patloor"
+node,11010099007,17.5063246,78.5042332,clinic,clinic,,Primary Health Centre Alwal
+node,11018919100,17.3973016,78.3354498,doctors,doctor,,"Government Poly Clinic (Unani), Saroornagar"
+node,11018944037,17.3260771,78.2751565,doctors,doctor,,"Government Ayurveda Dispenary,Moinadad (NRHM)"
+node,11018964665,17.3340862,78.3012946,doctors,doctor,,"Government Homoeo Dispensary, OU Campus"
+node,11018975141,17.3509661,78.2860355,doctors,doctor,,"Govt. Homoeo Dispensary, Chilkur"
+node,11018982181,17.4354113,78.3010988,doctors,doctor,,"Government Unani Dispesary, O. U. Campus"
+node,11021349280,17.4163843,78.3926882,clinic,clinic,,"Urban Primary Health Centre, Raidarga, Serilingampally"
+node,11021368402,17.4254925,78.4359361,clinic,clinic,,"Urban Primary Health Centre, Showkath Nagar"
+node,11021368403,17.4138251,78.4396832,clinic,clinic,,"Urban Primary Health Centre, Banjara Hills"
+node,11021399428,17.4163204,78.4084757,clinic,clinic,,"Urban Primary Health Centre, Film Nagar"
+node,11021626033,17.3511632,78.3777858,clinic,clinic,,"Urban Primary Health Centre, Bandlaguda Jagir"
+node,11023057485,17.3473229,78.5081519,doctors,doctor,,"Government Homoeo Dispensary, Santhosh Nagar"
+node,11024113316,17.4823881,78.5690729,clinic,clinic,,"Primary Health Center, Kushaiguda"
+node,11024124921,17.4457902,78.5765503,clinic,clinic,,Urban Primary Health Centre Mallapur (Urban)
+node,11027212874,17.5396853,78.4375187,clinic,clinic,,"Urban Primary Health Centre, Suraram Colony"
+node,11027230830,17.3984329,78.4614037,clinic,clinic,,"Urban Primary Health Centre, Niloufer"
+node,11027286314,17.3273676,78.5213269,clinic,clinic,,"Urban Primary Health Centrer, Meerpet"
+node,11027534552,17.4317717,78.4455728,hospital,hospital,,Shishira hospitals
+node,11027534558,17.4319921,78.4460360,clinic,clinic,,Pareena Eye care center
+node,11027534563,17.4314966,78.4473474,hospital,hospital,,Image Hospital
+node,11027534564,17.4302495,78.4487075,hospital,hospital,,Medkid children's hospital
+node,11027996625,17.3213427,78.5737856,clinic,clinic,,"Urban Primary Health Centre, Ranganayakula Gutta, Hayathnagar"
+node,11028194228,17.3578067,78.4986596,clinic,clinic,,"Urban Primary Health Centre, Madannapet"
+node,11028219397,17.3639917,78.4963100,clinic,clinic,,
+node,11028230881,17.3730794,78.4901865,clinic,clinic,,"Urban Primary Health Centre, Malakpet"
+node,11028244334,17.3849593,78.4891351,clinic,clinic,,"Urban Primary Health Centre, RFPTC"
+node,11028245894,17.3771853,78.4894301,clinic,clinic,,"Urban Primary Health Centre, Azampura"
+node,11028255847,17.3816956,78.4885825,clinic,clinic,,"Urban Primary Health Centre, Esamia Bazar"
+node,11030101369,17.3540126,78.5314657,doctors,doctor,,"Government Ayurveda Dispenary, Saroornagar (NRHM)"
+node,11030884944,17.3589920,78.5244222,clinic,clinic,,"Urban Primary Health Centre, Champapet Ph-II, Saroornagar"
+node,11030887961,17.3642323,78.5378413,clinic,clinic,,"Urban Primary Health Centre, Kothapet, Harijanawada, Saroornagar"
+node,11037390233,17.3656326,78.4855731,clinic,clinic,,"Urban Primary Health Centre, Dabeerpura"
+node,11037397227,17.3574611,78.4871985,clinic,clinic,,"Urban Primary Health Centre, Aman Nagar"
+node,11037398543,17.3707883,78.4810616,clinic,clinic,,"Urban Primary Health Centre, Darulshifa"
+node,11037401937,17.3739753,78.4832744,clinic,clinic,,"Urban Primary Health Centre, Jambaghpark"
+node,11037405943,17.3594784,78.4852226,clinic,clinic,,"Urban Primary Health Centre, Yakhutpura-1"
+node,11037406356,17.3881947,78.4644909,clinic,clinic,,"Urban Primary Health Centre, Aghapura"
+node,11037414562,17.3814192,78.4676747,clinic,clinic,,"Urban Primary Health Centre, Maharajgunj"
+node,11039692829,17.5113638,78.5598944,clinic,clinic,,Primary Health Centre Jawaharnagar
+node,11039713496,17.4623988,78.5619839,doctors,doctor,,"Government Unani Dispensary, Moulali,"
+node,11039714274,17.4686391,78.5406442,clinic,clinic,,Urban Primary Health Centre Vinayaknagar (Urban)
+node,11050792292,17.4563251,78.4424116,clinic,clinic,,Cygnet Superspeciality Clinics
+node,11082456129,17.4566753,78.4115501,hospital,hospital,,Maholla Clinic
+node,11082456132,17.4564341,78.4103806,hospital,hospital,,Mohammadi Clinic
+node,11082456140,17.4569367,78.4090537,school,,,Little Birds School
+node,11082456175,17.4559370,78.4102699,school,,,Kenworld High School
+node,11082456195,17.4549480,78.4087256,school,,,Tirumala High School
+node,11098927505,17.3934464,78.5365962,hospital,,,Susheela Hospital
+node,11098927905,17.3927523,78.5366562,school,,,Zilla Parishat High School
+node,11099726105,17.3944089,78.5337806,school,,,Bala Bharathi High School
+node,11330792641,17.4245950,78.4566843,clinic,clinic,,Dr. Kiran Lingutla
+node,11361075611,17.4946400,78.3850736,school,,,St. Mary’s High School
+node,11365536218,17.3373490,78.4680874,hospital,hospital,,
+node,11365536232,17.3403461,78.4696002,school,,,Sri Chaitanya School
+node,11365536259,17.3400659,78.4731667,school,,,Thakshashila HIgh School
+node,11365628296,17.3371624,78.4737816,school,,,Govt Girls High School  And College
+node,11365804003,17.3399877,78.4735935,school,,,Saraswati vidhya mandir
+node,11373156770,17.4243475,78.6025211,school,,,Meridian School - Uppal
+node,11484345699,17.4839859,78.3468247,,hospital,,Kinige Digital Technologies pvt ltd near Hospital
+node,11485649083,17.5153623,78.2985339,school,,,Sai High School
+node,11489967865,17.5458731,78.3359459,hospital,hospital,,
+node,11502921958,17.4113108,78.5645025,clinic,clinic,,Dr.Shyam's Spine Ortho & Neuro Polyclinic's
+node,11597432752,17.3677496,78.5426995,clinic,clinic,,"Godha Spine, Ortho & Polyclinic"
+node,11646727019,17.4019228,78.5101448,clinic,clinic,,"Urban Primary Health Centre, A.M.S"
+node,11690468635,17.3147451,78.6007159,hospital,hospital,,appolo medical shop1
+node,11690468802,17.3180653,78.5981505,school,,,
+node,11690757386,17.3585027,78.5438557,school,,,vidyanjali grammar schools
+node,11690983148,17.4750817,78.5513048,clinic,clinic,,Medical diagnostics
+node,11691161379,17.4754793,78.5514064,clinic,clinic,,SRI Venkateshwara Cinic
+node,11722129850,17.3668254,78.4622663,doctors,doctor,,"Government Unani Dispesary, Fathedaraaza"
+node,11736376192,17.4915484,78.3910656,hospital,hospital,,JNTU Hospital
+node,11747726722,17.4117422,78.4595945,doctors,doctor,,"Government Unani Dispensary, Saifabad"
+node,11770988839,17.4364246,78.3675806,hospital,hospital,,Omega Hospitals
+node,11770993373,17.4771569,78.4204028,hospital,hospital,,Amar Hospitals
+node,11770993380,17.4622687,78.3841760,hospital,hospital,,Yashoda Hospitals
+node,11821271825,17.4538625,78.4217520,hospital,hospital,,Sunridge Multi-Speciality Hospital
+node,11917332899,17.4010563,78.4555965,clinic,clinic,,"Urban Primary Health Centre, Shanthi Nagar"
+node,11921464277,17.5008159,78.4577277,clinic,clinic,,Urban Primary Health Centre Quthbullapur Village
+node,11921493915,17.3097376,78.4869005,clinic,clinic,,"Urban Primary Health Centre, Kothapet"
+node,11925953631,17.3841667,78.4562354,hospital,hospital,,D.K.GOVT. HOMOEO HOSPITAL
+node,11930063266,17.4062163,78.4368087,clinic,clinic,,"Urban Primary Health Centre, Syed Nagar"
+node,11930083525,17.3388251,78.4594635,clinic,clinic,,"Urban Primary Health Centre, Jahanuma"
+node,11930098383,17.3378976,78.4855397,clinic,clinic,,"Urban Primary Health Centre, Uppuguda"
+node,11930116019,17.4577166,78.4023645,clinic,clinic,,"Urban Primary Health Centre, Parvathi Nagar"
+node,11930207339,17.4290410,78.6170054,doctors,doctor,,"Government Unani Dispensary, Narapally (NRHM)"
+node,11930213438,17.3479535,78.4771227,clinic,clinic,,"Urban Primary Health Centre, Balagunj"
+node,11930235761,17.3317054,78.5754407,doctors,doctor,,"Govt. Homoeo Dispensary, Vanasthalipuram"
+node,11930238731,17.3518841,78.4599180,clinic,clinic,,"Urban Primary Health Centre, Chandulal Baradari"
+node,11930244808,17.3916885,78.4989544,clinic,clinic,,"Urban Primary Health Centre, Tandur"
+node,11930253631,17.4806758,78.4198371,clinic,clinic,,"Urban Primary Health Centre, Moosapet"
+node,11930815604,17.4633289,78.3529150,doctors,doctor,,"Government Ayurvedic Dispensary, Kondapur(NRHM)"
+node,11931079727,17.3860340,78.4596586,clinic,clinic,,"Urban Primary Health Centre, Afzal Sagar"
+node,11931097584,17.3576473,78.4620031,clinic,clinic,,"Urban Primary Health Centre, Umda Bazar"
+node,11931156246,17.3336415,78.4295286,clinic,clinic,,Urban Health Centre  Shivarampally
+node,11932472192,17.4550307,78.4112509,clinic,clinic,,"Urban Primary Health Centre, Vinayak Nagar"
+node,11932505648,17.5011464,78.3851614,clinic,clinic,,"Urban Primary Health Centre, Safilguda"
+node,11932511469,17.4973462,78.4230078,clinic,clinic,,"Urban Primary Health Center, Deenabandu colony"
+node,11934109534,17.4412713,78.4487486,doctors,doctor,,"Government Homoeo Dispensary, Ameerpet"
+node,11934131772,17.5260090,78.2672326,clinic,clinic,,"Primary Health Centre, RHC Patancheru"
+node,11934273832,17.3539344,78.4558855,clinic,clinic,,"Urban Primary Health Centre, Kamatipura"
+node,11934311883,17.4487092,78.4338427,hospital,hospital,,"Government Ayurvedic Hospital, Erragadda, Hyderabad"
+node,11934351636,17.3618702,78.4656310,clinic,clinic,,"Urban Primary Health Centre, Taramaidan"
+node,11935458418,17.3203486,78.4018045,hospital,hospital,,Community Health Centre Rajendranagar
+node,11936085021,17.3900490,78.4811485,clinic,clinic,,"Urban Primary Health Centre, Boggulakunta"
+node,11936118775,17.5274180,78.2674368,doctors,doctor,,"Government Ayurveda Dispensary, Area Hospital, Patanchervu (NRHM)"
+node,11936156147,17.3144808,78.4831721,hospital,hospital,,"Community Health Centre, BARKAS"
+node,11936158149,17.3986812,78.4610376,hospital,hospital,,Niloufer Hospital
+node,11936184186,17.3920110,78.4631951,doctors,doctor,,"Government Unani Dispesary, Nampally"
+node,11936188469,17.5567236,78.3472293,clinic,clinic,,"Primary Health Centre, Bollaram"
+node,11936432679,17.3960012,78.5166568,clinic,clinic,,"Urban Primary Health Centre, Bagh Amberpet"
+node,11936638169,17.3975018,78.4293977,hospital,hospital,,"Area Hospital, Golconda"
+node,11936665895,17.4087162,78.4861473,clinic,clinic,,"Urban Primary Health Centre, Gagan Mahal"
+node,11936671649,17.4454284,78.4349590,hospital,hospital,,Government Chest Hospital
+node,11936689756,17.3276718,78.4800924,clinic,clinic,,"Urban Primary Health Centre, Barkas"
+node,11936728726,17.4024775,78.5612475,clinic,clinic,,Primary Health Centre Uppal
+node,11937396786,17.3339005,78.4571412,clinic,clinic,,"Urban Primary Health Centre, Teegalkunta"
+node,11937453995,17.5141582,78.4250398,clinic,clinic,,"Urban Primary Health Center, Jeedimetla, Quthbullapur"
+node,11937489795,17.3684615,78.4674183,hospital,hospital,,"MG Govt Maternity Hospital, Petla Burz"
+node,11937535962,17.4050050,78.4738832,doctors,doctor,,"Government Ayurvedic Dispensary, Secretariate"
+node,11938066474,17.4777191,78.4787375,doctors,doctor,,"Government Homoeo Dispensary, Old Bowenpally"
+node,11938078386,17.3377885,78.4425920,clinic,clinic,,Urban Primary Health Centre HASSAN NAGAR
+node,11938175021,17.3285147,78.5388646,clinic,clinic,,"Urban Primary Health Centre, Nandanavanam, Sarrornagar"
+node,11938602461,17.5122039,78.4084660,clinic,clinic,,"Urban Primary Health Centre, Mancherial"
+node,11938622049,17.3922440,78.4601927,hospital,hospital,,MNJ Institute of Oncology and Regional Cancer Center
+node,11938626927,17.4078747,78.6022666,clinic,clinic,,"Urban Primary Health Centre, Peerjadiguda"
+node,11938631250,17.5216284,78.5162616,clinic,clinic,,"Urban Primary Health Centre, Bollarum"
+node,11938756790,17.3665926,78.4240150,doctors,doctor,,"Govt. Ayurvedic Dispensary, Hyderguda"
+node,11938915093,17.3251835,78.5721615,clinic,clinic,,"Urban Primary Health Centre, Saheb Nagar, Harijanawada, Hayathnagar"
+node,11938974688,17.4009612,78.5711696,doctors,doctor,,"Govrnment Unani Dispensary, Uppalkalan"
+node,11939112887,17.3552543,78.4431928,clinic,clinic,,"Urban Primary Health Centre, Kishan Bagh"
+node,11939197133,17.4139024,78.5856536,clinic,clinic,,"Urban Primary Health Centre, Subahs Nagar"
+node,11939462297,17.3922502,78.5085145,clinic,clinic,,"Urban Primary Health Centre, Tilak Nagar"
+node,11940064177,17.4527470,78.4434730,clinic,clinic,,"Urban Primary Health Centre, Sanath Nagar"
+node,11940092750,17.4506724,78.4361121,hospital,hospital,,Institute of Mental Health
+node,11940098996,17.4795998,78.3208883,doctors,doctor,,"Government Homoeo Dispenary, Serlingampally (NRHM)"
+node,11940114883,17.4073576,78.4567152,clinic,clinic,,"Urban Primary Health Centre, Chintal Basthi"
+node,11940167137,17.4908954,78.4412909,clinic,clinic,,"Urban Primary Health Centre, Jagadgirigutta"
+node,11940214216,17.4418967,78.4481001,clinic,clinic,,"Urban Primary Health Centre, Ameerpet"
+node,11940225530,17.3188464,78.4816446,doctors,doctor,,"Government Unani Dispesary, Misaram"
+node,11940270256,17.3871159,78.4527871,clinic,clinic,,"Urban Primary Health Centre, Kummarwadi"
+node,11941188911,17.3915031,78.4527388,doctors,doctor,,"Government Unani Dispensary, Mustidpura"
+node,11941197035,17.3513438,78.3805627,clinic,clinic,,"Urban Primary Health Centre, Bandlaguda"
+node,11941292390,17.3627476,78.4154946,clinic,clinic,,"Urban Primary Health Centre, Upperpally, Rajendranagar"
+node,11942015614,17.3164365,78.4490830,clinic,clinic,,Urban Primary Health Centre Mailardevpally
+node,11942191384,17.5270508,78.5366812,clinic,clinic,,"Urban Primary Health Centre, Macha Bollaram"
+node,11942389940,17.3517789,78.5679162,clinic,clinic,,Urban Primary Health Centre  Mansoorabad (Urban)
+node,11942434457,17.3833133,78.4010597,clinic,clinic,,"Urban Primary Health Centre, Golconda"
+node,11942628759,17.4667384,78.4886785,clinic,clinic,,Southern Regional Centre of AYJNIHH (Secunderabad)
+node,11942629822,17.3913867,78.4783334,clinic,clinic,,"Urban Primary Health Centre, Sultan Bazar"
+node,12185383852,17.3951477,78.4556625,hospital,hospital,,MK Dentistry
+node,12245832501,17.3934767,78.4551210,school,,,"Government High School, Vijayanagar Colony"
+node,12245832601,17.3799762,78.4831120,school,,,Vivek Vardhini Kanyashala School
+node,12289411655,17.3667392,78.5811285,hospital,hospital,,Swasthya Dental Clinic
+node,12325590356,17.4024844,78.4116857,clinic,clinic,,The Orthopod - Bone and Joint Clinic
+node,12404643201,17.4048423,78.5104584,clinic,,,Scope Laboratories Super Specialty Diagnostics
+node,12404643202,17.4049028,78.5104807,clinic,,,VisionExpress Opticians
+node,12410904323,17.5112388,78.4062417,school,,,Sri Nagarjuna Vidyalaya
+node,12486242066,17.4612688,78.4924255,clinic,clinic,,Abhinay Krishna Speciality Clinic
+node,12536226054,17.4754498,78.5681603,hospital,,,SK + Diagnostics
+node,12565848764,17.3535776,78.4745244,hospital,hospital,,
+node,12581496078,17.4143356,78.4465237,clinic,clinic,,KL Spine Surgeon
+node,12588996736,17.4694791,78.3622432,doctors,doctor,,"Elite Aesthetics Skin, Hair Care Clinics, Kondapur"
+node,12593994801,17.4374845,78.5537555,school,,,Johnson Grammar School ICSE/ICE
+node,12593997001,17.5309797,78.4236014,school,,,"Tatva Global School, Gajularamaram"
+node,12593999001,17.5291439,78.4246653,school,,,New Era The Lead School
+node,12596325982,17.4941991,78.3365878,school,,,genesis school
+node,12596351177,17.5425615,78.3648434,school,,,silver oaks school
+node,12596397523,17.5407025,78.3584626,school,,,kennedy school
+node,12603721115,17.5309792,78.4235992,school,,,Tatva Global School
+node,12669348711,17.4865279,78.4497546,hospital,hospital,,Revive Multispeciality Hospital
+node,12852366410,17.3959816,78.5299056,hospital,hospital,,Sai charan Children's hospital
+node,12852371077,17.3943514,78.5299096,hospital,hospital,,Janani infertility center
+node,12854636891,17.5060153,78.4283221,clinic,clinic,,Jahnavi Clinic
+node,13020731415,17.4731157,78.3872398,hospital,hospital,,Reborn Skin and Hair Clinic
+node,13022908099,17.4525847,78.2854753,school,,,ADOBE School
+node,13049397603,17.4335228,78.2674509,school,,,Birla Open Minds
+node,13074461001,17.5211202,78.3586426,school,,,Vikas The Concept School
+node,13169104952,17.4731930,78.3871998,hospital,hospital,,Sai Ayush Ayurveda Hospital - wellness Hyderabad
+node,13181481501,17.3637510,78.5850040,hospital,,,CGHS Bandlaguda
+node,13208170237,17.4464917,78.4393489,clinic,clinic,,Rams Super Speciality Clinic
+node,13227662859,17.3733681,78.4143950,hospital,hospital,,Renova Hospitals
+node,13285248846,17.4482414,78.3605759,hospital,hospital,,Pi Health Hospital
+node,13299770701,17.3919633,78.4294268,clinic,clinic,,"Dr.MALLENA's DENTAL Hospitals,"
+node,13334012866,17.4090636,78.3999909,hospital,hospital,,Oneders Clinics
+node,13335598229,17.5067008,78.4632839,clinic,clinic,,govind clinic
+node,13335598231,17.5061113,78.4648854,school,,,st mouses high school ground
+node,13335606934,17.4951547,78.4512394,school,,,TVR model School ground
+node,13337356007,17.3496950,78.5483858,hospital,hospital,,Medicare Hospitals
+node,13383694780,17.4562441,78.4348523,clinic,clinic,,Vi Clinic Dental & Women Care
+node,13413137566,17.3294023,78.5980640,school,,,Pallavi Model School Hayathnagar CBSE school
+node,13423743515,17.4276743,78.3749073,hospital,hospital,,Arete Hospitals
+node,13436948463,17.3968148,78.5014822,hospital,hospital,,Dental clinic
+node,13436972602,17.4126071,78.4901536,hospital,hospital,,eyes specalist
+node,13437156198,17.4832962,78.3948182,clinic,clinic,,tia clincic
+node,13481171201,17.4472537,78.5299577,school,,,St. Martin's High School
+node,13481173001,17.4733230,78.5416693,school,,,Kairali Vidhya Bhavan
+node,13531355136,17.4552142,78.3775600,hospital,hospital,,Medicover
+node,13597343949,17.3648650,78.3914584,school,,,Sreenidhi high school
+node,13597379930,17.3327926,78.5367482,hospital,hospital,,Govt street Hospital
+node,13605987501,17.5603161,78.3417556,school,,,"Telangana Model School, Bollaram"
+node,13673566725,17.5012965,78.4293736,school,,,
+node,13673586497,17.3731304,78.4672542,hospital,hospital,,Eye Hospital centre
+node,13673824533,17.3747716,78.4691254,hospital,hospital,,Chanda Nursing homes
+node,13673824534,17.3750071,78.4690221,hospital,hospital,,Pilies Clinic
+node,13673868798,17.5030699,78.4262632,hospital,hospital,,childern hospital
+node,13695602856,17.4400902,78.5548117,school,,,Delhi Public School Nacharam
+node,13707203217,17.4360061,78.4832145,hospital,hospital,,Chetana Hospital
+node,13715414722,17.4915494,78.3910632,hospital,hospital,,Hospital
+node,13715482751,17.4915660,78.3910771,hospital,hospital,,Jntu Hospital
+node,13845243023,17.4946528,78.3881636,hospital,hospital,,Gokul Speciality Clinics
+node,14062515340,17.3907194,78.6072522,clinic,clinic,,
+node,14062515344,17.3913629,78.6069976,school,,,Chaitanya School
+node,14062515347,17.3916146,78.6066963,school,,,
+node,14063329757,17.4295472,78.4540340,doctors,doctor,,Chetana Hospital At Panjagutta
+node,14065542879,17.3881003,78.4883380,hospital,hospital,,"Office Of The Director Of Health, Telangana"
+node,14076472616,17.4877126,78.3996886,hospital,hospital,,
+node,14076472617,17.4877382,78.3996870,hospital,hospital,,Saritha Dental Clinic
+node,14139916176,17.5411014,78.4868435,doctors,doctor,,SuVaè Skin & Hair Clinic
+node,14172768750,17.4833967,78.5408155,doctors,doctor,,Dr. Surya's Skin Clinic
+relation,3950843,17.4404102,78.4892347,school,,,BRJC Parsi High School
+relation,5314381,17.4584300,78.3332345,clinic,clinic,,Health Centre
+relation,5321005,17.3521089,78.3736138,hospital,,,Shadan Hospital
+relation,5330163,17.4226245,78.4534359,hospital,,,Nizams Institute of Medical Sciences Hospital (NIMS)
+relation,8402444,17.4155603,78.5902831,school,,,Narayana High School Boduppal
+relation,11902466,17.4432083,78.3661953,hospital,hospital,,AIG HOSPITALS
+way,29252418,17.4459393,78.4569492,school,,,Hyderabad Public School
+way,31549640,17.4393282,78.4423762,hospital,hospital,,Axon Hospital
+way,71931212,17.4862960,78.4832946,school,,,St Andrews School
+way,75097506,17.4385394,78.5039009,school,,,Keyes High School
+way,75104834,17.4647748,78.4914025,school,,,Delhi Public School
+way,75723547,17.4796329,78.5858706,school,,,Sri Chakri School
+way,84087867,17.3394335,78.6257538,school,,,"ZPHS, Kuntloor"
+way,90554385,17.4608132,78.4682031,school,,,Kendriya Vidyalaya
+way,98773172,17.4624680,78.4587497,school,,,NSKK
+way,112653544,17.4653462,78.4800651,school,,,Government School
+way,112653929,17.4648396,78.4585402,school,,,St Martin's School
+way,116017014,17.4070344,78.4699868,school,,,Vidyaranya High School
+way,116037991,17.4080796,78.4514946,hospital,,,Virinchi Hospitals
+way,122805504,17.4384654,78.3706796,school,,,NASR Boys School
+way,129532501,17.4841092,78.4133137,school,,,ZPHS Kukatpally
+way,131503627,17.3982231,78.4830646,hospital,hospital,,Fernandez Hospital
+way,146312947,17.3515397,78.5561728,hospital,,,Kamineni Hospital
+way,158309248,17.5384309,78.3846411,school,,,SAC
+way,158321649,17.5386330,78.3867526,school,,,Vignana Jyothi Public School
+way,159330478,17.3615342,78.5932865,school,,,Pragnashilpi International School
+way,176133766,17.4577441,78.4894068,school,,,Jain Vidyalay
+way,182703660,17.3936246,78.4272920,hospital,,,Olive Hospital
+way,182935269,17.4011973,78.4815108,school,,,St. Paul's high School
+way,184107080,17.4411967,78.5396410,school,,,Takshasila Public School
+way,186643394,17.4696260,78.3700311,school,,,Maharishi Vidya Mandir School
+way,189632731,17.5116864,78.3852062,school,,,Sri Krishna's Villa
+way,200173462,17.4631371,78.3530148,hospital,hospital,,"Government Area Hospital, Kondapur"
+way,221156976,17.4680774,78.3496555,school,,,Arbor School
+way,233492245,17.4425039,78.4467112,school,,,
+way,233492309,17.3184429,78.4804531,school,,,Kendriya Vidyalaya CRPF
+way,234428170,17.4397894,78.4455357,school,,,Nagarjuna High School
+way,237976870,17.4219081,78.4515489,hospital,,,Nizam's Institute Of Medical Sciences
+way,238170910,17.4168313,78.4959385,school,,,Arabindoo Bala Kendra
+way,238175841,17.4175818,78.4920628,school,,,Cambridge Boys School
+way,238175948,17.4202652,78.4932692,school,,,Sunflower School
+way,238194521,17.3603760,78.4750511,hospital,hospital,,Nizamia Government General Hospital
+way,238195448,17.3986264,78.4613767,hospital,,,Niloufer Hospital
+way,238282935,17.4020365,78.5102829,hospital,,,Durgabai Deshmukh Hospital and Research Centre
+way,238282938,17.4013035,78.5095248,school,,,Hindi Maha Vidyalaya
+way,238284087,17.3694395,78.4741015,hospital,,,Victoria Zenana Maternity Hospital
+way,238298641,17.3684482,78.4674190,hospital,,,"Modern Government Maternity Hospital, Petla Burz"
+way,238302531,17.3728870,78.4735108,hospital,,,Osmania General Hospital
+way,238857285,17.5303057,78.2664430,hospital,centre,,"Area Hospital, Patancheru"
+way,238860802,17.4902582,78.4068344,hospital,hospital,,Ramdev Rao Hospital
+way,246257880,17.3140127,78.4046049,hospital,,,NIRD Health Centre
+way,250946273,17.4428432,78.4453829,school,,,
+way,251804751,17.4910279,78.3931243,hospital,,,"Lotus Hospitals, Kukatpally"
+way,252088281,17.4252804,78.5235757,school,,,
+way,252285892,17.4253104,78.5308477,hospital,,,
+way,252604816,17.3794259,78.5710821,school,,,Government Primary School
+way,253465843,17.4010952,78.5708375,hospital,,,Shreeda Children's Hospital
+way,253465931,17.4011004,78.5711591,school,,,Government Primary School
+way,253467402,17.4058679,78.5914451,hospital,,,Anitha Nursing Home
+way,254295845,17.4176645,78.3391307,hospital,hospital,,Continental Hospitals
+way,259507812,17.4028694,78.5644376,school,,,
+way,259510771,17.4032980,78.5703165,school,,,government school
+way,264884924,17.5008666,78.3075673,school,,,Bharatiya Vidya Bhavans Public School
+way,265035310,17.3637853,78.5284635,school,,,mother teresa grammar high school block-I
+way,265035313,17.3639558,78.5277455,school,,,dwarakamai high school
+way,265035376,17.3641992,78.5265383,school,,,mother teresa grammar high school block-II
+way,265036384,17.3649018,78.5341006,hospital,hospital,,pananeeya dental hospital
+way,265200354,17.5002403,78.3027830,school,,,Jyothi Vidyalaya High School
+way,265204509,17.4968074,78.3052771,hospital,hospital,,BHEL Hospital
+way,265204559,17.4980588,78.3029044,school,,,BHEL Higher Secondary School
+way,265392005,17.4079922,78.4021701,school,,,International School
+way,265415839,17.4115892,78.4955353,clinic,,,maheswara medicals
+way,265616425,17.4488883,78.4258733,school,,,Nagarjuna High School
+way,265627804,17.4101981,78.4893998,hospital,,,Sridevi Fertility Center
+way,265627851,17.4104061,78.4892825,clinic,,,dimpi's hair &skin clinic
+way,265632074,17.4135437,78.4905333,hospital,hospital,,Sri Narmada Hospital
+way,274482470,17.4371696,78.4824784,hospital,hospital,,KIMS Hospital
+way,280689851,17.4091404,78.4786874,school,,,Dwaraka High School
+way,281543243,17.3725003,78.4985901,hospital,hospital,,مامدیپیڈی نگرجنہ ایریا اسپتال
+way,281981271,17.4544679,78.4437609,clinic,,,
+way,287681720,17.4003158,78.5591670,school,,,Kendriya Vidyalaya No. 1
+way,291884965,17.5034647,78.2896908,school,,,Vidya Bharathi High School
+way,292385860,17.4537022,78.4257799,school,,,Don Bosco School
+way,297191641,17.5123996,78.3502235,school,,,Shantiniketan
+way,297191643,17.5126487,78.3495133,school,,,Government School
+way,297191663,17.4976444,78.3537290,school,,,St. Rita School
+way,311079961,17.4379680,78.4103343,school,,,P Obul Reddy Public School (P.O.R.P.S)
+way,318606403,17.4107454,78.4647083,school,,,
+way,319567707,17.3963561,78.5009536,hospital,hospital,,Sir Ronald Ross Institute of Tropical and Communicable Diseases (FEVER HOSPITAL)
+way,319567708,17.4231010,78.5036034,hospital,,,Gandhi Hospital
+way,324532000,17.3954286,78.4781479,school,,,
+way,331212481,17.4672877,78.3783157,school,,,
+way,331214092,17.4971010,78.4066282,clinic,clinic,,Home Sree Towers
+way,331214101,17.4445657,78.3925852,school,,,Swathi High School
+way,331354520,17.3990149,78.5220925,school,,,Sri Satya Sai Vidya Vihar High School
+way,331629144,17.4826137,78.5528970,hospital,,,Poulomi Hospital
+way,331631567,17.4941550,78.4031704,hospital,hospital,,Apollo Hospital
+way,331632943,17.4728333,78.5643823,school,,,
+way,331633380,17.4763763,78.5631157,hospital,,,lucid diagnostics
+way,331773168,17.3966339,78.5191536,hospital,,,Sai Datta Hospital
+way,331793221,17.4975614,78.4143689,school,,,
+way,331980828,17.4946950,78.4165507,school,,,New Century School
+way,332097945,17.4057241,78.3948698,school,,,
+way,332098385,17.5410664,78.3582653,school,,,Kennedy High - The Global School
+way,332098758,17.5175519,78.3743398,school,,,Vignan School of Education
+way,337928613,17.4125349,78.4504102,hospital,hospital,,Care Hospital
+way,339718080,17.4617278,78.3660795,school,,,Gautham Grammar High School
+way,339756163,17.5010162,78.3054801,school,,,Zilla Praja Parishad High School
+way,339784668,17.4955027,78.3011477,school,,,Geethanjali Kindergarden School
+way,339798384,17.4823559,78.3009153,school,,,Sri Vani Vidya Niketan High School
+way,339807233,17.4966824,78.3099654,school,,,
+way,339975550,17.4767815,78.3842677,social_facility,,,
+way,341111300,17.4898119,78.3058316,school,,,
+way,341125535,17.4823971,78.2856373,school,,,
+way,341185823,17.4954460,78.3966804,hospital,hospital,,Remedy Hospital
+way,341192059,17.4946835,78.3985358,hospital,hospital,,Remedy Hosptials
+way,341369246,17.4535566,78.5006571,social_facility,,food_bank,tiffen centre
+way,342675477,17.4172887,78.3497364,school,,,The Shri Ram Universal School
+way,343345260,17.4024052,78.5368402,school,,,"Hyderabad Public School, Ramanthapur"
+way,343603096,17.4916793,78.3974290,clinic,clinic,,
+way,343606383,17.5033832,78.3884360,hospital,hospital,,lahari dental hospital
+way,343666748,17.5036402,78.3870894,school,,,Sanghamitra School
+way,344201163,17.5585346,78.4635840,school,,,DRS International School
+way,344202851,17.5587155,78.4641950,school,,,
+way,344212623,17.4911334,78.3910710,school,,,
+way,344478708,17.3423925,78.5073401,hospital,hospital,,Apollo DRDO Hospital
+way,346566165,17.5156001,78.5198769,school,,,"St. Ann's High School, Bolarum"
+way,353782722,17.3930660,78.4978277,hospital,,,Woodlands Hospital
+way,355613379,17.5621431,78.3985583,,centre,,"SubCentre, Bowrampet"
+way,355678228,17.4966619,78.3975936,hospital,hospital,,Kiran Skin Care Hospital
+way,355678252,17.5003332,78.3889832,school,,,Bhaskar Model High School
+way,355678288,17.5019842,78.3890493,hospital,,,Sri Sri Holistic Hospitals
+way,355688230,17.5184633,78.3968713,hospital,hospital,,People's Hospital
+way,355881714,17.5279622,78.4824881,clinic,clinic,,Sharada Poly Clinic
+way,355889250,17.4866860,78.3567621,,centre,,"Urban Health Centre, Hafeezpet (Urban)"
+way,355953881,17.4839527,78.3207132,school,,,
+way,355979902,17.4688070,78.4895434,hospital,centre,,Southern Regional Centre of Ali Yavar Jung National Institute for the Hearing Handicapped (AYJNIHH)
+way,356020523,17.4666099,78.4712940,school,,,Faizan High School
+way,356020535,17.4655709,78.4720887,school,,,
+way,356159628,17.4467602,78.3840567,hospital,hospital,,Pace Hospitals
+way,356200125,17.4692948,78.5648686,hospital,hospital,,Bhaskara Orthopaedic Centre
+way,356234454,17.4307944,78.4172096,hospital,hospital,,DR SHARATH CHANDRA
+way,356234494,17.4164192,78.4175575,hospital,hospital,,Appolo Cradle Hospital
+way,356240039,17.4953973,78.3197494,hospital,hospital,,"VHeal ENT, ORTHO and Multispeciality Center"
+way,356248376,17.4510205,78.5339402,hospital,hospital,,Govt hospital
+way,356249092,17.4502629,78.5349646,hospital,hospital,,Ctomatodont Dental Care
+way,356253303,17.4216675,78.5042811,hospital,,,Pulse hospital
+way,356261664,17.4307215,78.4242797,hospital,hospital,,Lakshmi Narayana Speciality Clinics
+way,356269588,17.5355888,78.4415176,school,,,Rv model hight school
+way,356270074,17.4249606,78.4563902,hospital,hospital,,ASVINS Specialty Cancer Hospital
+way,356271386,17.4135898,78.4240188,hospital,,,Omega Hospital
+way,356295344,17.4522517,78.4401318,school,,,St Theresa Girls High School
+way,356418532,17.4568177,78.4919670,school,,,Mudfort School
+way,356439747,17.4418003,78.4971353,hospital,hospital,,Yashoda Super Speciality Hospital - secunderabad
+way,356445594,17.5155538,78.4436829,school,,,
+way,356464777,17.4430285,78.4438236,hospital,hospital,,Sowmya Children's Hospital
+way,356484492,17.3940040,78.4823861,hospital,,,SIDDHARTH EYE CENTRE
+way,356492978,17.5154958,78.4435273,school,,,
+way,356492996,17.5153883,78.4434750,school,,,
+way,356493062,17.5153181,78.4434500,school,,,
+way,356493413,17.4157575,78.5410177,clinic,clinic,,"CGHS Dispensary No.XI,nKakatiyanagar"
+way,356504430,17.4564407,78.4121627,school,,,St.Thomas High School
+way,356517417,17.3950421,78.4720698,hospital,,,Swarup Eye Centre
+way,356534891,17.4349272,78.4550851,hospital,,,WIN VISION EYE HOSPITAL
+way,356535696,17.4069029,78.4761142,hospital,,,Hyderabad Nursing Home
+way,356535887,17.3943494,78.4517990,hospital,,,"Nirmala Maternity, Orthopaedic & General Hospital"
+way,356548444,17.4352432,78.5065684,hospital,hospital,,SRIKARA HOSPITALS
+way,356555597,17.3937102,78.4560360,school,,,Loyola School
+way,356555685,17.3950117,78.4545527,school,,,Loyola School
+way,356563904,17.3581524,78.5181413,school,,,
+way,357047297,17.4434002,78.4641659,school,,,Gowtham Model School
+way,357056659,17.3555734,78.5215610,hospital,hospital,,apollo pharmacy
+way,357057519,17.4052733,78.4631442,hospital,,,Gleneagles Global Hospital
+way,357072398,17.4739718,78.5508353,clinic,clinic,,Rehob  physiotherapy
+way,357088766,17.4389652,78.4982623,school,,,Tagore's Home New Era Institute Secondary School
+way,357101267,17.4415771,78.4863946,hospital,hospital,,Sunshine Heart Institute
+way,357101269,17.4464664,78.4857537,school,,,Geetanjali School
+way,357101676,17.4405948,78.4860508,hospital,,,Sunshine Hospitals Out Patient Care
+way,357111233,17.3618313,78.5297172,school,,,St Ann's Model High School
+way,357159617,17.3177925,78.6111781,school,,,
+way,357160491,17.4111409,78.5843331,school,,,
+way,357161046,17.3618261,78.5281415,school,,,Krishnaveni high school
+way,357166452,17.3694106,78.5276165,school,,,
+way,357179813,17.3555266,78.5658987,hospital,hospital,,Urban health centre
+way,357184145,17.3904121,78.4811818,hospital,,,Aditya Hospital
+way,357444200,17.4212689,78.4491146,hospital,,,ITMR Speciality Diagnostics
+way,357594063,17.3634503,78.5303878,school,,,SRKS
+way,357650447,17.3915868,78.5429968,school,,,Vishwa Shanthi High School
+way,357710710,17.3715880,78.5005651,hospital,hospital,,حیدرآباد ملٹی اسپیشلیٹی ہسپتال
+way,357710826,17.3726172,78.5006547,hospital,hospital,,انڈو یو ایس ہسپتال
+way,357711009,17.3691710,78.5012742,clinic,centre,,"CGHS Dispensary No.VII, Malakpet"
+way,357971564,17.3869715,78.5261703,hospital,,,Pharmacy
+way,357971577,17.3870379,78.5262011,hospital,,,Vasudeva Rao Clinic
+way,359272102,17.5276689,78.3923164,school,,,Pragathi Central School - Juniors
+way,360854043,17.4465312,78.4955870,clinic,,,Sweekar Upkar
+way,360984466,17.4402801,78.4975870,hospital,hospital,,Healing touch hospital
+way,360984573,17.4616225,78.4968171,school,,,Gunrock Public School
+way,361374171,17.4469307,78.4953619,clinic,,,Sweekar Upkar
+way,361374554,17.4478356,78.5089611,hospital,hospital,,Shenoy Hospital
+way,361655217,17.4411729,78.4869278,hospital,hospital,,Sunshine Hospital
+way,362018570,17.3830739,78.4544202,school,,,Goodwill Model School
+way,362515707,17.3714964,78.4437525,hospital,hospital,,khuteja hospitals
+way,364871053,17.3409222,78.5067856,hospital,hospital,,Owaisi Hospital and Research Centre
+way,368394812,17.5040289,78.3149068,school,,,MNR School
+way,378458223,17.4065246,78.4716449,hospital,,,Maxcure Hospital
+way,386432506,17.4402380,78.5551993,school,,,Delhi Public School Nacharam
+way,410283789,17.4109126,78.4834649,hospital,,,Sai Vani Super Specialty Hospital
+way,413246550,17.4388627,78.4986615,hospital,hospital,,Vijaya Health Care
+way,413292045,17.4395601,78.5047044,hospital,hospital,,Apollo Hospitals
+way,413311009,17.4400559,78.4977239,hospital,hospital,,Care Hospitals - Secunderabad
+way,413327528,17.4405052,78.5045932,hospital,hospital,,Medicover Hospitals Secunderabad
+way,413520492,17.4394520,78.4937321,school,,,Kotha yellaiah high school
+way,413840712,17.4102227,78.4841722,school,,,
+way,414408406,17.4192915,78.4997470,clinic,clinic,,Amvi Clinic
+way,417220229,17.4047518,78.4751131,hospital,,,Dr. Ramayya's Urology Nephrology Institute and Hospital Private Limited
+way,417241491,17.4453109,78.4348356,hospital,,,Government General and Chest Hospital
+way,417247417,17.3935869,78.4719415,hospital,,,Medwin Hospital
+way,417285596,17.4110085,78.4831621,hospital,,,Ravi Helios Hospital
+way,422917298,17.4707341,78.3107540,hospital,hospital,,
+way,437412061,17.4192716,78.4093444,school,,,
+way,469353805,17.5167154,78.3462117,school,,,MNR Scottsdale School
+way,480983272,17.3679894,78.5153178,school,,,St Jospeph High School
+way,514609444,17.5634492,78.3848567,school,,,Oakridge International School
+way,515014654,17.3406119,78.3844955,school,,,Rock School
+way,520463958,17.4685742,78.3040535,school,,,Epistemo Global
+way,550578074,17.3375324,78.3837318,school,,,Pranathi Vidyalaya School
+way,563524286,17.4173344,78.4305408,hospital,hospital,,Basavatarakam Indo American Cancer Institute And Research Centre
+way,576964701,17.3990416,78.6047168,school,,,SFS High School
+way,576964706,17.3955170,78.6120499,school,,,Primary Government School Parvathapur
+way,576987416,17.3966979,78.5876043,school,,,Global Indian International School
+way,576987419,17.3936325,78.5947082,school,,,Peerzadiguda Government High School
+way,579939314,17.3616036,78.4746421,clinic,clinic,,"Urban Primary Health Centre, Charminar"
+way,584703599,17.3634617,78.5302573,school,,,SRKS
+way,596480014,17.4787512,78.3202943,hospital,hospital,,
+way,596738251,17.5215028,78.3987568,school,,,Spring Board International Pre-School
+way,608308376,17.4123906,78.5838525,hospital,hospital,,Primary Healthcare Center
+way,616220205,17.3312085,78.5792372,school,,,siddhartha model high school
+way,627271805,17.3511806,78.4803061,social_facility,,,Safe Haven
+way,627572568,17.4945928,78.3366752,school,,,
+way,627572569,17.4940592,78.3366465,school,,,
+way,630869585,17.4305355,78.3721906,hospital,hospital,,Care Hospitals
+way,630961248,17.4477154,78.4396977,hospital,hospital,,ESI Hospital
+way,635428026,17.4193562,78.4090382,school,,,Jubilee Hills Public School
+way,635428028,17.4186940,78.4106805,school,,,Bharatiya Vidya Bhavan's Public School
+way,642171981,17.4467916,78.3796688,hospital,hospital,,
+way,642221208,17.4345485,78.3988911,school,,,Iqbalia International school
+way,645162358,17.4245445,78.4569528,hospital,hospital,,Yashoda Super Speciality Hospitals
+way,647243010,17.4533848,78.4405187,school,,,
+way,660771331,17.4246754,78.4275696,hospital,hospital,,L V Prasad Eye Institute
+way,681495412,17.3391407,78.3424050,school,,,Sreenidhi International School
+way,689847043,17.4211633,78.4345245,hospital,hospital,,Asha Hospital
+way,690384774,17.3768491,78.5583300,hospital,,,Supraja Hospital
+way,690864142,17.3375998,78.5060730,clinic,centre,,"CGHS Dispensary No.VIII, Kanchanbagh"
+way,691648389,17.4966966,78.3978239,hospital,hospital,,Mamtha Hospital
+way,694269435,17.4160939,78.5903660,school,,,Pallavi Model School Boduppal Campus
+way,694289781,17.4096152,78.5827029,school,,,
+way,694307846,17.4262644,78.5865675,school,,,Bachpan - Academic Heights School
+way,698602581,17.3521390,78.3342817,hospital,,,Dr VRK Hospital
+way,698701428,17.3326346,78.2999025,hospital,,,Bhaskar General Hospital
+way,699741742,17.4225718,78.5670290,school,,,SR Digi School
+way,699906462,17.4194327,78.5653816,school,,,St. Mary's High School
+way,700205874,17.4158360,78.5839507,school,,,
+way,700248245,17.3882657,78.4610655,hospital,hospital,,Apollo
+way,704493174,17.5069750,78.3387885,school,,,Delhi Public School
+way,705558188,17.4218424,78.5646709,school,,,The Pratibha School
+way,732247772,17.4006987,78.4997908,school,,,ambedkar college
+way,732260574,17.5505058,78.4399926,school,,,
+way,733458157,17.4273257,78.5191726,hospital,hospital,,
+way,733458158,17.4264370,78.5188782,school,,,
+way,740695877,17.3971684,78.5341855,school,,,ST. JOSEPH'S HIGH SCHOOL
+way,740792326,17.4497775,78.3875923,school,,,Global Edge School
+way,740795301,17.4298184,78.5518038,school,,,Pratibha High School
+way,751542510,17.4495633,78.3913668,school,,,Green Gables International school
+way,751542515,17.4332420,78.3973381,school,,,Bhavan's Atmakuri Rama Rao School
+way,758967948,17.4333608,78.4874416,hospital,hospital,,
+way,769168531,17.5222086,78.3870773,school,,,Rajadhani Residential School
+way,776657250,17.3454634,78.5469701,school,,,little flower school
+way,776657905,17.4138466,78.5072488,school,,,
+way,776657906,17.4134113,78.5067375,school,,,
+way,781149708,17.3605730,78.3978515,school,,,Glendale Academy International
+way,787952717,17.3449781,78.3939410,school,,,Sri Saraswathi Shishu Mandir
+way,787966250,17.3363842,78.3919233,school,,,ZP High School
+way,788002269,17.3300859,78.3813899,school,,,Noble School
+way,790725699,17.3552259,78.3785541,school,,,Rao's High School
+way,790732691,17.3676754,78.3877912,school,,,Govt. Primary School
+way,790788318,17.3696909,78.3708819,school,,,Rishi Public School
+way,790788323,17.3690358,78.3870579,school,,,Global Discovery School
+way,790793086,17.3653158,78.3913234,school,,,Sri Chaitanya School
+way,790793087,17.3656303,78.3916931,school,,,Gowtham Model School
+way,790793088,17.3639296,78.3917606,school,,,Zilla Parishad High School (ZPHS)
+way,797934052,17.4943114,78.4543716,school,,,Delhi World School
+way,805942920,17.4764418,78.5188749,school,,,KVT Primary Block
+way,815012412,17.4956065,78.3660561,school,,,
+way,835027606,17.4710900,78.5433786,school,,,
+way,835027610,17.4638110,78.5441122,school,,,D.A.V. Public School
+way,845716010,17.5205823,78.3937798,school,,,Pragathi Central School
+way,847474672,17.5339964,78.3926690,clinic,clinic,,Testing Centre
+way,849385520,17.4446381,78.4518215,hospital,alternative,,ప్రకృతి చికిత్సాలయము
+way,849386241,17.4891867,78.4078079,hospital,,,Aakar Asha Hospital
+way,852356518,17.5576036,78.3950277,school,,,Delhi Public School
+way,852368743,17.5544747,78.3982907,school,,,Ambitus World School
+way,852378918,17.5285745,78.3935422,school,,,ZPHS Govt High School
+way,852649107,17.5508440,78.3897293,school,,,Creek School
+way,853755273,17.5056274,78.3956175,hospital,hospital,,Prasad Hospital
+way,856352216,17.4172449,78.3718849,school,,,Delhi Public School
+way,859679417,17.4462393,78.4358697,hospital,,,
+way,859701773,17.4519592,78.4957390,school,,,Kendriya Vidyalaya Picket
+way,860344899,17.4149895,78.4136510,hospital,hospital,,Apollo Hospitals
+way,860523307,17.4275284,78.4226090,school,,,AISFM
+way,860550549,17.4254533,78.4319236,hospital,hospital,,Rainbow Children’s Hospital
+way,863515999,17.3591158,78.4945315,hospital,,,فیتھ اسپتال
+way,865307264,17.5321630,78.3923508,school,,,Cornerstone International School
+way,865914545,17.5444537,78.3721921,school,,,Keshava Reddy High School
+way,865916801,17.5425650,78.3645974,school,,,Silver Oaks
+way,867980241,17.3204026,78.4046153,school,,,Governament High School
+way,872851184,17.5250807,78.3944661,social_facility,,group_home,Orphanage
+way,872851196,17.5277532,78.3953310,hospital,hospital,,Sri Rn ayurved
+way,872852682,17.5256611,78.3989862,school,,,Pragnya Montessari School
+way,872925497,17.4853078,78.3680442,clinic,clinic,,Calvary Temple Sunday Clinic
+way,874589689,17.3998739,78.5591722,school,,,
+way,874988548,17.4041029,78.5594611,school,,,Kendriya Vidyalaya No. 2
+way,878100150,17.5138706,78.3558400,school,,,
+way,878105762,17.5202341,78.4291372,hospital,,,Usha Mullapudi Cardiac Centre
+way,879108467,17.5064128,78.2839346,hospital,hospital,,ESI Hospital
+way,879137458,17.4822634,78.3194476,school,,,Sancta Maria International School
+way,879138502,17.4749503,78.3288598,school,,,Vidyanjali High School
+way,879138798,17.4730861,78.3324071,school,,,CHIREC International School Gachibowli Campus
+way,879198193,17.4643557,78.3443811,school,,,Jain Heritage School
+way,879583475,17.5107038,78.4470872,hospital,,,ESI Hospital
+way,879738142,17.5115659,78.3066297,school,,,Line Line High School
+way,880085371,17.4996266,78.3568789,school,,,Unicent School
+way,880090855,17.5025853,78.4154659,school,,,Vasara Vidyalaya High School
+way,881191665,17.4059427,78.5580248,school,,,St. Mark's High School
+way,881192328,17.4064470,78.5625474,school,,,Srinivasa Digi School
+way,883215528,17.4934077,78.3671911,school,,,DAV Public School
+way,885449286,17.3682898,78.5050877,school,,,MDA vidhyalaya
+way,893226793,17.4538667,78.3843157,school,,,Meridian School
+way,896472886,17.4911247,78.4500262,school,,,St.Martins School
+way,899386536,17.5393498,78.4323126,school,,,North City High School
+way,899386543,17.5432685,78.4352554,school,,,KVM High School
+way,899386544,17.5419736,78.4376798,school,,,Neelima High School
+way,902917019,17.4224768,78.5100487,school,,,
+way,902925307,17.4905853,78.3374034,hospital,hospital,,Lakshmi hospital
+way,902926972,17.4912016,78.3405523,school,,,Kallam Anji Reddy School
+way,902961594,17.4986832,78.3472675,school,,,Gautami Vidya Kshetra School
+way,921619662,17.4467799,78.4933297,school,,,Centenary High School
+way,929509989,17.5291347,78.3894790,school,,,Government School of Telangana
+way,940065269,17.4033906,78.3728063,school,,,Mount Litera Zee School
+way,1001140161,17.5236426,78.3744262,school,,,Sriram School of CBSE
+way,1015402348,17.3477138,78.3228658,school,,,Sloka School
+way,1015405015,17.3538471,78.3292560,school,,,Pallavi International School
+way,1015405016,17.3539573,78.3287779,school,,,Pallavi Internation School Ground
+way,1015411590,17.3563722,78.3226784,school,,,Mehlua International School
+way,1043717438,17.3413271,78.4720005,school,,,sharadha school
+way,1051807914,17.4917300,78.5344648,school,,,Auditorium
+way,1057075649,17.4398889,78.3326866,school,,,goldcrest school
+way,1076262697,17.4023884,78.5368257,school,,,public school
+way,1076262700,17.4001346,78.5407560,hospital,hospital,,ground
+way,1082288737,17.4669969,78.4710227,school,,,
+way,1082807841,17.5105171,78.4283233,school,,,Freedom high School
+way,1122005587,17.4544692,78.4220082,hospital,hospital,,Maxwell Hospital
+way,1123874129,17.4938625,78.4105007,hospital,hospital,,Ragi hospital
+way,1124048925,17.3626504,78.4439387,school,,,
+way,1124063177,17.3596959,78.4414467,school,,,Govt High School
+way,1124068127,17.4547191,78.5642498,school,,,School ground
+way,1124074494,17.3269085,78.5266427,school,,,
+way,1133861034,17.3921683,78.3420706,school,,,
+way,1157549417,17.3779716,78.4480927,school,,,
+way,1157549420,17.3748898,78.4488915,school,,,
+way,1157549430,17.3770928,78.4480068,clinic,clinic,,
+way,1157556429,17.5142498,78.4426523,school,,,
+way,1157556430,17.5142477,78.4429813,school,,,
+way,1162366803,17.4861033,78.6003357,school,,,Serenity school ground
+way,1172957602,17.3914053,78.5454126,school,,,
+way,1212172825,17.4872818,78.4078837,social_facility,,assisted_living,Sivananda Rehabilitation Home
+way,1212194504,17.4336236,78.2978976,school,,,Vista International School
+way,1212194516,17.4340504,78.2684103,school,,,Birla Open Minds
+way,1225570310,17.3376757,78.4733384,hospital,hospital,,Gemini Health Care
+way,1225570321,17.3395740,78.4704771,school,,,
+way,1225572881,17.3424099,78.4748493,school,,,Emily The School
+way,1234690798,17.4217630,78.3490353,school,,,The Gaudium School
+way,1234969848,17.4116454,78.3483245,school,,,Keystone International School
+way,1257381221,17.4902187,78.4453099,school,,,navajyothi
+way,1258247709,17.4761162,78.5710126,school,,,NARAYANA
+way,1258248379,17.4765669,78.5709823,school,,,SRI CHAITANYA
+way,1292045202,17.4692664,78.2890229,school,,,Glendale school
+way,1293055730,17.4016164,78.3737084,school,,,
+way,1300732264,17.4015386,78.3499741,hospital,hospital,,Sankaraya Eye Hospital
+way,1303451263,17.4369658,78.3523780,social_facility,,,Brahma Kumari Santi Sarowar
+way,1322945923,17.4601687,78.2984310,school,,,Manthan International School
+way,1392300168,17.5014134,78.4752669,school,,,Suchitra Academy
+way,1392514385,17.4319493,78.5528537,hospital,hospital,,ESI Hospital
+way,1408647364,17.4312125,78.4555511,hospital,hospital,,Vivekananda Hospital
+way,1409458662,17.5522614,78.3534423,school,,,NVR High School
+way,1409678578,17.3900886,78.4958661,hospital,hospital,,Sai Krishna Neuro Hospital
+way,1409953967,17.4078730,78.4447648,,hospital,,TX Hospital
+way,1409986482,17.4245150,78.4569836,hospital,hospital,,Yashoda Hospital
+way,1421535233,17.4444655,78.2796537,school,,,Little Bridge School
+way,1430785676,17.4504056,78.5030891,hospital,hospital,,Pulse Clinics and Diagnostics
+way,1452398453,17.3610481,78.5637600,school,,,GD Goenka School
+way,1452947124,17.3653353,78.5842315,school,,,Indu International School
+way,1454106434,17.4951528,78.4512452,school,,,
+way,1455535745,17.3410389,78.5064811,hospital,hospital,,
+way,1456244366,17.4346602,78.2859121,school,,,Blue Blocks
+way,1464996554,17.3652110,78.3915234,school,,,
+way,1465001202,17.4087303,78.5024169,hospital,hospital,,Eye Hospital
+way,1489533463,17.3287369,78.5532591,school,,,Nagarjuna School Play Ground
+way,1492084953,17.5015883,78.4285229,school,,,govt school
+way,1499283578,17.3487483,78.5596930,school,,,
+way,1503406010,17.5248502,78.3585552,school,,,
+way,1517825408,17.4200227,78.3640647,school,,,Oakridge International School
+way,1522043844,17.4196300,78.4432574,school,,,Meridian School
+way,1522084724,17.4211415,78.4434294,school,,,Delhi School of Excellence banjara Hills
+way,1544841405,17.3482103,78.3923532,hospital,hospital,,
+way,1546126549,17.3914782,78.6073799,school,,,Kakatiya School

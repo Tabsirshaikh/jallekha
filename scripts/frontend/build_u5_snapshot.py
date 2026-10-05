@@ -74,6 +74,7 @@ def main() -> None:
                 "nonTapShare": optional_float(row["non_tap_share"]),
                 "waterAccessDeficitShare": optional_float(row["wad"]),
                 "hardshipShare": optional_float(row["hardship"]),
+                "criticalFacilities": optional_int(row["critical_facilities"]),
                 "growthRatio": optional_float(growth["building_growth_ratio"]),
                 "annualGrowth": optional_float(growth["adjusted_annual_growth"]),
                 "growthQuality": growth["growth_stability"],

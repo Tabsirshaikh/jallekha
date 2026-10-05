@@ -6,6 +6,8 @@ export type FieldReason = { code: string; model?: string; value: number | null; 
 export type Ward = {
   id: string; name: string; censusYear: number | null; reviewRequired: boolean;
   population2011: number | null; households2011: number | null; waterAccessDeficitShare: number | null;
+  /** OSM hospitals, clinics, UPHCs, schools and care homes placed in the ward (D9); null if not served. */
+  criticalFacilities: number | null;
   growthRatio: number | null; growthQuality: string | null; bookings: number | null; bookingsPer1000: number | null;
   bookingStatus: string | null; fieldStatus: string; fieldCandidate: boolean | null;
   fieldReasons: FieldReason[];
@@ -67,6 +69,7 @@ export function toWard(evidence: Row, equity: Row | undefined, field: Row | unde
     population2011: num(evidence.population),
     households2011: num(evidence.households),
     waterAccessDeficitShare: num(evidence.wad),
+    criticalFacilities: num(evidence.critical_facilities),
     growthRatio: num(field?.growth_ratio_context_only),
     growthQuality: text(field?.growth_quality),
     bookings: num(equity?.bookings),

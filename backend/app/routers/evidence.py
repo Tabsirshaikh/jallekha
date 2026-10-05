@@ -1,6 +1,6 @@
-"""Read-only evidence endpoints (T10): atlas, equity, under-served, coverage, ward report card,
-SMS summary and impact. Built from committed P1 / P2 files and A2's `build_ward_needs`; shapes
-as in docs/api_shapes.md sections 2-5, 16 and 17."""
+"""Read-only evidence endpoints (T10): atlas, facility candidates, equity, under-served, coverage,
+ward report card, SMS summary and impact. Built from committed P1 / P2 files and A2's
+`build_ward_needs`; shapes as in docs/api_shapes.md sections 2-5, 16 and 17."""
 
 from __future__ import annotations
 
@@ -52,6 +52,11 @@ EQUITY_WARDS = "data/derived/equity/wards.csv"
 EQUITY_MONTHLY = "data/derived/equity/monthly.csv"
 FIELD_CHECKS = "data/derived/underserved/field_checks.json"
 LAYERS = "data/derived/coverage/layers.json"
+FACILITY_COUNTS = "data/derived/evidence/ward_facilities.csv"
+FACILITY_POINTS = "data/derived/evidence/facility_points.csv"
+FACILITY_CATEGORIES = ("hospitals", "clinics", "uphcs", "schools", "care_homes")
+# Likeliest tier-0 stops first (F8 tier 0, F10); schools last.
+CANDIDATE_ORDER = ("hospitals", "uphcs", "clinics", "care_homes", "schools")
 IMPACT = "data/derived/sandbox/summary.json"
 
 Officer = Depends(require_roles("officer"))
@@ -93,6 +98,51 @@ def atlas_wards(offset: Offset = 0, limit: Limit = ApiConfig.default_limit) -> d
 def atlas_ward(ward_id: str) -> dict[str, Any]:
     growth = next((r for r in csv_rows(GROWTH) if r["ward_id"] == ward_id), None)
     return {"evidence": typed(_ward(ward_id)), "growth": typed(growth) if growth else None}
+
+
+# --- facility candidates (D9, F10) ----------------------------------------------------------
+
+
+def _candidate(row: dict[str, str]) -> dict[str, Any]:
+    return {
+        "osm_ref": row["osm_ref"],
+        "osm_type": row["osm_type"],
+        "osm_id": int(row["osm_id"]),
+        "osm_url": f"https://www.openstreetmap.org/{row['osm_ref']}",
+        "category": row["category"],
+        "name": row["name"] or None,  # text even when it looks like a number
+        "lat": float(row["lat"]),
+        "lon": float(row["lon"]),
+        "basis": "REAL",
+        "ward_id": row["ward_id"],
+        "ward_basis": row["ward_basis"],
+    }
+
+
+@router.get("/facilities/candidates", dependencies=[Officer])
+def facility_candidates(
+    ward_id: str, offset: Offset = 0, limit: Limit = ApiConfig.default_limit
+) -> dict[str, Any]:
+    """OSM hospitals, health centres, clinics, care homes and schools placed in the ward: candidate
+    critical (tier-0) stops. Read-only; each becomes a stop only when an officer registers it."""
+    counts = next((r for r in csv_rows(FACILITY_COUNTS) if r["ward_id"] == ward_id), None)
+    if counts is None:
+        raise not_found(f"Ward {ward_id}")
+    items = sorted(
+        (_candidate(r) for r in csv_rows(FACILITY_POINTS) if r["ward_id"] == ward_id),
+        key=lambda i: (CANDIDATE_ORDER.index(i["category"]), i["osm_type"], i["osm_id"]),
+    )
+    return {
+        "ward_id": ward_id,
+        "ward_name": counts["ward_name"],
+        "status": "CANDIDATE_OFFICER_CONFIRMATION_REQUIRED",
+        "counts": {c: int(counts[c]) for c in FACILITY_CATEGORIES},
+        "counts_basis": counts["counts_basis"],
+        "placement_basis": counts["placement_basis"],
+        "note": "OpenStreetMap features placed on the 2016 wards by position; OSM is incomplete, "
+        "so a ward may have facilities that are not listed. Register a stop to use one.",
+        **page(items, offset, limit),
+    }
 
 
 # --- equity / under-served / coverage --------------------------------------------------------

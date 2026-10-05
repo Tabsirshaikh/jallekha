@@ -1,0 +1,13 @@
+{
+  "inputs_sha256": {
+    "data/raw/d9_facilities/osm_facilities.csv": "ffe088e6aa205c13e0252e8d44ea4f22c2e0cb5228221538169aa156dab848bd",
+    "data/raw/geography/datameet/ghmc-wards.geojson": "3fdfef8e787ed543d816fee36a6097c350c4dff2423aae7fa203bb49cbd6edc2",
+    "data/raw/geography/osm/hyderabad_district.geojson": "5275d2bd776c7fb4ad3ebbcb3071a55238dd91e8db8b8f333747b3bb0bb0a840"
+  },
+  "outputs_sha256": {
+    "data/derived/evidence/facilities_summary.json": "bfc1c5c4e34abda518f0ce3c249a87c3772b7eded7e6dd363e9f7fdc493a8d2c",
+    "data/derived/evidence/facility_points.csv": "2f9e2bbbad51cc48ddbe198823c3ba1be2ac8c7ae941f229254ccbdc9d85e707",
+    "data/derived/evidence/ward_facilities.csv": "d4e3c77644787d68f77b3e90f12db90eec8d362fd496e9c5d0d90781f9b6a68c"
+  },
+  "schema_version": "D9-1"
+}

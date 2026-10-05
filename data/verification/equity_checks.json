@@ -1,5 +1,5 @@
 {
-  "evidence_input_sha256_lf": "55283537df47923deca25f8347c46e4d9c5455089527a36f3e6632ab4e2cc54c",
+  "evidence_input_sha256_lf": "629ca414bdbe335f0036933bf942132564a594c57b31fd7efd42805201b4d9fc",
   "outputs_sha256": {
     "data/derived/equity/lorenz.csv": "9dd6aa1e8b03b2a6b68a29884727ccd1e466edb9f00b935b36ec8b365ad4ea39",
     "data/derived/equity/monthly.csv": "f4c96b7644531da85ed5e076ca7d1a4395ccf3b49518a0105b29a3df8baec5dd",

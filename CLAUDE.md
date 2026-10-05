@@ -23,7 +23,7 @@ No LLM in any scoring, allocation or explanation step.
   for your feature before changing it).
 - **To-do list: `docs/REMAINING_WORK.md`** (items 11-22, each with what, where it stands, how to do
   it, done-when; plus "Research follow-ups"). Done: 11 (#68), 12 + 16 (#69), 14 (#70), 21 (#74),
-  22 (`docs/item-22-promise-column`). Left: 13, 15, 17, 18, 19, 20, and research follow-ups A and B.
+  22 (#75), 15 (`feat/d9-facilities`). Left: 13, 17, 18, 19, 20, and research follow-ups A and B.
 - Last full check on `main` (5c4d43c): lint clean; 908 backend + 184 frontend tests pass; all data
   verifiers pass.
 - GitHub Actions cannot run (account billing block). Every change is verified locally before merge.
@@ -56,13 +56,13 @@ D1 HMWSSB monthly tanker bookings per section (`hmwssb_tankers` 2022-Feb 2024, `
 to Aug 2026; sections re-cut Feb/Mar 2026); `census` (2011); `geography` (2016 GHMC wards
 `datameet/ghmc-wards.geojson`, 145 wards, ids like `relation/7848824`; OSM district/mandals/HMWSSB
 points); `d6_open_buildings` (growth); `d7_groundwater` (NOT fetched, needs NWDP login); `d8_weather`
-(Open-Meteo daily, city centre); `d13_chicago_311` (F13 calibration). D9 hospitals/schools: not in repo.
+(Open-Meteo daily, city centre); `d13_chicago_311` (F13 calibration); `d9_facilities` (OSM hospitals,
+clinics, UPHCs, schools, care homes; counts per ward in `data/derived/evidence/ward_facilities.csv`).
 
 ## Remaining items: start here
 
 | Item | Read first | Change |
 |---|---|---|
-| 15 D9 facilities | `scripts/data/fetch_d8_weather.py` (fetch + retrieval log pattern), `scripts/evidence/build_evidence.py` (column now `FACILITIES_UNAVAILABLE`), `verify_evidence.py`, `backend/tests/test_e2_evidence.py` | fetch OSM hospitals/clinics/UPHCs/schools/care homes (Overpass, district boundary in `data/raw/geography/osm/`), count per ward, rebuild E2 then E5 (checksums) |
 | 18 T9 threshold | `backend/app/services/confidence.py`, `backend/app/config/confidence.py` (`provisional_threshold` 0.5), `scripts/trust/calibrate_confidence.py`, `data/derived/confidence_calibration.csv` | degraded-signal replay (move some sections to wrong wards / fallback joins), pick lowest threshold meeting the 0.90 target |
 | Research A forecast rule | `docs/REMAINING_WORK.md` "Research follow-ups" A; `backend/app/services/forecast.py` (`select_model`, `global_gbm`), `config/forecast.py`, `scripts/forecast/run_backtest.py` | needs owner OK first |
 | Research B city weather | same doc, part B; `scripts/data/fetch_d8_weather.py`, weather features in `forecast.py` | TGDPS station data per mandal |

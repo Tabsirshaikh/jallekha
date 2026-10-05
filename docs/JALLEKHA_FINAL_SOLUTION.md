@@ -56,7 +56,7 @@ HMWSSB delivers almost every tanker that is booked (1,316,215 bookings and 1,315
 | D6 | **Google Open Buildings 2.5D Temporal** (2016-2023) plus WorldPop and GHS-POP 100 m population grids | **TO FETCH**, verified; modelled sources with documented uncertainty | F2 growth sensitivity |
 | D7 | **Groundwater level, CGWB / Telangana GW Dept**: manual wells (four times a year) and telemetric stations, via India-WRIS time-series extraction (CSV mirror on India Data Portal); GHMC station coverage and licence to confirm | **TO FETCH**, verified to exist | F5 covariate, F6 |
 | D8 | Daily weather 2022-2026, Open-Meteo | **REAL** | F5 |
-| D9 | OSM hospitals, clinics, UPHCs, schools, care homes (885 / 310 / 350 / 399 / 59) | **REAL**, verified | F1, F8 tier 0, F10 |
+| D9 | OSM hospitals, clinics, UPHCs, schools, care homes (885 / 310 / 350 / 399 / 59; that snapshot was never found. Re-pulled 2026-10-05 and placed in the 145 wards: 941 / 294 / 174 / 439 / 6, `data/derived/evidence/facilities_summary.json`) | **REAL** as mapped in OSM (incomplete); ward placement DERIVED | F1, F8 tier 0, F10 |
 | D10 | OSM HMWSSB tanks, reservoirs, works (~38) as stand-in filling points | **TO FETCH**; use as filling stations is **ASSUMED** | routing |
 | D11 | OSM road network + OSRM | **REAL** | routing |
 | D12 | Section coordinates (Nominatim, 159 of 201) | **DERIVED**, not hand-checked | F3 |

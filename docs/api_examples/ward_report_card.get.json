@@ -15,7 +15,7 @@
     "geography_version": "GHMC_2016_150",
     "quality_flags": [
       "HISTORICAL",
-      "FACILITIES_UNAVAILABLE",
+      "FACILITIES_OSM_INCOMPLETE",
       "APPROX_AREAL_CROSSWALK"
     ],
     "need": {

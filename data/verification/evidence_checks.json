@@ -2,19 +2,21 @@
   "inputs_sha256": {
     "data/derived/crosswalk/census_to_ghmc_2016.csv": "b2a920ebbb53e21e9e4711c2db11bb4522b94f7f25f006fa0573c271ac5c6dc5",
     "data/derived/crosswalk/ward2009_to_ghmc2016_weights.csv": "a0be1d99ef2976025e0e4a154a26c4814f5d6959fdce07161e4c545c07fb2f40",
+    "data/derived/evidence/ward_facilities.csv": "d4e3c77644787d68f77b3e90f12db90eec8d362fd496e9c5d0d90781f9b6a68c",
     "data/raw/census/hyderabad/hh14.xlsx": "8c25065bf17cff44e78c5a84213e7a8f5b3303d2321c26e95e007971f287e53c",
     "data/raw/census/rangareddy/hh14.xlsx": "4035c07e6d447edc3c414b96bf15465f4f3ea3d2ce92300223296329a2783d31",
     "data/raw/geography/datameet/ghmc-wards.geojson": "3fdfef8e787ed543d816fee36a6097c350c4dff2423aae7fa203bb49cbd6edc2",
-    "data/verification/source_manifest.csv": "819cb5e1fa1508c2fea85f6741302515015f2cd9a215b6b3987036563c6d743f"
+    "data/verification/source_manifest.csv": "c0c48886d3248817bffcde2edf4bf284babed676efc41a25eda2b50a42b3d5b7"
   },
   "normalized_lf_text_inputs": [
     "data/derived/crosswalk/census_to_ghmc_2016.csv",
     "data/verification/source_manifest.csv",
-    "data/derived/crosswalk/ward2009_to_ghmc2016_weights.csv"
+    "data/derived/crosswalk/ward2009_to_ghmc2016_weights.csv",
+    "data/derived/evidence/ward_facilities.csv"
   ],
   "outputs_sha256": {
-    "data/derived/evidence/evidence_summary.json": "bae0ad0035c4f3ecd7308a11fc99893fccb5d67f14da4d69f243b7167a635560",
-    "data/derived/evidence/ward_evidence.csv": "55283537df47923deca25f8347c46e4d9c5455089527a36f3e6632ab4e2cc54c"
+    "data/derived/evidence/evidence_summary.json": "f1497a8fa6ef34fcd10864e959320e1530e0aeb39984879cc7eca333de0fc5c0",
+    "data/derived/evidence/ward_evidence.csv": "629ca414bdbe335f0036933bf942132564a594c57b31fd7efd42805201b4d9fc"
   },
-  "schema_version": "E2-2"
+  "schema_version": "E2-3"
 }

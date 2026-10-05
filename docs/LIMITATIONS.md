@@ -31,7 +31,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 
 ### F1 Water Access Atlas (E1, E2)
 - Based on Census 2011 moved onto 2016 wards approximately (limits 1 to 3 above).
-- The **critical facilities column is empty** (`FACILITIES_UNAVAILABLE`): hospitals, clinics and schools (D9) were never loaded into the ward table.
+- **Critical facilities come from a fresh OpenStreetMap pull (D9, item 15)**, not the lost verified snapshot: 941 hospitals, 294 clinics, 174 UPHCs, 439 schools and 6 care homes placed in the 145 wards (the document says 885 / 310 / 350 / 399 / 59; `data/derived/evidence/facilities_summary.json`). Counts are REAL as mapped, placement DERIVED. OSM is incomplete and uneven (`FACILITIES_OSM_INCOMPLETE`): zero mapped is not zero present, 3 wards have none mapped, and care homes are barely mapped. UPHCs are found by name (UPHC, PHC, Basti Dawakhana), so others count as clinics or hospitals, which is why UPHCs are half the document's figure. Many OSM "hospitals" are small nursing homes. The tag choices are ours; the original query was never found.
 - 2 wards have partial Census coverage; Census for 2009 wards 115 and 116 (in Medak district) is not loaded.
 - Share of households away from water is a Census snapshot, not today's observation.
 - The Atlas screen (U5) calls the API (`/atlas/wards`, `/equity/*`, `/underserved/field-checks`, `/coverage/layers/...`) when an officer is signed in and all five answers are complete, and otherwise shows the committed snapshot (`frontend/src/data/u5Evidence.json`, rebuilt by `scripts/frontend/build_u5_snapshot.py`). Building change per ward comes from the field-check rows, so it is available only where the screen has them.
@@ -96,7 +96,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - The timetable SMS and print wording belongs to P4/T5.
 
 ### F10 Outage Response (A5, T5)
-- No verified critical-facility source: tier-0 stops are officer-entered.
+- Tier-0 stops are still officer-entered: `GET /facilities/candidates` lists each ward's OSM hospitals, UPHCs, clinics, care homes and schools (D9) as candidates, but nothing turns one into a critical stop automatically and no route creates outage critical stops yet; OSM is incomplete (see F1).
 - Detection threshold (5 reports in 6 hours) and the 24-hour deprivation constant are policy assumptions.
 - Notices are entered by officers; HMWSSB publishes press releases only, so no parser was built (D14 not fetched). Exact-only area matching; no locality alias table; Census population overstates partial-ward notices; no resident registry for alerts [OPEN].
 
@@ -182,7 +182,6 @@ The to-do list for these, with how to do each item and when it counts as done, i
 | Adopting the gradient-boosting forecast | owner | built and backtested (beats seasonal naive on the portal history, slightly worse on the short S2 files); the selection rule decides, OPEN |
 | T9 threshold calibration | P2/P3 | needs a degraded-signal replay scenario from P2; the threshold is a provisional 0.50 |
 | Spatial models for E5 | P1 | BYM2 did not converge (see F4); peer + NB are used |
-| Hospital and school data (D9) in the ward table | P1 | critical-facility column is empty, so F1 tier 0 and F10 have no facility counts |
 | Filling-point and reservoir decisions (Q1, Q2) | owner | ON_HOLD |
 | Telugu, Urdu and Hindi wording review | native speakers | review pack and glossary ready in `docs/translation_review/`; set each language to "reviewed" in `frontend/src/i18n.tsx` afterwards |
 | Passwords or single sign-on | owner | sign-in is a pasted token from the environment; there is no user database |
@@ -202,4 +201,5 @@ The to-do list for these, with how to do each item and when it counts as done, i
 - F2 says the growth ratio must not scale households; a modelled 2025 estimate now does.
 - F19 policy list lacks JL_F8 and JL_POOL.
 - D12 says "159 of 201 sections" geocoded; it is now 161 of 221.
-- `docs/features.csv` now has `doc_promise_met` (yes / partly / no) and `gap` per row (item 22): 21 yes, 24 partly, 2 no. A DONE status means the task's own done-when passed, not that the solution document's promise is met.
+- D9 lists 885 / 310 / 350 / 399 / 59 from a snapshot that was never found; the re-pull gives 941 / 294 / 174 / 439 / 6 in the wards (the D9 row now says so).
+- `docs/features.csv` now has `doc_promise_met` (yes / partly / no) and `gap` per row (item 22). A DONE status means the task's own done-when passed, not that the solution document's promise is met.
