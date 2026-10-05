@@ -22,8 +22,8 @@ No LLM in any scoring, allocation or explanation step.
 - All features exist; `docs/LIMITATIONS.md` lists every known limit per feature (read the section
   for your feature before changing it).
 - **To-do list: `docs/REMAINING_WORK.md`** (items 11-22, each with what, where it stands, how to do
-  it, done-when; plus "Research follow-ups"). Done and merged: 11 (#68), 12 + 16 (#69), 14 (#70).
-  Left: 13, 15, 17, 18, 19, 20, 21, 22, and research follow-ups A and B.
+  it, done-when; plus "Research follow-ups"). Done: 11 (#68), 12 + 16 (#69), 14 (#70), 21
+  (`docs/demo-step5-2025`). Left: 13, 15, 17, 18, 19, 20, 22, and research follow-ups A and B.
 - Last full check on `main` (5c4d43c): lint clean; 908 backend + 184 frontend tests pass; all data
   verifiers pass.
 - GitHub Actions cannot run (account billing block). Every change is verified locally before merge.
@@ -62,7 +62,6 @@ points); `d6_open_buildings` (growth); `d7_groundwater` (NOT fetched, needs NWDP
 
 | Item | Read first | Change |
 |---|---|---|
-| 21 demo step 5 | `docs/JALLEKHA_FINAL_SOLUTION.md` lines ~45 and ~164, `docs/P4_DEMO.md` | say the 2025 replay is the main run (2023 only for continuity) |
 | 22 tracker column | `docs/features.csv`, `docs/LIMITATIONS.md` (per-feature limits, section 6 stale rows) | add `doc_promise_met` (yes/partly/no) + `gap`; fix stale rows (e.g. T7) |
 | 15 D9 facilities | `scripts/data/fetch_d8_weather.py` (fetch + retrieval log pattern), `scripts/evidence/build_evidence.py` (column now `FACILITIES_UNAVAILABLE`), `verify_evidence.py`, `backend/tests/test_e2_evidence.py` | fetch OSM hospitals/clinics/UPHCs/schools/care homes (Overpass, district boundary in `data/raw/geography/osm/`), count per ward, rebuild E2 then E5 (checksums) |
 | 18 T9 threshold | `backend/app/services/confidence.py`, `backend/app/config/confidence.py` (`provisional_threshold` 0.5), `scripts/trust/calibrate_confidence.py`, `data/derived/confidence_calibration.csv` | degraded-signal replay (move some sections to wrong wards / fallback joins), pick lowest threshold meeting the 0.90 target |

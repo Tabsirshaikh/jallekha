@@ -1044,3 +1044,12 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:** another city's data; leak duplicates spread over about 16 days, longer than the 7-day window; text similarity on Indian examples still untested (`docs/LIMITATIONS.md` F13).
 - **Pull request:** see the PR for `feat/f13-dedup-calibration`.
 
+## `docs/demo-step5-2025` — demo step 5 names the 2025 replay (item 21)
+
+- **Owner / date:** docs work done by the repo owner, 2026-10-05.
+- **Why:** the solution document still presented the 2023 summer as the main replay (line 45 and demo step 5), while the sandbox and Impact page use Mar-Jul 2025 as the main run and keep 2023 for continuity (F19).
+- **What we changed:** `docs/JALLEKHA_FINAL_SOLUTION.md` line 45 and section 10 step 5 now name the Mar-Jul 2025 replay as the main run, with 2023 kept for continuity. `docs/P4_DEMO.md` names no replay year and is unchanged. Status updated in `docs/REMAINING_WORK.md`, `docs/features.csv` (X1 note) and `CLAUDE.md`.
+- **Validation:** no line of the solution document presents 2023 as the main replay (checked with a search for "2023"); docs only, no code changed.
+- **Known limitations:** none.
+- **Pull request:** see the PR for `docs/demo-step5-2025`.
+
