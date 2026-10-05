@@ -11,7 +11,7 @@ to-do list.
 | 11 | Ward report cards with real deliveries, debt and schedule | F20 | **done** (`feat/f20-report-cards`) | — |
 | 12 | Gradient-boosting forecast | F5 | **done** (`feat/f5-gbm-forecast`); adoption is the owner's rule | — |
 | 13 | Voice error rate for Telugu and Urdu | F14 | us, after recordings | a small labelled voice set |
-| 14 | Reproduce the duplicate calibration (71% / 88%) | F13 | **location/time done** (`feat/f13-dedup-calibration`); text similarity left | ~2 GB `ml` extra and Indian pairs |
+| 14 | Reproduce the duplicate calibration (71% / 88%) | F13 | **done** (`feat/f13-dedup-calibration`); text-similarity test skipped by owner decision | — |
 | 15 | Hospital and school data (D9) in the ward table | F1, F8, F10 | us, now | nothing (OSM is open) |
 | 16 | Weather data (D8) | F5 | **done** (with item 12) | — |
 | 17 | Groundwater data (D7) | F5, F6 | us, after registering | NWDP account |
@@ -126,7 +126,7 @@ set's size, and the number quoted in `LIMITATIONS.md` (F14).
 
 ### 14. Reproduce F13's duplicate calibration (F13, T1)
 
-**Status: location/time part done** on `feat/f13-dedup-calibration`: logged D13 pull, all measures reproduced or corrected (see `docs/LIMITATIONS.md` F13). The doc's 71% / 88% hold only as "linked to any earlier complaint"; into the right incident it is 59% / 60%, and 82% / 65% for the configured rule. **Left:** the text-similarity test on Indian examples (needs the `ml` extra, about 2 GB).
+**Status: location/time part done** on `feat/f13-dedup-calibration`: logged D13 pull, all measures reproduced or corrected (see `docs/LIMITATIONS.md` F13). The doc's 71% / 88% hold only as "linked to any earlier complaint"; into the right incident it is 59% / 60%, and 82% / 65% for the configured rule. The text-similarity test on Indian examples was **skipped by owner decision** (2026-10-05).
 
 **What it is.** The duplicate engine merges complaints within 100 m and a time window per
 category. The doc quotes "100 m / 48 h finds 71% of real duplicates, 300 m / 7 days finds 88%"
@@ -274,3 +274,93 @@ row, filled from `LIMITATIONS.md`, and fix the stale rows listed in `LIMITATIONS
 
 **Done when.** Every row has the new column and a reader can see at a glance which promises are
 only partly met.
+
+---
+
+## Research follow-ups (2026-10-05)
+
+Research only: nothing below is built yet. Each part says what was found, what we recommend and
+how to do it.
+
+### A. Choosing between the simple forecast and the gradient-boosting model (F5, after item 12)
+
+**The problem.** Item 12's gradient-boosting model beats seasonal naive on the long portal
+backtest (city MAPE 23.21% vs 26.28%, section WAPE 37.04% vs 47.67%, 33 months) but is slightly
+worse on the short S2 run (23.60% / 35.99% vs 21.89% / 35.12%). The selection rule in
+`config/forecast.py` (OPEN, never confirmed) asks for a win on both measures in both runs, so the
+baseline stays published.
+
+**What the research says.**
+1. **Judge on the longest honest backtest.** Rolling-origin evaluation (forecast each month from
+   data before it, then move on) is the standard way to compare forecasting models
+   ([Hyndman & Athanasopoulos, *Forecasting: Principles and Practice*, time series
+   cross-validation](https://otexts.com/fpp3/tscv.html)). Our two runs cover the **same months**
+   (2022 to Feb 2024 lies inside the portal run), from two copies of HMWSSB's data; the S2 run only
+   gives the model less history. Requiring a win in both counts those months twice and punishes a
+   learning model for having had less data, which is not how it will be used: the published
+   forecast is trained on the portal data through Jan 2026 (about 36 months).
+2. **Ask for evidence, not only a lower average.** The standard test of "is forecast A really more
+   accurate than B" is the Diebold-Mariano test with the Harvey-Leybourne-Newbold correction for
+   small samples ([statsmodels `diebold_mariano_test`](https://www.statsmodels.org/dev/generated/statsmodels.tsa.stattools.diebold_mariano_test.html),
+   [MetricGate summary](https://metricgate.com/docs/diebold-mariano-equal-accuracy/)). It can still
+   be over-confident in short samples ([Nottingham eprint](https://eprints.nottingham.ac.uk/43017)),
+   so it should be one condition among others, not the only one.
+3. **Try the average of the two.** Across 50 years of studies and the M competitions, a simple
+   average of forecasts is hard to beat and rarely worse than the models it averages, because their
+   errors partly cancel ([Wang et al., *Forecast combinations: an over 50-year review*](https://arxiv.org/pdf/2205.04216);
+   [M-competition lessons](https://r-statistics.co/M-Competition-Lessons-in-R.html)). An equal
+   average of seasonal naive and the gradient-boosting model is a cheap third candidate.
+4. **Guard against too little history.** The model lost mainly in the months where it had 2 to 11
+   year-on-year months to learn from. A minimum-history condition removes that failure mode.
+
+**Recommended rule (for the owner to confirm, item 19).** A candidate replaces seasonal naive when,
+on the longest rolling-origin backtest (the portal run, months every model shares):
+- it is better on both city MAPE and section WAPE;
+- the Harvey-Leybourne-Newbold Diebold-Mariano test on the monthly section absolute errors rejects
+  equal accuracy at 5% (one-sided);
+- it had at least 12 year-on-year training months when the forecast is made.
+
+The equal average of the candidate and seasonal naive is scored the same way; when two options are
+statistically tied, the simpler one wins. The S2 run stays as the check that reproduces the
+documented 21.9% / 35.1% baseline, not as a second vote.
+
+**How to do it.** In `backend/app/services/forecast.py`: add a `combo_naive_gbm` model (the mean of
+the two), a Diebold-Mariano function (statsmodels is not a dependency; the statistic is a few lines
+with numpy and scipy, already installed), and the new rule in `select_model`; put the rule's wording
+in `config/forecast.py`; re-run `scripts/forecast/run_backtest.py`; update `LIMITATIONS.md` F5.
+Tests: the statistic on a hand-checkable fixture, the minimum-history guard, and the rule choosing
+the simpler option on a tie. About 1 to 2 hours.
+
+### B. Weather for the whole of Hyderabad, not one point (D8, after item 16)
+
+**The problem.** The forecast uses one weather series at the city centre (Open-Meteo, 17.385 N,
+78.4867 E). Heat is not even across the city: studies of Hyderabad find the inner city 3 to 4 deg C
+hotter at the surface after its growth ([SIG research report](https://sig.ac.in/assets/pdf/research_student/mtech/21070146006.pdf)),
+with the strongest heat islands in Patancheru, Gachibowli, Mailardevpally and Hayathnagar
+([The South First, 2024](https://thesouthfirst.com/news/hyderabad-turns-into-a-cluster-of-urban-heat-islands-what-it-means)).
+These are land-surface temperatures, not air temperatures, but they show the spread.
+
+**Sources found.**
+
+| Source | What it gives | Detail | Verdict |
+|---|---|---|---|
+| **TGDPS automatic weather stations** (Telangana State Development Planning Society), on [AIKosh](https://aikosh.indiaai.gov.in/home/datasets/details/telangana_weather_data_2023_2025.html) / Open Data Telangana | about 584 stations; daily rainfall, minimum and maximum temperature, humidity and wind, by district and mandal; yearly files from [2018](https://aikosh.indiaai.gov.in/home/datasets/details/telangana_daily_weather_data_2018.html) to 2025 | real station measurements, one or more per mandal; Open Government License (India) | **best**: real local data for every booking year. To check before use: Hyderabad, Medchal-Malkajgiri, Ranga Reddy and Sangareddy mandals present, gaps, file format, and whether download needs a login |
+| [Open-Meteo historical API](https://open-meteo.com/en/docs/historical-weather-api), several points in one call (comma-separated coordinates) | the current source, at many points | "best match" blends ECMWF IFS (9 km, from 2017), ERA5-Land (about 11 km) and ERA5 (25 km) | **fallback**: free and complete, but at 9 to 11 km a city about 40 km across has only a handful of distinct cells, and reanalysis smooths heat islands |
+| IMD gridded data | rainfall at 0.25 deg, temperature at 1 deg | coarser than both | not worth it |
+
+**Recommended approach.**
+1. Download the TGDPS station files for 2018 to 2025 for the mandals HMWSSB serves and log them
+   in `data/raw/d8_weather_stations/` with a retrieval log and checksums (as for D8).
+2. Give each HMWSSB section the station of its mandal, or the nearest station. Sections are
+   already geocoded (D12) and mandal boundaries are in
+   `data/raw/geography/osm/hyderabad_mandals.geojson`. Where a station has a gap, fill from the
+   nearest station, else from the Open-Meteo point nearest the section, and label filled values.
+3. Build the gradient-boosting model's weather features per section (last year's month against
+   that station's own 2019-2021 normal, recent rain and heat) instead of one value for the city.
+4. Score it on the same backtest and keep it only if it wins under the rule in part A.
+
+**Effort and limits.** About half a day once the files download. Station networks have gaps and
+moved stations, and the 2018 start leaves 2019-2021 for the normal (as now). If the Hyderabad
+mandal files are missing or too patchy, use the Open-Meteo multi-point fallback: one point per GHMC
+zone (6 zones), given to sections by nearest point.
+
