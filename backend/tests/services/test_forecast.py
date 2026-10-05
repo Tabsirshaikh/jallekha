@@ -128,11 +128,68 @@ def test_backtest_naive_equals_the_baseline(s2: fc.Panel) -> None:
     assert summary.origins == len(base.scored_months)
 
 
-def test_gbm_is_reported_as_not_run_without_a_library() -> None:
-    assert "global_gbm" not in fc.MODELS
-    assert "global_gbm" in fc.NOT_RUN
-    assert "neither installed by setup" in fc.NOT_RUN["global_gbm"]
-    assert "D7 and D8" in fc.NOT_RUN["global_gbm"]
+def test_gbm_is_a_registered_model_and_no_longer_listed_as_not_run() -> None:
+    assert "global_gbm" in fc.MODELS
+    assert "global_gbm" not in fc.NOT_RUN
+
+
+# --- global gradient-boosting candidate (F5, item 12) ------------------------------------
+
+
+def _growing(years: int = 4, sections: int = 12, growth: float = 1.25) -> fc.Panel:
+    """Every section grows by `growth` a year, with a summer peak: seasonal naive lags behind."""
+    values: dict[tuple[int, int], dict[str, float]] = {}
+    for y in range(years):
+        for m in range(1, 13):
+            season = 1.6 if m in (3, 4, 5) else 1.0
+            values[(2022 + y, m)] = {
+                f"S{s:02d}": (40 + 7 * s) * season * growth**y for s in range(sections)
+            }
+    return _panel(values)
+
+
+def test_gbm_learns_growth_that_seasonal_naive_misses() -> None:
+    panel = _growing()
+    target = (2025, 4)
+    train = panel.until(target)
+    gbm = fc.global_gbm(train, target)
+    naive = fc.seasonal_naive(train, target)
+    assert gbm is not None and naive is not None
+    actual = panel.values[target]
+    assert set(gbm) == set(naive)  # the sections a year earlier, like the baseline
+    assert all(v >= 0 for v in gbm.values())
+    gbm_err = sum(abs(gbm[s] - actual[s]) for s in actual)
+    naive_err = sum(abs(naive[s] - actual[s]) for s in actual)
+    assert gbm_err < 0.5 * naive_err
+
+
+def test_gbm_is_deterministic() -> None:
+    panel = _growing()
+    target = (2025, 7)
+    assert fc.global_gbm(panel.until(target), target) == fc.global_gbm(panel.until(target), target)
+
+
+def test_gbm_needs_last_years_month_and_enough_history() -> None:
+    panel = _growing(years=2)
+    assert fc.global_gbm(panel.until((2023, 2)), (2023, 2)) is None  # one year-on-year month
+    gap = _panel({m: v for m, v in _growing().values.items() if m != (2024, 3)})
+    assert fc.global_gbm(gap.until((2025, 3)), (2025, 3)) is None  # no value a year earlier
+
+
+def test_gbm_forecasts_twelve_months_from_one_training_end() -> None:
+    panel = _growing()
+    train = panel.until((2025, 1))
+    for h in range(12):
+        target = fc.shift((2025, 1), h)
+        assert fc.global_gbm(train, target) is not None, target
+
+
+def test_monthly_weather_comes_from_the_daily_d8_file() -> None:
+    weather = fc.monthly_weather()
+    may_2024 = weather[(2024, 5)]
+    assert 30 < may_2024.tmax_mean < 45 and may_2024.precip_total >= 0
+    assert (2019, 1) in weather and (2026, 9) in weather
+    assert weather[(2024, 7)].precip_total > weather[(2024, 2)].precip_total  # monsoon vs dry
 
 
 # --- sections that appear or disappear ---------------------------------------------------

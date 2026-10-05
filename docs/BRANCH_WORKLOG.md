@@ -1018,3 +1018,16 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:** see `docs/LIMITATIONS.md` F11 and F20 (scheduled-supply wards only, one load per Confirmed delivery, manual close, old ward map).
 - **Pull request:** see the PR for `feat/f20-report-cards`.
 
+## `feat/f5-gbm-forecast` — gradient-boosting forecast candidate with weather (items 12 and 16)
+
+- **Owner / date:** P2 work done by the repo owner, 2026-10-05.
+- **Why:** F5 promises a global gradient-boosting model with weather; only seasonal naive and naive x growth existed, and D8 weather was not in the repo.
+- **What we changed:**
+  - **D8 weather:** `scripts/data/fetch_d8_weather.py` fetches Open-Meteo daily maximum temperature and rainfall for the city centre, 2019-2026, into `data/raw/d8_weather/` with a retrieval log and checksum.
+  - **Model:** `forecast.global_gbm`, a scikit-learn `HistGradientBoostingRegressor` (absolute-error loss) pooled over all sections, predicting log(value + 1) minus log(last year + 1) from the month, the values a year and two years earlier, recent section and city growth, last year's month weather against the 2019-2021 normal, and recent rain and heat. Every feature is at least as old as the forecast origin, so one model serves the whole 12-month horizon, and the leak check refuses later training data. Settings are in `config/forecast.py`, fixed before the backtest.
+  - **Results** (`data/derived/forecast_backtest.csv`): portal run, MAPE 23.21% / WAPE 37.04% against seasonal naive's 26.28% / 47.67%; S2 run, 23.60% / 35.99% against 21.89% / 35.12%. The OPEN selection rule (both measures, both runs) keeps seasonal naive, so the forecast table and the shortage warning are unchanged.
+  - `scikit-learn==1.9.1` added to the `models` extra.
+- **Validation:** tests written first and seen failing (learns growth seasonal naive misses, deterministic, needs last year's month and enough history, serves 12 months, monthly weather from the daily file); the existing leak tests now cover the new model.
+- **Known limitations:** see `docs/LIMITATIONS.md` F5 (owner rule decides adoption; groundwater missing; one weather point for the city).
+- **Pull request:** see the PR for `feat/f5-gbm-forecast`.
+

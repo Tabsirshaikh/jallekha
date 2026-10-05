@@ -9,11 +9,11 @@ to-do list.
 | # | Item | Feature | Who can start it | Blocked by |
 |---|---|---|---|---|
 | 11 | Ward report cards with real deliveries, debt and schedule | F20 | **done** (`feat/f20-report-cards`) | — |
-| 12 | Gradient-boosting forecast | F5 | us, after 16 | weather data (16), dependency choice (19) |
+| 12 | Gradient-boosting forecast | F5 | **done** (`feat/f5-gbm-forecast`); adoption is the owner's rule | — |
 | 13 | Voice error rate for Telugu and Urdu | F14 | us, after recordings | a small labelled voice set |
 | 14 | Reproduce the duplicate calibration (71% / 88%) | F13 | us, now | a calibration extract we must rebuild |
 | 15 | Hospital and school data (D9) in the ward table | F1, F8, F10 | us, now | nothing (OSM is open) |
-| 16 | Weather data (D8) | F5 | us, now | nothing (Open-Meteo is open) |
+| 16 | Weather data (D8) | F5 | **done** (with item 12) | — |
 | 17 | Groundwater data (D7) | F5, F6 | us, after registering | NWDP account |
 | 18 | Degraded-signal replay for the T9 threshold | F17 | us, now | nothing |
 | 19 | Seven owner decisions | several | owner | owner |
@@ -81,6 +81,8 @@ and the U10 screen shows them live; a ward with none of these says "none yet" ra
 sample number. Tests at service, API and screen level; `python tasks.py test` and `lint` pass.
 
 ### 12. Better F5 forecast: gradient boosting (F5, T2)
+
+**Status: done** on `feat/f5-gbm-forecast`. Built with scikit-learn 1.9.1 (`models` extra) and the D8 weather data. It beats seasonal naive on both measures on the portal history (MAPE 23.21% vs 26.28%, WAPE 37.04% vs 47.67%) and is slightly worse on the short S2 files, so under the current OPEN rule the baseline stays published. See `docs/LIMITATIONS.md` F5. The text below is the plan it followed.
 
 **What it is.** A second forecasting model: one gradient-boosting model pooled over all sections,
 using month, last year's value (lag 12), trend, weather (D8) and groundwater depth (D7), as the
@@ -166,6 +168,8 @@ an officer still confirms each.
 the difference is explained), and the verifier passes.
 
 ### 16. Weather data (D8) from Open-Meteo (F5)
+
+**Status: done** with item 12: `scripts/data/fetch_d8_weather.py` wrote `data/raw/d8_weather/` (2019-01-01 to 2026-09-30, 2,830 days, no gaps, retrieval log with SHA-256).
 
 **What it is.** Daily temperature and rainfall for Hyderabad, 2019 to 2026, from Open-Meteo's
 free historical API. The doc lists it as REAL.
