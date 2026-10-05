@@ -992,3 +992,16 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:** see `docs/LIMITATIONS.md` section 5 ("Not finished" and "Limits of the live wiring"). Main ones: plans come only from the committed replay, U10 report cards are still sample, sign-in is a pasted token, concurrent writes are last-writer-wins, screens were not looked at in a browser by a person.
 - **Pull request:** see the PR for `feat/live-backend`.
 
+## `fix/four-gaps` — supplied-booking plans, concurrency, weights and names, translation review
+
+- **Owner / date:** P2 work done by the repo owner, 2026-10-04 to 2026-10-05.
+- **Why:** four gaps left after the live wiring: plans only from the 2025 replay; two simultaneous actions could lose a change or crash a duplicate start with a 500; the live plan screen had no priority weights and showed ward ids; the Telugu, Urdu and Hindi text is unreviewed.
+- **What we changed:**
+  - **Plans from supplied bookings:** `POST /plans` takes the day's bookings (any day; validated, listed problems by booking number; canonical order, so the same bookings are the same plan; id is a hash of the bookings; kept in the recipe so the plan rebuilds exactly). The plan screen takes them as CSV (paste or file) and checks the shape before sending. There is still no automatic feed: HMWSSB publishes monthly totals only.
+  - **Concurrency:** optimistic versions (`plan_record.version`, new `delivery_version` table) refuse a write from a stale read (409), and a per-plan / per-delivery lock makes change, ledger entry and save one step in one process; a duplicate start is a 409.
+  - **Weights and names:** `NeedWeights` (water access, phone access, hardship; 0 to 5). A weighted plan is its own replay run with its own id and ledger entry; `GET /plans/{id}/compare` lists who gains and loses trips; plan views carry `weights`, `group_names` and `source`; the list carries the default weights and the maximum. The screen has the three sliders, the who-gains panel and names everywhere.
+  - **Translations:** `docs/translation_review/` (807 strings with reviewer columns, a glossary with counts and five inconsistencies), `npm run i18n:export` / `i18n:check` (in `tasks.py test`), quality checks on every test run, and a "draft translation" notice in Telugu, Urdu and Hindi until each is set to reviewed.
+- **Validation:** tests written first and seen failing for each part (store-level conflict rules plus real concurrent HTTP calls; weights and supplied bookings at service and API level; adapter, CSV parser and screen tests; translation checks with tests proving they catch dropped placeholders, copied English and the wrong script). The real API was run once to confirm the shapes the screen expects. Full suite: see the PR.
+- **Known limitations:** see `docs/LIMITATIONS.md` (live booking feed, weights' small effect, multi-process ledger gap, translations still need a native speaker).
+- **Pull request:** see the PR for `fix/four-gaps`.
+
