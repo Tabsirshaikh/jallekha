@@ -263,20 +263,87 @@ def test_conformal_backtest_reports_coverage_or_says_why_not(s2: fc.Panel) -> No
 # --- model choice ------------------------------------------------------------------------
 
 
-def test_only_a_model_that_beats_the_baseline_is_selected() -> None:
-    def s(mape: float, wape: float) -> fc.Summary:
-        return fc.Summary(mape, wape, 10, 100)
+def test_diebold_mariano_with_the_small_sample_correction_on_a_hand_checkable_fixture() -> None:
+    # Loss differentials 1, 2, 3, 4: mean 2.5, variance 1.25, DM = 2.5 / sqrt(1.25 / 4) = 4.4721;
+    # HLN correction for h = 1: x sqrt(3 / 4) = 3.8730; one-sided p from t(3) = 0.015233.
+    test = fc.diebold_mariano([5, 6, 7, 8], [4, 4, 4, 4])
+    assert test.n == 4
+    assert test.statistic == pytest.approx(3.8730, abs=1e-4)
+    assert test.p_value == pytest.approx(0.015233, abs=1e-6)
+    # Equal losses: no evidence either way.
+    assert fc.diebold_mariano([1, 2, 3], [1, 2, 3]).p_value == 1.0
 
-    naive = {"seasonal_naive": s(20, 30)}
-    assert fc.select_model([{**naive, "naive_x_growth": s(25, 29)}]) == "seasonal_naive"
-    assert fc.select_model([{**naive, "naive_x_growth": s(19, 29)}]) == "naive_x_growth"
-    # Must beat it in every run given (S2 and portal).
-    assert (
-        fc.select_model(
-            [{**naive, "naive_x_growth": s(19, 29)}, {**naive, "naive_x_growth": s(21, 29)}]
+
+def test_year_on_year_months_count_training_months_with_a_value_a_year_earlier() -> None:
+    panel = _panel({(2022, m): {"a": 1.0} for m in range(1, 13)} | {(2023, 1): {"a": 1.0}})
+    assert fc.yoy_months(panel) == 1
+    # Dec 2022 missing: Dec 2023 has no value a year earlier and does not count.
+    gap = {(2022, m): {"a": 1.0} for m in range(1, 12)} | {
+        (2023, m): {"a": 1.0} for m in range(1, 13)
+    }
+    assert fc.yoy_months(_panel(gap)) == 11
+
+
+def test_combination_is_the_equal_average_of_seasonal_naive_and_gbm(monkeypatch) -> None:
+    monkeypatch.setattr(fc, "seasonal_naive", lambda train, target: {"a": 10.0, "b": 4.0})
+    monkeypatch.setattr(fc, "global_gbm", lambda train, target: {"a": 20.0, "b": 8.0})
+    assert fc.combo_naive_gbm(_panel({}), (2024, 1)) == {"a": 15.0, "b": 6.0}
+    monkeypatch.setattr(fc, "global_gbm", lambda train, target: None)
+    assert fc.combo_naive_gbm(_panel({}), (2024, 1)) is None
+    assert "combo_naive_gbm" in fc.MODELS
+
+
+def _rows(model: str, errors: list[float]) -> list[fc.BacktestRow]:
+    """One origin per error (months from Jan 2024): city off by `error`% and the sections'
+    absolute error `error` on 100 actual bookings."""
+    return [
+        fc.BacktestRow(
+            model, (2024 + i // 12, i % 12 + 1), 100.0, 100.0 + e, abs(e), abs(e), 100.0, 10
         )
-        == "seasonal_naive"
-    )
+        for i, e in enumerate(errors)
+    ]
+
+
+NAIVE = [30.0, 28.0, 33.0, 31.0, 29.0, 35.0, 30.0, 32.0, 27.0, 34.0, 30.0, 31.0]
+
+
+def test_a_candidate_replaces_the_baseline_only_when_it_is_better_and_significantly_so() -> None:
+    better = [e - 8 + (i % 3) for i, e in enumerate(NAIVE)]  # clearly and consistently better
+    noisy = [
+        e - 1 + (6 if i % 2 else -6) for i, e in enumerate(NAIVE)
+    ]  # slightly better on average
+    rows = _rows("seasonal_naive", NAIVE) + _rows("global_gbm", better)
+    chosen = fc.select(rows, production_yoy_months=24)
+    assert chosen.model == "global_gbm"
+    test = next(t for t in chosen.tests if t.model == "global_gbm")
+    assert test.p_value < 0.05 and test.city_mape < test.baseline_city_mape
+    rows = _rows("seasonal_naive", NAIVE) + _rows("global_gbm", noisy)
+    assert fc.select(rows, production_yoy_months=24).model == "seasonal_naive"
+
+
+def test_too_little_history_keeps_the_baseline() -> None:
+    better = [e - 8 for e in NAIVE]
+    rows = _rows("seasonal_naive", NAIVE) + _rows("global_gbm", better)
+    assert fc.select(rows, production_yoy_months=11).model == "seasonal_naive"
+
+
+def test_on_a_statistical_tie_the_simpler_model_wins() -> None:
+    gbm = [e - 8 + (i % 3) for i, e in enumerate(NAIVE)]
+    combo_tied = [e + (0.5 if i % 2 else -0.5) for i, e in enumerate(gbm)]
+    rows = _rows("seasonal_naive", NAIVE) + _rows("global_gbm", gbm)
+    assert fc.select(rows + _rows("combo_naive_gbm", combo_tied), 24).model == "global_gbm"
+    combo_better = [e - 5 + (i % 2) for i, e in enumerate(gbm)]
+    assert fc.select(rows + _rows("combo_naive_gbm", combo_better), 24).model == "combo_naive_gbm"
+
+
+def test_selection_scores_only_origins_with_enough_history() -> None:
+    # The candidate is far worse on the first origins, but they are not scored.
+    naive = NAIVE * 2
+    gbm = [60.0] * 12 + [e - 8 + (i % 3) for i, e in enumerate(NAIVE)]
+    rows = _rows("seasonal_naive", naive) + _rows("global_gbm", gbm)
+    history = {r.origin: (12 if r.origin >= (2025, 1) else 6) for r in rows}
+    chosen = fc.select(rows, 24, origin_yoy_months=history)
+    assert chosen.model == "global_gbm" and chosen.origins == 12
 
 
 # --- capacity planner --------------------------------------------------------------------
@@ -317,4 +384,5 @@ def test_forecast_table_basis_carries_the_recut_label(s2: fc.Panel) -> None:
         s2, "seasonal_naive", 2, basis_note=FORECAST_CONFIG.forecast_table_note
     )
     assert all("re-cut" in str(r["point_basis"]) for r in table if r["point"] is not None)
-    assert "OPEN" in FORECAST_CONFIG.model_selection_rule
+    # The rule was decided by the owner (research follow-up A, 2026-10-06).
+    assert "Diebold-Mariano" in FORECAST_CONFIG.model_selection_rule

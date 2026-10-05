@@ -381,12 +381,26 @@ def global_gbm(train: Panel, target: Month) -> SectionValues | None:
     }
 
 
+def combo_naive_gbm(train: Panel, target: Month) -> SectionValues | None:
+    """Equal average of seasonal naive and the gradient-boosting model per section: forecast
+    combinations are hard to beat and rarely worse than the models they average (Wang et al.,
+    "Forecast combinations: an over 50-year review"). None when either model has no forecast."""
+    naive = seasonal_naive(train, target)
+    gbm = global_gbm(train, target)
+    if naive is None or gbm is None:
+        return None
+    return {s: (naive.get(s, 0.0) + gbm.get(s, 0.0)) / 2 for s in sorted(set(naive) | set(gbm))}
+
+
 Model = Callable[[Panel, Month], SectionValues | None]
 MODELS: dict[str, Model] = {
     "seasonal_naive": seasonal_naive,
     "naive_x_growth": naive_x_growth,
     "global_gbm": global_gbm,
+    "combo_naive_gbm": combo_naive_gbm,
 }
+# Simplest first: on a statistical tie the simpler model is used.
+COMPLEXITY: tuple[str, ...] = ("seasonal_naive", "naive_x_growth", "global_gbm", "combo_naive_gbm")
 
 
 def reconcile(section_forecasts: Mapping[str, float]) -> float:
@@ -467,23 +481,122 @@ def common_origins(rows: Sequence[BacktestRow]) -> set[Month]:
     return set.intersection(*sets) if sets else set()
 
 
-def select_model(runs: Sequence[Mapping[str, Summary]]) -> str:
-    """Selection rule (config `model_selection_rule`, OPEN): a model is used only if it beats
-    seasonal naive on both city MAPE and section WAPE in every run given; otherwise the
-    baseline."""
-    names = set.intersection(*(set(run) for run in runs)) - {"seasonal_naive"}
-    winners = [
-        n
-        for n in sorted(names)
-        if all(
-            run[n].city_mape < run["seasonal_naive"].city_mape
-            and run[n].section_wape < run["seasonal_naive"].section_wape
-            for run in runs
+def yoy_months(panel: Panel) -> int:
+    """Training months that have a value a year earlier (what a year-on-year model learns from).
+    A missing month (Dec 2022) breaks the pair, so the month a year after it does not count."""
+    return sum(1 for m in panel.values if shift(m, -12) in panel.values)
+
+
+@dataclass(frozen=True)
+class DMTest:
+    statistic: float
+    p_value: float  # one-sided: the candidate's losses are lower
+    n: int
+
+
+def diebold_mariano(baseline_losses: Sequence[float], candidate_losses: Sequence[float]) -> DMTest:
+    """Diebold-Mariano test of equal accuracy, one-sided (candidate better), with the
+    Harvey-Leybourne-Newbold small-sample correction for one-step forecasts (h = 1): the
+    statistic is scaled by sqrt((n - 1) / n) and compared with Student's t on n - 1 degrees of
+    freedom. Losses are paired per origin. Needs scipy (`models` extra)."""
+    d = [b - c for b, c in zip(baseline_losses, candidate_losses, strict=True)]
+    n = len(d)
+    if n < 2:
+        return DMTest(0.0, 1.0, n)
+    mean = sum(d) / n
+    variance = sum((x - mean) ** 2 for x in d) / n
+    if variance == 0:
+        if mean == 0:
+            return DMTest(0.0, 1.0, n)
+        return DMTest(math.copysign(math.inf, mean), 0.0 if mean > 0 else 1.0, n)
+    statistic = mean / math.sqrt(variance / n) * math.sqrt((n - 1) / n)
+    from scipy.stats import t  # `models` extra (installed with scikit-learn)
+
+    return DMTest(statistic, float(t.sf(statistic, n - 1)), n)
+
+
+@dataclass(frozen=True)
+class CandidateTest:
+    model: str
+    city_mape: float
+    section_wape: float
+    baseline_city_mape: float
+    baseline_section_wape: float
+    dm: DMTest
+    passed: bool
+
+    @property
+    def p_value(self) -> float:
+        return self.dm.p_value
+
+
+@dataclass(frozen=True)
+class Selection:
+    model: str
+    origins: int  # scored origins (shared by every model, with enough history)
+    tests: tuple[CandidateTest, ...]
+    reason: str
+
+
+def select(
+    rows: Sequence[BacktestRow],
+    production_yoy_months: int,
+    origin_yoy_months: Mapping[Month, int] | None = None,
+    config: ForecastConfig = FORECAST_CONFIG,
+) -> Selection:
+    """Selection rule (config `model_selection_rule`), applied to one backtest run (the longest).
+    Scored on the origins every model shares where the training data had at least
+    `selection_min_yoy_months` year-on-year months. A candidate passes when it beats seasonal
+    naive on city MAPE and section WAPE and the HLN Diebold-Mariano test on the monthly section
+    absolute errors rejects equal accuracy at `selection_alpha` (one-sided). The published
+    forecast must also have that much history. Of the passing models the simplest is used,
+    unless a more complex one is significantly better than it."""
+    base = "seasonal_naive"
+    minimum = config.selection_min_yoy_months
+    origins = common_origins(rows)
+    if origin_yoy_months is not None:
+        origins = {o for o in origins if origin_yoy_months.get(o, 0) >= minimum}
+    ordered = sorted(origins)
+    loss: dict[str, dict[Month, float]] = {}
+    for r in rows:
+        if r.origin in origins:
+            loss.setdefault(r.model, {})[r.origin] = r.abs_error
+    summaries = summarise(rows, origins)
+
+    def losses(model: str) -> list[float]:
+        return [loss[model][o] for o in ordered]
+
+    tests = []
+    for name in COMPLEXITY[1:]:
+        if name not in summaries or base not in summaries:
+            continue
+        s, b = summaries[name], summaries[base]
+        dm = diebold_mariano(losses(base), losses(name))
+        better = s.city_mape < b.city_mape and s.section_wape < b.section_wape
+        passed = better and dm.p_value < config.selection_alpha
+        tests.append(
+            CandidateTest(
+                name, s.city_mape, s.section_wape, b.city_mape, b.section_wape, dm, passed
+            )
         )
-    ]
-    if not winners:
-        return "seasonal_naive"
-    return min(winners, key=lambda n: runs[0][n].section_wape)
+    if production_yoy_months < minimum:
+        reason = f"published forecast has {production_yoy_months} year-on-year months (< {minimum})"
+        return Selection(base, len(ordered), tuple(tests), reason)
+    passing = [t.model for t in tests if t.passed]
+    if not passing:
+        reason = "no candidate is better on both measures with a significant DM test"
+        return Selection(base, len(ordered), tuple(tests), reason)
+    chosen = passing[0]
+    for name in passing[1:]:
+        if diebold_mariano(losses(chosen), losses(name)).p_value < config.selection_alpha:
+            chosen = name
+    reason = f"better than seasonal naive on both measures, DM p < {config.selection_alpha}"
+    if len(passing) > 1:
+        reason += (
+            f"; of {', '.join(passing)} the simplest unless a more complex one is "
+            "significantly better"
+        )
+    return Selection(chosen, len(ordered), tuple(tests), reason)
 
 
 # --- split-conformal intervals -----------------------------------------------------------

@@ -52,7 +52,9 @@ def _label(month: fc.Month) -> str:
     return f"{month[0]}-{month[1]:02d}"
 
 
-def _run(name: str, panel: fc.Panel) -> tuple[list[dict[str, object]], dict[str, fc.Summary]]:
+def _run(
+    name: str, panel: fc.Panel
+) -> tuple[list[dict[str, object]], dict[str, fc.Summary], list[fc.BacktestRow]]:
     rows: list[dict[str, object]] = []
     backtest = fc.backtest(panel)
     basis = f"DERIVED: rolling-origin backtest on {name} ({panel.column}), training before origin"
@@ -107,7 +109,7 @@ def _run(name: str, panel: fc.Panel) -> tuple[list[dict[str, object]], dict[str,
             )  # fmt: skip
     for model, why in fc.NOT_RUN.items():
         rows.append({"run": name, "row_type": "not_run", "model": model, "note": why})
-    return rows, summaries
+    return rows, summaries, backtest
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -119,16 +121,32 @@ def main(argv: list[str] | None = None) -> int:
 
     s2 = fc.load_panel(S2_DIR, cfg.baseline_column)
     portal = fc.load_panel(PORTAL_DIR, cfg.baseline_column, through=cfg.portal_through)
-    rows_s2, summary_s2 = _run("s2_2022-01_2024-02", s2)
-    rows_portal, summary_portal = _run(f"portal_2022-01_{_label(cfg.portal_through)}", portal)
-    selected = fc.select_model([summary_s2, summary_portal])
+    rows_s2, summary_s2, _ = _run("s2_2022-01_2024-02", s2)
+    portal_name = f"portal_2022-01_{_label(cfg.portal_through)}"
+    rows_portal, summary_portal, backtest_portal = _run(portal_name, portal)
+    # The rule is judged on the longest run (portal); S2 only checks the documented baseline.
+    history = {o: fc.yoy_months(portal.until(o)) for o in {r.origin for r in backtest_portal}}
+    selection = fc.select(backtest_portal, fc.yoy_months(portal), history)
+    selected = selection.model
     rows = rows_s2 + rows_portal
+    basis = "DERIVED: selection rule on the portal run (config model_selection_rule)"
+    for t in selection.tests:
+        rows.append(
+            {
+                "run": portal_name, "row_type": "selection_test", "model": t.model,
+                "months": selection.origins, "city_mape": round(t.city_mape, 4),
+                "city_mape_basis": basis, "section_wape": round(t.section_wape, 4),
+                "section_wape_basis": basis,
+                "note": f"seasonal naive {t.baseline_city_mape:.4f} / "
+                f"{t.baseline_section_wape:.4f}; "
+                f"HLN Diebold-Mariano {t.dm.statistic:.4f}, one-sided p {t.p_value:.4f} "
+                f"(n {t.dm.n}); {'passes' if t.passed else 'does not pass'}",
+            }
+        )  # fmt: skip
     rows.append(
         {
-            "run": "both", "row_type": "selected", "model": selected,
-            "note": "beats seasonal naive on city MAPE and section WAPE in both runs"
-            if selected != "seasonal_naive"
-            else "no model beats seasonal naive on both metrics in both runs; baseline used",
+            "run": portal_name, "row_type": "selected", "model": selected,
+            "months": selection.origins, "note": selection.reason,
         }
     )  # fmt: skip
     changes = fc.section_changes(portal)

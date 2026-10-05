@@ -1102,3 +1102,16 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:** none; install the new dev dependency with `python tasks.py setup` (or `pip install pytest-xdist==3.8.0`).
 - **Pull request:** see the PR for `chore/parallel-tests`.
 
+## `feat/f5-selection-rule` — forecast model chosen by a tested rule (research follow-up A)
+
+- **Owner / date:** P3 work done by the repo owner, 2026-10-06 (rule applied at the owner's request).
+- **Why:** the OPEN rule (beat seasonal naive on both measures in both runs) counted the same months twice and penalised the gradient-boosting model for the short S2 history, so the baseline stayed published although the model won the long backtest.
+- **What we changed:**
+  - `services/forecast.py`: `combo_naive_gbm` (equal average, a fourth model), `yoy_months`, `diebold_mariano` (one-sided, HLN correction, h = 1; scipy from the `models` extra) and `select` (portal run, shared origins with >= 12 year-on-year training months, better on both measures and DM p < 0.05, published forecast needs the same history, simplest model on a tie). The old `select_model` is removed.
+  - `config/forecast.py`: the rule, `selection_alpha` 0.05, `selection_min_yoy_months` 12.
+  - `scripts/forecast/run_backtest.py` writes a `selection_test` row per candidate (both measures, DM statistic, p, n) and the `selected` row with the reason. Forecast table and shortage list rebuilt; API examples regenerated.
+- **Results:** gradient boosting selected (23.01% / 37.39% vs 30.98% / 50.97%, p = 0.0006, 24 origins). Shortage list: 86 high / 110 medium / 352 low / 3 unknown (was 46 / 130 / 372 / 3). On the real Feb-Aug 2026 city totals the two forecasts are nearly tied (31.1% vs 31.8% MAPE) and both miss the summer 2026 surge.
+- **Validation:** tests written first and seen failing (DM statistic and p on a hand-checked fixture, year-on-year months with the Dec 2022 gap, combination, significance and history conditions, tie goes to the simpler model, scoring only origins with enough history), then passing.
+- **Known limitations:** 24 scored months; DM can be over-confident in short samples; out-of-sample evidence so far is a tie (`docs/LIMITATIONS.md` F5).
+- **Pull request:** see the PR for `feat/f5-selection-rule`.
+

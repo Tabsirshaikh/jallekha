@@ -52,14 +52,22 @@ class ForecastConfig:
         "section names are from before the Feb/Mar 2026 re-cut, so Feb 2026 onwards cannot "
         "be compared section by section with current HMWSSB sections"
     )
-    # Model choice. docs/P3_BUILD_PLAN.md T2 says only that a model must beat the baseline; it
-    # does not say which metric decides. OPEN, owner to confirm. Rule applied: a model is used
-    # only if it beats seasonal naive on both city MAPE and section WAPE in both backtest runs
-    # (S2 and portal); otherwise seasonal naive is used.
+    # Model choice (docs/REMAINING_WORK.md "Research follow-ups" A; applied at the owner's
+    # request on 2026-10-06). Judged on the longest rolling-origin backtest (portal run, origins
+    # every model shares with at least selection_min_yoy_months of year-on-year training data);
+    # the S2 run only checks that the documented 21.9% / 35.1% baseline reproduces. A candidate
+    # replaces seasonal naive when it is better on city MAPE and section WAPE AND the one-sided
+    # Diebold-Mariano test with the Harvey-Leybourne-Newbold correction on the monthly section
+    # absolute errors rejects equal accuracy at selection_alpha (Hyndman & Athanasopoulos, FPP3
+    # time-series cross-validation; statsmodels diebold_mariano_test). The published forecast
+    # must have the same minimum history. On a statistical tie the simpler model wins.
     model_selection_rule: str = (
-        "a model is used only if it beats seasonal naive on both city MAPE and section WAPE in "
-        "both backtest runs (S2 and portal); otherwise seasonal naive (OPEN)"
+        "longest backtest (portal), shared origins with >= 12 year-on-year training months: a "
+        "candidate is used if it beats seasonal naive on city MAPE and section WAPE and the HLN "
+        "Diebold-Mariano test (one-sided, 5%) rejects equal accuracy; simplest model on a tie"
     )
+    selection_alpha: float = 0.05
+    selection_min_yoy_months: int = 12
     # Covariates of the gradient-boosting candidate: weather D8 (Open-Meteo, REAL reanalysis).
     # Groundwater D7 is not in the repo (NWDP needs registration; data/raw/d7_groundwater).
     covariates: tuple[str, ...] = ("weather_d8",)
