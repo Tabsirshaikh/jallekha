@@ -202,4 +202,4 @@ The to-do list for these, with how to do each item and when it counts as done, i
 - F2 says the growth ratio must not scale households; a modelled 2025 estimate now does.
 - F19 policy list lacks JL_F8 and JL_POOL.
 - D12 says "159 of 201 sections" geocoded; it is now 161 of 221.
-- T7 is merged (PR #46) but the tracker still says IN_REVIEW.
+- `docs/features.csv` now has `doc_promise_met` (yes / partly / no) and `gap` per row (item 22): 21 yes, 24 partly, 2 no. A DONE status means the task's own done-when passed, not that the solution document's promise is met.
