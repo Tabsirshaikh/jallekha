@@ -7,6 +7,7 @@ from app.errors import install_error_handlers
 from app.routers import (
     auth_routes,
     contests,
+    debt,
     deliveries,
     evidence,
     forecast,
@@ -38,3 +39,4 @@ app.include_router(plans.router)
 app.include_router(contests.router)
 app.include_router(deliveries.router)
 app.include_router(stops.router)
+app.include_router(debt.router)

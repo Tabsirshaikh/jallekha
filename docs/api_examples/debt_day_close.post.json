@@ -1,0 +1,51 @@
+{
+  "_example": {
+    "endpoint": "POST /debt/days/{day}/close",
+    "status": "ROUTE_ON_MAIN",
+    "basis": "DERIVED (A6 on stored plans); SYNTHETIC example",
+    "built_from": "services/day_close.py, services/debt_store.py",
+    "notes": "Officer only. See docs/api_additions/report_cards.md."
+  },
+  "request": {
+    "day": "2026-10-03",
+    "plan_id": "plan-2026-10-03-41c27fd9",
+    "officer_id": "off-1",
+    "reason": "all deliveries closed"
+  },
+  "response": {
+    "day": "2026-10-03",
+    "plan_id": "plan-2026-10-03-41c27fd9",
+    "plan_digest": "59c86e915b824ac8c6ebc6a8eb6f45050f9126ecc4239c84a2b63c1e28c936a5",
+    "wards": [
+      {
+        "ward_id": "relation/7848824",
+        "planned_litres": 130000.0,
+        "credited_litres": 10000.0,
+        "deliveries": {
+          "Confirmed": 2,
+          "Disputed": 1
+        },
+        "debt_before": 0.0,
+        "debt_after": 120000.0,
+        "capped": false,
+        "alert": false,
+        "days_in_debt": 1,
+        "ward_name": "Ward 105 Gachibowli"
+      }
+    ],
+    "accounts": [
+      {
+        "account_id": "ward:relation/7848824",
+        "ward_id": "relation/7848824",
+        "ward_name": "Ward 105 Gachibowli",
+        "debt_litres": 120000.0,
+        "daily_entitlement_litres": 130000.0,
+        "cap_litres": 910000.0,
+        "in_debt_since": "2026-10-03",
+        "alert_raised": false,
+        "settled_through": "2026-10-03"
+      }
+    ],
+    "basis": "DERIVED (A6: litres the approved plan gave each ward's registered stops minus one tanker load per Confirmed delivery started that day at those stops)"
+  }
+}

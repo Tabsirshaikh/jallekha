@@ -21,3 +21,7 @@ class DeliveryStop(IdTimestampMixin, Base):
     lon: Mapped[float] = mapped_column(Float)
     # REAL (registered on the ground) or SYNTHETIC (demo, labelled on screen).
     basis: Mapped[str] = mapped_column(String(16))
+    # The ward the stop serves (F20) and where that came from: OFFICER (named at registration),
+    # DERIVED (placed on the 2016 ward polygons) or UNPLACED (outside every ward; ward empty).
+    ward_id: Mapped[str | None] = mapped_column(String(64), index=True)
+    ward_basis: Mapped[str] = mapped_column(String(16), default="UNPLACED")

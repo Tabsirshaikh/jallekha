@@ -24,6 +24,20 @@ export function liveReason(status: AuthStatus, role: Role | null, error: ApiErro
   return "error";
 }
 
+const WARD_CARD_ROLES: Role[] = ["officer", "resident", "councillor"];
+
+/** The ward report card is open to officers, residents and councillors; other roles are not asked. */
+export function canFetchWardCard(status: AuthStatus, role: Role | null): boolean {
+  return status === "signed-in" && role !== null && WARD_CARD_ROLES.includes(role);
+}
+
+/** Like `liveReason`, for the ward card: `notOfficer` here means "this role may not read ward cards". */
+export function wardCardReason(status: AuthStatus, role: Role | null, error: ApiError | null): LiveReason | null {
+  if (status === "signed-in" && !canFetchWardCard(status, role)) return "notOfficer";
+  if (status === "signed-in" && !error) return null;
+  return liveReason(status, "officer", error);
+}
+
 export const liveReasonCopy = {
   en: {
     signIn: "Sign in as an officer to see live data. Showing the saved snapshot.",

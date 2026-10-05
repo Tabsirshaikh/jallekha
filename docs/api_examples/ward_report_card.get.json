@@ -1,10 +1,10 @@
 {
   "_example": {
     "endpoint": "GET /wards/{ward_id}/report-card",
-    "status": "FROM_MAIN (data on main, route not built; deliveries, debt and schedule UNAVAILABLE)",
-    "basis": "need: REAL Census 2011 reweighted (DERIVED, HISTORICAL) + A2; bookings: REAL HMWSSB section records placed on wards (DERIVED_APPROXIMATE); deliveries / debt / schedule UNAVAILABLE",
-    "built_from": "ward_evidence.csv row + services/service_models.py build_ward_needs (WardNeed) + data/derived/equity/wards.csv + equity/monthly.csv (period)",
-    "notes": "Agreed with P4: need, bookings, deliveries, debt, schedule per ward with period, geography version, quality flags and basis; null with basis UNAVAILABLE where no store exists."
+    "status": "ROUTE_ON_MAIN (deliveries from stored stops and deliveries; debt from closed days; schedule from the stored plans)",
+    "basis": "need: REAL Census 2011 reweighted (DERIVED, HISTORICAL) + A2; bookings: REAL HMWSSB section records placed on wards (DERIVED_APPROXIMATE); deliveries: REAL or SYNTHETIC as the stops are registered; debt: DERIVED (A6 from closed days); schedule: the plan's own basis. Each live block is {value, basis, reason}: value null with basis UNAVAILABLE and the reason when there is nothing yet.",
+    "built_from": "ward_evidence.csv row + build_ward_needs + equity/wards.csv + equity/monthly.csv; services/report_card.py over the delivery store (stops of the ward), the debt store and one stored plan (supplied before replay, latest day, approved before draft)",
+    "notes": "SYNTHETIC example: one registered stop in Ward 105 Gachibowli, a plan from 12 supplied bookings for 2026-10-03 approved, 3 deliveries (2 Confirmed, 1 Disputed), the day closed. See docs/api_additions/report_cards.md."
   },
   "request": {
     "ward_id": "relation/7848824"
@@ -49,19 +49,86 @@
       "mapping_status": "APPROXIMATE_SECTION_POINT_IN_WARD"
     },
     "deliveries": {
-      "value": null,
-      "basis": "UNAVAILABLE",
-      "reason": "no delivery store on main"
+      "value": {
+        "window_days": 30,
+        "from": "2026-09-05T06:00:00+00:00",
+        "to": "2026-10-05T06:00:00+00:00",
+        "stops": [
+          {
+            "stop_id": "stop-g1",
+            "basis": "SYNTHETIC",
+            "ward_basis": "DERIVED"
+          }
+        ],
+        "started": 3,
+        "by_outcome": {
+          "Confirmed": 2,
+          "Disputed": 1,
+          "Unconfirmed": 0,
+          "Failed": 0,
+          "open": 0
+        },
+        "confirmed_litres": 10000
+      },
+      "basis": "SYNTHETIC",
+      "reason": null
     },
     "debt": {
-      "value": null,
-      "basis": "UNAVAILABLE",
-      "reason": "no debt accounts stored on main (A6 accounts are passed in by the caller)"
+      "value": {
+        "debt_litres": 120000.0,
+        "debt_loads": 24,
+        "cap_litres": 910000.0,
+        "in_debt_since": "2026-10-03",
+        "days_in_debt": 1,
+        "alert_raised": false,
+        "settled_through": "2026-10-03",
+        "last_day": {
+          "day": "2026-10-03",
+          "plan_id": "plan-2026-10-03-41c27fd9",
+          "alert": false,
+          "capped": false,
+          "credited_litres": 10000.0,
+          "days_in_debt": 1,
+          "debt_after": 120000.0,
+          "debt_before": 0.0,
+          "deliveries": {
+            "Confirmed": 2,
+            "Disputed": 1
+          },
+          "planned_litres": 130000.0
+        }
+      },
+      "basis": "DERIVED (A6: litres the approved plan gave the ward's stops minus one load per Confirmed delivery, settled when an officer closes the day; bookings as supplied, not verified)",
+      "reason": null
     },
     "schedule": {
-      "value": null,
-      "basis": "UNAVAILABLE",
-      "reason": "no plan store on main"
+      "value": {
+        "plan_id": "plan-2026-10-03-41c27fd9",
+        "day": "2026-10-03",
+        "status": "APPROVED",
+        "source": "supplied_bookings",
+        "booked": {
+          "group": "ward:relation/7848824",
+          "served": 4,
+          "waiting": 0
+        },
+        "scheduled": {
+          "litres": 127542.41237198106,
+          "floor": 214399.92285,
+          "target": 214399.92285,
+          "status": "FLOOR_NOT_MET"
+        },
+        "stops": [
+          {
+            "stop_id": "stop-g1",
+            "litres": 130000.0,
+            "loads": 26.0,
+            "arrivals": []
+          }
+        ]
+      },
+      "basis": "Plan from 12 bookings supplied for the day, not the replay: bookings as supplied (not verified here); capacity ASSUMED (A8 fleet scenario main_2025, tight); need DERIVED from Census 2011",
+      "reason": null
     }
   }
 }

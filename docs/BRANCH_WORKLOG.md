@@ -1005,3 +1005,16 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:** see `docs/LIMITATIONS.md` (live booking feed, weights' small effect, multi-process ledger gap, translations still need a native speaker).
 - **Pull request:** see the PR for `fix/four-gaps`.
 
+## `feat/f20-report-cards` — ward report cards with real deliveries, water debt and schedule (item 11)
+
+- **Owner / date:** P2 work done by the repo owner, 2026-10-05.
+- **Why:** the F20 card showed need and bookings only; deliveries, water debt and schedule were "not available" because nothing joined a delivery to a ward, nothing settled debt, and the card did not read the plans. The U10 screen showed sample cards.
+- **What we changed (design from the item 11 research in `docs/REMAINING_WORK.md`):**
+  - **Stops get a ward:** named by the officer or placed on the 2016 ward polygons (DERIVED); `delivery_stop.ward_id`, `ward_basis`.
+  - **Plans give water to stops:** a supplied plan uses the registered stops as the scheduled-supply points (A4 splits each scheduled ward's litres across its stops) and the saved debt accounts (A7 raises the ward's turns); both are in the recipe and the plan id.
+  - **Closing a day (A6):** `POST /debt/days/{day}/close` settles every ward's debt from the approved supplied plan and the day's delivery outcomes at its stops, with A6's `settle_day` unchanged; new `water_debt_account` and `debt_day` tables, `GET /debt/accounts`, `GET /debt/days`, ledger entry `debt_day_closed`.
+  - **Card and SMS:** deliveries, debt and schedule are live `{value, basis, reason}` blocks; the SMS gains the three phrases. The U10 screen calls the card and SMS for resident, councillor and officer tokens and keeps the sample cards as the labelled fallback.
+- **Validation:** tests written first and seen failing for each part (ward placement, store, plan builder, day close, report card service, API loop and refusals, screen and adapter). Full suites: see the PR.
+- **Known limitations:** see `docs/LIMITATIONS.md` F11 and F20 (scheduled-supply wards only, one load per Confirmed delivery, manual close, old ward map).
+- **Pull request:** see the PR for `feat/f20-report-cards`.
+

@@ -25,6 +25,7 @@ from app.config.plans import PLAN_STORE_CONFIG
 from app.db import create_all, make_engine, make_session_factory
 from app.models import StoredPlan
 from app.services import plan_builder, planner
+from app.services.debt_store import DebtStore
 from app.services.delivery_store import DeliveryStore
 from app.services.delivery_store import Stop as Stop  # re-exported for the routers and tests
 
@@ -240,3 +241,16 @@ def get_delivery_store() -> DeliveryStore:
         create_all(engine)
         _DELIVERIES = DeliveryStore(engine)
     return _DELIVERIES
+
+
+# Water debt accounts and closed days (services/debt_store.py).
+_DEBTS: DebtStore | None = None
+
+
+def get_debt_store() -> DebtStore:
+    global _DEBTS
+    if _DEBTS is None:
+        engine = make_engine()
+        create_all(engine)
+        _DEBTS = DebtStore(engine)
+    return _DEBTS

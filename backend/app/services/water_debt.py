@@ -18,10 +18,10 @@ ward; A2/A3/A4). Once a day it is settled:
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, replace
 from datetime import date, datetime
-from typing import get_args
+from typing import Any, get_args
 
 from app.config.allocation import ALLOCATION_CONFIG
 from app.config.trust import TRUST_CONFIG
@@ -62,6 +62,32 @@ class DebtChange:
     capped: bool
     days_in_debt: int
     alert: bool  # alert raised by this settlement
+
+
+def account_as_dict(account: DebtAccount) -> dict[str, Any]:
+    """A JSON-safe copy (stored plans and the debt store keep accounts this way)."""
+    return {
+        "account_id": account.account_id,
+        "daily_entitlement_litres": account.daily_entitlement_litres,
+        "debt_litres": account.debt_litres,
+        "in_debt_since": account.in_debt_since.isoformat() if account.in_debt_since else None,
+        "alert_raised": account.alert_raised,
+        "settled_through": account.settled_through.isoformat() if account.settled_through else None,
+    }
+
+
+def account_from_dict(data: Mapping[str, Any]) -> DebtAccount:
+    def day(value: Any) -> date | None:
+        return date.fromisoformat(value) if value else None
+
+    return DebtAccount(
+        account_id=str(data["account_id"]),
+        daily_entitlement_litres=float(data["daily_entitlement_litres"]),
+        debt_litres=float(data["debt_litres"]),
+        in_debt_since=day(data.get("in_debt_since")),
+        alert_raised=bool(data.get("alert_raised", False)),
+        settled_through=day(data.get("settled_through")),
+    )
 
 
 def counts_toward_debt(outcome: str) -> bool:

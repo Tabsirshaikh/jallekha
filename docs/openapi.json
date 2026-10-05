@@ -989,8 +989,8 @@
         "tags": [
           "evidence"
         ],
-        "summary": "Report Card",
-        "operationId": "report_card_wards__ward_id__report_card_get",
+        "summary": "Ward Report Card",
+        "operationId": "ward_report_card_wards__ward_id__report_card_get",
         "parameters": [
           {
             "name": "ward_id",
@@ -1026,7 +1026,7 @@
                 "schema": {
                   "type": "object",
                   "additionalProperties": true,
-                  "title": "Response Report Card Wards  Ward Id  Report Card Get"
+                  "title": "Response Ward Report Card Wards  Ward Id  Report Card Get"
                 }
               }
             }
@@ -1467,7 +1467,7 @@
           "plans"
         ],
         "summary": "Create Plan",
-        "description": "Build and store a plan (T9 gate): from the bookings supplied in the request, or, without\nthem, for a day of the committed replay. Idempotent: if the same plan is already stored it\nis returned as stored (200) and nothing is built or logged again.",
+        "description": "Build and store a plan (T9 gate): from the bookings supplied in the request, or, without\nthem, for a day of the committed replay. A supplied plan also uses the registered delivery\nstops (scheduled supply goes to the stops of its wards) and the saved water debt accounts.\nIdempotent: if the same plan is already stored it is returned as stored (200) and nothing is\nbuilt or logged again.",
         "operationId": "create_plan_plans_post",
         "parameters": [
           {
@@ -3005,6 +3005,223 @@
           }
         }
       }
+    },
+    "/debt/days/{day}/close": {
+      "post": {
+        "tags": [
+          "debt"
+        ],
+        "summary": "Close",
+        "operationId": "close_debt_days__day__close_post",
+        "parameters": [
+          {
+            "name": "day",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "Day"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CloseDay"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Close Debt Days  Day  Close Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/debt/accounts": {
+      "get": {
+        "tags": [
+          "debt"
+        ],
+        "summary": "Accounts",
+        "operationId": "accounts_debt_accounts_get",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Accounts Debt Accounts Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/debt/days": {
+      "get": {
+        "tags": [
+          "debt"
+        ],
+        "summary": "Days",
+        "operationId": "days_debt_days_get",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Days Debt Days Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -3026,6 +3243,35 @@
           "items"
         ],
         "title": "BatchRequest"
+      },
+      "CloseDay": {
+        "properties": {
+          "plan_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Id"
+          },
+          "officer_id": {
+            "type": "string",
+            "title": "Officer Id"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "officer_id",
+          "reason"
+        ],
+        "title": "CloseDay"
       },
       "Decision": {
         "properties": {

@@ -4,6 +4,8 @@ as in docs/api_shapes.md sections 2-5, 16 and 17."""
 
 from __future__ import annotations
 
+import logging
+from datetime import datetime
 from functools import lru_cache
 from typing import Annotated, Any
 
@@ -12,19 +14,30 @@ from fastapi import APIRouter, Depends, Query
 from app.auth import require_roles
 from app.config.api import SMS_SUMMARY_TEMPLATE_KEY, SMS_SUMMARY_TEMPLATES, ApiConfig
 from app.config.env import REPO_ROOT
+from app.config.report_cards import REPORT_CARD_CONFIG
 from app.routers.common import (
     UNAVAILABLE,
     csv_rows,
+    get_now,
     json_file,
     not_found,
     page,
     typed,
-    unavailable,
 )
-from app.services import ledger_store, service_models
+from app.routers.stores import (
+    DebtStore,
+    DeliveryStore,
+    PlanRecord,
+    PlanStore,
+    get_debt_store,
+    get_delivery_store,
+    get_plan_store,
+)
+from app.services import day_close, ledger_store, plan_builder, report_card, service_models
 from app.services.ledger_store import StoredLedger
 
 router = APIRouter(tags=["evidence"])
+logger = logging.getLogger(__name__)
 
 
 def get_summary_ledger() -> StoredLedger:
@@ -45,6 +58,10 @@ Officer = Depends(require_roles("officer"))
 Reader = Depends(require_roles("officer", "resident", "councillor"))
 Offset = Annotated[int, Query(ge=0)]
 Limit = Annotated[int, Query(ge=1, le=ApiConfig.max_limit)]
+Plans = Annotated[PlanStore, Depends(get_plan_store)]
+Deliveries = Annotated[DeliveryStore, Depends(get_delivery_store)]
+Debts = Annotated[DebtStore, Depends(get_debt_store)]
+Now = Annotated[datetime, Depends(get_now)]
 
 
 def _ward(ward_id: str) -> dict[str, str]:
@@ -125,6 +142,53 @@ def coverage_layer(layer_id: str) -> dict[str, Any]:
 # --- ward report card and SMS summary --------------------------------------------------------
 
 
+def _card_plan(plans: PlanStore) -> tuple[PlanRecord | None, str | None]:
+    """The plan a card shows: built from supplied bookings before replay simulations, then the
+    latest day, approved before draft, then the latest stored. (record, None) or (None, why)."""
+    rows = plans.summaries()
+    if not rows:
+        return None, None
+    best = max(
+        rows,
+        key=lambda r: (
+            r["source"] == plan_builder.SUPPLIED,
+            r["day"],
+            r["status"] == "APPROVED",
+            r["created_at"],
+        ),
+    )
+    try:
+        return plans.get(best["plan_id"]), None
+    except plan_builder.PlanRebuildError:
+        logger.warning("Report card: plan %s could not be rebuilt", best["plan_id"], exc_info=True)
+        return None, "the latest plan could not be loaded; an officer has to check it"
+
+
+def _live_blocks(
+    ward_id: str, plans: PlanStore, deliveries: DeliveryStore, debts: DebtStore, now: datetime
+) -> dict[str, Any]:
+    stops = deliveries.list_stops(ward_id=ward_id)
+    start, end = report_card.delivery_window(now)
+    visits = deliveries.list_deliveries(
+        stop_ids=[s.stop_id for s in stops], started_from=start, started_before=end
+    )
+    record, problem = _card_plan(plans)
+    schedule = (
+        report_card.schedule_block(record.plan, record.recipe, record.inputs, record.basis, ward_id)
+        if record is not None
+        else report_card.schedule_block(None, None, None, None, ward_id)
+    )
+    if problem:
+        schedule = {"value": None, "basis": UNAVAILABLE, "reason": problem}
+    return {
+        "deliveries": report_card.deliveries_block(stops, visits, now),
+        "debt": report_card.debt_block(
+            debts.account(day_close.account_id(ward_id)), debts.ward_last_day(ward_id)
+        ),
+        "schedule": schedule,
+    }
+
+
 def _report_card(ward_id: str) -> dict[str, Any]:
     row, need = _ward(ward_id), _need(ward_id)
     eq = next((r for r in csv_rows(EQUITY_WARDS) if r["ward_id"] == ward_id), {})
@@ -164,26 +228,46 @@ def _report_card(ward_id: str) -> dict[str, Any]:
             "basis": eq.get("basis") or UNAVAILABLE,
             "mapping_status": eq.get("mapping_status"),
         },
-        "deliveries": unavailable("no delivery store on main"),
-        "debt": unavailable(
-            "no debt accounts stored on main (A6 accounts are passed in by the caller)"
-        ),
-        "schedule": unavailable("no plan store on main"),
     }
 
 
 @router.get("/wards/{ward_id:path}/report-card", dependencies=[Reader])
-def report_card(ward_id: str) -> dict[str, Any]:
-    return _report_card(ward_id)
+def ward_report_card(
+    ward_id: str, plans: Plans, deliveries: Deliveries, debts: Debts, now: Now
+) -> dict[str, Any]:
+    return {**_report_card(ward_id), **_live_blocks(ward_id, plans, deliveries, debts, now)}
+
+
+def _sms_parts(card: dict[str, Any]) -> dict[str, str]:
+    """The live blocks as short SMS phrases ("not available" when a block has no value)."""
+    visits, debt, schedule = (card[k]["value"] for k in ("deliveries", "debt", "schedule"))
+    if visits is None:
+        deliveries = "not available"
+    else:
+        deliveries = f"{visits['started']} started, {visits['by_outcome']['Confirmed']} confirmed"
+    owed = "not available" if debt is None else f"{debt['debt_loads']} tanker loads owed"
+    if schedule is None:
+        planned = "not available"
+    else:
+        loads = sum(s["loads"] for s in schedule["stops"])
+        planned = (
+            f"{schedule['day']} {schedule['status']}, {schedule['booked']['served']} booked trips, "
+            f"{loads:g} loads to stops"
+        )
+    return {"deliveries": deliveries, "debt": owed, "schedule": planned}
 
 
 @router.get("/wards/{ward_id:path}/sms-summary", dependencies=[Reader])
 def sms_summary(
     ward_id: str,
     ledger: Annotated[StoredLedger, Depends(get_summary_ledger)],
+    plans: Plans,
+    deliveries: Deliveries,
+    debts: Debts,
+    now: Now,
     lang: str = "en",
 ) -> dict[str, Any]:
-    card = _report_card(ward_id)
+    card = ward_report_card(ward_id, plans, deliveries, debts, now)
     heads = ledger.heads()
     head = heads[-1].head_hash[:12] if heads else "not published yet"
     params = {
@@ -194,6 +278,8 @@ def sms_summary(
         "period_from": card["bookings"]["period"]["from"],
         "period_to": card["bookings"]["period"]["to"],
         "service_class": card["need"]["service_class"],
+        "window_days": REPORT_CARD_CONFIG.delivery_window_days,
+        **_sms_parts(card),
         "ledger_head": head,
     }
     used = lang if lang in SMS_SUMMARY_TEMPLATES else "en"

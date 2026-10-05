@@ -32,6 +32,8 @@ EVENT_TYPES = frozenset(
         "delivery_verified",
         "delivery_failed",
         "water_debt_changed",
+        # A6 on stored plans: an officer closes a day, settling every ward's debt (F11, F20)
+        "debt_day_closed",
         "station_paused",
         "station_resumed",
         "weights_changed",

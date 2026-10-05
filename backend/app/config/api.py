@@ -89,8 +89,8 @@ class ApiConfig:
 SMS_SUMMARY_TEMPLATES: dict[str, str] = {
     "en": (
         "{ward_name}: {bookings} tanker bookings {period_from} to {period_to}; "
-        "need class {service_class}. Deliveries, water debt and schedule not available yet. "
-        "Ledger head {ledger_head}."
+        "need class {service_class}. Deliveries (last {window_days} days): {deliveries}. "
+        "Water debt: {debt}. Plan: {schedule}. Ledger head {ledger_head}."
     ),
 }
 SMS_SUMMARY_TEMPLATE_KEY = "ward.sms_summary"

@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import csv
 import json
+from datetime import UTC, datetime
 from functools import lru_cache
 from typing import Any
 
@@ -17,6 +18,11 @@ from app.config.env import REPO_ROOT
 from app.errors import error_response
 
 UNAVAILABLE = "UNAVAILABLE"
+
+
+def get_now() -> datetime:
+    """The current time (UTC); a dependency so tests can fix it."""
+    return datetime.now(UTC)
 
 
 def typed(row: dict[str, str]) -> dict[str, Any]:

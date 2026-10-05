@@ -1,0 +1,43 @@
+{
+  "_example": {
+    "endpoint": "GET /debt/days",
+    "status": "ROUTE_ON_MAIN",
+    "basis": "DERIVED (A6 on stored plans); SYNTHETIC example",
+    "built_from": "services/day_close.py, services/debt_store.py",
+    "notes": "Officer only. See docs/api_additions/report_cards.md."
+  },
+  "request": {
+    "offset": 0,
+    "limit": 50
+  },
+  "response": {
+    "total": 1,
+    "offset": 0,
+    "limit": 50,
+    "items": [
+      {
+        "day": "2026-10-03",
+        "plan_id": "plan-2026-10-03-41c27fd9",
+        "plan_digest": "59c86e915b824ac8c6ebc6a8eb6f45050f9126ecc4239c84a2b63c1e28c936a5",
+        "closed_by": "off-1",
+        "reason": "all deliveries closed",
+        "closed_at": "2026-10-05T14:18:45.193354+00:00",
+        "wards": {
+          "relation/7848824": {
+            "alert": false,
+            "capped": false,
+            "credited_litres": 10000.0,
+            "days_in_debt": 1,
+            "debt_after": 120000.0,
+            "debt_before": 0.0,
+            "deliveries": {
+              "Confirmed": 2,
+              "Disputed": 1
+            },
+            "planned_litres": 130000.0
+          }
+        }
+      }
+    ]
+  }
+}

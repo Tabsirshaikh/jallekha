@@ -298,3 +298,35 @@ def test_registered_stop_runs_end_to_end_across_restarts(
             assert where(phone[-10:]) <= {("representative", "phone"), ("resident", "phone")}
     finally:
         engine.dispose()
+
+
+# --- the stop's ward (F20) ---------------------------------------------------------------------
+
+
+def test_a_stop_without_a_ward_is_placed_on_the_ward_map(client: TestClient) -> None:
+    created = _register(client, _stop(lat=17.44437, lon=78.31387))  # inside Ward 105 Gachibowli
+    assert created.status_code == 200, created.text
+    body = created.json()
+    assert body["ward_id"] == "relation/7848824"
+    assert body["ward_basis"] == "DERIVED"
+    assert body["ward_name"] == "Ward 105 Gachibowli"
+
+
+def test_the_officer_can_name_the_ward(client: TestClient) -> None:
+    created = _register(client, _stop(ward_id="relation/7848859"))
+    assert created.status_code == 200, created.text
+    assert (created.json()["ward_id"], created.json()["ward_basis"]) == (
+        "relation/7848859",
+        "OFFICER",
+    )
+    again = client.get("/stops/stop-0100", headers=auth("officer")).json()
+    assert again["ward_id"] == "relation/7848859"
+
+
+def test_an_unknown_ward_is_422_and_a_stop_outside_the_map_is_unplaced(client: TestClient) -> None:
+    bad = _register(client, _stop(ward_id="relation/0"))
+    assert bad.status_code == 422
+    assert "relation/0" in bad.text
+    outside = _register(client, _stop(lat=17.0, lon=78.0))
+    assert outside.status_code == 200, outside.text
+    assert outside.json()["ward_id"] is None and outside.json()["ward_basis"] == "UNPLACED"
