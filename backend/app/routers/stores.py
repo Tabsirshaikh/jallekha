@@ -16,7 +16,7 @@ from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 from typing import Any
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -29,12 +29,17 @@ from app.services.delivery_store import DeliveryStore
 from app.services.delivery_store import Stop as Stop  # re-exported for the routers and tests
 
 
+class PlanConflict(Exception):
+    """The plan was changed by someone else since it was read: reload it and try again."""
+
+
 @dataclass
 class PlanRecord:
     inputs: planner.PlanInputs
     plan: planner.DailyPlan
     basis: dict[str, str]
     recipe: dict[str, Any] | None = None  # how to rebuild it (plan_builder); None: not storable
+    version: int = 0  # times saved when it was read (optimistic lock, see PlanStore.save)
 
 
 class PlanStore:
@@ -91,7 +96,13 @@ class PlanStore:
             approved_by=row.approved_by,
             approval_reason=row.approval_reason,
         )
-        return PlanRecord(built.inputs, plan, json.loads(row.basis_json), dict(built.recipe))
+        return PlanRecord(
+            built.inputs,
+            plan,
+            json.loads(row.basis_json),
+            dict(built.recipe),
+            row.version,
+        )
 
     def put(self, record: PlanRecord) -> bool:
         """Store a new plan; False (and nothing changed) if its plan id is already stored."""
@@ -133,10 +144,21 @@ class PlanStore:
             row = self._row(session, plan.plan_id)
             if row is None or row.digest != plan.digest:
                 raise ValueError(f"Plan {plan.plan_id} with this digest is not stored")
-            row.status = plan.status
-            row.checked_json = _checked_json(plan)
-            row.approved_by = plan.approved_by
-            row.approval_reason = plan.approval_reason
+            # Compare and swap: only if nobody saved since `record` was read.
+            saved = session.execute(
+                update(StoredPlan)
+                .where(StoredPlan.id == row.id, StoredPlan.version == record.version)
+                .values(
+                    status=plan.status,
+                    checked_json=_checked_json(plan),
+                    approved_by=plan.approved_by,
+                    approval_reason=plan.approval_reason,
+                    version=record.version + 1,
+                )
+            )
+            if saved.rowcount == 0:
+                raise PlanConflict(f"Plan {plan.plan_id} was changed by someone else; reload it")
+        record.version += 1
 
     def records(self) -> Iterator[PlanRecord]:
         """Every plan, by day (a persisted plan is rebuilt when it is not cached)."""
@@ -158,6 +180,8 @@ class PlanStore:
                     "status": r.plan.status,
                     "basis": r.basis,
                     "flags_total": len(r.plan.flags),
+                    "weights": (r.recipe or {}).get("weights"),
+                    "source": (r.recipe or {}).get("source", "planner_replay"),
                     "checked_total": len(r.plan.checked),
                     "created_at": self._created[r.plan.plan_id].isoformat(),
                 }
@@ -174,6 +198,8 @@ class PlanStore:
                 "status": row.status,
                 "basis": json.loads(row.basis_json),
                 "flags_total": row.flags_total,
+                "weights": json.loads(row.recipe_json).get("weights"),
+                "source": json.loads(row.recipe_json).get("source", "planner_replay"),
                 "checked_total": len(json.loads(row.checked_json)),
                 "created_at": _utc(row.created_at).isoformat(),
             }

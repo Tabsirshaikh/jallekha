@@ -23,7 +23,7 @@ import math
 import random
 import unicodedata
 from collections.abc import Collection, Iterable
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from datetime import datetime, timedelta
 from typing import Any, Literal, cast
 
@@ -124,6 +124,9 @@ class DeliveryState:
     sampled_at: datetime | None = None
     responses: tuple[tuple[str, Answer], ...] = ()
     outcome: OutcomeDecision | None = None
+    # Times saved, set by the store; bookkeeping for the optimistic lock, not part of the
+    # delivery (ignored by ==).
+    version: int = field(default=0, compare=False)
 
     @property
     def otp_locked(self) -> bool:

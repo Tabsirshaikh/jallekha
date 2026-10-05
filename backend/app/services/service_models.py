@@ -18,6 +18,7 @@ need weight (the deficit-round-robin share in F8). Distance never enters the nee
 from __future__ import annotations
 
 import csv
+import math
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
@@ -93,18 +94,49 @@ def _validated(overrides: Iterable[Override], ward_ids: set[str]) -> dict[str, O
     return by_ward
 
 
-def need_weight(wad: float, cad: float, hardship: float) -> float:
-    cfg = ALLOCATION_CONFIG
-    return (
-        1
-        + cfg.need_weight_wad * wad
-        + cfg.need_weight_cad * cad
-        + cfg.need_weight_hardship * hardship
-    )
+@dataclass(frozen=True)
+class NeedWeights:
+    """The three need weights of F7 (water access, phone access, hardship).
+
+    The defaults are the configured policy weights; an officer may try others for one plan.
+    """
+
+    wad: float
+    cad: float
+    hardship: float
+
+    @classmethod
+    def default(cls) -> NeedWeights:
+        cfg = ALLOCATION_CONFIG
+        return cls(cfg.need_weight_wad, cfg.need_weight_cad, cfg.need_weight_hardship)
+
+    def validated(self) -> NeedWeights:
+        """Each weight between 0 and the configured maximum, rounded to two decimals."""
+        top = ALLOCATION_CONFIG.need_weight_max
+        for name, value in self.as_dict().items():
+            if (
+                not isinstance(value, int | float)
+                or not math.isfinite(value)
+                or not 0 <= value <= top
+            ):
+                raise ValueError(f"The {name} weight must be a number between 0 and {top:g}")
+        return NeedWeights(round(self.wad, 2), round(self.cad, 2), round(self.hardship, 2))
+
+    def as_dict(self) -> dict[str, float]:
+        return {"wad": self.wad, "cad": self.cad, "hardship": self.hardship}
+
+
+def need_weight(
+    wad: float, cad: float, hardship: float, weights: NeedWeights | None = None
+) -> float:
+    w = weights or NeedWeights.default()
+    return 1 + w.wad * wad + w.cad * cad + w.hardship * hardship
 
 
 def build_ward_needs(
-    evidence: list[dict[str, str]], overrides: Iterable[Override]
+    evidence: list[dict[str, str]],
+    overrides: Iterable[Override],
+    weights: NeedWeights | None = None,
 ) -> list[WardNeed]:
     cfg = ALLOCATION_CONFIG
     by_ward = _validated(overrides, {row["ward_id"] for row in evidence})
@@ -127,7 +159,7 @@ def build_ward_needs(
             service_class, basis = "piped_regularity_unknown", "UNAVAILABLE"
         route = ROUTES[service_class]
 
-        weight = need_weight(wad, cad, hardship) if complete else None
+        weight = need_weight(wad, cad, hardship, weights) if complete else None
         candidate = (
             complete and not override and route == "booked" and wad >= cfg.scheduled_candidate_wad
         )

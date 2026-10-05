@@ -10,6 +10,13 @@ class PlanStoreConfig:
     # Rebuilt plans a store keeps in memory. A replay day holds about 7,000 pending bookings
     # (measured on main_2025 tight, 2026-10-04), so the cache is kept small. ASSUMED, OPEN.
     built_cache_size: int = 8
+    # Replay runs kept for officer-chosen need weights (the default run is one of them). Each holds
+    # one day's pending bookings and queue states in memory. ASSUMED, OPEN.
+    weighted_replays_kept: int = 3
+    # Most bookings one supplied plan may hold. HMWSSB booked about 2,900 tankers a day at the
+    # June 2022 peak (89,284 in the month, D1) and the replay carries about 7,000 pending
+    # bookings on its busiest days, so 10,000 leaves room. Basis: ASSUMED, OPEN.
+    max_supplied_bookings: int = 10_000
 
 
 PLAN_STORE_CONFIG = PlanStoreConfig()

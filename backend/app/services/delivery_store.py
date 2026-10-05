@@ -27,11 +27,11 @@ from __future__ import annotations
 
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 from typing import Literal, cast
 
-from sqlalchemy import delete, select
+from sqlalchemy import delete, select, update
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -42,6 +42,7 @@ from app.models import (
     DeliveryOutcome,
     DeliveryRoster,
     DeliveryStop,
+    DeliveryVersion,
     Representative,
     Resident,
     ResidentResponse,
@@ -62,6 +63,10 @@ class Stop:
     representatives: tuple[dl.Representative, ...]
     residents: tuple[dl.Resident, ...]
     basis: str = "SYNTHETIC"  # REAL | SYNTHETIC; never assumed REAL
+
+
+class DeliveryConflict(Exception):
+    """The delivery was changed (or started) by someone else since it was read."""
 
 
 class StopConflict(ValueError):
@@ -201,16 +206,35 @@ class DeliveryStore:
             return self._states(session, session.scalars(query).all())
 
     def put_delivery(self, state: dl.DeliveryState) -> None:
-        """Insert or update one delivery so that it loads back equal to `state`."""
+        """Insert or update one delivery so that it loads back equal to `state`.
+
+        `state.version` is the version it was read at (0 for a new delivery). A write from a
+        stale read, or a second start of the same delivery, raises DeliveryConflict and changes
+        nothing."""
+        created = False
+        try:
+            created = self._put_delivery(state)
+        except IntegrityError as exc:
+            if state.version == 0 and not created:  # another start of this delivery won
+                raise DeliveryConflict(f"Delivery {state.delivery_id} already exists") from exc
+            raise
+
+    def _put_delivery(self, state: dl.DeliveryState) -> bool:
         with self._sessions.begin() as session:
             row = session.get(Delivery, state.delivery_id)
             stop = session.scalar(select(DeliveryStop).where(DeliveryStop.stop_id == state.stop_id))
             if stop is None:
                 raise ValueError(f"Stop {state.stop_id} is not registered")
             self._check_representatives(session, state)  # before a new row can be autoflushed
+            created = row is None
             if row is None:
+                if state.version != 0:
+                    raise DeliveryConflict(f"Delivery {state.delivery_id} is not stored")
                 row = Delivery(id=state.delivery_id, basis=stop.basis)
                 session.add(row)
+                session.add(DeliveryVersion(delivery_id=state.delivery_id, version=1))
+            else:
+                self._bump_version(session, state)
             row.created_at = _utc(state.started_at)
             row.stop_id, row.driver_id = state.stop_id, state.driver_id
             row.stop_lat, row.stop_lon = state.stop_lat, state.stop_lon
@@ -231,6 +255,27 @@ class DeliveryStore:
             self._write_roster(session, state)
             self._write_responses(session, state)
             self._write_outcome(session, state)
+        return created
+
+    @staticmethod
+    def _bump_version(session: Session, state: dl.DeliveryState) -> None:
+        """Count this save, only if nobody saved since `state` was read (compare and swap)."""
+        current = session.get(DeliveryVersion, state.delivery_id)
+        if current is None:  # a delivery stored before versions existed
+            if state.version != 0:
+                raise DeliveryConflict(f"Delivery {state.delivery_id} changed since it was read")
+            session.add(DeliveryVersion(delivery_id=state.delivery_id, version=1))
+            return
+        changed = session.execute(
+            update(DeliveryVersion)
+            .where(
+                DeliveryVersion.delivery_id == state.delivery_id,
+                DeliveryVersion.version == state.version,
+            )
+            .values(version=state.version + 1)
+        )
+        if changed.rowcount == 0:
+            raise DeliveryConflict(f"Delivery {state.delivery_id} changed since it was read")
 
     @staticmethod
     def _check_representatives(session: Session, state: dl.DeliveryState) -> None:
@@ -339,7 +384,19 @@ class DeliveryStore:
                 select(DeliveryOutcome).where(DeliveryOutcome.delivery_id.in_(ids))
             )
         }
-        return [_state(row, roster[row.id], reps, answers, outcomes.get(row.id)) for row in rows]
+        versions = {
+            v.delivery_id: v.version
+            for v in session.scalars(
+                select(DeliveryVersion).where(DeliveryVersion.delivery_id.in_(ids))
+            )
+        }
+        return [
+            replace(
+                _state(row, roster[row.id], reps, answers, outcomes.get(row.id)),
+                version=versions.get(row.id, 0),
+            )
+            for row in rows
+        ]
 
 
 def _state(

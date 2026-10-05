@@ -45,6 +45,7 @@ def setup() -> None:
 def test() -> None:
     run([venv_python(), "-m", "pytest", "backend/tests"])
     run([npm_command(), "run", "test", "--", "--run"], cwd=FRONTEND)
+    run([npm_command(), "run", "i18n:check"], cwd=FRONTEND)
     data_verifier = ROOT / "scripts" / "data" / "verify_manifest.py"
     if data_verifier.exists():
         run([venv_python(), str(data_verifier)])

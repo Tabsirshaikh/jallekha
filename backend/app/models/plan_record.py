@@ -30,6 +30,8 @@ class StoredPlan(IdTimestampMixin, Base):
     approved_by: Mapped[str | None] = mapped_column(String(64))
     approval_reason: Mapped[str | None] = mapped_column(Text)
     basis_json: Mapped[str] = mapped_column(Text)  # labels shown with the plan
+    # Optimistic lock: a save from a stale read is refused (PlanConflict).
+    version: Mapped[int] = mapped_column(Integer, default=0)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=utcnow, onupdate=utcnow, nullable=False
     )

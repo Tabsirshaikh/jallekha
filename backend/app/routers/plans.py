@@ -9,6 +9,7 @@ plan is 404, a stored plan that no longer rebuilds to its digest is 409.
 from __future__ import annotations
 
 from collections.abc import Iterator
+from contextlib import contextmanager
 from dataclasses import asdict
 from datetime import UTC, date, datetime
 from functools import lru_cache
@@ -16,17 +17,20 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Response
 from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from app.auth import require_roles
+from app.config.allocation import ALLOCATION_CONFIG
 from app.config.api import ApiConfig
 from app.config.confidence import CONFIDENCE_CONFIG
 from app.config.env import REPO_ROOT
 from app.routers import evidence
 from app.routers.common import csv_rows, invalid, not_found, page, typed
-from app.routers.stores import PlanRecord, PlanStore, get_plan_store
+from app.routers.stores import PlanConflict, PlanRecord, PlanStore, get_plan_store
 from app.services import confidence, explain, fair_queue, ledger_store, plan_builder, planner
+from app.services.keyed_lock import KeyedLocks
 from app.services.ledger_store import StoredLedger
+from app.services.service_models import NeedWeights
 
 router = APIRouter(tags=["plans"])
 
@@ -42,13 +46,40 @@ def get_plan_ledger() -> StoredLedger:
 Ledger = Annotated[StoredLedger, Depends(get_plan_ledger)]
 
 
+# One change at a time per plan inside this process, so a check or approval and its ledger entry
+# are never half-applied; the stored version refuses a stale write from another process (409).
+_locks = KeyedLocks()
+
+
+@contextmanager
+def _guarded(plan_id: str) -> Iterator[None]:
+    with _locks.hold(plan_id):
+        try:
+            yield
+        except PlanConflict as exc:
+            raise HTTPException(409, str(exc)) from exc
+
+
 class Decision(BaseModel):
     officer_id: str
     reason: str
 
 
+class WeightsIn(BaseModel):
+    """Need weights for one plan (F7): all three, each between 0 and the configured maximum."""
+
+    model_config = ConfigDict(extra="forbid")
+    wad: float  # water-access deficit
+    cad: float  # households with no phone
+    hardship: float
+
+
 class NewPlan(BaseModel):
     day: date  # a day of the replay window (YYYY-MM-DD)
+    weights: WeightsIn | None = None  # absent: the configured default weights
+    # The day's bookings, supplied by an officer (see docs/api_additions/plans.md). Absent: the
+    # plan is built from the committed replay, which needs a day inside its window.
+    bookings: list[dict[str, Any]] | None = None
 
 
 def _record(plans: PlanStore, plan_id: str) -> PlanRecord:
@@ -84,8 +115,15 @@ def plan_view(record: PlanRecord) -> dict[str, Any]:
             "special_tankers", "approved_by", "approval_reason",
         )
     }  # fmt: skip
+    recipe = record.recipe or {}
+    weights = recipe.get("weights")
+    shown = NeedWeights(**weights) if weights else NeedWeights.default()
     view.update(
         {
+            "source": recipe.get("source", plan_builder.SOURCE),
+            "bookings_supplied": len(recipe["bookings"]) if "bookings" in recipe else None,
+            "weights": {**shown.as_dict(), "is_default": weights is None},
+            "group_names": plan_builder.group_names(list(full["effective_entitlement"])),
             "stations": stations,
             "stations_total": len(stations),
             "transfers": full["transfers"],
@@ -109,9 +147,22 @@ def plan_view(record: PlanRecord) -> dict[str, Any]:
 
 @router.post("/plans", dependencies=[Officer], status_code=201)
 def create_plan(body: NewPlan, plans: Plans, ledger: Ledger, response: Response) -> dict[str, Any]:
-    """Build and store the plan for a replay day (T9 gate). Idempotent: if that day's plan is
-    already stored, it is returned as stored (200) and nothing is built or logged again."""
-    plan_id = f"replay-{body.day.isoformat()}"
+    """Build and store a plan (T9 gate): from the bookings supplied in the request, or, without
+    them, for a day of the committed replay. Idempotent: if the same plan is already stored it
+    is returned as stored (200) and nothing is built or logged again."""
+    try:
+        weights = NeedWeights(**body.weights.model_dump()).validated() if body.weights else None
+    except ValueError as exc:
+        return invalid(str(exc))
+    supplied = body.bookings is not None
+    try:
+        plan_id = (
+            plan_builder.supplied_plan_id(body.day, body.bookings, weights)
+            if body.bookings is not None
+            else plan_builder.plan_id_for(body.day, weights)
+        )
+    except plan_builder.InvalidBookings as exc:
+        return invalid(str(exc))
     try:
         existing = plans.get(plan_id)
     except plan_builder.PlanRebuildError as exc:
@@ -120,7 +171,13 @@ def create_plan(body: NewPlan, plans: Plans, ledger: Ledger, response: Response)
         response.status_code = 200
         return plan_view(existing)
     try:
-        built = plan_builder.build_replay_plan(body.day)
+        built = (
+            plan_builder.build_supplied_plan(body.day, body.bookings, weights=weights)
+            if body.bookings is not None
+            else plan_builder.build_replay_plan(body.day, weights=weights)
+        )
+    except plan_builder.InvalidBookings as exc:
+        return invalid(str(exc))
     except plan_builder.ReplayDayUnavailable as exc:
         raise HTTPException(404, str(exc)) from exc
     record = PlanRecord(built.inputs, built.plan, built.basis, built.recipe)
@@ -128,6 +185,14 @@ def create_plan(body: NewPlan, plans: Plans, ledger: Ledger, response: Response)
         response.status_code = 200
         return plan_view(_record(plans, built.plan.plan_id))
     for entry_type, payload, actor in built.events:  # plan_created, once
+        if supplied:  # say where the bookings came from
+            payload = {
+                **payload,
+                "source": plan_builder.SUPPLIED,
+                "bookings": len(built.recipe["bookings"]),
+            }
+        if "weights" in built.recipe:  # every weight change is a ledger entry
+            payload = {**payload, "weights": built.recipe["weights"]}
         ledger.append(entry_type, payload, actor)
     return plan_view(record)
 
@@ -136,7 +201,26 @@ def create_plan(body: NewPlan, plans: Plans, ledger: Ledger, response: Response)
 def list_plans(
     plans: Plans, offset: evidence.Offset = 0, limit: evidence.Limit = ApiConfig.default_limit
 ) -> dict[str, Any]:
-    return page(plans.summaries(), offset, limit)
+    # The sliders of a screen start at the defaults and stop at the largest allowed weight.
+    return {
+        **page(plans.summaries(), offset, limit),
+        "default_weights": NeedWeights.default().as_dict(),
+        "max_weight": ALLOCATION_CONFIG.need_weight_max,
+    }
+
+
+@router.get("/plans/{plan_id}/compare", dependencies=[Officer])
+def compare_plan(plan_id: str, plans: Plans) -> dict[str, Any]:
+    """Who gains and who loses booked trips under this plan's weights, against the default
+    plan for the same day (SIMULATION). A plan with the default weights has no comparison."""
+    record = _record(plans, plan_id)
+    if not record.recipe:
+        raise not_found(f"Comparison for plan {plan_id}")
+    built = plan_builder.BuiltPlan(record.inputs, record.plan, record.basis, record.recipe, ())
+    try:
+        return plan_builder.compare_to_default(built)
+    except ValueError as exc:
+        raise HTTPException(404, str(exc)) from exc
 
 
 @router.get("/plans/{plan_id}", dependencies=[Officer])
@@ -182,43 +266,45 @@ def plan_confidence(plan_id: str, plans: Plans) -> dict[str, Any]:
 
 @router.post("/plans/{plan_id}/groups/{group:path}/check", dependencies=[Officer])
 def check_group(plan_id: str, group: str, body: Decision, plans: Plans, ledger: Ledger) -> Any:
-    record = _record(plans, plan_id)
-    try:
-        checked = planner.mark_checked(
-            record.plan, group, body.officer_id, body.reason, ledger, datetime.now(UTC)
-        )
-    except ValueError as exc:
-        return invalid(str(exc))
-    record.plan = checked
-    plans.save(record)
-    entry = ledger.entries[-1]
-    return {
-        "plan_id": plan_id,
-        "group": group,
-        "checked": True,
-        "unchecked_flags": sorted(set(checked.flags) - set(checked.checked)),
-        "ledger_seq": entry.seq,
-        "ledger_event": entry.event_type,
-    }
+    with _guarded(plan_id):
+        record = _record(plans, plan_id)
+        try:
+            checked = planner.mark_checked(
+                record.plan, group, body.officer_id, body.reason, ledger, datetime.now(UTC)
+            )
+        except ValueError as exc:
+            return invalid(str(exc))
+        record.plan = checked
+        plans.save(record)
+        entry = ledger.entries[-1]
+        return {
+            "plan_id": plan_id,
+            "group": group,
+            "checked": True,
+            "unchecked_flags": sorted(set(checked.flags) - set(checked.checked)),
+            "ledger_seq": entry.seq,
+            "ledger_event": entry.event_type,
+        }
 
 
 @router.post("/plans/{plan_id}/approve", dependencies=[Officer])
 def approve(plan_id: str, body: Decision, plans: Plans, ledger: Ledger) -> Any:
-    record = _record(plans, plan_id)
-    if record.plan.status == "APPROVED":
-        raise HTTPException(409, f"Plan {plan_id} is already approved")
-    if not body.reason.strip():
-        return invalid("A reason is required")
-    try:
-        record.plan = planner.approve_plan(
-            record.plan, body.officer_id, body.reason, ledger, datetime.now(UTC)
-        )
-    except planner.PlanBlocked as exc:
-        raise HTTPException(409, str(exc)) from exc
-    except ValueError as exc:
-        return invalid(str(exc))
-    plans.save(record)
-    return plan_view(record)
+    with _guarded(plan_id):
+        record = _record(plans, plan_id)
+        if record.plan.status == "APPROVED":
+            raise HTTPException(409, f"Plan {plan_id} is already approved")
+        if not body.reason.strip():
+            return invalid("A reason is required")
+        try:
+            record.plan = planner.approve_plan(
+                record.plan, body.officer_id, body.reason, ledger, datetime.now(UTC)
+            )
+        except planner.PlanBlocked as exc:
+            raise HTTPException(409, str(exc)) from exc
+        except ValueError as exc:
+            return invalid(str(exc))
+        plans.save(record)
+        return plan_view(record)
 
 
 # --- explanations (T7) ---------------------------------------------------------------------------

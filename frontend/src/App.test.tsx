@@ -67,4 +67,23 @@ describe("App", () => {
     fireEvent.click(screen.getByRole("button", { name: "Continue" }));
     await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("That token was not accepted."));
   });
+
+  it("says a translation is a draft until a native speaker has reviewed it", () => {
+    render(
+      <LocaleProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </LocaleProvider>,
+    );
+    expect(screen.queryByRole("note", { name: "Translation status" })).not.toBeInTheDocument();
+    const picker = screen.getByRole("combobox", { name: "Language" });
+    fireEvent.change(picker, { target: { value: "te" } });
+    expect(screen.getByRole("note", { name: "అనువాద స్థితి" })).toHaveTextContent("ఈ అనువాదం ముసాయిదా");
+    fireEvent.change(picker, { target: { value: "ur" } });
+    expect(screen.getByRole("note", { name: "ترجمے کی حیثیت" })).toHaveTextContent("یہ ترجمہ مسودہ ہے");
+    fireEvent.change(picker, { target: { value: "hi" } });
+    expect(screen.getByRole("note", { name: "अनुवाद की स्थिति" })).toHaveTextContent("यह अनुवाद मसौदा है");
+  });
 });
+

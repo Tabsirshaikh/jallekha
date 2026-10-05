@@ -21,7 +21,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 7. **Filling stations are stand-ins.** The count (90) is REAL, the positions are ASSUMED (booking-weighted k-means). HMWSSB publishes no station list with coordinates.
 8. **Fleet, trips and capacity are from news reports**, not official data [ASSUMED].
 9. **Most officer and field screens now use the live API, with a labelled fallback.** T10 is merged (bearer-token roles officer, driver, resident, field worker and councillor; tokens, optionally bound to a user id, come from the environment only). The atlas, equity and field-check (U5), forecast and shortage (U6), impact (U9), plan (U7), explanation and contest (U8), driver (U4), field-worker (U3) and resident (U2) intake screens call it when someone is signed in with the right role and the API answers; otherwise they show the committed snapshot or sample data with a "Saved snapshot" chip and the reason. The ward report card and SMS summary (U10) still show sample cards. Nobody signs in with a password: a token is pasted in the top bar. Screens were tested with mocked and real API calls, but have not been looked at in a browser by a person.
-10. **Translations are drafts.** Telugu, Urdu and Hindi wording needs native-speaker review. Alert and explanation wording is [OPEN].
+10. **Translations are drafts.** Telugu, Urdu and Hindi were written without a native-speaker review; the app says so in each of them until a reviewer signs it off. `docs/translation_review/` has every string (807) beside its English, columns for the reviewer and a glossary with five inconsistent terms to settle. Automated checks (every test run) find no missing language, broken placeholder, wrong script or English left in place, but cannot judge wording. Alert and explanation wording is [OPEN].
 11. **No migrations.** New database columns need a fresh database or a manual column add.
 12. **Third-party warnings.** OR-Tools prints SWIG deprecation warnings on import (upstream).
 
@@ -81,7 +81,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 ## 3. Layer B: Allocation
 
 ### F7 Service models (A2)
-- Need weights (water access counts double) and thresholds are policy assumptions for officer sliders [ASSUMED].
+- Need weights (water access counts double) and thresholds are policy assumptions [ASSUMED]. Officers can try other need weights for one plan (0 to 5 each); a weighted plan is a separate plan with its own ledger entry. The effect is small: on 2025-05-01 the strongest water-access setting moves 6 groups by at most 8 trips, because daily capacity limits it. The debt weight has no slider (the replay has no debts).
 - Wards are never classed `no_connection` by Census alone (maximum non-tap share about 29%); that class normally comes from officer input.
 - Need comes from Census 2011 through the approximate crosswalk.
 
@@ -164,22 +164,22 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 | X1 release tag | P4 | README, slide outline and demo script are written; the tag waits for green CI and version approval |
 | Green CI | owner | GitHub Actions has not run since the account billing block (jobs fail in seconds with "recent account payments have failed"); everything merged was checked locally instead |
 | Ward report cards (U10 screen) live, with deliveries, debt and schedule | P3/P4 | deliveries and plans are stored, but nothing yet joins a delivery's outcome to a ward and its water debt (A6), so the card cannot show them |
-| Plans from today's bookings | P2/P3 | `POST /plans` builds plans from the committed Mar-Jul 2025 replay (SIMULATION) only; no job builds a plan from live bookings |
+| A live booking feed | HMWSSB / owner | plans can be built from bookings an officer supplies (CSV or the API, any day), but nothing imports HMWSSB's bookings automatically; supplied bookings are not verified, capacity is the ASSUMED fleet scenario, and nothing carries over from the day before (no queue state or debt from earlier supplied days) |
 | Gradient-boosting forecast | P3 | no agreed dependency; weather (D8) and groundwater (D7) data missing |
 | T9 threshold calibration | P2/P3 | needs a degraded-signal replay scenario from P2; the threshold is a provisional 0.50 |
 | Spatial models for E5 | P1 | BYM2 did not converge (see F4); peer + NB are used |
 | Hospital and school data (D9) in the ward table | P1 | critical-facility column is empty, so F1 tier 0 and F10 have no facility counts |
 | Filling-point and reservoir decisions (Q1, Q2) | owner | ON_HOLD |
-| Telugu, Urdu and Hindi wording review | native speakers | drafts only |
+| Telugu, Urdu and Hindi wording review | native speakers | review pack and glossary ready in `docs/translation_review/`; set each language to "reviewed" in `frontend/src/i18n.tsx` afterwards |
 | Passwords or single sign-on | owner | sign-in is a pasted token from the environment; there is no user database |
 
 ### Limits of the live wiring
-- **Concurrent writes** to one plan or delivery are last-writer-wins (two simultaneous wrong OTP tries or checks can lose one). A race between two starts of the same delivery can end in a 500 instead of a 409.
+- **Concurrent writes** to one plan or delivery: inside one process a per-item lock makes each change, its ledger entry and its save one step, and a stored version refuses a write from a stale read (409, "reload and try again"); a duplicate delivery start is a 409, not a 500. With several server processes the version still prevents lost updates, but a refused change can leave its ledger entry without the saved change (the lock does not span processes).
 - **Plans are stored as a rebuild recipe**, not a copy. The first build or rebuild after a restart takes about 12 s, and the explain-booking route can take up to about 30 s after a restart when many plans are stored. If the inputs or gate change after a plan is stored, loading it fails with 409 (digest mismatch) rather than showing a different plan.
 - A plan view is about 1.1 MB (every station and booking). It is refetched after each check or approval.
 - The ledger entry for a check or approval is written before the database save, and for a new plan after it; a failure between the two leaves one without the other.
 - A representative id cannot be reused at another stop. `GET /deliveries` loads every matching delivery before paging.
-- The live schedule shows ward ids and litres, not ward names or time windows, because the API has none; the plan screen's priority-weight sliders exist only in the sample.
+- The live schedule has no time windows (the API has none). Wards and sections are shown by name (from the Census evidence file); a ward without a name shows its id.
 - The shortage screen loads at most 600 rows; API reason texts and bases are English only in every language.
 
 ## 6. Solution document statements that are now out of date
