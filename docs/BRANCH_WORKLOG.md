@@ -1080,3 +1080,16 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:** OSM is incomplete (zero mapped is not zero present); tag choices are ours; old 2016 ward map; no route creates outage critical stops from a candidate yet (`docs/LIMITATIONS.md` F1, F10).
 - **Pull request:** see the PR for `feat/d9-facilities`.
 
+## `feat/t9-degraded-replay` — T9 threshold chosen on a degraded-signal replay (item 18)
+
+- **Owner / date:** P3 work done by the repo owner, 2026-10-06.
+- **Why:** on the all-fallback replay every threshold looked the same (`not_separable`), so the gate ran on a PROVISIONAL 0.50 that flagged 60 of 152 groups.
+- **What we changed:**
+  - `services/confidence.py`: `degrade` (one seeded draw of errors: weakly placed sections moved to a neighbouring ward, true need off by a factor that widens as the Census join score falls), `error_groups` (which groups those errors damage) and `choose_across_seeds` (the lowest threshold meeting the target in every draw). Error rates and draw count in `config/confidence.py`, all ASSUMED.
+  - `scripts/trust/calibrate_confidence.py` now runs the A7 replay once on our data and once per draw on the "true" data, and writes per draw and threshold: match share of unflagged group-days, groups flagged, damaged groups caught; plus the selection row. `--seeds` lets the test re-run draw 0 only.
+  - Config threshold 0.05, basis DERIVED. U7 says how a DERIVED threshold was chosen (all four languages) and keeps the PROVISIONAL wording for a provisional one. `plan_confidence.get.json` updated.
+- **Results:** 0.05 keeps at least 90.86% of unflagged decisions right in all 5 draws (88.97% with nothing flagged), flags 45 of 152 groups, catches about 41% of damaged groups; 0.70 would catch about 92% but flag 117 groups.
+- **Validation:** tests written first and seen failing (moves only weak placements and only to neighbours, need error grows as join quality falls, damaged groups, every-draw rule, committed selection equals config, draw 0 reproduces; U7 note), then passing.
+- **Known limitations:** assumed error rates and partly circular by design; thin margin because capacity rarely binds; the 90% rule is OPEN (`docs/LIMITATIONS.md` F17).
+- **Pull request:** see the PR for `feat/t9-degraded-replay`.
+

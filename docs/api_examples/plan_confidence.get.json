@@ -2,7 +2,7 @@
   "_example": {
     "endpoint": "GET /plans/{plan_id}/confidence",
     "status": "PROPOSED, service not merged (T9 on feat/t9-confidence, local)",
-    "basis": "DERIVED from REAL P1 files; threshold PROVISIONAL (calibration not_separable, SIMULATION)",
+    "basis": "DERIVED from REAL P1 files; threshold DERIVED on the degraded-signal replay (item 18, SIMULATION; assumed error rates)",
     "built_from": "feat/t9-confidence: services/confidence.py T9Gate.explain -> Combined (SignalScore); data/derived/confidence_calibration.csv selection row",
     "notes": "Three groups of replay day 1: an unplaced section, a mixed-source ward, a ward above the threshold."
   },
@@ -10,21 +10,27 @@
     "plan_id": "replay-2025-03-01"
   },
   "response": {
-    "threshold": 0.5,
-    "threshold_basis": "PROVISIONAL",
+    "threshold": 0.05,
+    "threshold_basis": "DERIVED",
     "calibration": {
       "row_type": "selection",
-      "threshold": 0.5,
-      "group_days": 17363,
-      "unflagged_group_days": 11500,
-      "matched_unflagged": 10887,
-      "match_share": 0.9467,
-      "match_share_basis": "not_separable: target 0.90 already met with nothing flagged, so the replay cannot tell thresholds apart; PROVISIONAL threshold kept (OPEN, owner to confirm)",
+      "scenario": "degraded_signals",
+      "seed": "all",
+      "threshold": 0.05,
+      "group_days": 86974,
+      "unflagged_group_days": 66483,
+      "matched_unflagged": 60973,
+      "match_share": 0.9086,
+      "match_share_basis": "lowest threshold with match share >= target 0.90 in every one of 5 error draws (OPEN, owner to confirm); match share is the lowest draw",
       "groups": 152,
-      "flagged_groups": 60,
-      "flagged_share": 0.3947,
+      "flagged_groups": 45,
+      "flagged_share": 0.2961,
       "flagged_share_basis": "DERIVED; groups with T9 confidence below the threshold, over replay groups",
-      "status": "not_separable",
+      "damaged_groups": 434,
+      "caught_groups": 180,
+      "caught_share": 0.4147,
+      "caught_share_basis": "SIMULATION; damaged groups (a section wrongly placed in it, or need off by at least the configured share) with T9 confidence below the threshold, over damaged groups; summed over draws",
+      "status": "chosen",
       "label": "SIMULATION"
     },
     "groups": [
@@ -78,7 +84,7 @@
       {
         "group": "ward:relation/7852805",
         "confidence": 0.4796,
-        "needs_check": true,
+        "needs_check": false,
         "reason": "weakest census_join_quality=0.4796 (min(census_coverage 1.0000, dominant_source_share 0.4796)); used: census_join_quality, section_location; unavailable: data_age, evidence_age, forecast_interval_width",
         "used": [
           "census_join_quality",

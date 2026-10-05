@@ -14,6 +14,8 @@ class ConfidenceConfig:
     section_summary_path: str = "data/derived/crosswalk/section_to_ward_summary.json"  # P1
     replay_groups_path: str = "data/derived/planner_replay/groups.csv"  # A7 replay (P2)
     calibration_path: str = "data/derived/confidence_calibration.csv"
+    # Ward neighbours (shared border) for the degraded scenario: E5's adjacency graph (P1).
+    adjacency_path: str = "data/derived/underserved/ward_adjacency.json"
 
     # --- signal 1: Census join quality (E2 columns) ---
     # Rule: a ward that is not allocation_eligible, or whose join_status is not the areal
@@ -69,16 +71,44 @@ class ConfidenceConfig:
     target_match_share: float = 0.90
     # PROVISIONAL threshold used when the calibration cannot choose one. ASSUMED, OPEN.
     provisional_threshold: float = 0.5
-    # The gate's threshold. PROVISIONAL: on the A7 replay (2026-10-03, SIMULATION) the target
-    # is already met with nothing flagged (match share 0.9522 at 0.00) and the share does not
-    # rise with the threshold, so the replay cannot select one ("not_separable", see
-    # data/derived/confidence_calibration.csv). OPEN, owner to confirm.
-    threshold: float = 0.5
-    threshold_basis: str = "PROVISIONAL"
+    # The gate's threshold. DERIVED (item 18): the lowest candidate meeting target_match_share
+    # in all 5 error draws of the degraded-signal replay (SIMULATION, 2026-10-06; lowest draw
+    # 0.9086 against 0.8897 with nothing flagged). It flags the 45 of 152 replay groups with
+    # confidence 0 (no usable Census join or no ward placement) and catches about 41% of the
+    # damaged groups; catching 90% would need 0.70 and send 117 groups to officers
+    # (data/derived/confidence_calibration.csv). Holds only under the ASSUMED error rates
+    # below; the rule itself is OPEN, owner to confirm.
+    threshold: float = 0.05
+    threshold_basis: str = "DERIVED"
     # Candidate thresholds 0.00-1.00 in steps of 0.05. ASSUMED.
     candidate_thresholds: tuple[float, ...] = field(
         default_factory=lambda: tuple(round(i * 0.05, 2) for i in range(21))
     )
+    # --- degraded-signal scenario (item 18) ---
+    # The replay above cannot tell thresholds apart, so the threshold is chosen on a scenario
+    # where the data the system has is wrong in known places, more often where its own quality
+    # signals say it is weak. Every rate is ASSUMED, OPEN, owner to confirm; the chosen
+    # threshold holds only if real errors follow the same pattern (docs/LIMITATIONS.md F17).
+    # Chance that a placed section really lies in a neighbouring ward, by placement method.
+    degraded_move_probability: tuple[tuple[str, float], ...] = (
+        ("INSIDE", 0.02),
+        ("NEAREST_500M", 0.25),
+        ("WARD_NAME", 0.5),
+        ("OSM_NEAR_DIVISION", 0.5),
+    )
+    # A placed section farther than location_outlier_km from its division office.
+    degraded_outlier_move_probability: float = 0.5
+    # True need = recorded need x exp(N(0, sd)), sd = max(floor, need_error_sd x (1 - Census
+    # join score)): a ward whose Census join scores 1 is off by about 5%, one scoring 0 (the
+    # median fallback) by a factor of about e (+170% / -63%) one time in three.
+    degraded_need_error_sd: float = 1.0
+    degraded_need_error_sd_floor: float = 0.05
+    # A group counts as damaged (for the "caught" share) when a section was moved out of it or
+    # its true need is off by at least this share.
+    degraded_error_need_share: float = 0.25
+    # Error draws; a threshold must meet target_match_share in every one.
+    degraded_seeds: int = 5
+
     # Rounding of written values, and the tolerance Windows / Linux runs must agree within.
     confidence_decimals: int = 4
     threshold_decimals: int = 2

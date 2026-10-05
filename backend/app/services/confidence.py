@@ -13,6 +13,8 @@ and `approve_plan` refuses them until an officer's `mark_checked` (ledger `ward_
 from __future__ import annotations
 
 import csv
+import math
+import random
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from datetime import date
@@ -328,3 +330,84 @@ def calibrate(
         # no threshold is chosen (the gate would never flag anything).
         return Calibration(tuple(rows), target, "not_separable", None)
     return Calibration(tuple(rows), target, "chosen", meets[0].threshold)
+
+
+# --- degraded-signal scenario (item 18) ---------------------------------------------------
+
+
+@dataclass(frozen=True)
+class Degradation:
+    """One seeded draw of errors in the data the system has: sections that really lie in a
+    neighbouring ward, and each group's true need as a multiple of its recorded need."""
+
+    seed: int
+    moved: Mapping[str, str]  # section -> the ward it really lies in
+    need_factor: Mapping[str, float]  # group -> true need / recorded need
+
+
+def degrade(
+    seed: int,
+    tables: SignalTables,
+    groups: Iterable[str],
+    neighbours: Mapping[str, Sequence[str]],
+    config: ConfidenceConfig = CONFIDENCE_CONFIG,
+) -> Degradation:
+    """Errors are likelier where the quality signals say the data is weak (ASSUMED rates in
+    config): a weakly placed section moves to a neighbouring ward, and need is off by more
+    where the Census join scores lower. Same seed, same draw."""
+    rng = random.Random(seed)
+    move = dict(config.degraded_move_probability)
+    moved: dict[str, str] = {}
+    for row in sorted(tables.sections, key=lambda r: r["section"]):
+        ward = row.get("ward_id") or ""
+        if row.get("status") != "MAPPED" or not ward:
+            continue
+        p = move.get(row.get("ward_method", ""), 0.0)
+        distance = row.get("division_distance_km") or ""
+        if distance and float(distance) > config.location_outlier_km:
+            p = max(p, config.degraded_outlier_move_probability)
+        draw = rng.random()
+        options = sorted(neighbours.get(ward, ()))
+        if draw < p and options:
+            moved[row["section"]] = rng.choice(options)
+    factor = {}
+    for group in sorted(set(groups)):
+        score = score_census(group, tables, config).score or 0.0
+        sd = max(config.degraded_need_error_sd_floor, config.degraded_need_error_sd * (1 - score))
+        factor[group] = math.exp(rng.gauss(0.0, sd)) if sd > 0 else 1.0
+    return Degradation(seed, moved, factor)
+
+
+def error_groups(
+    degradation: Degradation, tables: SignalTables, config: ConfidenceConfig = CONFIDENCE_CONFIG
+) -> frozenset[str]:
+    """Groups the system gets wrong: one a section was wrongly placed in, or one whose true
+    need is off by at least degraded_error_need_share."""
+    ward_of = {r["section"]: r.get("ward_id") for r in tables.sections}
+    placed = {f"{WARD_PREFIX}{ward_of[s]}" for s in degradation.moved if ward_of.get(s)}
+    far = {
+        g
+        for g, f in degradation.need_factor.items()
+        if abs(f - 1.0) >= config.degraded_error_need_share - 1e-12
+    }
+    return frozenset(placed | far)
+
+
+def choose_across_seeds(seeds: Sequence[Calibration], target: float) -> tuple[str, float | None]:
+    """The lowest threshold whose unflagged match share meets the target in every seed;
+    "not_separable" when the lowest candidate (nothing flagged) already does, "unreachable"
+    when none does. Every seed's rows must use the same thresholds."""
+    thresholds = [r.threshold for r in seeds[0].rows]
+    meets = [
+        t
+        for i, t in enumerate(thresholds)
+        if all(
+            s.rows[i].match_share is not None and s.rows[i].match_share >= target - 1e-12
+            for s in seeds
+        )
+    ]
+    if not meets:
+        return "unreachable", None
+    if meets[0] == thresholds[0] and all(s.rows[0].flagged_groups == 0 for s in seeds):
+        return "not_separable", None
+    return "chosen", meets[0]

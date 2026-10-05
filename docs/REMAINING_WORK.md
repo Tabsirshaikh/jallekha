@@ -15,7 +15,7 @@ to-do list.
 | 15 | Hospital and school data (D9) in the ward table | F1, F8, F10 | **done** (`feat/d9-facilities`) | — |
 | 16 | Weather data (D8) | F5 | **done** (with item 12) | — |
 | 17 | Groundwater data (D7) | F5, F6 | us, after registering | NWDP account |
-| 18 | Degraded-signal replay for the T9 threshold | F17 | us, now | nothing |
+| 18 | Degraded-signal replay for the T9 threshold | F17 | **done** (`feat/t9-degraded-replay`); the 90% rule is the owner's | — |
 | 19 | Seven owner decisions | several | owner | owner |
 | 20 | Decide the stack (or edit the doc) | all | owner, then us | decision |
 | 21 | Fix demo step 5 in the solution doc | docs | **done** (`docs/demo-step5-2025`) | — |
@@ -205,6 +205,8 @@ add it to F6's reasons and as a candidate F5 feature.
 data is unusable (too few wells, gaps), `LIMITATIONS.md` says so with the evidence.
 
 ### 18. Degraded-signal replay for the T9 threshold (F17)
+
+**Status: done** on `feat/t9-degraded-replay`: the calibration replays against true data that differs from ours where our placement and Census joins are weak (ASSUMED error rates, 5 draws). The curve separates and the 90% rule chooses **0.05** (DERIVED): 45 of 152 groups flagged, about 41% of damaged groups caught, at least 90.86% of unflagged decisions right in every draw. Catching 90% of damaged groups would need 0.70 (117 groups flagged). See `docs/LIMITATIONS.md` F17 for why this is partly circular. The text below is the plan it followed.
 
 **What it is.** The confidence gate flags groups for an officer's check when confidence is below
 a threshold. The threshold should be chosen on a replay, but on the normal replay nothing goes
