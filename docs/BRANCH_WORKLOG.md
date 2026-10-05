@@ -1093,3 +1093,12 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:** assumed error rates and partly circular by design; thin margin because capacity rarely binds; the 90% rule is OPEN (`docs/LIMITATIONS.md` F17).
 - **Pull request:** see the PR for `feat/t9-degraded-replay`.
 
+## `chore/parallel-tests` — backend tests run in parallel
+
+- **Owner / date:** repo owner, 2026-10-06.
+- **Why:** GitHub Actions cannot run (billing), so every merge runs `tasks.py test` locally; the serial backend suite took 14-16 minutes.
+- **What we changed:** `pytest-xdist==3.8.0` in the `dev` extra; `tasks.py test` runs `pytest -n auto backend/tests`. The tests themselves are unchanged.
+- **Validation:** the same 945 backend tests pass in 6 min 36 s (was 13-16 min serially). The slowest single test (E5 PyMC prior, ~4.5 min) now bounds the run.
+- **Known limitations:** none; install the new dev dependency with `python tasks.py setup` (or `pip install pytest-xdist==3.8.0`).
+- **Pull request:** see the PR for `chore/parallel-tests`.
+

@@ -73,7 +73,8 @@ clinics, UPHCs, schools, care homes; counts per ward in `data/derived/evidence/w
 
 - `python tasks.py lint` — ruff check + format check (config `backend/pyproject.toml`, 100 cols), eslint, tsc.
 - `python tasks.py test` — backend pytest, frontend vitest, `npm run i18n:check`, all data verifiers.
-  Takes 10-18 minutes. Must exit 0 before any merge.
+  Backend tests run in parallel (pytest-xdist, `-n auto`): about 7-9 minutes in all, bounded by one
+  E5 PyMC test (~4.5 min). Must exit 0 before any merge.
 - Use the venv Python: `.venv/Scripts/python.exe` (has scikit-learn, pymc; system Python does not).
   One test file: `.venv/Scripts/python.exe -m pytest -q -p no:warnings backend/tests/<file>`.
 - Format a file: `.venv/Scripts/python.exe -m ruff format --config backend/pyproject.toml <file>`.
