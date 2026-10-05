@@ -137,4 +137,61 @@ def test_registered_run_writes_derived_output(tmp_path: Path) -> None:
     # 100 m / 48 h links only SR2; 300 m / 168 h links SR2 and SR3; SR5 (500 m) never.
     assert float(rows[("linked_share", "radius=100m;window=48h")]["value"]) == pytest.approx(1 / 3)
     assert float(rows[("linked_share", "radius=300m;window=168h")]["value"]) == pytest.approx(2 / 3)
-    assert rows[("linked_share", "radius=100m;window=48h")]["reference"] == "0.71"
+    # The document's 71% / 88% count a duplicate as caught when it is linked to anything.
+    assert rows[("linked_share", "radius=100m;window=48h")]["reference"] == ""
+    assert rows[("linked_any_share", "radius=100m;window=48h")]["reference"] == "0.71"
+    assert rows[("linked_any_share", "radius=300m;window=168h")]["reference"] == "0.88"
+
+
+# Three ways of counting a caught duplicate, and merged non-duplicates. 1e-5 degree of latitude
+# is about 1.11 m: P2 is ~150 m from P1, P3 ~230 m from P1 and ~80 m from P2; Q is 2.2 km away.
+SPREAD = [
+    ["P1", "Pressure", "05/01/2023 09:00:00 AM", "41.95000", "-87.6300", "false", ""],
+    ["P2", "Pressure", "05/01/2023 10:00:00 AM", "41.95135", "-87.6300", "true", "P1"],
+    ["P3", "Pressure", "05/01/2023 11:00:00 AM", "41.95207", "-87.6300", "true", "P1"],
+    ["Q1", "Pressure", "05/01/2023 09:00:00 AM", "41.97000", "-87.6300", "false", ""],
+    ["Q2", "Pressure", "05/01/2023 10:00:00 AM", "41.97000", "-87.6300", "true", "P1"],
+    ["Q3", "Pressure", "05/01/2023 11:00:00 AM", "41.97005", "-87.6300", "false", ""],
+]
+
+
+def _spread_results(tmp_path: Path) -> dict[tuple[str, str], dict[str, object]]:
+    data = tmp_path / "spread.csv"
+    with data.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(HEADER)
+        writer.writerows(SPREAD)
+    results = calibrate_dedup.calibrate(calibrate_dedup.parse_rows(data))
+    return {(r["metric"], r["group"]): r for r in results}  # type: ignore[misc]
+
+
+def test_linked_any_same_incident_and_exact_parent_are_reported_apart(tmp_path: Path) -> None:
+    r = _spread_results(tmp_path)
+    near, wide = "radius=100m;window=48h", "radius=300m;window=168h"
+    # 100 m: P2 is alone (150 m); P3 joins P2, the same incident but not P1 itself; Q2 joins
+    # Q1, the wrong incident.
+    assert r[("linked_any_share", near)]["value"] == pytest.approx(2 / 3)
+    assert r[("linked_same_incident_share", near)]["value"] == pytest.approx(1 / 3)
+    assert r[("linked_share", near)]["value"] == pytest.approx(0)
+    # 300 m: P2 and P3 reach P1; Q2 still joins Q1.
+    assert r[("linked_any_share", wide)]["value"] == pytest.approx(1)
+    assert r[("linked_same_incident_share", wide)]["value"] == pytest.approx(2 / 3)
+    assert r[("linked_share", wide)]["value"] == pytest.approx(2 / 3)
+
+
+def test_merged_non_duplicates_are_counted(tmp_path: Path) -> None:
+    r = _spread_results(tmp_path)
+    # Originals with a position: P1, Q1, Q3; Q3 (6 m from Q1, 2 h later) is merged.
+    for group in ("radius=100m;window=48h", "radius=300m;window=168h"):
+        row = r[("merged_non_duplicate_share", group)]
+        assert row["value"] == pytest.approx(1 / 3) and row["n"] == 3
+
+
+def test_the_configured_rule_is_replayed_with_chicago_types_mapped(tmp_path: Path) -> None:
+    assert calibrate_dedup.CATEGORY_MAP["Check for Leak"] == "leak"
+    assert calibrate_dedup.CATEGORY_MAP["No Water Complaint"] == "no_water"
+    r = _spread_results(tmp_path)
+    # 100 m like the near rule; unmapped types ("Pressure") use the "other" window (7 days).
+    assert r[("linked_any_share", "configured_rule")]["value"] == pytest.approx(2 / 3)
+    assert r[("linked_same_incident_share", "configured_rule")]["value"] == pytest.approx(1 / 3)
+    assert r[("merged_non_duplicate_share", "configured_rule")]["value"] == pytest.approx(1 / 3)

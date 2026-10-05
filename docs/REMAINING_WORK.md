@@ -11,7 +11,7 @@ to-do list.
 | 11 | Ward report cards with real deliveries, debt and schedule | F20 | **done** (`feat/f20-report-cards`) | — |
 | 12 | Gradient-boosting forecast | F5 | **done** (`feat/f5-gbm-forecast`); adoption is the owner's rule | — |
 | 13 | Voice error rate for Telugu and Urdu | F14 | us, after recordings | a small labelled voice set |
-| 14 | Reproduce the duplicate calibration (71% / 88%) | F13 | us, now | a calibration extract we must rebuild |
+| 14 | Reproduce the duplicate calibration (71% / 88%) | F13 | **location/time done** (`feat/f13-dedup-calibration`); text similarity left | ~2 GB `ml` extra and Indian pairs |
 | 15 | Hospital and school data (D9) in the ward table | F1, F8, F10 | us, now | nothing (OSM is open) |
 | 16 | Weather data (D8) | F5 | **done** (with item 12) | — |
 | 17 | Groundwater data (D7) | F5, F6 | us, after registering | NWDP account |
@@ -125,6 +125,8 @@ speakers agree.
 set's size, and the number quoted in `LIMITATIONS.md` (F14).
 
 ### 14. Reproduce F13's duplicate calibration (F13, T1)
+
+**Status: location/time part done** on `feat/f13-dedup-calibration`: logged D13 pull, all measures reproduced or corrected (see `docs/LIMITATIONS.md` F13). The doc's 71% / 88% hold only as "linked to any earlier complaint"; into the right incident it is 59% / 60%, and 82% / 65% for the configured rule. **Left:** the text-similarity test on Indian examples (needs the `ml` extra, about 2 GB).
 
 **What it is.** The duplicate engine merges complaints within 100 m and a time window per
 category. The doc quotes "100 m / 48 h finds 71% of real duplicates, 300 m / 7 days finds 88%"

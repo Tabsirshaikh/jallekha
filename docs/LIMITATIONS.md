@@ -111,7 +111,7 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - The sandbox uses 90 stand-in stations; straight-line km times 1.35 plus an in-section allowance, not real roads.
 - Replay bookings carry no tier, so tier 0 and 1 priority is not tested in the simulation.
 - Scheduled supply in the sandbox treats every A2 candidate as officer-confirmed.
-- **The duplicate-merge measure (PS11) is missing** from the Impact results: T1's calibration extract was never logged.
+- **The duplicate-merge measure (PS11) is missing** from the Impact results: the sandbox does not simulate complaints. The calibration extract is now logged (F13), so the engine's merge rate on real duplicates is known (82% linked, 65% into the right incident), but not a JalLekha-vs-B1 comparison.
 - JL (JalLekha) is worse than B1 on: booked service served (the 5% reserve), and km per litre (sharing). These are listed in `summary.json`.
 - Simulation shows capacity is not binding on 2025 data (B1 served 98.7%). The tight scenario is calibrated to the 2026 delivered share, whose cause HMWSSB does not publish.
 
@@ -124,7 +124,12 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - Silent residents count for nothing; unresolved deliveries never reduce debt (decided in A6).
 
 ### F13 Duplicate engine (T1)
-- Calibrated on Chicago 311, another city. The frozen extract was not found, so the 71% and 88% figures cannot be reproduced from the repo. Text similarity is untested on Indian data.
+- **Calibration reproduced on a logged pull (item 14).** The original 31,098-row extract was never found and Chicago's data changes daily, so the closest match was pulled and registered (`data/raw/d13_chicago_311/`, D13-CHICAGO-311: the four water-supply types, 2022-2023, 31,835 rows, 4,931 duplicates) and `scripts/trust/calibrate_dedup.py` writes `data/derived/dedup_calibration.csv`. Results:
+  - 95% of duplicates within **104 m** of their parent (document: 106 m), and no-water duplicates 90% within **24 h** (document: 20 h): reproduced.
+  - Leak duplicates 90% within **381 h, about 16 days** (document: about 9 days): not reproduced; the 7-day leak window misses more leak duplicates than the document implies.
+  - The document's **71% / 88%** reproduce (72% / 85%) only when a duplicate counts as caught once it is linked to *any* earlier complaint. Linked into the right incident (its parent or another duplicate of it): **59% / 60%**; to the exact recorded parent: 53% / 56%. Up to 15% / 27% of non-duplicate complaints are merged too (an upper bound: Chicago does not flag every duplicate).
+  - **The rule JalLekha uses** (100 m; 48 h no-water, 7 days leaks; Chicago types mapped, low pressure as no-water, ASSUMED): 82% linked, 65% into the right incident, up to 19% of non-duplicates merged.
+- It is still another city's data. Text similarity (LaBSE) is untested on Indian examples: it needs the heavy `ml` extra (torch, about 2 GB with the model) and a labelled set of Indian complaint pairs.
 
 ### F14 Unified multilingual intake (T4)
 - No Telugu or Urdu speech error rate is published; it must be measured on a small labelled set. Failed items are saved for a human.

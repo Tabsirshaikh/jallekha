@@ -60,7 +60,7 @@ HMWSSB delivers almost every tanker that is booked (1,316,215 bookings and 1,315
 | D10 | OSM HMWSSB tanks, reservoirs, works (~38) as stand-in filling points | **TO FETCH**; use as filling stations is **ASSUMED** | routing |
 | D11 | OSM road network + OSRM | **REAL** | routing |
 | D12 | Section coordinates (Nominatim, 159 of 201) | **DERIVED**, not hand-checked | F3 |
-| D13 | Chicago 311 water complaints 2022-23 with duplicate flag and parent id (31,098 rows, 4,994 duplicates) | **REAL**, another city | F13 calibration |
+| D13 | Chicago 311 water complaints 2022-23 with duplicate flag and parent id (31,098 rows, 4,994 duplicates; that extract was lost, re-pulled 2026-10-05: 31,835 rows, 4,931 duplicates, `data/raw/d13_chicago_311/`) | **REAL**, another city | F13 calibration |
 | D14 | HMWSSB supply-interruption notices (published through press/website) | **TO FETCH**; parse only what is published | F15, F10 |
 | D15 | Reservoir levels (CWC/India-WRIS bulletins for Nagarjuna Sagar, Yellampally; twin reservoirs in news) | **TO VERIFY**; build F6 without it if no machine-readable source | F6 |
 | D16 | Booking caps and prices by category (domestic 1 per 2 days or 8/month Rs 500; apartments 5-24 flats 2/day or 30/month; 25-200 flats 3/day or 60/month; commercial 1/day or 30/month Rs 850), HMWSSB guidelines; channels 47% IVRS / 46% app / 7% web (Apr 2026, news) | **REAL** | F8 |
@@ -108,7 +108,7 @@ HMWSSB delivers almost every tanker that is booked (1,316,215 bookings and 1,315
 
 **F12 Delivery proof.** OTP to one of 2-3 registered representatives per stop, server-side geofence (150 m), then 3-5 random residents get "Did you get water? 1 yes / 2 no". Outcomes: OTP + mostly yes = Confirmed; OTP + mostly no = Disputed; no OTP + mostly yes = Unconfirmed; no OTP + mostly no = Failed; silence counts for nothing.
 
-**F13 Duplicate engine (calibrated).** Location/time rule calibrated on real Chicago duplicates: 95% within 106 m; no-water duplicates 90% within 20 h; leaks 90% within about 9 days. Rule: 100 m radius, 48 h window for no-water / tanker-missed / dirty water, 7 days for leaks and other; same household id matches first. Text: multilingual sentence embeddings (e.g. LaBSE) as a secondary signal, marked untested on Indian data. Duplicate **rate per area** is kept as a reporting-activity signal (Liu et al. 2023).
+**F13 Duplicate engine (calibrated).** Location/time rule calibrated on real Chicago duplicates: 95% within 106 m; no-water duplicates 90% within 20 h; leaks 90% within about 9 days (re-pulled 2026-10-05: 104 m, 24 h, and about 16 days for leaks; `data/derived/dedup_calibration.csv`). Rule: 100 m radius, 48 h window for no-water / tanker-missed / dirty water, 7 days for leaks and other; same household id matches first. Text: multilingual sentence embeddings (e.g. LaBSE) as a secondary signal, marked untested on Indian data. Duplicate **rate per area** is kept as a reporting-activity signal (Liu et al. 2023).
 
 **F14 Unified multilingual intake.** Resident PWA and field-worker mode (offline queue, sync later), SMS, missed-call/IVR, voice notes. Languages: **Telugu, Urdu, Hindi, English**. Speech-to-text with **AI4Bharat IndicConformer-600M multilingual** (open, MIT; covers Telugu, Hindi and Urdu; runs with `transformers` + ONNX Runtime, no NeMo) on the server; no Telugu/Urdu error rate is published, so we measure it on a small labelled set; fallback: voice note saved for a human. Text ≥ 16 px, touch targets ≥ 48 px.
 
@@ -147,7 +147,7 @@ Access: F14 intake (app, SMS, IVR, voice, field worker, offline) ─► F13 dupl
 | Growth adjustment | correlation of ward building growth with section booking growth | none |
 | Under-served detection | number flagged, stability across model variants, agreement with peer-median | no ground truth (stated); field checks |
 | Forecast | MAPE, WAPE, interval coverage, rolling origin | seasonal naive 21.9% / 35.1% |
-| Duplicates | share of real duplicates linked to true parent | 100 m / 48 h = 71%; 300 m / 7 d = 88% (Chicago) |
+| Duplicates | share of real duplicates linked to an earlier complaint / into the right incident | 100 m / 48 h = 72% / 59%; 300 m / 7 d = 85% / 60%; configured rule 82% / 65% (Chicago, re-pulled 2026-10-05; the earlier 71% / 88% matched "linked to any earlier complaint") |
 
 On the calibrated simulation (always labelled): the four PS11 measures from F19, 30+ seeds, mean and range, against B1.
 

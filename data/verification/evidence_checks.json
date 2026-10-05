@@ -5,7 +5,7 @@
     "data/raw/census/hyderabad/hh14.xlsx": "8c25065bf17cff44e78c5a84213e7a8f5b3303d2321c26e95e007971f287e53c",
     "data/raw/census/rangareddy/hh14.xlsx": "4035c07e6d447edc3c414b96bf15465f4f3ea3d2ce92300223296329a2783d31",
     "data/raw/geography/datameet/ghmc-wards.geojson": "3fdfef8e787ed543d816fee36a6097c350c4dff2423aae7fa203bb49cbd6edc2",
-    "data/verification/source_manifest.csv": "32955b71b8c2162e89bcfc0dfb3e49d934d62951bb9a4d59d39557e0c53cdc37"
+    "data/verification/source_manifest.csv": "819cb5e1fa1508c2fea85f6741302515015f2cd9a215b6b3987036563c6d743f"
   },
   "normalized_lf_text_inputs": [
     "data/derived/crosswalk/census_to_ghmc_2016.csv",
