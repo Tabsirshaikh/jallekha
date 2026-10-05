@@ -4,7 +4,7 @@ import { setToken } from "./api";
 import { AuthProvider } from "./auth";
 import { LocaleProvider } from "./i18n";
 import PlanExperience from "./PlanExperience";
-import { apiError, json, planServer, SUPPLIED_ID, WEIGHTED_ID } from "./test/planFixtures";
+import { apiError, derivedConfidenceBody, json, planServer, SUPPLIED_ID, WEIGHTED_ID } from "./test/planFixtures";
 
 const CHECKS = "/plans/replay-2025-05-01/groups/";
 
@@ -38,6 +38,17 @@ async function checkBoth(reason = "Compared with the field map") {
 describe("PlanExperience (live API)", () => {
   beforeEach(() => setToken(null));
   afterEach(() => vi.unstubAllGlobals());
+
+  it("says how a calibrated threshold was chosen, and that it rests on assumed error rates", async () => {
+    setToken("t-officer");
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(planServer({ confidence: derivedConfidenceBody }).fetchMock));
+    renderScreen();
+    await screen.findByText("Live data");
+    await openPlan();
+    expect(screen.getByText(/chosen on a simulated replay with deliberately wrong data/)).toBeInTheDocument();
+    expect(screen.queryByText(/PROVISIONAL and not calibrated/)).not.toBeInTheDocument();
+    expect(screen.getByText("DERIVED · SIMULATION")).toBeInTheDocument();
+  });
 
   it("lists stored plans, opens one and shows queue, schedule, outage and confidence", async () => {
     setToken("t-officer");

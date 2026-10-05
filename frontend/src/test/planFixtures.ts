@@ -95,6 +95,14 @@ export const confidenceBody = {
   groups: [group("section:ADARSHNAGAR", 0.0, true), group("ward:relation/7848824", 0.5, false), group("ward:relation/7852805", 0.25, true)],
 };
 
+/** The gate as calibrated on the degraded-signal replay (item 18): threshold DERIVED. */
+export const derivedConfidenceBody = {
+  ...confidenceBody,
+  threshold: 0.05,
+  threshold_basis: "DERIVED",
+  calibration: { ...confidenceBody.calibration, threshold: 0.05, status: "chosen", scenario: "degraded_signals" },
+};
+
 export function listBody(checkedTotal = 0, status: "DRAFT" | "APPROVED" = "DRAFT", withWeighted = false, withSupplied = false) {
   const item = (id: string, weights: typeof WEIGHTS | null, source = "planner_replay", day = "2025-05-01") => ({ plan_id: id, day, status, basis: BASIS, flags_total: 2, checked_total: checkedTotal, created_at: "2026-10-04T15:17:45.312034+00:00", weights, source });
   const items = withWeighted ? [item("replay-2025-05-01", null), item(WEIGHTED_ID, WEIGHTS)] : [item("replay-2025-05-01", null)];
@@ -120,7 +128,7 @@ export function apiError(status: number, code: string, message: string): Respons
 export type Call = { method: string; path: string; body: unknown };
 
 /** A stateful stand-in for the plan routes: checks and approval change what later GETs return. */
-export function planServer(options: { userId?: string | null; plans?: boolean; approve?: (body: unknown) => Response; compare?: Response } = {}) {
+export function planServer(options: { userId?: string | null; plans?: boolean; approve?: (body: unknown) => Response; compare?: Response; confidence?: unknown } = {}) {
   const calls: Call[] = [];
   const checked: Record<string, string> = {};
   let approval: { by: string; reason: string } | null = null;
@@ -161,7 +169,7 @@ export function planServer(options: { userId?: string | null; plans?: boolean; a
     if (path === `/plans/${WEIGHTED_ID}/confidence` && weightedStored) return Promise.resolve(json(confidenceBody));
     if (path === `/plans/${WEIGHTED_ID}/compare` && weightedStored) return Promise.resolve(options.compare ?? json(compareBody));
     if (path === "/plans/replay-2025-05-01" && stored) return Promise.resolve(json(planBody({ ...checked }, approval ? "APPROVED" : "DRAFT", approval)));
-    if (path === "/plans/replay-2025-05-01/confidence" && stored) return Promise.resolve(json(confidenceBody));
+    if (path === "/plans/replay-2025-05-01/confidence" && stored) return Promise.resolve(json(options.confidence ?? confidenceBody));
     const check = path.match(/^\/plans\/replay-2025-05-01\/groups\/(.+)\/check$/);
     if (check && method === "POST") {
       checked[check[1]] = (body as { reason: string }).reason;

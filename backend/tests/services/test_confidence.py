@@ -261,13 +261,23 @@ def test_outlier_distance_is_p1s_value() -> None:
     assert CONFIDENCE_CONFIG.location_outlier_km == summary["checks"]["outlier_km"]
 
 
-def test_committed_selection_is_provisional_until_the_replay_separates_thresholds() -> None:
+def test_committed_selection_is_the_config_threshold() -> None:
     with (REPO / CONFIDENCE_CONFIG.calibration_path).open(encoding="utf-8") as handle:
-        selection = [r for r in csv.DictReader(handle) if r["row_type"] == "selection"]
+        rows = list(csv.DictReader(handle))
+    selection = [r for r in rows if r["row_type"] == "selection"]
     assert len(selection) == 1
     row = selection[0]
+    assert row["scenario"] == "degraded_signals"
+    seeds = {r["seed"] for r in rows if r["row_type"] == "threshold"}
+    assert len(seeds) == CONFIDENCE_CONFIG.degraded_seeds
     if row["status"] == "chosen":
         assert float(row["threshold"]) == pytest.approx(CONFIDENCE_CONFIG.threshold, abs=0.005)
+        assert CONFIDENCE_CONFIG.threshold_basis == "DERIVED"
+        # Every draw meets the target at the chosen threshold.
+        at = [
+            r for r in rows if r["row_type"] == "threshold" and r["threshold"] == row["threshold"]
+        ]
+        assert all(float(r["match_share"]) >= CONFIDENCE_CONFIG.target_match_share for r in at)
     else:
         assert CONFIDENCE_CONFIG.threshold_basis == "PROVISIONAL"
         assert float(row["threshold"]) == pytest.approx(
@@ -288,17 +298,101 @@ def _calibration_script():  # type: ignore[no-untyped-def]
 
 
 def test_committed_calibration_reproduces_within_tolerance(tmp_path: Path) -> None:
+    # One error draw (seed 0) keeps the test to two replays; it must equal the committed rows.
     script = _calibration_script()
-    assert script.main(["--out", str(tmp_path / "calibration.csv")]) == 0
+    assert script.main(["--out", str(tmp_path / "calibration.csv"), "--seeds", "1"]) == 0
     with (tmp_path / "calibration.csv").open(encoding="utf-8") as handle:
-        fresh = list(csv.DictReader(handle))
+        fresh = [r for r in csv.DictReader(handle) if r["row_type"] == "threshold"]
     with (REPO / "data/derived/confidence_calibration.csv").open(encoding="utf-8") as handle:
-        committed = list(csv.DictReader(handle))
+        committed = [r for r in csv.DictReader(handle) if r["seed"] == "0"]
     assert [r["threshold"] for r in fresh] == [r["threshold"] for r in committed]
     tol = CONFIDENCE_CONFIG.reproduce_tolerance
     for a, b in zip(fresh, committed, strict=True):
         assert a["row_type"] == b["row_type"] and a["status"] == b["status"]
-        for column in ("match_share", "flagged_share"):
+        assert (a["damaged_groups"], a["caught_groups"]) == (
+            b["damaged_groups"],
+            b["caught_groups"],
+        )
+        for column in ("match_share", "flagged_share", "caught_share"):
             if a[column] or b[column]:
                 assert abs(float(a[column]) - float(b[column])) <= tol, (a["threshold"], column)
         assert a["label"] == "SIMULATION" and a["match_share_basis"]
+
+
+# --- degraded-signal scenario (item 18) --------------------------------------------------
+
+NEIGHBOURS = {"A": ("B", "P"), "B": ("A",), "P": ("A",), "R": ("A",)}
+
+
+def _degraded_config(**changes: object):  # type: ignore[no-untyped-def]
+    import dataclasses
+
+    base = dict(
+        degraded_move_probability=(("INSIDE", 0.0), ("NEAREST_500M", 0.0), ("WARD_NAME", 1.0)),
+        degraded_outlier_move_probability=1.0,
+        degraded_need_error_sd=1.0,
+        degraded_need_error_sd_floor=0.0,
+    )
+    base.update(changes)
+    return dataclasses.replace(CONFIDENCE_CONFIG, **base)
+
+
+def test_degrade_moves_weakly_placed_sections_to_a_neighbouring_ward() -> None:
+    config = _degraded_config()
+    groups = ["ward:A", "ward:B", "ward:P", "ward:R", "section:LOST"]
+    d = cf.degrade(7, TABLES, groups, NEIGHBOURS, config)
+    # WARD_NAME (SP) and the 9 km outlier (FAR) always move here; INSIDE and NEAREST_500M never;
+    # an unplaced section has no ward to move from.
+    assert set(d.moved) == {"SP", "FAR"}
+    assert d.moved["SP"] in NEIGHBOURS["P"] and d.moved["FAR"] in NEIGHBOURS["A"]
+    assert d == cf.degrade(7, TABLES, groups, NEIGHBOURS, config)  # seeded
+
+
+def test_need_error_grows_as_census_join_quality_falls() -> None:
+    config = _degraded_config()
+    groups = ["ward:A", "ward:B", "section:LOST"]
+    factors = [cf.degrade(s, TABLES, groups, NEIGHBOURS, config).need_factor for s in range(20)]
+    # A's Census join scores 1: no error. B (0.3) and an unplaced section (0) get errors.
+    assert all(f["ward:A"] == 1.0 for f in factors)
+    assert any(abs(f["ward:B"] - 1) > 0.05 for f in factors)
+    assert any(abs(f["section:LOST"] - 1) > 0.05 for f in factors)
+    floor = _degraded_config(degraded_need_error_sd=0.0, degraded_need_error_sd_floor=0.0)
+    assert set(cf.degrade(3, TABLES, groups, NEIGHBOURS, floor).need_factor.values()) == {1.0}
+
+
+def test_error_groups_are_where_a_section_moved_or_need_is_far_off() -> None:
+    config = _degraded_config(degraded_error_need_share=0.25)
+    d = cf.Degradation(
+        seed=0,
+        moved={"SP": "A"},
+        need_factor={"ward:A": 1.0, "ward:B": 1.3, "ward:R": 0.9, "ward:P": 1.0},
+    )
+    # SP was placed in P (its group is wrong); B's need is 30% off; R's 10% is within tolerance.
+    assert cf.error_groups(d, TABLES, config) == frozenset({"ward:P", "ward:B"})
+
+
+def _row(t: float, share: float | None, flagged: int = 0) -> cf.CalibrationRow:
+    return cf.CalibrationRow(t, 10, 10, 9, share, 4, flagged, flagged / 4)
+
+
+def _cal(*shares: float | None) -> cf.Calibration:
+    rows = tuple(
+        _row(t, s, i) for i, (t, s) in enumerate(zip((0.0, 0.5, 1.0), shares, strict=True))
+    )
+    return cf.Calibration(rows, 0.9, "n/a", None)
+
+
+def test_threshold_must_meet_the_target_in_every_seed() -> None:
+    # Seed 1 meets the target with nothing flagged, seed 0 needs 0.5: 0.5 is chosen.
+    assert cf.choose_across_seeds([_cal(0.85, 0.92, None), _cal(0.91, 0.95, None)], 0.9) == (
+        "chosen",
+        0.5,
+    )
+    assert cf.choose_across_seeds([_cal(0.91, 0.92, None), _cal(0.95, 0.9, None)], 0.9) == (
+        "not_separable",
+        None,
+    )
+    assert cf.choose_across_seeds([_cal(0.8, 0.85, None), _cal(0.95, 0.99, None)], 0.9) == (
+        "unreachable",
+        None,
+    )
