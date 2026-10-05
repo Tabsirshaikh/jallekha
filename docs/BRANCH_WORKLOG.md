@@ -1053,3 +1053,15 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:** none.
 - **Pull request:** see the PR for `docs/demo-step5-2025`.
 
+## `docs/item-22-promise-column` — tracker says whether each doc promise is met (item 22)
+
+- **Owner / date:** docs work done by the repo owner, 2026-10-06.
+- **Why:** `docs/features.csv` marks a task DONE when its own done-when passed, which is often narrower than the solution document's promise (T2 DONE without an adopted GBM, T9 DONE with a provisional threshold), so readers took DONE to mean the promise is met.
+- **What we changed:**
+  - Two new columns at the end of `docs/features.csv`: `doc_promise_met` (yes / partly / no) and `gap` (what is missing, from `docs/LIMITATIONS.md`). Result: 21 yes, 24 partly, 2 no (Q1, Q2 on hold).
+  - Stale notes fixed: A7 (API plans use T9's gate) and U4-U8 (live since PR #65, not "pending" or "unavailable"). T7 was already DONE, so the `LIMITATIONS.md` section 6 line about it is replaced by a note on the new columns.
+  - `backend/tests/test_features_tracker.py` keeps the columns honest: allowed values, a gap note for every partly / no row, T2 and T9 not marked met, and no stale notes on the live screens.
+- **Validation:** tests written first and seen failing (5 of 5), then passing; `scripts/ci/verify_p1_r_p1.py` still passes (47 rows, columns read by name).
+- **Known limitations:** the yes / partly / no values are a judgement against the solution document as written; update a row's value whenever its gap closes.
+- **Pull request:** see the PR for `docs/item-22-promise-column`.
+

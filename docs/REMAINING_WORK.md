@@ -19,7 +19,7 @@ to-do list.
 | 19 | Seven owner decisions | several | owner | owner |
 | 20 | Decide the stack (or edit the doc) | all | owner, then us | decision |
 | 21 | Fix demo step 5 in the solution doc | docs | **done** (`docs/demo-step5-2025`) | — |
-| 22 | "Done-when vs doc promise" column in `features.csv` | tracker | us, now | nothing |
+| 22 | "Done-when vs doc promise" column in `features.csv` | tracker | **done** (`docs/item-22-promise-column`) | — |
 
 Order we will work in: 11, then 21 and 22 (quick), then 15, 16, 18, 14, then 12 once 16 is in,
 then 17 and 13 when the data arrives. Item 19 runs alongside: each decision unblocks something.
@@ -264,6 +264,8 @@ the Mar-Jul 2025 replay as the main run (2023 is kept for continuity, F19).
 **Done when.** No line of the doc presents 2023 as the main replay.
 
 ### 22. "Done-when vs doc promise" column in `features.csv`
+
+**Status: done** on `docs/item-22-promise-column`: every row has `doc_promise_met` (21 yes, 24 partly, 2 no) and a `gap` note, checked by `backend/tests/test_features_tracker.py`. T7 was already DONE; the notes of A7 and U4-U8 that still said the API was missing (from before PR #65) are corrected. The text below is the plan it followed.
 
 **What it is.** `docs/features.csv` marks a task DONE when its own done-when test passed, which is
 often narrower than what the solution doc promises (T2 is DONE but the GBM model is not built; T9
