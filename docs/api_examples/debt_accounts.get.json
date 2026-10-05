@@ -1,0 +1,31 @@
+{
+  "_example": {
+    "endpoint": "GET /debt/accounts",
+    "status": "ROUTE_ON_MAIN",
+    "basis": "DERIVED (A6 on stored plans); SYNTHETIC example",
+    "built_from": "services/day_close.py, services/debt_store.py",
+    "notes": "Officer only. See docs/api_additions/report_cards.md."
+  },
+  "request": {
+    "offset": 0,
+    "limit": 50
+  },
+  "response": {
+    "total": 1,
+    "offset": 0,
+    "limit": 50,
+    "items": [
+      {
+        "account_id": "ward:relation/7848824",
+        "ward_id": "relation/7848824",
+        "ward_name": "Ward 105 Gachibowli",
+        "debt_litres": 120000.0,
+        "daily_entitlement_litres": 130000.0,
+        "cap_litres": 910000.0,
+        "in_debt_since": "2026-10-03",
+        "alert_raised": false,
+        "settled_through": "2026-10-03"
+      }
+    ]
+  }
+}

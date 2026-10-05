@@ -37,7 +37,15 @@ from app.config.allocation import ALLOCATION_CONFIG
 from app.config.confidence import CONFIDENCE_CONFIG
 from app.config.env import REPO_ROOT
 from app.config.plans import PLAN_STORE_CONFIG
-from app.services import booking_groups, confidence, fair_queue, planner, service_models
+from app.services import (
+    booking_groups,
+    confidence,
+    fair_queue,
+    planner,
+    service_models,
+    water_debt,
+)
+from app.services.scheduled_supply import ServicePoint, ServicePointRegistry
 from app.services.service_models import NeedWeights
 
 SOURCE = "planner_replay"
@@ -454,12 +462,43 @@ def normalise_bookings(day: date, raw: Sequence[Mapping[str, Any]]) -> list[dict
     return [r[2] for r in rows]
 
 
+def normalise_stops(stops: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    """Registered delivery stops with a ward, as a plan keeps them: by stop id, four fields."""
+    rows = [
+        {
+            "stop_id": str(s["stop_id"]),
+            "ward_id": str(s["ward_id"]),
+            "lat": float(s["lat"]),
+            "lon": float(s["lon"]),
+        }
+        for s in stops
+        if s.get("ward_id")
+    ]
+    return sorted(rows, key=lambda s: s["stop_id"])
+
+
+def normalise_debts(debts: Sequence[water_debt.DebtAccount]) -> list[dict[str, Any]]:
+    """Accounts that still owe water, by id (an account at 0 changes no turns, so it is left
+    out and does not change the plan id)."""
+    debts = [a for a in debts if a.debt_litres > 0]
+    return [water_debt.account_as_dict(a) for a in sorted(debts, key=lambda a: a.account_id)]
+
+
 def supplied_plan_id(
-    day: date, bookings: Sequence[Mapping[str, Any]], weights: NeedWeights | None = None
+    day: date,
+    bookings: Sequence[Mapping[str, Any]],
+    weights: NeedWeights | None = None,
+    stops: Sequence[Mapping[str, Any]] = (),
+    debts: Sequence[water_debt.DebtAccount] = (),
 ) -> str:
-    """`plan-<day>-<8 hex of the bookings>`, plus the weights when they are not the defaults."""
+    """`plan-<day>-<8 hex of the bookings>`, plus the weights when they are not the defaults.
+
+    Registered stops and debt accounts change the plan, so when there are any they are hashed
+    with the bookings (a plan without them keeps the id it always had)."""
     rows = normalise_bookings(day, bookings)
-    blob = json.dumps(rows, sort_keys=True, separators=(",", ":")).encode()
+    extras = {"stops": normalise_stops(stops), "debts": normalise_debts(debts)}
+    content: Any = {"bookings": rows, **extras} if any(extras.values()) else rows
+    blob = json.dumps(content, sort_keys=True, separators=(",", ":")).encode()
     plan_id = f"plan-{day.isoformat()}-{hashlib.sha256(blob).hexdigest()[:8]}"
     weights = weights.validated() if weights is not None else None
     if weights is not None and weights != NeedWeights.default():
@@ -472,11 +511,15 @@ def build_supplied_plan(
     bookings: Sequence[Mapping[str, Any]],
     threshold: float | None = None,
     weights: NeedWeights | None = None,
+    stops: Sequence[Mapping[str, Any]] = (),
+    debts: Sequence[water_debt.DebtAccount] = (),
 ) -> BuiltPlan:
     """The DRAFT plan for the bookings an officer supplies for a day, gated by T9.
 
-    Capacity is the same ASSUMED fleet scenario as the replay (there is no live capacity feed),
-    need is Census 2011, and nothing carries over from an earlier day."""
+    Capacity is the same ASSUMED fleet scenario as the replay (there is no live capacity feed)
+    and need is Census 2011. Registered delivery stops with a ward are the service points of
+    scheduled supply (A4 splits each scheduled ward's litres across its stops), and debt
+    accounts saved by closing earlier days raise their groups' turns (A6/A7)."""
     script = _script()
     recipe: dict[str, Any] = {
         "source": SUPPLIED,
@@ -487,6 +530,10 @@ def build_supplied_plan(
         "threshold": CONFIDENCE_CONFIG.threshold if threshold is None else threshold,
         "bookings": normalise_bookings(day, bookings),
     }
+    if stops_kept := normalise_stops(stops):
+        recipe["stops"] = stops_kept
+    if debts_kept := normalise_debts(debts):
+        recipe["debts"] = debts_kept
     if weights is not None:
         weights = weights.validated()
         if weights != NeedWeights.default():
@@ -515,19 +562,59 @@ def _build_supplied(recipe: dict[str, Any]) -> BuiltPlan:
         )
         for row in rows
     ]
+    stops = recipe.get("stops", [])
+    debts = [water_debt.account_from_dict(d) for d in recipe.get("debts", [])]
     inputs = planner.PlanInputs(
-        plan_id=supplied_plan_id(day, rows, weights),
+        plan_id=supplied_plan_id(day, rows, weights, stops, debts),
         day=day,
         capacity=setup.capacity,
         pending=pending,
         entitlement=_entitlement(weights) or ctx.entitlement,
         queue_states={},
+        debts={a.account_id: a for a in debts},
         scheduled=ctx.scheduled,
         station_km=ctx.network.station_km,
+        registry=ServicePointRegistry(
+            tuple(
+                ServicePoint(
+                    point_id=s["stop_id"],
+                    ward_id=s["ward_id"],
+                    name=s["stop_id"],
+                    lat=s["lat"],
+                    lng=s["lon"],
+                    registered_by="officer",
+                    reason="registered delivery stop (F12)",
+                )
+                for s in stops
+            )
+        ),
     )
     events = _Events()
     plan = planner.build_plan(inputs, t9_gate(threshold), events, _script().planner_now(day))
     stored = {**recipe, "bookings": rows}
-    return BuiltPlan(
-        inputs, plan, _basis(threshold, weights, len(rows)), stored, tuple(events.events)
-    )
+    basis = _basis(threshold, weights, len(rows))
+    if stops:
+        basis["stops"] = (
+            f"{len(stops)} registered delivery stops with a ward (officer-registered; ward "
+            "OFFICER or DERIVED from the 2016 ward map); scheduled litres split across a "
+            "ward's stops in whole loads (A4); not routed (no fleet given)"
+        )
+    if debts:
+        basis["debts"] = (
+            f"{len(debts)} water debt accounts saved by closing earlier days (A6: planned "
+            "litres at the ward's stops minus Confirmed deliveries)"
+        )
+    return BuiltPlan(inputs, plan, basis, stored, tuple(events.events))
+
+
+def stop_litres(plan: planner.DailyPlan, stop_ids: Sequence[str]) -> dict[str, float]:
+    """Scheduled-supply litres the plan gives each of these stops (routed or not)."""
+    wanted = set(stop_ids)
+    litres = dict.fromkeys(stop_ids, 0.0)
+    for stop in plan.special_stops:
+        if stop.kind == "scheduled" and stop.place_id in wanted:
+            litres[stop.place_id] += stop.litres
+    for need in plan.unrouted:
+        if need.kind == "scheduled" and need.place_id in wanted:
+            litres[need.place_id] += need.litres
+    return litres

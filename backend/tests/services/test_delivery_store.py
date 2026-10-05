@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import sqlite3
 from collections.abc import Callable, Iterator
-from datetime import UTC, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -307,3 +307,58 @@ def test_otp_and_phones_stay_in_their_own_columns(
     assert where(state.otp.code_hash) == {("delivery", "otp_code_hash")}
     for phone in phones:
         assert where(phone) <= {("representative", "phone"), ("resident", "phone")}
+
+
+def test_a_stop_keeps_its_ward_and_where_the_ward_came_from(new_store: StoreFactory) -> None:
+    placed = Stop("stop-w", LAT, LON, (), (), "SYNTHETIC", "relation/7848824", "OFFICER")
+    new_store().put_stop(placed)
+    loaded = new_store().get_stop("stop-w")
+    assert loaded == placed
+    assert loaded is not None and loaded.ward_id == "relation/7848824"
+    assert loaded.ward_basis == "OFFICER"
+    assert new_store().get_stop("stop-w") in new_store().list_stops()
+
+
+def test_a_stop_without_a_ward_is_unplaced(new_store: StoreFactory) -> None:
+    new_store().put_stop(STOP)
+    loaded = new_store().get_stop("stop-1")
+    assert loaded is not None and loaded.ward_id is None and loaded.ward_basis == "UNPLACED"
+
+
+def test_stops_and_deliveries_can_be_listed_by_ward_and_start_time(
+    new_store: StoreFactory, chain: InMemoryLedger
+) -> None:
+    store = new_store()
+    reps = tuple(dl.Representative(f"rep-a{i}", "stop-a", f"+9100000002{i}", "te") for i in (1, 2))
+    store.put_stop(Stop("stop-a", LAT, LON, reps, (), "SYNTHETIC", "relation/1", "DERIVED"))
+    store.put_stop(Stop("stop-b", LAT, LON, (), (), "SYNTHETIC", "relation/2", "DERIVED"))
+    assert [s.stop_id for s in new_store().list_stops(ward_id="relation/1")] == ["stop-a"]
+    for i, start in enumerate([T0, T0 + timedelta(days=1)]):
+        state = dl.start_delivery(f"del-w{i}", "stop-a", LAT, LON, "drv-1", reps, chain, start)
+        new_store().put_delivery(state)
+    found = new_store().list_deliveries(stop_ids=["stop-a"], started_from=T0 + timedelta(hours=1))
+    assert [d.delivery_id for d in found] == ["del-w1"]
+    until = new_store().list_deliveries(stop_ids=["stop-a"], started_before=T0 + timedelta(hours=1))
+    assert [d.delivery_id for d in until] == ["del-w0"]
+    assert new_store().list_deliveries(stop_ids=[]) == []
+
+
+def test_deliveries_are_found_by_hyderabad_day_bounds(
+    new_store: StoreFactory, chain: InMemoryLedger
+) -> None:
+    from app.services.day_close import day_bounds
+
+    store = new_store()
+    reps = tuple(dl.Representative(f"rep-b{i}", "stop-b", f"+9100000003{i}", "te") for i in (1, 2))
+    store.put_stop(Stop("stop-b", LAT, LON, reps, (), "SYNTHETIC", "relation/1", "DERIVED"))
+    starts = {
+        "late": datetime(2026, 10, 3, 18, 20, tzinfo=UTC),  # 23:50 IST on 10-03
+        "early": datetime(2026, 10, 2, 18, 40, tzinfo=UTC),  # 00:10 IST on 10-03
+        "next": datetime(2026, 10, 3, 18, 40, tzinfo=UTC),  # 00:10 IST on 10-04
+        "before": datetime(2026, 10, 2, 18, 20, tzinfo=UTC),  # 23:50 IST on 10-02
+    }
+    for name, at in starts.items():
+        new_store().put_delivery(dl.start_delivery(name, "stop-b", LAT, LON, "d", reps, chain, at))
+    start, end = day_bounds(date(2026, 10, 3))
+    found = new_store().list_deliveries(stop_ids=["stop-b"], started_from=start, started_before=end)
+    assert sorted(d.delivery_id for d in found) == ["early", "late"]

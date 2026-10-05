@@ -8,7 +8,7 @@ to-do list.
 
 | # | Item | Feature | Who can start it | Blocked by |
 |---|---|---|---|---|
-| 11 | Ward report cards with real deliveries, debt and schedule | F20 | us, now | nothing |
+| 11 | Ward report cards with real deliveries, debt and schedule | F20 | **done** (`feat/f20-report-cards`) | — |
 | 12 | Gradient-boosting forecast | F5 | us, after 16 | weather data (16), dependency choice (19) |
 | 13 | Voice error rate for Telugu and Urdu | F14 | us, after recordings | a small labelled voice set |
 | 14 | Reproduce the duplicate calibration (71% / 88%) | F13 | us, now | a calibration extract we must rebuild |
@@ -29,6 +29,8 @@ then 17 and 13 when the data arrives. Item 19 runs alongside: each decision unbl
 ## Finish features
 
 ### 11. Ward report cards with real deliveries, debt and schedule (F20, U10)
+
+**Status: done** on `feat/f20-report-cards` (see `docs/api_additions/report_cards.md`). Built as researched: stops get a ward, supplied plans give scheduled water to the stops, an officer closes each day to settle water debt, the next plan uses the debt, and the card and U10 screen show all three live. The text below is the plan it followed.
 
 **What it is.** One public page per ward (and a short SMS) that tells residents how much water
 their ward needs, how many bookings it made, how many tanker visits were delivered and confirmed,

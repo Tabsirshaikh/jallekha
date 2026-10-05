@@ -22,6 +22,7 @@ from app.routers.stores import (
     PlanRecord,
     PlanStore,
     Stop,
+    get_debt_store,
     get_delivery_store,
     get_plan_store,
 )
@@ -30,6 +31,7 @@ from app.services import fair_queue, planner
 from app.services import intake_pipeline as ip
 from app.services import notices as nt
 from app.services.contest import ContestService
+from app.services.debt_store import DebtStore
 from app.services.ledger_store import StoredLedger
 from app.services.sms import FakeSmsSender
 
@@ -121,6 +123,7 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClie
     residents = tuple(dl.Resident(f"res-{i:02d}", f"+9198000002{i:02d}", "te") for i in range(1, 6))
     delivery_store = DeliveryStore(engine)
     delivery_store.put_stop(Stop("stop-0001", *STOP, reps, residents, "SYNTHETIC"))
+    debt_store = DebtStore(engine)
     overrides = {
         get_api_config: ApiConfig.from_env,
         intake.get_intake_service: lambda: intake_service,
@@ -133,6 +136,7 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClie
         contests.get_contest_service: lambda: ContestService(engine, ledger=chain),
         get_plan_store: lambda: plan_store,
         get_delivery_store: lambda: delivery_store,
+        get_debt_store: lambda: debt_store,  # never the default database
     }
     app.dependency_overrides.update(overrides)
     try:

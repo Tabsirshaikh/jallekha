@@ -33,6 +33,7 @@ from app.routers.common import invalid, not_found, page
 from app.routers.deliveries import phone_key
 from app.routers.stores import DeliveryStore, Stop, get_delivery_store
 from app.services import delivery as dl
+from app.services import ward_locate
 from app.services.delivery_store import StopConflict
 
 router = APIRouter(prefix="/stops", tags=["stops"])
@@ -100,6 +101,8 @@ class StopIn(BaseModel):
     )
     residents: list[Person] = Field(max_length=STOP_CONFIG.residents_max)
     basis: Literal["REAL", "SYNTHETIC"]
+    # The ward the stop serves (F20). Absent: placed on the 2016 ward polygons (DERIVED).
+    ward_id: str | None = Field(default=None, max_length=64)
 
     @model_validator(mode="after")
     def _people(self) -> StopIn:
@@ -133,6 +136,9 @@ def view(stop: Stop) -> dict[str, Any]:
         "lat": stop.lat,
         "lon": stop.lon,
         "basis": stop.basis,
+        "ward_id": stop.ward_id,
+        "ward_name": ward_locate.ward_name(stop.ward_id),
+        "ward_basis": stop.ward_basis,
         "representatives": [
             {"id": r.id, "language": r.language, "phone_last2": phone_key(r.phone)[-2:]}
             for r in stop.representatives
@@ -148,6 +154,10 @@ def register(payload: Annotated[Any, Body()], store: Store) -> Any:
         body = StopIn.model_validate(payload)
     except ValidationError as exc:
         return error_response(422, "validation_error", "Request is not valid", _errors(exc))
+    try:
+        ward_id, ward_basis = ward_locate.place(body.lat, body.lon, body.ward_id)
+    except ValueError as exc:
+        return invalid(str(exc))
     stop = Stop(
         body.stop_id,
         body.lat,
@@ -157,6 +167,8 @@ def register(payload: Annotated[Any, Body()], store: Store) -> Any:
         ),
         tuple(dl.Resident(r.id, r.phone, r.language) for r in body.residents),
         body.basis,
+        ward_id,
+        ward_basis,
     )
     try:
         store.put_stop(stop)

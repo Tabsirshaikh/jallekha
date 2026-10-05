@@ -63,6 +63,8 @@ class Stop:
     representatives: tuple[dl.Representative, ...]
     residents: tuple[dl.Resident, ...]
     basis: str = "SYNTHETIC"  # REAL | SYNTHETIC; never assumed REAL
+    ward_id: str | None = None  # the ward it serves (F20), see services/ward_locate.py
+    ward_basis: str = "UNPLACED"  # OFFICER | DERIVED | UNPLACED
 
 
 class DeliveryConflict(Exception):
@@ -80,6 +82,11 @@ def _utc(value: datetime) -> datetime:
 
 def _utc_or_none(value: datetime | None) -> datetime | None:
     return None if value is None else _utc(value)
+
+
+def _naive_utc(value: datetime) -> datetime:
+    """Stored times are naive UTC (SQLite); compare like with like."""
+    return _utc(value).replace(tzinfo=None)
 
 
 def _duplicates(ids: Iterable[str]) -> list[str]:
@@ -107,7 +114,14 @@ class DeliveryStore:
             with self._sessions.begin() as session:
                 self._check_free(session, stop)
                 session.add(
-                    DeliveryStop(stop_id=stop.stop_id, lat=stop.lat, lon=stop.lon, basis=stop.basis)
+                    DeliveryStop(
+                        stop_id=stop.stop_id,
+                        lat=stop.lat,
+                        lon=stop.lon,
+                        basis=stop.basis,
+                        ward_id=stop.ward_id,
+                        ward_basis=stop.ward_basis,
+                    )
                 )
                 session.flush()  # the stop row first: residents refer to it
                 session.add_all(
@@ -148,10 +162,13 @@ class DeliveryStore:
             row = session.scalar(select(DeliveryStop).where(DeliveryStop.stop_id == stop_id))
             return self._stops(session, [row])[0] if row else None
 
-    def list_stops(self) -> list[Stop]:
+    def list_stops(self, ward_id: str | None = None) -> list[Stop]:
+        """Stops by id, optionally only those serving one ward."""
+        query = select(DeliveryStop).order_by(DeliveryStop.stop_id)
+        if ward_id is not None:
+            query = query.where(DeliveryStop.ward_id == ward_id)
         with self._sessions() as session:
-            rows = session.scalars(select(DeliveryStop).order_by(DeliveryStop.stop_id)).all()
-            return self._stops(session, rows)
+            return self._stops(session, session.scalars(query).all())
 
     @staticmethod
     def _stops(session: Session, rows: Sequence[DeliveryStop]) -> list[Stop]:
@@ -178,6 +195,8 @@ class DeliveryStore:
                 tuple(reps[row.stop_id]),
                 tuple(residents[row.stop_id]),
                 row.basis,
+                row.ward_id,
+                row.ward_basis,
             )
             for row in rows
         ]
@@ -194,14 +213,26 @@ class DeliveryStore:
             return self._states(session, [row])[0] if row else None
 
     def list_deliveries(
-        self, driver_id: str | None = None, stop_id: str | None = None
+        self,
+        driver_id: str | None = None,
+        stop_id: str | None = None,
+        stop_ids: Iterable[str] | None = None,
+        started_from: datetime | None = None,
+        started_before: datetime | None = None,
     ) -> list[dl.DeliveryState]:
-        """Deliveries in start order, optionally of one driver and / or one stop."""
+        """Deliveries in start order, optionally of one driver, one stop or a set of stops, and
+        started in [started_from, started_before)."""
         query = select(Delivery).order_by(Delivery.created_at, Delivery.id)
         if driver_id is not None:
             query = query.where(Delivery.driver_id == driver_id)
         if stop_id is not None:
             query = query.where(Delivery.stop_id == stop_id)
+        if stop_ids is not None:
+            query = query.where(Delivery.stop_id.in_(list(stop_ids)))
+        if started_from is not None:
+            query = query.where(Delivery.created_at >= _naive_utc(started_from))
+        if started_before is not None:
+            query = query.where(Delivery.created_at < _naive_utc(started_before))
         with self._sessions() as session:
             return self._states(session, session.scalars(query).all())
 

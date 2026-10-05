@@ -26,8 +26,25 @@ from app.config.confidence import CONFIDENCE_CONFIG
 from app.config.env import REPO_ROOT
 from app.routers import evidence
 from app.routers.common import csv_rows, invalid, not_found, page, typed
-from app.routers.stores import PlanConflict, PlanRecord, PlanStore, get_plan_store
-from app.services import confidence, explain, fair_queue, ledger_store, plan_builder, planner
+from app.routers.stores import (
+    DebtStore,
+    DeliveryStore,
+    PlanConflict,
+    PlanRecord,
+    PlanStore,
+    get_debt_store,
+    get_delivery_store,
+    get_plan_store,
+)
+from app.services import (
+    confidence,
+    explain,
+    fair_queue,
+    ledger_store,
+    plan_builder,
+    planner,
+    ward_locate,
+)
 from app.services.keyed_lock import KeyedLocks
 from app.services.ledger_store import StoredLedger
 from app.services.service_models import NeedWeights
@@ -37,6 +54,8 @@ router = APIRouter(tags=["plans"])
 Officer = Depends(require_roles("officer"))
 Reader = Depends(require_roles("officer", "resident", "councillor"))
 Plans = Annotated[PlanStore, Depends(get_plan_store)]
+Deliveries = Annotated[DeliveryStore, Depends(get_delivery_store)]
+Debts = Annotated[DebtStore, Depends(get_debt_store)]
 
 
 def get_plan_ledger() -> StoredLedger:
@@ -118,9 +137,22 @@ def plan_view(record: PlanRecord) -> dict[str, Any]:
     recipe = record.recipe or {}
     weights = recipe.get("weights")
     shown = NeedWeights(**weights) if weights else NeedWeights.default()
+    stops = recipe.get("stops", [])
+    litres = plan_builder.stop_litres(record.plan, [s["stop_id"] for s in stops])
     view.update(
         {
             "source": recipe.get("source", plan_builder.SOURCE),
+            # Registered delivery stops the plan used (supplied plans) and its loads for each.
+            "stops": [
+                {
+                    "stop_id": s["stop_id"],
+                    "ward_id": s["ward_id"],
+                    "ward_name": ward_locate.ward_name(s["ward_id"]),
+                    "litres": litres[s["stop_id"]],
+                }
+                for s in stops
+            ],
+            "debts_used": len(recipe.get("debts", [])),
             "bookings_supplied": len(recipe["bookings"]) if "bookings" in recipe else None,
             "weights": {**shown.as_dict(), "is_default": weights is None},
             "group_names": plan_builder.group_names(list(full["effective_entitlement"])),
@@ -146,18 +178,36 @@ def plan_view(record: PlanRecord) -> dict[str, Any]:
 
 
 @router.post("/plans", dependencies=[Officer], status_code=201)
-def create_plan(body: NewPlan, plans: Plans, ledger: Ledger, response: Response) -> dict[str, Any]:
+def create_plan(
+    body: NewPlan,
+    plans: Plans,
+    ledger: Ledger,
+    response: Response,
+    deliveries: Deliveries,
+    debts: Debts,
+) -> dict[str, Any]:
     """Build and store a plan (T9 gate): from the bookings supplied in the request, or, without
-    them, for a day of the committed replay. Idempotent: if the same plan is already stored it
-    is returned as stored (200) and nothing is built or logged again."""
+    them, for a day of the committed replay. A supplied plan also uses the registered delivery
+    stops (scheduled supply goes to the stops of its wards) and the saved water debt accounts.
+    Idempotent: if the same plan is already stored it is returned as stored (200) and nothing is
+    built or logged again."""
     try:
         weights = NeedWeights(**body.weights.model_dump()).validated() if body.weights else None
     except ValueError as exc:
         return invalid(str(exc))
     supplied = body.bookings is not None
+    stops: list[dict[str, Any]] = []
+    owed: list[Any] = []
+    if supplied:
+        stops = [
+            {"stop_id": s.stop_id, "ward_id": s.ward_id, "lat": s.lat, "lon": s.lon}
+            for s in deliveries.list_stops()
+            if s.ward_id
+        ]
+        owed = list(debts.accounts().values())
     try:
         plan_id = (
-            plan_builder.supplied_plan_id(body.day, body.bookings, weights)
+            plan_builder.supplied_plan_id(body.day, body.bookings, weights, stops, owed)
             if body.bookings is not None
             else plan_builder.plan_id_for(body.day, weights)
         )
@@ -172,7 +222,9 @@ def create_plan(body: NewPlan, plans: Plans, ledger: Ledger, response: Response)
         return plan_view(existing)
     try:
         built = (
-            plan_builder.build_supplied_plan(body.day, body.bookings, weights=weights)
+            plan_builder.build_supplied_plan(
+                body.day, body.bookings, weights=weights, stops=stops, debts=owed
+            )
             if body.bookings is not None
             else plan_builder.build_replay_plan(body.day, weights=weights)
         )
@@ -190,6 +242,8 @@ def create_plan(body: NewPlan, plans: Plans, ledger: Ledger, response: Response)
                 **payload,
                 "source": plan_builder.SUPPLIED,
                 "bookings": len(built.recipe["bookings"]),
+                "stops": len(built.recipe.get("stops", [])),
+                "debts": len(built.recipe.get("debts", [])),
             }
         if "weights" in built.recipe:  # every weight change is a ledger entry
             payload = {**payload, "weights": built.recipe["weights"]}

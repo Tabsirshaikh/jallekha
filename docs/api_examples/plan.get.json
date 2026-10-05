@@ -26,6 +26,8 @@
       "is_default": true
     },
     "source": "planner_replay",
+    "stops": [],
+    "debts_used": 0,
     "bookings_supplied": null,
     "group_names": {
       "section:40 MLD STP ATTAPUR": "40 MLD STP ATTAPUR",

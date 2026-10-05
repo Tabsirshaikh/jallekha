@@ -4,6 +4,7 @@ from app.models.base import Base, IdTimestampMixin, new_id, utcnow
 from app.models.complaint import Complaint
 from app.models.contest import Contest
 from app.models.contest_reply import ContestReply
+from app.models.debt_day import DebtDay
 from app.models.delivery import Delivery
 from app.models.delivery_outcome import DeliveryOutcome
 from app.models.delivery_roster import DeliveryRoster
@@ -19,12 +20,14 @@ from app.models.resident import Resident
 from app.models.resident_response import ResidentResponse
 from app.models.supply_notice import SupplyNotice
 from app.models.voice_note import VoiceNote
+from app.models.water_debt_account import WaterDebtAccount
 
 __all__ = [
     "Base",
     "Complaint",
     "Contest",
     "ContestReply",
+    "DebtDay",
     "Delivery",
     "DeliveryOutcome",
     "DeliveryRoster",
@@ -41,6 +44,7 @@ __all__ = [
     "StoredPlan",
     "SupplyNotice",
     "VoiceNote",
+    "WaterDebtAccount",
     "new_id",
     "utcnow",
 ]

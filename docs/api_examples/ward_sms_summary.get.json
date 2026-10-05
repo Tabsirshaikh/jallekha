@@ -1,10 +1,10 @@
 {
   "_example": {
     "endpoint": "GET /wards/{ward_id}/sms-summary?lang=te",
-    "status": "PROPOSED (wording not written; route not built)",
+    "status": "ROUTE_ON_MAIN (English wording PROPOSED, OPEN for review)",
     "basis": "values from the report card (see its basis); text built server-side",
     "built_from": "the report card above + a PROPOSED English template (template key ward.sms_summary); te / ur / hi fall back to English until reviewed",
-    "notes": "Agreed with P4: SMS built server-side with English fallback. The wording is PROPOSED (OPEN, native speakers and P4 to review); the ledger head comes from T6's published head."
+    "notes": "Agreed with P4: SMS built server-side with English fallback. Deliveries, debt and plan phrases come from the card's live blocks ('not available' when a block has no value). SYNTHETIC example, same state as the report card example."
   },
   "request": {
     "ward_id": "relation/7848824",
@@ -21,8 +21,12 @@
       "period_from": "2022-01",
       "period_to": "2024-02",
       "service_class": "piped_regularity_unknown",
+      "window_days": 30,
+      "deliveries": "3 started, 2 confirmed",
+      "debt": "24 tanker loads owed",
+      "schedule": "2026-10-03 APPROVED, 4 booked trips, 26 loads to stops",
       "ledger_head": "<latest published head hash, first 12 characters>"
     },
-    "text": "Ward 105 Gachibowli: 66431 tanker bookings 2022-01 to 2024-02; need class piped_regularity_unknown. Deliveries, water debt and schedule not available yet. Ledger head <latest published head hash, first 12 characters>."
+    "text": "Ward 105 Gachibowli: 66431 tanker bookings 2022-01 to 2024-02; need class piped_regularity_unknown. Deliveries (last 30 days): 3 started, 2 confirmed. Water debt: 24 tanker loads owed. Plan: 2026-10-03 APPROVED, 4 booked trips, 26 loads to stops. Ledger head <latest published head hash, first 12 characters>."
   }
 }
