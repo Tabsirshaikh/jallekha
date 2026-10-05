@@ -121,10 +121,12 @@ def _reason(row: ShortageRow, config: ShortageConfig) -> str:
                 "capacity unavailable (no A8 filling station"
                 " for this section), so the risk is unknown"
             )
-        core = f"Forecast {row.forecast_bookings:,.0f} bookings{upper} in {row.month}; {note}"
+        # Rounded from the 1-decimal value the CSV stores, so the reason matches the column.
+        shown = round(row.forecast_bookings, 1)
+        core = f"Forecast {shown:,.0f} bookings{upper} in {row.month}; {note}"
     else:
         core = (
-            f"Forecast {row.forecast_bookings:,.0f} bookings{upper}"
+            f"Forecast {round(row.forecast_bookings, 1):,.0f} bookings{upper}"
             f" in {row.month} against capacity"
             f" {row.capacity_trips:,.0f} trips (A8 fleet split, ASSUMED):"
             f" {row.capacity_ratio:.0%} of capacity, risk {row.risk}"

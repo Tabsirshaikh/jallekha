@@ -23,7 +23,8 @@ No LLM in any scoring, allocation or explanation step.
   for your feature before changing it).
 - **To-do list: `docs/REMAINING_WORK.md`** (items 11-22, each with what, where it stands, how to do
   it, done-when; plus "Research follow-ups"). Done: 11 (#68), 12 + 16 (#69), 14 (#70), 21 (#74),
-  22 (#75), 15 (#76), 18 (`feat/t9-degraded-replay`). Left: 13, 17, 19, 20, and research follow-ups A and B.
+  22 (#75), 15 (#76), 18 (#77), research A (`feat/f5-selection-rule`). Left: 13, 17, 19, 20, and
+  research follow-up B.
 - Last full check on `main` (5c4d43c): lint clean; 908 backend + 184 frontend tests pass; all data
   verifiers pass.
 - GitHub Actions cannot run (account billing block). Every change is verified locally before merge.
@@ -63,7 +64,6 @@ clinics, UPHCs, schools, care homes; counts per ward in `data/derived/evidence/w
 
 | Item | Read first | Change |
 |---|---|---|
-| Research A forecast rule | `docs/REMAINING_WORK.md` "Research follow-ups" A; `backend/app/services/forecast.py` (`select_model`, `global_gbm`), `config/forecast.py`, `scripts/forecast/run_backtest.py` | needs owner OK first |
 | Research B city weather | same doc, part B; `scripts/data/fetch_d8_weather.py`, weather features in `forecast.py` | TGDPS station data per mandal |
 | 13 voice error rate | `backend/app/config/intake.py` (`asr_model_id`), `services/intake_pipeline.py` | blocked: needs labelled Telugu/Urdu recordings |
 | 17 groundwater | `data/raw/d7_groundwater/RETRIEVAL_LOG.md`, `services/shortage.py` | blocked: NWDP account |

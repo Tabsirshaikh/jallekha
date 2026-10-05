@@ -292,6 +292,8 @@ how to do it.
 
 ### A. Choosing between the simple forecast and the gradient-boosting model (F5, after item 12)
 
+**Status: done** on `feat/f5-selection-rule` (applied at the owner's request, 2026-10-06): the recommended rule below is built (`forecast.select`, `diebold_mariano`, `yoy_months`, `combo_naive_gbm`). It selects **gradient boosting** (p = 0.0006 on 24 origins; the combination also passes but is not significantly better). On the real Feb-Aug 2026 city totals the two forecasts are nearly tied (31.1% vs 31.8% MAPE); see `docs/LIMITATIONS.md` F5. The text below is the research it followed.
+
 **The problem.** Item 12's gradient-boosting model beats seasonal naive on the long portal
 backtest (city MAPE 23.21% vs 26.28%, section WAPE 37.04% vs 47.67%, 33 months) but is slightly
 worse on the short S2 run (23.60% / 35.99% vs 21.89% / 35.12%). The selection rule in
