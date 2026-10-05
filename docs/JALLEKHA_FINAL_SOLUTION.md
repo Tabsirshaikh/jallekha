@@ -42,7 +42,7 @@ HMWSSB delivers almost every tanker that is booked (1,316,215 bookings and 1,315
 | OTP + GPS tanker delivery already runs in Bengaluru; Delhi runs GPS tankers and fixed-point schedules for unconnected localities. | OTP/geofence is standard practice, not our innovation. Scheduled supply to fixed points is a proven model. |
 | Norms: Sphere 2018 at least 15 l/person/day, water point within 500 m, queue under 30 min (PDF verified); JMP basic service = collection within 30 min round trip; CPHEEO 1999: 135 lpcd cities with sewerage, 150 metropolitan, 40 through standposts (secondary copy). | 15 lpcd floor; 150 lpcd reporting norm for Hyderabad; all as config values with source. |
 
-**What is ours:** not a new algorithm but (1) a working evidence layer on real Hyderabad data that exposes the booking/need mismatch, (2) a fair queue + scheduled supply evaluated against today's FCFS on a replay of the real 2023 summer, (3) a closed loop in which verified delivery outcomes change the next allocation.
+**What is ours:** not a new algorithm but (1) a working evidence layer on real Hyderabad data that exposes the booking/need mismatch, (2) a fair queue + scheduled supply evaluated against today's FCFS on a replay of the real Mar-Jul 2025 summer (2023 kept for continuity, F19), (3) a closed loop in which verified delivery outcomes change the next allocation.
 
 ## 4. Data sources
 
@@ -161,7 +161,7 @@ New repository, new structure. These v1 modules are **copied with their tests** 
 
 ## 10. Three-minute demo
 
-1. Booking Equity: top 10% of sections take 68% (REAL). 2. Atlas + growth: who lacks water today (REAL/DERIVED). 3. Under-served flags with reasons (DERIVED). 4. Forecast + shortage warning for next summer, accuracy vs baseline (REAL backtest). 5. 2023 replay: FCFS vs fair queue + scheduled supply, four PS11 measures (SIMULATION). 6. Officer: explanation for a booking, slider, approve with reason. 7. Telugu voice complaint → duplicate merged → outage. 8. Delivery: OTP, resident says "no" → Disputed, debt stays. 9. Next day the ward moves up; ledger shows why; tampering is caught.
+1. Booking Equity: top 10% of sections take 68% (REAL). 2. Atlas + growth: who lacks water today (REAL/DERIVED). 3. Under-served flags with reasons (DERIVED). 4. Forecast + shortage warning for next summer, accuracy vs baseline (REAL backtest). 5. Mar-Jul 2025 replay (main run; 2023 kept for continuity): FCFS vs fair queue + scheduled supply, four PS11 measures (SIMULATION). 6. Officer: explanation for a booking, slider, approve with reason. 7. Telugu voice complaint → duplicate merged → outage. 8. Delivery: OTP, resident says "no" → Disputed, debt stays. 9. Next day the ward moves up; ledger shows why; tampering is caught.
 
 ## 11. Sources (verification status)
 

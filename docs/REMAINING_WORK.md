@@ -18,7 +18,7 @@ to-do list.
 | 18 | Degraded-signal replay for the T9 threshold | F17 | us, now | nothing |
 | 19 | Seven owner decisions | several | owner | owner |
 | 20 | Decide the stack (or edit the doc) | all | owner, then us | decision |
-| 21 | Fix demo step 5 in the solution doc | docs | us, now | nothing |
+| 21 | Fix demo step 5 in the solution doc | docs | **done** (`docs/demo-step5-2025`) | — |
 | 22 | "Done-when vs doc promise" column in `features.csv` | tracker | us, now | nothing |
 
 Order we will work in: 11, then 21 and 22 (quick), then 15, 16, 18, 14, then 12 once 16 is in,
@@ -252,6 +252,8 @@ OSRM): several days, and a database migration tool would be needed too (we have 
 **Done when.** The doc and the code say the same thing.
 
 ### 21. Fix demo step 5 in the solution doc
+
+**Status: done** on `docs/demo-step5-2025`: lines 45 and 164 now name the Mar-Jul 2025 replay as the main run, with 2023 kept for continuity. `docs/P4_DEMO.md` names no replay year, so it needed no change. The text below is the plan it followed.
 
 **What it is.** `docs/JALLEKHA_FINAL_SOLUTION.md` line 164 (demo script, step 5) says "2023
 replay", and line 45 says "a replay of the real 2023 summer". The sandbox and Impact page now use
