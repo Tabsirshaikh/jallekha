@@ -159,6 +159,8 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 
 ## 5. Not finished (2026-10-04)
 
+The to-do list for these, with how to do each item and when it counts as done, is `docs/REMAINING_WORK.md`.
+
 | Item | Owner | Why |
 |---|---|---|
 | X1 release tag | P4 | README, slide outline and demo script are written; the tag waits for green CI and version approval |
