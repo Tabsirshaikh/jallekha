@@ -42,6 +42,36 @@ No LLM in any scoring, allocation or explanation step.
 | `data/raw/` | logged source data (checksums in `data/verification/source_manifest.csv`); `data/derived/` built outputs |
 | `docs/` | `JALLEKHA_FINAL_SOLUTION.md` (design), `LIMITATIONS.md`, `REMAINING_WORK.md`, `BRANCH_WORKLOG.md`, `features.csv` (tracker), `api_shapes.md` + `api_additions/` + `api_examples/` (API contract), `openapi.json`, `translation_review/` |
 
+## Screens (frontend/src)
+
+U2 resident intake + U10 ward card: `ResidentExperience.tsx` (+ `WardCardLive.tsx`, `wardCardAdapter.ts`);
+U3 `FieldWorkerExperience.tsx`; U4 `DriverExperience.tsx`; U5 atlas/equity/field checks
+`EvidenceExperience.tsx`; U6 `ForecastExperience.tsx`; U7 plan `PlanExperience.tsx`; U8 explain and
+contest `ExplainExperience.tsx`; U9 impact `ImpactExperience.tsx`. Snapshot builders:
+`scripts/frontend/build_u5|u6|u9_snapshot.py`.
+
+## Data (data/raw)
+
+D1 HMWSSB monthly tanker bookings per section (`hmwssb_tankers` 2022-Feb 2024, `hmwssb_tankers_portal`
+to Aug 2026; sections re-cut Feb/Mar 2026); `census` (2011); `geography` (2016 GHMC wards
+`datameet/ghmc-wards.geojson`, 145 wards, ids like `relation/7848824`; OSM district/mandals/HMWSSB
+points); `d6_open_buildings` (growth); `d7_groundwater` (NOT fetched, needs NWDP login); `d8_weather`
+(Open-Meteo daily, city centre); `d13_chicago_311` (F13 calibration). D9 hospitals/schools: not in repo.
+
+## Remaining items: start here
+
+| Item | Read first | Change |
+|---|---|---|
+| 21 demo step 5 | `docs/JALLEKHA_FINAL_SOLUTION.md` lines ~45 and ~164, `docs/P4_DEMO.md` | say the 2025 replay is the main run (2023 only for continuity) |
+| 22 tracker column | `docs/features.csv`, `docs/LIMITATIONS.md` (per-feature limits, section 6 stale rows) | add `doc_promise_met` (yes/partly/no) + `gap`; fix stale rows (e.g. T7) |
+| 15 D9 facilities | `scripts/data/fetch_d8_weather.py` (fetch + retrieval log pattern), `scripts/evidence/build_evidence.py` (column now `FACILITIES_UNAVAILABLE`), `verify_evidence.py`, `backend/tests/test_e2_evidence.py` | fetch OSM hospitals/clinics/UPHCs/schools/care homes (Overpass, district boundary in `data/raw/geography/osm/`), count per ward, rebuild E2 then E5 (checksums) |
+| 18 T9 threshold | `backend/app/services/confidence.py`, `backend/app/config/confidence.py` (`provisional_threshold` 0.5), `scripts/trust/calibrate_confidence.py`, `data/derived/confidence_calibration.csv` | degraded-signal replay (move some sections to wrong wards / fallback joins), pick lowest threshold meeting the 0.90 target |
+| Research A forecast rule | `docs/REMAINING_WORK.md` "Research follow-ups" A; `backend/app/services/forecast.py` (`select_model`, `global_gbm`), `config/forecast.py`, `scripts/forecast/run_backtest.py` | needs owner OK first |
+| Research B city weather | same doc, part B; `scripts/data/fetch_d8_weather.py`, weather features in `forecast.py` | TGDPS station data per mandal |
+| 13 voice error rate | `backend/app/config/intake.py` (`asr_model_id`), `services/intake_pipeline.py` | blocked: needs labelled Telugu/Urdu recordings |
+| 17 groundwater | `data/raw/d7_groundwater/RETRIEVAL_LOG.md`, `services/shortage.py` | blocked: NWDP account |
+| 19, 20 | `docs/REMAINING_WORK.md` | owner decisions; 20 = edit design doc section 7 "Stack" (line ~138) or build Docker/PostgreSQL/Leaflet |
+
 ## Commands (run from the repo root, Windows)
 
 - `python tasks.py lint` — ruff check + format check (config `backend/pyproject.toml`, 100 cols), eslint, tsc.
