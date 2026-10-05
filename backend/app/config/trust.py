@@ -61,8 +61,10 @@ class TrustConfig:
     dedup_radius_metres: float = 100.0
     # Source: F13 ("48 h window for no-water / tanker-missed / dirty water, 7 days for leaks
     # and other"); calibration: "no-water duplicates 90% within 20 h; leaks 90% within about
-    # 9 days". Categories outside this table are rejected. Stored as (category, hours) pairs so
-    # the config stays immutable, hashable and copyable; read it with dict(...).
+    # 9 days" (re-pulled 2026-10-05: 24 h and about 16 days, data/derived/dedup_calibration.csv;
+    # the windows are kept until the owner decides). Categories outside this table are
+    # rejected. Stored as (category, hours) pairs so the config stays immutable, hashable and
+    # copyable; read it with dict(...).
     dedup_window_hours: tuple[tuple[str, int], ...] = (
         ("no_water", 48),
         ("tanker_missed", 48),

@@ -11,6 +11,15 @@ Output: data/derived/dedup_calibration.csv (basis DERIVED). Each metric is print
 value the solution document reports, for comparison only: if they differ, report the
 difference; never tune the rule or the tests to match.
 
+A Chicago duplicate (DUPLICATE true, with its PARENT_SR_NUMBER in the extract) counts as caught
+by a replayed rule in three ways, from loose to strict:
+- linked_any_share: the engine links it to some earlier complaint;
+- linked_same_incident_share: the complaint it is linked to has the same true root (the parent,
+  or another duplicate of that parent): the right incident;
+- linked_share: the engine's cluster root is its true root (the recorded parent chain).
+merged_non_duplicate_share is the share of non-duplicate complaints the rule merges anyway: an
+upper bound on wrong merges, because Chicago does not flag every duplicate.
+
 Chicago timestamps are local time without zone; they are compared as-is, so pairs that
 straddle a daylight-saving change can be off by one hour.
 """
@@ -37,11 +46,27 @@ SOURCE_DOC = "docs/JALLEKHA_FINAL_SOLUTION.md"
 # (metric, group) -> (value reported in the solution document, where it says so)
 REFERENCES = {
     ("child_parent_distance_m_p95", "all"): (106.0, f"{SOURCE_DOC} F13 '95% within 106 m'"),
-    ("linked_share", "radius=100m;window=48h"): (0.71, f"{SOURCE_DOC} section 7 '100 m / 48 h'"),
-    ("linked_share", "radius=300m;window=168h"): (0.88, f"{SOURCE_DOC} section 7 '300 m / 7 d'"),
+    # The 71% / 88% reproduce only when a duplicate counts as caught once it is linked to any
+    # earlier complaint (checked on the 2026-10-05 pull); see linked_any_share.
+    ("linked_any_share", "radius=100m;window=48h"): (
+        0.71,
+        f"{SOURCE_DOC} section 7 '100 m / 48 h'",
+    ),
+    ("linked_any_share", "radius=300m;window=168h"): (
+        0.88,
+        f"{SOURCE_DOC} section 7 '300 m / 7 d'",
+    ),
 }
 # Uniform-window rules evaluated in section 7 of the solution document.
 REPLAY_RULES = ((100.0, 48.0), (300.0, 168.0))
+# Chicago types as JalLekha categories, to replay the configured F13 rule (group
+# "configured_rule"). Low pressure is treated as no water (ASSUMED); other types are "other".
+CATEGORY_MAP = {
+    "No Water Complaint": "no_water",
+    "Low Water Pressure Complaint": "no_water",
+    "Check for Leak": "leak",
+    "Water Quality Concern": "dirty_water",
+}
 _TIME_FORMATS = ("%m/%d/%Y %I:%M:%S %p", "%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%dT%H:%M:%S")
 
 
@@ -189,18 +214,47 @@ def calibrate(rows: list[ChicagoRow]) -> list[dict[str, object]]:
         )
         for r in located
     ]
-    for radius, window in REPLAY_RULES:
-        rule = DedupRule(radius_m=radius, window_hours={}, default_window_hours=window)
-        engine_root = {link.child_id: link.parent_id for link in link_duplicates(records, rule)}
-        hits = sum(
-            engine_root.get(child.sr_number) == _true_root(child.sr_number, by_sr)
-            for child, _ in pairs
+    originals = [r for r in located if not r.duplicate]
+    configured = [
+        ComplaintRecord(
+            id=r.id,
+            category=CATEGORY_MAP.get(r.category, "other"),
+            lat=r.lat,
+            lon=r.lon,
+            created_at=r.created_at,
         )
-        add(
-            "linked_share",
+        for r in records
+    ]
+    runs = [
+        (
             f"radius={radius:g}m;window={window:g}h",
-            hits / len(pairs) if pairs else math.nan,
-            len(pairs),
+            records,
+            DedupRule(radius_m=radius, window_hours={}, default_window_hours=window),
+        )
+        for radius, window in REPLAY_RULES
+    ]
+    runs.append(("configured_rule", configured, DedupRule.from_config()))
+    for group, replayed, rule in runs:
+        engine_root = {link.child_id: link.parent_id for link in link_duplicates(replayed, rule)}
+        linked = [c for c, _ in pairs if c.sr_number in engine_root]
+        same = [
+            c
+            for c in linked
+            if _true_root(engine_root[c.sr_number], by_sr) == _true_root(c.sr_number, by_sr)
+        ]
+        exact = [c for c in linked if engine_root[c.sr_number] == _true_root(c.sr_number, by_sr)]
+        for metric, hits in (
+            ("linked_any_share", linked),
+            ("linked_same_incident_share", same),
+            ("linked_share", exact),
+        ):
+            add(metric, group, len(hits) / len(pairs) if pairs else math.nan, len(pairs))
+        merged = sum(o.sr_number in engine_root for o in originals)
+        add(
+            "merged_non_duplicate_share",
+            group,
+            merged / len(originals) if originals else math.nan,
+            len(originals),
         )
     add("rows_total", "all", len(rows), len(rows))
     add("rows_without_coordinates", "all", len(rows) - len(located), len(rows))

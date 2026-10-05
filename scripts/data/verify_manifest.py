@@ -30,7 +30,10 @@ def main() -> int:
     require(MANIFEST.is_file(), "Missing data/verification/source_manifest.csv")
     with MANIFEST.open(encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))
-    require(len(rows) == 33, f"Expected 33 S2 resources, found {len(rows)}")
+    # The S2 port (33 resources) plus later logged pulls, e.g. D13 for the F13 calibration
+    # (scripts/data/fetch_d13_chicago.py); every row is checked the same way below.
+    s2 = [row for row in rows if not row["dataset_id"].startswith("D13-")]
+    require(len(s2) == 33, f"Expected 33 S2 resources, found {len(s2)}")
     require(len({row["file_path"] for row in rows}) == len(rows), "Manifest paths are not unique")
     require(
         sum(row["dataset_id"].startswith("D1-HMWSSB-") for row in rows) == 26,

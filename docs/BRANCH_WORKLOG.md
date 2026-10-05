@@ -1031,3 +1031,16 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:** see `docs/LIMITATIONS.md` F5 (owner rule decides adoption; groundwater missing; one weather point for the city).
 - **Pull request:** see the PR for `feat/f5-gbm-forecast`.
 
+## `feat/f13-dedup-calibration` — reproduce the F13 duplicate calibration (item 14, location and time)
+
+- **Owner / date:** P2 work done by the repo owner, 2026-10-05.
+- **Why:** the 106 m / 20 h / 9 days / 71% / 88% figures came from a Chicago extract that was never found, so they could not be checked.
+- **What we changed:**
+  - `scripts/data/fetch_d13_chicago.py` pulls the closest match (the four water-supply types, 2022-2023: 31,835 rows, 4,931 duplicates) into `data/raw/d13_chicago_311/` and registers it as D13-CHICAGO-311 in the source manifest.
+  - `scripts/trust/calibrate_dedup.py` now reports three ways of counting a caught duplicate (linked to anything, into the right incident, to the exact parent), the share of non-duplicates merged, and the configured JalLekha rule with Chicago types mapped. The document's 71% / 88% are compared with "linked to anything", the only definition that reproduces them.
+  - Results in `data/derived/dedup_calibration.csv`; the solution document's D13 row, F13 text and section 7 table now carry the re-pulled numbers.
+  - The new manifest row changes the manifest checksum that E2 and E5 record, so `evidence_checks.json` and `underserved_checks.json` were rebuilt (only that checksum line changed), and `verify_manifest.py` now counts the 33 S2 resources apart from logged D13 pulls.
+- **Validation:** tests written first and seen failing (fixtures where the three definitions differ; merged non-duplicates; the configured rule).
+- **Known limitations:** another city's data; leak duplicates spread over about 16 days, longer than the 7-day window; text similarity on Indian examples still untested (`docs/LIMITATIONS.md` F13).
+- **Pull request:** see the PR for `feat/f13-dedup-calibration`.
+
