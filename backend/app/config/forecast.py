@@ -60,8 +60,33 @@ class ForecastConfig:
         "a model is used only if it beats seasonal naive on both city MAPE and section WAPE in "
         "both backtest runs (S2 and portal); otherwise seasonal naive (OPEN)"
     )
-    # Covariates for a later model (weather D8, groundwater D7): not in the repo yet.
-    covariates: tuple[str, ...] = ()
+    # Covariates of the gradient-boosting candidate: weather D8 (Open-Meteo, REAL reanalysis).
+    # Groundwater D7 is not in the repo (NWDP needs registration; data/raw/d7_groundwater).
+    covariates: tuple[str, ...] = ("weather_d8",)
+    weather_file: str = "data/raw/d8_weather/open_meteo_hyderabad_daily.csv"
+    # Normal weather per calendar month: 2019-2021, the three years before the first booking
+    # month (Jan 2022), so the normal never contains a month that is forecast or scored.
+    weather_normal_years: tuple[int, int] = (2019, 2021)
+    # Recent weather before the forecast origin: rainfall over 6 months (one monsoon season
+    # feeds next summer's groundwater), maximum temperature over 3 months. Basis: ASSUMED.
+    recent_rain_months: int = 6
+    recent_heat_months: int = 3
+    # Global gradient-boosting candidate (F5: "one global gradient-boosting model pooled over all
+    # sections with month, lag-12, trend, weather"). scikit-learn HistGradientBoostingRegressor
+    # on log(bookings + 1) - log(same month last year + 1), so it learns a correction to seasonal
+    # naive (Grinsztajn et al. 2022: tree models suit small tabular data). Absolute-error loss
+    # because WAPE is an absolute-error measure. Settings fixed before any backtest was run and
+    # never tuned on it (so the backtest stays an honest test); strong regularisation for about
+    # 200 sections x 1-3 years. Basis: ASSUMED.
+    gbm_learning_rate: float = 0.05
+    gbm_max_iter: int = 200
+    gbm_max_leaf_nodes: int = 15
+    gbm_min_samples_leaf: int = 20
+    gbm_l2_regularization: float = 1.0
+    gbm_random_state: int = 0
+    # Least training data: year-on-year months and section-months. Basis: ASSUMED.
+    gbm_min_training_months: int = 2
+    gbm_min_training_rows: int = 100
 
 
 FORECAST_CONFIG = ForecastConfig()

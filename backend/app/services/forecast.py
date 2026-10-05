@@ -9,10 +9,12 @@ naive (same month one year earlier) on `noofbookings`; a month is scored only if
 city MAPE = mean of monthly absolute percentage errors of city totals; section WAPE = sum of
 absolute errors / sum of actuals, pooled over all section-months.
 
-Models: (a) seasonal naive; (b) seasonal naive x year-on-year growth. A global gradient-
-boosting model needs scikit-learn or lightgbm, which `tasks.py setup` does not install, so it
-is listed in NOT_RUN. Weather (D8) and groundwater (D7) are not in the repo; covariates can be
-added later through `ForecastConfig.covariates` and a model that reads them.
+Models: (a) seasonal naive; (b) seasonal naive x year-on-year growth; (c) one global
+gradient-boosting model pooled over all sections (scikit-learn, `models` extra) that learns a
+correction to seasonal naive from the month, last year's and the year before's values, recent
+section and city growth, and weather (D8: last year's month against normal, and recent rain and
+heat before the forecast origin). Every feature is at least as old as the forecast origin, so
+the same model serves all 12 months of the horizon. Groundwater (D7) is not in the repo.
 
 Every model receives only training data strictly before its target month (it refuses
 otherwise), so the rolling-origin backtest cannot leak.
@@ -21,11 +23,14 @@ otherwise), so the rolling-origin backtest cannot leak.
 from __future__ import annotations
 
 import calendar
+import csv
 import math
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
+from functools import lru_cache
 from pathlib import Path
 
+from app.config.env import REPO_ROOT
 from app.config.forecast import FORECAST_CONFIG, ForecastConfig
 from app.services import hmwssb
 
@@ -33,10 +38,6 @@ Month = tuple[int, int]
 SectionValues = dict[str, float]
 
 NOT_RUN: dict[str, str] = {
-    "global_gbm": (
-        "not run: needs scikit-learn or lightgbm, neither installed by setup; team decision "
-        "on the dependency pending; covariates D7 and D8 not in the repo"
-    ),
     "chronos_2": "not run: owner decision pending (no-LLM rule)",
 }
 DERIVED_COLUMNS = frozenset(
@@ -203,8 +204,189 @@ def naive_x_growth(train: Panel, target: Month) -> SectionValues | None:
     return {s: v * growth for s, v in base.items()}
 
 
+# --- global gradient-boosting candidate ---------------------------------------------------
+
+
+@dataclass(frozen=True)
+class MonthWeather:
+    tmax_mean: float  # mean daily maximum temperature, deg C
+    precip_total: float  # total precipitation, mm
+
+
+@lru_cache(maxsize=1)
+def monthly_weather(path: str = FORECAST_CONFIG.weather_file) -> dict[Month, MonthWeather]:
+    """D8 daily weather summed up per month (empty if the file is absent)."""
+    file = REPO_ROOT / path
+    if not file.exists():
+        return {}
+    tmax: dict[Month, list[float]] = {}
+    rain: dict[Month, float] = {}
+    with file.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            month = (int(row["date"][:4]), int(row["date"][5:7]))
+            if row["tmax_c"]:
+                tmax.setdefault(month, []).append(float(row["tmax_c"]))
+            rain[month] = rain.get(month, 0.0) + float(row["precip_mm"] or 0.0)
+    return {m: MonthWeather(sum(v) / len(v), rain.get(m, 0.0)) for m, v in tmax.items()}
+
+
+@lru_cache(maxsize=1)
+def _weather_normal() -> dict[int, MonthWeather]:
+    first, last = FORECAST_CONFIG.weather_normal_years
+    weather = monthly_weather()
+    normal: dict[int, MonthWeather] = {}
+    for m in range(1, 13):
+        months = [weather[(y, m)] for y in range(first, last + 1) if (y, m) in weather]
+        if months:
+            normal[m] = MonthWeather(
+                sum(w.tmax_mean for w in months) / len(months),
+                sum(w.precip_total for w in months) / len(months),
+            )
+    return normal
+
+
+def _weather_anomaly(month: Month) -> tuple[float, float]:
+    """(heat: deg C above normal, rain: log ratio to normal) for one month; NaN if unknown."""
+    weather, normal = monthly_weather().get(month), _weather_normal().get(month[1])
+    if weather is None or normal is None:
+        return math.nan, math.nan
+    return (
+        weather.tmax_mean - normal.tmax_mean,
+        math.log1p(weather.precip_total) - math.log1p(normal.precip_total),
+    )
+
+
+def _recent_weather(cutoff: Month) -> tuple[float, float]:
+    """Rain (log ratio to normal, `recent_rain_months`) and heat (deg C above normal,
+    `recent_heat_months`) over the months just before `cutoff`; NaN when not all are known."""
+    weather, normal = monthly_weather(), _weather_normal()
+    rain_months = [shift(cutoff, -k) for k in range(1, FORECAST_CONFIG.recent_rain_months + 1)]
+    heat_months = [shift(cutoff, -k) for k in range(1, FORECAST_CONFIG.recent_heat_months + 1)]
+    if not all(m in weather and m[1] in normal for m in rain_months + heat_months):
+        return math.nan, math.nan
+    rain = math.log1p(sum(weather[m].precip_total for m in rain_months)) - math.log1p(
+        sum(normal[m[1]].precip_total for m in rain_months)
+    )
+    heat = sum(weather[m].tmax_mean - normal[m[1]].tmax_mean for m in heat_months) / len(
+        heat_months
+    )
+    return rain, heat
+
+
+def _recent_growth(train: Panel, cutoff: Month, window: int) -> tuple[float, dict[str, float]]:
+    """Log year-on-year growth of the city and of each section over the most recent `window`
+    training months before `cutoff` that have a value a year earlier (NaN when there are
+    fewer)."""
+    period = FORECAST_CONFIG.seasonal_period_months
+    months = [m for m in sorted(train.values, reverse=True) if m < cutoff]
+    months = [m for m in months if shift(m, -period) in train.values][:window]
+    if len(months) < window:
+        return math.nan, {}
+    now: dict[str, float] = {}
+    before: dict[str, float] = {}
+    for m in months:
+        for s, v in train.values[m].items():
+            now[s] = now.get(s, 0.0) + v
+        for s, v in train.values[shift(m, -period)].items():
+            before[s] = before.get(s, 0.0) + v
+    city = math.log1p(sum(now.values())) - math.log1p(sum(before.values()))
+    sections = {s: math.log1p(now.get(s, 0.0)) - math.log1p(b) for s, b in before.items() if b > 0}
+    return city, sections
+
+
+def _gbm_rows(
+    train: Panel, target: Month, cutoff: Month
+) -> tuple[list[str], list[list[float]]] | None:
+    """Feature rows for every section of the month a year before `target`, using only data
+    before `cutoff` (and before the training end)."""
+    period = FORECAST_CONFIG.seasonal_period_months
+    lag_month = shift(target, -period)
+    if lag_month not in train.values or lag_month >= cutoff:
+        return None
+    lag24 = train.values.get(shift(target, -2 * period), {})
+    city_growth, section_growth = _recent_growth(
+        train, cutoff, FORECAST_CONFIG.growth_window_months
+    )
+    lag_heat, lag_rain = _weather_anomaly(lag_month)
+    recent_rain, recent_heat = _recent_weather(cutoff)
+    sections = sorted(train.values[lag_month])
+    rows = [
+        [
+            math.log1p(train.values[lag_month][s]),
+            math.log1p(lag24[s]) if s in lag24 else math.nan,
+            float(target[1]),
+            section_growth.get(s, math.nan),
+            city_growth,
+            lag_heat,
+            lag_rain,
+            recent_rain,
+            recent_heat,
+        ]
+        for s in sections
+    ]
+    return sections, rows
+
+
+GBM_FEATURES = (
+    "log_lag12", "log_lag24", "month", "section_growth", "city_growth",
+    "lag12_heat_anomaly", "lag12_rain_anomaly", "recent_rain_anomaly", "recent_heat_anomaly",
+)  # fmt: skip
+
+
+def global_gbm(train: Panel, target: Month) -> SectionValues | None:
+    """One gradient-boosting model over all sections, trained on every training month that has
+    a value a year earlier, predicting log(value + 1) - log(last year + 1). Forecasts the
+    sections of the month a year before `target` (like seasonal naive); None without that month
+    or with too little training data."""
+    _check(train, target)
+    cfg = FORECAST_CONFIG
+    origin = shift(max(train.values), 1) if train.values else target
+    query = _gbm_rows(train, target, min(target, origin))
+    if query is None:
+        return None
+    features: list[list[float]] = []
+    targets: list[float] = []
+    months = 0
+    for month in sorted(train.values):
+        rows = _gbm_rows(train, month, month)
+        if rows is None:
+            continue
+        months += 1
+        actual = train.values[month]
+        for section, row in zip(*rows, strict=True):
+            features.append(row)
+            targets.append(math.log1p(actual.get(section, 0.0)) - row[0])
+    if months < cfg.gbm_min_training_months or len(targets) < cfg.gbm_min_training_rows:
+        return None
+    from sklearn.ensemble import HistGradientBoostingRegressor  # `models` extra
+
+    model = HistGradientBoostingRegressor(
+        loss="absolute_error",
+        learning_rate=cfg.gbm_learning_rate,
+        max_iter=cfg.gbm_max_iter,
+        max_leaf_nodes=cfg.gbm_max_leaf_nodes,
+        min_samples_leaf=cfg.gbm_min_samples_leaf,
+        l2_regularization=cfg.gbm_l2_regularization,
+        early_stopping=False,
+        random_state=cfg.gbm_random_state,
+    )
+    # A feature with no value in the training data (e.g. no year-before-last yet) is left out.
+    used = [i for i in range(len(GBM_FEATURES)) if any(not math.isnan(r[i]) for r in features)]
+    model.fit([[r[i] for i in used] for r in features], targets)
+    sections, rows = query
+    predicted = model.predict([[r[i] for i in used] for r in rows])
+    return {
+        s: max(0.0, math.expm1(row[0] + float(p)))
+        for s, row, p in zip(sections, rows, predicted, strict=True)
+    }
+
+
 Model = Callable[[Panel, Month], SectionValues | None]
-MODELS: dict[str, Model] = {"seasonal_naive": seasonal_naive, "naive_x_growth": naive_x_growth}
+MODELS: dict[str, Model] = {
+    "seasonal_naive": seasonal_naive,
+    "naive_x_growth": naive_x_growth,
+    "global_gbm": global_gbm,
+}
 
 
 def reconcile(section_forecasts: Mapping[str, float]) -> float:
