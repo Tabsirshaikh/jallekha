@@ -8,7 +8,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc -b --pretty false",
-    "test": "vitest"
+    "test": "vitest",
+    "i18n:export": "node scripts/exportTranslations.mjs",
+    "i18n:check": "node scripts/exportTranslations.mjs --check"
   },
   "dependencies": {
     "@vitejs/plugin-react": "4.4.1",
