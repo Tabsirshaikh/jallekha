@@ -43,7 +43,8 @@ def setup() -> None:
 
 
 def test() -> None:
-    run([venv_python(), "-m", "pytest", "backend/tests"])
+    # Parallel workers (pytest-xdist); the same tests as a serial run, only faster.
+    run([venv_python(), "-m", "pytest", "-n", "auto", "backend/tests"])
     run([npm_command(), "run", "test", "--", "--run"], cwd=FRONTEND)
     run([npm_command(), "run", "i18n:check"], cwd=FRONTEND)
     data_verifier = ROOT / "scripts" / "data" / "verify_manifest.py"
