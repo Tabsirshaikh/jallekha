@@ -56,6 +56,11 @@ class ApiConfig:
     # Local development token: accepted for every user role. Environment: API_DEV_TOKEN.
     # Never committed; leave unset outside a developer's machine.
     dev_token: str | None = field(default=None, repr=False)
+    # Sign-in. Environment: AUTH_REQUIRED. When the environment variable is unset the running app
+    # needs no token: every caller acts as the local "dev" principal (all user roles) and the
+    # screens never ask anyone to sign in. AUTH_REQUIRED=true brings the token checks back
+    # (API_TOKENS roles and user ids). A config built directly (tests) requires tokens.
+    auth_required: bool = True
     # SMS / telephony webhook credential (header X-Gateway-Token). Environment: GATEWAY_TOKEN.
     gateway_token: str | None = field(default=None, repr=False)
     # OTP signing key for delivery proof (T3 takes it as an argument). Environment: OTP_HMAC_KEY.
@@ -76,6 +81,8 @@ class ApiConfig:
         return cls(
             tokens=parsed.roles,
             token_users=parsed.users,
+            auth_required=os.environ.get("AUTH_REQUIRED", "").strip().lower()
+            in ("1", "true", "yes"),  # unset: open
             dev_token=os.environ.get("API_DEV_TOKEN") or None,
             gateway_token=os.environ.get("GATEWAY_TOKEN") or None,
             otp_key=os.environ.get("OTP_HMAC_KEY") or None,

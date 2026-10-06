@@ -118,13 +118,18 @@ def test_a_bad_pair_does_not_hide_a_good_one() -> None:
 def test_me_returns_role_and_user_id_and_never_the_token(bound: TestClient) -> None:
     me = bound.get("/auth/me", headers=h("resident-a"))
     assert me.status_code == 200
-    assert me.json() == {"role": "resident", "user_id": "resident-demo-a"}
+    assert me.json() == {"role": "resident", "user_id": "resident-demo-a", "open": False}
     assert BOUND["resident-a"][0] not in me.text
     assert bound.get("/auth/me", headers=h("councillor")).json() == {
         "role": "councillor",
         "user_id": "councillor-demo-01",
+        "open": False,
     }
-    assert bound.get("/auth/me", headers=h("driver")).json() == {"role": "driver", "user_id": None}
+    assert bound.get("/auth/me", headers=h("driver")).json() == {
+        "role": "driver",
+        "user_id": None,
+        "open": False,
+    }
 
 
 @pytest.mark.parametrize("who", list(BOUND))
@@ -143,7 +148,7 @@ def test_me_needs_a_valid_token(bound: TestClient) -> None:
 def test_me_for_the_dev_token(bound: TestClient, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("API_DEV_TOKEN", "dev-fake")
     me = bound.get("/auth/me", headers={"Authorization": "Bearer dev-fake"})
-    assert me.status_code == 200 and me.json() == {"role": "dev", "user_id": None}
+    assert me.status_code == 200 and me.json() == {"role": "dev", "user_id": None, "open": False}
 
 
 # --- councillor access -------------------------------------------------------------------------

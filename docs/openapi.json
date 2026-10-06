@@ -37,6 +37,7 @@
           "auth"
         ],
         "summary": "Me",
+        "description": "`open` is true when the server does not ask anyone to sign in (AUTH_REQUIRED unset).",
         "operationId": "me_auth_me_get",
         "parameters": [
           {
@@ -67,6 +68,9 @@
                     "anyOf": [
                       {
                         "type": "string"
+                      },
+                      {
+                        "type": "boolean"
                       },
                       {
                         "type": "null"

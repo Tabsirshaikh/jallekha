@@ -1,9 +1,10 @@
-import { lazy, Suspense, useState, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { localeNames, supportedLocales, translationStatus, useLocale, type MessageKey } from "./i18n";
 import DriverExperience from "./DriverExperience";
 import ResidentExperience from "./ResidentExperience";
 import FieldWorkerExperience from "./FieldWorkerExperience";
 import SignIn from "./SignIn";
+import { useAuth, type Role } from "./auth";
 import OfficerOverview from "./OfficerOverview";
 const EvidenceExperience = lazy(() => import("./EvidenceExperience"));
 const ForecastExperience = lazy(() => import("./ForecastExperience"));
@@ -12,6 +13,7 @@ const ExplainExperience = lazy(() => import("./ExplainExperience"));
 const ImpactExperience = lazy(() => import("./ImpactExperience"));
 
 type Workspace = "officer" | "resident" | "fieldWorker" | "driver";
+const workspaceRole: Record<Workspace, Role> = { officer: "officer", resident: "resident", fieldWorker: "field_worker", driver: "driver" };
 type IconName = "overview" | "atlas" | "plan" | "impact" | "help" | "water" | "report" | "route" | "proof" | "settings" | "arrow" | "location" | "check";
 
 const navByWorkspace: Record<Workspace, { key: MessageKey; icon: IconName }[]> = {
@@ -129,6 +131,9 @@ export default function App() {
   const [navOpen, setNavOpen] = useState(true);
   const { direction, locale, t } = useLocale();
   const meta = workspaceNames[workspace];
+  // With no sign-in (open server) the screens act as the role of the workspace on show.
+  const { setWorkspaceRole } = useAuth();
+  useEffect(() => setWorkspaceRole(workspaceRole[workspace]), [workspace, setWorkspaceRole]);
 
   function changeWorkspace(next: Workspace) {
     setWorkspace(next);

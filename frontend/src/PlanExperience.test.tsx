@@ -5,6 +5,7 @@ import { AuthProvider } from "./auth";
 import { LocaleProvider } from "./i18n";
 import PlanExperience from "./PlanExperience";
 import { apiError, derivedConfidenceBody, json, planServer, SUPPLIED_ID, WEIGHTED_ID } from "./test/planFixtures";
+import { expectNoDataRequests } from "./test/noDataRequests";
 
 const CHECKS = "/plans/replay-2025-05-01/groups/";
 
@@ -208,7 +209,7 @@ describe("PlanExperience (sample fallback)", () => {
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
     renderScreen();
-    expect(fetchMock).not.toHaveBeenCalled();
+    expectNoDataRequests(fetchMock);
     expect(screen.getByText("Saved snapshot")).toBeInTheDocument();
     expect(screen.getByText("Sign in with an officer token to see live plans. Showing the sample plan.")).toBeInTheDocument();
     expect(screen.getAllByText("Sample Ward A").length).toBeGreaterThan(0);
