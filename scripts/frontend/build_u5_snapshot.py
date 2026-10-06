@@ -4,8 +4,12 @@ from __future__ import annotations
 
 import csv
 import json
+import sys
 from datetime import date
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "backend"))
+from app.services.service_models import need_weight  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 OUTPUT = ROOT / "frontend" / "src" / "data"
@@ -57,6 +61,7 @@ def main() -> None:
         growth = growth_by_id[ward_id]
         equity = equity_by_id[ward_id]
         field = field_by_id[ward_id]
+        scores = field.get("model_scores") or {}
         wards.append(
             {
                 "id": ward_id,
@@ -74,6 +79,14 @@ def main() -> None:
                 "nonTapShare": optional_float(row["non_tap_share"]),
                 "waterAccessDeficitShare": optional_float(row["wad"]),
                 "hardshipShare": optional_float(row["hardship"]),
+                "constrainedAccessShare": optional_float(row["cad"]),
+                "needWeight": (
+                    round(
+                        need_weight(float(row["wad"]), float(row["cad"]), float(row["hardship"])), 4
+                    )
+                    if row["wad"] and row["cad"] and row["hardship"]
+                    else None
+                ),
                 "criticalFacilities": optional_int(row["critical_facilities"]),
                 "growthRatio": optional_float(growth["building_growth_ratio"]),
                 "annualGrowth": optional_float(growth["adjusted_annual_growth"]),
@@ -85,6 +98,9 @@ def main() -> None:
                 "fieldStatus": field["status"],
                 "fieldCandidate": field["field_check_candidate"],
                 "fieldReasons": field["reasons"],
+                "observedBookings": field.get("observed_bookings"),
+                "peerExpected": scores.get("PEER_MEDIAN", {}).get("expected"),
+                "modelExpected": scores.get("NB", {}).get("expected"),
                 "fieldNotes": field["input_notes"],
                 "fieldAction": field["action"],
             }

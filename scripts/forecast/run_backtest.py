@@ -5,8 +5,8 @@ Runs every available model on two datasets and writes:
   origins all models share, split-conformal coverage, models not run, the selected model;
 - data/derived/forecast_table.csv: section and city forecasts 12 months ahead with 80% / 90%
   section intervals;
-- data/derived/forecast_capacity.csv only when --trips-per-day is given (no sourced value
-  exists: OPEN, owner to confirm).
+- data/derived/forecast_capacity.csv: city trips needed vs fleet x trips per tanker per day
+  (config/forecast.py, 9 a day, DERIVED from 2026 news; --trips-per-day N overrides it).
 
 Datasets: S2 (data/raw/hmwssb_tankers, Jan 2022 - Feb 2024; the done-when baseline) and the
 D1b portal files (data/raw/hmwssb_tankers_portal) up to Jan 2026, before the Feb/Mar 2026
@@ -115,7 +115,9 @@ def _run(
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out-dir", type=Path, default=ROOT / "data/derived")
-    parser.add_argument("--trips-per-day", type=float, default=None)
+    parser.add_argument(
+        "--trips-per-day", type=float, default=FORECAST_CONFIG.trips_per_tanker_per_day
+    )
     args = parser.parse_args(argv)
     cfg = FORECAST_CONFIG
 
@@ -203,8 +205,6 @@ def main(argv: list[str] | None = None) -> int:
                 f"({s.origins} origins)"
             )
     print(f"Selected: {selected}")
-    if args.trips_per_day is None:
-        print("Capacity plan not written: trips per tanker per day is OPEN (no sourced value).")
     return 0
 
 

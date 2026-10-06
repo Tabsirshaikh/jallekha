@@ -207,6 +207,21 @@ class PlanStore:
             for row in rows
         ]
 
+    def supplied_bookings(self) -> list[dict[str, Any]]:
+        """Every booking officers supplied for a day (stored in the plans' recipes), without
+        rebuilding any plan. The same booking in two plans appears twice; callers dedupe by id."""
+        if self._sessions is None:
+            recipes = [r.recipe or {} for r in self.plans.values()]
+        else:
+            with self._sessions() as session:
+                recipes = [json.loads(r) for r in session.scalars(select(StoredPlan.recipe_json))]
+        return [
+            b
+            for recipe in recipes
+            if recipe.get("source") == plan_builder.SUPPLIED
+            for b in recipe.get("bookings", [])
+        ]
+
 
 def _checked_json(plan: planner.DailyPlan) -> str:
     return json.dumps([{"group": g, "reason": r} for g, r in plan.checked.items()])

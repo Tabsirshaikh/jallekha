@@ -13,7 +13,7 @@ export const atlasPage = {
     {
       ward_id: "relation/901", ward_name: "Ward 901 Testpur", geo_version: "GHMC_2016_150", census_year: 2011,
       review_required: false, allocation_eligible: true, population: 50000, population_basis: "DERIVED",
-      households: 12000, households_basis: "DERIVED", wad: 0.21, wad_basis: "DERIVED",
+      households: 12000, households_basis: "DERIVED", cad: 0.09, hardship: 0.14, wad: 0.21, wad_basis: "DERIVED",
       critical_facilities: 12, critical_facilities_basis: "DERIVED",
     },
     {
@@ -55,6 +55,7 @@ export const fieldChecks = {
   rows: [
     {
       ward_id: "relation/901", ward_name: "Ward 901 Testpur", status: "AGREED_FIELD_CHECK_CANDIDATE", field_check_candidate: true,
+      observed_bookings: 40, model_scores: { PEER_MEDIAN: { expected: 400 }, NB: { expected: 900 } },
       growth_ratio_context_only: 1.25, growth_quality: "STABLE_TREND",
       reasons: [
         { basis: "DERIVED", code: "LOW_OBSERVED_REFERENCE_RATIO", model: "PEER_MEDIAN", threshold: 0.11, value: 0.05 },
@@ -86,6 +87,17 @@ export const waterAccessLayer = {
   ],
 };
 
+const clue = (code: string, bad: boolean, value: number, reference: number, known = true) => ({ code, bad, known, counts: code !== "groundwater", value, reference });
+export const liveNeed = {
+  as_of: "2026-10-06T12:00:00+00:00", window_days: 30, min_bad_clues: 2,
+  wards: [
+    { ward_id: "relation/901", name: "Ward 901 Testpur", need: {}, bookings_window: 4, usual_month_bookings: 10, bad_count: 2, known_count: 4, rising: true,
+      clues: [clue("owed", true, 6, 0), clue("bookings", false, 4, 15), clue("complaints", true, 3, 3), clue("cuts", false, 0, 1), clue("groundwater", false, 0, 1, false)] },
+  ],
+  concentration: { source: "live", live_bookings: 120, unplaced_bookings: 0, gini: 0.71, top_share: 0.68, top_sections: 2, sections: 12, bookings: 120,
+    top: [{ section: "MADHAPUR", bookings: 50, share: 0.42 }] },
+};
+
 export const liveInput = { atlas: atlasPage, equityWards: equityWardsPage, equitySummary, fieldChecks, layer: waterAccessLayer };
 
 function json(body: unknown, status = 200): Response {
@@ -102,6 +114,7 @@ export function liveFetch(url: string): Promise<Response> {
     "/equity/summary": equitySummary,
     "/underserved/field-checks": fieldChecks,
     "/coverage/layers/water_access_evidence": waterAccessLayer,
+    "/atlas/live": liveNeed,
   };
   return Promise.resolve(path in routes ? json(routes[path]) : json({ error: { code: "not_found", message: "Not found" } }, 404));
 }

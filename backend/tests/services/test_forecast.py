@@ -351,13 +351,29 @@ def test_selection_scores_only_origins_with_enough_history() -> None:
 
 
 def test_capacity_planner_refuses_to_run_without_trips_per_day() -> None:
-    assert FORECAST_CONFIG.trips_per_tanker_per_day is None
     with pytest.raises(ValueError, match="trips per tanker per day"):
         fc.capacity_plan({(2026, 5): 100.0}, fleet=10, trips_per_tanker_per_day=None)
     plan = fc.capacity_plan({(2026, 5): 1000.0}, fleet=10, trips_per_tanker_per_day=2.0)
     assert plan[0].capacity_trips == 10 * 2.0 * 31
     assert plan[0].shortfall_trips == 1000.0 - 620.0
     assert plan[0].fleet_basis.startswith("ASSUMED")
+
+
+def test_trips_per_tanker_per_day_is_sourced_and_matches_the_sandbox() -> None:
+    from app.config.sandbox import SANDBOX_CONFIG
+
+    # 11,000 trips a day with 1,233 tankers (May 2026) = 8.9; owner confirmed 9 on 2026-10-06.
+    assert FORECAST_CONFIG.trips_per_tanker_per_day == 9.0
+    assert FORECAST_CONFIG.trips_per_tanker_per_day == SANDBOX_CONFIG.trips_per_tanker_day
+    assert FORECAST_CONFIG.trips_per_tanker_per_day_basis.startswith("DERIVED")
+    plan = fc.capacity_plan(
+        {(2026, 5): 1.0},
+        fleet=FORECAST_CONFIG.fleet_tankers_2026,
+        trips_per_tanker_per_day=FORECAST_CONFIG.trips_per_tanker_per_day,
+    )
+    assert plan[0].capacity_trips == 1123 * 9.0 * 31
+    assert "OPEN" not in plan[0].capacity_basis
+    assert "DERIVED" in plan[0].capacity_basis
 
 
 # --- output script -----------------------------------------------------------------------
@@ -378,6 +394,11 @@ def test_run_backtest_writes_outputs_with_basis_columns(tmp_path: Path) -> None:
         assert rows
         derived = [c for c in rows[0] if c in fc.DERIVED_COLUMNS]
         assert derived and all(f"{c}_basis" in rows[0] for c in derived)
+    # Trips per tanker per day is sourced (9, DERIVED), so the capacity plan is written.
+    with (tmp_path / "forecast_capacity.csv").open(encoding="utf-8") as handle:
+        capacity = list(csv.DictReader(handle))
+    assert len(capacity) == FORECAST_CONFIG.horizon_months
+    assert all("9.0 trips per day" in r["capacity_basis"] for r in capacity)
 
 
 def test_forecast_table_basis_carries_the_recut_label(s2: fc.Panel) -> None:

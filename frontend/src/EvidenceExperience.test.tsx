@@ -6,9 +6,6 @@ import EvidenceExperience from "./EvidenceExperience";
 import { LocaleProvider } from "./i18n";
 import { errorFetch, liveFetch } from "./test/evidenceFixtures";
 
-const PEER = "Peer-reference ratio below threshold";
-const NB = "Statistical-model (negative binomial) reference ratio below threshold";
-
 function renderScreen() {
   return render(
     <LocaleProvider>
@@ -19,88 +16,95 @@ function renderScreen() {
   );
 }
 
-function wardList(container: HTMLElement) {
-  return within(container.querySelector(".evidence-ward-list") as HTMLElement);
-}
-
-function expectOneReasonPerMethod(card: HTMLElement) {
-  expect(within(card).getAllByText(PEER)).toHaveLength(1);
-  expect(within(card).getAllByText(NB)).toHaveLength(1);
-}
-
 describe("EvidenceExperience", () => {
   beforeEach(() => setToken(null));
   afterEach(() => vi.unstubAllGlobals());
 
-  it("shows live API data and says so", async () => {
+  it("shows the live wards and opens a ward sheet with the live signs in plain words", async () => {
     setToken("t-officer");
     vi.stubGlobal("fetch", vi.fn().mockImplementation(liveFetch));
     const { container } = renderScreen();
-
-    expect(await screen.findByText("Live data")).toBeInTheDocument();
-    expect(screen.getByText("Served by the JalLekha API just now.")).toBeInTheDocument();
-    expect(wardList(container).getByText("Ward 901 Testpur")).toBeInTheDocument();
-    expect(screen.queryByText("Ward 91 Khairatabad")).not.toBeInTheDocument();
-    expect(container.querySelectorAll(".evidence-map path")).toHaveLength(3);
-
-    // Unavailable values stay blank, never zero.
-    fireEvent.click(wardList(container).getByText("Ward 902 Nullabad"));
-    const card = container.querySelector(".evidence-selected-card") as HTMLElement;
-    expect(within(card).getByRole("heading", { name: "Ward 902 Nullabad" })).toBeInTheDocument();
-    expect(within(card).queryByText(/^0/)).not.toBeInTheDocument();
-    expect(within(card).getByText("Unavailable")).toBeInTheDocument();
-
-    // OSM facility counts are shown with their source and the warning that the map is incomplete.
-    fireEvent.click(wardList(container).getByText("Ward 901 Testpur"));
-    const testpur = container.querySelector(".evidence-selected-card") as HTMLElement;
-    expect(within(testpur).getByText("Hospitals, clinics, schools, care homes · OSM")).toBeInTheDocument();
-    expect(within(testpur).getByText("12")).toBeInTheDocument();
-    expect(within(testpur).getByText(/facilities missing from the map are not counted/)).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("tab", { name: "Booking equity" }));
-    expect(screen.getByText("Live: concentration of observed bookings, not unequal need")).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("tab", { name: "Field checks" }));
-    const cards = container.querySelectorAll<HTMLElement>(".evidence-candidate-card");
-    expect(cards).toHaveLength(1);
-    expect(within(cards[0]).getByRole("heading", { name: "Ward 901 Testpur" })).toBeInTheDocument();
-    expectOneReasonPerMethod(cards[0]);
-    expect(screen.getAllByText(/a flag is not proof/).length).toBeGreaterThan(0);
+    expect(await screen.findByText("wards with 2 or more warning signs")).toBeInTheDocument();
+    expect(container.querySelectorAll(".atlas-map path")).toHaveLength(3);
+    expect(screen.queryByText(/DERIVED|SIMULATION|GHMC_2016/)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Ward 901 Testpur" }));
+    const sheet = within(screen.getByRole("dialog", { name: "Ward 901 Testpur" }));
+    expect(sheet.getByText("2 or more warning signs")).toBeInTheDocument();
+    expect(sheet.getByText("Background")).toBeInTheDocument();
+    expect(sheet.getByText("Owed 6 tanker loads")).toBeInTheDocument();
+    expect(sheet.getByText('3 "no water" complaints this week')).toBeInTheDocument();
+    expect(sheet.getByText("No groundwater wells nearby")).toBeInTheDocument();
+    fireEvent.click(sheet.getByRole("button", { name: "Close" }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
-  it("falls back to the saved snapshot on a 401 and asks for sign-in", async () => {
-    setToken("t-expired");
+  it("shows live booking concentration on the bookings tab", async () => {
+    setToken("t-officer");
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(liveFetch));
+    renderScreen();
+    await screen.findByText("wards with 2 or more warning signs");
+    fireEvent.click(screen.getByRole("tab", { name: "2. Bookings" }));
+    expect(screen.getByText("Top 2 areas take 68% of all tankers")).toBeInTheDocument();
+    expect(screen.getByText("Last 30 days, 120 live bookings")).toBeInTheDocument();
+    expect(screen.getByText("MADHAPUR")).toBeInTheDocument();
+  });
+
+  it("falls back to saved data on a 401 and asks for sign-in", async () => {
+    setToken("t-bad");
     vi.stubGlobal("fetch", vi.fn().mockImplementation(errorFetch(401)));
     const { container } = renderScreen();
-    expect(await screen.findByText("Saved snapshot")).toBeInTheDocument();
-    expect(screen.getByText("Sign in with an officer token to see live data. Showing the saved snapshot.")).toBeInTheDocument();
-    expect(wardList(container).getByText("Ward 91 Khairatabad")).toBeInTheDocument();
+    expect(await screen.findByText(/^Sign in as an officer/)).toBeInTheDocument();
+    expect(container.querySelectorAll(".atlas-map path").length).toBeGreaterThan(100);
   });
 
-  it("falls back to the saved snapshot when the server cannot be reached", async () => {
-    setToken("t-officer");
-    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("Failed to fetch")));
-    const { container } = renderScreen();
-    expect(await screen.findByText("The server could not be reached. Showing the saved snapshot.")).toBeInTheDocument();
-    expect(screen.getByText("Saved snapshot")).toBeInTheDocument();
-    expect(wardList(container).getByText("Ward 91 Khairatabad")).toBeInTheDocument();
-  });
-
-  it("does not call the API when signed out and shows the snapshot", () => {
-    const fetchMock = vi.fn();
-    vi.stubGlobal("fetch", fetchMock);
+  it("does not call the API when signed out", () => {
+    const fetch = vi.fn();
+    vi.stubGlobal("fetch", fetch);
     renderScreen();
-    expect(fetchMock).not.toHaveBeenCalled();
-    expect(screen.getByText("Saved snapshot")).toBeInTheDocument();
-    expect(screen.getByText("Sign in with an officer token to see live data. Showing the saved snapshot.")).toBeInTheDocument();
+    expect(fetch).not.toHaveBeenCalled();
+    expect(screen.getByText(/^Sign in as an officer/)).toBeInTheDocument();
   });
 
-  it("lists the six snapshot field-check candidates with one reason per method", () => {
+  it("explains low-booking wards as booked vs expected", () => {
     vi.stubGlobal("fetch", vi.fn());
     const { container } = renderScreen();
-    fireEvent.click(screen.getByRole("tab", { name: "Field checks" }));
-    const cards = container.querySelectorAll<HTMLElement>(".evidence-candidate-card");
-    expect(cards).toHaveLength(6);
-    cards.forEach(expectOneReasonPerMethod);
+    fireEvent.click(screen.getByRole("tab", { name: "3. Expected vs actual" }));
+    const cards = container.querySelectorAll(".atlas-check-card");
+    expect(cards.length).toBe(6);
+    const first = within(cards[0] as HTMLElement);
+    expect(first.getByText(/^Booked .* tankers in 2025$/)).toBeInTheDocument();
+    expect(first.getByText(/^5 similar wards booked about/)).toBeInTheDocument();
+    expect(first.getByText(/^Statistical model .* expected about/)).toBeInTheDocument();
+  });
+
+  it("searches wards and opens the chosen one", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    const { container } = renderScreen();
+    fireEvent.change(screen.getByLabelText("Find a ward"), { target: { value: "Gachibowli" } });
+    fireEvent.click(within(container.querySelector(".atlas-search ul") as HTMLElement).getByRole("button", { name: "Ward 105 Gachibowli" }));
+    expect(screen.getByRole("dialog", { name: "Ward 105 Gachibowli" })).toBeInTheDocument();
+  });
+
+  it("zooms only with the buttons", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    const { container } = renderScreen();
+    const svg = container.querySelector(".atlas-map") as SVGSVGElement;
+    const fitted = svg.getAttribute("viewBox");
+    fireEvent.wheel(svg, { deltaY: -100 });
+    expect(svg.getAttribute("viewBox")).toBe(fitted);
+    fireEvent.click(screen.getByRole("button", { name: "Zoom in" }));
+    expect(svg.getAttribute("viewBox")).not.toBe(fitted);
+    fireEvent.click(screen.getByRole("button", { name: "Fit map" }));
+    expect(svg.getAttribute("viewBox")).toBe(fitted);
+  });
+
+  it("ranks wards under the map and lists building growth A-Z", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    const { container } = renderScreen();
+    expect(container.querySelectorAll(".atlas-rank li")).toHaveLength(15);
+    fireEvent.click(screen.getByRole("button", { name: "Show all wards" }));
+    expect(container.querySelectorAll(".atlas-rank li")).toHaveLength(145);
+    fireEvent.click(screen.getByRole("radio", { name: "Building growth" }));
+    expect(screen.getByText(/^Listed A–Z, not ranked/)).toBeInTheDocument();
   });
 });

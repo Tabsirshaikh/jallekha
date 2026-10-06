@@ -1144,6 +1144,50 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:** short history (2021 start); messy well positions; the anomaly is shown, not used for the risk (`docs/LIMITATIONS.md` F5, F6).
 - **Pull request:** see the PR for `feat/d7-groundwater`.
 
+## `feat/item19-trips-protocol` — owner decisions 2 and 4 (item 19)
+
+- **Owner / date:** repo owner, 2026-10-06.
+- **Why:** the F5 capacity check refused to run without trips per tanker per day, and the docs still asked for the forecast protocol to be confirmed although it was confirmed on 2026-10-03.
+- **What we changed:**
+  - `config/forecast.py`: `trips_per_tanker_per_day = 9.0` with `trips_per_tanker_per_day_basis` (DERIVED: 11,000 trips / 1,233 tankers, May 2026 news = 8.9; other Hyderabad, Chennai and Bengaluru figures in the comment); same value as the sandbox.
+  - `services/forecast.py`: the capacity basis no longer says OPEN; `scripts/forecast/run_backtest.py` writes `data/derived/forecast_capacity.csv` by default.
+  - Docs: protocol recorded as confirmed (`LIMITATIONS.md` F5); item 19 statuses (6, 7 and item 13 dropped by the owner); Q1 searched again (no list); Q2 source found (Open Data Telangana daily reservoir storage, 2021-2026); stale item 12 status line fixed.
+- **Results:** 1,123 tankers x 9 trips covers every forecast month (May 2026 peak: 73% of capacity); a peak-season rate, and the forecast under-forecast the real 2026 surge.
+- **Validation:** test written first and seen failing (config value, basis, same as sandbox, capacity basis), then passing; the script test checks the capacity file.
+- **Pull request:** see the PR for `feat/item19-trips-protocol`.
+
+## `feat/u5-live-atlas` — live need map and officer overview
+
+- **Owner / date:** repo owner, 2026-10-06.
+- **Why:** the owner found the atlas too complex (basis labels, geography jargon, small map) and not live: booking equity came from fixed 2022-24 files and need never changed.
+- **What we changed:**
+  - `GET /atlas/live` (`services/live_need.py`, `config/live_need.py`): Census need plus five live clues per ward (water owed, bookings jump, "no water" complaints, supply cuts, groundwater), flagged at 2 bad clues; booking concentration from bookings supplied in the last 30 days (history if none). `PlanStore.supplied_bookings()` reads stored bookings without rebuilding plans.
+  - U5 rebuilt (`EvidenceExperience.tsx` + `.css`): near full-page map with a latitude-corrected projection, layers (need rising now, no water at home, limited access, building growth), bookings tab with concentration and busiest areas on the map, low-bookings tab explained as booked vs similar wards vs model, ward sheet at the bottom with all ward facts and the live signs in plain words, ward search. No basis labels or geography jargon on screen.
+  - Officer overview (`OfficerOverview.tsx`): live cards (need rising, low bookings, concentration, latest plan) that open their screen, and a three-step "what to do today" list; the non-working buttons are gone.
+  - Snapshot (`build_u5_snapshot.py`) carries CAD and the field-check observed / expected bookings.
+- **Validation:** service and API tests written first and seen failing, then passing; screen tests rewritten for the new layout; headless screenshot checked.
+- **Known limitations:** `docs/LIMITATIONS.md` "Live need on the U5 map".
+- **Pull request:** see the PR for `feat/u5-live-atlas`.
+
+## `fix/u5-map-signs` — owner review of the need map
+
+- **Owner / date:** repo owner, 2026-10-06.
+- **Why:** owner review: a focus box appeared on click, the map was too small, CAD was mislabelled ("limited water access"; it is the Channel Access Deficit, homes with no phone), "need rising" was driven by groundwater alone and showed missing data as green ticks, and the booking check said 2022-24 for 2025 figures.
+- **What we changed:** groundwater is background (`counts: false`), owed and bookings are unknown until data is entered (`known_count`), unknown wards grey; WAD / CAD labels corrected in all four languages; booking check says 2025, names the peer and model figures and says when a ward booked more than expected; map fills the screen, zoom (wheel, buttons) and drag, no focus box.
+- **Validation:** tests written first for the sign rules and seen failing; screen tests updated; headless screenshot checked.
+
+## `fix/u5-zoom-buttons` — zoom by buttons only
+
+- **Owner / date:** repo owner, 2026-10-06.
+- **Why:** the owner wants the map box to stay fixed: no mouse-wheel zoom or drag.
+- **What we changed:** wheel and drag removed; + zooms towards the selected ward (else the centre of the view), - zooms out, the fit button resets. Test: wheel leaves the view unchanged, the buttons change and reset it.
+
+## `fix/u5-zoom-buttons` — zoom by buttons only
+
+- **Owner / date:** repo owner, 2026-10-06.
+- **Why:** the map box must stay fixed: no mouse-wheel zoom or drag.
+- **What we changed:** wheel and drag removed; + zooms towards the selected ward (else the centre), - zooms out, the fit button resets.
+
 ## `feat/item20-osrm` — OSRM road routing with cached legs (item 20)
 
 - **Owner / date:** repo owner, 2026-10-06.

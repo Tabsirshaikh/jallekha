@@ -71,6 +71,7 @@ type ChartProps = { history: Month[]; outlook: OutlookMonth[]; selected: string 
 /** History (REAL) and forecast on one month axis, so a live forecast that overlaps observed months sits over them. */
 function OutlookChart({ history, outlook, selected, onSelect, locale, title, text }: ChartProps) {
   const fmt = (v: number | null) => number(v, locale);
+  const [hoverMonth, setHoverMonth] = useState<string | null>(null);
   const shown = history.filter((row) => row.month);
   const allMonths = [...shown.map((row) => row.month), ...outlook.map((row) => row.month)].sort();
   if (allMonths.length === 0) return null;
@@ -99,9 +100,8 @@ function OutlookChart({ history, outlook, selected, onSelect, locale, title, tex
   const labels = shown.length
     ? [...months.filter((m) => m.endsWith("-01")).map((m) => ({ month: m, label: m.slice(0,4) })), ...outlook.filter((row) => row.month > historyEnd).map((row) => ({ month: row.month, label: monthName(row.month, locale).split(" ")[0] }))]
     : outlook.map((row) => ({ month: row.month, label: monthName(row.month, locale).split(" ")[0] }));
-  const basis = outlook[0];
   return <>
-    <div className="forecast-chart-scroll"><svg viewBox={"0 0 "+width+" "+height} className="forecast-chart" role="img" aria-label={title}>
+    <div className="forecast-chart-scroll forecast-chart-hover" onMouseLeave={() => setHoverMonth(null)}><svg viewBox={"0 0 "+width+" "+height} className="forecast-chart" role="img" aria-label={title}>
       <line x1={left} x2={width-right} y1={y(0)} y2={y(0)} className="chart-axis"/>
       {ticks.map((v)=><g key={v}><line x1={left} x2={width-right} y1={y(v)} y2={y(v)} className="chart-grid"/><text x={left-8} y={y(v)+4} textAnchor="end">{fmt(v)}</text></g>)}
       {band90&&<polygon points={band90} className="range-90"/>}
@@ -111,13 +111,22 @@ function OutlookChart({ history, outlook, selected, onSelect, locale, title, tex
       <path d={forecastPath} className="forecast-line"/>
       {outlook.filter((row)=>row.median!==null).map((row)=><g key={row.month} className="forecast-point" tabIndex={0} role="button" aria-label={monthName(row.month,locale)+": "+text.median+" "+fmt(row.median)} onClick={()=>onSelect(row.month)} onKeyDown={(event)=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();onSelect(row.month);}}}><circle cx={x(row.month)} cy={y(row.median ?? 0)} r={selected===row.month?7:5}/><title>{monthName(row.month,locale)} · {fmt(row.median)}</title></g>)}
       {labels.map((item)=><text key={item.month+item.label} x={x(item.month)} y={height-12} textAnchor="middle">{item.label}</text>)}
-    </svg></div>
+      {hoverMonth&&<line x1={x(hoverMonth)} x2={x(hoverMonth)} y1={top} y2={y(0)} className="chart-hover-line"/>}
+      {months.map((m)=><rect key={"h"+m} x={x(m)-(width-left-right)/Math.max(months.length-1,1)/2} y={top} width={(width-left-right)/Math.max(months.length-1,1)} height={y(0)-top} fill="transparent" onMouseEnter={()=>setHoverMonth(m)}/>)}
+    </svg>
+    {hoverMonth&&(()=>{ const h = shown.find((row)=>row.month===hoverMonth); const o = outlook.find((row)=>row.month===hoverMonth); const pos = x(hoverMonth)/width*100;
+      return <div className="chart-tooltip" style={{ left: `${pos}%`, transform: pos > 60 ? "translateX(-105%)" : "translateX(5%)" }}><strong>{monthName(hoverMonth, locale)}</strong>
+        {h&&h.bookings!==null&&<span><i className="history-key"/>{text.observed}: {fmt(h.bookings)}</span>}
+        {o&&o.median!==null&&<span><i className="median-key"/>{text.median}: {fmt(o.median)}</span>}
+        {o&&o.capacity!==null&&<span><i className="capacity-key"/>{text.capacity}: {fmt(o.capacity)}</span>}
+        {!(h&&h.bookings!==null)&&!(o&&o.median!==null)&&<span>—</span>}</div>; })()}
+    </div>
     <div className="forecast-legend">
-      {shown.length>0&&<span><i className="history-key"/>{text.observed} · REAL</span>}
-      {band80&&<span><i className="range-key range-key-80"/>{text.p80} · {basis.rangeBasis}</span>}
-      {band90&&<span><i className="range-key range-key-90"/>{text.p90} · {basis.rangeBasis}</span>}
-      <span><i className="median-key"/>{text.median} · {basis.basis}</span>
-      {hasCapacity&&<span><i className="capacity-key"/>{text.capacity} · {outlook.find((row)=>row.capacity!==null)?.capacityBasis}</span>}
+      {shown.length>0&&<span><i className="history-key"/>{text.observed}</span>}
+      {band80&&<span><i className="range-key range-key-80"/>{text.p80}</span>}
+      {band90&&<span><i className="range-key range-key-90"/>{text.p90}</span>}
+      <span><i className="median-key"/>{text.median}</span>
+      {hasCapacity&&<span><i className="capacity-key"/>{text.capacity}</span>}
     </div>
   </>;
 }
@@ -176,19 +185,18 @@ export default function ForecastExperience() {
   const sectionStatus = live && section ? (sectionForecast.loading ? w.loadingSection : sectionForecast.error ? w.sectionLoadFailed : outlook.length === 0 ? w.noSectionRows : null) : null;
 
   return <div className="forecast-page">
-    <header className="forecast-heading"><div><p className="eyebrow">{live ? w.labelLimitLive : w.labelLimit}</p><h1>{w.title}</h1><p className="muted">{w.intro}</p></div><div className="forecast-heading-tags"><DataSourceChip state={{ live, loading, error }} /><span className="forecast-demo-badge">{live ? w.derived : w.sim}</span></div></header>
+    <header className="forecast-heading"><div><h1>{w.title}</h1><p className="muted">{w.intro}</p></div><div className="forecast-heading-tags"><DataSourceChip state={{ live, loading, error }} /><span className="forecast-demo-badge">{live ? w.derived : w.sim}</span></div></header>
     {reason&&<p className="forecast-live-reason" role="note">{liveReasonCopy[locale][reason]}</p>}
     <div className="forecast-tabs" role="tablist">{(["outlook","accuracy","shortage"] as const).map((tab)=><button key={tab} role="tab" aria-selected={view===tab} className={view===tab?"active":""} onClick={()=>setView(tab)}>{w[tab]}</button>)}</div>
     {view==="outlook"&&<>
-      <div className="forecast-notice"><strong>{w.source} · {snapshot.historyStart}–{snapshot.historyEnd}</strong><span>{live ? w.liveNotice : w.fixtureNote}</span></div>
       <div className="forecast-metrics"><article><span>{w.latest} · {monthText(snapshot.summary.latest.month)}</span><strong>{fmt(snapshot.summary.latest.bookings)}</strong><small>{w.bookings} · <b className="basis-real">{w.real}</b></small></article><article><span>{w.delivered}</span><strong>{fmt(snapshot.summary.latest.delivered)}</strong><small>{w.deliveryRate}: {deliveryPct===null?"—":new Intl.NumberFormat(locale,{style:"percent",maximumFractionDigits:1}).format(deliveryPct)}</small></article><article><span>{w.peak} · {monthText(snapshot.summary.peak.month)}</span><strong>{fmt(snapshot.summary.peak.bookings)}</strong><small>{w.bookings} · <b className="basis-real">{w.real}</b></small></article><article><span>{w.status}</span><strong>{live ? w.liveStatus : w.pending}</strong><small>{live ? w.liveStatusNote : w.notLive}</small></article></div>
       {live&&<label className="forecast-area">{w.area}<select value={section} onChange={(event)=>{setSection(event.target.value);setSelected(null);}}><option value="">{w.cityTotal}</option>{sections.map((name)=><option key={name} value={name}>{name}</option>)}</select></label>}
       <section className="forecast-chart-panel"><div className="forecast-panel-head"><div><h2>{section ? `${section} · ${words.forecast}` : w.dateRange}</h2><p>{section ? `${w.sectionNote} ${w.sectionsRecut}` : w.historyGap}</p></div><span className={section ? "source-tag derived" : "source-tag real"}>{section ? (outlook[0]?.basis ?? "DERIVED") : `REAL · ${w.observed}`}</span></div>
         {sectionStatus ? <p className="forecast-panel-status" role="status">{sectionStatus}</p> : <OutlookChart history={section ? [] : history} outlook={outlook} selected={selectedMonth?.month ?? null} onSelect={setSelected} locale={locale} title={section || w.dateRange} text={{ ...words, observed: w.observed }} />}
       </section>
       <section className="forecast-detail" aria-label={w.selectedMonthLabel}>{selectedMonth ? <>
-        <div><p className="eyebrow">{words.forecast} · {selectedMonth.basis}</p><h2>{monthText(selectedMonth.month)}</h2>{selectedMonth.low90!==null&&selectedMonth.high90!==null ? <p>{w.range}: {fmt(selectedMonth.low90)}–{fmt(selectedMonth.high90)}</p> : <p>{w.rangeUnavailable}{selectedMonth.rangeNote ? `: ${selectedMonth.rangeNote}` : ""}</p>}</div>
-        <div className="forecast-detail-metrics"><span>{words.median} · {selectedMonth.basis}<strong>{fmt(selectedMonth.median)}</strong></span><span>{words.p80} · {selectedMonth.rangeBasis}<strong>{selectedMonth.low80===null||selectedMonth.high80===null?"—":`${fmt(selectedMonth.low80)}–${fmt(selectedMonth.high80)}`}</strong></span><span>{words.p90} · {selectedMonth.rangeBasis}<strong>{selectedMonth.low90===null||selectedMonth.high90===null?"—":`${fmt(selectedMonth.low90)}–${fmt(selectedMonth.high90)}`}</strong></span><span>{words.capacity} · {selectedMonth.capacityBasis}<strong>{fmt(selectedMonth.capacity)}</strong></span></div>
+        <div><p className="eyebrow">{words.forecast}</p><h2>{monthText(selectedMonth.month)}</h2>{selectedMonth.low90!==null&&selectedMonth.high90!==null ? <p>{w.range}: {fmt(selectedMonth.low90)}–{fmt(selectedMonth.high90)}</p> : <p>{w.rangeUnavailable}{selectedMonth.rangeNote ? `: ${selectedMonth.rangeNote}` : ""}</p>}</div>
+        <div className="forecast-detail-metrics"><span>{words.median}<strong>{fmt(selectedMonth.median)}</strong></span><span>{words.p80}<strong>{selectedMonth.low80===null||selectedMonth.high80===null?"—":`${fmt(selectedMonth.low80)}–${fmt(selectedMonth.high80)}`}</strong></span><span>{words.p90}<strong>{selectedMonth.low90===null||selectedMonth.high90===null?"—":`${fmt(selectedMonth.low90)}–${fmt(selectedMonth.high90)}`}</strong></span><span>{words.capacity}<strong>{fmt(selectedMonth.capacity)}</strong></span></div>
       </> : <p className="muted">—</p>}</section>
       <p className="forecast-footnote">{w.dataPeriod}: {snapshot.summary.observedMonthCount} {w.months}, {w.from} {snapshot.historyStart} {w.to??""} {snapshot.historyEnd}. {w.historyGap}</p>
     </>}
@@ -207,7 +215,7 @@ export default function ForecastExperience() {
       <div className="risk-filter" role="group" aria-label={w.filterLabel}>{(["all",...RISK_ORDER] as const).map((value)=><button key={value} type="button" aria-pressed={riskFilter===value} className={riskFilter===value?"active":""} onClick={()=>chooseRisk(value)}>{`${value==="all"?w.riskAll:w[riskWord[value]]} (${value==="all"?shortageRows.length:shortageRows.filter((row)=>row.risk===value).length})`}</button>)}</div>
       {filtered.length===0 ? <p className="muted">{w.shortageEmpty}</p> : <ol className="shortage-list" aria-label={w.riskListLabel}>{visible.map((row)=><li key={row.key} className={`shortage-item risk-${row.risk}`}>
         <div className="shortage-item-head"><span className={`risk-pill risk-${row.risk}`}>{w[riskWord[row.risk]]}</span><h3>{row.section}</h3><span className="shortage-when">{monthText(row.month)} · {ahead(row.monthsAhead)}</span></div>
-        <dl className="shortage-figures"><div><dt>{w.forecastBookings} <b>{row.forecastBasis}</b></dt><dd>{fmt(row.forecast)}</dd></div><div><dt>{w.upper80} <b>{row.upper80Basis}</b></dt><dd>{fmt(row.upper80)}</dd></div><div><dt>{w.capacityTrips} <b>{row.capacityBasis}</b></dt><dd>{fmt(row.capacity)}{row.ratio!==null&&<small> · {pct(row.ratio)} {w.ofCapacity}</small>}</dd></div></dl>
+        <dl className="shortage-figures"><div><dt>{w.forecastBookings}</dt><dd>{fmt(row.forecast)}</dd></div><div><dt>{w.upper80} <b>{row.upper80Basis}</b></dt><dd>{fmt(row.upper80)}</dd></div><div><dt>{w.capacityTrips} <b>{row.capacityBasis}</b></dt><dd>{fmt(row.capacity)}{row.ratio!==null&&<small> · {pct(row.ratio)} {w.ofCapacity}</small>}</dd></div></dl>
         <p className="shortage-reason">{row.reason}</p>
       </li>)}</ol>}
       <div className="shortage-more"><span>{w.showingCount.replace("{shown}", String(visible.length)).replace("{total}", String(filtered.length))}</span>{visible.length<filtered.length&&<button type="button" className="button button-secondary" onClick={()=>setShownCount((n)=>n+SHOW_STEP)}>{w.showMore}</button>}</div>
@@ -220,6 +228,5 @@ export default function ForecastExperience() {
       <div className="forecast-signal-grid"><article><span className="source-tag">UNAVAILABLE</span><h2>{w.groundwater}</h2><p>{w.groundwaterNote}</p></article><article><span className="source-tag">UNAVAILABLE</span><h2>{w.reservoir}</h2><p>{w.reservoirNote}</p></article></div>
       <p className="forecast-footnote">{w.capacityNote}</p>
     </>)}
-    <p className="forecast-footer-note">{live ? `${w.labelLimitLive} · API: /forecast, /forecast/backtest, /shortage` : `${w.labelLimit} · ${w.generated}: ${snapshot.snapshotDate}`}</p>
   </div>;
 }

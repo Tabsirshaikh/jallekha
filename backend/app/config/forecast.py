@@ -41,9 +41,18 @@ class ForecastConfig:
     # news"). Basis: ASSUMED; label on screen.
     fleet_tankers_early_2024: int = 577
     fleet_tankers_2026: int = 1123
-    # Trips per tanker per day: no source. OPEN, owner to confirm. No default: the capacity
-    # planner refuses to run until a sourced value is given.
-    trips_per_tanker_per_day: float | None = None
+    # Trips per tanker per day. Source: "more than 11,000 tanker trips ... every day through
+    # 1,233 tankers" (Hyderabad Mail, 2026-05-13) = 8.9; about 12,000 a day with a fleet of
+    # 1,250 (Siasat, May 2025) = 9.6; HMWSSB driver "8-10 trips daily" in summer (The News
+    # Minute, 2021); Chennai Metrowater 8-10, Bengaluru BWSSB 8. HMWSSB runs two shifts in
+    # peak season, so this is about 4.5 per shift (allocation.max_trips_per_tanker = 4 per
+    # 12-hour shift). Same value as config/sandbox.py. Confirmed by the owner on 2026-10-06.
+    # Basis: DERIVED from REAL news figures; a peak-season rate, high for quiet months.
+    trips_per_tanker_per_day: float = 9.0
+    trips_per_tanker_per_day_basis: str = (
+        "DERIVED: 11,000 trips a day / 1,233 tankers (May 2026 news) = 8.9, rounded to 9; "
+        "peak-season rate"
+    )
     # Portal data (D1b) is used up to the month before the Feb/Mar 2026 section re-cut.
     portal_through: tuple[int, int] = (2026, 1)
     # Label on the 12-month forecast built from the portal data through Jan 2026.

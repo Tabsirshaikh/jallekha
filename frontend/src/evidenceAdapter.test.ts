@@ -11,6 +11,7 @@ describe("adaptLiveEvidence", () => {
     expect(testpur).toEqual({
       id: "relation/901", name: "Ward 901 Testpur", censusYear: 2011, reviewRequired: false,
       population2011: 50000, households2011: 12000, waterAccessDeficitShare: 0.21, criticalFacilities: 12,
+      constrainedAccessShare: 0.09, hardshipShare: 0.14, observedBookings: 40, peerExpected: 400, modelExpected: 900,
       growthRatio: 1.25, growthQuality: "STABLE_TREND", bookings: 120, bookingsPer1000: 10.5,
       bookingStatus: "APPROXIMATE_SECTION_POINT_IN_WARD", fieldStatus: "AGREED_FIELD_CHECK_CANDIDATE", fieldCandidate: true,
       fieldReasons: [
