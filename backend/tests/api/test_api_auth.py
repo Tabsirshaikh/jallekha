@@ -109,3 +109,30 @@ def test_no_token_or_key_is_committed() -> None:
     for path in (ROOT / ".env.example", ROOT / "backend/app/config/api.py"):
         text = Path(path).read_text(encoding="utf-8")
         assert "t-officer" not in text and "dev-123" not in text
+
+
+def test_open_server_needs_no_token_and_says_so(monkeypatch: pytest.MonkeyPatch) -> None:
+    """AUTH_REQUIRED unset (the running app's default): everyone acts as the dev principal."""
+    from app.auth import get_api_config
+    from app.config.api import ApiConfig
+
+    monkeypatch.delenv("AUTH_REQUIRED", raising=False)
+    monkeypatch.setenv("API_TOKENS", "")
+    app.dependency_overrides.pop(get_api_config, None)
+    assert ApiConfig.from_env().auth_required is False
+    web = TestClient(app)
+    assert web.get("/auth/me").json() == {"role": "dev", "user_id": None, "open": True}
+    assert web.get("/atlas/wards").status_code == 200
+
+
+def test_auth_required_brings_the_token_checks_back(monkeypatch: pytest.MonkeyPatch) -> None:
+    from app.auth import get_api_config
+    from app.config.api import ApiConfig
+
+    monkeypatch.setenv("AUTH_REQUIRED", "true")
+    monkeypatch.setenv("API_TOKENS", "officer:abc")
+    app.dependency_overrides.pop(get_api_config, None)
+    assert ApiConfig.from_env().auth_required is True
+    web = TestClient(app)
+    assert web.get("/auth/me").status_code == 401
+    assert web.get("/auth/me", headers={"Authorization": "Bearer abc"}).json()["open"] is False

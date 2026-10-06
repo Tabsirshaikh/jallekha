@@ -51,6 +51,12 @@ NOW = datetime(2026, 10, 3, 5, 0, tzinfo=UTC)
 STOP = (17.4400, 78.4983)
 
 
+@pytest.fixture(autouse=True)
+def _tokens_required(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The running app is open (no AUTH_REQUIRED); these tests check the token rules."""
+    monkeypatch.setenv("AUTH_REQUIRED", "true")
+
+
 def auth(role: str) -> dict[str, str]:
     return {"Authorization": f"Bearer {TOKENS[role]}"}
 

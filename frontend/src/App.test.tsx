@@ -36,7 +36,7 @@ describe("App", () => {
   });
 
   it("signs in with a token and shows the role the server reports", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ role: "officer", user_id: "off-1" }), { status: 200, headers: { "Content-Type": "application/json" } })));
+    vi.stubGlobal("fetch", vi.fn(() => Promise.resolve(new Response(JSON.stringify({ role: "officer", user_id: "off-1" }), { status: 200, headers: { "Content-Type": "application/json" } }))));
     render(
       <LocaleProvider>
         <AuthProvider>
@@ -51,6 +51,19 @@ describe("App", () => {
     expect(screen.getByText(/off-1/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
     expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument();
+  });
+
+  it("shows no sign-in button when the server needs no sign-in", async () => {
+    vi.stubGlobal("fetch", vi.fn(() => Promise.resolve(new Response(JSON.stringify({ role: "dev", user_id: null, open: true }), { status: 200, headers: { "Content-Type": "application/json" } }))));
+    render(
+      <LocaleProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </LocaleProvider>,
+    );
+    await waitFor(() => expect(screen.queryByRole("button", { name: "Sign in" })).not.toBeInTheDocument());
+    expect(screen.queryByText(/Signed in as/)).not.toBeInTheDocument();
   });
 
   it("says so when a token is rejected", async () => {

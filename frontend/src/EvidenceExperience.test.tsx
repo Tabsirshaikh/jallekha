@@ -5,6 +5,7 @@ import { AuthProvider } from "./auth";
 import EvidenceExperience from "./EvidenceExperience";
 import { LocaleProvider } from "./i18n";
 import { errorFetch, liveFetch } from "./test/evidenceFixtures";
+import { expectNoDataRequests } from "./test/noDataRequests";
 
 function renderScreen() {
   return render(
@@ -61,7 +62,7 @@ describe("EvidenceExperience", () => {
     const fetch = vi.fn();
     vi.stubGlobal("fetch", fetch);
     renderScreen();
-    expect(fetch).not.toHaveBeenCalled();
+    expectNoDataRequests(fetch);
     expect(screen.getByText(/^Sign in as an officer/)).toBeInTheDocument();
   });
 

@@ -31,7 +31,15 @@ credential is not a user.
 ```
 
 `user_id` is `null` for a token without one. Dev token: `{"role": "dev", "user_id": null}`.
-Errors: 401 without a valid token.
+`open` is `true` when the server asks nobody to sign in (see below).
+Errors: 401 without a valid token, only when `AUTH_REQUIRED=true`.
+
+**No sign-in (2026-10-06, `feat/remove-sign-in`).** When the environment variable `AUTH_REQUIRED`
+is unset, the running API needs no token: every caller acts as the `dev` principal (all user
+roles) and `GET /auth/me` answers `{"role": "dev", "user_id": null, "open": true}`. The screens
+then never show a sign-in box and act as the role of the workspace on show (officer, resident,
+field worker, driver). `AUTH_REQUIRED=true` brings the token checks above back (`API_TOKENS`);
+the SMS / telephony gateway credential (`X-Gateway-Token`) is required either way.
 
 ## 2. Councillor role
 
