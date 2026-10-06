@@ -1,0 +1,3452 @@
+{
+ "retrieved_at_utc": "2026-10-06T20:37:46+00:00",
+ "queries": [
+  {
+   "section": "BACHUPALLY (PD 7)",
+   "variant": "Bachupally",
+   "url": "https://nominatim.openstreetmap.org/search?q=Bachupally%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 251865905,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 9903987780,
+     "lat": "17.5366480",
+     "lon": "78.3644736",
+     "category": "office",
+     "type": "educational_institution",
+     "place_rank": 30,
+     "importance": 4.207446402681037e-05,
+     "addresstype": "office",
+     "name": "akashra junior college",
+     "display_name": "akashra junior college, bachupally, Nizampet Road, Nizampet, Bachupally mandal, Hyderabad, Medchal–Malkajgiri, Telangana, 500090, India",
+     "address": {
+      "office": "akashra junior college",
+      "house_number": "bachupally",
+      "road": "Nizampet Road",
+      "suburb": "Nizampet",
+      "city": "Hyderabad",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500090",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.5365980",
+      "17.5366980",
+      "78.3644236",
+      "78.3645236"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "BACHUPALLY (PD 7)",
+   "variant": "Bachupalli",
+   "url": "https://nominatim.openstreetmap.org/search?q=Bachupalli%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "BACHUPALLY (PD 7)",
+   "variant": "Bachupally Hyderabad",
+   "url": "https://nominatim.openstreetmap.org/search?q=Bachupally+Hyderabad%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249148791,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 1244563305,
+     "lat": "17.5457451",
+     "lon": "78.3970359",
+     "category": "building",
+     "type": "apartments",
+     "place_rank": 30,
+     "importance": 4.207446402681037e-05,
+     "addresstype": "building",
+     "name": "SPATIAL SAPPHIRE",
+     "display_name": "SPATIAL SAPPHIRE, G9WW+7RP, Unnamed Road, Bachupally, Hyderabad, Telangana 500090, Medak Road, Gajularamaram, Ward 125 Gajularamaram, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Dundigal mandal, Medchal–Malkajgiri, Telangana, 500090, India",
+     "address": {
+      "building": "SPATIAL SAPPHIRE",
+      "house_number": "G9WW+7RP, Unnamed Road, Bachupally, Hyderabad, Telangana 500090",
+      "road": "Medak Road",
+      "suburb": "Gajularamaram",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Dundigal mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500090",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.5455928",
+      "17.5458707",
+      "78.3969244",
+      "78.3971449"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "BACHUPALLY (PD 7)",
+   "variant": "Bachu Pally",
+   "url": "https://nominatim.openstreetmap.org/search?q=Bachu+Pally%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "Doyens section",
+   "variant": "Doyens Section",
+   "url": "https://nominatim.openstreetmap.org/search?q=Doyens+Section%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "Doyens section",
+   "variant": "Doyens Township",
+   "url": "https://nominatim.openstreetmap.org/search?q=Doyens+Township%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249080258,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2923222382,
+     "lat": "17.4773141",
+     "lon": "78.3258464",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Doyens Township",
+     "display_name": "Doyens Township, Chandanagar, Lingampally, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, 500019, India",
+     "address": {
+      "neighbourhood": "Doyens Township",
+      "suburb": "Chandanagar",
+      "city_district": "Greater Hyderabad Municipal Corporation West Zone",
+      "city": "Hyderabad",
+      "county": "Serilingampalle mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500019",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4673141",
+      "17.4873141",
+      "78.3158464",
+      "78.3358464"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "Doyens section",
+   "variant": "Doyen's Township",
+   "url": "https://nominatim.openstreetmap.org/search?q=Doyen%27s+Township%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "Doyens section",
+   "variant": "Doyens",
+   "url": "https://nominatim.openstreetmap.org/search?q=Doyens%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 248902422,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2923222382,
+     "lat": "17.4773141",
+     "lon": "78.3258464",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Doyens Township",
+     "display_name": "Doyens Township, Chandanagar, Lingampally, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, 500019, India",
+     "address": {
+      "neighbourhood": "Doyens Township",
+      "suburb": "Chandanagar",
+      "city_district": "Greater Hyderabad Municipal Corporation West Zone",
+      "city": "Hyderabad",
+      "county": "Serilingampalle mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500019",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4673141",
+      "17.4873141",
+      "78.3158464",
+      "78.3358464"
+     ]
+    },
+    {
+     "place_id": 249510143,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 879138502,
+     "lat": "17.4749504",
+     "lon": "78.3288598",
+     "category": "amenity",
+     "type": "school",
+     "place_rank": 30,
+     "importance": 6.836270695043896e-05,
+     "addresstype": "amenity",
+     "name": "Vidyanjali High School",
+     "display_name": "Vidyanjali High School, 147, Doyens Rd, Doyens Colony, Serilingampally, Hyderabad, Telangana 500019, Old Bombay Road, Doyens Township, Madinaguda, Masjid Banda, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, 500019, India",
+     "address": {
+      "amenity": "Vidyanjali High School",
+      "house_number": "147, Doyens Rd, Doyens Colony, Serilingampally, Hyderabad, Telangana 500019",
+      "road": "Old Bombay Road",
+      "neighbourhood": "Doyens Township",
+      "suburb": "Madinaguda",
+      "city_district": "Greater Hyderabad Municipal Corporation West Zone",
+      "city": "Hyderabad",
+      "county": "Serilingampalle mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500019",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4743317",
+      "17.4755690",
+      "78.3282310",
+      "78.3294886"
+     ]
+    },
+    {
+     "place_id": 249418818,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2166591671,
+     "lat": "17.4766062",
+     "lon": "78.3246229",
+     "category": "highway",
+     "type": "bus_stop",
+     "place_rank": 30,
+     "importance": 6.836270695043896e-05,
+     "addresstype": "highway",
+     "name": "Alind / Doyens Colony",
+     "display_name": "Alind / Doyens Colony, Old Bombay Road, Doyens Township, Madinaguda, Masjid Banda, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, 500019, India",
+     "address": {
+      "highway": "Alind / Doyens Colony",
+      "road": "Old Bombay Road",
+      "neighbourhood": "Doyens Township",
+      "suburb": "Madinaguda",
+      "city_district": "Greater Hyderabad Municipal Corporation West Zone",
+      "city": "Hyderabad",
+      "county": "Serilingampalle mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500019",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4765562",
+      "17.4766562",
+      "78.3245729",
+      "78.3246729"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "THATTIKHANA",
+   "variant": "Thattikhana",
+   "url": "https://nominatim.openstreetmap.org/search?q=Thattikhana%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "THATTIKHANA",
+   "variant": "Thatti Khana",
+   "url": "https://nominatim.openstreetmap.org/search?q=Thatti+Khana%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "THATTIKHANA",
+   "variant": "Thattikhana Mahalla",
+   "url": "https://nominatim.openstreetmap.org/search?q=Thattikhana+Mahalla%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "THATTIKHANA",
+   "variant": "Thattiannaram",
+   "url": "https://nominatim.openstreetmap.org/search?q=Thattiannaram%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "THATTIKHANA",
+   "variant": "Tattikhana",
+   "url": "https://nominatim.openstreetmap.org/search?q=Tattikhana%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "FATHER BALAIAHNAGAR (Div13)",
+   "variant": "Father Balaiahnagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Father+Balaiahnagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "FATHER BALAIAHNAGAR (Div13)",
+   "variant": "Father Balaiah Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Father+Balaiah+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249175684,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2923174840,
+     "lat": "17.5083672",
+     "lon": "78.4958715",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Father Balaiah Nagar",
+     "display_name": "Father Balaiah Nagar, Ward 133 Macha Bolarum, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Alwal mandal, Medchal–Malkajgiri, Telangana, 500100, India",
+     "address": {
+      "neighbourhood": "Father Balaiah Nagar",
+      "suburb": "Ward 133 Macha Bolarum",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Alwal mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500100",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4983672",
+      "17.5183672",
+      "78.4858715",
+      "78.5058715"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "FATHER BALAIAHNAGAR (Div13)",
+   "variant": "Father Balaiah Nagar Colony",
+   "url": "https://nominatim.openstreetmap.org/search?q=Father+Balaiah+Nagar+Colony%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "FATHER BALAIAHNAGAR (Div13)",
+   "variant": "Fater Balaiahnagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Fater+Balaiahnagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "suchitra",
+   "variant": "Suchitra",
+   "url": "https://nominatim.openstreetmap.org/search?q=Suchitra%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249465144,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 824841767,
+     "lat": "17.5022569",
+     "lon": "78.4837671",
+     "category": "highway",
+     "type": "secondary",
+     "place_rank": 26,
+     "importance": 0.05340169604028378,
+     "addresstype": "road",
+     "name": "Suchitra Road",
+     "display_name": "Suchitra Road, Kistamma Enclave, Alwal, Ward 134 Alwal, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Alwal mandal, Medchal–Malkajgiri, Telangana, 500009, India",
+     "address": {
+      "road": "Suchitra Road",
+      "neighbourhood": "Kistamma Enclave",
+      "suburb": "Alwal",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Alwal mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500009",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4989599",
+      "17.5058961",
+      "78.4768112",
+      "78.4905384"
+     ]
+    },
+    {
+     "place_id": 246255394,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 1152348232,
+     "lat": "17.4991090",
+     "lon": "78.4768969",
+     "category": "highway",
+     "type": "secondary",
+     "place_rank": 26,
+     "importance": 0.05340169604028378,
+     "addresstype": "road",
+     "name": "Suchitra Road",
+     "display_name": "Suchitra Road, Ramaraju Nagar, Jeedimetla Village, Ward 132 Jeedimetla, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Quthbullapur mandal, Medchal–Malkajgiri, Telangana, 500009, India",
+     "address": {
+      "road": "Suchitra Road",
+      "neighbourhood": "Ramaraju Nagar",
+      "suburb": "Jeedimetla Village",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Quthbullapur mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500009",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4990907",
+      "17.4991273",
+      "78.4768516",
+      "78.4769421"
+     ]
+    },
+    {
+     "place_id": 249792228,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 1392300168,
+     "lat": "17.5014975",
+     "lon": "78.4748005",
+     "category": "amenity",
+     "type": "school",
+     "place_rank": 30,
+     "importance": 6.836270695043896e-05,
+     "addresstype": "amenity",
+     "name": "Suchitra Academy",
+     "display_name": "Suchitra Academy, 4-102, Quthubullapur Main Road, Vennalagadda, Jeedimetla Village, Ward 132 Jeedimetla, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Quthbullapur mandal, Medchal–Malkajgiri, Telangana, 500067, India",
+     "address": {
+      "amenity": "Suchitra Academy",
+      "house_number": "4-102",
+      "road": "Quthubullapur Main Road",
+      "neighbourhood": "Vennalagadda",
+      "suburb": "Jeedimetla Village",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Quthbullapur mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500067",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4999562",
+      "17.5028706",
+      "78.4736413",
+      "78.4768926"
+     ]
+    },
+    {
+     "place_id": 249666786,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 355956738,
+     "lat": "17.5012320",
+     "lon": "78.4737859",
+     "category": "leisure",
+     "type": "pitch",
+     "place_rank": 30,
+     "importance": 6.836270695043896e-05,
+     "addresstype": "leisure",
+     "name": "Suchitra Badminton Academy",
+     "display_name": "Suchitra Badminton Academy, Quthubullapur Main Road, Vennalagadda, Jeedimetla Village, Ward 132 Jeedimetla, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Quthbullapur mandal, Medchal–Malkajgiri, Telangana, 500009, India",
+     "address": {
+      "leisure": "Suchitra Badminton Academy",
+      "road": "Quthubullapur Main Road",
+      "neighbourhood": "Vennalagadda",
+      "suburb": "Jeedimetla Village",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Quthbullapur mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500009",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.5010039",
+      "17.5014600",
+      "78.4736914",
+      "78.4738805"
+     ]
+    },
+    {
+     "place_id": 249605920,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2710839011,
+     "lat": "17.4995311",
+     "lon": "78.4765646",
+     "category": "highway",
+     "type": "bus_stop",
+     "place_rank": 30,
+     "importance": 6.836270695043896e-05,
+     "addresstype": "highway",
+     "name": "Suchitra Bus Stop",
+     "display_name": "Suchitra Bus Stop, Nizamabad Road, PET Bashirabad, Jeedimetla Village, Ward 132 Jeedimetla, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Quthbullapur mandal, Medchal–Malkajgiri, Telangana, 500009, India",
+     "address": {
+      "highway": "Suchitra Bus Stop",
+      "road": "Nizamabad Road",
+      "neighbourhood": "PET Bashirabad",
+      "suburb": "Jeedimetla Village",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Quthbullapur mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500009",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4994811",
+      "17.4995811",
+      "78.4765146",
+      "78.4766146"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "suchitra",
+   "variant": "Suchitra Junction",
+   "url": "https://nominatim.openstreetmap.org/search?q=Suchitra+Junction%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "suchitra",
+   "variant": "Suchitra Circle",
+   "url": "https://nominatim.openstreetmap.org/search?q=Suchitra+Circle%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "DEEPTHISRI NAGAR",
+   "variant": "Deepthisri Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Deepthisri+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "DEEPTHISRI NAGAR",
+   "variant": "Deepthi Sri Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Deepthi+Sri+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249118317,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 7007986361,
+     "lat": "17.4953362",
+     "lon": "78.3405813",
+     "category": "highway",
+     "type": "bus_stop",
+     "place_rank": 30,
+     "importance": 6.836270695043896e-05,
+     "addresstype": "highway",
+     "name": "Deepthi Sri Nagar",
+     "display_name": "Deepthi Sri Nagar, Allwyn - Gangaram Road Mumbai Highway, Sri Ram Nagar Colony, Ward 110 Chandanagar, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, 500050, India",
+     "address": {
+      "highway": "Deepthi Sri Nagar",
+      "road": "Allwyn - Gangaram Road Mumbai Highway",
+      "neighbourhood": "Sri Ram Nagar Colony",
+      "suburb": "Ward 110 Chandanagar",
+      "city_district": "Greater Hyderabad Municipal Corporation West Zone",
+      "city": "Hyderabad",
+      "county": "Serilingampalle mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500050",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4952862",
+      "17.4953862",
+      "78.3405313",
+      "78.3406313"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "DEEPTHISRI NAGAR",
+   "variant": "Deepthi Sree Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Deepthi+Sree+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249212936,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 158326986,
+     "lat": "17.4991906",
+     "lon": "78.3389180",
+     "category": "highway",
+     "type": "tertiary",
+     "place_rank": 26,
+     "importance": 0.05340169604028378,
+     "addresstype": "road",
+     "name": "Deepthi Sree Nagar Road",
+     "display_name": "Deepthi Sree Nagar Road, Deepthisree Nagar, Ward 110 Chandanagar, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, 500050, India",
+     "address": {
+      "road": "Deepthi Sree Nagar Road",
+      "neighbourhood": "Deepthisree Nagar",
+      "suburb": "Ward 110 Chandanagar",
+      "city_district": "Greater Hyderabad Municipal Corporation West Zone",
+      "city": "Hyderabad",
+      "county": "Serilingampalle mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500050",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4991491",
+      "17.4999837",
+      "78.3355772",
+      "78.3423783"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "DEEPTHISRI NAGAR",
+   "variant": "Deepthisree Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Deepthisree+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249109758,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2921505704,
+     "lat": "17.4996030",
+     "lon": "78.3397686",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Deepthisree Nagar",
+     "display_name": "Deepthisree Nagar, Ward 110 Chandanagar, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, 500050, India",
+     "address": {
+      "neighbourhood": "Deepthisree Nagar",
+      "suburb": "Ward 110 Chandanagar",
+      "city_district": "Greater Hyderabad Municipal Corporation West Zone",
+      "city": "Hyderabad",
+      "county": "Serilingampalle mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500050",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4896030",
+      "17.5096030",
+      "78.3297686",
+      "78.3497686"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "DEEPTHISRI NAGAR",
+   "variant": "Dipthisri Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Dipthisri+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "DEEPTHISRI NAGAR",
+   "variant": "Deeptisri Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Deeptisri+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "PEERJADIGUDA (DIV 19)",
+   "variant": "Peerjadiguda",
+   "url": "https://nominatim.openstreetmap.org/search?q=Peerjadiguda%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 251803244,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 11938626927,
+     "lat": "17.4078747",
+     "lon": "78.6022666",
+     "category": "amenity",
+     "type": "clinic",
+     "place_rank": 30,
+     "importance": 5.36987869077137e-05,
+     "addresstype": "amenity",
+     "name": "Urban Primary Health Centre, Peerjadiguda",
+     "display_name": "Urban Primary Health Centre, Peerjadiguda, Hyderabad-Janagam Highway, Boduppal, Chengicherla, Medipally mandal, Medchal–Malkajgiri, Telangana, 500098, India",
+     "address": {
+      "amenity": "Urban Primary Health Centre, Peerjadiguda",
+      "road": "Hyderabad-Janagam Highway",
+      "suburb": "Boduppal",
+      "village": "Chengicherla",
+      "county": "Medipally mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500098",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4078247",
+      "17.4079247",
+      "78.6022166",
+      "78.6023166"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "PEERJADIGUDA (DIV 19)",
+   "variant": "Peerzadiguda",
+   "url": "https://nominatim.openstreetmap.org/search?q=Peerzadiguda%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249015600,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 11373182169,
+     "lat": "17.4013579",
+     "lon": "78.5815697",
+     "category": "highway",
+     "type": "bus_stop",
+     "place_rank": 30,
+     "importance": 5.36987869077137e-05,
+     "addresstype": "highway",
+     "name": "Peerzadiguda Road Bus Stop",
+     "display_name": "Peerzadiguda Road Bus Stop, Hyderabad-Janagam Highway, Hanuman Nagar, Peerzadiguda, Greater Hyderabad Municipal Corporation East Zone, Hyderabad, Medipally mandal, Medchal–Malkajgiri, Telangana, 500092, India",
+     "address": {
+      "highway": "Peerzadiguda Road Bus Stop",
+      "road": "Hyderabad-Janagam Highway",
+      "neighbourhood": "Hanuman Nagar",
+      "suburb": "Peerzadiguda",
+      "city_district": "Greater Hyderabad Municipal Corporation East Zone",
+      "city": "Hyderabad",
+      "county": "Medipally mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500092",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4013079",
+      "17.4014079",
+      "78.5815197",
+      "78.5816197"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "PEERJADIGUDA (DIV 19)",
+   "variant": "Peerzadiguda Medipally",
+   "url": "https://nominatim.openstreetmap.org/search?q=Peerzadiguda+Medipally%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 250026252,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 11373182169,
+     "lat": "17.4013579",
+     "lon": "78.5815697",
+     "category": "highway",
+     "type": "bus_stop",
+     "place_rank": 30,
+     "importance": 5.36987869077137e-05,
+     "addresstype": "highway",
+     "name": "Peerzadiguda Road Bus Stop",
+     "display_name": "Peerzadiguda Road Bus Stop, Hyderabad-Janagam Highway, Hanuman Nagar, Peerzadiguda, Greater Hyderabad Municipal Corporation East Zone, Hyderabad, Medipally mandal, Medchal–Malkajgiri, Telangana, 500092, India",
+     "address": {
+      "highway": "Peerzadiguda Road Bus Stop",
+      "road": "Hyderabad-Janagam Highway",
+      "neighbourhood": "Hanuman Nagar",
+      "suburb": "Peerzadiguda",
+      "city_district": "Greater Hyderabad Municipal Corporation East Zone",
+      "city": "Hyderabad",
+      "county": "Medipally mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500092",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4013079",
+      "17.4014079",
+      "78.5815197",
+      "78.5816197"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "PEERJADIGUDA (DIV 19)",
+   "variant": "Pirzadiguda",
+   "url": "https://nominatim.openstreetmap.org/search?q=Pirzadiguda%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "PEERJADIGUDA (DIV 19)",
+   "variant": "Peerjadi Guda",
+   "url": "https://nominatim.openstreetmap.org/search?q=Peerjadi+Guda%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "PEERJADIGUDA (DIV 19)",
+   "variant": "Pirjadiguda",
+   "url": "https://nominatim.openstreetmap.org/search?q=Pirjadiguda%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "CHANUKYAPURI",
+   "variant": "Chanukyapuri",
+   "url": "https://nominatim.openstreetmap.org/search?q=Chanukyapuri%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "CHANUKYAPURI",
+   "variant": "Chanakyapuri",
+   "url": "https://nominatim.openstreetmap.org/search?q=Chanakyapuri%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 246131290,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2926905012,
+     "lat": "17.4599973",
+     "lon": "78.5340922",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Chanakyapuri",
+     "display_name": "Chanakyapuri, Neredmet, Ward 140 Malkajgiri, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Malkajgiri mandal, Medchal–Malkajgiri, Telangana, 500056, India",
+     "address": {
+      "neighbourhood": "Chanakyapuri",
+      "suburb": "Neredmet",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Malkajgiri mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500056",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4499973",
+      "17.4699973",
+      "78.5240922",
+      "78.5440922"
+     ]
+    },
+    {
+     "place_id": 249291275,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2948307779,
+     "lat": "17.3606758",
+     "lon": "78.5601419",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Chanakyapuri",
+     "display_name": "Chanakyapuri, Mansoorabad, Ward 11 Nagole, Greater Hyderabad Municipal Corporation East Zone, Hyderabad, Saroornagar mandal, Ranga Reddy, Telangana, 500068, India",
+     "address": {
+      "neighbourhood": "Chanakyapuri",
+      "suburb": "Mansoorabad",
+      "city_district": "Greater Hyderabad Municipal Corporation East Zone",
+      "city": "Hyderabad",
+      "county": "Saroornagar mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500068",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3506758",
+      "17.3706758",
+      "78.5501419",
+      "78.5701419"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "CHANUKYAPURI",
+   "variant": "Chanakya Puri",
+   "url": "https://nominatim.openstreetmap.org/search?q=Chanakya+Puri%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "CHANUKYAPURI",
+   "variant": "Chanukya Puri",
+   "url": "https://nominatim.openstreetmap.org/search?q=Chanukya+Puri%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "MARUTHINAGAR (DIV 10)",
+   "variant": "Maruthinagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Maruthinagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "MARUTHINAGAR (DIV 10)",
+   "variant": "Maruthi Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Maruthi+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249246324,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 4487889903,
+     "lat": "17.3138317",
+     "lon": "78.5779533",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Maruthi Nagar",
+     "display_name": "Maruthi Nagar, Hayathnagar mandal, Greater Hyderabad Municipal Corporation East Zone, Hyderabad, Ranga Reddy, Telangana, 500070, India",
+     "address": {
+      "neighbourhood": "Maruthi Nagar",
+      "suburb": "Hayathnagar mandal",
+      "city_district": "Greater Hyderabad Municipal Corporation East Zone",
+      "city": "Hyderabad",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500070",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3038317",
+      "17.3238317",
+      "78.5679533",
+      "78.5879533"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "MARUTHINAGAR (DIV 10)",
+   "variant": "Maruti Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Maruti+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 248972300,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2948309787,
+     "lat": "17.3443667",
+     "lon": "78.5087764",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Maruti Nagar",
+     "display_name": "Maruti Nagar, Champapet, Ward 17 Champapet, Greater Hyderabad Municipal Corporation East Zone, Hyderabad, Saroornagar mandal, Ranga Reddy, Telangana, 500059, India",
+     "address": {
+      "neighbourhood": "Maruti Nagar",
+      "suburb": "Champapet",
+      "city_district": "Greater Hyderabad Municipal Corporation East Zone",
+      "city": "Hyderabad",
+      "county": "Saroornagar mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500059",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3343667",
+      "17.3543667",
+      "78.4987764",
+      "78.5187764"
+     ]
+    },
+    {
+     "place_id": 249009880,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2948197403,
+     "lat": "17.3721658",
+     "lon": "78.5385776",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Maruti Nagar",
+     "display_name": "Maruti Nagar, Chaitanyapuri, Ward 22 Chaitanyapuri, Greater Hyderabad Municipal Corporation East Zone, Hyderabad, Saroornagar mandal, Ranga Reddy, Telangana, 500035, India",
+     "address": {
+      "neighbourhood": "Maruti Nagar",
+      "suburb": "Chaitanyapuri",
+      "city_district": "Greater Hyderabad Municipal Corporation East Zone",
+      "city": "Hyderabad",
+      "county": "Saroornagar mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500035",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3621658",
+      "17.3821658",
+      "78.5285776",
+      "78.5485776"
+     ]
+    },
+    {
+     "place_id": 249129638,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2929579786,
+     "lat": "17.4524567",
+     "lon": "78.5352209",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Maruti Nagar",
+     "display_name": "Maruti Nagar, Neredmet, Ward 140 Malkajgiri, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Malkajgiri mandal, Medchal–Malkajgiri, Telangana, 500017, India",
+     "address": {
+      "neighbourhood": "Maruti Nagar",
+      "suburb": "Neredmet",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Malkajgiri mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500017",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4424567",
+      "17.4624567",
+      "78.5252209",
+      "78.5452209"
+     ]
+    },
+    {
+     "place_id": 249124540,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2942982517,
+     "lat": "17.3821968",
+     "lon": "78.4271855",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Maruti Nagar",
+     "display_name": "Maruti Nagar, Ward 71 Gudimalkapur, Greater Hyderabad Municipal Corporation Central Zone, Hyderabad, Asif Nagar mandal, Hyderabad, Telangana, 500048, India",
+     "address": {
+      "neighbourhood": "Maruti Nagar",
+      "suburb": "Ward 71 Gudimalkapur",
+      "city_district": "Greater Hyderabad Municipal Corporation Central Zone",
+      "city": "Hyderabad",
+      "county": "Asif Nagar mandal",
+      "state_district": "Hyderabad",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500048",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3721968",
+      "17.3921968",
+      "78.4171855",
+      "78.4371855"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "MARUTHINAGAR (DIV 10)",
+   "variant": "Marutinagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Marutinagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "SHAPOORNAGAR",
+   "variant": "Shapoornagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Shapoornagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "SHAPOORNAGAR",
+   "variant": "Shapur Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Shapur+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249208912,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 731848146,
+     "lat": "17.5173373",
+     "lon": "78.4450956",
+     "category": "place",
+     "type": "village",
+     "place_rank": 19,
+     "importance": 0.1467350293736171,
+     "addresstype": "village",
+     "name": "Shapur Nagar",
+     "display_name": "Shapur Nagar, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Quthbullapur mandal, Medchal–Malkajgiri, Telangana, India",
+     "address": {
+      "village": "Shapur Nagar",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Quthbullapur mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.5110646",
+      "17.5218633",
+      "78.4417795",
+      "78.4476267"
+     ]
+    },
+    {
+     "place_id": 248968488,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 6854523495,
+     "lat": "17.5146989",
+     "lon": "78.4473499",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Shapur Nagar",
+     "display_name": "Shapur Nagar, Ward 130 Subash Nagar, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Quthbullapur mandal, Medchal–Malkajgiri, Telangana, 500055, India",
+     "address": {
+      "neighbourhood": "Shapur Nagar",
+      "suburb": "Ward 130 Subash Nagar",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Quthbullapur mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500055",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.5046989",
+      "17.5246989",
+      "78.4373499",
+      "78.4573499"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "SHAPOORNAGAR",
+   "variant": "Shapoor Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Shapoor+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "SHAPOORNAGAR",
+   "variant": "Shapurnagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Shapurnagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "YAPRAL (Div13)",
+   "variant": "Yapral",
+   "url": "https://nominatim.openstreetmap.org/search?q=Yapral%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 248227144,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2923196503,
+     "lat": "17.5030543",
+     "lon": "78.5407976",
+     "category": "place",
+     "type": "suburb",
+     "place_rank": 19,
+     "importance": 0.3656661556590361,
+     "addresstype": "suburb",
+     "name": "Yapral",
+     "display_name": "Yapral, Ward 136 Neredmet, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Alwal mandal, Medchal–Malkajgiri, Telangana, 500094, India",
+     "address": {
+      "suburb": "Yapral",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Alwal mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500094",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4830543",
+      "17.5230543",
+      "78.5207976",
+      "78.5607976"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "VAJPAYEE NAGAR",
+   "variant": "Vajpayee Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Vajpayee+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "VAJPAYEE NAGAR",
+   "variant": "Vajpai Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Vajpai+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249112254,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 11985296215,
+     "lat": "17.4948233",
+     "lon": "78.4617120",
+     "category": "amenity",
+     "type": "childcare",
+     "place_rank": 30,
+     "importance": 6.836270695043896e-05,
+     "addresstype": "amenity",
+     "name": "Vajpai Nagar-I  Ward No:131",
+     "display_name": "Vajpai Nagar-I  Ward No:131, Prasoona nagar, Bapu Nagar, Ward 131 Quthbullapur, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Quthbullapur mandal, Medchal–Malkajgiri, Telangana, 500009, India",
+     "address": {
+      "amenity": "Vajpai Nagar-I  Ward No:131",
+      "road": "Prasoona nagar",
+      "neighbourhood": "Bapu Nagar",
+      "suburb": "Ward 131 Quthbullapur",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Quthbullapur mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500009",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4947733",
+      "17.4948733",
+      "78.4616620",
+      "78.4617620"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "VAJPAYEE NAGAR",
+   "variant": "Atal Bihari Vajpayee Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Atal+Bihari+Vajpayee+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "VAJPAYEE NAGAR",
+   "variant": "Vajpayi Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Vajpayi+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "VAISHALINAGAR (DIV 10)",
+   "variant": "Vaishalinagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Vaishalinagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "VAISHALINAGAR (DIV 10)",
+   "variant": "Vaishali Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Vaishali+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 248866609,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 582035135,
+     "lat": "17.4856358",
+     "lon": "78.3492508",
+     "category": "building",
+     "type": "apartments",
+     "place_rank": 30,
+     "importance": 6.836270695043896e-05,
+     "addresstype": "building",
+     "name": "The Square Apartments",
+     "display_name": "The Square Apartments, Vaishali Nagar, Vishali Nagar Road, Vishal Nagar, Madinaguda, Ward 109 Hafeezpet, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, 500049, India",
+     "address": {
+      "building": "The Square Apartments",
+      "house_number": "Vaishali Nagar",
+      "road": "Vishali Nagar Road",
+      "neighbourhood": "Vishal Nagar",
+      "suburb": "Madinaguda",
+      "city_district": "Greater Hyderabad Municipal Corporation West Zone",
+      "city": "Hyderabad",
+      "county": "Serilingampalle mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500049",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4854186",
+      "17.4858531",
+      "78.3490803",
+      "78.3494213"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "VAISHALINAGAR (DIV 10)",
+   "variant": "Vaisali Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Vaisali+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "ALWAL (Div13)",
+   "variant": "Alwal",
+   "url": "https://nominatim.openstreetmap.org/search?q=Alwal%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249292650,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2923174834,
+     "lat": "17.5022292",
+     "lon": "78.5088584",
+     "category": "place",
+     "type": "suburb",
+     "place_rank": 19,
+     "importance": 0.3687910674753876,
+     "addresstype": "suburb",
+     "name": "Alwal",
+     "display_name": "Alwal, Ward 134 Alwal, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Alwal mandal, Medchal–Malkajgiri, Telangana, 500015, India",
+     "address": {
+      "suburb": "Alwal",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Alwal mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500015",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4822292",
+      "17.5222292",
+      "78.4888584",
+      "78.5288584"
+     ]
+    },
+    {
+     "place_id": 249292855,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 7175448859,
+     "lat": "17.5018763",
+     "lon": "78.5090947",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08005369878690773,
+     "addresstype": "neighbourhood",
+     "name": "alwal",
+     "display_name": "alwal, Alwal, Ward 134 Alwal, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Alwal mandal, Medchal–Malkajgiri, Telangana, 500015, India",
+     "address": {
+      "neighbourhood": "alwal",
+      "suburb": "Alwal",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Alwal mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500015",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4918763",
+      "17.5118763",
+      "78.4990947",
+      "78.5190947"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "BOATS CLUB",
+   "variant": "Boats Club",
+   "url": "https://nominatim.openstreetmap.org/search?q=Boats+Club%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "BOATS CLUB",
+   "variant": "Boat Club",
+   "url": "https://nominatim.openstreetmap.org/search?q=Boat+Club%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "ASMANGARH",
+   "variant": "Asmangarh",
+   "url": "https://nominatim.openstreetmap.org/search?q=Asmangarh%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "ASMANGARH",
+   "variant": "Asmangadh",
+   "url": "https://nominatim.openstreetmap.org/search?q=Asmangadh%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249944171,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2948197389,
+     "lat": "17.3687913",
+     "lon": "78.5137788",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Asmangadh",
+     "display_name": "Asmangadh, Moosarambagh, Ward 27 Akbarbagh, Greater Hyderabad Municipal Corporation South Zone, Hyderabad, Saroornagar mandal, Ranga Reddy, Telangana, 500036, India",
+     "address": {
+      "neighbourhood": "Asmangadh",
+      "suburb": "Moosarambagh",
+      "city_district": "Greater Hyderabad Municipal Corporation South Zone",
+      "city": "Hyderabad",
+      "county": "Saroornagar mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500036",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3587913",
+      "17.3787913",
+      "78.5037788",
+      "78.5237788"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "ASMANGARH",
+   "variant": "Asman Garh",
+   "url": "https://nominatim.openstreetmap.org/search?q=Asman+Garh%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249894314,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 28269479,
+     "lat": "17.3672315",
+     "lon": "78.5154203",
+     "category": "highway",
+     "type": "tertiary",
+     "place_rank": 26,
+     "importance": 0.05340169604028378,
+     "addresstype": "road",
+     "name": "آسمان گڑھ روڈ",
+     "display_name": "آسمان گڑھ روڈ, Bank Colony, Gaddiannaram, Ward 24 Saidabad, Greater Hyderabad Municipal Corporation South Zone, Hyderabad, Saroornagar mandal, Ranga Reddy, Telangana, 500036, India",
+     "address": {
+      "road": "آسمان گڑھ روڈ",
+      "neighbourhood": "Bank Colony",
+      "suburb": "Gaddiannaram",
+      "city_district": "Greater Hyderabad Municipal Corporation South Zone",
+      "city": "Hyderabad",
+      "county": "Saroornagar mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500036",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3668280",
+      "17.3673211",
+      "78.5118872",
+      "78.5189070"
+     ]
+    },
+    {
+     "place_id": 249773700,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 1200745952,
+     "lat": "17.3667186",
+     "lon": "78.5191502",
+     "category": "highway",
+     "type": "tertiary",
+     "place_rank": 26,
+     "importance": 0.05340169604028378,
+     "addresstype": "road",
+     "name": "آسمان گڑھ روڈ",
+     "display_name": "آسمان گڑھ روڈ, Bank Colony, Gaddiannaram, Ward 24 Saidabad, Greater Hyderabad Municipal Corporation South Zone, Hyderabad, Saroornagar mandal, Ranga Reddy, Telangana, 500659, India",
+     "address": {
+      "road": "آسمان گڑھ روڈ",
+      "neighbourhood": "Bank Colony",
+      "suburb": "Gaddiannaram",
+      "city_district": "Greater Hyderabad Municipal Corporation South Zone",
+      "city": "Hyderabad",
+      "county": "Saroornagar mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500659",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3666091",
+      "17.3668280",
+      "78.5189070",
+      "78.5193933"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "VIGYANPURI",
+   "variant": "Vigyanpuri",
+   "url": "https://nominatim.openstreetmap.org/search?q=Vigyanpuri%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "VIGYANPURI",
+   "variant": "Vignanpuri",
+   "url": "https://nominatim.openstreetmap.org/search?q=Vignanpuri%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "VIGYANPURI",
+   "variant": "Vignan Puri",
+   "url": "https://nominatim.openstreetmap.org/search?q=Vignan+Puri%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249037984,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 6853049437,
+     "lat": "17.4189350",
+     "lon": "78.5421380",
+     "category": "amenity",
+     "type": "college",
+     "place_rank": 30,
+     "importance": 6.836270695043896e-05,
+     "addresstype": "amenity",
+     "name": "Vignan Junior and Degree College",
+     "display_name": "Vignan Junior and Degree College, 1-84/1Habsiguda Main Rd Nagendra Nagar, Habsiguda Main Road, Prashanth Nagar, Uppal, Ward 6 Nacharam, Greater Hyderabad Municipal Corporation East Zone, Hyderabad, Uppal mandal, Medchal–Malkajgiri, Telangana, 500007, India",
+     "address": {
+      "amenity": "Vignan Junior and Degree College",
+      "house_number": "1-84/1Habsiguda Main Rd Nagendra Nagar",
+      "road": "Habsiguda Main Road",
+      "neighbourhood": "Prashanth Nagar",
+      "suburb": "Uppal",
+      "city_district": "Greater Hyderabad Municipal Corporation East Zone",
+      "city": "Hyderabad",
+      "county": "Uppal mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500007",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4188850",
+      "17.4189850",
+      "78.5420880",
+      "78.5421880"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "VIGYANPURI",
+   "variant": "Vigyan Puri",
+   "url": "https://nominatim.openstreetmap.org/search?q=Vigyan+Puri%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "Jagathgirigutta",
+   "variant": "Jagathgirigutta",
+   "url": "https://nominatim.openstreetmap.org/search?q=Jagathgirigutta%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 250249724,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 11992862826,
+     "lat": "17.4993176",
+     "lon": "78.4226016",
+     "category": "amenity",
+     "type": "childcare",
+     "place_rank": 30,
+     "importance": 6.836270695043896e-05,
+     "addresstype": "amenity",
+     "name": "Jagathgirigutta",
+     "display_name": "Jagathgirigutta, Kukatpally-Jagathgiri Gutta Road, Ward 122 Vivekananda Nagar Colony, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Kukatpally mandal, Medchal–Malkajgiri, Telangana, 500047, India",
+     "address": {
+      "amenity": "Jagathgirigutta",
+      "road": "Kukatpally-Jagathgiri Gutta Road",
+      "suburb": "Ward 122 Vivekananda Nagar Colony",
+      "city_district": "Greater Hyderabad Municipal Corporation West Zone",
+      "city": "Hyderabad",
+      "county": "Kukatpally mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500047",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4992676",
+      "17.4993676",
+      "78.4225516",
+      "78.4226516"
+     ]
+    },
+    {
+     "place_id": 249661983,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "relation",
+     "osm_id": 7852863,
+     "lat": "17.5058259",
+     "lon": "78.4241102",
+     "category": "boundary",
+     "type": "administrative",
+     "place_rank": 20,
+     "importance": 0.1334016960402838,
+     "addresstype": "suburb",
+     "name": "Ward 126 Jagathgirigutta",
+     "display_name": "Ward 126 Jagathgirigutta, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Kukatpally mandal, Medchal–Malkajgiri, Telangana, India",
+     "address": {
+      "suburb": "Ward 126 Jagathgirigutta",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Kukatpally mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4977680",
+      "17.5146891",
+      "78.4127070",
+      "78.4330059"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "Jagathgirigutta",
+   "variant": "Jagadgirigutta",
+   "url": "https://nominatim.openstreetmap.org/search?q=Jagadgirigutta%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 246489267,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2921528745,
+     "lat": "17.5020418",
+     "lon": "78.4260747",
+     "category": "place",
+     "type": "suburb",
+     "place_rank": 19,
+     "importance": 0.1467350293736171,
+     "addresstype": "suburb",
+     "name": "Jagadgirigutta",
+     "display_name": "Jagadgirigutta, Ward 126 Jagathgirigutta, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Kukatpally mandal, Medchal–Malkajgiri, Telangana, 500047, India",
+     "address": {
+      "suburb": "Jagadgirigutta",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Kukatpally mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500047",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4820418",
+      "17.5220418",
+      "78.4060747",
+      "78.4460747"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "Jagathgirigutta",
+   "variant": "Jagathgiri Gutta",
+   "url": "https://nominatim.openstreetmap.org/search?q=Jagathgiri+Gutta%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 248906399,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 362161866,
+     "lat": "17.5072734",
+     "lon": "78.4376981",
+     "category": "highway",
+     "type": "tertiary",
+     "place_rank": 26,
+     "importance": 0.05340169604028378,
+     "addresstype": "road",
+     "name": "Jagathgiri Gutta",
+     "display_name": "Jagathgiri Gutta, Srinivas Nagar, Ward 128 Chintal, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Quthbullapur mandal, Medchal–Malkajgiri, Telangana, 500055, India",
+     "address": {
+      "road": "Jagathgiri Gutta",
+      "neighbourhood": "Srinivas Nagar",
+      "suburb": "Ward 128 Chintal",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Quthbullapur mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500055",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.5017048",
+      "17.5121013",
+      "78.4311737",
+      "78.4447565"
+     ]
+    },
+    {
+     "place_id": 249157549,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 1243996830,
+     "lat": "17.5011445",
+     "lon": "78.4276899",
+     "category": "highway",
+     "type": "tertiary",
+     "place_rank": 26,
+     "importance": 0.05340169604028378,
+     "addresstype": "road",
+     "name": "Jagathgiri Gutta",
+     "display_name": "Jagathgiri Gutta, Devamma Basthi, Jagadgirigutta, Ward 126 Jagathgirigutta, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Kukatpally mandal, Medchal–Malkajgiri, Telangana, 500047, India",
+     "address": {
+      "road": "Jagathgiri Gutta",
+      "neighbourhood": "Devamma Basthi",
+      "suburb": "Jagadgirigutta",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Kukatpally mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500047",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.5007887",
+      "17.5015537",
+      "78.4259404",
+      "78.4294486"
+     ]
+    },
+    {
+     "place_id": 249251322,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 1243996832,
+     "lat": "17.5012494",
+     "lon": "78.4303112",
+     "category": "highway",
+     "type": "tertiary",
+     "place_rank": 26,
+     "importance": 0.05340169604028378,
+     "addresstype": "road",
+     "name": "Jagathgiri Gutta",
+     "display_name": "Jagathgiri Gutta, Beerappa Nagar, Jagadgirigutta, Ward 126 Jagathgirigutta, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Kukatpally mandal, Medchal–Malkajgiri, Telangana, 500055, India",
+     "address": {
+      "road": "Jagathgiri Gutta",
+      "neighbourhood": "Beerappa Nagar",
+      "suburb": "Jagadgirigutta",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Kukatpally mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500055",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.5007940",
+      "17.5017048",
+      "78.4294486",
+      "78.4311737"
+     ]
+    },
+    {
+     "place_id": 248898651,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 1378318842,
+     "lat": "17.5016180",
+     "lon": "78.4256617",
+     "category": "highway",
+     "type": "tertiary",
+     "place_rank": 26,
+     "importance": 0.05340169604028378,
+     "addresstype": "road",
+     "name": "Jagathgiri Gutta",
+     "display_name": "Jagathgiri Gutta, Maisamma Nagar, Jagadgirigutta, Ward 126 Jagathgirigutta, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Kukatpally mandal, Medchal–Malkajgiri, Telangana, 500047, India",
+     "address": {
+      "road": "Jagathgiri Gutta",
+      "neighbourhood": "Maisamma Nagar",
+      "suburb": "Jagadgirigutta",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Kukatpally mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500047",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.5015769",
+      "17.5016591",
+      "78.4255198",
+      "78.4258036"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "Jagathgirigutta",
+   "variant": "Jagadgiri Gutta",
+   "url": "https://nominatim.openstreetmap.org/search?q=Jagadgiri+Gutta%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "Jagathgirigutta",
+   "variant": "Jagatgirigutta",
+   "url": "https://nominatim.openstreetmap.org/search?q=Jagatgirigutta%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "HINDI NAGAR",
+   "variant": "Hindi Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Hindi+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "HINDI NAGAR",
+   "variant": "Hindinagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Hindinagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "HUSSAINSAGAR",
+   "variant": "Hussainsagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Hussainsagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "HUSSAINSAGAR",
+   "variant": "Hussain Sagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Hussain+Sagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249227731,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "relation",
+     "osm_id": 2833155,
+     "lat": "17.4229113",
+     "lon": "78.4754210",
+     "category": "water",
+     "type": "lake",
+     "place_rank": 20,
+     "importance": 0.37244305375643855,
+     "addresstype": "lake",
+     "name": "Hussain Sagar",
+     "display_name": "Hussain Sagar, Greater Hyderabad Municipal Corporation Central Zone, Hyderabad, Khairatabad mandal, Hyderabad, Telangana, 500080, India",
+     "address": {
+      "lake": "Hussain Sagar",
+      "city_district": "Greater Hyderabad Municipal Corporation Central Zone",
+      "city": "Hyderabad",
+      "county": "Khairatabad mandal",
+      "state_district": "Hyderabad",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500080",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4085927",
+      "17.4373612",
+      "78.4623422",
+      "78.4867613"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "GODE-KI-KABAR",
+   "variant": "Gode Ki Kabar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Gode+Ki+Kabar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "GODE-KI-KABAR",
+   "variant": "Godekikhabar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Godekikhabar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "GODE-KI-KABAR",
+   "variant": "Gode Ki Khabar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Gode+Ki+Khabar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "ADARSHNAGAR",
+   "variant": "Adarshnagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Adarshnagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "ADARSHNAGAR",
+   "variant": "Adarsh Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Adarsh+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249034201,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2949046150,
+     "lat": "17.3221808",
+     "lon": "78.4294273",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Adarsh Nagar",
+     "display_name": "Adarsh Nagar, Mailardevpally, Ward 59 Mailardevpally, Greater Hyderabad Municipal Corporation South Zone, Hyderabad, Rajendranagar mandal, Ranga Reddy, Telangana, 500077, India",
+     "address": {
+      "neighbourhood": "Adarsh Nagar",
+      "suburb": "Mailardevpally",
+      "city_district": "Greater Hyderabad Municipal Corporation South Zone",
+      "city": "Hyderabad",
+      "county": "Rajendranagar mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500077",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3121808",
+      "17.3321808",
+      "78.4194273",
+      "78.4394273"
+     ]
+    },
+    {
+     "place_id": 249043269,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2935023012,
+     "lat": "17.4058387",
+     "lon": "78.4711355",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Adarsh Nagar",
+     "display_name": "Adarsh Nagar, Ward 78 Gunfoundry, Greater Hyderabad Municipal Corporation Central Zone, Hyderabad, Khairatabad mandal, Hyderabad, Telangana, 500063, India",
+     "address": {
+      "neighbourhood": "Adarsh Nagar",
+      "suburb": "Ward 78 Gunfoundry",
+      "city_district": "Greater Hyderabad Municipal Corporation Central Zone",
+      "city": "Hyderabad",
+      "county": "Khairatabad mandal",
+      "state_district": "Hyderabad",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500063",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3958387",
+      "17.4158387",
+      "78.4611355",
+      "78.4811355"
+     ]
+    },
+    {
+     "place_id": 249161613,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2923222379,
+     "lat": "17.4835578",
+     "lon": "78.3213131",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Adarsh Nagar",
+     "display_name": "Adarsh Nagar, Chandanagar, Lingampally, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, 500019, India",
+     "address": {
+      "neighbourhood": "Adarsh Nagar",
+      "suburb": "Chandanagar",
+      "city_district": "Greater Hyderabad Municipal Corporation West Zone",
+      "city": "Hyderabad",
+      "county": "Serilingampalle mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500019",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4735578",
+      "17.4935578",
+      "78.3113131",
+      "78.3313131"
+     ]
+    },
+    {
+     "place_id": 249088898,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 58822082,
+     "lat": "17.4039768",
+     "lon": "78.4713100",
+     "category": "highway",
+     "type": "residential",
+     "place_rank": 26,
+     "importance": 0.05340169604028378,
+     "addresstype": "road",
+     "name": "Adarsh Nagar",
+     "display_name": "Adarsh Nagar, Hill Fort, Ward 78 Gunfoundry, Greater Hyderabad Municipal Corporation Central Zone, Hyderabad, Nampally mandal, Hyderabad, Telangana, 500063, India",
+     "address": {
+      "road": "Adarsh Nagar",
+      "neighbourhood": "Hill Fort",
+      "suburb": "Ward 78 Gunfoundry",
+      "city_district": "Greater Hyderabad Municipal Corporation Central Zone",
+      "city": "Hyderabad",
+      "county": "Nampally mandal",
+      "state_district": "Hyderabad",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500063",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4039486",
+      "17.4061330",
+      "78.4693637",
+      "78.4714531"
+     ]
+    },
+    {
+     "place_id": 249106646,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 11957663706,
+     "lat": "17.4159774",
+     "lon": "78.5647210",
+     "category": "amenity",
+     "type": "childcare",
+     "place_rank": 30,
+     "importance": 6.836270695043896e-05,
+     "addresstype": "amenity",
+     "name": "Adarsh nagar",
+     "display_name": "Adarsh nagar, Chilkanagar Main Road, Dharmapuri Colony, Uppal, Ward 7 Chilka Nagar, Greater Hyderabad Municipal Corporation East Zone, Hyderabad, Uppal mandal, Medchal–Malkajgiri, Telangana, 500039, India",
+     "address": {
+      "amenity": "Adarsh nagar",
+      "road": "Chilkanagar Main Road",
+      "neighbourhood": "Dharmapuri Colony",
+      "suburb": "Uppal",
+      "city_district": "Greater Hyderabad Municipal Corporation East Zone",
+      "city": "Hyderabad",
+      "county": "Uppal mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500039",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4159274",
+      "17.4160274",
+      "78.5646710",
+      "78.5647710"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "Bhagatsingh Nagar",
+   "variant": "Bhagatsingh Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Bhagatsingh+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "Bhagatsingh Nagar",
+   "variant": "Bhagat Singh Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Bhagat+Singh+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249488048,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2924213333,
+     "lat": "17.4959379",
+     "lon": "78.4450488",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Bhagat Singh Nagar",
+     "display_name": "Bhagat Singh Nagar, Ward 128 Chintal, Greater Hyderabad Municipal Corporation North Zone, Hyderabad, Quthbullapur mandal, Medchal–Malkajgiri, Telangana, 500037, India",
+     "address": {
+      "neighbourhood": "Bhagat Singh Nagar",
+      "suburb": "Ward 128 Chintal",
+      "city_district": "Greater Hyderabad Municipal Corporation North Zone",
+      "city": "Hyderabad",
+      "county": "Quthbullapur mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500037",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4859379",
+      "17.5059379",
+      "78.4350488",
+      "78.4550488"
+     ]
+    },
+    {
+     "place_id": 249781934,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2923247798,
+     "lat": "17.4964141",
+     "lon": "78.3773785",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Bhagat Singh Nagar",
+     "display_name": "Bhagat Singh Nagar, Ward 114 KPHB Colony, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Kukatpally mandal, Medchal–Malkajgiri, Telangana, 500085, India",
+     "address": {
+      "neighbourhood": "Bhagat Singh Nagar",
+      "suburb": "Ward 114 KPHB Colony",
+      "city_district": "Greater Hyderabad Municipal Corporation West Zone",
+      "city": "Hyderabad",
+      "county": "Kukatpally mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500085",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4864141",
+      "17.5064141",
+      "78.3673785",
+      "78.3873785"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "TAPPA CHABUTRA",
+   "variant": "Tappa Chabutra",
+   "url": "https://nominatim.openstreetmap.org/search?q=Tappa+Chabutra%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "TAPPA CHABUTRA",
+   "variant": "Tappachabutra",
+   "url": "https://nominatim.openstreetmap.org/search?q=Tappachabutra%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249842748,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 28092807,
+     "lat": "17.3854599",
+     "lon": "78.4491980",
+     "category": "highway",
+     "type": "secondary",
+     "place_rank": 26,
+     "importance": 0.05340169604028378,
+     "addresstype": "road",
+     "name": "Tappachabutra road",
+     "display_name": "Tappachabutra road, HUDA Colony, Ward 72 Asif Nagar, Greater Hyderabad Municipal Corporation Central Zone, Hyderabad, Asif Nagar mandal, Hyderabad, Telangana, 500006, India",
+     "address": {
+      "road": "Tappachabutra road",
+      "neighbourhood": "HUDA Colony",
+      "suburb": "Ward 72 Asif Nagar",
+      "city_district": "Greater Hyderabad Municipal Corporation Central Zone",
+      "city": "Hyderabad",
+      "county": "Asif Nagar mandal",
+      "state_district": "Hyderabad",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500006",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3800840",
+      "17.3910202",
+      "78.4476890",
+      "78.4497935"
+     ]
+    },
+    {
+     "place_id": 420725395,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 1532154638,
+     "lat": "17.3765416",
+     "lon": "78.4479509",
+     "category": "highway",
+     "type": "secondary",
+     "place_rank": 26,
+     "importance": 0.05340169604028378,
+     "addresstype": "road",
+     "name": "Tappachabutra road",
+     "display_name": "Tappachabutra road, Ward 65 Karwan, Greater Hyderabad Municipal Corporation Central Zone, Hyderabad, Asif Nagar mandal, Hyderabad, Telangana, 500023, India",
+     "address": {
+      "road": "Tappachabutra road",
+      "suburb": "Ward 65 Karwan",
+      "city_district": "Greater Hyderabad Municipal Corporation Central Zone",
+      "city": "Hyderabad",
+      "county": "Asif Nagar mandal",
+      "state_district": "Hyderabad",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500023",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3736043",
+      "17.3795661",
+      "78.4475660",
+      "78.4482067"
+     ]
+    },
+    {
+     "place_id": 250102368,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 355708917,
+     "lat": "17.3737367",
+     "lon": "78.4480830",
+     "category": "highway",
+     "type": "secondary",
+     "place_rank": 26,
+     "importance": 0.05340169604028378,
+     "addresstype": "road",
+     "name": "Tappachabutra road",
+     "display_name": "Tappachabutra road, Dattattreya Nagar, Ward 64 Dattatreya Nagar, Greater Hyderabad Municipal Corporation Central Zone, Hyderabad, Asif Nagar mandal, Hyderabad, Telangana, 500023, India",
+     "address": {
+      "road": "Tappachabutra road",
+      "neighbourhood": "Dattattreya Nagar",
+      "suburb": "Ward 64 Dattatreya Nagar",
+      "city_district": "Greater Hyderabad Municipal Corporation Central Zone",
+      "city": "Hyderabad",
+      "county": "Asif Nagar mandal",
+      "state_district": "Hyderabad",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500023",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3735208",
+      "17.3739679",
+      "78.4479869",
+      "78.4480931"
+     ]
+    },
+    {
+     "place_id": 420725398,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 1532154641,
+     "lat": "17.3797341",
+     "lon": "78.4476046",
+     "category": "highway",
+     "type": "secondary",
+     "place_rank": 26,
+     "importance": 0.05340169604028378,
+     "addresstype": "road",
+     "name": "Tappachabutra road",
+     "display_name": "Tappachabutra road, Mahboob Colony, Ward 71 Gudimalkapur, Greater Hyderabad Municipal Corporation Central Zone, Hyderabad, Asif Nagar mandal, Hyderabad, Telangana, 500023, India",
+     "address": {
+      "road": "Tappachabutra road",
+      "neighbourhood": "Mahboob Colony",
+      "suburb": "Ward 71 Gudimalkapur",
+      "city_district": "Greater Hyderabad Municipal Corporation Central Zone",
+      "city": "Hyderabad",
+      "county": "Asif Nagar mandal",
+      "state_district": "Hyderabad",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500023",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3795661",
+      "17.3799020",
+      "78.4475660",
+      "78.4476432"
+     ]
+    },
+    {
+     "place_id": 420725396,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 1532154639,
+     "lat": "17.3799930",
+     "lon": "78.4476661",
+     "category": "highway",
+     "type": "secondary",
+     "place_rank": 26,
+     "importance": 0.05340169604028378,
+     "addresstype": "road",
+     "name": "Tappachabutra road",
+     "display_name": "Tappachabutra road, HUDA Colony, Ward 72 Asif Nagar, Greater Hyderabad Municipal Corporation Central Zone, Hyderabad, Asif Nagar mandal, Hyderabad, Telangana, 500023, India",
+     "address": {
+      "road": "Tappachabutra road",
+      "neighbourhood": "HUDA Colony",
+      "suburb": "Ward 72 Asif Nagar",
+      "city_district": "Greater Hyderabad Municipal Corporation Central Zone",
+      "city": "Hyderabad",
+      "county": "Asif Nagar mandal",
+      "state_district": "Hyderabad",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500023",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3799020",
+      "17.3800840",
+      "78.4476432",
+      "78.4476890"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "TAPPA CHABUTRA",
+   "variant": "Tappachabutara",
+   "url": "https://nominatim.openstreetmap.org/search?q=Tappachabutara%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "VINAY NAGAR (DIV 2 (a))",
+   "variant": "Vinay Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Vinay+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249350370,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2948309803,
+     "lat": "17.3515414",
+     "lon": "78.5111106",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Vinay Nagar",
+     "display_name": "Vinay Nagar, Saidabad mandal, Greater Hyderabad Municipal Corporation South Zone, Hyderabad, Telangana, 500059, India",
+     "address": {
+      "neighbourhood": "Vinay Nagar",
+      "suburb": "Saidabad mandal",
+      "city_district": "Greater Hyderabad Municipal Corporation South Zone",
+      "city": "Hyderabad",
+      "state_district": "Hyderabad",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500059",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3415414",
+      "17.3615414",
+      "78.5011106",
+      "78.5211106"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "NAGARAM",
+   "variant": "Nagaram",
+   "url": "https://nominatim.openstreetmap.org/search?q=Nagaram%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 248735420,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 816175481,
+     "lat": "17.4910113",
+     "lon": "78.6136770",
+     "category": "building",
+     "type": "house",
+     "place_rank": 30,
+     "importance": 5.36987869077137e-05,
+     "addresstype": "building",
+     "name": "Nagaram sarpanch house",
+     "display_name": "Nagaram sarpanch house, Rampally Main Road, Nagaram, Hyderabad, Keesara mandal, Medchal–Malkajgiri, Telangana, 500083, India",
+     "address": {
+      "building": "Nagaram sarpanch house",
+      "road": "Rampally Main Road",
+      "suburb": "Nagaram",
+      "city": "Hyderabad",
+      "county": "Keesara mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500083",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4909517",
+      "17.4910720",
+      "78.6136024",
+      "78.6137513"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "NAGARAM",
+   "variant": "Nagaram Keesara",
+   "url": "https://nominatim.openstreetmap.org/search?q=Nagaram+Keesara%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 246078190,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 816175481,
+     "lat": "17.4910113",
+     "lon": "78.6136770",
+     "category": "building",
+     "type": "house",
+     "place_rank": 30,
+     "importance": 5.36987869077137e-05,
+     "addresstype": "building",
+     "name": "Nagaram sarpanch house",
+     "display_name": "Nagaram sarpanch house, Rampally Main Road, Nagaram, Hyderabad, Keesara mandal, Medchal–Malkajgiri, Telangana, 500083, India",
+     "address": {
+      "building": "Nagaram sarpanch house",
+      "road": "Rampally Main Road",
+      "suburb": "Nagaram",
+      "city": "Hyderabad",
+      "county": "Keesara mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500083",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4909517",
+      "17.4910720",
+      "78.6136024",
+      "78.6137513"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "M.R.G.FILTERS",
+   "variant": "M R G Filters",
+   "url": "https://nominatim.openstreetmap.org/search?q=M+R+G+Filters%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "M.R.G.FILTERS",
+   "variant": "MRG Filters",
+   "url": "https://nominatim.openstreetmap.org/search?q=MRG+Filters%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "M.R.G.FILTERS",
+   "variant": "Mir Alam Filter Beds",
+   "url": "https://nominatim.openstreetmap.org/search?q=Mir+Alam+Filter+Beds%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "M.R.G.FILTERS",
+   "variant": "Mir Alam Filters",
+   "url": "https://nominatim.openstreetmap.org/search?q=Mir+Alam+Filters%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "ADIBATLA (PD 1)",
+   "variant": "Adibatla",
+   "url": "https://nominatim.openstreetmap.org/search?q=Adibatla%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "ADIBATLA (PD 1)",
+   "variant": "Adibatla Hyderabad",
+   "url": "https://nominatim.openstreetmap.org/search?q=Adibatla+Hyderabad%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "CHANUDLAL BHARADARI",
+   "variant": "Chanudlal Bharadari",
+   "url": "https://nominatim.openstreetmap.org/search?q=Chanudlal+Bharadari%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "CHANUDLAL BHARADARI",
+   "variant": "Chandulal Baradari",
+   "url": "https://nominatim.openstreetmap.org/search?q=Chandulal+Baradari%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249154697,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2948275423,
+     "lat": "17.3518433",
+     "lon": "78.4603915",
+     "category": "place",
+     "type": "neighbourhood",
+     "place_rank": 24,
+     "importance": 0.08006836270695046,
+     "addresstype": "neighbourhood",
+     "name": "Chandulal Baradari",
+     "display_name": "Chandulal Baradari, Ward 53 Doodh Bowli, Greater Hyderabad Municipal Corporation South Zone, Hyderabad, Bahadurpura mandal, Hyderabad, Telangana, 500064, India",
+     "address": {
+      "neighbourhood": "Chandulal Baradari",
+      "suburb": "Ward 53 Doodh Bowli",
+      "city_district": "Greater Hyderabad Municipal Corporation South Zone",
+      "city": "Hyderabad",
+      "county": "Bahadurpura mandal",
+      "state_district": "Hyderabad",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500064",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3418433",
+      "17.3618433",
+      "78.4503915",
+      "78.4703915"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "CHANUDLAL BHARADARI",
+   "variant": "Chandulal Bharadari",
+   "url": "https://nominatim.openstreetmap.org/search?q=Chandulal+Bharadari%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "CHANUDLAL BHARADARI",
+   "variant": "Chanudlal Baradari",
+   "url": "https://nominatim.openstreetmap.org/search?q=Chanudlal+Baradari%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "TURKAYAMJAL (PD 1)",
+   "variant": "Turkayamjal",
+   "url": "https://nominatim.openstreetmap.org/search?q=Turkayamjal%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "TURKAYAMJAL (PD 1)",
+   "variant": "Thurkayamjal",
+   "url": "https://nominatim.openstreetmap.org/search?q=Thurkayamjal%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "PEDDA AMBERPET (PD 1)",
+   "variant": "Pedda Amberpet",
+   "url": "https://nominatim.openstreetmap.org/search?q=Pedda+Amberpet%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249261343,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 11949876436,
+     "lat": "17.3172848",
+     "lon": "78.6384505",
+     "category": "amenity",
+     "type": "childcare",
+     "place_rank": 30,
+     "importance": 4.307240405885431e-05,
+     "addresstype": "amenity",
+     "name": "Pedda Amberpet - IV",
+     "display_name": "Pedda Amberpet - IV, Vijaywada Highway, Abdullapurmet mandal, Ranga Reddy, Telangana, 501505, India",
+     "address": {
+      "amenity": "Pedda Amberpet - IV",
+      "road": "Vijaywada Highway",
+      "village": "Abdullapurmet mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "501505",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3172348",
+      "17.3173348",
+      "78.6384005",
+      "78.6385005"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "PEDDA AMBERPET (PD 1)",
+   "variant": "Pedda Amber Pet",
+   "url": "https://nominatim.openstreetmap.org/search?q=Pedda+Amber+Pet%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "POCHARAM (DIV 19)",
+   "variant": "Pocharam",
+   "url": "https://nominatim.openstreetmap.org/search?q=Pocharam%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "MISRIGUNJ",
+   "variant": "Misrigunj",
+   "url": "https://nominatim.openstreetmap.org/search?q=Misrigunj%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "MISRIGUNJ",
+   "variant": "Misri Ganj",
+   "url": "https://nominatim.openstreetmap.org/search?q=Misri+Ganj%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "MISRIGUNJ",
+   "variant": "Misrigunj Hyderabad",
+   "url": "https://nominatim.openstreetmap.org/search?q=Misrigunj+Hyderabad%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "MYSARAM",
+   "variant": "Mysaram",
+   "url": "https://nominatim.openstreetmap.org/search?q=Mysaram%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "MYSARAM",
+   "variant": "Maisaram",
+   "url": "https://nominatim.openstreetmap.org/search?q=Maisaram%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249067503,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 8752754940,
+     "lat": "17.3188282",
+     "lon": "78.4816034",
+     "category": "amenity",
+     "type": "clinic",
+     "place_rank": 30,
+     "importance": 6.836270695043896e-05,
+     "addresstype": "amenity",
+     "name": "Urban Primary Health Centre, Maisaram",
+     "display_name": "Urban Primary Health Centre, Maisaram, Srisailam Highway, Maheshwaram Lines, Ward 42 Barkas, Greater Hyderabad Municipal Corporation South Zone, Hyderabad, Bandlaguda mandal, Hyderabad, Telangana, 500005, India",
+     "address": {
+      "amenity": "Urban Primary Health Centre, Maisaram",
+      "road": "Srisailam Highway",
+      "neighbourhood": "Maheshwaram Lines",
+      "suburb": "Ward 42 Barkas",
+      "city_district": "Greater Hyderabad Municipal Corporation South Zone",
+      "city": "Hyderabad",
+      "county": "Bandlaguda mandal",
+      "state_district": "Hyderabad",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500005",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3187782",
+      "17.3188782",
+      "78.4815534",
+      "78.4816534"
+     ]
+    },
+    {
+     "place_id": 248845601,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 6542342933,
+     "lat": "17.3273586",
+     "lon": "78.4948904",
+     "category": "healthcare",
+     "type": "centre",
+     "place_rank": 30,
+     "importance": 6.836270695043896e-05,
+     "addresstype": "healthcare",
+     "name": "Urban Primary Health Centre, Maisaram",
+     "display_name": "Urban Primary Health Centre, Maisaram, Defence Ln, Ward 41 Kanchanbagh, Greater Hyderabad Municipal Corporation South Zone, Hyderabad, Bandlaguda mandal, Hyderabad, Telangana, 500058, India",
+     "address": {
+      "healthcare": "Urban Primary Health Centre, Maisaram",
+      "road": "Defence Ln",
+      "suburb": "Ward 41 Kanchanbagh",
+      "city_district": "Greater Hyderabad Municipal Corporation South Zone",
+      "city": "Hyderabad",
+      "county": "Bandlaguda mandal",
+      "state_district": "Hyderabad",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500058",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3273086",
+      "17.3274086",
+      "78.4948404",
+      "78.4949404"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "MYSARAM",
+   "variant": "Mysarm",
+   "url": "https://nominatim.openstreetmap.org/search?q=Mysarm%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "YAKATPURA",
+   "variant": "Yakatpura",
+   "url": "https://nominatim.openstreetmap.org/search?q=Yakatpura%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "YAKATPURA",
+   "variant": "Yakutpura",
+   "url": "https://nominatim.openstreetmap.org/search?q=Yakutpura%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 248887033,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2948276359,
+     "lat": "17.3586277",
+     "lon": "78.4858046",
+     "category": "place",
+     "type": "suburb",
+     "place_rank": 19,
+     "importance": 0.36855591270156857,
+     "addresstype": "suburb",
+     "name": "Yakutpura",
+     "display_name": "Yakutpura, Ward 31 Rein Bazar, Greater Hyderabad Municipal Corporation South Zone, Hyderabad, Charminar mandal, Hyderabad, Telangana, 500065, India",
+     "address": {
+      "suburb": "Yakutpura",
+      "city_district": "Greater Hyderabad Municipal Corporation South Zone",
+      "city": "Hyderabad",
+      "county": "Charminar mandal",
+      "state_district": "Hyderabad",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500065",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3386277",
+      "17.3786277",
+      "78.4658046",
+      "78.5058046"
+     ]
+    },
+    {
+     "place_id": 249074388,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 2766428030,
+     "lat": "17.3600834",
+     "lon": "78.4921942",
+     "category": "railway",
+     "type": "halt",
+     "place_rank": 30,
+     "importance": 0.2574973608523206,
+     "addresstype": "railway",
+     "name": "Yakutpura",
+     "display_name": "Yakutpura, Yakutpura station road, Nagar Bowli, Ward 30 Dabeerpura, Greater Hyderabad Municipal Corporation South Zone, Hyderabad, Charminar mandal, Hyderabad, Telangana, 500065, India",
+     "address": {
+      "railway": "Yakutpura",
+      "road": "Yakutpura station road",
+      "neighbourhood": "Nagar Bowli",
+      "suburb": "Ward 30 Dabeerpura",
+      "city_district": "Greater Hyderabad Municipal Corporation South Zone",
+      "city": "Hyderabad",
+      "county": "Charminar mandal",
+      "state_district": "Hyderabad",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500065",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3600334",
+      "17.3601334",
+      "78.4921442",
+      "78.4922442"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "THUKKUGUDA",
+   "variant": "Thukkuguda",
+   "url": "https://nominatim.openstreetmap.org/search?q=Thukkuguda%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "THUKKUGUDA",
+   "variant": "Thukku Guda",
+   "url": "https://nominatim.openstreetmap.org/search?q=Thukku+Guda%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "THUKKUGUDA",
+   "variant": "Tukkuguda",
+   "url": "https://nominatim.openstreetmap.org/search?q=Tukkuguda%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249500873,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 11934210457,
+     "lat": "17.3836154",
+     "lon": "78.4036544",
+     "category": "amenity",
+     "type": "health_post",
+     "place_rank": 30,
+     "importance": 6.836270695043896e-05,
+     "addresstype": "amenity",
+     "name": "Mankal ward office ,  (Tukkuguda - HUA)(Basthi Dawakhana)",
+     "display_name": "Mankal ward office ,  (Tukkuguda - HUA)(Basthi Dawakhana), Commoner Stairs, Bada Bazaar, Golconda, Ward 66 Langar Houz, Greater Hyderabad Municipal Corporation Central Zone, Hyderabad, Golconda mandal, Hyderabad, Telangana, 500008, India",
+     "address": {
+      "amenity": "Mankal ward office ,  (Tukkuguda - HUA)(Basthi Dawakhana)",
+      "road": "Commoner Stairs",
+      "neighbourhood": "Bada Bazaar",
+      "suburb": "Golconda",
+      "city_district": "Greater Hyderabad Municipal Corporation Central Zone",
+      "city": "Hyderabad",
+      "county": "Golconda mandal",
+      "state_district": "Hyderabad",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500008",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.3835654",
+      "17.3836654",
+      "78.4036044",
+      "78.4037044"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "GUNDLAPOCHAMPALLY (PD 7)",
+   "variant": "Gundlapochampally",
+   "url": "https://nominatim.openstreetmap.org/search?q=Gundlapochampally%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "GUNDLAPOCHAMPALLY (PD 7)",
+   "variant": "Gundla Pochampally",
+   "url": "https://nominatim.openstreetmap.org/search?q=Gundla+Pochampally%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "GUNDLAPOCHAMPALLY (PD 7)",
+   "variant": "Gundlapochampalli",
+   "url": "https://nominatim.openstreetmap.org/search?q=Gundlapochampalli%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "GUNDLAPOCHAMPALLY (PD 7)",
+   "variant": "Gundlapocham Pally",
+   "url": "https://nominatim.openstreetmap.org/search?q=Gundlapocham+Pally%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "SHAMSHABAD",
+   "variant": "Shamshabad",
+   "url": "https://nominatim.openstreetmap.org/search?q=Shamshabad%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249507977,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 1500234193,
+     "lat": "17.2950515",
+     "lon": "78.3641547",
+     "category": "amenity",
+     "type": "grave_yard",
+     "place_rank": 30,
+     "importance": 5.5001907377691576e-05,
+     "addresstype": "amenity",
+     "name": "",
+     "display_name": "79W7+4M7, Kothwalguda, Telangana, Shamshabad, Hyderabad, Moinabad mandal, Ranga Reddy, Telangana, 501218, India",
+     "address": {
+      "house_number": "79W7+4M7, Kothwalguda, Telangana",
+      "road": "Shamshabad",
+      "city": "Hyderabad",
+      "county": "Moinabad mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "501218",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.2946382",
+      "17.2955369",
+      "78.3639840",
+      "78.3645232"
+     ]
+    },
+    {
+     "place_id": 250157184,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 1500237699,
+     "lat": "17.2572070",
+     "lon": "78.3451039",
+     "category": "amenity",
+     "type": "place_of_worship",
+     "place_rank": 30,
+     "importance": 5.5001907377691576e-05,
+     "addresstype": "amenity",
+     "name": "Sri Sita Rama Chandra Swami Temple",
+     "display_name": "Sri Sita Rama Chandra Swami Temple, 784W+V4G, Nagarguda - Shamshabad Rd, Near Rajeev Gandhi International Airport, Shamshabad, Ammapalle, Telangana, Nethaji Rd, Narkhuda, Hyderabad, Ranga Reddy, Telangana, 501218, India",
+     "address": {
+      "amenity": "Sri Sita Rama Chandra Swami Temple",
+      "house_number": "784W+V4G, Nagarguda - Shamshabad Rd, Near Rajeev Gandhi International Airport, Shamshabad, Ammapalle, Telangana",
+      "road": "Nethaji Rd",
+      "village": "Narkhuda",
+      "city": "Hyderabad",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "501218",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.2570003",
+      "17.2574151",
+      "78.3448272",
+      "78.3453725"
+     ]
+    },
+    {
+     "place_id": 250098599,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 1500229454,
+     "lat": "17.2491625",
+     "lon": "78.3315904",
+     "category": "shop",
+     "type": "books",
+     "place_rank": 30,
+     "importance": 5.5001907377691576e-05,
+     "addresstype": "shop",
+     "name": "Pen 'N' Paper Stationary & More",
+     "display_name": "Pen 'N' Paper Stationary & More, 68XJ+JJ Chowdariguda, Telangana, Shamshabad, Chowderguda, Hyderabad, Ranga Reddy, Telangana, 501218, India",
+     "address": {
+      "shop": "Pen 'N' Paper Stationary & More",
+      "house_number": "68XJ+JJ Chowdariguda, Telangana",
+      "road": "Shamshabad",
+      "village": "Chowderguda",
+      "city": "Hyderabad",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "501218",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.2490851",
+      "17.2492380",
+      "78.3315034",
+      "78.3316786"
+     ]
+    },
+    {
+     "place_id": 250141709,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 1500232093,
+     "lat": "17.2497087",
+     "lon": "78.3326089",
+     "category": "shop",
+     "type": "yes",
+     "place_rank": 30,
+     "importance": 5.5001907377691576e-05,
+     "addresstype": "shop",
+     "name": "ramdev kirana and general store",
+     "display_name": "ramdev kirana and general store, Shop.No. 26part, to, shapur main road, near Hanuman mandir, Narkhuda, Chowdariguda, Telangana 501218, Shamshabad, Chowderguda, Hyderabad, Ranga Reddy, Telangana, 501218, India",
+     "address": {
+      "shop": "ramdev kirana and general store",
+      "house_number": "Shop.No. 26part, to, shapur main road, near Hanuman mandir, Narkhuda, Chowdariguda, Telangana 501218",
+      "road": "Shamshabad",
+      "village": "Chowderguda",
+      "city": "Hyderabad",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "501218",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.2496480",
+      "17.2497684",
+      "78.3325490",
+      "78.3326684"
+     ]
+    },
+    {
+     "place_id": 250219475,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 1500230370,
+     "lat": "17.2490959",
+     "lon": "78.3314216",
+     "category": "office",
+     "type": "estate_agent",
+     "place_rank": 30,
+     "importance": 5.5001907377691576e-05,
+     "addresstype": "office",
+     "name": "LUCKY REAL ESTATE",
+     "display_name": "LUCKY REAL ESTATE, 68XJ+JH Chowdariguda, Telangana, Shamshabad, Chowderguda, Hyderabad, Ranga Reddy, Telangana, 501218, India",
+     "address": {
+      "office": "LUCKY REAL ESTATE",
+      "house_number": "68XJ+JH Chowdariguda, Telangana",
+      "road": "Shamshabad",
+      "village": "Chowderguda",
+      "city": "Hyderabad",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "501218",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.2490313",
+      "17.2491578",
+      "78.3313652",
+      "78.3314780"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "THOOMKUNTA (PD 3)",
+   "variant": "Thoomkunta",
+   "url": "https://nominatim.openstreetmap.org/search?q=Thoomkunta%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "THOOMKUNTA (PD 3)",
+   "variant": "Thumkunta",
+   "url": "https://nominatim.openstreetmap.org/search?q=Thumkunta%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249173803,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 13684639129,
+     "lat": "17.5643539",
+     "lon": "78.5517143",
+     "category": "highway",
+     "type": "bus_stop",
+     "place_rank": 30,
+     "importance": 5.36987869077137e-05,
+     "addresstype": "highway",
+     "name": "Thumkunta",
+     "display_name": "Thumkunta, Hyderabad - Karimnagar Highway, Thumukunta, Shamirpet mandal, Medchal–Malkajgiri, Telangana, 500078, India",
+     "address": {
+      "highway": "Thumkunta",
+      "road": "Hyderabad - Karimnagar Highway",
+      "village": "Thumukunta",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500078",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.5643039",
+      "17.5644039",
+      "78.5516643",
+      "78.5517643"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "THOOMKUNTA (PD 3)",
+   "variant": "Toomkunta",
+   "url": "https://nominatim.openstreetmap.org/search?q=Toomkunta%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "Durgam Cheruvu",
+   "variant": "Durgam Cheruvu",
+   "url": "https://nominatim.openstreetmap.org/search?q=Durgam+Cheruvu%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249089152,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "way",
+     "osm_id": 28131043,
+     "lat": "17.4310553",
+     "lon": "78.3897305",
+     "category": "leisure",
+     "type": "nature_reserve",
+     "place_rank": 24,
+     "importance": 0.3307177672703685,
+     "addresstype": "nature_reserve",
+     "name": "Durgam Cheruvu",
+     "display_name": "Durgam Cheruvu, Ward 104 Kondapur, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, India",
+     "address": {
+      "nature_reserve": "Durgam Cheruvu",
+      "suburb": "Ward 104 Kondapur",
+      "city_district": "Greater Hyderabad Municipal Corporation West Zone",
+      "city": "Hyderabad",
+      "county": "Serilingampalle mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4260642",
+      "17.4360442",
+      "78.3859464",
+      "78.3940467"
+     ]
+    },
+    {
+     "place_id": 249263707,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 6451675812,
+     "lat": "17.4429466",
+     "lon": "78.3875721",
+     "category": "railway",
+     "type": "station",
+     "place_rank": 30,
+     "importance": 0.19938740066310082,
+     "addresstype": "railway",
+     "name": "Durgam Cheruvu",
+     "display_name": "Durgam Cheruvu, Cyber Towers - Madhapur Main Road, Vittal Rao Nagar, Madhapur, Ward 107 Madhapur, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, 800081, India",
+     "address": {
+      "railway": "Durgam Cheruvu",
+      "road": "Cyber Towers - Madhapur Main Road",
+      "neighbourhood": "Vittal Rao Nagar",
+      "suburb": "Madhapur",
+      "city_district": "Greater Hyderabad Municipal Corporation West Zone",
+      "city": "Hyderabad",
+      "county": "Serilingampalle mandal",
+      "state_district": "Ranga Reddy",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "800081",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4379466",
+      "17.4479466",
+      "78.3825721",
+      "78.3925721"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "PATANCHERU PIPELINE",
+   "variant": "Patancheru Pipeline",
+   "url": "https://nominatim.openstreetmap.org/search?q=Patancheru+Pipeline%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "40 MLD STP ATTAPUR",
+   "variant": "40 Mld Stp Attapur",
+   "url": "https://nominatim.openstreetmap.org/search?q=40+Mld+Stp+Attapur%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "CHENGICHERLA",
+   "variant": "Chengicherla",
+   "url": "https://nominatim.openstreetmap.org/search?q=Chengicherla%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 249291785,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 11373181970,
+     "lat": "17.4114348",
+     "lon": "78.6070496",
+     "category": "highway",
+     "type": "bus_stop",
+     "place_rank": 30,
+     "importance": 5.36987869077137e-05,
+     "addresstype": "highway",
+     "name": "Chengicherla IDA Entrance",
+     "display_name": "Chengicherla IDA Entrance, Hyderabad-Janagam Highway, Medpally, Medipally mandal, Medchal–Malkajgiri, Telangana, 500098, India",
+     "address": {
+      "highway": "Chengicherla IDA Entrance",
+      "road": "Hyderabad-Janagam Highway",
+      "suburb": "Medpally",
+      "county": "Medipally mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500098",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4113848",
+      "17.4114848",
+      "78.6069996",
+      "78.6070996"
+     ]
+    },
+    {
+     "place_id": 249317237,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 11595483069,
+     "lat": "17.4114477",
+     "lon": "78.6070518",
+     "category": "highway",
+     "type": "bus_stop",
+     "place_rank": 30,
+     "importance": 5.36987869077137e-05,
+     "addresstype": "highway",
+     "name": "Chengicherla Road Bus Stop",
+     "display_name": "Chengicherla Road Bus Stop, Hyderabad-Janagam Highway, Medpally, Medipally mandal, Medchal–Malkajgiri, Telangana, 500098, India",
+     "address": {
+      "highway": "Chengicherla Road Bus Stop",
+      "road": "Hyderabad-Janagam Highway",
+      "suburb": "Medpally",
+      "county": "Medipally mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500098",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4113977",
+      "17.4114977",
+      "78.6070018",
+      "78.6071018"
+     ]
+    }
+   ]
+  },
+  {
+   "section": "KONDAPAKA",
+   "variant": "Kondapaka",
+   "url": "https://nominatim.openstreetmap.org/search?q=Kondapaka%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "SANATNAGAR",
+   "variant": "Sanatnagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Sanatnagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": []
+  },
+  {
+   "section": "SANATNAGAR",
+   "variant": "Sanat Nagar",
+   "url": "https://nominatim.openstreetmap.org/search?q=Sanat+Nagar%2C+Hyderabad%2C+Telangana&format=jsonv2&limit=5&viewbox=78.00%2C17.80%2C78.80%2C17.00&bounded=1&countrycodes=in&addressdetails=1",
+   "results": [
+    {
+     "place_id": 250098565,
+     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+     "osm_type": "node",
+     "osm_id": 5186129525,
+     "lat": "17.4622355",
+     "lon": "78.4366978",
+     "category": "railway",
+     "type": "station",
+     "place_rank": 30,
+     "importance": 6.836270695043896e-05,
+     "addresstype": "railway",
+     "name": "Sanat Nagar",
+     "display_name": "Sanat Nagar, Bharata nagar slum, Fateh Nagar, Ward 118 Fateh Nagar, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Balanagar mandal, Medchal–Malkajgiri, Telangana, 500042, India",
+     "address": {
+      "railway": "Sanat Nagar",
+      "road": "Bharata nagar slum",
+      "suburb": "Fateh Nagar",
+      "city_district": "Greater Hyderabad Municipal Corporation West Zone",
+      "city": "Hyderabad",
+      "county": "Balanagar mandal",
+      "state_district": "Medchal–Malkajgiri",
+      "state": "Telangana",
+      "ISO3166-2-lvl4": "IN-TS",
+      "postcode": "500042",
+      "country": "India",
+      "country_code": "in"
+     },
+     "boundingbox": [
+      "17.4572355",
+      "17.4672355",
+      "78.4316978",
+      "78.4416978"
+     ]
+    }
+   ]
+  }
+ ]
+}
