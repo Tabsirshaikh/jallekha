@@ -57,6 +57,7 @@ def main() -> None:
         growth = growth_by_id[ward_id]
         equity = equity_by_id[ward_id]
         field = field_by_id[ward_id]
+        scores = field.get("model_scores") or {}
         wards.append(
             {
                 "id": ward_id,
@@ -87,8 +88,8 @@ def main() -> None:
                 "fieldCandidate": field["field_check_candidate"],
                 "fieldReasons": field["reasons"],
                 "observedBookings": field.get("observed_bookings"),
-                "peerExpected": (field.get("model_scores") or {}).get("PEER_MEDIAN", {}).get("expected"),
-                "modelExpected": (field.get("model_scores") or {}).get("NB", {}).get("expected"),
+                "peerExpected": scores.get("PEER_MEDIAN", {}).get("expected"),
+                "modelExpected": scores.get("NB", {}).get("expected"),
                 "fieldNotes": field["input_notes"],
                 "fieldAction": field["action"],
             }
