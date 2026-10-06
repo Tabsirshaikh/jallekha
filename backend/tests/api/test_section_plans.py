@@ -180,3 +180,41 @@ def test_closing_a_day_settles_section_debt_and_the_next_plan_uses_it(client) ->
     assert after["debts_used"] > 100  # the saved section accounts reach the plan
     group = "section:" + owed["ward_name"]
     assert after["effective_entitlement"][group] > plan["effective_entitlement"][group]
+
+
+def test_tanker_routes_of_a_plan_by_section(client) -> None:  # type: ignore[no-untyped-def]
+    body = {"day": "2025-05-15", "unit": "section", "capacity": "tight", "carry_over": False}
+    plan = client.post("/plans", json=body, headers=auth("officer")).json()
+    served = sum(s["served_total"] for s in plan["stations"].values())
+    routes = client.get(f"/plans/{plan['plan_id']}/routes", headers=auth("officer"))
+    assert routes.status_code == 200, routes.text
+    data = routes.json()
+    summary = data["summary"]
+    # every served booking and every reserved scheduled-supply load is driven, none dropped
+    assert summary["unscheduled"] == 0 and summary["trips"] >= served
+    assert summary["tankers"] <= summary["fleet"] == 1150
+    assert summary["special_trips"] > 0 and data["tankers"] == []  # trips only for one station
+    # one station's tankers: named, with timed round trips inside the working day
+    station = data["stations"][0]["station_id"]
+    one = client.get(
+        f"/plans/{plan['plan_id']}/routes?station={station}", headers=auth("officer")
+    ).json()
+    assert one["tankers"] and all(t["station_id"] == station for t in one["tankers"])
+    trip = one["tankers"][0]["trips"][0]
+    assert trip["depart"] >= "06:00" and trip["back"] <= "22:00" and trip["km"] > 0
+    assert trip["leg_basis"] in ("OSRM", "ESTIMATE")
+    for tanker in one["tankers"]:
+        times = [t["back"] for t in tanker["trips"]]
+        assert times == sorted(times)  # a tanker's trips follow one another
+    assert (
+        client.get(
+            f"/plans/{plan['plan_id']}/routes?station=NOPE", headers=auth("officer")
+        ).status_code
+        == 404
+    )
+
+
+def test_routes_are_only_for_plans_by_section(client) -> None:  # type: ignore[no-untyped-def]
+    made = client.post("/plans", json={"day": "2025-05-01"}, headers=auth("officer")).json()
+    refused = client.get(f"/plans/{made['plan_id']}/routes", headers=auth("officer"))
+    assert refused.status_code == 409

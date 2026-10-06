@@ -54,5 +54,18 @@ class SectionPlanConfig:
     # its buildings is in those wards; its people affected are scaled by that share. ASSUMED.
     outage_min_building_share: float = 0.5
 
+    # Tanker routes (services/route_schedule.py). One booking is one tanker load: a trip is
+    # station -> section -> station, so a tanker's day is a list of round trips. Basis below.
+    # - Tankers on the road per station follow the station's trips of the day (capacity / trips a
+    #   tanker makes: 9, DERIVED from 11,000 trips a day by 1,233 tankers, SANDBOX_CONFIG).
+    # - Working day: two shifts, 06:00 to 22:00 (HMWSSB runs two shifts at busy stations, Siasat
+    #   2026-04-23). Basis: ASSUMED.
+    # - Time of a trip: fill + drive there + unload + drive back; fill 20 and unload 30 minutes
+    #   (ALLOCATION_CONFIG, ASSUMED); driving from OSRM free-flow car legs where cached (DERIVED,
+    #   optimistic: no traffic, no truck limits), else the straight line x 1.35 at 25 km/h
+    #   (ESTIMATE).
+    route_day_start_minute: int = 6 * 60
+    route_day_end_minute: int = 22 * 60
+
 
 SECTION_PLAN_CONFIG = SectionPlanConfig()

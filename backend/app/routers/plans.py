@@ -48,6 +48,7 @@ from app.services import (
     ledger_store,
     plan_builder,
     planner,
+    route_schedule,
     section_plan,
     ward_locate,
 )
@@ -372,6 +373,41 @@ def get_plan(plan_id: str, plans: Plans) -> dict[str, Any]:
 @lru_cache(maxsize=1)
 def _gate(mtime: float) -> confidence.T9Gate:
     return confidence.T9Gate(confidence.SignalTables.from_files(REPO_ROOT))
+
+
+_ROUTES: dict[tuple[str, str], dict[str, Any]] = {}
+
+
+@router.get("/plans/{plan_id}/routes", dependencies=[Officer])
+def plan_routes(plan_id: str, plans: Plans, station: str | None = None) -> dict[str, Any]:
+    """Tanker routes of a plan by section (route_schedule.py): the summary and every station's
+    figures; with `station`, also that station's tankers and their trips (a day has about 6,000
+    trips, so the trips of other stations are not sent). Computed from the plan, never stored."""
+    record = _record(plans, plan_id)
+    if (record.recipe or {}).get("source") != plan_builder.SECTION:
+        raise HTTPException(409, "Routes are made for plans by section")
+    key = (plan_id, record.plan.digest)
+    if key not in _ROUTES:
+        if len(_ROUTES) >= 8:
+            _ROUTES.pop(next(iter(_ROUTES)))
+        sections = section_plan.static_sections(REPO_ROOT)
+        _ROUTES[key] = route_schedule.build_routes(REPO_ROOT, record.plan, record.inputs, sections)
+    full = _ROUTES[key]
+    if station is not None and station not in {r["station_id"] for r in full["stations"]}:
+        raise not_found(f"Station {station}")
+    return {
+        "plan_id": plan_id,
+        "day": record.plan.day.isoformat(),
+        "station": station,
+        "summary": full["summary"],
+        "stations": full["stations"],
+        "tankers": [t for t in full["tankers"] if t["station_id"] == station] if station else [],
+        "unscheduled": [
+            u for u in full["unscheduled"] if station is None or u["station_id"] == station
+        ][:200],
+        "unscheduled_total": len(full["unscheduled"]),
+        "basis": full["basis"],
+    }
 
 
 @router.get("/plans/{plan_id}/confidence", dependencies=[Officer])

@@ -740,3 +740,8 @@ def fresh_bookings(root: Path, day: date) -> dict[str, int]:
         for n, t in totals.items()
         if n in sections
     }
+
+
+def static_sections(root: Path) -> dict[str, SectionInfo]:
+    """The section table (cached), for callers outside this module."""
+    return _static(str(root), "fleet").sections
