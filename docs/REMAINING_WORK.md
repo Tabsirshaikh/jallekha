@@ -17,7 +17,7 @@ to-do list.
 | 17 | Groundwater data (D7) | F5, F6 | **done** (`feat/d7-groundwater`, Open Data Telangana, no NWDP account needed) | — |
 | 18 | Degraded-signal replay for the T9 threshold | F17 | **done** (`feat/t9-degraded-replay`); the 90% rule is the owner's | — |
 | 19 | Seven owner decisions | several | owner | 2 and 4 **done** (`feat/item19-trips-protocol`); 6, 7 dropped; 1, 3 (Q1), 5 open; Q2 source found |
-| 20 | Decide the stack (or edit the doc) | all | owner, then us | decision |
+| 20 | Decide the stack (or edit the doc) | all | **done** (`feat/item20-osrm`) | — |
 | 21 | Fix demo step 5 in the solution doc | docs | **done** (`docs/demo-step5-2025`) | — |
 | 22 | "Done-when vs doc promise" column in `features.csv` | tracker | **done** (`docs/item-22-promise-column`) | — |
 
@@ -245,6 +245,8 @@ config uses the chosen threshold (basis DERIVED), or the result says why no thre
 | ~~Version for the release tag (X1)~~ dropped by owner (2026-10-06) | waits on green CI | release |
 
 ### 20. Decide the stack
+
+**Status: done (2026-10-06).** Owner decisions: SQLite stays (PostgreSQL deferred), SVG maps stay (no Leaflet), MAPIE and Nixtla not used (own split-conformal, bottom-up reconciliation); the design doc's stack line says so. OSRM road routing is built with cached legs (`feat/item20-osrm`, see `LIMITATIONS.md` A8). The text below is the original item.
 
 **What it is.** The solution doc (Section 7) promises PostgreSQL/PostGIS in Docker, TanStack
 Query, Leaflet, OSRM, scikit-learn, MAPIE and Nixtla. What we actually run: SQLite only, no

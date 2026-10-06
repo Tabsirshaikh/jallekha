@@ -71,15 +71,18 @@ class ConfidenceConfig:
     target_match_share: float = 0.90
     # PROVISIONAL threshold used when the calibration cannot choose one. ASSUMED, OPEN.
     provisional_threshold: float = 0.5
-    # The gate's threshold. DERIVED (item 18): the lowest candidate meeting target_match_share
-    # in all 5 error draws of the degraded-signal replay (SIMULATION, 2026-10-06; lowest draw
-    # 0.9086 against 0.8897 with nothing flagged). It flags the 45 of 152 replay groups with
-    # confidence 0 (no usable Census join or no ward placement) and catches about 41% of the
-    # damaged groups; catching 90% would need 0.70 and send 117 groups to officers
-    # (data/derived/confidence_calibration.csv). Holds only under the ASSUMED error rates
-    # below; the rule itself is OPEN, owner to confirm.
+    # The gate's threshold. OWNER_DECISION (delegated, 2026-10-06, item 20). On the OSRM road
+    # replay the calibration rule (lowest candidate meeting target_match_share in all 5 error
+    # draws) picks rule_threshold = 0.70, which sends 117 of 152 groups (77%) to officers every
+    # day. 0.05 flags the 45 groups with confidence 0 (no usable Census join or ward placement),
+    # catches about 42% of damaged groups, and reaches a match share of 0.890 in the worst draw
+    # (mean 0.905): 1 point under the 0.90 target. Chosen because a gate that flags most of the
+    # plan is overridden by habit (alert fatigue), which removes the check it is meant to give.
+    # Data: data/derived/confidence_calibration.csv. Holds only under the ASSUMED error rates.
     threshold: float = 0.05
-    threshold_basis: str = "DERIVED"
+    threshold_basis: str = "OWNER_DECISION"
+    # What the calibration rule itself picks (kept so the decision stays visible and testable).
+    rule_threshold: float = 0.70
     # Candidate thresholds 0.00-1.00 in steps of 0.05. ASSUMED.
     candidate_thresholds: tuple[float, ...] = field(
         default_factory=lambda: tuple(round(i * 0.05, 2) for i in range(21))

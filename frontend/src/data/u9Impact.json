@@ -34,9 +34,9 @@
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.104619,
-          "min": 0.103165,
-          "max": 0.106221,
+          "mean": 0.104604,
+          "min": 0.103134,
+          "max": 0.106205,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
@@ -58,9 +58,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.421752,
-          "min": 0.421745,
-          "max": 0.421759,
+          "mean": 0.47245,
+          "min": 0.47244,
+          "max": 0.472459,
           "basis": "SIMULATION"
         }
       }
@@ -73,7 +73,7 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.98704,
+          "mean": 0.987041,
           "min": 0.986984,
           "max": 0.987117,
           "basis": "SIMULATION"
@@ -85,13 +85,13 @@
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.102477,
-          "min": 0.100721,
-          "max": 0.104279,
+          "mean": 0.102463,
+          "min": 0.100693,
+          "max": 0.104269,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.015166,
+          "mean": 0.01517,
           "min": 0.014701,
           "max": 0.015578,
           "basis": "SIMULATION"
@@ -109,9 +109,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.421503,
-          "min": 0.421486,
-          "max": 0.421516,
+          "mean": 0.472302,
+          "min": 0.472281,
+          "max": 0.47232,
           "basis": "SIMULATION"
         }
       }
@@ -136,9 +136,9 @@
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.102832,
-          "min": 0.101053,
-          "max": 0.104613,
+          "mean": 0.102818,
+          "min": 0.101025,
+          "max": 0.104603,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
@@ -160,9 +160,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.421512,
-          "min": 0.421492,
-          "max": 0.42153,
+          "mean": 0.472314,
+          "min": 0.472291,
+          "max": 0.472334,
           "basis": "SIMULATION"
         }
       }
@@ -187,9 +187,9 @@
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.000204,
-          "min": 8.5e-05,
-          "max": 0.000336,
+          "mean": 0.000172,
+          "min": 7.5e-05,
+          "max": 0.000306,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
@@ -211,9 +211,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.437332,
-          "min": 0.437161,
-          "max": 0.437503,
+          "mean": 0.492289,
+          "min": 0.492119,
+          "max": 0.492447,
           "basis": "SIMULATION"
         }
       }
@@ -227,20 +227,20 @@
       "metrics": {
         "served_share": {
           "mean": 0.987086,
-          "min": 0.987028,
+          "min": 0.987029,
           "max": 0.987166,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.012218,
+          "mean": 0.012217,
           "min": 0.012141,
-          "max": 0.012274,
+          "max": 0.012273,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.103769,
-          "min": 0.102273,
-          "max": 0.105385,
+          "mean": 0.103755,
+          "min": 0.102245,
+          "max": 0.105375,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
@@ -262,9 +262,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.421744,
-          "min": 0.421732,
-          "max": 0.421754,
+          "mean": 0.472451,
+          "min": 0.472433,
+          "max": 0.472463,
           "basis": "SIMULATION"
         }
       }
@@ -289,9 +289,9 @@
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.11313,
-          "min": 0.11128,
-          "max": 0.114652,
+          "mean": 0.113085,
+          "min": 0.111232,
+          "max": 0.114606,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
@@ -313,9 +313,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.421813,
-          "min": 0.421807,
-          "max": 0.42182,
+          "mean": 0.472629,
+          "min": 0.472611,
+          "max": 0.472637,
           "basis": "SIMULATION"
         }
       }
@@ -340,9 +340,9 @@
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.103826,
-          "min": 0.102323,
-          "max": 0.105455,
+          "mean": 0.103811,
+          "min": 0.102292,
+          "max": 0.105439,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
@@ -364,9 +364,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.421759,
-          "min": 0.421752,
-          "max": 0.421763,
+          "mean": 0.472466,
+          "min": 0.472456,
+          "max": 0.472472,
           "basis": "SIMULATION"
         }
       }
@@ -379,45 +379,45 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.999696,
-          "min": 0.999637,
-          "max": 0.999732,
+          "mean": 0.993515,
+          "min": 0.993493,
+          "max": 0.993535,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.000274,
-          "min": 0.000241,
-          "max": 0.000335,
+          "mean": 0.006091,
+          "min": 0.006071,
+          "max": 0.00611,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.011139,
-          "min": 0.009586,
-          "max": 0.012922,
+          "mean": 0.02983,
+          "min": 0.029098,
+          "max": 0.030742,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.001258,
-          "min": 0.001081,
-          "max": 0.001406,
+          "mean": 0.007648,
+          "min": 0.007478,
+          "max": 0.007815,
           "basis": "SIMULATION"
         },
         "jain_fill_rate": {
-          "mean": 0.999888,
-          "min": 0.999843,
-          "max": 0.999922,
+          "mean": 0.998008,
+          "min": 0.997962,
+          "max": 0.998043,
           "basis": "SIMULATION"
         },
         "worst_group_fill_rate": {
-          "mean": 0.889155,
-          "min": 0.866438,
-          "max": 0.907534,
+          "mean": 0.64196,
+          "min": 0.641306,
+          "max": 0.6427,
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.439646,
-          "min": 0.43951,
-          "max": 0.439741,
+          "mean": 0.483317,
+          "min": 0.483174,
+          "max": 0.483414,
           "basis": "SIMULATION"
         }
       }
@@ -430,33 +430,33 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.900208,
-          "min": 0.900029,
-          "max": 0.90039,
+          "mean": 0.9002,
+          "min": 0.900015,
+          "max": 0.900343,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.100391,
-          "min": 0.100192,
-          "max": 0.10059,
+          "mean": 0.100424,
+          "min": 0.100266,
+          "max": 0.100629,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 1.014848,
-          "min": 1.005115,
-          "max": 1.026888,
+          "mean": 1.023453,
+          "min": 1.011739,
+          "max": 1.035539,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.068486,
-          "min": 0.067755,
-          "max": 0.069148,
+          "mean": 0.068042,
+          "min": 0.067392,
+          "max": 0.068738,
           "basis": "SIMULATION"
         },
         "jain_fill_rate": {
-          "mean": 0.978082,
-          "min": 0.977645,
-          "max": 0.978377,
+          "mean": 0.978131,
+          "min": 0.977726,
+          "max": 0.978439,
           "basis": "SIMULATION"
         },
         "worst_group_fill_rate": {
@@ -466,9 +466,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.422921,
-          "min": 0.422869,
-          "max": 0.422956,
+          "mean": 0.475164,
+          "min": 0.475101,
+          "max": 0.47522,
           "basis": "SIMULATION"
         }
       }
@@ -481,33 +481,33 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.898376,
-          "min": 0.898187,
-          "max": 0.898569,
+          "mean": 0.898402,
+          "min": 0.898221,
+          "max": 0.898538,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.101596,
-          "min": 0.101406,
-          "max": 0.101799,
+          "mean": 0.101583,
+          "min": 0.10145,
+          "max": 0.101782,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.867803,
-          "min": 0.861227,
-          "max": 0.878791,
+          "mean": 0.896232,
+          "min": 0.886967,
+          "max": 0.906685,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.098038,
-          "min": 0.096645,
-          "max": 0.099289,
+          "mean": 0.109778,
+          "min": 0.107959,
+          "max": 0.111634,
           "basis": "SIMULATION"
         },
         "jain_fill_rate": {
-          "mean": 0.958778,
-          "min": 0.957756,
-          "max": 0.959725,
+          "mean": 0.9475,
+          "min": 0.9457,
+          "max": 0.949846,
           "basis": "SIMULATION"
         },
         "worst_group_fill_rate": {
@@ -517,9 +517,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.420905,
-          "min": 0.420835,
-          "max": 0.420953,
+          "mean": 0.47275,
+          "min": 0.472664,
+          "max": 0.472854,
           "basis": "SIMULATION"
         }
       }
@@ -532,33 +532,33 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.897601,
-          "min": 0.897451,
-          "max": 0.897835,
+          "mean": 0.897434,
+          "min": 0.897231,
+          "max": 0.897581,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.10247,
-          "min": 0.10221,
-          "max": 0.102636,
+          "mean": 0.102694,
+          "min": 0.102537,
+          "max": 0.102913,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.796796,
-          "min": 0.787328,
-          "max": 0.809678,
+          "mean": 0.794577,
+          "min": 0.784133,
+          "max": 0.803229,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.107717,
-          "min": 0.10666,
-          "max": 0.109314,
+          "mean": 0.121527,
+          "min": 0.119486,
+          "max": 0.123046,
           "basis": "SIMULATION"
         },
         "jain_fill_rate": {
-          "mean": 0.949376,
-          "min": 0.948162,
-          "max": 0.950365,
+          "mean": 0.936586,
+          "min": 0.934793,
+          "max": 0.939215,
           "basis": "SIMULATION"
         },
         "worst_group_fill_rate": {
@@ -568,9 +568,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.4212,
-          "min": 0.421139,
-          "max": 0.421256,
+          "mean": 0.473039,
+          "min": 0.472964,
+          "max": 0.473138,
           "basis": "SIMULATION"
         }
       }
@@ -583,45 +583,45 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.939689,
-          "min": 0.939446,
-          "max": 0.940045,
+          "mean": 0.939843,
+          "min": 0.939626,
+          "max": 0.940065,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.060459,
-          "min": 0.060093,
-          "max": 0.060695,
+          "mean": 0.059959,
+          "min": 0.059757,
+          "max": 0.060182,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.469143,
-          "min": 0.462089,
-          "max": 0.475983,
+          "mean": 0.469114,
+          "min": 0.462348,
+          "max": 0.475986,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.050755,
-          "min": 0.049551,
-          "max": 0.051972,
+          "mean": 0.051454,
+          "min": 0.050733,
+          "max": 0.052388,
           "basis": "SIMULATION"
         },
         "jain_fill_rate": {
-          "mean": 0.985016,
-          "min": 0.984375,
-          "max": 0.985739,
+          "mean": 0.982931,
+          "min": 0.982605,
+          "max": 0.983261,
           "basis": "SIMULATION"
         },
         "worst_group_fill_rate": {
-          "mean": 0.39603,
-          "min": 0.354545,
-          "max": 0.432216,
+          "mean": 0.190606,
+          "min": 0.181818,
+          "max": 0.190909,
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.48059,
-          "min": 0.480053,
-          "max": 0.481296,
+          "mean": 0.550384,
+          "min": 0.549992,
+          "max": 0.551146,
           "basis": "SIMULATION"
         }
       }
@@ -634,33 +634,33 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.898983,
-          "min": 0.898787,
-          "max": 0.899146,
+          "mean": 0.898998,
+          "min": 0.898804,
+          "max": 0.899131,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.1009,
-          "min": 0.100721,
-          "max": 0.101113,
+          "mean": 0.100939,
+          "min": 0.100808,
+          "max": 0.10115,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.911897,
-          "min": 0.903169,
-          "max": 0.922786,
+          "mean": 0.920721,
+          "min": 0.911656,
+          "max": 0.931514,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.092533,
-          "min": 0.091966,
-          "max": 0.09345,
+          "mean": 0.090316,
+          "min": 0.089398,
+          "max": 0.091392,
           "basis": "SIMULATION"
         },
         "jain_fill_rate": {
-          "mean": 0.959662,
-          "min": 0.959111,
-          "max": 0.960155,
+          "mean": 0.960228,
+          "min": 0.959641,
+          "max": 0.960995,
           "basis": "SIMULATION"
         },
         "worst_group_fill_rate": {
@@ -670,9 +670,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.421954,
-          "min": 0.421927,
-          "max": 0.421982,
+          "mean": 0.474569,
+          "min": 0.474505,
+          "max": 0.474625,
           "basis": "SIMULATION"
         }
       }
@@ -685,33 +685,33 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.873641,
-          "min": 0.873506,
-          "max": 0.87378,
+          "mean": 0.873226,
+          "min": 0.873065,
+          "max": 0.873351,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.127716,
-          "min": 0.127595,
-          "max": 0.127848,
+          "mean": 0.128102,
+          "min": 0.127987,
+          "max": 0.128257,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 1.073649,
-          "min": 1.064428,
-          "max": 1.08669,
+          "mean": 1.08262,
+          "min": 1.074146,
+          "max": 1.095317,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.076087,
-          "min": 0.075671,
-          "max": 0.076499,
+          "mean": 0.075666,
+          "min": 0.075228,
+          "max": 0.07611,
           "basis": "SIMULATION"
         },
         "jain_fill_rate": {
-          "mean": 0.973023,
-          "min": 0.972908,
-          "max": 0.973111,
+          "mean": 0.973126,
+          "min": 0.973002,
+          "max": 0.973209,
           "basis": "SIMULATION"
         },
         "worst_group_fill_rate": {
@@ -721,9 +721,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.423673,
-          "min": 0.423653,
-          "max": 0.423686,
+          "mean": 0.475322,
+          "min": 0.475248,
+          "max": 0.475381,
           "basis": "SIMULATION"
         }
       }
@@ -736,33 +736,33 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.899273,
-          "min": 0.899064,
-          "max": 0.899425,
+          "mean": 0.899239,
+          "min": 0.899046,
+          "max": 0.899366,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.101357,
-          "min": 0.101183,
-          "max": 0.101583,
+          "mean": 0.101398,
+          "min": 0.101259,
+          "max": 0.101609,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.900338,
-          "min": 0.891668,
-          "max": 0.911634,
+          "mean": 0.907241,
+          "min": 0.897033,
+          "max": 0.918433,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.067689,
-          "min": 0.067203,
-          "max": 0.068135,
+          "mean": 0.067267,
+          "min": 0.066783,
+          "max": 0.067691,
           "basis": "SIMULATION"
         },
         "jain_fill_rate": {
-          "mean": 0.976514,
-          "min": 0.976388,
-          "max": 0.976619,
+          "mean": 0.976556,
+          "min": 0.976431,
+          "max": 0.976655,
           "basis": "SIMULATION"
         },
         "worst_group_fill_rate": {
@@ -772,9 +772,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.423266,
-          "min": 0.423253,
-          "max": 0.423278,
+          "mean": 0.475242,
+          "min": 0.475193,
+          "max": 0.475287,
           "basis": "SIMULATION"
         }
       }
@@ -787,45 +787,45 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.912446,
-          "min": 0.912315,
-          "max": 0.912559,
+          "mean": 0.903175,
+          "min": 0.902948,
+          "max": 0.903481,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.089705,
-          "min": 0.089586,
-          "max": 0.089841,
+          "mean": 0.099277,
+          "min": 0.098972,
+          "max": 0.099528,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.63524,
-          "min": 0.62849,
-          "max": 0.64368,
+          "mean": 0.713056,
+          "min": 0.704674,
+          "max": 0.723046,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.051634,
-          "min": 0.051213,
-          "max": 0.052177,
+          "mean": 0.056141,
+          "min": 0.055555,
+          "max": 0.056645,
           "basis": "SIMULATION"
         },
         "jain_fill_rate": {
-          "mean": 0.984877,
-          "min": 0.98466,
-          "max": 0.984993,
+          "mean": 0.981964,
+          "min": 0.981825,
+          "max": 0.982078,
           "basis": "SIMULATION"
         },
         "worst_group_fill_rate": {
-          "mean": 0.468486,
-          "min": 0.463585,
-          "max": 0.471948,
+          "mean": 0.378097,
+          "min": 0.37635,
+          "max": 0.379603,
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.474787,
-          "min": 0.474504,
-          "max": 0.475197,
+          "mean": 0.519782,
+          "min": 0.519336,
+          "max": 0.520303,
           "basis": "SIMULATION"
         }
       }
@@ -850,8 +850,8 @@
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.000739,
-          "min": 0.000558,
+          "mean": 0.000733,
+          "min": 0.000555,
           "max": 0.000948,
           "basis": "SIMULATION"
         },
@@ -874,9 +874,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.431817,
-          "min": 0.431817,
-          "max": 0.431818,
+          "mean": 0.473409,
+          "min": 0.473409,
+          "max": 0.47341,
           "basis": "SIMULATION"
         }
       }
@@ -901,8 +901,8 @@
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.000711,
-          "min": 0.000548,
+          "mean": 0.000705,
+          "min": 0.000545,
           "max": 0.000927,
           "basis": "SIMULATION"
         },
@@ -925,9 +925,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.431813,
-          "min": 0.431807,
-          "max": 0.431817,
+          "mean": 0.473403,
+          "min": 0.473395,
+          "max": 0.473409,
           "basis": "SIMULATION"
         }
       }
@@ -952,8 +952,8 @@
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.000711,
-          "min": 0.000548,
+          "mean": 0.000705,
+          "min": 0.000545,
           "max": 0.000927,
           "basis": "SIMULATION"
         },
@@ -976,9 +976,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.431813,
-          "min": 0.431807,
-          "max": 0.431817,
+          "mean": 0.473403,
+          "min": 0.473395,
+          "max": 0.473409,
           "basis": "SIMULATION"
         }
       }
@@ -1027,9 +1027,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.432002,
-          "min": 0.431965,
-          "max": 0.432046,
+          "mean": 0.473612,
+          "min": 0.473571,
+          "max": 0.473658,
           "basis": "SIMULATION"
         }
       }
@@ -1054,8 +1054,8 @@
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.000738,
-          "min": 0.000558,
+          "mean": 0.000732,
+          "min": 0.000555,
           "max": 0.000948,
           "basis": "SIMULATION"
         },
@@ -1078,9 +1078,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.431817,
-          "min": 0.431817,
-          "max": 0.431818,
+          "mean": 0.473409,
+          "min": 0.473409,
+          "max": 0.47341,
           "basis": "SIMULATION"
         }
       }
@@ -1105,8 +1105,8 @@
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.000775,
-          "min": 0.000591,
+          "mean": 0.000769,
+          "min": 0.000586,
           "max": 0.000975,
           "basis": "SIMULATION"
         },
@@ -1129,9 +1129,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.431817,
-          "min": 0.431817,
-          "max": 0.431818,
+          "mean": 0.473409,
+          "min": 0.473409,
+          "max": 0.47341,
           "basis": "SIMULATION"
         }
       }
@@ -1156,8 +1156,8 @@
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.000738,
-          "min": 0.000558,
+          "mean": 0.000732,
+          "min": 0.000555,
           "max": 0.000948,
           "basis": "SIMULATION"
         },
@@ -1180,9 +1180,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.431817,
-          "min": 0.431817,
-          "max": 0.431818,
+          "mean": 0.473409,
+          "min": 0.473409,
+          "max": 0.47341,
           "basis": "SIMULATION"
         }
       }
@@ -1207,9 +1207,9 @@
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 2e-05,
-          "min": 3e-06,
-          "max": 3.8e-05,
+          "mean": 7.8e-05,
+          "min": 4e-05,
+          "max": 0.000131,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
@@ -1231,9 +1231,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.432011,
-          "min": 0.431975,
-          "max": 0.432044,
+          "mean": 0.473561,
+          "min": 0.473532,
+          "max": 0.473605,
           "basis": "SIMULATION"
         }
       }
@@ -1246,33 +1246,33 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.900116,
-          "min": 0.899942,
-          "max": 0.900314,
+          "mean": 0.900101,
+          "min": 0.899854,
+          "max": 0.900279,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.097268,
-          "min": 0.097065,
-          "max": 0.097475,
+          "mean": 0.097208,
+          "min": 0.097043,
+          "max": 0.097436,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.898898,
-          "min": 0.883509,
-          "max": 0.909165,
+          "mean": 0.907933,
+          "min": 0.892839,
+          "max": 0.92066,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.065773,
-          "min": 0.06508,
-          "max": 0.066405,
+          "mean": 0.065026,
+          "min": 0.063582,
+          "max": 0.06639,
           "basis": "SIMULATION"
         },
         "jain_fill_rate": {
-          "mean": 0.980658,
-          "min": 0.980227,
-          "max": 0.981045,
+          "mean": 0.981574,
+          "min": 0.980808,
+          "max": 0.982208,
           "basis": "SIMULATION"
         },
         "worst_group_fill_rate": {
@@ -1282,9 +1282,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.433115,
-          "min": 0.433054,
-          "max": 0.433202,
+          "mean": 0.478375,
+          "min": 0.478273,
+          "max": 0.478485,
           "basis": "SIMULATION"
         }
       }
@@ -1297,33 +1297,33 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.898384,
-          "min": 0.89815,
-          "max": 0.898585,
+          "mean": 0.89825,
+          "min": 0.89805,
+          "max": 0.898515,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.098837,
-          "min": 0.098647,
-          "max": 0.09906,
+          "mean": 0.098914,
+          "min": 0.098672,
+          "max": 0.099083,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.831022,
-          "min": 0.819438,
-          "max": 0.844866,
+          "mean": 0.834633,
+          "min": 0.821137,
+          "max": 0.852272,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.088715,
-          "min": 0.08659,
-          "max": 0.090505,
+          "mean": 0.09955,
+          "min": 0.098209,
+          "max": 0.100872,
           "basis": "SIMULATION"
         },
         "jain_fill_rate": {
-          "mean": 0.963712,
-          "min": 0.96226,
-          "max": 0.965079,
+          "mean": 0.954126,
+          "min": 0.952975,
+          "max": 0.955302,
           "basis": "SIMULATION"
         },
         "worst_group_fill_rate": {
@@ -1333,9 +1333,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.430355,
-          "min": 0.430267,
-          "max": 0.430429,
+          "mean": 0.47386,
+          "min": 0.473694,
+          "max": 0.474013,
           "basis": "SIMULATION"
         }
       }
@@ -1348,33 +1348,33 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.898327,
-          "min": 0.898138,
-          "max": 0.898492,
+          "mean": 0.898125,
+          "min": 0.897919,
+          "max": 0.898359,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.098879,
-          "min": 0.098731,
-          "max": 0.099057,
+          "mean": 0.099026,
+          "min": 0.098816,
+          "max": 0.099204,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.835084,
-          "min": 0.823701,
-          "max": 0.845933,
+          "mean": 0.836547,
+          "min": 0.825435,
+          "max": 0.851277,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.090213,
-          "min": 0.088213,
-          "max": 0.091746,
+          "mean": 0.101584,
+          "min": 0.099754,
+          "max": 0.103037,
           "basis": "SIMULATION"
         },
         "jain_fill_rate": {
-          "mean": 0.96373,
-          "min": 0.962603,
-          "max": 0.965298,
+          "mean": 0.954442,
+          "min": 0.953122,
+          "max": 0.95602,
           "basis": "SIMULATION"
         },
         "worst_group_fill_rate": {
@@ -1384,9 +1384,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.431117,
-          "min": 0.430999,
-          "max": 0.431232,
+          "mean": 0.474899,
+          "min": 0.474712,
+          "max": 0.475006,
           "basis": "SIMULATION"
         }
       }
@@ -1399,45 +1399,45 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.924913,
-          "min": 0.92462,
-          "max": 0.925173,
+          "mean": 0.934835,
+          "min": 0.934591,
+          "max": 0.935171,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.073891,
-          "min": 0.073608,
-          "max": 0.074156,
+          "mean": 0.064373,
+          "min": 0.064072,
+          "max": 0.064621,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.679992,
-          "min": 0.666205,
-          "max": 0.690737,
+          "mean": 0.56096,
+          "min": 0.547532,
+          "max": 0.573383,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.0348,
-          "min": 0.033398,
-          "max": 0.036218,
+          "mean": 0.042426,
+          "min": 0.041286,
+          "max": 0.043595,
           "basis": "SIMULATION"
         },
         "jain_fill_rate": {
-          "mean": 0.993936,
-          "min": 0.993635,
-          "max": 0.994198,
+          "mean": 0.990256,
+          "min": 0.989283,
+          "max": 0.991047,
           "basis": "SIMULATION"
         },
         "worst_group_fill_rate": {
-          "mean": 0.607776,
-          "min": 0.604919,
-          "max": 0.611688,
+          "mean": 0.565242,
+          "min": 0.459016,
+          "max": 0.607734,
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.466063,
-          "min": 0.465469,
-          "max": 0.466525,
+          "mean": 0.532828,
+          "min": 0.532059,
+          "max": 0.533573,
           "basis": "SIMULATION"
         }
       }
@@ -1450,45 +1450,45 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.899027,
-          "min": 0.898826,
-          "max": 0.899238,
+          "mean": 0.899006,
+          "min": 0.898753,
+          "max": 0.899236,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.09797,
-          "min": 0.097777,
-          "max": 0.098152,
+          "mean": 0.09792,
+          "min": 0.097711,
+          "max": 0.098155,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.851463,
-          "min": 0.838078,
-          "max": 0.862474,
+          "mean": 0.856365,
+          "min": 0.84293,
+          "max": 0.870362,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.075661,
-          "min": 0.075001,
-          "max": 0.076371,
+          "mean": 0.072173,
+          "min": 0.071451,
+          "max": 0.072647,
           "basis": "SIMULATION"
         },
         "jain_fill_rate": {
-          "mean": 0.971042,
-          "min": 0.970575,
-          "max": 0.971881,
+          "mean": 0.972361,
+          "min": 0.971698,
+          "max": 0.97326,
           "basis": "SIMULATION"
         },
         "worst_group_fill_rate": {
-          "mean": 0.197344,
-          "min": 0.162088,
-          "max": 0.255495,
+          "mean": 0.219048,
+          "min": 0.173077,
+          "max": 0.28022,
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.433045,
-          "min": 0.43297,
-          "max": 0.433096,
+          "mean": 0.478841,
+          "min": 0.478769,
+          "max": 0.478929,
           "basis": "SIMULATION"
         }
       }
@@ -1501,33 +1501,33 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.876832,
-          "min": 0.876629,
-          "max": 0.877016,
+          "mean": 0.876512,
+          "min": 0.876299,
+          "max": 0.876674,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.121006,
-          "min": 0.120825,
-          "max": 0.121185,
+          "mean": 0.121209,
+          "min": 0.121046,
+          "max": 0.121395,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 1.002059,
-          "min": 0.992892,
-          "max": 1.011117,
+          "mean": 1.003539,
+          "min": 0.99522,
+          "max": 1.012855,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.068752,
-          "min": 0.068212,
-          "max": 0.069209,
+          "mean": 0.066246,
+          "min": 0.065843,
+          "max": 0.066616,
           "basis": "SIMULATION"
         },
         "jain_fill_rate": {
-          "mean": 0.978673,
-          "min": 0.978515,
-          "max": 0.978855,
+          "mean": 0.979858,
+          "min": 0.979712,
+          "max": 0.979996,
           "basis": "SIMULATION"
         },
         "worst_group_fill_rate": {
@@ -1537,9 +1537,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.434247,
-          "min": 0.434206,
-          "max": 0.434303,
+          "mean": 0.480865,
+          "min": 0.480766,
+          "max": 0.480947,
           "basis": "SIMULATION"
         }
       }
@@ -1552,33 +1552,33 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.899496,
-          "min": 0.899309,
-          "max": 0.899658,
+          "mean": 0.899446,
+          "min": 0.899206,
+          "max": 0.899623,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.097857,
-          "min": 0.097692,
-          "max": 0.098042,
+          "mean": 0.097813,
+          "min": 0.097644,
+          "max": 0.098034,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.86751,
-          "min": 0.853981,
-          "max": 0.878643,
+          "mean": 0.871665,
+          "min": 0.858419,
+          "max": 0.885407,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.062367,
-          "min": 0.061816,
-          "max": 0.062754,
+          "mean": 0.059544,
+          "min": 0.059118,
+          "max": 0.059912,
           "basis": "SIMULATION"
         },
         "jain_fill_rate": {
-          "mean": 0.980874,
-          "min": 0.980714,
-          "max": 0.981072,
+          "mean": 0.982218,
+          "min": 0.982083,
+          "max": 0.982356,
           "basis": "SIMULATION"
         },
         "worst_group_fill_rate": {
@@ -1588,9 +1588,9 @@
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.433734,
-          "min": 0.433691,
-          "max": 0.433798,
+          "mean": 0.47936,
+          "min": 0.479307,
+          "max": 0.479436,
           "basis": "SIMULATION"
         }
       }
@@ -1603,45 +1603,45 @@
       "label": "SIMULATION",
       "metrics": {
         "served_share": {
-          "mean": 0.914037,
-          "min": 0.913637,
-          "max": 0.914439,
+          "mean": 0.90652,
+          "min": 0.906261,
+          "max": 0.906693,
           "basis": "SIMULATION"
         },
         "need_weighted_unmet_share": {
-          "mean": 0.08709,
-          "min": 0.08672,
-          "max": 0.087463,
+          "mean": 0.09369,
+          "min": 0.093543,
+          "max": 0.093927,
           "basis": "SIMULATION"
         },
         "mean_wait_days": {
-          "mean": 0.757439,
-          "min": 0.745718,
-          "max": 0.770517,
+          "mean": 0.824581,
+          "min": 0.809629,
+          "max": 0.837492,
           "basis": "SIMULATION"
         },
         "gini_fill_rate": {
-          "mean": 0.041471,
-          "min": 0.040615,
-          "max": 0.041964,
+          "mean": 0.048128,
+          "min": 0.047627,
+          "max": 0.048676,
           "basis": "SIMULATION"
         },
         "jain_fill_rate": {
-          "mean": 0.990423,
-          "min": 0.990189,
-          "max": 0.990816,
+          "mean": 0.986901,
+          "min": 0.986623,
+          "max": 0.987094,
           "basis": "SIMULATION"
         },
         "worst_group_fill_rate": {
-          "mean": 0.583615,
-          "min": 0.560651,
-          "max": 0.601369,
+          "mean": 0.381808,
+          "min": 0.375535,
+          "max": 0.392643,
           "basis": "SIMULATION"
         },
         "km_per_kl": {
-          "mean": 0.48243,
-          "min": 0.481836,
-          "max": 0.483338,
+          "mean": 0.521066,
+          "min": 0.520435,
+          "max": 0.521576,
           "basis": "SIMULATION"
         }
       }

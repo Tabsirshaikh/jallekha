@@ -1187,3 +1187,11 @@ The pull-request description must summarize the same information and link to thi
 - **Owner / date:** repo owner, 2026-10-06.
 - **Why:** the map box must stay fixed: no mouse-wheel zoom or drag.
 - **What we changed:** wheel and drag removed; + zooms towards the selected ward (else the centre), - zooms out, the fit button resets.
+
+## `feat/item20-osrm` — OSRM road routing with cached legs (item 20)
+
+- **Owner / date:** repo owner, 2026-10-06.
+- **Why:** item 20: the owner chose to build OSRM routing; SQLite, SVG maps, own intervals and bottom-up reconciliation stay (design doc stack line edited).
+- **What we changed:** `scripts/routing/build_osrm_legs.py` (Geofabrik extract, pyosmium crop, OSRM v26.10.0 Windows binaries, car profile, /table both directions); committed legs and build log in `data/derived/routing/`; `scripts/sandbox/build_stations.py` uses road km (home station = nearest by road); sandbox, planner replay, T9 calibration, shortage and U9 snapshot rebuilt; T9 threshold kept at 0.05 as a delegated owner decision (`rule_threshold` 0.70 recorded and tested).
+- **Results:** road/straight ratio 1.32 median; km per kl +12% for all policies; JL_POOL's served-share gain over B1 falls from 1.2 to 0.3 points.
+- **Validation:** road-km test written first and seen failing; OSRM table parsing tests; affected tests pass.

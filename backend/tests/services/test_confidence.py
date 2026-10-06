@@ -271,8 +271,13 @@ def test_committed_selection_is_the_config_threshold() -> None:
     seeds = {r["seed"] for r in rows if r["row_type"] == "threshold"}
     assert len(seeds) == CONFIDENCE_CONFIG.degraded_seeds
     if row["status"] == "chosen":
-        assert float(row["threshold"]) == pytest.approx(CONFIDENCE_CONFIG.threshold, abs=0.005)
-        assert CONFIDENCE_CONFIG.threshold_basis == "DERIVED"
+        if CONFIDENCE_CONFIG.threshold_basis == "OWNER_DECISION":
+            # A recorded decision may differ from the rule; the rule's own pick must stay current.
+            picked = CONFIDENCE_CONFIG.rule_threshold
+        else:
+            assert CONFIDENCE_CONFIG.threshold_basis == "DERIVED"
+            picked = CONFIDENCE_CONFIG.threshold
+        assert float(row["threshold"]) == pytest.approx(picked, abs=0.005)
         # Every draw meets the target at the chosen threshold.
         at = [
             r for r in rows if r["row_type"] == "threshold" and r["threshold"] == row["threshold"]
