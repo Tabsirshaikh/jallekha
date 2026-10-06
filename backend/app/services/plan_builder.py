@@ -695,7 +695,7 @@ def _build_section(recipe: dict[str, Any]) -> BuiltPlan:
     except section_plan.SectionPlanUnavailable as exc:
         raise ReplayDayUnavailable(str(exc)) from exc
     events = _Events()
-    now = datetime(day.year, day.month, day.day, tzinfo=IST).astimezone(UTC) + timedelta(minutes=30)
+    now = _script().planner_now(day)  # plans are made at 05:00 local time on their day
     plan = planner.build_plan(inputs, section_plan.SectionGate(sections), events, now)
     basis = _basis_section(day, capacity, weights, len(inputs.pending), left_out, sections)
     return BuiltPlan(inputs, plan, basis, recipe, tuple(events.events))

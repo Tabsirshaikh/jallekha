@@ -1,3 +1,5 @@
+import PlanMap from "./PlanMap";
+import SectionPlanForm from "./SectionPlanForm";
 import { useMemo, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { ApiError, apiFetch } from "./api";
 import { useAuth } from "./auth";
@@ -250,20 +252,22 @@ function LivePlans({ t, locale, notice, plans, reloadList, userId }: { t: Copy; 
   const canCheck = officerId.length > 0 && checkReason.trim().length > 0 && busy === null;
   const blockedBy = !plan ? null : plan.approved ? t.alreadyApproved : plan.unchecked.length > 0 ? fill(t.approveBlockedFlags, { checked: plan.checkedTotal, total: plan.flagsTotal }) : !officerId ? t.needOfficer : !approvalReason.trim() ? t.approveNeedReason : null;
 
+  const tag = plan?.source === "section_month" ? "DERIVED · ASSUMED CAPACITY" : "SIMULATION"; // a plan by section uses real monthly totals
   return <div className="plan-page">
     <header className="plan-heading"><div><p className="eyebrow">{t.draft}</p><h1>{t.title}</h1><p className="muted">{t.liveIntro}</p></div><span className="forecast-demo-badge">{t.liveBadge}</span></header>
     {notice}
-    <div className="plan-notice"><strong>{t.liveCaveat}</strong></div>
+    <div className="plan-notice"><strong>{plan?.source === "section_month" ? "This plan uses the real monthly booking totals of each HMWSSB section, divided by the days of the month; the trips available are an assumption. Approval is saved on the server and logged in the ledger; it does not dispatch tankers." : t.liveCaveat}</strong></div>
 
     <section className="plan-panel plan-plans" aria-labelledby="plan-list-title">
       <div className="plan-plans-list">
-        <div className="plan-panel-title"><div><p className="eyebrow">SIMULATION</p><h2 id="plan-list-title">{t.plans}</h2></div></div>
+        <div className="plan-panel-title"><div><p className="eyebrow">{tag}</p><h2 id="plan-list-title">{t.plans}</h2></div></div>
         {plans.items.length === 0 ? <p className="plan-empty">{t.noPlans}</p> : <ul className="plan-list">{plans.items.map((item) => <li key={item.id} className={item.id === selectedId ? "plan-list-row selected" : "plan-list-row"}>
-          <div><strong>{item.day}</strong><small><span>{statusLabel(item.status)}</span> · <span>{fill(t.flagsProgress, { checked: n(item.checkedTotal), total: n(item.flagsTotal) })}</span></small>{item.source === "supplied_bookings" && <small><span>{t.suppliedLabel}</span></small>}{item.weights && <small><span>{fill(t.weightsBadge, { wad: item.weights.wad, cad: item.weights.cad, hardship: item.weights.hardship })}</span></small>}</div>
+          <div><strong>{item.day}</strong><small><span>{statusLabel(item.status)}</span> · <span>{fill(t.flagsProgress, { checked: n(item.checkedTotal), total: n(item.flagsTotal) })}</span></small>{item.source === "supplied_bookings" && <small><span>{t.suppliedLabel}</span></small>}{item.source === "section_month" && <small><span>By section · real monthly totals</span></small>}{item.weights && <small><span>{fill(t.weightsBadge, { wad: item.weights.wad, cad: item.weights.cad, hardship: item.weights.hardship })}</span></small>}</div>
           <button className="button button-secondary" aria-label={item.weights ? fill(t.openWeightedAria, { day: item.day, wad: item.weights.wad, cad: item.weights.cad, hardship: item.weights.hardship }) : item.source === "supplied_bookings" ? fill(t.openSuppliedAria, { day: item.day }) : fill(t.openAria, { day: item.day })} aria-pressed={item.id === selectedId} onClick={() => open(item.id)}>{item.id === selectedId ? t.opened : t.open}</button>
         </li>)}</ul>}
         {plans.total > plans.items.length && <p className="plan-empty">{fill(t.showing, { shown: plans.items.length, total: plans.total })}</p>}
       </div>
+      <SectionPlanForm weights={chosen} onBuilt={(id) => { open(id); reloadList(); }} />
       <form className="plan-build" noValidate onSubmit={(event) => void build(event)}>
         <label htmlFor="plan-build-day">{t.buildTitle}</label>
         <div className="plan-build-row"><input id="plan-build-day" type="date" min={REPLAY_FIRST_DAY} max={REPLAY_LAST_DAY} value={day} required onChange={(event) => setDay(event.target.value)} /><button className="button button-primary" type="submit" disabled={!day || building}>{t.build}</button></div>
@@ -297,15 +301,18 @@ function LivePlans({ t, locale, notice, plans, reloadList, userId }: { t: Copy; 
 
     {plan && <>
       {plan.approved && <div className="plan-approved" role="status"><strong>{fill(t.approvedLive, { officer: plan.approvedBy ?? "—" })}</strong>{plan.approvalReason && <span>“{plan.approvalReason}”</span>}<span>{t.approvedLiveNote}</span></div>}
+      {plan.source === "section_month" && <div className="plan-notice"><strong>{plan.basis.plan}</strong></div>}
       {plan.source === "supplied_bookings" && <div className="plan-notice"><strong>{fill(t.suppliedNote, { count: plan.bookingsSupplied ?? "?", day: plan.day })}</strong></div>}
       <section className="plan-summary" aria-label={`${t.draft} · ${plan.day}`}>
-        <article><span>{t.liveTrips}</span><strong>{n(plan.trips)}</strong><small>SIMULATION</small></article>
-        <article><span>{t.reserve}</span><strong>{n(plan.reserveTrips)}</strong><small>SIMULATION</small></article>
-        <article><span>{t.outage}</span><strong>{n(plan.outageTrips)}</strong><small>SIMULATION</small></article>
-        <article><span>{t.served}</span><strong>{n(plan.served)}</strong><small>SIMULATION · {fill(t.waitingCount, { count: n(plan.waiting) })}</small></article>
+        <article><span>{t.liveTrips}</span><strong>{n(plan.trips)}</strong><small>{tag}</small></article>
+        <article><span>{t.reserve}</span><strong>{n(plan.reserveTrips)}</strong><small>{tag}</small></article>
+        <article><span>{t.outage}</span><strong>{n(plan.outageTrips)}</strong><small>{tag}</small></article>
+        <article><span>{t.served}</span><strong>{n(plan.served)}</strong><small>{tag} · {fill(t.waitingCount, { count: n(plan.waiting) })}</small></article>
       </section>
 
-      {weighted && <section className="plan-panel plan-gains" aria-labelledby="plan-gains-title"><div className="plan-panel-title"><div><p className="eyebrow">{t.weightsTitle}</p><h2 id="plan-gains-title">{t.gainsTitle}</h2></div><span className="source-tag">SIMULATION</span></div>
+      <PlanMap plan={plan} />
+
+      {weighted && <section className="plan-panel plan-gains" aria-labelledby="plan-gains-title"><div className="plan-panel-title"><div><p className="eyebrow">{t.weightsTitle}</p><h2 id="plan-gains-title">{t.gainsTitle}</h2></div><span className="source-tag">{tag}</span></div>
         <p className="plan-threshold">{fill(t.gainsIntro, { day: plan.day })}</p>
         {compareApi.loading && <p className="plan-message" role="status">{t.gainsLoading}</p>}
         {!compareApi.loading && !compare && <p className="plan-message error" role="alert">{t.compareFailed}</p>}
@@ -333,7 +340,7 @@ function LivePlans({ t, locale, notice, plans, reloadList, userId }: { t: Copy; 
           {checkNote && <p className={`plan-message ${checkNote.tone}`} role={checkNote.tone === "error" ? "alert" : "status"}>{checkNote.text}</p>}
         </section>
 
-        <section className="plan-panel" aria-labelledby="plan-queue-title"><div className="plan-panel-title"><div><p className="eyebrow">{t.queueOrder}</p><h2 id="plan-queue-title">{t.liveQueue}</h2></div><span className="source-tag">SIMULATION</span></div>
+        <section className="plan-panel" aria-labelledby="plan-queue-title"><div className="plan-panel-title"><div><p className="eyebrow">{t.queueOrder}</p><h2 id="plan-queue-title">{t.liveQueue}</h2></div><span className="source-tag">{tag}</span></div>
           <p className="plan-threshold">{t.queueNote}</p>
           <div className="plan-queue plan-queue-scroll">{plan.queue.map((row) => <article className="plan-queue-row" key={row.group}>
             <div className="plan-queue-copy"><strong>{label(row.group)}</strong><span>{t.servedBookings}: {n(row.served)} · {t.confidenceLabel} {score(row.confidence)}</span></div>
@@ -342,13 +349,13 @@ function LivePlans({ t, locale, notice, plans, reloadList, userId }: { t: Copy; 
         </section>
       </div>
 
-      <section className="plan-panel plan-schedule" aria-labelledby="plan-schedule-title"><div className="plan-panel-title"><div><p className="eyebrow" id="plan-schedule-title">{t.liveSchedule}</p><h2>{t.liveScheduleNote}</h2></div><span className="source-tag">SIMULATION</span></div>
+      <section className="plan-panel plan-schedule" aria-labelledby="plan-schedule-title"><div className="plan-panel-title"><div><p className="eyebrow" id="plan-schedule-title">{t.liveSchedule}</p><h2>{t.liveScheduleNote}</h2></div><span className="source-tag">{tag}</span></div>
         <div className="plan-schedule-table"><div className="plan-schedule-row plan-schedule-head"><span>{t.ward}</span><span>{t.litres}</span><span>{t.scheduleStatus}</span></div>
           {plan.schedule.map((row) => <div className="plan-schedule-row" key={row.wardId}><span>{label(row.wardId)}</span><span>{n(row.litres)} / {n(row.floor)}</span><span className="plan-schedule-status"><span>{row.status === "FLOOR_NOT_MET" ? t.floorNotMet : row.status === "FLOOR_MET" ? t.floorMet : row.status ?? "—"}</span>{row.unrouted === "NEEDS_SERVICE_POINT" ? <small>{t.needsServicePoint}</small> : row.unrouted ? <small>{row.unrouted}</small> : null}</span></div>)}
         </div>
       </section>
 
-      <section className="plan-panel" aria-labelledby="plan-outage-title"><div className="plan-panel-title"><div><p className="eyebrow">SIMULATION</p><h2 id="plan-outage-title">{t.liveOutage}</h2></div><span className="source-tag">DERIVED · ASSUMED</span></div>
+      <section className="plan-panel" aria-labelledby="plan-outage-title"><div className="plan-panel-title"><div><p className="eyebrow">{tag}</p><h2 id="plan-outage-title">{t.liveOutage}</h2></div><span className="source-tag">DERIVED · ASSUMED</span></div>
         <dl className="plan-outage">
           <div><dt>{t.outageCritical}</dt><dd>{n(plan.outage.critical)}</dd></div>
           <div><dt>{t.outageAllocations}</dt><dd>{n(plan.outage.allocations)}</dd></div>

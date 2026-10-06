@@ -1,0 +1,20 @@
+.plan-map-panel { display: grid; gap: 12px; }
+.plan-map-switch { display: flex; gap: 6px; }
+.plan-map-switch button { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: #fff; font: inherit; cursor: pointer; color: var(--ink); }
+.plan-map-switch button.active { background: var(--deep); border-color: var(--deep); color: #fff; }
+.plan-map-stage { position: relative; background: linear-gradient(180deg, #fbfdfb, #eef5f1); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.plan-map-stage svg { display: block; width: 100%; height: auto; max-height: 70vh; }
+.plan-map-stage path { stroke: #fff; stroke-width: 1.2; cursor: pointer; vector-effect: non-scaling-stroke; }
+.plan-map-stage path.hover { stroke: var(--deep); stroke-width: 2; }
+.plan-map-stage path.selected { stroke: var(--ink); stroke-width: 3; }
+.plan-map-stage path:focus { outline: none; }
+.plan-map-stage path:focus-visible { stroke: var(--green); stroke-width: 3; }
+.plan-map-legend { position: absolute; bottom: 12px; inset-inline-start: 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px; background: rgb(255 255 255 / 94%); border-radius: 10px; font-size: .82rem; color: var(--muted); }
+.plan-map-legend i { width: 18px; height: 12px; border-radius: 3px; display: inline-block; margin-inline-start: 6px; }
+.plan-map-legend i.flag { background: #fff; border: 2.5px solid #9a4a1c; }
+.plan-map-tip { position: absolute; top: 12px; inset-inline-end: 12px; padding: 6px 12px; border-radius: 8px; background: var(--deep); color: #fff; font-size: .9rem; }
+.plan-map-side { display: grid; gap: 8px; }
+.plan-map-side ol { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+.plan-map-side li { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed var(--line); padding-bottom: 3px; }
+.plan-map-side li button { background: none; border: 0; padding: 0; font: inherit; color: var(--deep); cursor: pointer; text-align: start; }
+.plan-map-pick { display: grid; gap: 2px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
