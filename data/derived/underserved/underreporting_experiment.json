@@ -1,0 +1,2174 @@
+{
+  "basis": "DERIVED",
+  "config": {
+    "reporting_prior_means": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "reporting_prior_strength": 50.0,
+    "minimum_need_share": 0.01,
+    "non_tap_weight": 0.5,
+    "intercept_sd": 2.0,
+    "access_coefficient_sd": 1.0,
+    "map_starts": 3,
+    "map_max_evaluations": 2000,
+    "minimum_successful_starts": 2,
+    "maximum_prediction_relative_spread": 0.05,
+    "initial_jitter_sd": 0.2,
+    "division_shrinkage_connections": 5000.0,
+    "seed": 20261006,
+    "max_rhat": 1.01,
+    "minimum_bulk_ess": 100,
+    "stand_in_stations": 90,
+    "basis": "ASSUMED"
+  },
+  "train_year": 2024,
+  "test_year": 2025,
+  "training_sections": 107,
+  "paired_sections": 107,
+  "baseline": {
+    "mean_absolute_error": 9487.298083510133,
+    "spearman": 0.15906992464125336,
+    "median_miss": 3.611975981074041,
+    "within_2x": 0.2336448598130841,
+    "count": 107,
+    "positive_pairs": 107,
+    "zero_pairs_excluded_from_miss": 0,
+    "basis": "DERIVED"
+  },
+  "persistence_baseline": {
+    "mean_absolute_error": 2386.0093457943926,
+    "spearman": 0.9546544406348354,
+    "median_miss": 1.3642934586194435,
+    "within_2x": 0.9158878504672897,
+    "count": 107,
+    "positive_pairs": 107,
+    "zero_pairs_excluded_from_miss": 0,
+    "basis": "DERIVED"
+  },
+  "division_shrinkage_baseline": {
+    "mean_absolute_error": 4173.402685729666,
+    "spearman": 0.8045729848105617,
+    "median_miss": 1.644975256539502,
+    "within_2x": 0.6822429906542056,
+    "count": 107,
+    "positive_pairs": 107,
+    "zero_pairs_excluded_from_miss": 0,
+    "basis": "DERIVED"
+  },
+  "runs": [
+    {
+      "prior_mean": 0.25,
+      "prior_basis": "ASSUMED",
+      "diagnostics": {
+        "fitting_method": "MAP_POINT_ESTIMATE",
+        "successful_starts": 3,
+        "prediction_relative_spread": 0.0004857381404568152,
+        "starts": [
+          {
+            "index": 0,
+            "success": true,
+            "objective": 1055.3869933862377
+          },
+          {
+            "index": 1,
+            "success": true,
+            "objective": 1055.3869933441842
+          },
+          {
+            "index": 2,
+            "success": true,
+            "objective": 1055.3871152933448
+          }
+        ],
+        "posterior_diagnostics": null,
+        "posterior_basis": "UNAVAILABLE: point estimates, no MCMC posterior or intervals"
+      },
+      "metrics": {
+        "mean_absolute_error": 12406.250175111783,
+        "spearman": 0.334041130615316,
+        "median_miss": 3.7938786427984836,
+        "within_2x": 0.2336448598130841,
+        "count": 107,
+        "positive_pairs": 107,
+        "zero_pairs_excluded_from_miss": 0,
+        "basis": "DERIVED"
+      },
+      "retention": "REJECT_BASELINE_NOT_BEATEN",
+      "retention_vs_persistence": "REJECT_BASELINE_NOT_BEATEN",
+      "predictions": [
+        {
+          "section_id": "1:BAHADURPURA",
+          "expected": 3041.1326252396025,
+          "actual": 159,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:ALKAPURI",
+          "expected": 5442.451321008946,
+          "actual": 8176,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:DILSHUKNAGAR",
+          "expected": 13490.875250819727,
+          "actual": 3893,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:KOTHAPETA",
+          "expected": 3706.790653749805,
+          "actual": 1249,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:LINGOJIGUDA",
+          "expected": 12014.486028901318,
+          "actual": 1553,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:SAHEBNAGAR (DIV 10)",
+          "expected": 8967.713285592634,
+          "actual": 3148,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:SAROORNAGAR",
+          "expected": 10910.570494880181,
+          "actual": 5111,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "12:CHINTAL",
+          "expected": 34786.654464584964,
+          "actual": 2312,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "12:GAJULARAMARAM",
+          "expected": 27334.973894368864,
+          "actual": 13211,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "12:JEEDIMETLA",
+          "expected": 13681.082165568427,
+          "actual": 2241,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "12:SURARAM",
+          "expected": 13894.187352490237,
+          "actual": 4076,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "12:USHODAYA",
+          "expected": 21117.307038023537,
+          "actual": 5281,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "13:DEFENCE COLONY",
+          "expected": 7227.877791963902,
+          "actual": 3775,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "13:GOWTHAM NAGAR",
+          "expected": 68609.45452519812,
+          "actual": 10764,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "13:MACHABOLLARAM",
+          "expected": 15744.966859561084,
+          "actual": 2582,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "13:SAINATHPURAM",
+          "expected": 80464.53177533434,
+          "actual": 6090,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "13:VENKATAPURAM",
+          "expected": 18722.908154513087,
+          "actual": 1462,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:CHERLAPALLY",
+          "expected": 6156.8332972429,
+          "actual": 576,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:HOUSING BOARD",
+          "expected": 8118.8582015858565,
+          "actual": 904,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:HUBSIGUDA",
+          "expected": 2282.715894869243,
+          "actual": 2460,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:NACHARAM",
+          "expected": 37275.537082817515,
+          "actual": 2786,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:RADHIKA",
+          "expected": 42855.5499900886,
+          "actual": 2798,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:RAMANTHAPUR(DIV 14)",
+          "expected": 10145.3854929214,
+          "actual": 1774,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:SAIBABA NAGAR",
+          "expected": 5732.94191439597,
+          "actual": 2148,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:UPPAL",
+          "expected": 12021.354834719039,
+          "actual": 1604,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "15:GACHIBOWLI (DIV 15)",
+          "expected": 42464.14976624937,
+          "actual": 49312,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "15:KONDAPUR (DIV 15)",
+          "expected": 23039.5630946359,
+          "actual": 116195,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "15:NALLAGANDLA (DIV 15)",
+          "expected": 46320.68924937539,
+          "actual": 529,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:ATTAPUR",
+          "expected": 19138.188250604864,
+          "actual": 4227,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:BUDVEL (DIV16)",
+          "expected": 12291.847717945886,
+          "actual": 3067,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:HYDERGUDA",
+          "expected": 3511.8503099868367,
+          "actual": 19997,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:KATEDAN",
+          "expected": 963.6545570230252,
+          "actual": 456,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:MAILERDEV PALLY",
+          "expected": 7004.542194334716,
+          "actual": 807,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:SULEMAN NAGAR",
+          "expected": 47428.84307405763,
+          "actual": 1750,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "18:KISMATHPUR (DIV 18)",
+          "expected": 1666.1298578195883,
+          "actual": 50823,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "18:MANIKONDA (DIV 18)",
+          "expected": 14734.101884646892,
+          "actual": 102406,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "19:BODUPPAL (DIV 19)",
+          "expected": 1383.6637229358316,
+          "actual": 3788,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "2:CHANCHALGUDA",
+          "expected": 1367.7005152555391,
+          "actual": 236,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "2:MADANNAPET",
+          "expected": 765.1311986703143,
+          "actual": 76,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "2:MALAKPET",
+          "expected": 2568.6987266514748,
+          "actual": 457,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "2:MOOSARAMBAGH",
+          "expected": 4599.26284016351,
+          "actual": 2632,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "2:SAIDABAD",
+          "expected": 19612.695172274023,
+          "actual": 1088,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "20:BADANGPET  (DIV 20)",
+          "expected": 9565.351106950857,
+          "actual": 385,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "20:JILLELAGUDA (DIV 20)",
+          "expected": 7052.0785369761625,
+          "actual": 295,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "20:MEERPET (DIV 20)",
+          "expected": 7052.0785369761625,
+          "actual": 1502,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:AHMED NAGAR",
+          "expected": 9494.23512798419,
+          "actual": 640,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:ASIF NAGAR",
+          "expected": 7794.92607842762,
+          "actual": 1920,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:CHINTAL BASTHI",
+          "expected": 11456.10907663334,
+          "actual": 4400,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:GOLCONDA",
+          "expected": 1314.1735056839266,
+          "actual": 539,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:HAKEEMPET",
+          "expected": 13615.676940735751,
+          "actual": 1554,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:KAKATIYA NAGAR",
+          "expected": 8153.852655524996,
+          "actual": 4783,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:KARWAN",
+          "expected": 2352.015766932773,
+          "actual": 936,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:LANGER HOUSE",
+          "expected": 4761.384595541471,
+          "actual": 810,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:MEHIDIPATNAM",
+          "expected": 17324.22975804527,
+          "actual": 9029,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:OLD MALLEPALLY",
+          "expected": 5885.2941777380165,
+          "actual": 369,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:SHAIKPET",
+          "expected": 6151.08169370858,
+          "actual": 19295,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:TOLI CHOWK",
+          "expected": 11981.993209858269,
+          "actual": 7080,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:VIJAYNAGAR COLONY",
+          "expected": 9087.581225411072,
+          "actual": 8114,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "4:GOWLIGUDA",
+          "expected": 19704.514637996443,
+          "actual": 560,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "4:GUNFOUNDRY",
+          "expected": 5829.049531796074,
+          "actual": 2312,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "4:RED HILLS HIGH LEVEL",
+          "expected": 4398.968231875245,
+          "actual": 3036,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "4:RED HILLS LOW LEVEL",
+          "expected": 4398.968231875245,
+          "actual": 719,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "4:SULTAN BAZAR",
+          "expected": 7421.246207160802,
+          "actual": 1197,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:ADIKMET",
+          "expected": 1048.8055784356977,
+          "actual": 743,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:AMBERPET",
+          "expected": 806.2074614453252,
+          "actual": 222,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:AZAMABAD",
+          "expected": 4638.367364413072,
+          "actual": 4521,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:BAGH LINGAMPALLY",
+          "expected": 4980.965476403631,
+          "actual": 3942,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:BARKATPURA",
+          "expected": 5105.209289675687,
+          "actual": 3349,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:DOMALGUDA",
+          "expected": 10091.168359984693,
+          "actual": 862,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:GANDHINAGAR",
+          "expected": 7856.560576627362,
+          "actual": 9022,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:MUSHEERABAD",
+          "expected": 17646.55097449603,
+          "actual": 4237,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:NARAYANGUDA",
+          "expected": 4827.101116464014,
+          "actual": 8187,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:SHIVAM",
+          "expected": 8433.539201113183,
+          "actual": 1989,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:BANJARA HILLS",
+          "expected": 6598.553622806966,
+          "actual": 35369,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:BORABANDA",
+          "expected": 8480.25171864559,
+          "actual": 3075,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:ERRAGADDA",
+          "expected": 8118.778962060805,
+          "actual": 10365,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:FATHENAGAR",
+          "expected": 21698.0474070118,
+          "actual": 16812,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:FILM NAGAR",
+          "expected": 14894.976663489244,
+          "actual": 6186,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:JUBILEE HILLS",
+          "expected": 10873.56868367579,
+          "actual": 41253,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:S.P.R HILLS",
+          "expected": 6564.769737200835,
+          "actual": 1619,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:S.R.NAGAR",
+          "expected": 6082.483278915223,
+          "actual": 40862,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:SOMAJIGUDA",
+          "expected": 10405.876520939008,
+          "actual": 21981,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:VENGALRAONAGAR",
+          "expected": 5359.162862488981,
+          "actual": 26212,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:YELLAREDDYGUDA",
+          "expected": 8260.761603114644,
+          "actual": 19814,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:BOIGUDA",
+          "expected": 15951.950615142165,
+          "actual": 2082,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:BOUDHANAGAR",
+          "expected": 1151.0001663724713,
+          "actual": 531,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:LALAPET",
+          "expected": 2288.9470856547878,
+          "actual": 353,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:MARREDPALLY",
+          "expected": 10515.087733453489,
+          "actual": 2959,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:METTUGUDA",
+          "expected": 8311.0458016121,
+          "actual": 530,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:NALLAGUTTA",
+          "expected": 2469.4044438515903,
+          "actual": 462,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:PRAKASHNAGAR",
+          "expected": 8651.715505711922,
+          "actual": 3727,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:REGIMENTAL BAZAR",
+          "expected": 16886.966168212257,
+          "actual": 1374,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:SEETHAPALMANDI",
+          "expected": 4636.816889830368,
+          "actual": 1665,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:SRINIVAS NAGAR",
+          "expected": 4988.966122204151,
+          "actual": 3079,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:TARNAKA",
+          "expected": 5812.916026646391,
+          "actual": 8720,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:BALAJINAGAR (DIV 9)",
+          "expected": 3438.573077453723,
+          "actual": 35912,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:BALANAGAR",
+          "expected": 2076.934205385925,
+          "actual": 1136,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:BHAGYANAGAR",
+          "expected": 12601.327925017871,
+          "actual": 24324,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:BHARATHNAGAR",
+          "expected": 2644.834366319603,
+          "actual": 1313,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:GAYATRI NAGAR",
+          "expected": 12360.20517489941,
+          "actual": 28518,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:HASMATHPET",
+          "expected": 15074.283965206503,
+          "actual": 9862,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:KPHB",
+          "expected": 8732.95699130618,
+          "actual": 51452,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:KUKATPALLY",
+          "expected": 1479.1363492709406,
+          "actual": 3936,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:MOOSAPET",
+          "expected": 2888.048443831344,
+          "actual": 2293,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:MOTI NAGAR",
+          "expected": 12449.71062501572,
+          "actual": 11848,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:VIVEKANANDA NAGAR",
+          "expected": 8205.559016134886,
+          "actual": 2958,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:YELLAMMABANDA",
+          "expected": 15117.354857214446,
+          "actual": 4120,
+          "basis": "DERIVED"
+        }
+      ]
+    },
+    {
+      "prior_mean": 0.5,
+      "prior_basis": "ASSUMED",
+      "diagnostics": {
+        "fitting_method": "MAP_POINT_ESTIMATE",
+        "successful_starts": 3,
+        "prediction_relative_spread": 0.0004454922940300103,
+        "starts": [
+          {
+            "index": 0,
+            "success": true,
+            "objective": 1057.4594832429484
+          },
+          {
+            "index": 1,
+            "success": true,
+            "objective": 1057.45949820564
+          },
+          {
+            "index": 2,
+            "success": true,
+            "objective": 1057.4594913361252
+          }
+        ],
+        "posterior_diagnostics": null,
+        "posterior_basis": "UNAVAILABLE: point estimates, no MCMC posterior or intervals"
+      },
+      "metrics": {
+        "mean_absolute_error": 12437.914235999819,
+        "spearman": 0.3166474410321295,
+        "median_miss": 3.9289219774067994,
+        "within_2x": 0.22429906542056074,
+        "count": 107,
+        "positive_pairs": 107,
+        "zero_pairs_excluded_from_miss": 0,
+        "basis": "DERIVED"
+      },
+      "retention": "REJECT_BASELINE_NOT_BEATEN",
+      "retention_vs_persistence": "REJECT_BASELINE_NOT_BEATEN",
+      "predictions": [
+        {
+          "section_id": "1:BAHADURPURA",
+          "expected": 3008.221225873636,
+          "actual": 159,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:ALKAPURI",
+          "expected": 5432.104312968853,
+          "actual": 8176,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:DILSHUKNAGAR",
+          "expected": 13208.77835251384,
+          "actual": 3893,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:KOTHAPETA",
+          "expected": 4036.6377482037146,
+          "actual": 1249,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:LINGOJIGUDA",
+          "expected": 11808.632776665401,
+          "actual": 1553,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:SAHEBNAGAR (DIV 10)",
+          "expected": 8778.872597500029,
+          "actual": 3148,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:SAROORNAGAR",
+          "expected": 10690.960926737465,
+          "actual": 5111,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "12:CHINTAL",
+          "expected": 34353.40703775417,
+          "actual": 2312,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "12:GAJULARAMARAM",
+          "expected": 27098.214918785157,
+          "actual": 13211,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "12:JEEDIMETLA",
+          "expected": 13520.614031716914,
+          "actual": 2241,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "12:SURARAM",
+          "expected": 13753.947558418415,
+          "actual": 4076,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "12:USHODAYA",
+          "expected": 20748.63696268531,
+          "actual": 5281,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "13:DEFENCE COLONY",
+          "expected": 7098.343213640907,
+          "actual": 3775,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "13:GOWTHAM NAGAR",
+          "expected": 67227.83430072335,
+          "actual": 10764,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "13:MACHABOLLARAM",
+          "expected": 15468.101424944427,
+          "actual": 2582,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "13:SAINATHPURAM",
+          "expected": 78874.19964404192,
+          "actual": 6090,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "13:VENKATAPURAM",
+          "expected": 18345.91557019356,
+          "actual": 1462,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:CHERLAPALLY",
+          "expected": 6058.7562726405,
+          "actual": 576,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:HOUSING BOARD",
+          "expected": 7966.876640441518,
+          "actual": 904,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:HUBSIGUDA",
+          "expected": 2485.1849663406706,
+          "actual": 2460,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:NACHARAM",
+          "expected": 36675.33234760927,
+          "actual": 2786,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:RADHIKA",
+          "expected": 42106.3213910955,
+          "actual": 2798,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:RAMANTHAPUR(DIV 14)",
+          "expected": 9971.81927593774,
+          "actual": 1774,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:SAIBABA NAGAR",
+          "expected": 5667.694628692783,
+          "actual": 2148,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:UPPAL",
+          "expected": 11856.43514002356,
+          "actual": 1604,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "15:GACHIBOWLI (DIV 15)",
+          "expected": 41832.90985058119,
+          "actual": 49312,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "15:KONDAPUR (DIV 15)",
+          "expected": 22673.0560735435,
+          "actual": 116195,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "15:NALLAGANDLA (DIV 15)",
+          "expected": 45560.30685107554,
+          "actual": 529,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:ATTAPUR",
+          "expected": 20297.010900687666,
+          "actual": 4227,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:BUDVEL (DIV16)",
+          "expected": 12136.448384200043,
+          "actual": 3067,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:HYDERGUDA",
+          "expected": 3445.255065601351,
+          "actual": 19997,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:KATEDAN",
+          "expected": 1266.5688064312471,
+          "actual": 456,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:MAILERDEV PALLY",
+          "expected": 8364.358373319501,
+          "actual": 807,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:SULEMAN NAGAR",
+          "expected": 46995.30023902568,
+          "actual": 1750,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "18:KISMATHPUR (DIV 18)",
+          "expected": 1641.5161115199676,
+          "actual": 50823,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "18:MANIKONDA (DIV 18)",
+          "expected": 14504.793848602238,
+          "actual": 102406,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "19:BODUPPAL (DIV 19)",
+          "expected": 1555.610318931205,
+          "actual": 3788,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "2:CHANCHALGUDA",
+          "expected": 1695.7651148269238,
+          "actual": 236,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "2:MADANNAPET",
+          "expected": 1101.620627287166,
+          "actual": 76,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "2:MALAKPET",
+          "expected": 3083.044507153922,
+          "actual": 457,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "2:MOOSARAMBAGH",
+          "expected": 5246.563264927636,
+          "actual": 2632,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "2:SAIDABAD",
+          "expected": 19329.17961251989,
+          "actual": 1088,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "20:BADANGPET  (DIV 20)",
+          "expected": 9460.309227680478,
+          "actual": 385,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "20:JILLELAGUDA (DIV 20)",
+          "expected": 6948.89953016146,
+          "actual": 295,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "20:MEERPET (DIV 20)",
+          "expected": 6948.89953016146,
+          "actual": 1502,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:AHMED NAGAR",
+          "expected": 9360.714477807494,
+          "actual": 640,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:ASIF NAGAR",
+          "expected": 9365.160102256095,
+          "actual": 1920,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:CHINTAL BASTHI",
+          "expected": 11285.561367772836,
+          "actual": 4400,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:GOLCONDA",
+          "expected": 1779.6114004185292,
+          "actual": 539,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:HAKEEMPET",
+          "expected": 13401.376319857036,
+          "actual": 1554,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:KAKATIYA NAGAR",
+          "expected": 8041.320656225363,
+          "actual": 4783,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:KARWAN",
+          "expected": 3231.638876735737,
+          "actual": 936,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:LANGER HOUSE",
+          "expected": 5373.608949267587,
+          "actual": 810,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:MEHIDIPATNAM",
+          "expected": 17106.177228897886,
+          "actual": 9029,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:OLD MALLEPALLY",
+          "expected": 7778.4188573966285,
+          "actual": 369,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:SHAIKPET",
+          "expected": 6067.868105487071,
+          "actual": 19295,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:TOLI CHOWK",
+          "expected": 11808.5272670556,
+          "actual": 7080,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:VIJAYNAGAR COLONY",
+          "expected": 8942.054964818612,
+          "actual": 8114,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "4:GOWLIGUDA",
+          "expected": 19509.44341931391,
+          "actual": 560,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "4:GUNFOUNDRY",
+          "expected": 5739.4907773281875,
+          "actual": 2312,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "4:RED HILLS HIGH LEVEL",
+          "expected": 4326.452213106586,
+          "actual": 3036,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "4:RED HILLS LOW LEVEL",
+          "expected": 4326.452213106586,
+          "actual": 719,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "4:SULTAN BAZAR",
+          "expected": 7293.81559740975,
+          "actual": 1197,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:ADIKMET",
+          "expected": 1311.6565130823606,
+          "actual": 743,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:AMBERPET",
+          "expected": 1140.0497348284996,
+          "actual": 222,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:AZAMABAD",
+          "expected": 4563.7514211916605,
+          "actual": 4521,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:BAGH LINGAMPALLY",
+          "expected": 4899.775538236795,
+          "actual": 3942,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:BARKATPURA",
+          "expected": 5025.784038689169,
+          "actual": 3349,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:DOMALGUDA",
+          "expected": 9973.012541621498,
+          "actual": 862,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:GANDHINAGAR",
+          "expected": 7732.132383071487,
+          "actual": 9022,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:MUSHEERABAD",
+          "expected": 17443.423878338857,
+          "actual": 4237,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:NARAYANGUDA",
+          "expected": 4734.519461012739,
+          "actual": 8187,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:SHIVAM",
+          "expected": 8295.088958716771,
+          "actual": 1989,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:BANJARA HILLS",
+          "expected": 6508.62437437865,
+          "actual": 35369,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:BORABANDA",
+          "expected": 8391.622702597642,
+          "actual": 3075,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:ERRAGADDA",
+          "expected": 7988.152480067359,
+          "actual": 10365,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:FATHENAGAR",
+          "expected": 21398.499112972182,
+          "actual": 16812,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:FILM NAGAR",
+          "expected": 14738.97761581263,
+          "actual": 6186,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:JUBILEE HILLS",
+          "expected": 10740.162694003888,
+          "actual": 41253,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:S.P.R HILLS",
+          "expected": 6488.008164457951,
+          "actual": 1619,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:S.R.NAGAR",
+          "expected": 5962.989219619365,
+          "actual": 40862,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:SOMAJIGUDA",
+          "expected": 10229.298160133392,
+          "actual": 21981,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:VENGALRAONAGAR",
+          "expected": 5262.379916045912,
+          "actual": 26212,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:YELLAREDDYGUDA",
+          "expected": 8117.901245929186,
+          "actual": 19814,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:BOIGUDA",
+          "expected": 15750.369721145267,
+          "actual": 2082,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:BOUDHANAGAR",
+          "expected": 1403.436644599203,
+          "actual": 531,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:LALAPET",
+          "expected": 3240.832164485985,
+          "actual": 353,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:MARREDPALLY",
+          "expected": 10392.129377252593,
+          "actual": 2959,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:METTUGUDA",
+          "expected": 8181.06101293299,
+          "actual": 530,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:NALLAGUTTA",
+          "expected": 2429.1018093032317,
+          "actual": 462,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:PRAKASHNAGAR",
+          "expected": 8499.679291136184,
+          "actual": 3727,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:REGIMENTAL BAZAR",
+          "expected": 16678.606434370737,
+          "actual": 1374,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:SEETHAPALMANDI",
+          "expected": 5300.799193542576,
+          "actual": 1665,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:SRINIVAS NAGAR",
+          "expected": 5411.980462966902,
+          "actual": 3079,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:TARNAKA",
+          "expected": 5920.739071188587,
+          "actual": 8720,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:BALAJINAGAR (DIV 9)",
+          "expected": 3382.5327078108567,
+          "actual": 35912,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:BALANAGAR",
+          "expected": 2795.965196366282,
+          "actual": 1136,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:BHAGYANAGAR",
+          "expected": 12370.342204715862,
+          "actual": 24324,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:BHARATHNAGAR",
+          "expected": 3478.925932726197,
+          "actual": 1313,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:GAYATRI NAGAR",
+          "expected": 12170.544892551477,
+          "actual": 28518,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:HASMATHPET",
+          "expected": 14783.043554884645,
+          "actual": 9862,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:KPHB",
+          "expected": 8568.779415963289,
+          "actual": 51452,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:KUKATPALLY",
+          "expected": 1455.475757142146,
+          "actual": 3936,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:MOOSAPET",
+          "expected": 3368.494838304596,
+          "actual": 2293,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:MOTI NAGAR",
+          "expected": 12319.4762359665,
+          "actual": 11848,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:VIVEKANANDA NAGAR",
+          "expected": 8081.488818214911,
+          "actual": 2958,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:YELLAMMABANDA",
+          "expected": 14847.631402692476,
+          "actual": 4120,
+          "basis": "DERIVED"
+        }
+      ]
+    },
+    {
+      "prior_mean": 0.75,
+      "prior_basis": "ASSUMED",
+      "diagnostics": {
+        "fitting_method": "MAP_POINT_ESTIMATE",
+        "successful_starts": 3,
+        "prediction_relative_spread": 0.00757598306816231,
+        "starts": [
+          {
+            "index": 0,
+            "success": true,
+            "objective": 1060.0826390124755
+          },
+          {
+            "index": 1,
+            "success": true,
+            "objective": 1060.082704502586
+          },
+          {
+            "index": 2,
+            "success": true,
+            "objective": 1060.0827648956217
+          }
+        ],
+        "posterior_diagnostics": null,
+        "posterior_basis": "UNAVAILABLE: point estimates, no MCMC posterior or intervals"
+      },
+      "metrics": {
+        "mean_absolute_error": 12761.770851259877,
+        "spearman": 0.2125400125891427,
+        "median_miss": 4.533566591729086,
+        "within_2x": 0.19626168224299065,
+        "count": 107,
+        "positive_pairs": 107,
+        "zero_pairs_excluded_from_miss": 0,
+        "basis": "DERIVED"
+      },
+      "retention": "REJECT_BASELINE_NOT_BEATEN",
+      "retention_vs_persistence": "REJECT_BASELINE_NOT_BEATEN",
+      "predictions": [
+        {
+          "section_id": "1:BAHADURPURA",
+          "expected": 2966.3817081396674,
+          "actual": 159,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:ALKAPURI",
+          "expected": 5401.415084805367,
+          "actual": 8176,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:DILSHUKNAGAR",
+          "expected": 12776.534175972061,
+          "actual": 3893,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:KOTHAPETA",
+          "expected": 4617.636974530578,
+          "actual": 1249,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:LINGOJIGUDA",
+          "expected": 11511.669337289999,
+          "actual": 1553,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:SAHEBNAGAR (DIV 10)",
+          "expected": 8490.033905337837,
+          "actual": 3148,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "10:SAROORNAGAR",
+          "expected": 10358.81017395909,
+          "actual": 5111,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "12:CHINTAL",
+          "expected": 33829.917866222866,
+          "actual": 2312,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "12:GAJULARAMARAM",
+          "expected": 26889.18483771589,
+          "actual": 13211,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "12:JEEDIMETLA",
+          "expected": 13329.74674711484,
+          "actual": 2241,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "12:SURARAM",
+          "expected": 13611.740228623605,
+          "actual": 4076,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "12:USHODAYA",
+          "expected": 20210.355671303543,
+          "actual": 5281,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "13:DEFENCE COLONY",
+          "expected": 6909.287758353337,
+          "actual": 3775,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "13:GOWTHAM NAGAR",
+          "expected": 65095.682326848284,
+          "actual": 10764,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "13:MACHABOLLARAM",
+          "expected": 15038.478190340997,
+          "actual": 2582,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "13:SAINATHPURAM",
+          "expected": 76465.62409264136,
+          "actual": 6090,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "13:VENKATAPURAM",
+          "expected": 17763.181605095324,
+          "actual": 1462,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:CHERLAPALLY",
+          "expected": 5920.584712956338,
+          "actual": 576,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:HOUSING BOARD",
+          "expected": 7742.94695348237,
+          "actual": 904,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:HUBSIGUDA",
+          "expected": 2837.0575991307487,
+          "actual": 2460,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:NACHARAM",
+          "expected": 35829.565319557536,
+          "actual": 2786,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:RADHIKA",
+          "expected": 41008.95552905432,
+          "actual": 2798,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:RAMANTHAPUR(DIV 14)",
+          "expected": 9723.88519680391,
+          "actual": 1774,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:SAIBABA NAGAR",
+          "expected": 5594.301674957445,
+          "actual": 2148,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "14:UPPAL",
+          "expected": 11639.743688456969,
+          "actual": 1604,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "15:GACHIBOWLI (DIV 15)",
+          "expected": 40961.211083742026,
+          "actual": 49312,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "15:KONDAPUR (DIV 15)",
+          "expected": 22155.39092844802,
+          "actual": 116195,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "15:NALLAGANDLA (DIV 15)",
+          "expected": 44474.024214898236,
+          "actual": 529,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:ATTAPUR",
+          "expected": 22328.472836754554,
+          "actual": 4227,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:BUDVEL (DIV16)",
+          "expected": 11922.183282704376,
+          "actual": 3067,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:HYDERGUDA",
+          "expected": 3345.074268918221,
+          "actual": 19997,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:KATEDAN",
+          "expected": 2474.1483173445913,
+          "actual": 456,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:MAILERDEV PALLY",
+          "expected": 11913.800401895036,
+          "actual": 807,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "16:SULEMAN NAGAR",
+          "expected": 46494.876059989394,
+          "actual": 1750,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "18:KISMATHPUR (DIV 18)",
+          "expected": 1605.3584765495386,
+          "actual": 50823,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "18:MANIKONDA (DIV 18)",
+          "expected": 14181.01192243245,
+          "actual": 102406,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "19:BODUPPAL (DIV 19)",
+          "expected": 1897.4315618574103,
+          "actual": 3788,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "2:CHANCHALGUDA",
+          "expected": 2634.1856443998463,
+          "actual": 236,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "2:MADANNAPET",
+          "expected": 3323.602759928489,
+          "actual": 76,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "2:MALAKPET",
+          "expected": 4366.828751132535,
+          "actual": 457,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "2:MOOSARAMBAGH",
+          "expected": 6583.1621768902505,
+          "actual": 2632,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "2:SAIDABAD",
+          "expected": 18928.901893671995,
+          "actual": 1088,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "20:BADANGPET  (DIV 20)",
+          "expected": 9337.303421792038,
+          "actual": 385,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "20:JILLELAGUDA (DIV 20)",
+          "expected": 6809.417020777087,
+          "actual": 295,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "20:MEERPET (DIV 20)",
+          "expected": 6809.417020777087,
+          "actual": 1502,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:AHMED NAGAR",
+          "expected": 9183.603550456794,
+          "actual": 640,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:ASIF NAGAR",
+          "expected": 13400.941230041673,
+          "actual": 1920,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:CHINTAL BASTHI",
+          "expected": 11047.675068431518,
+          "actual": 4400,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:GOLCONDA",
+          "expected": 3850.808304741452,
+          "actual": 539,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:HAKEEMPET",
+          "expected": 13099.225908451155,
+          "actual": 1554,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:KAKATIYA NAGAR",
+          "expected": 7889.301338360788,
+          "actual": 4783,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:KARWAN",
+          "expected": 7578.906996897882,
+          "actual": 936,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:LANGER HOUSE",
+          "expected": 6635.513703333391,
+          "actual": 810,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:MEHIDIPATNAM",
+          "expected": 16817.97601992935,
+          "actual": 9029,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:OLD MALLEPALLY",
+          "expected": 15158.395603606823,
+          "actual": 369,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:SHAIKPET",
+          "expected": 5961.583212205112,
+          "actual": 19295,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:TOLI CHOWK",
+          "expected": 11564.012004279488,
+          "actual": 7080,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "3:VIJAYNAGAR COLONY",
+          "expected": 8732.970971972594,
+          "actual": 8114,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "4:GOWLIGUDA",
+          "expected": 19278.642436811406,
+          "actual": 560,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "4:GUNFOUNDRY",
+          "expected": 5610.132414530962,
+          "actual": 2312,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "4:RED HILLS HIGH LEVEL",
+          "expected": 4220.159351333403,
+          "actual": 3036,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "4:RED HILLS LOW LEVEL",
+          "expected": 4220.159351333403,
+          "actual": 719,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "4:SULTAN BAZAR",
+          "expected": 7106.619278204692,
+          "actual": 1197,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:ADIKMET",
+          "expected": 2089.508080172865,
+          "actual": 743,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:AMBERPET",
+          "expected": 3104.047460706239,
+          "actual": 222,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:AZAMABAD",
+          "expected": 4457.576727765726,
+          "actual": 4521,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:BAGH LINGAMPALLY",
+          "expected": 4783.684552266697,
+          "actual": 3942,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:BARKATPURA",
+          "expected": 4914.431246649398,
+          "actual": 3349,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:DOMALGUDA",
+          "expected": 9825.64541036912,
+          "actual": 862,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:GANDHINAGAR",
+          "expected": 7557.2172825185,
+          "actual": 9022,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:MUSHEERABAD",
+          "expected": 17192.967399334793,
+          "actual": 4237,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:NARAYANGUDA",
+          "expected": 4595.139616547943,
+          "actual": 8187,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "5:SHIVAM",
+          "expected": 8100.548047794379,
+          "actual": 1989,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:BANJARA HILLS",
+          "expected": 6395.296397845252,
+          "actual": 35369,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:BORABANDA",
+          "expected": 8299.230609835742,
+          "actual": 3075,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:ERRAGADDA",
+          "expected": 7805.032518511566,
+          "actual": 10365,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:FATHENAGAR",
+          "expected": 21001.81305959231,
+          "actual": 16812,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:FILM NAGAR",
+          "expected": 14571.223797472952,
+          "actual": 6186,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:JUBILEE HILLS",
+          "expected": 10578.978162764275,
+          "actual": 41253,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:S.P.R HILLS",
+          "expected": 6398.288637654712,
+          "actual": 1619,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:S.R.NAGAR",
+          "expected": 5783.854867104823,
+          "actual": 40862,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:SOMAJIGUDA",
+          "expected": 9971.854076165773,
+          "actual": 21981,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:VENGALRAONAGAR",
+          "expected": 5121.854942873433,
+          "actual": 26212,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "6:YELLAREDDYGUDA",
+          "expected": 7912.200503385952,
+          "actual": 19814,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:BOIGUDA",
+          "expected": 15474.333005363853,
+          "actual": 2082,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:BOUDHANAGAR",
+          "expected": 2076.277336310649,
+          "actual": 531,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:LALAPET",
+          "expected": 8786.305360799777,
+          "actual": 353,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:MARREDPALLY",
+          "expected": 10222.99590154288,
+          "actual": 2959,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:METTUGUDA",
+          "expected": 7991.87517064058,
+          "actual": 530,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:NALLAGUTTA",
+          "expected": 2369.9524164356126,
+          "actual": 462,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:PRAKASHNAGAR",
+          "expected": 8273.024560547205,
+          "actual": 3727,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:REGIMENTAL BAZAR",
+          "expected": 16387.924137071022,
+          "actual": 1374,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:SEETHAPALMANDI",
+          "expected": 6694.943951817954,
+          "actual": 1665,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:SRINIVAS NAGAR",
+          "expected": 6165.229005074576,
+          "actual": 3079,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "7:TARNAKA",
+          "expected": 6076.444660505698,
+          "actual": 8720,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:BALAJINAGAR (DIV 9)",
+          "expected": 3303.5053596139055,
+          "actual": 35912,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:BALANAGAR",
+          "expected": 5895.330476356764,
+          "actual": 1136,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:BHAGYANAGAR",
+          "expected": 12031.892652194327,
+          "actual": 24324,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:BHARATHNAGAR",
+          "expected": 6683.749515736533,
+          "actual": 1313,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:GAYATRI NAGAR",
+          "expected": 11920.412676487178,
+          "actual": 28518,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:HASMATHPET",
+          "expected": 14346.796888481116,
+          "actual": 9862,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:KPHB",
+          "expected": 8326.599863801797,
+          "actual": 51452,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:KUKATPALLY",
+          "expected": 1422.5479527661034,
+          "actual": 3936,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:MOOSAPET",
+          "expected": 4471.0859383306915,
+          "actual": 2293,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:MOTI NAGAR",
+          "expected": 12181.129087851998,
+          "actual": 11848,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:VIVEKANANDA NAGAR",
+          "expected": 7913.472209673069,
+          "actual": 2958,
+          "basis": "DERIVED"
+        },
+        {
+          "section_id": "9:YELLAMMABANDA",
+          "expected": 14455.879011172385,
+          "actual": 4120,
+          "basis": "DERIVED"
+        }
+      ]
+    }
+  ],
+  "reporting_probability": null,
+  "true_demand": null,
+  "latent_basis": "UNAVAILABLE",
+  "latent_reason": "No identified reporting prior or field ground truth; decomposition is assumption-dependent.",
+  "status": "REJECT_RESEARCH_CANDIDATE",
+  "station_method": "ASSUMED stand-ins refitted by 2024-only booking-weighted k-means; existing 2025 stations not used for fitting",
+  "exposure_method": "Census-2011 households apportioned by 2023 building-count mass; approximate need/context",
+  "inputs_sha256": {
+    "data/raw/hmwssb_tankers_portal/2024-01.csv": "311f2e103146596dd16930d4c78ba54da27b965490eb8dfb6d4a918b0ea88985",
+    "data/raw/hmwssb_billing_portal/2024-01.csv": "445d7793c19f4aad43e1f636875c6f075037c3069cf9efbbfbbb56be46310bc1",
+    "data/raw/hmwssb_tankers_portal/2024-02.csv": "9950c45274e0d265f0a1be6a9580395b0b3911abad584dc3b4b51a6a42d6647c",
+    "data/raw/hmwssb_billing_portal/2024-02.csv": "c2b5f223ad50adfc746f8585cebab044b031dec7d38a008ea7819084b005f8ee",
+    "data/raw/hmwssb_tankers_portal/2024-03.csv": "73205ddec534c9883572a801331411850fe04dda3c7981992d2547e059765515",
+    "data/raw/hmwssb_billing_portal/2024-03.csv": "fdf90fc48a813f62866b5bfde6b3bd76f8bd492df67fe804dbb7e6a3797f1e5c",
+    "data/raw/hmwssb_tankers_portal/2024-04.csv": "6bc96987933eafcf7d1a17535205dc2ccb9eea50085f026ae37b0e410a5bcc11",
+    "data/raw/hmwssb_billing_portal/2024-04.csv": "ef4025c3ca8006a4ea90f3109905bf7a8df021fbe3cff331e31a186829130a4e",
+    "data/raw/hmwssb_tankers_portal/2024-05.csv": "5882aebec7a947aff38b5dde0bd48fe0d6cc4a4c60394fcc77805a80218fe849",
+    "data/raw/hmwssb_billing_portal/2024-05.csv": "83f2d9ac95c200b3ad05fcdf5a38b79b59ac28e0d2873c721fb257fd5cd1251c",
+    "data/raw/hmwssb_tankers_portal/2024-06.csv": "5fdeebc6e93a6cf629ec08d8b3152316ae91279fd81071dae8e0e411aac205e9",
+    "data/raw/hmwssb_billing_portal/2024-06.csv": "6885e6a032912436ccdabca0096034491475a16f87beb6dc168650db59fd2206",
+    "data/raw/hmwssb_tankers_portal/2024-07.csv": "0a25636ea22671279825fc971e812f285ebf1adc738a6a2ddbd4a89738e96d78",
+    "data/raw/hmwssb_billing_portal/2024-07.csv": "fc1b6229dd62e929ff2a0f74fbf918f74fd01297aeab95a34defed2de4fd2ce0",
+    "data/raw/hmwssb_tankers_portal/2024-08.csv": "295ac5f8ee8d79fb430074e823b2707e6a060cff2509a5a1e06aa29ebda3c5bb",
+    "data/raw/hmwssb_billing_portal/2024-08.csv": "fd466f6b2593be0e789250a94fe6107c106116152c065e99fbc5e6ca63451322",
+    "data/raw/hmwssb_tankers_portal/2024-09.csv": "a224cd113928406b9c10271219053392fb641538131d7f16a2b46b626c8cc0b1",
+    "data/raw/hmwssb_billing_portal/2024-09.csv": "691a2cc698f831907b66127a8dc0831760459e49201ecea56157c0766eb4f369",
+    "data/raw/hmwssb_tankers_portal/2024-10.csv": "a02e09bc4b74366a1cece47dfdcb874b9d2251e5d2d55cba4ccc58f6f212a3db",
+    "data/raw/hmwssb_billing_portal/2024-10.csv": "573780a02bf99aaaa74cddcf40cb0ca384593335a243fa3084b284bfd40400bc",
+    "data/raw/hmwssb_tankers_portal/2024-11.csv": "989aaf68d6d82a87f7bdedacecaace9e36ce19d0689eba545e58393677547cb5",
+    "data/raw/hmwssb_billing_portal/2024-11.csv": "a94fe7068f2831dbf1af6f0c613cc9758d36d561500f0f67d7d337afde02889c",
+    "data/raw/hmwssb_tankers_portal/2024-12.csv": "4ed129d8cbf7066f009162306f4ad8fd6ca69253cc89142977afba9fd1d8877b",
+    "data/raw/hmwssb_billing_portal/2024-12.csv": "f4a33d24d19431d11c60896f2ed7031df27463a8f47c7cffabb8c8f444d29816",
+    "data/raw/hmwssb_tankers_portal/2025-01.csv": "fddb8c23352fda1e2d509a822e3742784578f39a721a276fc89eb06f01f82b54",
+    "data/raw/hmwssb_billing_portal/2025-01.csv": "f455ebe1c6c11a337b71e681ae2fe654564095e8964132f26c8f7dcaddd236ff",
+    "data/raw/hmwssb_tankers_portal/2025-02.csv": "17d10aa8ca91ec403397d75f8b3798835d2041446f158269f6f0687dda7610ad",
+    "data/raw/hmwssb_billing_portal/2025-02.csv": "bd12d02e3c5a124bc335e9608a4ee15b7609566647c03dcdc08d11034069f8ac",
+    "data/raw/hmwssb_tankers_portal/2025-03.csv": "11e64b35f0ab211b6cae8f958cfdeb1d6233c79d0981733d47aa9c6e17ae36a1",
+    "data/raw/hmwssb_billing_portal/2025-03.csv": "4c32562e31a67d14e2c7ad2826c3cf9e00c0c16f2622c737023ad7acce3685ec",
+    "data/raw/hmwssb_tankers_portal/2025-04.csv": "588bddbcfd6c0599759b7fba8619e74662d047a5e52ec9b81f1532c698a2ee5c",
+    "data/raw/hmwssb_billing_portal/2025-04.csv": "61a765a6c515f56235db07d86a07431c6e5dd35e994c70bd75ab84121961c522",
+    "data/raw/hmwssb_tankers_portal/2025-05.csv": "a4013765622ed91185a564a35f53888280b00028f9e4184fdedeb327a8e925f6",
+    "data/raw/hmwssb_billing_portal/2025-05.csv": "d0ba9223a953656403f97fcdeed5f043b0da5fd472c821fe0360ac0fca51dbd2",
+    "data/raw/hmwssb_tankers_portal/2025-06.csv": "37b1d7cbdfba6d0c6a04325272dbb06bca4f45fc76433a5f6605ffd7dc0489f4",
+    "data/raw/hmwssb_billing_portal/2025-06.csv": "69e143886de1eec849211956f26d410b7e0351c0d79f9be1e22d7d54f50bca81",
+    "data/raw/hmwssb_tankers_portal/2025-07.csv": "f2ee7b91e61ff38e8dd8bcf232827be0ae6ddd363e56c12620a1caf9d0920b7a",
+    "data/raw/hmwssb_billing_portal/2025-07.csv": "bb89b5d3d6f48283a6b9f58f578933e826353c16ed9ebac60711f2e328122506",
+    "data/raw/hmwssb_tankers_portal/2025-08.csv": "e5519c586f93fa1597599e63adaa7e0f74ae36dab60a81da5643fdb6b8341714",
+    "data/raw/hmwssb_billing_portal/2025-08.csv": "dbcdd55b7f5511599c5e837f2e4f6fa372b1105fa7bad0c82148c09eb8755434",
+    "data/raw/hmwssb_tankers_portal/2025-09.csv": "42b8c3ca58dbcc27475c56b9b4ce932cdceb80d96df035291afd2aaa2e14881d",
+    "data/raw/hmwssb_billing_portal/2025-09.csv": "d4f754434416abc3710a24ae89e950d30426150c3640cc3775f518b8674fc946",
+    "data/raw/hmwssb_tankers_portal/2025-10.csv": "9da28031c06e68bc19e08ff67cf12f9d90d4644ca24a6a4c7b9fa6ed7a6fda6f",
+    "data/raw/hmwssb_billing_portal/2025-10.csv": "9a806bcd11d9f8dba4faf180300babe54564db697883e9364558aa3f41e525b4",
+    "data/raw/hmwssb_tankers_portal/2025-11.csv": "6cfabfe087080f0ecb39e2600222f87fe3960d158d39390cd2ed95b61df666e3",
+    "data/raw/hmwssb_billing_portal/2025-11.csv": "1f1812cb60eaa067d953b0f2b461fc09a98003c6e859049861a969b205df51a6",
+    "data/raw/hmwssb_tankers_portal/2025-12.csv": "e96590142acb7de7db6c7c554131d043ec70edd908c5f12a8c85649b2e4e0807",
+    "data/raw/hmwssb_billing_portal/2025-12.csv": "0eeb5e9a77d33564f30bc8b1bb171bf5aecf57c74a1696fa4493744650103a20",
+    "data/derived/evidence/ward_evidence.csv": "629ca414bdbe335f0036933bf942132564a594c57b31fd7efd42805201b4d9fc",
+    "data/derived/crosswalk/section_ward_building_weights.csv": "1b4461f6bbb5526d1c19028d09b80f39f9a1aa10d059fa359dc7fc897d68ca13",
+    "data/derived/crosswalk/section_to_ward_2016.csv": "7cd5f22f86e0418601aa46f65b08a2e8b85acc5bbcd312adcaab5ffb6faabf25"
+  }
+}

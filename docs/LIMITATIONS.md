@@ -79,6 +79,40 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - The map screens (U5) follow the same live-or-snapshot rule.
 
 ### F4 Under-served Field-Check Screen (E5)
+- **Under-reporting experiment rejected (`feat/e5-underreporting`, 2026-10-06):** new seeded,
+  non-spatial PyMC NB/Binomial thinning model, marginalized to NB(mu*p, alpha). True demand
+  exposure uses Census-2011 households apportioned by 2023 building-count mass, WAD/non-tap;
+  reporting logits use CAD, hardship and distance to stand-ins fitted on 2024 bookings only.
+  Committed sandbox stations use 2025 booking weights and were excluded to avoid leakage.
+  No 2025 booking or connection inputs enter the fitting. 107 complete paired sections.
+- **Fast inference is a point estimate:** three seeded bounded L-BFGS-B MAP starts per
+  ASSUMED reporting prior (means 0.25, 0.50, 0.75, strength 50). All starts succeeded and
+  observed-prediction spreads were below 0.8%. This is optimizer agreement, **not posterior
+  convergence**: no R-hat, ESS, posterior intervals or validated latent probabilities.
+  Windows' 32-bit MinGW prevented compilation; the Python-linker NUTS attempt was interrupted
+  without final results and replaced with bounded MAP. Archived NB/BYM2 fits were not resampled.
+
+  | 2024 -> 2025 predictor | Spearman | Median miss | Within 2x | Mean absolute error |
+  |---|---:|---:|---:|---:|
+  | Section connections x city rate | 0.1591 | 3.6120x | 23.36% | 9,487.30 |
+  | Same section's 2024 bookings | 0.9547 | 1.3643x | 91.59% | 2,386.01 |
+  | Own rate shrunk toward division rate | 0.8046 | 1.6450x | 68.22% | 4,173.40 |
+  | Under-reporting, prior 0.25 | 0.3340 | 3.7939x | 23.36% | 12,406.25 |
+  | Under-reporting, prior 0.50 | 0.3166 | 3.9289x | 22.43% | 12,437.91 |
+  | Under-reporting, prior 0.75 | 0.2125 | 4.5336x | 19.63% | 12,761.77 |
+
+  None beats the baseline on rank, median miss and absolute error together; all lose badly
+  to persistence. **The new model is not used by the screen or allocation.** The stronger
+  booking-only benchmark cannot identify persistent under-reporting, so it does not replace
+  the descriptive peer-rate visit screen. The cohort differs from the 121 section-peer pairs.
+  Reproduce: `scripts/evidence/run_underreporting.py`; verify stored inputs/results without
+  fitting: `scripts/evidence/verify_underreporting.py`.
+- **Identifiability remains blocked:** [Stoner et al., §2.2](https://arxiv.org/html/1809.00544v1)
+  requires informative reporting priors or fully reported observations. Our priors are assumptions,
+  not measured booking probabilities. Better booking prediction would still not establish hidden
+  demand or flag precision. `true_demand` and `reporting_probability` remain UNAVAILABLE/null.
+  Research used [PyMC's documented local MAP](https://www.pymc.io/projects/docs/en/stable/api/generated/pymc.find_MAP.html)
+  and a stronger own-section persistence control instead of repeating the prior spatial attempts.
 - **Transfer sensitivity audit (107 identical wards, DERIVED_APPROXIMATE):** original point
   table reproduced from source data; after the building-count split, re-evaluated archived NB
   predictions and recomputed peers/household baseline. Results:

@@ -1216,3 +1216,17 @@ The pull-request description must summarize the same information and link to thi
 - Legacy E5 fits frozen on original observations. No spatial resampling or source-manifest edits.
   New section checks retain exact counts; approximate counts are research/context only.
 - Actual vector building footprints and official section GIS are still absent. RTI is owner action.
+## `feat/e5-underreporting` — F4 model experiment, 2026-10-06
+
+- Read F4-F6/P3/worklog before parallel primary-source research; no repetition of BYM2 repairs.
+- New non-spatial PyMC marginalized NB/Binomial model, seeded 2024-only data; 107 section pairs.
+  Need exposure from historical Census/2023 buildings; 2024-only station stand-ins avoid leakage.
+- Initial NUTS was interrupted without final metrics. Bounded MAP with three seeded starts and
+  three assumed reporting priors completed; all optimizers succeeded, predictions agree within 0.8%.
+  Posterior diagnostics and latent demand/probability unavailable; no posterior claims.
+- Reject all new fits: median misses 3.79/3.93/4.53x vs city baseline 3.61x and own-section
+  persistence 1.36x (rho 0.955, within2x 91.59%). Complete table in LIMITATIONS F4.
+- Test-first gate for MAP optimizer success/stability failed before implementation and now passes.
+  Saved-result verifier checks inputs, predictions, metrics and rejection without fitting.
+- No operational scoring/allocation change, no Windows spatial sampling, no external publication.
+  Work isolated after another session stashed this code and switched the shared checkout.
