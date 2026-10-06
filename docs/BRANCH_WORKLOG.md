@@ -1144,3 +1144,14 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:** short history (2021 start); messy well positions; the anomaly is shown, not used for the risk (`docs/LIMITATIONS.md` F5, F6).
 - **Pull request:** see the PR for `feat/d7-groundwater`.
 
+## `feat/item19-trips-protocol` — owner decisions 2 and 4 (item 19)
+
+- **Owner / date:** repo owner, 2026-10-06.
+- **Why:** the F5 capacity check refused to run without trips per tanker per day, and the docs still asked for the forecast protocol to be confirmed although it was confirmed on 2026-10-03.
+- **What we changed:**
+  - `config/forecast.py`: `trips_per_tanker_per_day = 9.0` with `trips_per_tanker_per_day_basis` (DERIVED: 11,000 trips / 1,233 tankers, May 2026 news = 8.9; other Hyderabad, Chennai and Bengaluru figures in the comment); same value as the sandbox.
+  - `services/forecast.py`: the capacity basis no longer says OPEN; `scripts/forecast/run_backtest.py` writes `data/derived/forecast_capacity.csv` by default.
+  - Docs: protocol recorded as confirmed (`LIMITATIONS.md` F5); item 19 statuses (6, 7 and item 13 dropped by the owner); Q1 searched again (no list); Q2 source found (Open Data Telangana daily reservoir storage, 2021-2026); stale item 12 status line fixed.
+- **Results:** 1,123 tankers x 9 trips covers every forecast month (May 2026 peak: 73% of capacity); a peak-season rate, and the forecast under-forecast the real 2026 surge.
+- **Validation:** test written first and seen failing (config value, basis, same as sandbox, capacity basis), then passing; the script test checks the capacity file.
+- **Pull request:** see the PR for `feat/item19-trips-protocol`.

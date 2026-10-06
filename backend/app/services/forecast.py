@@ -897,11 +897,9 @@ def capacity_plan(
     trips_per_tanker_per_day: float | None,
 ) -> list[CapacityRow]:
     """Trips needed (one booking = one trip) versus fleet x trips per tanker per day x days.
-    Trips per day has no source: it must be given (OPEN), never defaulted."""
+    Trips per day must be given (FORECAST_CONFIG.trips_per_tanker_per_day, DERIVED)."""
     if trips_per_tanker_per_day is None or trips_per_tanker_per_day <= 0:
-        raise ValueError(
-            "trips per tanker per day is required (OPEN, owner to confirm: no sourced value)"
-        )
+        raise ValueError("trips per tanker per day is required (a positive number)")
     rows = []
     for month in sorted(city_forecast):
         days = calendar.monthrange(*month)[1]
@@ -914,7 +912,8 @@ def capacity_plan(
                 capacity,
                 max(0.0, needed - capacity),
                 "DERIVED: forecast bookings, one trip per booking (ASSUMED)",
-                f"DERIVED: fleet x {trips_per_tanker_per_day} trips per day (OPEN) x {days} days",
+                f"DERIVED: fleet x {trips_per_tanker_per_day} trips per day (news, 2026) x "
+                f"{days} days",
             )
         )
     return rows

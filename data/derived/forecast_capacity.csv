@@ -1,0 +1,13 @@
+month,trips_needed,trips_needed_basis,capacity_trips,capacity_basis,shortfall_trips,fleet_basis
+2026-02,116404.0027137357,"DERIVED: forecast bookings, one trip per booking (ASSUMED)",282996.0,"DERIVED: fleet x 9.0 trips per day (news, 2026) x 28 days",0.0,"ASSUMED: config/forecast.py fleet (D17, news)"
+2026-03,181028.09674798133,"DERIVED: forecast bookings, one trip per booking (ASSUMED)",313317.0,"DERIVED: fleet x 9.0 trips per day (news, 2026) x 31 days",0.0,"ASSUMED: config/forecast.py fleet (D17, news)"
+2026-04,186324.92323128055,"DERIVED: forecast bookings, one trip per booking (ASSUMED)",303210.0,"DERIVED: fleet x 9.0 trips per day (news, 2026) x 30 days",0.0,"ASSUMED: config/forecast.py fleet (D17, news)"
+2026-05,228301.5785513216,"DERIVED: forecast bookings, one trip per booking (ASSUMED)",313317.0,"DERIVED: fleet x 9.0 trips per day (news, 2026) x 31 days",0.0,"ASSUMED: config/forecast.py fleet (D17, news)"
+2026-06,176533.33948979154,"DERIVED: forecast bookings, one trip per booking (ASSUMED)",303210.0,"DERIVED: fleet x 9.0 trips per day (news, 2026) x 30 days",0.0,"ASSUMED: config/forecast.py fleet (D17, news)"
+2026-07,145031.22777695372,"DERIVED: forecast bookings, one trip per booking (ASSUMED)",313317.0,"DERIVED: fleet x 9.0 trips per day (news, 2026) x 31 days",0.0,"ASSUMED: config/forecast.py fleet (D17, news)"
+2026-08,53751.357850379005,"DERIVED: forecast bookings, one trip per booking (ASSUMED)",313317.0,"DERIVED: fleet x 9.0 trips per day (news, 2026) x 31 days",0.0,"ASSUMED: config/forecast.py fleet (D17, news)"
+2026-09,44259.23758807511,"DERIVED: forecast bookings, one trip per booking (ASSUMED)",303210.0,"DERIVED: fleet x 9.0 trips per day (news, 2026) x 30 days",0.0,"ASSUMED: config/forecast.py fleet (D17, news)"
+2026-10,46086.05262160727,"DERIVED: forecast bookings, one trip per booking (ASSUMED)",313317.0,"DERIVED: fleet x 9.0 trips per day (news, 2026) x 31 days",0.0,"ASSUMED: config/forecast.py fleet (D17, news)"
+2026-11,47229.531771565846,"DERIVED: forecast bookings, one trip per booking (ASSUMED)",303210.0,"DERIVED: fleet x 9.0 trips per day (news, 2026) x 30 days",0.0,"ASSUMED: config/forecast.py fleet (D17, news)"
+2026-12,53216.57992605228,"DERIVED: forecast bookings, one trip per booking (ASSUMED)",313317.0,"DERIVED: fleet x 9.0 trips per day (news, 2026) x 31 days",0.0,"ASSUMED: config/forecast.py fleet (D17, news)"
+2027-01,69391.34811241626,"DERIVED: forecast bookings, one trip per booking (ASSUMED)",313317.0,"DERIVED: fleet x 9.0 trips per day (news, 2026) x 31 days",0.0,"ASSUMED: config/forecast.py fleet (D17, news)"
