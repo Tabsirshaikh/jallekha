@@ -30,7 +30,7 @@ describe("AuthProvider", () => {
   });
 
   it("signs in through /auth/me and keeps the role and user id", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ role: "field_worker", user_id: "fw-7" })));
+    vi.stubGlobal("fetch", vi.fn(() => Promise.resolve(jsonResponse({ role: "field_worker", user_id: "fw-7" }))));
     render(<AuthProvider><Probe /></AuthProvider>);
     await act(async () => screen.getByText("in").click());
     await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("signed-in"));
@@ -39,7 +39,7 @@ describe("AuthProvider", () => {
   });
 
   it("rejects a token the server does not know and forgets it", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ error: { code: "unauthorized", message: "Unknown token" } }, 401)));
+    vi.stubGlobal("fetch", vi.fn(() => Promise.resolve(jsonResponse({ error: { code: "unauthorized", message: "Unknown token" } }, 401))));
     render(<AuthProvider><Probe /></AuthProvider>);
     await act(async () => screen.getByText("in").click());
     await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("rejected"));
@@ -63,5 +63,24 @@ describe("AuthProvider", () => {
     await act(async () => screen.getByText("in").click());
     await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("unreachable"));
     expect(getToken()).toBe("t-field-1");
+  });
+});
+
+describe("AuthProvider on an open server", () => {
+  beforeEach(() => setToken(null));
+  afterEach(() => vi.unstubAllGlobals());
+
+  it("is signed in without a token and acts as the role of the workspace", async () => {
+    vi.stubGlobal("fetch", vi.fn(() => Promise.resolve(jsonResponse({ role: "dev", user_id: null, open: true }))));
+    function Workspace() {
+      const auth = useAuth();
+      return <div><p data-testid="open">{String(auth.open)}</p><p data-testid="who">{auth.role ?? "-"}:{auth.userId ?? "-"}</p><button onClick={() => auth.setWorkspaceRole("driver")}>driver</button></div>;
+    }
+    render(<AuthProvider><Probe /><Workspace /></AuthProvider>);
+    await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("signed-in"));
+    expect(screen.getAllByTestId("who")[0]).toHaveTextContent("officer:officer-01");
+    await act(async () => screen.getByText("driver").click());
+    expect(screen.getAllByTestId("who")[0]).toHaveTextContent("driver:driver-01");
+    expect(getToken()).toBeNull();
   });
 });

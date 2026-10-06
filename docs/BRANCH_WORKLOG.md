@@ -1305,3 +1305,11 @@ No push, PR or merge. Evidence and reproducible commands in LIMITATIONS F5/F6 an
 - **What we changed:** `scripts/routing/build_osrm_legs.py` (Geofabrik extract, pyosmium crop, OSRM v26.10.0 Windows binaries, car profile, /table both directions); committed legs and build log in `data/derived/routing/`; `scripts/sandbox/build_stations.py` uses road km (home station = nearest by road); sandbox, planner replay, T9 calibration, shortage and U9 snapshot rebuilt; T9 threshold kept at 0.05 as a delegated owner decision (`rule_threshold` 0.70 recorded and tested).
 - **Results:** road/straight ratio 1.32 median; km per kl +12% for all policies; JL_POOL's served-share gain over B1 falls from 1.2 to 0.3 points.
 - **Validation:** road-km test written first and seen failing; OSRM table parsing tests; affected tests pass.
+
+## `feat/remove-sign-in` — no sign-in
+
+- **Owner / date:** repo owner, 2026-10-06.
+- **Why:** owner decision: nobody should have to sign in or paste a token to use the screens.
+- **What we changed:** `config/api.py` (`auth_required`, from `AUTH_REQUIRED`; a config built directly still requires tokens), `auth.py` (open server: every caller is the `dev` principal), `routers/auth_routes.py` (`open` flag), `.env.example`; frontend `auth.tsx` asks `/auth/me` once, and on an open server is signed in and acts as the role of the workspace on show (`App.tsx`); `SignIn.tsx` renders nothing then; `docs/openapi.json`, `docs/api_additions/auth_contests.md`, `docs/LIMITATIONS.md`.
+- **Known limitations:** with `AUTH_REQUIRED` unset anyone who can reach the API can use every officer route (approve plans, close days). Roles are a screen choice. Screen ids in open mode are fixed (`officer-01`, `driver-01`, `resident-01`, `field-worker-01`). Set `AUTH_REQUIRED=true` to restore tokens.
+- **Validation:** backend `tests/api` (170) and the affected router tests pass; frontend lint, type check and all 200 tests pass; full `tasks.py test` (PyMC, data verifiers) not run in this session.

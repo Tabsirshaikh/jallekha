@@ -8,6 +8,7 @@ import type { VerifyResult } from "./driverAdapter";
 import { LocaleProvider } from "./i18n";
 import { apiError, callsTo, json, routedFetch } from "./test/apiMock";
 import { confirmedOutcome, delivery, inside, issued, noLocation, outside, registeredPhones, stopsPage } from "./test/driverFixtures";
+import { expectNoDataRequests } from "./test/noDataRequests";
 
 const SIGN_IN = "Sign in with a driver token to see your registered stops and record deliveries. Showing the sample route.";
 
@@ -78,7 +79,7 @@ describe("DriverExperience", () => {
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
     renderDriver();
-    expect(fetchMock).not.toHaveBeenCalled();
+    expectNoDataRequests(fetchMock);
     expect(screen.getByText("Saved snapshot")).toBeInTheDocument();
     expect(screen.getByText(SIGN_IN)).toBeInTheDocument();
     expect(screen.getByText("Sample stop 01")).toBeInTheDocument();

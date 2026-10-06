@@ -6,6 +6,7 @@ import ExplainExperience from "./ExplainExperience";
 import { LocaleProvider } from "./i18n";
 import { jsonResponse } from "./test/apiFixtures";
 import { BOOKING_ID, bookingResponse, contestItem, contestReply, noCensusWard, wardResponse } from "./test/explainFixtures";
+import { expectNoDataRequests } from "./test/noDataRequests";
 
 const SAMPLE = /DEMO-BK-105/;
 
@@ -241,7 +242,7 @@ describe("ExplainExperience (sample fallback)", () => {
     fireEvent.click(screen.getByRole("button", { name: "File sample contest" }));
     expect(await screen.findByText("Not sent to the server")).toBeInTheDocument();
     expect(localStorage.getItem("jallekha-u8-contests")).toContain("Sample check");
-    expect(api.fetchMock).not.toHaveBeenCalled();
+    expectNoDataRequests(api.fetchMock);
   });
 
   it("falls back when the sign-in is rejected (401) and never calls the contest routes", async () => {
