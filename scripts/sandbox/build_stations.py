@@ -10,11 +10,13 @@ the section was located (MAPPED or UNMAPPED_NO_WARD); otherwise the booking-weig
 the located sections in its HMWSSB division (APPROXIMATE). A division with no located section
 gives no point; its bookings are left out of the sandbox and counted.
 
-Road km = 2 x (straight-line km + section_access_km) x road_factor (ALLOCATION_CONFIG, 1.35),
-round trip; the access km stands for driving inside the section to the household. Station to
-station: 2 x straight-line km x road_factor (for trip sharing, JL_POOL). Each
-section keeps its nearest b4_candidate_stations stations; the first is its home station
-(HMWSSB: "token will be assigned to nearest Tanker Filling Station").
+Road km (item 20): OSRM road km on OpenStreetMap, station to section and back
+(data/derived/routing/, built by scripts/routing/build_osrm_legs.py; DERIVED), plus
+2 x section_access_km x road_factor (ALLOCATION_CONFIG, 1.35) for driving inside the section to
+the household. Station to station: OSRM road km both ways (for trip sharing, JL_POOL). A pair
+OSRM found no route for falls back to straight line x road_factor (labelled ASSUMED). Each
+section keeps its nearest b4_candidate_stations stations by road; the first is its home
+station (HMWSSB: "token will be assigned to nearest Tanker Filling Station").
 """
 
 from __future__ import annotations
@@ -25,7 +27,7 @@ import io
 import json
 import math
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import numpy as np
@@ -45,6 +47,11 @@ SECTIONS = "data/derived/sandbox/section_points.csv"
 NETWORK = "data/derived/sandbox/section_station_km.csv"
 STATION_PAIRS = "data/derived/sandbox/station_station_km.csv"
 CHECKS = "data/verification/sandbox_stations_checks.json"
+OSRM_SECTION_STATION = "data/derived/routing/osrm_section_station.csv"
+OSRM_STATION_STATION = "data/derived/routing/osrm_station_station.csv"
+OSRM_POINTS = "data/derived/routing/osrm_points.csv"
+OSRM_BASIS = "DERIVED: OSRM car route on OSM roads (no traffic), both ways"
+ESTIMATE_BASIS = "ASSUMED: straight line x road_factor (no OSRM route)"
 WEIGHT_MONTHS = tuple((2025, m) for m in range(3, 8))  # the main replay window
 LOCATED = ("MAPPED", "UNMAPPED_NO_WARD")
 KMEANS_SEED = 0
@@ -114,6 +121,37 @@ def kmeans(xy: np.ndarray, weights: np.ndarray, k: int) -> np.ndarray:
     return centres
 
 
+def osrm_legs(root: Path, stations: list[dict], points: list[dict]) -> tuple[dict, dict]:
+    """Committed OSRM legs: {(section, station): (out_km, back_km)}, {(a, b): (ab_km, ba_km)}.
+    Refuses legs built for other points (re-run scripts/routing/build_osrm_legs.py)."""
+    with (root / OSRM_POINTS).open(encoding="utf-8", newline="") as handle:
+        legged = {
+            (r["kind"], r["id"]): (float(r["lat"]), float(r["lng"])) for r in csv.DictReader(handle)
+        }
+    expected = {("station", s["station_id"]): (s["lat"], s["lng"]) for s in stations} | {
+        ("section", p["section"]): (p["lat"], p["lng"]) for p in points if p["lat"] is not None
+    }
+    for key, (lat, lng) in expected.items():
+        got = legged.get(key)
+        if got is None or abs(got[0] - lat) > 1e-6 or abs(got[1] - lng) > 1e-6:
+            raise ValueError(f"OSRM legs are for other points ({key}); re-run build_osrm_legs.py")
+
+    def km(value: str) -> float | None:
+        return float(value) if value else None
+
+    with (root / OSRM_SECTION_STATION).open(encoding="utf-8", newline="") as handle:
+        section_station = {
+            (r["section"], r["station_id"]): (km(r["out_km"]), km(r["back_km"]))
+            for r in csv.DictReader(handle)
+        }
+    with (root / OSRM_STATION_STATION).open(encoding="utf-8", newline="") as handle:
+        station_station = {
+            (r["station_a"], r["station_b"]): (km(r["ab_km"]), km(r["ba_km"]))
+            for r in csv.DictReader(handle)
+        }
+    return section_station, station_station
+
+
 def _csv(rows: list[dict]) -> bytes:
     stream = io.StringIO(newline="")
     writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator="\n")
@@ -143,6 +181,17 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
         for sid, c in zip(station_ids, centres, strict=True)
     ]
 
+    road_section, road_station = osrm_legs(root, stations, points)
+    factor = ALLOCATION_CONFIG.road_factor
+    access = 2 * cfg.section_access_km * factor
+
+    def section_km(p: dict, s: dict) -> tuple[float, str]:
+        out, back = road_section.get((p["section"], s["station_id"]), (None, None))
+        if out is None or back is None:
+            straight = haversine_km(p["lat"], p["lng"], s["lat"], s["lng"])
+            return 2 * straight * factor + access, ESTIMATE_BASIS
+        return out + back + access, OSRM_BASIS
+
     network, section_rows = [], []
     served_bookings: dict[str, int] = defaultdict(int)
     served_sections: dict[str, int] = defaultdict(int)
@@ -150,21 +199,18 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
         row = dict(p) | {"home_station": "", "home_round_trip_km": ""}
         if p["lat"] is not None:
             km = sorted(
-                (
-                    2
-                    * (haversine_km(p["lat"], p["lng"], s["lat"], s["lng"]) + cfg.section_access_km)
-                    * ALLOCATION_CONFIG.road_factor,
-                    s["station_id"],
-                )
-                for s in stations
-            )[: cfg.b4_candidate_stations]
-            for rank, (distance, sid) in enumerate(km, start=1):
+                (*section_km(p, s), s["station_id"]) for s in stations
+            )  # (km, basis, station): ties go to the lower id, as before
+            km = sorted(km, key=lambda t: (t[0], t[2]))[: cfg.b4_candidate_stations]
+            km = [(distance, sid, basis) for distance, basis, sid in km]
+            for rank, (distance, sid, basis) in enumerate(km, start=1):
                 network.append(
                     {
                         "section": p["section"],
                         "station_id": sid,
                         "rank": rank,
                         "round_trip_km": round(distance, 3),
+                        "km_basis": basis,
                     }
                 )
             row["home_station"], row["home_round_trip_km"] = (
@@ -179,21 +225,22 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
         s["bookings_2025_mar_jul"] = served_bookings[s["station_id"]]
         s["basis"] = "ASSUMED_STAND_IN"
 
-    pairs = [
-        {
+    def pair(a: dict, b: dict) -> dict:
+        straight = haversine_km(a["lat"], a["lng"], b["lat"], b["lng"])
+        ab, ba = road_station.get((a["station_id"], b["station_id"]), (None, None))
+        if ab is None or ba is None:
+            km, basis = 2 * straight * factor, ESTIMATE_BASIS
+        else:
+            km, basis = ab + ba, OSRM_BASIS
+        return {
             "station_a": a["station_id"],
             "station_b": b["station_id"],
-            "straight_km": round(haversine_km(a["lat"], a["lng"], b["lat"], b["lng"]), 3),
-            "round_trip_km": round(
-                2
-                * haversine_km(a["lat"], a["lng"], b["lat"], b["lng"])
-                * ALLOCATION_CONFIG.road_factor,
-                3,
-            ),
+            "straight_km": round(straight, 3),
+            "round_trip_km": round(km, 3),
+            "km_basis": basis,
         }
-        for i, a in enumerate(stations)
-        for b in stations[i + 1 :]
-    ]
+
+    pairs = [pair(a, b) for i, a in enumerate(stations) for b in stations[i + 1 :]]
     total = sum(p["bookings_2025_mar_jul"] for p in points)
     by_basis: dict[str, int] = defaultdict(int)
     for p in points:
@@ -207,6 +254,10 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
             k: round(v / total, 6) for k, v in sorted(by_basis.items())
         },
         "road_factor": ALLOCATION_CONFIG.road_factor,
+        "road_km_basis": {
+            "section_station": dict(sorted(Counter(r["km_basis"] for r in network).items())),
+            "station_station": dict(sorted(Counter(r["km_basis"] for r in pairs).items())),
+        },
         "median_home_round_trip_km": round(
             float(np.median([r["home_round_trip_km"] for r in section_rows if r["home_station"]])),
             3,
@@ -221,7 +272,8 @@ def build(root: Path = ROOT) -> dict[str, bytes]:
     checks = {
         "summary": summary,
         "inputs_sha256": {
-            SECTION_WARDS: hashlib.sha256((root / SECTION_WARDS).read_bytes()).hexdigest()
+            name: hashlib.sha256((root / name).read_bytes()).hexdigest()
+            for name in (SECTION_WARDS, OSRM_POINTS, OSRM_SECTION_STATION, OSRM_STATION_STATION)
         },
         "outputs_sha256": {p: hashlib.sha256(c).hexdigest() for p, c in artifacts.items()},
     }

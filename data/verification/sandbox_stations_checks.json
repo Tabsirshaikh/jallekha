@@ -1,12 +1,15 @@
 {
   "inputs_sha256": {
-    "data/derived/crosswalk/section_to_ward_2016.csv": "7cd5f22f86e0418601aa46f65b08a2e8b85acc5bbcd312adcaab5ffb6faabf25"
+    "data/derived/crosswalk/section_to_ward_2016.csv": "7cd5f22f86e0418601aa46f65b08a2e8b85acc5bbcd312adcaab5ffb6faabf25",
+    "data/derived/routing/osrm_points.csv": "f0cd2c1442f1cb4d77ccfbb7e75dfb258a8eaaa9e2c7e1627ed43b13c9d7244f",
+    "data/derived/routing/osrm_section_station.csv": "4be523847d2e285cbea77397b1d1b3b566a67fcc6dff95e01b78d72621d82512",
+    "data/derived/routing/osrm_station_station.csv": "cea32e28ffb01e0ef36cca0712706e893c9688fa61bc5d109241289620d25857"
   },
   "outputs_sha256": {
-    "data/derived/sandbox/section_points.csv": "490701a97a443bde6836659b6745d2037be53592ce1ba987296a11f76b1b3bee",
-    "data/derived/sandbox/section_station_km.csv": "e99d628e89e4b710565f220265a40fe45cfeeb6707be22fac06d47521ecdf19e",
-    "data/derived/sandbox/station_station_km.csv": "ede51c82437d3add32b51e86cb824f53e0326df76e59e61911794e690ff7cb72",
-    "data/derived/sandbox/stations.csv": "6232197e8f8b6605f0a02b3a580f39914d8f81af9c115cb19d7ce96c63cb5a5f"
+    "data/derived/sandbox/section_points.csv": "20c90b381a6f105b1004474497cd8bba7ca69bcc2f6c228641d9aabc9a538e7d",
+    "data/derived/sandbox/section_station_km.csv": "0cdd5a203ba7c91d0dd03554334428f94c70cbddf81153adac37a44fcae50f6c",
+    "data/derived/sandbox/station_station_km.csv": "307374db8c96cd783da855f2fb524275d2b780872c916fcdc7ba637d26472166",
+    "data/derived/sandbox/stations.csv": "81fa39a9ec8c530b9c86268d5c840a58ccd86443f26380278e8b2f83bffe120c"
   },
   "summary": {
     "booking_share_by_point_basis": {
@@ -15,8 +18,16 @@
       "NO_POINT": 2e-06
     },
     "bookings_2025_mar_jul": 977933,
-    "median_home_round_trip_km": 2.632,
+    "median_home_round_trip_km": 3.115,
     "road_factor": 1.35,
+    "road_km_basis": {
+      "section_station": {
+        "DERIVED: OSRM car route on OSM roads (no traffic), both ways": 1090
+      },
+      "station_station": {
+        "DERIVED: OSRM car route on OSM roads (no traffic), both ways": 4005
+      }
+    },
     "station_basis": "ASSUMED_STAND_IN (booking-weighted k-means; HMWSSB publishes no list)",
     "station_count_source": "Telangana Today, 2025-12-21: 90 tanker filling stations",
     "stations": 90
