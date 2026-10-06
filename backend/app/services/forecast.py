@@ -245,9 +245,49 @@ def _weather_normal() -> dict[int, MonthWeather]:
     return normal
 
 
-def _weather_anomaly(month: Month) -> tuple[float, float]:
-    """(heat: deg C above normal, rain: log ratio to normal) for one month; NaN if unknown."""
-    weather, normal = monthly_weather().get(month), _weather_normal().get(month[1])
+@lru_cache(maxsize=1)
+def section_monthly_weather() -> dict[str, dict[Month, MonthWeather]]:
+    """D8b: each section's monthly weather (TGDPS stations of its nearest mandal, else its
+    district, else the city; data/derived/weather/section_monthly.csv). Empty if absent."""
+    file = REPO_ROOT / FORECAST_CONFIG.section_weather_file
+    if not file.exists():
+        return {}
+    out: dict[str, dict[Month, MonthWeather]] = {}
+    with file.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            month = (int(row["month"][:4]), int(row["month"][5:7]))
+            out.setdefault(row["section"], {})[month] = MonthWeather(
+                float(row["tmax_mean_c"]), float(row["rain_total_mm"])
+            )
+    return out
+
+
+@lru_cache(maxsize=1)
+def _section_normals() -> dict[str, dict[int, MonthWeather]]:
+    """Each section's normal per calendar month over `weather_normal_years`."""
+    first, last = FORECAST_CONFIG.weather_normal_years
+    out: dict[str, dict[int, MonthWeather]] = {}
+    for section, series in section_monthly_weather().items():
+        for m in range(1, 13):
+            months = [series[(y, m)] for y in range(first, last + 1) if (y, m) in series]
+            if months:
+                out.setdefault(section, {})[m] = MonthWeather(
+                    sum(w.tmax_mean for w in months) / len(months),
+                    sum(w.precip_total for w in months) / len(months),
+                )
+    return out
+
+
+def _weather_anomaly(
+    month: Month,
+    series: Mapping[Month, MonthWeather] | None = None,
+    normals: Mapping[int, MonthWeather] | None = None,
+) -> tuple[float, float]:
+    """(heat: deg C above normal, rain: log ratio to normal) for one month; NaN if unknown.
+    Default: the city series (D8); a section's own series when given."""
+    series = monthly_weather() if series is None else series
+    normals = _weather_normal() if normals is None else normals
+    weather, normal = series.get(month), normals.get(month[1])
     if weather is None or normal is None:
         return math.nan, math.nan
     return (
@@ -256,10 +296,16 @@ def _weather_anomaly(month: Month) -> tuple[float, float]:
     )
 
 
-def _recent_weather(cutoff: Month) -> tuple[float, float]:
+def _recent_weather(
+    cutoff: Month,
+    series: Mapping[Month, MonthWeather] | None = None,
+    normals: Mapping[int, MonthWeather] | None = None,
+) -> tuple[float, float]:
     """Rain (log ratio to normal, `recent_rain_months`) and heat (deg C above normal,
-    `recent_heat_months`) over the months just before `cutoff`; NaN when not all are known."""
-    weather, normal = monthly_weather(), _weather_normal()
+    `recent_heat_months`) over the months just before `cutoff`; NaN when not all are known.
+    Default: the city series (D8); a section's own series when given."""
+    weather = monthly_weather() if series is None else series
+    normal = _weather_normal() if normals is None else normals
     rain_months = [shift(cutoff, -k) for k in range(1, FORECAST_CONFIG.recent_rain_months + 1)]
     heat_months = [shift(cutoff, -k) for k in range(1, FORECAST_CONFIG.recent_heat_months + 1)]
     if not all(m in weather and m[1] in normal for m in rain_months + heat_months):
@@ -295,10 +341,11 @@ def _recent_growth(train: Panel, cutoff: Month, window: int) -> tuple[float, dic
 
 
 def _gbm_rows(
-    train: Panel, target: Month, cutoff: Month
+    train: Panel, target: Month, cutoff: Month, local: bool = False
 ) -> tuple[list[str], list[list[float]]] | None:
     """Feature rows for every section of the month a year before `target`, using only data
-    before `cutoff` (and before the training end)."""
+    before `cutoff` (and before the training end). `local`: each section's own weather (D8b)
+    where it has a series, the city series otherwise."""
     period = FORECAST_CONFIG.seasonal_period_months
     lag_month = shift(target, -period)
     if lag_month not in train.values or lag_month >= cutoff:
@@ -307,23 +354,32 @@ def _gbm_rows(
     city_growth, section_growth = _recent_growth(
         train, cutoff, FORECAST_CONFIG.growth_window_months
     )
-    lag_heat, lag_rain = _weather_anomaly(lag_month)
-    recent_rain, recent_heat = _recent_weather(cutoff)
+    city_weather = (*_weather_anomaly(lag_month), *_recent_weather(cutoff))
+    series, normals = (section_monthly_weather(), _section_normals()) if local else ({}, {})
+
+    def weather(section: str) -> tuple[float, float, float, float]:
+        if section not in series or section not in normals:
+            return city_weather
+        own, normal = series[section], normals[section]
+        return (*_weather_anomaly(lag_month, own, normal), *_recent_weather(cutoff, own, normal))
+
     sections = sorted(train.values[lag_month])
-    rows = [
-        [
-            math.log1p(train.values[lag_month][s]),
-            math.log1p(lag24[s]) if s in lag24 else math.nan,
-            float(target[1]),
-            section_growth.get(s, math.nan),
-            city_growth,
-            lag_heat,
-            lag_rain,
-            recent_rain,
-            recent_heat,
-        ]
-        for s in sections
-    ]
+    rows = []
+    for s in sections:
+        lag_heat, lag_rain, recent_rain, recent_heat = weather(s)
+        rows.append(
+            [
+                math.log1p(train.values[lag_month][s]),
+                math.log1p(lag24[s]) if s in lag24 else math.nan,
+                float(target[1]),
+                section_growth.get(s, math.nan),
+                city_growth,
+                lag_heat,
+                lag_rain,
+                recent_rain,
+                recent_heat,
+            ]
+        )
     return sections, rows
 
 
@@ -337,18 +393,28 @@ def global_gbm(train: Panel, target: Month) -> SectionValues | None:
     """One gradient-boosting model over all sections, trained on every training month that has
     a value a year earlier, predicting log(value + 1) - log(last year + 1). Forecasts the
     sections of the month a year before `target` (like seasonal naive); None without that month
-    or with too little training data."""
+    or with too little training data. Weather: the city series (D8)."""
+    return _gbm(train, target, local=False)
+
+
+def global_gbm_local_weather(train: Panel, target: Month) -> SectionValues | None:
+    """The same model with each section's own weather (D8b TGDPS stations of its nearest
+    mandal; research follow-up B). Sections without a series use the city weather."""
+    return _gbm(train, target, local=True)
+
+
+def _gbm(train: Panel, target: Month, local: bool) -> SectionValues | None:
     _check(train, target)
     cfg = FORECAST_CONFIG
     origin = shift(max(train.values), 1) if train.values else target
-    query = _gbm_rows(train, target, min(target, origin))
+    query = _gbm_rows(train, target, min(target, origin), local)
     if query is None:
         return None
     features: list[list[float]] = []
     targets: list[float] = []
     months = 0
     for month in sorted(train.values):
-        rows = _gbm_rows(train, month, month)
+        rows = _gbm_rows(train, month, month, local)
         if rows is None:
             continue
         months += 1
@@ -397,10 +463,17 @@ MODELS: dict[str, Model] = {
     "seasonal_naive": seasonal_naive,
     "naive_x_growth": naive_x_growth,
     "global_gbm": global_gbm,
+    "global_gbm_local_weather": global_gbm_local_weather,
     "combo_naive_gbm": combo_naive_gbm,
 }
 # Simplest first: on a statistical tie the simpler model is used.
-COMPLEXITY: tuple[str, ...] = ("seasonal_naive", "naive_x_growth", "global_gbm", "combo_naive_gbm")
+COMPLEXITY: tuple[str, ...] = (
+    "seasonal_naive",
+    "naive_x_growth",
+    "global_gbm",
+    "global_gbm_local_weather",
+    "combo_naive_gbm",
+)
 
 
 def reconcile(section_forecasts: Mapping[str, float]) -> float:

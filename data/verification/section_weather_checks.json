@@ -1,0 +1,19 @@
+{
+  "inputs_sha256": {
+    "data/derived/crosswalk/section_to_ward_2016.csv": "7cd5f22f86e0418601aa46f65b08a2e8b85acc5bbcd312adcaab5ffb6faabf25",
+    "data/raw/d8_weather/open_meteo_hyderabad_daily.csv": "c72e6cc821f5e2897415ff842f73021ac4870f205321a01536f07e3b8f5d2b68",
+    "data/raw/d8_weather_stations/mandal_points.csv": "69a165706fd319e39a3320c762abfc8c5d0951c60d59ccf6eda85693d5c5228d",
+    "data/raw/d8_weather_stations/tgdps_daily_hmwssb_districts.csv.gz": "f98b6c6f75b65e29b83598427be4a3c26fa83ea72003b90c73f8489bbbb1b554"
+  },
+  "mandal_months": 8784,
+  "min_day_share": 0.8,
+  "outputs_sha256": {
+    "data/derived/weather/section_mandal.csv": "7fadd9d8317cd7fbb1fe850cb871b7ed9b1102d55f572b852c0986ed2cce583c",
+    "data/derived/weather/section_monthly.csv": "6cf3ca8ce3548feb6a428d714e85ecfafe17fe0adb3eb3bcd2b7bc45143331cf"
+  },
+  "section_month_sources": {
+    "CITY": 4729,
+    "MANDAL": 15824
+  },
+  "sections_with_point": 172
+}

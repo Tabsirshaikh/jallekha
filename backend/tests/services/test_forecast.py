@@ -6,6 +6,7 @@ from __future__ import annotations
 import csv
 import glob
 import importlib.util
+import math
 import sys
 from dataclasses import replace
 from pathlib import Path
@@ -386,3 +387,55 @@ def test_forecast_table_basis_carries_the_recut_label(s2: fc.Panel) -> None:
     assert all("re-cut" in str(r["point_basis"]) for r in table if r["point"] is not None)
     # The rule was decided by the owner (research follow-up A, 2026-10-06).
     assert "Diebold-Mariano" in FORECAST_CONFIG.model_selection_rule
+
+
+# --- research follow-up B: weather per section ---------------------------------------------
+
+
+def _two_section_panel() -> fc.Panel:
+    return _panel(
+        {(y, m): {"HOT": 100.0, "COOL": 100.0} for y in (2023, 2024) for m in range(1, 13)}
+    )
+
+
+def test_local_weather_rows_use_each_sections_own_weather(monkeypatch) -> None:
+    hot = {(y, m): fc.MonthWeather(40.0, 5.0) for y in (2023, 2024) for m in range(1, 13)}
+    cool = {(y, m): fc.MonthWeather(30.0, 50.0) for y in (2023, 2024) for m in range(1, 13)}
+    normal = {m: fc.MonthWeather(35.0, 20.0) for m in range(1, 13)}
+    monkeypatch.setattr(fc, "section_monthly_weather", lambda: {"HOT": hot, "COOL": cool})
+    monkeypatch.setattr(fc, "_section_normals", lambda: {"HOT": normal, "COOL": normal})
+    train = _two_section_panel()
+    sections, rows = fc._gbm_rows(train, (2025, 3), (2025, 1), local=True)
+    heat = fc.GBM_FEATURES.index("lag12_heat_anomaly")
+    by_section = dict(zip(sections, rows, strict=True))
+    assert by_section["HOT"][heat] == pytest.approx(5.0)
+    assert by_section["COOL"][heat] == pytest.approx(-5.0)
+    # The city version gives every section the same value.
+    _, city_rows = fc._gbm_rows(train, (2025, 3), (2025, 1))
+    assert len({r[heat] for r in city_rows}) == 1
+
+
+def test_a_section_without_its_own_weather_uses_the_city_series(monkeypatch) -> None:
+    monkeypatch.setattr(fc, "section_monthly_weather", lambda: {})
+    monkeypatch.setattr(fc, "_section_normals", lambda: {})
+    train = _two_section_panel()
+    local = fc._gbm_rows(train, (2025, 3), (2025, 1), local=True)
+    city = fc._gbm_rows(train, (2025, 3), (2025, 1))
+    assert local is not None and city is not None
+
+    def same(a: float, b: float) -> bool:
+        return a == b or (math.isnan(a) and math.isnan(b))
+
+    assert local[0] == city[0]
+    assert all(
+        same(a, b)
+        for x, y in zip(local[1], city[1], strict=True)
+        for a, b in zip(x, y, strict=True)
+    )
+
+
+def test_local_weather_model_is_a_candidate_between_gbm_and_the_combination() -> None:
+    assert "global_gbm_local_weather" in fc.MODELS
+    order = fc.COMPLEXITY
+    assert order.index("global_gbm") < order.index("global_gbm_local_weather")
+    assert order.index("global_gbm_local_weather") < order.index("combo_naive_gbm")
