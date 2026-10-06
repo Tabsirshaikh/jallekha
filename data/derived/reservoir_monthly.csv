@@ -1,0 +1,11 @@
+month,reservoir,gross_storage_tmc,capacity_tmc,storage_share,days_observed,basis
+2026-06,AKKAMPALLI (AMRSLBC),0.0,1.5,0.0,30,"DERIVED: monthly mean of REAL daily Telangana I&CAD storage; context, not allocation or risk rule"
+2026-06,NAGARJUNA SAGAR,139.22366638183593,312.0450134277344,0.44616532997114644,30,"DERIVED: monthly mean of REAL daily Telangana I&CAD storage; context, not allocation or risk rule"
+2026-06,SINGUR,4.730833371480306,29.90999984741211,0.15816895338064102,30,"DERIVED: monthly mean of REAL daily Telangana I&CAD storage; context, not allocation or risk rule"
+2026-06,SRI PADA YELLAMPALLY PROJECT,8.005006678899129,20.174999237060547,0.39677853688312903,30,"DERIVED: monthly mean of REAL daily Telangana I&CAD storage; context, not allocation or risk rule"
+2026-06,SRISAILAM,39.829826736450194,215.8070068359375,0.1845622499492333,30,"DERIVED: monthly mean of REAL daily Telangana I&CAD storage; context, not allocation or risk rule"
+2026-07,AKKAMPALLI (AMRSLBC),0.0,1.5,0.0,31,"DERIVED: monthly mean of REAL daily Telangana I&CAD storage; context, not allocation or risk rule"
+2026-07,NAGARJUNA SAGAR,137.7574202014554,312.0450134277344,0.441466500900705,31,"DERIVED: monthly mean of REAL daily Telangana I&CAD storage; context, not allocation or risk rule"
+2026-07,SINGUR,4.431935541091427,29.90999984741211,0.1481757125944917,31,"DERIVED: monthly mean of REAL daily Telangana I&CAD storage; context, not allocation or risk rule"
+2026-07,SRI PADA YELLAMPALLY PROJECT,8.436451619671237,20.174999237060547,0.41816366486764783,31,"DERIVED: monthly mean of REAL daily Telangana I&CAD storage; context, not allocation or risk rule"
+2026-07,SRISAILAM,42.17774200439453,215.8070068359375,0.19544194890974614,31,"DERIVED: monthly mean of REAL daily Telangana I&CAD storage; context, not allocation or risk rule"

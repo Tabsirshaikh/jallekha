@@ -394,3 +394,14 @@ is unproven. Ward per-population rates remain null. Pending: 2 under-reporting e
 3 persisted field outcomes and precision after 30 outcomes; F5/F6 refresh, recut crosswalk,
 city ranges, reservoir context and forecast screen. Owner RTI for GIS section boundaries
 is an external action; Codex will not send it. No push, PR or merge before owner approval.
+
+
+## F5/F6 local refresh ? 2026-10-06
+
+Implemented on `feat/f5-forecast-refresh`, pending owner approval: latest Aug2026 city training;
+Sep2026-Aug2027 forecast; honest candidate selection; city intervals/measured undercoverage;
+current section correspondence with explicit unmatched records; monthly fetch/build command;
+reservoir context; clear four-language future/accuracy views and real saved output.
+Remaining: authoritative re-cut boundary/identifier crosswalk (210 unmatched sections);
+multi-step interval validation and better coverage after the summer shift; externally scheduled
+execution of the documented refresh command. No newly tested candidate passed the adopted rule.

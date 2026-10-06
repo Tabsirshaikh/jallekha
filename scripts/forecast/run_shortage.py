@@ -31,6 +31,43 @@ def _fmt(value: float | None, decimals: int = 2) -> str:
 
 
 def build() -> bytes:
+    # The refreshed contract retains unmatched rows with null forecasts and unknown risk.
+    # Share the pure builder rather than reapplying the old section names/capacity split.
+    import importlib.util
+
+    crosswalk = ROOT / "data/derived/forecast_section_crosswalk.csv"
+    if crosswalk.exists():
+        spec = importlib.util.spec_from_file_location(
+            "refresh_forecast", ROOT / "scripts/forecast/refresh_forecast.py"
+        )
+        assert spec and spec.loader
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        with (ROOT / SHORTAGE_CONFIG.forecast_table_path).open(
+            encoding="utf-8", newline=""
+        ) as handle:
+            table = [
+                {k: None if v == "" else v for k, v in r.items()} for r in csv.DictReader(handle)
+            ]
+        for row in table:
+            for key in ("point", "lower_80", "upper_80", "lower_90", "upper_90", "capacity_trips"):
+                if row.get(key) is not None:
+                    row[key] = float(row[key])
+        matches = list(csv.DictReader(crosswalk.open(encoding="utf-8", newline="")))
+        reservoir_path = ROOT / "data/derived/reservoir_monthly.csv"
+        reservoirs = (
+            list(csv.DictReader(reservoir_path.open(encoding="utf-8", newline="")))
+            if reservoir_path.exists()
+            else []
+        )
+        for row in reservoirs:
+            row["storage_share"] = float(row["storage_share"])
+        rows = module.build_shortage(table, matches, reservoirs)
+        stream = io.StringIO(newline="")
+        writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+        return stream.getvalue().encode()
     cfg = SHORTAGE_CONFIG
     with (ROOT / cfg.forecast_table_path).open(encoding="utf-8", newline="") as handle:
         forecast = list(csv.DictReader(handle))

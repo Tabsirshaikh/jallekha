@@ -19,6 +19,8 @@ router = APIRouter(tags=["forecast"])
 TABLE = "data/derived/forecast_table.csv"
 BACKTEST = "data/derived/forecast_backtest.csv"
 SHORTAGE = "data/derived/shortage_risk.csv"
+HISTORY = "data/derived/forecast_history.csv"
+ACCURACY = "data/derived/forecast_accuracy.csv"
 
 Officer = Depends(require_roles("officer"))
 Offset = Annotated[int, Query(ge=0)]
@@ -47,6 +49,37 @@ def forecast(
 def backtest(offset: Offset = 0, limit: Limit = ApiConfig.default_limit) -> dict[str, Any]:
     rows = [typed(r) for r in csv_rows(BACKTEST)]
     return {"items": rows[offset : offset + limit], "total": len(rows)}
+
+
+def _filtered_rows(path: str, level: str | None, section: str | None, offset: int, limit: int):
+    rows = [
+        typed(r)
+        for r in csv_rows(path)
+        if (level is None or r["level"] == level) and (section is None or r["section"] == section)
+    ]
+    return {"items": rows[offset : offset + limit], "total": len(rows)}
+
+
+@router.get("/forecast/history", dependencies=[Officer])
+def history(
+    level: Literal["city", "section"] | None = None,
+    section: str | None = None,
+    offset: Offset = 0,
+    limit: Limit = ApiConfig.default_limit,
+) -> dict[str, Any]:
+    """Last twelve available actual months; historical section identity can be approximate."""
+    return _filtered_rows(HISTORY, level, section, offset, limit)
+
+
+@router.get("/forecast/accuracy", dependencies=[Officer])
+def accuracy(
+    level: Literal["city", "section"] | None = None,
+    section: str | None = None,
+    offset: Offset = 0,
+    limit: Limit = ApiConfig.default_limit,
+) -> dict[str, Any]:
+    """Past rolling-origin estimates, explicitly distinct from previously issued forecasts."""
+    return _filtered_rows(ACCURACY, level, section, offset, limit)
 
 
 @router.get("/shortage", dependencies=[Officer])

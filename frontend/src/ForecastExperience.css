@@ -61,3 +61,11 @@
 .chart-hover-line { stroke: #0d4c43; stroke-width: 1; stroke-dasharray: 3 3; }
 .chart-tooltip { position: absolute; top: 12px; z-index: 5; display: grid; gap: 3px; min-width: 190px; padding: 10px 12px; background: #fff; border: 1px solid #e6ebe6; border-radius: 10px; box-shadow: 0 8px 22px rgb(13 76 67 / 14%); font-size: .9rem; pointer-events: none; }
 .chart-tooltip span { display: flex; align-items: center; gap: 6px; }
+
+.forecast-boundary { stroke: #879b91; stroke-width: 1; stroke-dasharray: 4 5; }
+.forecast-shortfall { color: #a33825; font-weight: 700; }
+.forecast-accuracy-panel { padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+.forecast-overall { padding: 14px; border-radius: 10px; background: #e7f4ef; color: #245b46; font-weight: 700; }
+.forecast-past-list { display: grid; gap: 12px; margin: 16px 0 0; padding-inline-start: 24px; line-height: 1.6; }
+.forecast-page .forecast-chart-panel > p { color: #5f7368; line-height: 1.5; }
+.forecast-page .forecast-heading-tags > span { color: #5f7368; }

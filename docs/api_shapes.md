@@ -1533,3 +1533,10 @@ _The example shows several calls; fields are those of one call._
 - **Councillor role** for contests (owner).
 - **SMS summary wording** in te / ur / hi (English proposal in the example; native speakers and P4 to review).
 - For P2 / P3, not P4: no plan store and no delivery store on `main`; the explanation's queue day must use the plan's `booked_trips`; A8's replay day holds bookings that arrive after the 05:00 plan time, so T7's `waiting_hours` can be negative.
+
+
+### F5/F6 refresh additions (local approval pending)
+
+See `api_additions/forecast_refresh.md`: `/forecast/history` and `/forecast/accuracy` use the
+standard paginated envelope and officer role; `/forecast` adds capacity, current data month and
+section correspondence status, and city conformal bounds. Unmatched history remains null.

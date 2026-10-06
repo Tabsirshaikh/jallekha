@@ -18,6 +18,7 @@ The portal refuses some cloud runners, so CI only verifies committed files.
 
 from __future__ import annotations
 
+import argparse
 import csv
 import hashlib
 import json
@@ -95,6 +96,13 @@ def manifest_row(
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--new-only",
+        action="store_true",
+        help="reuse downloaded monthly bytes; fetch only new months",
+    )
+    args = parser.parse_args()
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     retrieved = datetime.now(UTC).replace(microsecond=0).isoformat()
 
@@ -123,7 +131,8 @@ def main() -> int:
             raise RuntimeError(f"Unexpected file name: {url}")
         month = f"{match.group(1)}-{int(match.group(2)):02d}"
         path = OUT_DIR / f"{month}.csv"
-        path.write_bytes(download(url))
+        if not args.new_only or not path.exists():
+            path.write_bytes(download(url))
         rows.append(
             manifest_row(
                 f"D1b-HMWSSB-{month}",
@@ -136,7 +145,8 @@ def main() -> int:
             )
         )
         print(f"  {month}: {path.stat().st_size} bytes")
-        time.sleep(2)
+        if not args.new_only:
+            time.sleep(2)
 
     rows.sort(key=lambda row: row["dataset_id"])
     with MANIFEST_PATH.open("w", encoding="utf-8", newline="") as handle:

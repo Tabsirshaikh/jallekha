@@ -129,6 +129,29 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - The U5 field-check cards show these candidates, live or from the snapshot, with each method's ratio listed separately.
 
 ### F5 Surge Forecast and Capacity Planner (T2)
+
+- **Local refresh (`feat/f5-forecast-refresh`, 2026-10-06, approval pending) supersedes the stale published GBM below.** Exact city totals now train through Aug 2026; the twelve forecast months are Sep 2026-Aug 2027. 31 shared origins include 2026, with the same research-A rule (both city MAPE and matched-section WAPE plus one-sided HLN DM at 5%). **No candidate passes; seasonal naive is retained.** Its city MAPE is 31.16% and section WAPE 46.57%. New fixed candidates are median year-on-year level corrections over 6/12 months, recency-weighted seasonal Ridge, a known-calendar summer interaction, and origin-lagged groundwater/reservoir context; no tuning grid was used. This matched cohort differs from the old 221-section experiment, so its percentages are not directly comparable with that run.
+
+| Candidate | City MAPE | Matched-section WAPE | HLN DM one-sided p | Rule |
+|---|---|---|---|---|
+| naive_x_growth | 25.76% | 42.78% | 0.1415 | fail |
+| seasonal_level12 | 29.59% | 49.20% | 0.8538 | fail |
+| seasonal_level6 | 25.42% | 47.39% | 0.6342 | fail |
+| recent_seasonal_ridge | 43.21% | 53.58% | 0.9765 | fail |
+| ridge_summer | 42.93% | 53.17% | 0.9696 | fail |
+| ridge_groundwater | 44.31% | 53.56% | 0.9732 | fail |
+| ridge_reservoir | 43.12% | 53.59% | 0.9767 | fail |
+| global_gbm | 35.50% | 39.34% | 0.1218 | fail |
+| global_gbm_local_weather | 34.36% | 39.18% | 0.1196 | fail |
+| global_gbm_groundwater | 34.70% | 39.10% | 0.1115 | fail |
+| combo_naive_gbm | 32.18% | 38.26% | 0.0030 | fail |
+
+- **City ranges are now real model output, with poor measured coverage disclosed.** Nominal 80% / 90% city conformal intervals cover 54.5% / 81.8% of 22 held-back city months (first 21 origins calibrate, remaining origins test). The summer shift causes undercoverage. Final widths calibrate all past residuals; applying one-step widths to all twelve horizons is approximate and does not establish multi-step coverage. They are not sums of section intervals.
+- **The re-cut is still unresolved geographically.** Conservative one-to-one name/division correspondence gives 63 approximate and 210 unmatched current sections, zero authoritative exact boundary matches. Transient `(NEW)` suffixes are joined to active names; OLD residual rows never duplicate an active section's history. Historical points are included when available, but do not locate the changed boundaries; no new points or fuzzy boundary equivalence are fabricated. An absent historical identity is omitted rather than invented as zero. Section scoring uses only pairs present in both periods; unmatched forecasts and capacities stay null and their warnings unknown. Exact city totals include all portal rows and are forecast independently, so the incomplete matched-section predictions cannot sum to the city total.
+- **Frozen Feb-Aug 2026 holdout re-run:** original Jan-trained GBM city MAPE 31.10% versus seasonal naive 31.77% over seven months (`forecast_2026_holdout.csv`), confirming the earlier near tie. The new accuracy view uses retrospective rolling-origin estimates, explicitly described as forecasts using earlier records, rather than claiming they were issued in advance.
+- **Refresh and screen:** `python scripts/forecast/refresh_forecast.py` fetches new portal months and the accepted reservoir source then rewrites all F5/F6 artifacts; `--offline` repeats a build from logged source bytes. `build_u6_snapshot.py` writes the real published fallback. Separate observed/future lines, city/section ranges, capacity and monthly expected-versus-actual text are shown in four languages. API additions are documented in `api_additions/forecast_refresh.md`.
+
+**Earlier implementation and experiments (historical):**
 - **Built (T2, PR #58): baseline, backtest, reconciliation, intervals and capacity check.** The seasonal-naive baseline is reproduced (21.89% city MAPE, 35.12% section WAPE on the 2022-24 files). The protocol was recovered by reproduction, not from the lost review file, and confirmed by the owner (Padmaja) on 2026-10-03 (`config/forecast.py` `baseline_protocol`), so the numbers may be quoted with that protocol.
 - On the longer portal history (to Jan 2026) seasonal naive scores 26.28% / 47.67% and the 80% interval covers only 0.77. Naive x growth does not beat the baseline on both measures, so no candidate is selected: **nothing beats the baseline**.
 - **Gradient-boosting candidate built (item 12):** one scikit-learn model pooled over all sections, learning a correction to seasonal naive from the month, the values a year and two years earlier, recent section and city growth, and weather (D8, Open-Meteo reanalysis: last year's month against the 2019-2021 normal, recent rain and heat). Settings were fixed before the backtest and never tuned on it. Result on the same rolling backtest: on the portal history (33 common months) it beats seasonal naive on both measures (city MAPE 23.21% vs 26.28%, section WAPE 37.04% vs 47.67%); on the short S2 files (2-12 training months) it is slightly worse (23.60% / 35.99% vs 21.89% / 35.12%), worse in its first months and better once it has a year of history. Groundwater (D7) is tested as a candidate feature (below).
@@ -142,6 +165,11 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - `GET /forecast` and `/forecast/backtest` serve the table, and the U6 screen shows them live (city forecast DERIVED with no city interval, section forecast with intervals, backtest accuracy per model) with the committed real history and SIMULATION fixtures as the fallback.
 
 ### F6 Shortage Early Warning (T8)
+
+- **Local refreshed warning (`feat/f5-forecast-refresh`, approval pending):** 819 section-month rows for Sep-Nov 2026; 6 high, 28 medium, 143 low, 642 unknown. Unmatched section identities retain null booking forecasts/capacity and unknown risk. Capacity transfers only use unique historical name matches and remain ASSUMED; stations and section boundaries are still stand-ins. The city capacity uses the owner-confirmed 1,123 tankers x 9 daily trips.
+- **Accepted reservoir context is now included.** 67 daily-source monthly files Jan 2021-Jul 2026 from Telangana I&CAD are logged in a separate hash manifest; latest July storage for Nagarjuna Sagar, Singur, Sri Pada Yellampally, Akkampalli and Srisailam appears beside groundwater in reasons. Monthly storage means are DERIVED from REAL observations; source zeros can represent unfilled/missing reporting and should not be interpreted as confirmed supply loss. Reservoir context does not alter the capacity-only risk rule. No global source-manifest changes or E5 spatial re-fitting were needed.
+
+**Earlier implementation (historical):**
 - **Built (T8, PR #61):** 551 rows (section x month, 1 to 3 months after the forecast origin), each with a risk (low, medium, high, unknown) and a reason from its own numbers. `GET /shortage` serves it.
 - **Groundwater (D7, item 17) is in the reasons, not in the risk rule.** Open Data Telangana publishes the Ground Water Department's monthly well levels (Jan 2021 - Jul 2026; 337 wells in the four HMWSSB districts), so the NWDP account was not needed. A section's anomaly is the median, over wells within 5 km of its point with at least 2 earlier years of the same month, of depth minus that month's earlier mean; the reason gives it for the latest month at or before the forecast origin (389 of 551 rows; the others say why: no section point, or too few wells). A groundwater risk rule would be a policy choice (OPEN). Data quality: 3,925 of 16,021 readings have latitude and longitude swapped (fixed), 742 have no position and 2,199 no value (`N/A` or blank); a well is its village and position rounded to about 1 km, so a well whose position jumps splits into short series that drop out. The two-earlier-years normal is short (2021 start). Reservoir levels are off until Q2 is approved.
 - Capacity is ASSUMED (A8 fleet scenario: 1,150 tankers x 9 trips a day, 90 stand-in stations). 3 sections have no station, so their risk is `unknown`. Risk ratios (1.0 and 0.85) and the 80% bound rule are [OPEN].

@@ -53,13 +53,14 @@ class ForecastConfig:
         "DERIVED: 11,000 trips a day / 1,233 tankers (May 2026 news) = 8.9, rounded to 9; "
         "peak-season rate"
     )
-    # Portal data (D1b) is used up to the month before the Feb/Mar 2026 section re-cut.
-    portal_through: tuple[int, int] = (2026, 1)
-    # Label on the 12-month forecast built from the portal data through Jan 2026.
-    # OPEN, owner to confirm: where the published forecast should start.
+    # Portal data (D1b): no fixed cutoff; latest published city month is used.
+    portal_through: tuple[int, int] | None = None  # latest published month, REAL
+    # ASSUMED fixed regularisation for recency-weighted city regression; never tuned on test.
+    refresh_ridge_alpha: float = 10.0
+    # Label on the rolling twelve-month forecast and conservative section correspondence.
     forecast_table_note: str = (
-        "section names are from before the Feb/Mar 2026 re-cut, so Feb 2026 onwards cannot "
-        "be compared section by section with current HMWSSB sections"
+        "city totals include every published section; section history uses conservative "
+        "one-to-one name correspondence across the 2026 re-cut; boundaries are unverified"
     )
     # Model choice (docs/REMAINING_WORK.md "Research follow-ups" A; applied at the owner's
     # request on 2026-10-06). Judged on the longest rolling-origin backtest (portal run, origins
@@ -143,10 +144,11 @@ class ShortageConfig:
     groundwater_path: str = "data/derived/groundwater/section_anomaly.csv"
     groundwater_radius_km: float = 5.0
     groundwater_note: str = "groundwater data unavailable"
-    # Reservoir levels: only if Q2 is approved (docs/features.csv T8 note). Off; no data.
+    # Legacy risk_list toggle remains off: the refresh builder adds Q2-approved reservoir
+    # context separately, without altering this capacity-only risk rule.
     reservoirs_enabled: bool = False
-    # T2's label: section names are from before the Feb/Mar 2026 re-cut.
-    section_label: str = "pre-re-cut section name (Feb/Mar 2026)"
+    # Refreshed outputs use current names, with correspondence status in their basis.
+    section_label: str = "current section"
     forecast_table_path: str = "data/derived/forecast_table.csv"
     output_path: str = "data/derived/shortage_risk.csv"
 
