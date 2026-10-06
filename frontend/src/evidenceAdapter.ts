@@ -7,6 +7,8 @@ export type Ward = {
   id: string; name: string; censusYear: number | null; reviewRequired: boolean;
   population2011: number | null; households2011: number | null; waterAccessDeficitShare: number | null;
   constrainedAccessShare?: number | null; hardshipShare?: number | null;
+  /** Fair-queue need score (1 + weighted WAD, CAD, hardship; backend service_models.need_weight). */
+  needWeight?: number | null;
   /** Field check (E5): bookings seen, and what similar wards and the statistical model expected. */
   observedBookings?: number | null; peerExpected?: number | null; modelExpected?: number | null;
   /** OSM hospitals, clinics, UPHCs, schools and care homes placed in the ward (D9); null if not served. */
@@ -146,7 +148,7 @@ export function reasonForError(error: ApiError): FallbackReason {
 
 /** U5 live need (GET /atlas/live): five clues per ward and booking concentration. */
 export type Clue = { code: "owed" | "bookings" | "complaints" | "cuts" | "groundwater"; bad: boolean; known: boolean; counts: boolean; value: number | null; reference: number };
-export type LiveWard = { id: string; clues: Clue[]; badCount: number; knownCount: number; rising: boolean; bookingsWindow: number; usualMonth: number | null };
+export type LiveWard = { id: string; needWeight: number | null; clues: Clue[]; badCount: number; knownCount: number; rising: boolean; bookingsWindow: number; usualMonth: number | null };
 export type Concentration = { source: "live" | "history"; liveBookings: number; gini: number | null; topShare: number | null; topSections: number; sections: number; bookings: number; top: { section: string; bookings: number; share: number }[] };
 export type LiveNeed = { windowDays: number; minBad: number; wards: Map<string, LiveWard>; concentration: Concentration };
 
@@ -158,6 +160,7 @@ export function adaptLiveNeed(raw: unknown): LiveNeed | null {
     if (typeof w.ward_id !== "string" || !Array.isArray(w.clues)) return null;
     wards.set(w.ward_id, {
       id: w.ward_id,
+      needWeight: isRow(w.need) ? num(w.need.need_weight) : null,
       clues: w.clues.filter(isRow).map((k) => ({ code: k.code as Clue["code"], bad: k.bad === true, known: k.known !== false, counts: k.counts !== false, value: num(k.value), reference: num(k.reference) ?? 0 })),
       badCount: num(w.bad_count) ?? 0, knownCount: num(w.known_count) ?? 4, rising: w.rising === true, bookingsWindow: num(w.bookings_window) ?? 0, usualMonth: num(w.usual_month_bookings),
     });
