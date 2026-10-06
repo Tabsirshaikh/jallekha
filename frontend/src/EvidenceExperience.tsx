@@ -13,6 +13,8 @@ type Position = [number, number];
 // The committed snapshot (scripts/frontend/build_u5_snapshot.py) is shown whenever live data is not available.
 const snapshot = evidence as EvidenceDataset;
 const snapshotFeatures = (geometry as { features: Feature[] }).features;
+// Need score per ward from the snapshot, used when the live API does not send one.
+const savedNeed = new Map(snapshot.wards.map((w) => [w.id, w.needWeight ?? null]));
 const PAGE = "?limit=200"; // all 145 wards in one page (API maximum is 200)
 const SCALE = ["#e3f1ea", "#b9dccb", "#86c2a8", "#4f9e83", "#1f7560"];
 const NO_DATA = "#eceeeb";
@@ -126,7 +128,7 @@ export default function EvidenceExperience() {
   const pick = (id: string) => setSelectedId(id);
 
   const metric = (r: Ward): number | null =>
-    tab === "bookings" ? bookingsOf(r) : shown === "wad" ? r.waterAccessDeficitShare : shown === "cad" ? r.constrainedAccessShare ?? null : shown === "need" ? liveOf(r.id)?.needWeight ?? r.needWeight ?? null : shown === "growth" ? (r.growthRatio === null ? null : r.growthRatio - 1) : null;
+    tab === "bookings" ? bookingsOf(r) : shown === "wad" ? r.waterAccessDeficitShare : shown === "cad" ? r.constrainedAccessShare ?? null : shown === "need" ? liveOf(r.id)?.needWeight ?? r.needWeight ?? savedNeed.get(r.id) ?? null : shown === "growth" ? (r.growthRatio === null ? null : r.growthRatio - 1) : null;
   const scale = useMemo(() => classes(rows.map(metric)), [rows, tab, shown, conc]); // eslint-disable-line react-hooks/exhaustive-deps
   function colour(r: Ward) {
     if (tab === "checks") return r.fieldCandidate === true ? "#c9783f" : NO_DATA;
@@ -171,20 +173,20 @@ export default function EvidenceExperience() {
       </div>
 
       <p className="atlas-step">{tab === "need" ? w.stepNeed : tab === "bookings" ? w.stepBookings : w.stepChecks}</p>
+        <div className="atlas-toolbar">
+        {tab === "need" && <div className="atlas-chips" role="radiogroup">{(["rising", "need", "wad", "cad", "growth"] as const).map((l) => <button key={l} role="radio" aria-checked={shown === l} className={shown === l ? "active" : ""} disabled={l === "rising" && !need} title={l === "rising" && !need ? w.signIn : undefined} onClick={() => setLayer(l)}>{l === "rising" ? w.layerRising : l === "wad" ? w.layerWad : l === "cad" ? w.layerCad : l === "need" ? w.layerNeed : w.layerGrowth}</button>)}</div>}
+        {tab === "need" && shown === "rising" && <p className="atlas-help">{w.risingHelp}</p>}
+        {tab === "need" && shown === "need" && <p className="atlas-help">{w.needHelp}</p>}
+        {tab === "need" && shown === "rising" && need && <p className="atlas-stat"><strong>{fmt(rising)}</strong> {w.wardsRising}</p>}
+        {tab === "bookings" && conc && <div className="atlas-stat-card">
+          <p className="atlas-big">{fill(w.topShare, { n: fmt(conc.topSections), p: pct(conc.topShare) })}</p>
+          <p>{w.gini}: <strong>{conc.gini === null ? "—" : conc.gini >= 0.6 ? w.giniHigh : conc.gini >= 0.35 ? w.giniMid : w.giniLow}</strong> ({conc.gini?.toFixed(2) ?? "—"})</p>
+          <p className="muted">{conc.source === "live" ? fill(w.sourceLive, { d: need?.windowDays ?? 30, n: fmt(conc.liveBookings) }) : w.sourceHistory}</p>
+        </div>}
+        {tab === "bookings" && !conc && <div className="atlas-stat-card"><p className="atlas-big">{fill(w.topShare, { n: fmt(dataset.summary.equity.top_section_count), p: pct(dataset.summary.equity.top_booking_share) })}</p><p className="muted">{w.sourceHistory}</p></div>}
+        {tab === "checks" && <p className="atlas-stat"><strong>{fmt(checks.length)}</strong> {w.wardsChecked}</p>}
+      </div>
       <section className="atlas-stage">
-        <div className="atlas-overlay atlas-overlay-top">
-          {tab === "need" && <div className="atlas-chips" role="radiogroup">{(["rising", "need", "wad", "cad", "growth"] as const).map((l) => <button key={l} role="radio" aria-checked={shown === l} className={shown === l ? "active" : ""} disabled={l === "rising" && !need} title={l === "rising" && !need ? w.signIn : undefined} onClick={() => setLayer(l)}>{l === "rising" ? w.layerRising : l === "wad" ? w.layerWad : l === "cad" ? w.layerCad : l === "need" ? w.layerNeed : w.layerGrowth}</button>)}</div>}
-          {tab === "need" && shown === "rising" && <p className="atlas-help">{w.risingHelp}</p>}
-          {tab === "need" && shown === "need" && <p className="atlas-help">{w.needHelp}</p>}
-          {tab === "need" && shown === "rising" && need && <p className="atlas-stat"><strong>{fmt(rising)}</strong> {w.wardsRising}</p>}
-          {tab === "bookings" && conc && <div className="atlas-stat-card">
-            <p className="atlas-big">{fill(w.topShare, { n: fmt(conc.topSections), p: pct(conc.topShare) })}</p>
-            <p>{w.gini}: <strong>{conc.gini === null ? "—" : conc.gini >= 0.6 ? w.giniHigh : conc.gini >= 0.35 ? w.giniMid : w.giniLow}</strong> ({conc.gini?.toFixed(2) ?? "—"})</p>
-            <p className="muted">{conc.source === "live" ? fill(w.sourceLive, { d: need?.windowDays ?? 30, n: fmt(conc.liveBookings) }) : w.sourceHistory}</p>
-          </div>}
-          {tab === "bookings" && !conc && <div className="atlas-stat-card"><p className="atlas-big">{fill(w.topShare, { n: fmt(dataset.summary.equity.top_section_count), p: pct(dataset.summary.equity.top_booking_share) })}</p><p className="muted">{w.sourceHistory}</p></div>}
-          {tab === "checks" && <p className="atlas-stat"><strong>{fmt(checks.length)}</strong> {w.wardsChecked}</p>}
-        </div>
         <svg className="atlas-map" viewBox={`${box.x} ${box.y} ${box.w} ${boxH}`} role="group" aria-label={w.title}>
           {rows.map((r) => {
             const d = view.paths.get(r.id);
@@ -249,7 +251,7 @@ function WardSheet({ ward, live, days, minBad, w, fmt, pct, onClose }: { ward: W
         </div>
         <div><h3>{w.needTitle}</h3>
           <dl className="atlas-facts">
-            <div><dt>{w.needScore}</dt><dd>{ward.needWeight === null || ward.needWeight === undefined ? "—" : ward.needWeight.toFixed(2)}</dd></div>
+            <div><dt>{w.needScore}</dt><dd>{(ward.needWeight ?? savedNeed.get(ward.id) ?? null) === null ? "—" : (ward.needWeight ?? savedNeed.get(ward.id))!.toFixed(2)}</dd></div>
             <div><dt>{w.wad}</dt><dd>{pct(ward.waterAccessDeficitShare)}</dd></div>
             <div><dt>{w.cad}</dt><dd>{pct(ward.constrainedAccessShare)}</dd></div>
             <div><dt>{w.hardship}</dt><dd>{pct(ward.hardshipShare)}</dd></div>
