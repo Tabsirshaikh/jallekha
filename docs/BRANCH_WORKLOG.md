@@ -1,5 +1,23 @@
 # Branch worklog
 
+## `feat/place-missing-sections` — location review, 2026-10-07
+
+- Fetched current origin/main; isolated worktree `../jallekha-placement-review`. Brought
+  latest main into the existing owner-assigned branch without rewriting shared history.
+- Reviewed all eight ambiguous and three far-away candidates. Five named OSM places accepted;
+  six unresolved review rows and twelve NOT_FOUND rows have blank coordinates. All 22 existing
+  automatic candidates retain their weaker status, including documented landmark proxies.
+- New CSV: 45 identities; ACCEPT_AUTO 22/66,374 bookings; ACCEPT_REVIEWED 5/24,543;
+  UNPLACED 18/26,647. Accepted candidate coverage 90,917 (77.33% of missing-location cohort).
+  Every point is copied from logged candidates; no existing data or section map changed.
+- Four artifact tests failed before CSV creation, then passed. Evidence/reasons in
+  `research/SECTION_PLACEMENT_REVIEW.md`. No UI/API changes; push only this branch, no PR/merge.
+- Final checks: lint, 200 frontend tests, translations and all task data verifiers pass.
+  Full backend: 1,025 pass, one inherited shortage-artifact reproducibility failure. A8 station
+  changes make 42 saved capacity/reason rows stale; risk categories are unchanged. The current
+  forecast table contains the same stale section-capacity inputs. Existing data was preserved;
+  no full-green claim. Fix verification report: `research/E5_F5_FIX_VERIFICATION.md`.
+
 This file records what each task branch discovered and changed. It lets a teammate understand, review, reproduce, or correct the work without relying on chat history.
 
 ## Required workflow

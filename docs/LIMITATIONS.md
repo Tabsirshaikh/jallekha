@@ -52,6 +52,12 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - **Basis labels are hidden on the officer need map and overview** (owner decision 2026-10-06: they made the screens hard to read). The API, data files and docs still carry them.
 
 ### F3 Booking Equity and coverage map (E4, E6)
+- **Missing-location review (2026-10-07):** new `section_placement_reviewed.csv` retains 22
+  automatic candidates and accepts five named OSM places; 18 remain unplaced. Accepted
+  candidates cover 90,917 of 117,564 previously unplaced 2025 bookings. This is a hand-off;
+  existing crosswalk, weights and map are unchanged. Automatic landmarks are not validated
+  centres, and reviewed localities are not official boundaries. Evidence and reasons:
+  `research/SECTION_PLACEMENT_REVIEW.md`.
 - **Building-weighted repair (local `feat/booking-dasymetric`):** section totals are split over
   historical wards by 2023 Open Buildings fractional-count mass in approximate section cells.
   Cells use all located section points (global Voronoi), clipped by the section division's

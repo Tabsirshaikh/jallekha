@@ -1,5 +1,12 @@
 # JalLekha 2.0: remaining work (items 11 to 22)
 
+**Location-review hand-off, 2026-10-07:** `feat/place-missing-sections` supplies
+`section_placement_reviewed.csv`: 22 automatic, five reviewed locality candidates and
+18 unplaced identities. Candidate bookings covered: 90,917; unresolved: 26,647 (2025).
+No existing crosswalk, map or weights changed. The separate section-map owner can consume
+the file, retaining automatic-proxy caveats; incorporation is not completed here.
+Rationale: `research/SECTION_PLACEMENT_REVIEW.md`.
+
 Status on `main` as of 2026-10-05, after PR #66. Items 1 to 10 of the 22-item list are done
 (PRs #64, #65) and so are the four follow-up fixes (PR #66). This file lists what is left: for
 each item, what it is, where it stands in the code today, what blocks it, how to do it, and when
@@ -426,4 +433,3 @@ execution of the documented refresh command. No newly tested candidate passed th
 - **Outage & Pressure Dashboards:** Outage Dashboard is behind internal ERP login (no public data); Water Pressure Dashboard server (`65.2.47.226`) is unreachable/timed out.
 - **RTI application drafted:** `docs/handoff/RTI_SUPPLY_HOURS.md` requests scheduled supply timings, SCADA daily supply hours/flow (2024–2026), and GIS boundary shapefiles.
 - **Tests & Verifier:** `backend/tests/test_d16_supply_timings.py` (7 tests pass) and `scripts/data/verify_supply_timings.py` (`data/verification/supply_timings_checks.json`).
-
