@@ -112,6 +112,13 @@ export default function EvidenceExperience() {
   const allLive = sources.every((s) => s.live);
   const live = useMemo(() => (allLive ? adaptLiveEvidence({ atlas: atlas.data, equityWards: equityWards.data, equitySummary: equitySummary.data, fieldChecks: fieldChecks.data, layer: layerGeo.data }) : null), [allLive, atlas.data, equityWards.data, equitySummary.data, fieldChecks.data, layerGeo.data]);
   const need = useMemo(() => (liveNeedApi.live ? adaptLiveNeed(liveNeedApi.data) : null), [liveNeedApi.live, liveNeedApi.data]);
+  // Why there are no live signs: signed out, still loading, an old server, or an error (not always "sign in").
+  const noLive = !enabled || need ? w.signIn
+    : liveNeedApi.loading ? "Checking for live signs…"
+    : liveNeedApi.error?.status === 404 ? "This server has no live signs for sections yet. Restart the API from the section branch. Showing saved data."
+    : liveNeedApi.error ? `Live signs could not be loaded (${liveNeedApi.error.status === 0 ? "server not reachable" : "server error " + liveNeedApi.error.status}). Showing saved data.`
+    : adaptLiveNeed(liveNeedApi.data) === null ? "The server's live signs answer was incomplete. Showing saved data."
+    : w.signIn;
 
   const dataset = bySection ? sectionSnapshot : live?.dataset ?? snapshot;
   const features = bySection ? sectionFeatures : live?.features ?? snapshotFeatures;
@@ -202,7 +209,7 @@ export default function EvidenceExperience() {
     <div className="atlas-page">
       {unitToggle}
       <header className="atlas-head">
-        <div><h1>{w.title}</h1><p className="muted">{need ? w.intro : w.signIn}</p></div>
+        <div><h1>{w.title}</h1><p className="muted">{need ? w.intro : noLive}</p></div>
         <div className="atlas-search">
           <input aria-label={w.search} placeholder={w.search} value={query} onChange={(e) => setQuery(e.target.value)} />
           {query.trim() && <ul>{found.length ? found.map((r) => <li key={r.id}><button onClick={() => { setSelectedId(r.id); setQuery(""); }}>{r.name}</button></li>) : <li className="muted">{w.searchEmpty}</li>}</ul>}
@@ -277,7 +284,7 @@ export default function EvidenceExperience() {
         <SectionOutcomeForm onSaved={checkedSectionsApi.reload} />
       </section>}
 
-      {selected && <WardSheet ward={selected} sections={bySection ? sectionRows.filter((r) => r.section_id === selected.id) : checks.filter((r) => r.ward_id === selected.id)} live={liveOf(selected.id)} days={need?.windowDays ?? 30} minBad={need?.minBad ?? 2} w={w} fmt={fmt} pct={pct} rich={locale === "en"} onClose={() => setSelectedId(null)} />}
+      {selected && <WardSheet ward={selected} sections={bySection ? sectionRows.filter((r) => r.section_id === selected.id) : checks.filter((r) => r.ward_id === selected.id)} live={liveOf(selected.id)} noLive={noLive} days={need?.windowDays ?? 30} minBad={need?.minBad ?? 2} w={w} fmt={fmt} pct={pct} rich={locale === "en"} onClose={() => setSelectedId(null)} />}
     </div>
   );
 }
@@ -311,7 +318,7 @@ function SectionRates({ section, w, fmt, rich }: { section: SectionCheck; w: Sec
 }
 
 type SectionWords = Words & Record<keyof typeof sectionCopy.en | keyof typeof outcomeCopy.en, string>;
-function WardSheet({ ward, sections, live, days, minBad, w, fmt, pct, rich, onClose }: { rich: boolean; ward: Ward; sections: SectionCheck[]; live: LiveWard | undefined; days: number; minBad: number; w: SectionWords; fmt: (n: number) => string; pct: (n: number | null | undefined) => string; onClose: () => void }) {
+function WardSheet({ ward, sections, live, noLive, days, minBad, w, fmt, pct, rich, onClose }: { rich: boolean; ward: Ward; sections: SectionCheck[]; live: LiveWard | undefined; noLive: string; days: number; minBad: number; w: SectionWords; fmt: (n: number) => string; pct: (n: number | null | undefined) => string; onClose: () => void }) {
   const status = !live || live.knownCount === 0 ? w.noLive : live.rising ? w.rising : live.badCount === 1 ? w.oneSign : w.calm;
   return (
     <section className="atlas-sheet" role="dialog" aria-label={ward.name}>
@@ -319,7 +326,7 @@ function WardSheet({ ward, sections, live, days, minBad, w, fmt, pct, rich, onCl
       <div className="atlas-sheet-grid">
         <div><h3>{w.nowTitle}</h3>
           {live ? <><ul className="atlas-clues">{live.clues.filter((c) => c.counts).map((c) => <li key={c.code} className={c.bad ? "bad" : c.known ? "ok" : "unknown"}>{clueText(c, w, days, fmt)}</li>)}</ul><p className="muted small">{fill(w.nowNote, { n: minBad })}</p>
-            <h3 className="atlas-bg-title">{w.bgTitle}</h3><ul className="atlas-clues">{live.clues.filter((c) => !c.counts).map((c) => <li key={c.code} className="info">{clueText(c, w, days, fmt)}</li>)}</ul></> : <p className="muted">{w.signIn}</p>}
+            <h3 className="atlas-bg-title">{w.bgTitle}</h3><ul className="atlas-clues">{live.clues.filter((c) => !c.counts).map((c) => <li key={c.code} className="info">{clueText(c, w, days, fmt)}</li>)}</ul></> : <p className="muted">{noLive}</p>}
         </div>
         <div><h3>{w.needTitle}</h3>
           <dl className="atlas-facts">
