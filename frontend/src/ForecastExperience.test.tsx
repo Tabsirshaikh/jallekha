@@ -168,4 +168,12 @@ describe("ForecastExperience", () => {
     expect(await screen.findByText(/server could not be reached/)).toBeInTheDocument();
     expect(screen.getByText("Saved snapshot")).toBeInTheDocument();
   });
+
+  it("shows the month and its numbers when the pointer is over the chart", () => {
+    const { container } = render(<LocaleProvider><AuthProvider><ForecastExperience /></AuthProvider></LocaleProvider>);
+    const columns = container.querySelectorAll(".forecast-chart rect");
+    expect(columns.length).toBeGreaterThan(10);
+    fireEvent.mouseEnter(columns[0]);
+    expect(container.querySelector(".chart-tooltip")).not.toBeNull();
+  });
 });

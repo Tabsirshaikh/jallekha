@@ -71,6 +71,7 @@ type ChartProps = { history: Month[]; outlook: OutlookMonth[]; selected: string 
 /** History (REAL) and forecast on one month axis, so a live forecast that overlaps observed months sits over them. */
 function OutlookChart({ history, outlook, selected, onSelect, locale, title, text }: ChartProps) {
   const fmt = (v: number | null) => number(v, locale);
+  const [hoverMonth, setHoverMonth] = useState<string | null>(null);
   const shown = history.filter((row) => row.month);
   const allMonths = [...shown.map((row) => row.month), ...outlook.map((row) => row.month)].sort();
   if (allMonths.length === 0) return null;
@@ -100,7 +101,7 @@ function OutlookChart({ history, outlook, selected, onSelect, locale, title, tex
     ? [...months.filter((m) => m.endsWith("-01")).map((m) => ({ month: m, label: m.slice(0,4) })), ...outlook.filter((row) => row.month > historyEnd).map((row) => ({ month: row.month, label: monthName(row.month, locale).split(" ")[0] }))]
     : outlook.map((row) => ({ month: row.month, label: monthName(row.month, locale).split(" ")[0] }));
   return <>
-    <div className="forecast-chart-scroll"><svg viewBox={"0 0 "+width+" "+height} className="forecast-chart" role="img" aria-label={title}>
+    <div className="forecast-chart-scroll forecast-chart-hover" onMouseLeave={() => setHoverMonth(null)}><svg viewBox={"0 0 "+width+" "+height} className="forecast-chart" role="img" aria-label={title}>
       <line x1={left} x2={width-right} y1={y(0)} y2={y(0)} className="chart-axis"/>
       {ticks.map((v)=><g key={v}><line x1={left} x2={width-right} y1={y(v)} y2={y(v)} className="chart-grid"/><text x={left-8} y={y(v)+4} textAnchor="end">{fmt(v)}</text></g>)}
       {band90&&<polygon points={band90} className="range-90"/>}
@@ -110,9 +111,18 @@ function OutlookChart({ history, outlook, selected, onSelect, locale, title, tex
       <path d={forecastPath} className="forecast-line"/>
       {outlook.filter((row)=>row.median!==null).map((row)=><g key={row.month} className="forecast-point" tabIndex={0} role="button" aria-label={monthName(row.month,locale)+": "+text.median+" "+fmt(row.median)} onClick={()=>onSelect(row.month)} onKeyDown={(event)=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();onSelect(row.month);}}}><circle cx={x(row.month)} cy={y(row.median ?? 0)} r={selected===row.month?7:5}/><title>{monthName(row.month,locale)} · {fmt(row.median)}</title></g>)}
       {labels.map((item)=><text key={item.month+item.label} x={x(item.month)} y={height-12} textAnchor="middle">{item.label}</text>)}
-    </svg></div>
+      {hoverMonth&&<line x1={x(hoverMonth)} x2={x(hoverMonth)} y1={top} y2={y(0)} className="chart-hover-line"/>}
+      {months.map((m)=><rect key={"h"+m} x={x(m)-(width-left-right)/Math.max(months.length-1,1)/2} y={top} width={(width-left-right)/Math.max(months.length-1,1)} height={y(0)-top} fill="transparent" onMouseEnter={()=>setHoverMonth(m)}/>)}
+    </svg>
+    {hoverMonth&&(()=>{ const h = shown.find((row)=>row.month===hoverMonth); const o = outlook.find((row)=>row.month===hoverMonth); const pos = x(hoverMonth)/width*100;
+      return <div className="chart-tooltip" style={{ left: `${pos}%`, transform: pos > 60 ? "translateX(-105%)" : "translateX(5%)" }}><strong>{monthName(hoverMonth, locale)}</strong>
+        {h&&h.bookings!==null&&<span><i className="history-key"/>{text.observed}: {fmt(h.bookings)}</span>}
+        {o&&o.median!==null&&<span><i className="median-key"/>{text.median}: {fmt(o.median)}</span>}
+        {o&&o.capacity!==null&&<span><i className="capacity-key"/>{text.capacity}: {fmt(o.capacity)}</span>}
+        {!(h&&h.bookings!==null)&&!(o&&o.median!==null)&&<span>—</span>}</div>; })()}
+    </div>
     <div className="forecast-legend">
-      {shown.length>0&&<span><i className="history-key"/>{text.observed} · REAL</span>}
+      {shown.length>0&&<span><i className="history-key"/>{text.observed}</span>}
       {band80&&<span><i className="range-key range-key-80"/>{text.p80}</span>}
       {band90&&<span><i className="range-key range-key-90"/>{text.p90}</span>}
       <span><i className="median-key"/>{text.median}</span>
