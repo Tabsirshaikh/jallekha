@@ -65,16 +65,22 @@ describe("EvidenceExperience", () => {
     expect(screen.getByText(/^Sign in as an officer/)).toBeInTheDocument();
   });
 
-  it("explains low-booking wards as booked vs expected", () => {
+  it("shows exact sections and map dots without ward booking estimates", () => {
     vi.stubGlobal("fetch", vi.fn());
     const { container } = renderScreen();
-    fireEvent.click(screen.getByRole("tab", { name: "3. Expected vs actual" }));
+    fireEvent.click(screen.getByRole("tab", { name: "3. Low bookings" }));
     const cards = container.querySelectorAll(".atlas-check-card");
-    expect(cards.length).toBe(6);
+    expect(cards.length).toBeGreaterThan(0);
+    expect(container.querySelectorAll(".atlas-map circle")).toHaveLength(cards.length);
     const first = within(cards[0] as HTMLElement);
     expect(first.getByText(/^Booked .* tankers in 2025$/)).toBeInTheDocument();
-    expect(first.getByText(/^5 similar wards booked about/)).toBeInTheDocument();
-    expect(first.getByText(/^Statistical model .* expected about/)).toBeInTheDocument();
+    expect(first.getByText(/^Bookings per 1,000 domestic connections:/)).toBeInTheDocument();
+    expect(first.getByText(/^Similar sections' rate:/)).toBeInTheDocument();
+    expect(screen.queryByText(/^Statistical model/)).not.toBeInTheDocument();
+    expect(first.getByText("Not yet checked on the ground")).toBeInTheDocument();
+    fireEvent.click(first.getByRole("button", { name: "Open on map" }));
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.queryByText(/^5 similar wards booked about/)).not.toBeInTheDocument();
   });
 
   it("searches wards and opens the chosen one", () => {
@@ -83,6 +89,20 @@ describe("EvidenceExperience", () => {
     fireEvent.change(screen.getByLabelText("Find a ward"), { target: { value: "Gachibowli" } });
     fireEvent.click(within(container.querySelector(".atlas-search ul") as HTMLElement).getByRole("button", { name: "Ward 105 Gachibowli" }));
     expect(screen.getByRole("dialog", { name: "Ward 105 Gachibowli" })).toBeInTheDocument();
+  });
+
+  it("uses the live section list, including an empty list, instead of saved flags", async () => {
+    setToken("t-officer");
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(liveFetch));
+    const { container } = renderScreen();
+    await screen.findByText("wards with 2 or more warning signs");
+    fireEvent.click(screen.getByRole("tab", { name: "3. Low bookings" }));
+    expect(await screen.findByText("Section checks from the service")).toBeInTheDocument();
+    expect(container.querySelectorAll(".atlas-check-card")).toHaveLength(1);
+    expect(container.querySelectorAll(".atlas-map circle")).toHaveLength(1);
+    fireEvent.click(screen.getByRole("button", { name: "TEST SECTION" }));
+    expect(screen.getByRole("dialog", { name: "Ward 901 Testpur" })).toBeInTheDocument();
+    expect(screen.queryByText(/^Statistical model/)).not.toBeInTheDocument();
   });
 
   it("zooms only with the buttons", () => {

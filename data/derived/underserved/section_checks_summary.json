@@ -1,0 +1,1793 @@
+{
+  "basis": "DERIVED",
+  "config": {
+    "basis": "ASSUMED",
+    "flats_distance_weight": 2.0,
+    "minimum_peers": 3,
+    "months_per_year": 12,
+    "need_quantile": 0.5,
+    "peer_count": 5,
+    "period_year": 2025,
+    "ratio_quantile": 0.2,
+    "train_year": 2024
+  },
+  "flagged_count": 12,
+  "input_sha256": {
+    "data/derived/crosswalk/section_to_ward_2016.csv": "7cd5f22f86e0418601aa46f65b08a2e8b85acc5bbcd312adcaab5ffb6faabf25",
+    "data/derived/evidence/ward_evidence.csv": "629ca414bdbe335f0036933bf942132564a594c57b31fd7efd42805201b4d9fc",
+    "data/raw/hmwssb_billing_portal/2024-01.csv": "445d7793c19f4aad43e1f636875c6f075037c3069cf9efbbfbbb56be46310bc1",
+    "data/raw/hmwssb_billing_portal/2024-02.csv": "c2b5f223ad50adfc746f8585cebab044b031dec7d38a008ea7819084b005f8ee",
+    "data/raw/hmwssb_billing_portal/2024-03.csv": "fdf90fc48a813f62866b5bfde6b3bd76f8bd492df67fe804dbb7e6a3797f1e5c",
+    "data/raw/hmwssb_billing_portal/2024-04.csv": "ef4025c3ca8006a4ea90f3109905bf7a8df021fbe3cff331e31a186829130a4e",
+    "data/raw/hmwssb_billing_portal/2024-05.csv": "83f2d9ac95c200b3ad05fcdf5a38b79b59ac28e0d2873c721fb257fd5cd1251c",
+    "data/raw/hmwssb_billing_portal/2024-06.csv": "6885e6a032912436ccdabca0096034491475a16f87beb6dc168650db59fd2206",
+    "data/raw/hmwssb_billing_portal/2024-07.csv": "fc1b6229dd62e929ff2a0f74fbf918f74fd01297aeab95a34defed2de4fd2ce0",
+    "data/raw/hmwssb_billing_portal/2024-08.csv": "fd466f6b2593be0e789250a94fe6107c106116152c065e99fbc5e6ca63451322",
+    "data/raw/hmwssb_billing_portal/2024-09.csv": "691a2cc698f831907b66127a8dc0831760459e49201ecea56157c0766eb4f369",
+    "data/raw/hmwssb_billing_portal/2024-10.csv": "573780a02bf99aaaa74cddcf40cb0ca384593335a243fa3084b284bfd40400bc",
+    "data/raw/hmwssb_billing_portal/2024-11.csv": "a94fe7068f2831dbf1af6f0c613cc9758d36d561500f0f67d7d337afde02889c",
+    "data/raw/hmwssb_billing_portal/2024-12.csv": "f4a33d24d19431d11c60896f2ed7031df27463a8f47c7cffabb8c8f444d29816",
+    "data/raw/hmwssb_billing_portal/2025-01.csv": "f455ebe1c6c11a337b71e681ae2fe654564095e8964132f26c8f7dcaddd236ff",
+    "data/raw/hmwssb_billing_portal/2025-02.csv": "bd12d02e3c5a124bc335e9608a4ee15b7609566647c03dcdc08d11034069f8ac",
+    "data/raw/hmwssb_billing_portal/2025-03.csv": "4c32562e31a67d14e2c7ad2826c3cf9e00c0c16f2622c737023ad7acce3685ec",
+    "data/raw/hmwssb_billing_portal/2025-04.csv": "61a765a6c515f56235db07d86a07431c6e5dd35e994c70bd75ab84121961c522",
+    "data/raw/hmwssb_billing_portal/2025-05.csv": "d0ba9223a953656403f97fcdeed5f043b0da5fd472c821fe0360ac0fca51dbd2",
+    "data/raw/hmwssb_billing_portal/2025-06.csv": "69e143886de1eec849211956f26d410b7e0351c0d79f9be1e22d7d54f50bca81",
+    "data/raw/hmwssb_billing_portal/2025-07.csv": "bb89b5d3d6f48283a6b9f58f578933e826353c16ed9ebac60711f2e328122506",
+    "data/raw/hmwssb_billing_portal/2025-08.csv": "dbcdd55b7f5511599c5e837f2e4f6fa372b1105fa7bad0c82148c09eb8755434",
+    "data/raw/hmwssb_billing_portal/2025-09.csv": "d4f754434416abc3710a24ae89e950d30426150c3640cc3775f518b8674fc946",
+    "data/raw/hmwssb_billing_portal/2025-10.csv": "9a806bcd11d9f8dba4faf180300babe54564db697883e9364558aa3f41e525b4",
+    "data/raw/hmwssb_billing_portal/2025-11.csv": "1f1812cb60eaa067d953b0f2b461fc09a98003c6e859049861a969b205df51a6",
+    "data/raw/hmwssb_billing_portal/2025-12.csv": "0eeb5e9a77d33564f30bc8b1bb171bf5aecf57c74a1696fa4493744650103a20",
+    "data/raw/hmwssb_tankers_portal/2024-01.csv": "311f2e103146596dd16930d4c78ba54da27b965490eb8dfb6d4a918b0ea88985",
+    "data/raw/hmwssb_tankers_portal/2024-02.csv": "9950c45274e0d265f0a1be6a9580395b0b3911abad584dc3b4b51a6a42d6647c",
+    "data/raw/hmwssb_tankers_portal/2024-03.csv": "73205ddec534c9883572a801331411850fe04dda3c7981992d2547e059765515",
+    "data/raw/hmwssb_tankers_portal/2024-04.csv": "6bc96987933eafcf7d1a17535205dc2ccb9eea50085f026ae37b0e410a5bcc11",
+    "data/raw/hmwssb_tankers_portal/2024-05.csv": "5882aebec7a947aff38b5dde0bd48fe0d6cc4a4c60394fcc77805a80218fe849",
+    "data/raw/hmwssb_tankers_portal/2024-06.csv": "5fdeebc6e93a6cf629ec08d8b3152316ae91279fd81071dae8e0e411aac205e9",
+    "data/raw/hmwssb_tankers_portal/2024-07.csv": "0a25636ea22671279825fc971e812f285ebf1adc738a6a2ddbd4a89738e96d78",
+    "data/raw/hmwssb_tankers_portal/2024-08.csv": "295ac5f8ee8d79fb430074e823b2707e6a060cff2509a5a1e06aa29ebda3c5bb",
+    "data/raw/hmwssb_tankers_portal/2024-09.csv": "a224cd113928406b9c10271219053392fb641538131d7f16a2b46b626c8cc0b1",
+    "data/raw/hmwssb_tankers_portal/2024-10.csv": "a02e09bc4b74366a1cece47dfdcb874b9d2251e5d2d55cba4ccc58f6f212a3db",
+    "data/raw/hmwssb_tankers_portal/2024-11.csv": "989aaf68d6d82a87f7bdedacecaace9e36ce19d0689eba545e58393677547cb5",
+    "data/raw/hmwssb_tankers_portal/2024-12.csv": "4ed129d8cbf7066f009162306f4ad8fd6ca69253cc89142977afba9fd1d8877b",
+    "data/raw/hmwssb_tankers_portal/2025-01.csv": "fddb8c23352fda1e2d509a822e3742784578f39a721a276fc89eb06f01f82b54",
+    "data/raw/hmwssb_tankers_portal/2025-02.csv": "17d10aa8ca91ec403397d75f8b3798835d2041446f158269f6f0687dda7610ad",
+    "data/raw/hmwssb_tankers_portal/2025-03.csv": "11e64b35f0ab211b6cae8f958cfdeb1d6233c79d0981733d47aa9c6e17ae36a1",
+    "data/raw/hmwssb_tankers_portal/2025-04.csv": "588bddbcfd6c0599759b7fba8619e74662d047a5e52ec9b81f1532c698a2ee5c",
+    "data/raw/hmwssb_tankers_portal/2025-05.csv": "a4013765622ed91185a564a35f53888280b00028f9e4184fdedeb327a8e925f6",
+    "data/raw/hmwssb_tankers_portal/2025-06.csv": "37b1d7cbdfba6d0c6a04325272dbb06bca4f45fc76433a5f6605ffd7dc0489f4",
+    "data/raw/hmwssb_tankers_portal/2025-07.csv": "f2ee7b91e61ff38e8dd8bcf232827be0ae6ddd363e56c12620a1caf9d0920b7a",
+    "data/raw/hmwssb_tankers_portal/2025-08.csv": "e5519c586f93fa1597599e63adaa7e0f74ae36dab60a81da5643fdb6b8341714",
+    "data/raw/hmwssb_tankers_portal/2025-09.csv": "42b8c3ca58dbcc27475c56b9b4ce932cdceb80d96df035291afd2aaa2e14881d",
+    "data/raw/hmwssb_tankers_portal/2025-10.csv": "9da28031c06e68bc19e08ff67cf12f9d90d4644ca24a6a4c7b9fa6ed7a6fda6f",
+    "data/raw/hmwssb_tankers_portal/2025-11.csv": "6cfabfe087080f0ecb39e2600222f87fe3960d158d39390cd2ed95b61df666e3",
+    "data/raw/hmwssb_tankers_portal/2025-12.csv": "e96590142acb7de7db6c7c554131d043ec70edd908c5f12a8c85649b2e4e0807"
+  },
+  "limitations": [
+    "Partial booking or billing years excluded, never filled with zero.",
+    "Unnamed portal section buckets excluded; divisions are part of section identity.",
+    "Connections are accounts, not households; flats share is only a proxy.",
+    "Same-division peers may have different supply and booking access.",
+    "2024 to 2025 accuracy is prediction accuracy, not field-check precision.",
+    "Geocoded point and Census-2011 ward need are approximate context only.",
+    "No field outcomes yet; flags cannot change allocation or entitlement."
+  ],
+  "method": "Annual bookings per 1000 mean monthly domestic connections; leave-target-out median of nearest same-division peers by log connection count and flats share. 2024 ratio threshold; 2025 peer rates describe current comparisons. Need context only.",
+  "schema_version": "e5-section-checks-v1",
+  "section_count": 197,
+  "validation": {
+    "baseline": {
+      "basis": "DERIVED",
+      "count": 121,
+      "mean_absolute_error": 7405.759392934651,
+      "median_miss": 3.3102646978616037,
+      "positive_pairs": 121,
+      "spearman": 0.1503900229983166,
+      "within_2x": 0.2809917355371901,
+      "zero_pairs_excluded_from_miss": 0
+    },
+    "basis": "DERIVED",
+    "exposure_year": 2024,
+    "peer": {
+      "basis": "DERIVED",
+      "count": 121,
+      "mean_absolute_error": 6057.835483111992,
+      "median_miss": 2.482408804352271,
+      "positive_pairs": 121,
+      "spearman": 0.3718343443786221,
+      "within_2x": 0.38016528925619836,
+      "zero_pairs_excluded_from_miss": 0
+    },
+    "predictions": [
+      {
+        "baseline": 4644.388337277822,
+        "basis": "DERIVED",
+        "expected": 2920.1311147815095,
+        "observed": 557,
+        "peers": [
+          "Bhagatsingh Nagar",
+          "JEEDIMETLA",
+          "SHAPOORNAGAR",
+          "suchitra",
+          "GAJULARAMARAM"
+        ],
+        "section": "ADARSHNAGAR"
+      },
+      {
+        "baseline": 5397.932793734883,
+        "basis": "DERIVED",
+        "expected": 3655.1932071869564,
+        "observed": 743,
+        "peers": [
+          "BARKATPURA",
+          "NARAYANGUDA",
+          "BAGH LINGAMPALLY",
+          "DOMALGUDA",
+          "GANDHINAGAR"
+        ],
+        "section": "ADIKMET"
+      },
+      {
+        "baseline": 2528.4516129144263,
+        "basis": "DERIVED",
+        "expected": 1057.5494292237443,
+        "observed": 640,
+        "peers": [
+          "OLD MALLEPALLY",
+          "KAKATIYA NAGAR",
+          "HAKEEMPET",
+          "CHINTAL BASTHI",
+          "ASIF NAGAR"
+        ],
+        "section": "AHMED NAGAR"
+      },
+      {
+        "baseline": 6880.2104032058205,
+        "basis": "DERIVED",
+        "expected": 1575.4328860236153,
+        "observed": 8176,
+        "peers": [
+          "LINGOJIGUDA",
+          "KOTHAPETA",
+          "MARUTHINAGAR (DIV 10)",
+          "VAISHALINAGAR (DIV 10)",
+          "SAROORNAGAR"
+        ],
+        "section": "ALKAPURI"
+      },
+      {
+        "baseline": 7571.187224893113,
+        "basis": "DERIVED",
+        "expected": 2157.0168818392704,
+        "observed": 1454,
+        "peers": [
+          "VAJPAYEE NAGAR",
+          "GOWTHAM NAGAR",
+          "SAINATHPURAM",
+          "CHANUKYAPURI",
+          "VENKATAPURAM"
+        ],
+        "section": "ALWAL (Div13)"
+      },
+      {
+        "baseline": 6414.908567619145,
+        "basis": "DERIVED",
+        "expected": 1729.748601680974,
+        "observed": 222,
+        "peers": [
+          "BOATS CLUB",
+          "SHIVAM",
+          "ADIKMET",
+          "BAGH LINGAMPALLY",
+          "AZAMABAD"
+        ],
+        "section": "AMBERPET"
+      },
+      {
+        "baseline": 4591.745223885326,
+        "basis": "DERIVED",
+        "expected": 2898.810877288877,
+        "observed": 1920,
+        "peers": [
+          "CHINTAL BASTHI",
+          "TOLI CHOWK",
+          "GOLCONDA",
+          "VIJAYNAGAR COLONY",
+          "HAKEEMPET"
+        ],
+        "section": "ASIF NAGAR"
+      },
+      {
+        "baseline": 4596.635567752388,
+        "basis": "DERIVED",
+        "expected": 501.6983323749281,
+        "observed": 1238,
+        "peers": [
+          "VINAY NAGAR (DIV 2 (a))",
+          "CHANCHALGUDA",
+          "SAIDABAD",
+          "MALAKPET",
+          "MOOSARAMBAGH"
+        ],
+        "section": "ASMANGARH"
+      },
+      {
+        "baseline": 7683.737050657122,
+        "basis": "DERIVED",
+        "expected": 1491.6053540587218,
+        "observed": 4227,
+        "peers": [
+          "SULEMAN NAGAR",
+          "BUDVEL (DIV16)",
+          "MAILERDEV PALLY",
+          "KATEDAN",
+          "HYDERGUDA"
+        ],
+        "section": "ATTAPUR"
+      },
+      {
+        "baseline": 8823.83442307684,
+        "basis": "DERIVED",
+        "expected": 1444.8141098712626,
+        "observed": 4521,
+        "peers": [
+          "SHIVAM",
+          "BOATS CLUB",
+          "AMBERPET",
+          "ADIKMET",
+          "BAGH LINGAMPALLY"
+        ],
+        "section": "AZAMABAD"
+      },
+      {
+        "baseline": 4797.571167231395,
+        "basis": "DERIVED",
+        "expected": 3248.6602207818205,
+        "observed": 3942,
+        "peers": [
+          "BARKATPURA",
+          "DOMALGUDA",
+          "MUSHEERABAD",
+          "NARAYANGUDA",
+          "ADIKMET"
+        ],
+        "section": "BAGH LINGAMPALLY"
+      },
+      {
+        "baseline": 5601.385481968994,
+        "basis": "DERIVED",
+        "expected": 2197.608899241187,
+        "observed": 35912,
+        "peers": [
+          "KUKATPALLY",
+          "VIVEKANANDA NAGAR",
+          "BHARATHNAGAR",
+          "MOOSAPET",
+          "GAYATRI NAGAR"
+        ],
+        "section": "BALAJINAGAR (DIV 9)"
+      },
+      {
+        "baseline": 8331.348028935023,
+        "basis": "DERIVED",
+        "expected": 7359.608511215935,
+        "observed": 1136,
+        "peers": [
+          "HASMATHPET",
+          "YELLAMMABANDA",
+          "KPHB",
+          "GAYATRI NAGAR",
+          "BHARATHNAGAR"
+        ],
+        "section": "BALANAGAR"
+      },
+      {
+        "baseline": 7895.747840658593,
+        "basis": "DERIVED",
+        "expected": 10362.79033764191,
+        "observed": 35369,
+        "peers": [
+          "THATTIKHANA",
+          "VENGALRAONAGAR",
+          "YELLAREDDYGUDA",
+          "FILM NAGAR",
+          "S.P.R HILLS"
+        ],
+        "section": "BANJARA HILLS"
+      },
+      {
+        "baseline": 4671.069478081941,
+        "basis": "DERIVED",
+        "expected": 2505.1554939289463,
+        "observed": 3349,
+        "peers": [
+          "NARAYANGUDA",
+          "BAGH LINGAMPALLY",
+          "GANDHINAGAR",
+          "DOMALGUDA",
+          "ADIKMET"
+        ],
+        "section": "BARKATPURA"
+      },
+      {
+        "baseline": 4719.900999930992,
+        "basis": "DERIVED",
+        "expected": 5048.672986443659,
+        "observed": 24324,
+        "peers": [
+          "MOTI NAGAR",
+          "KUKATPALLY",
+          "MOOSAPET",
+          "BALAJINAGAR (DIV 9)",
+          "VIVEKANANDA NAGAR"
+        ],
+        "section": "BHAGYANAGAR"
+      },
+      {
+        "baseline": 5572.762586982365,
+        "basis": "DERIVED",
+        "expected": 5960.941963226157,
+        "observed": 1313,
+        "peers": [
+          "GAYATRI NAGAR",
+          "BALAJINAGAR (DIV 9)",
+          "VIVEKANANDA NAGAR",
+          "MOOSAPET",
+          "KUKATPALLY"
+        ],
+        "section": "BHARATHNAGAR"
+      },
+      {
+        "baseline": 6876.758395770247,
+        "basis": "DERIVED",
+        "expected": 1854.284140420144,
+        "observed": 1304,
+        "peers": [
+          "SHIVAM",
+          "AMBERPET",
+          "AZAMABAD",
+          "ADIKMET",
+          "BAGH LINGAMPALLY"
+        ],
+        "section": "BOATS CLUB"
+      },
+      {
+        "baseline": 4553.773142094018,
+        "basis": "DERIVED",
+        "expected": 2695.2832578166776,
+        "observed": 2082,
+        "peers": [
+          "TARNAKA",
+          "SEETHAPALMANDI",
+          "SRINIVAS NAGAR",
+          "LALAPET",
+          "METTUGUDA"
+        ],
+        "section": "BOIGUDA"
+      },
+      {
+        "baseline": 6135.72746626714,
+        "basis": "DERIVED",
+        "expected": 10603.435479000324,
+        "observed": 3075,
+        "peers": [
+          "FILM NAGAR",
+          "FATHENAGAR",
+          "VENGALRAONAGAR",
+          "YELLAREDDYGUDA",
+          "ERRAGADDA"
+        ],
+        "section": "BORABANDA"
+      },
+      {
+        "baseline": 5493.582166428898,
+        "basis": "DERIVED",
+        "expected": 2290.9161718256473,
+        "observed": 531,
+        "peers": [
+          "LALAPET",
+          "HUSSAINSAGAR",
+          "SEETHAPALMANDI",
+          "BOIGUDA",
+          "PRAKASHNAGAR"
+        ],
+        "section": "BOUDHANAGAR"
+      },
+      {
+        "baseline": 6364.422958873883,
+        "basis": "DERIVED",
+        "expected": 1235.493523316062,
+        "observed": 3067,
+        "peers": [
+          "MAILERDEV PALLY",
+          "SULEMAN NAGAR",
+          "KATEDAN",
+          "ATTAPUR",
+          "HYDERGUDA"
+        ],
+        "section": "BUDVEL (DIV16)"
+      },
+      {
+        "baseline": 4730.976190453456,
+        "basis": "DERIVED",
+        "expected": 2974.5727044717687,
+        "observed": 546,
+        "peers": [
+          "ADARSHNAGAR",
+          "JEEDIMETLA",
+          "SHAPOORNAGAR",
+          "suchitra",
+          "GAJULARAMARAM"
+        ],
+        "section": "Bhagatsingh Nagar"
+      },
+      {
+        "baseline": 4596.635567752388,
+        "basis": "DERIVED",
+        "expected": 501.6983323749281,
+        "observed": 236,
+        "peers": [
+          "ASMANGARH",
+          "VINAY NAGAR (DIV 2 (a))",
+          "MADANNAPET",
+          "MALAKPET",
+          "SAIDABAD"
+        ],
+        "section": "CHANCHALGUDA"
+      },
+      {
+        "baseline": 9943.507418169413,
+        "basis": "DERIVED",
+        "expected": 2773.9215626563414,
+        "observed": 6608,
+        "peers": [
+          "DEFENCE COLONY",
+          "SAINATHPURAM",
+          "ALWAL (Div13)",
+          "VAJPAYEE NAGAR",
+          "GOWTHAM NAGAR"
+        ],
+        "section": "CHANUKYAPURI"
+      },
+      {
+        "baseline": 7311.279831723058,
+        "basis": "DERIVED",
+        "expected": 1585.2101663633775,
+        "observed": 576,
+        "peers": [
+          "HOUSING BOARD",
+          "SAIBABA NAGAR",
+          "RADHIKA",
+          "NACHARAM",
+          "HUBSIGUDA"
+        ],
+        "section": "CHERLAPALLY"
+      },
+      {
+        "baseline": 8628.580252502215,
+        "basis": "DERIVED",
+        "expected": 3062.7737778824485,
+        "observed": 2312,
+        "peers": [
+          "USHODAYA",
+          "SURARAM",
+          "GAJULARAMARAM",
+          "Jagathgirigutta",
+          "SHAPOORNAGAR"
+        ],
+        "section": "CHINTAL"
+      },
+      {
+        "baseline": 4210.298402254456,
+        "basis": "DERIVED",
+        "expected": 1760.9981735159818,
+        "observed": 4400,
+        "peers": [
+          "TOLI CHOWK",
+          "ASIF NAGAR",
+          "HAKEEMPET",
+          "VIJAYNAGAR COLONY",
+          "GOLCONDA"
+        ],
+        "section": "CHINTAL BASTHI"
+      },
+      {
+        "baseline": 9918.696114726228,
+        "basis": "DERIVED",
+        "expected": 2657.352716542267,
+        "observed": 3775,
+        "peers": [
+          "CHANUKYAPURI",
+          "SAINATHPURAM",
+          "ALWAL (Div13)",
+          "VAJPAYEE NAGAR",
+          "GOWTHAM NAGAR"
+        ],
+        "section": "DEFENCE COLONY"
+      },
+      {
+        "baseline": 4422.3811090775025,
+        "basis": "DERIVED",
+        "expected": 2929.7687999402588,
+        "observed": 3893,
+        "peers": [
+          "SAROORNAGAR",
+          "MARUTHINAGAR (DIV 10)",
+          "KOTHAPETA",
+          "ALKAPURI",
+          "LINGOJIGUDA"
+        ],
+        "section": "DILSHUKNAGAR"
+      },
+      {
+        "baseline": 4334.71450357825,
+        "basis": "DERIVED",
+        "expected": 3674.068062033778,
+        "observed": 862,
+        "peers": [
+          "MUSHEERABAD",
+          "BAGH LINGAMPALLY",
+          "GANDHINAGAR",
+          "BARKATPURA",
+          "NARAYANGUDA"
+        ],
+        "section": "DOMALGUDA"
+      },
+      {
+        "baseline": 3933.2748055496845,
+        "basis": "DERIVED",
+        "expected": 22945.806008070544,
+        "observed": 14414,
+        "peers": [
+          "GACHIBOWLI (DIV 15)",
+          "NALLAGANDLA (DIV 15)",
+          "KONDAPUR (DIV 15)"
+        ],
+        "section": "Doyens section"
+      },
+      {
+        "baseline": 5422.0249289623225,
+        "basis": "DERIVED",
+        "expected": 11856.659540749233,
+        "observed": 10365,
+        "peers": [
+          "FATHENAGAR",
+          "JUBILEE HILLS",
+          "VENGALRAONAGAR",
+          "YELLAREDDYGUDA",
+          "BORABANDA"
+        ],
+        "section": "ERRAGADDA"
+      },
+      {
+        "baseline": 5953.777907683788,
+        "basis": "DERIVED",
+        "expected": 7066.098245195179,
+        "observed": 16812,
+        "peers": [
+          "ERRAGADDA",
+          "VENGALRAONAGAR",
+          "YELLAREDDYGUDA",
+          "BORABANDA",
+          "FILM NAGAR"
+        ],
+        "section": "FATHENAGAR"
+      },
+      {
+        "baseline": 5314.725031173247,
+        "basis": "DERIVED",
+        "expected": 1538.9327300479722,
+        "observed": 11995,
+        "peers": [
+          "YAPRAL (Div13)",
+          "VENKATAPURAM",
+          "MACHABOLLARAM",
+          "GOWTHAM NAGAR",
+          "ALWAL (Div13)"
+        ],
+        "section": "FATHER BALAIAHNAGAR (Div13)"
+      },
+      {
+        "baseline": 6531.41381856975,
+        "basis": "DERIVED",
+        "expected": 11287.239433727516,
+        "observed": 6186,
+        "peers": [
+          "VENGALRAONAGAR",
+          "BORABANDA",
+          "YELLAREDDYGUDA",
+          "FATHENAGAR",
+          "ERRAGADDA"
+        ],
+        "section": "FILM NAGAR"
+      },
+      {
+        "baseline": 5293.149984700913,
+        "basis": "DERIVED",
+        "expected": 19152.5164923572,
+        "observed": 49312,
+        "peers": [
+          "Doyens section",
+          "NALLAGANDLA (DIV 15)",
+          "KONDAPUR (DIV 15)"
+        ],
+        "section": "GACHIBOWLI (DIV 15)"
+      },
+      {
+        "baseline": 7412.754466964604,
+        "basis": "DERIVED",
+        "expected": 2631.208071190661,
+        "observed": 13211,
+        "peers": [
+          "suchitra",
+          "SHAPOORNAGAR",
+          "JEEDIMETLA",
+          "CHINTAL",
+          "USHODAYA"
+        ],
+        "section": "GAJULARAMARAM"
+      },
+      {
+        "baseline": 4287.465151803838,
+        "basis": "DERIVED",
+        "expected": 2903.243537435913,
+        "observed": 9022,
+        "peers": [
+          "NARAYANGUDA",
+          "DOMALGUDA",
+          "BARKATPURA",
+          "MUSHEERABAD",
+          "BAGH LINGAMPALLY"
+        ],
+        "section": "GANDHINAGAR"
+      },
+      {
+        "baseline": 6192.685588954102,
+        "basis": "DERIVED",
+        "expected": 2429.595499951974,
+        "observed": 28518,
+        "peers": [
+          "VIVEKANANDA NAGAR",
+          "BHARATHNAGAR",
+          "BALAJINAGAR (DIV 9)",
+          "MOOSAPET",
+          "KUKATPALLY"
+        ],
+        "section": "GAYATRI NAGAR"
+      },
+      {
+        "baseline": 6349.392343164823,
+        "basis": "DERIVED",
+        "expected": 1189.9896831245394,
+        "observed": 615,
+        "peers": [
+          "HINDI NAGAR",
+          "RED HILLS LOW LEVEL",
+          "RED HILLS HIGH LEVEL",
+          "SULTAN BAZAR",
+          "GOWLIGUDA"
+        ],
+        "section": "GODE-KI-KABAR"
+      },
+      {
+        "baseline": 5036.622682144858,
+        "basis": "DERIVED",
+        "expected": 3179.6660972943423,
+        "observed": 539,
+        "peers": [
+          "ASIF NAGAR",
+          "KARWAN",
+          "VIJAYNAGAR COLONY",
+          "MEHIDIPATNAM",
+          "CHINTAL BASTHI"
+        ],
+        "section": "GOLCONDA"
+      },
+      {
+        "baseline": 3025.324933172284,
+        "basis": "DERIVED",
+        "expected": 693.2875457535164,
+        "observed": 560,
+        "peers": [
+          "SULTAN BAZAR",
+          "GUNFOUNDRY",
+          "RED HILLS LOW LEVEL",
+          "RED HILLS HIGH LEVEL",
+          "HINDI NAGAR"
+        ],
+        "section": "GOWLIGUDA"
+      },
+      {
+        "baseline": 6620.087259571043,
+        "basis": "DERIVED",
+        "expected": 1886.0503054519838,
+        "observed": 10764,
+        "peers": [
+          "ALWAL (Div13)",
+          "VENKATAPURAM",
+          "MACHABOLLARAM",
+          "VAJPAYEE NAGAR",
+          "YAPRAL (Div13)"
+        ],
+        "section": "GOWTHAM NAGAR"
+      },
+      {
+        "baseline": 2433.0179906851345,
+        "basis": "DERIVED",
+        "expected": 455.99108564908363,
+        "observed": 2312,
+        "peers": [
+          "GOWLIGUDA",
+          "SULTAN BAZAR",
+          "RED HILLS HIGH LEVEL",
+          "RED HILLS LOW LEVEL",
+          "HINDI NAGAR"
+        ],
+        "section": "GUNFOUNDRY"
+      },
+      {
+        "baseline": 3779.948141952962,
+        "basis": "DERIVED",
+        "expected": 2386.3159333151134,
+        "observed": 1554,
+        "peers": [
+          "CHINTAL BASTHI",
+          "OLD MALLEPALLY",
+          "ASIF NAGAR",
+          "TOLI CHOWK",
+          "KAKATIYA NAGAR"
+        ],
+        "section": "HAKEEMPET"
+      },
+      {
+        "baseline": 8476.691925336982,
+        "basis": "DERIVED",
+        "expected": 5595.5262677400615,
+        "observed": 9862,
+        "peers": [
+          "BALANAGAR",
+          "YELLAMMABANDA",
+          "KPHB",
+          "GAYATRI NAGAR",
+          "VIVEKANANDA NAGAR"
+        ],
+        "section": "HASMATHPET"
+      },
+      {
+        "baseline": 5319.974959148181,
+        "basis": "DERIVED",
+        "expected": 997.0584543704091,
+        "observed": 926,
+        "peers": [
+          "RED HILLS LOW LEVEL",
+          "GODE-KI-KABAR",
+          "RED HILLS HIGH LEVEL",
+          "SULTAN BAZAR",
+          "GOWLIGUDA"
+        ],
+        "section": "HINDI NAGAR"
+      },
+      {
+        "baseline": 8032.102134363746,
+        "basis": "DERIVED",
+        "expected": 1487.5557600380546,
+        "observed": 904,
+        "peers": [
+          "CHERLAPALLY",
+          "RADHIKA",
+          "NACHARAM",
+          "SAIBABA NAGAR",
+          "RAMANTHAPUR(DIV 14)"
+        ],
+        "section": "HOUSING BOARD"
+      },
+      {
+        "baseline": 5657.192935510766,
+        "basis": "DERIVED",
+        "expected": 1047.7194881352498,
+        "observed": 2460,
+        "peers": [
+          "SAIBABA NAGAR",
+          "CHERLAPALLY",
+          "RADHIKA",
+          "HOUSING BOARD",
+          "NACHARAM"
+        ],
+        "section": "HUBSIGUDA"
+      },
+      {
+        "baseline": 6229.147417492347,
+        "basis": "DERIVED",
+        "expected": 2398.043960319004,
+        "observed": 649,
+        "peers": [
+          "BOUDHANAGAR",
+          "LALAPET",
+          "PRAKASHNAGAR",
+          "MARREDPALLY",
+          "SEETHAPALMANDI"
+        ],
+        "section": "HUSSAINSAGAR"
+      },
+      {
+        "baseline": 5682.00423895395,
+        "basis": "DERIVED",
+        "expected": 1103.0189982728841,
+        "observed": 19997,
+        "peers": [
+          "KATEDAN",
+          "MAILERDEV PALLY",
+          "BUDVEL (DIV16)",
+          "SULEMAN NAGAR",
+          "ATTAPUR"
+        ],
+        "section": "HYDERGUDA"
+      },
+      {
+        "baseline": 6768.235912014406,
+        "basis": "DERIVED",
+        "expected": 4255.487449277136,
+        "observed": 2241,
+        "peers": [
+          "SHAPOORNAGAR",
+          "suchitra",
+          "GAJULARAMARAM",
+          "USHODAYA",
+          "CHINTAL"
+        ],
+        "section": "JEEDIMETLA"
+      },
+      {
+        "baseline": 4830.00565376147,
+        "basis": "DERIVED",
+        "expected": 10562.05631048319,
+        "observed": 41253,
+        "peers": [
+          "ERRAGADDA",
+          "SOMAJIGUDA",
+          "S.R.NAGAR",
+          "FATHENAGAR",
+          "YELLAREDDYGUDA"
+        ],
+        "section": "JUBILEE HILLS"
+      },
+      {
+        "baseline": 9973.928233695404,
+        "basis": "DERIVED",
+        "expected": 3540.314276822663,
+        "observed": 1032,
+        "peers": [
+          "SURARAM",
+          "USHODAYA",
+          "CHINTAL",
+          "GAJULARAMARAM",
+          "SHAPOORNAGAR"
+        ],
+        "section": "Jagathgirigutta"
+      },
+      {
+        "baseline": 3250.784168808177,
+        "basis": "DERIVED",
+        "expected": 1359.67203196347,
+        "observed": 4783,
+        "peers": [
+          "OLD MALLEPALLY",
+          "HAKEEMPET",
+          "TOLI CHOWK",
+          "CHINTAL BASTHI",
+          "AHMED NAGAR"
+        ],
+        "section": "KAKATIYA NAGAR"
+      },
+      {
+        "baseline": 5724.794747790746,
+        "basis": "DERIVED",
+        "expected": 1238.0306195965416,
+        "observed": 936,
+        "peers": [
+          "LANGER HOUSE",
+          "GOLCONDA",
+          "MEHIDIPATNAM",
+          "ASIF NAGAR",
+          "VIJAYNAGAR COLONY"
+        ],
+        "section": "KARWAN"
+      },
+      {
+        "baseline": 6149.247828723136,
+        "basis": "DERIVED",
+        "expected": 1948.8071347051311,
+        "observed": 456,
+        "peers": [
+          "MAILERDEV PALLY",
+          "BUDVEL (DIV16)",
+          "SULEMAN NAGAR",
+          "HYDERGUDA",
+          "ATTAPUR"
+        ],
+        "section": "KATEDAN"
+      },
+      {
+        "baseline": 6557.303874336551,
+        "basis": "DERIVED",
+        "expected": 23726.679002413515,
+        "observed": 116195,
+        "peers": [
+          "GACHIBOWLI (DIV 15)",
+          "NALLAGANDLA (DIV 15)",
+          "Doyens section"
+        ],
+        "section": "KONDAPUR (DIV 15)"
+      },
+      {
+        "baseline": 6157.734013668921,
+        "basis": "DERIVED",
+        "expected": 4079.4170711672023,
+        "observed": 1249,
+        "peers": [
+          "LINGOJIGUDA",
+          "MARUTHINAGAR (DIV 10)",
+          "SAROORNAGAR",
+          "ALKAPURI",
+          "VAISHALINAGAR (DIV 10)"
+        ],
+        "section": "KOTHAPETA"
+      },
+      {
+        "baseline": 7632.819940982414,
+        "basis": "DERIVED",
+        "expected": 5038.48020582621,
+        "observed": 51452,
+        "peers": [
+          "HASMATHPET",
+          "BALANAGAR",
+          "VIVEKANANDA NAGAR",
+          "YELLAMMABANDA",
+          "BALAJINAGAR (DIV 9)"
+        ],
+        "section": "KPHB"
+      },
+      {
+        "baseline": 5151.186178912953,
+        "basis": "DERIVED",
+        "expected": 2020.980813562578,
+        "observed": 3936,
+        "peers": [
+          "BALAJINAGAR (DIV 9)",
+          "MOOSAPET",
+          "MOTI NAGAR",
+          "VIVEKANANDA NAGAR",
+          "BHARATHNAGAR"
+        ],
+        "section": "KUKATPALLY"
+      },
+      {
+        "baseline": 5356.292954043277,
+        "basis": "DERIVED",
+        "expected": 2233.6642608970305,
+        "observed": 353,
+        "peers": [
+          "BOUDHANAGAR",
+          "SEETHAPALMANDI",
+          "HUSSAINSAGAR",
+          "BOIGUDA",
+          "TARNAKA"
+        ],
+        "section": "LALAPET"
+      },
+      {
+        "baseline": 6497.037577857164,
+        "basis": "DERIVED",
+        "expected": 1405.0340339556446,
+        "observed": 810,
+        "peers": [
+          "KARWAN",
+          "SHAIKPET",
+          "GOLCONDA",
+          "MEHIDIPATNAM",
+          "ASIF NAGAR"
+        ],
+        "section": "LANGER HOUSE"
+      },
+      {
+        "baseline": 6462.157919393557,
+        "basis": "DERIVED",
+        "expected": 4281.093869016504,
+        "observed": 1553,
+        "peers": [
+          "KOTHAPETA",
+          "ALKAPURI",
+          "MARUTHINAGAR (DIV 10)",
+          "SAROORNAGAR",
+          "VAISHALINAGAR (DIV 10)"
+        ],
+        "section": "LINGOJIGUDA"
+      },
+      {
+        "baseline": 5936.589787327494,
+        "basis": "DERIVED",
+        "expected": 1933.3947724200088,
+        "observed": 2582,
+        "peers": [
+          "VENKATAPURAM",
+          "YAPRAL (Div13)",
+          "FATHER BALAIAHNAGAR (Div13)",
+          "GOWTHAM NAGAR",
+          "VAJPAYEE NAGAR"
+        ],
+        "section": "MACHABOLLARAM"
+      },
+      {
+        "baseline": 4945.000651459012,
+        "basis": "DERIVED",
+        "expected": 878.4727830007957,
+        "observed": 76,
+        "peers": [
+          "MALAKPET",
+          "CHANCHALGUDA",
+          "SAIDABAD",
+          "ASMANGARH",
+          "MOOSARAMBAGH"
+        ],
+        "section": "MADANNAPET"
+      },
+      {
+        "baseline": 6206.565535517971,
+        "basis": "DERIVED",
+        "expected": 1966.9721459484501,
+        "observed": 807,
+        "peers": [
+          "KATEDAN",
+          "BUDVEL (DIV16)",
+          "SULEMAN NAGAR",
+          "ATTAPUR",
+          "HYDERGUDA"
+        ],
+        "section": "MAILERDEV PALLY"
+      },
+      {
+        "baseline": 5002.534108718571,
+        "basis": "DERIVED",
+        "expected": 888.693525095046,
+        "observed": 457,
+        "peers": [
+          "MADANNAPET",
+          "SAIDABAD",
+          "MOOSARAMBAGH",
+          "CHANCHALGUDA",
+          "ASMANGARH"
+        ],
+        "section": "MALAKPET"
+      },
+      {
+        "baseline": 7764.211973998929,
+        "basis": "DERIVED",
+        "expected": 1312.978072472116,
+        "observed": 2959,
+        "peers": [
+          "PRAKASHNAGAR",
+          "HUSSAINSAGAR",
+          "BOUDHANAGAR",
+          "LALAPET",
+          "SEETHAPALMANDI"
+        ],
+        "section": "MARREDPALLY"
+      },
+      {
+        "baseline": 5778.228946220561,
+        "basis": "DERIVED",
+        "expected": 1854.0480054640366,
+        "observed": 5354,
+        "peers": [
+          "SAROORNAGAR",
+          "KOTHAPETA",
+          "LINGOJIGUDA",
+          "ALKAPURI",
+          "DILSHUKNAGAR"
+        ],
+        "section": "MARUTHINAGAR (DIV 10)"
+      },
+      {
+        "baseline": 5300.629334144654,
+        "basis": "DERIVED",
+        "expected": 1146.301606941486,
+        "observed": 9029,
+        "peers": [
+          "VIJAYNAGAR COLONY",
+          "GOLCONDA",
+          "KARWAN",
+          "TOLI CHOWK",
+          "ASIF NAGAR"
+        ],
+        "section": "MEHIDIPATNAM"
+      },
+      {
+        "baseline": 3739.8904723359947,
+        "basis": "DERIVED",
+        "expected": 1654.5912117177097,
+        "observed": 530,
+        "peers": [
+          "NALLAGUTTA",
+          "SRINIVAS NAGAR",
+          "BOIGUDA",
+          "TARNAKA",
+          "REGIMENTAL BAZAR"
+        ],
+        "section": "METTUGUDA"
+      },
+      {
+        "baseline": 4908.826490207065,
+        "basis": "DERIVED",
+        "expected": 5250.758373239141,
+        "observed": 2293,
+        "peers": [
+          "MOTI NAGAR",
+          "KUKATPALLY",
+          "BALAJINAGAR (DIV 9)",
+          "BHARATHNAGAR",
+          "VIVEKANANDA NAGAR"
+        ],
+        "section": "MOOSAPET"
+      },
+      {
+        "baseline": 5053.451218393279,
+        "basis": "DERIVED",
+        "expected": 551.557331799885,
+        "observed": 2632,
+        "peers": [
+          "SAIDABAD",
+          "MALAKPET",
+          "ASMANGARH",
+          "VINAY NAGAR (DIV 2 (a))",
+          "MADANNAPET"
+        ],
+        "section": "MOOSARAMBAGH"
+      },
+      {
+        "baseline": 4625.833797311614,
+        "basis": "DERIVED",
+        "expected": 1814.8676880222843,
+        "observed": 11848,
+        "peers": [
+          "MOOSAPET",
+          "KUKATPALLY",
+          "BALAJINAGAR (DIV 9)",
+          "VIVEKANANDA NAGAR",
+          "BHARATHNAGAR"
+        ],
+        "section": "MOTI NAGAR"
+      },
+      {
+        "baseline": 4270.9242828417155,
+        "basis": "DERIVED",
+        "expected": 2892.042940062509,
+        "observed": 4237,
+        "peers": [
+          "DOMALGUDA",
+          "BAGH LINGAMPALLY",
+          "GANDHINAGAR",
+          "BARKATPURA",
+          "NARAYANGUDA"
+        ],
+        "section": "MUSHEERABAD"
+      },
+      {
+        "baseline": 9222.397448242427,
+        "basis": "DERIVED",
+        "expected": 1062.5687805785076,
+        "observed": 2786,
+        "peers": [
+          "RADHIKA",
+          "HOUSING BOARD",
+          "RAMANTHAPUR(DIV 14)",
+          "CHERLAPALLY",
+          "UPPAL"
+        ],
+        "section": "NACHARAM"
+      },
+      {
+        "baseline": 7522.211869400914,
+        "basis": "DERIVED",
+        "expected": 43882.82610290621,
+        "observed": 529,
+        "peers": [
+          "GACHIBOWLI (DIV 15)",
+          "KONDAPUR (DIV 15)",
+          "Doyens section"
+        ],
+        "section": "NALLAGANDLA (DIV 15)"
+      },
+      {
+        "baseline": 3428.70638538336,
+        "basis": "DERIVED",
+        "expected": 1516.9180741467517,
+        "observed": 462,
+        "peers": [
+          "METTUGUDA",
+          "REGIMENTAL BAZAR",
+          "SRINIVAS NAGAR",
+          "BOIGUDA",
+          "TARNAKA"
+        ],
+        "section": "NALLAGUTTA"
+      },
+      {
+        "baseline": 4696.671866562445,
+        "basis": "DERIVED",
+        "expected": 2518.8863888472492,
+        "observed": 8187,
+        "peers": [
+          "BARKATPURA",
+          "GANDHINAGAR",
+          "BAGH LINGAMPALLY",
+          "ADIKMET",
+          "DOMALGUDA"
+        ],
+        "section": "NARAYANGUDA"
+      },
+      {
+        "baseline": 3217.19901313291,
+        "basis": "DERIVED",
+        "expected": 1345.6247146118722,
+        "observed": 369,
+        "peers": [
+          "KAKATIYA NAGAR",
+          "HAKEEMPET",
+          "AHMED NAGAR",
+          "CHINTAL BASTHI",
+          "ASIF NAGAR"
+        ],
+        "section": "OLD MALLEPALLY"
+      },
+      {
+        "baseline": 7210.668198340408,
+        "basis": "DERIVED",
+        "expected": 1219.3702675812954,
+        "observed": 3727,
+        "peers": [
+          "MARREDPALLY",
+          "HUSSAINSAGAR",
+          "SEETHAPALMANDI",
+          "BOUDHANAGAR",
+          "LALAPET"
+        ],
+        "section": "PRAKASHNAGAR"
+      },
+      {
+        "baseline": 8338.827378378766,
+        "basis": "DERIVED",
+        "expected": 1392.0430595203159,
+        "observed": 2798,
+        "peers": [
+          "HOUSING BOARD",
+          "NACHARAM",
+          "CHERLAPALLY",
+          "SAIBABA NAGAR",
+          "RAMANTHAPUR(DIV 14)"
+        ],
+        "section": "RADHIKA"
+      },
+      {
+        "baseline": 10782.632892300067,
+        "basis": "DERIVED",
+        "expected": 1242.3330428011948,
+        "observed": 1774,
+        "peers": [
+          "UPPAL",
+          "NACHARAM",
+          "HOUSING BOARD",
+          "RADHIKA",
+          "CHERLAPALLY"
+        ],
+        "section": "RAMANTHAPUR(DIV 14)"
+      },
+      {
+        "baseline": 4562.187410218228,
+        "basis": "DERIVED",
+        "expected": 804.38946116203,
+        "observed": 3036,
+        "peers": [
+          "RED HILLS LOW LEVEL",
+          "SULTAN BAZAR",
+          "HINDI NAGAR",
+          "GODE-KI-KABAR",
+          "GOWLIGUDA"
+        ],
+        "section": "RED HILLS HIGH LEVEL"
+      },
+      {
+        "baseline": 4664.381213675518,
+        "basis": "DERIVED",
+        "expected": 874.1884612641738,
+        "observed": 719,
+        "peers": [
+          "RED HILLS HIGH LEVEL",
+          "HINDI NAGAR",
+          "SULTAN BAZAR",
+          "GODE-KI-KABAR",
+          "GOWLIGUDA"
+        ],
+        "section": "RED HILLS LOW LEVEL"
+      },
+      {
+        "baseline": 3078.5433811373755,
+        "basis": "DERIVED",
+        "expected": 1283.80437460518,
+        "observed": 1374,
+        "peers": [
+          "NALLAGUTTA",
+          "METTUGUDA",
+          "SRINIVAS NAGAR",
+          "TARNAKA",
+          "BOIGUDA"
+        ],
+        "section": "REGIMENTAL BAZAR"
+      },
+      {
+        "baseline": 9162.778403157212,
+        "basis": "DERIVED",
+        "expected": 12025.707180419718,
+        "observed": 1619,
+        "peers": [
+          "THATTIKHANA",
+          "BANJARA HILLS",
+          "FILM NAGAR",
+          "BORABANDA",
+          "VENGALRAONAGAR"
+        ],
+        "section": "S.P.R HILLS"
+      },
+      {
+        "baseline": 3965.1339575071643,
+        "basis": "DERIVED",
+        "expected": 8670.79070708433,
+        "observed": 40862,
+        "peers": [
+          "SOMAJIGUDA",
+          "JUBILEE HILLS",
+          "ERRAGADDA",
+          "FATHENAGAR",
+          "YELLAREDDYGUDA"
+        ],
+        "section": "S.R.NAGAR"
+      },
+      {
+        "baseline": 10762.927683188667,
+        "basis": "DERIVED",
+        "expected": 2464.4987912126417,
+        "observed": 3148,
+        "peers": [
+          "VAISHALINAGAR (DIV 10)",
+          "ALKAPURI",
+          "LINGOJIGUDA",
+          "KOTHAPETA",
+          "MARUTHINAGAR (DIV 10)"
+        ],
+        "section": "SAHEBNAGAR (DIV 10)"
+      },
+      {
+        "baseline": 6361.186701903032,
+        "basis": "DERIVED",
+        "expected": 1178.1000491277869,
+        "observed": 2148,
+        "peers": [
+          "CHERLAPALLY",
+          "HUBSIGUDA",
+          "HOUSING BOARD",
+          "RADHIKA",
+          "NACHARAM"
+        ],
+        "section": "SAIBABA NAGAR"
+      },
+      {
+        "baseline": 4880.419345685158,
+        "basis": "DERIVED",
+        "expected": 532.6718228867165,
+        "observed": 1088,
+        "peers": [
+          "MALAKPET",
+          "ASMANGARH",
+          "VINAY NAGAR (DIV 2 (a))",
+          "MOOSARAMBAGH",
+          "MADANNAPET"
+        ],
+        "section": "SAIDABAD"
+      },
+      {
+        "baseline": 9628.65557331648,
+        "basis": "DERIVED",
+        "expected": 2579.646936295782,
+        "observed": 6090,
+        "peers": [
+          "CHANUKYAPURI",
+          "DEFENCE COLONY",
+          "ALWAL (Div13)",
+          "VAJPAYEE NAGAR",
+          "GOWTHAM NAGAR"
+        ],
+        "section": "SAINATHPURAM"
+      },
+      {
+        "baseline": 5496.674589756599,
+        "basis": "DERIVED",
+        "expected": 1763.7062592490201,
+        "observed": 5111,
+        "peers": [
+          "MARUTHINAGAR (DIV 10)",
+          "KOTHAPETA",
+          "LINGOJIGUDA",
+          "ALKAPURI",
+          "DILSHUKNAGAR"
+        ],
+        "section": "SAROORNAGAR"
+      },
+      {
+        "baseline": 5110.8408420096885,
+        "basis": "DERIVED",
+        "expected": 2131.306601389766,
+        "observed": 1665,
+        "peers": [
+          "LALAPET",
+          "BOUDHANAGAR",
+          "BOIGUDA",
+          "TARNAKA",
+          "SRINIVAS NAGAR"
+        ],
+        "section": "SEETHAPALMANDI"
+      },
+      {
+        "baseline": 6912.357222449599,
+        "basis": "DERIVED",
+        "expected": 491.4288657462659,
+        "observed": 19295,
+        "peers": [
+          "LANGER HOUSE",
+          "MEHIDIPATNAM",
+          "KARWAN",
+          "VIJAYNAGAR COLONY",
+          "GOLCONDA"
+        ],
+        "section": "SHAIKPET"
+      },
+      {
+        "baseline": 6911.781887877003,
+        "basis": "DERIVED",
+        "expected": 2453.3844161087377,
+        "observed": 4977,
+        "peers": [
+          "JEEDIMETLA",
+          "suchitra",
+          "GAJULARAMARAM",
+          "USHODAYA",
+          "CHINTAL"
+        ],
+        "section": "SHAPOORNAGAR"
+      },
+      {
+        "baseline": 7213.185287095513,
+        "basis": "DERIVED",
+        "expected": 1181.0865186517606,
+        "observed": 1989,
+        "peers": [
+          "BOATS CLUB",
+          "AMBERPET",
+          "AZAMABAD",
+          "ADIKMET",
+          "BAGH LINGAMPALLY"
+        ],
+        "section": "SHIVAM"
+      },
+      {
+        "baseline": 4167.651727060808,
+        "basis": "DERIVED",
+        "expected": 12600.373187887328,
+        "observed": 21981,
+        "peers": [
+          "S.R.NAGAR",
+          "JUBILEE HILLS",
+          "ERRAGADDA",
+          "FATHENAGAR",
+          "VENGALRAONAGAR"
+        ],
+        "section": "SOMAJIGUDA"
+      },
+      {
+        "baseline": 4024.5372521276586,
+        "basis": "DERIVED",
+        "expected": 1678.2997315224259,
+        "observed": 3079,
+        "peers": [
+          "TARNAKA",
+          "METTUGUDA",
+          "BOIGUDA",
+          "NALLAGUTTA",
+          "SEETHAPALMANDI"
+        ],
+        "section": "SRINIVAS NAGAR"
+      },
+      {
+        "baseline": 6495.814991890398,
+        "basis": "DERIVED",
+        "expected": 2058.6404962880097,
+        "observed": 1750,
+        "peers": [
+          "BUDVEL (DIV16)",
+          "MAILERDEV PALLY",
+          "KATEDAN",
+          "ATTAPUR",
+          "HYDERGUDA"
+        ],
+        "section": "SULEMAN NAGAR"
+      },
+      {
+        "baseline": 3870.63525395834,
+        "basis": "DERIVED",
+        "expected": 682.4573228431611,
+        "observed": 1197,
+        "peers": [
+          "RED HILLS LOW LEVEL",
+          "RED HILLS HIGH LEVEL",
+          "GOWLIGUDA",
+          "HINDI NAGAR",
+          "GODE-KI-KABAR"
+        ],
+        "section": "SULTAN BAZAR"
+      },
+      {
+        "baseline": 9235.845893876849,
+        "basis": "DERIVED",
+        "expected": 3278.326884903947,
+        "observed": 4076,
+        "peers": [
+          "USHODAYA",
+          "Jagathgirigutta",
+          "CHINTAL",
+          "GAJULARAMARAM",
+          "SHAPOORNAGAR"
+        ],
+        "section": "SURARAM"
+      },
+      {
+        "baseline": 4378.655681560238,
+        "basis": "DERIVED",
+        "expected": 1825.9730732785847,
+        "observed": 8720,
+        "peers": [
+          "SRINIVAS NAGAR",
+          "BOIGUDA",
+          "SEETHAPALMANDI",
+          "METTUGUDA",
+          "LALAPET"
+        ],
+        "section": "TARNAKA"
+      },
+      {
+        "baseline": 8779.749411451703,
+        "basis": "DERIVED",
+        "expected": 8494.215505566015,
+        "observed": 13543,
+        "peers": [
+          "S.P.R HILLS",
+          "BANJARA HILLS",
+          "FILM NAGAR",
+          "VENGALRAONAGAR",
+          "BORABANDA"
+        ],
+        "section": "THATTIKHANA"
+      },
+      {
+        "baseline": 4298.036924575282,
+        "basis": "DERIVED",
+        "expected": 2713.39013391637,
+        "observed": 7080,
+        "peers": [
+          "CHINTAL BASTHI",
+          "ASIF NAGAR",
+          "VIJAYNAGAR COLONY",
+          "HAKEEMPET",
+          "MEHIDIPATNAM"
+        ],
+        "section": "TOLI CHOWK"
+      },
+      {
+        "baseline": 12376.74115931927,
+        "basis": "DERIVED",
+        "expected": 2066.112637729104,
+        "observed": 1604,
+        "peers": [
+          "RAMANTHAPUR(DIV 14)",
+          "NACHARAM",
+          "HOUSING BOARD",
+          "RADHIKA",
+          "CHERLAPALLY"
+        ],
+        "section": "UPPAL"
+      },
+      {
+        "baseline": 8550.334750629216,
+        "basis": "DERIVED",
+        "expected": 1845.9995639444337,
+        "observed": 5281,
+        "peers": [
+          "CHINTAL",
+          "SURARAM",
+          "Jagathgirigutta",
+          "GAJULARAMARAM",
+          "SHAPOORNAGAR"
+        ],
+        "section": "USHODAYA"
+      },
+      {
+        "baseline": 8303.15663487784,
+        "basis": "DERIVED",
+        "expected": 2941.572886180491,
+        "observed": 1723,
+        "peers": [
+          "LINGOJIGUDA",
+          "ALKAPURI",
+          "SAHEBNAGAR (DIV 10)",
+          "KOTHAPETA",
+          "MARUTHINAGAR (DIV 10)"
+        ],
+        "section": "VAISHALINAGAR (DIV 10)"
+      },
+      {
+        "baseline": 7544.002666337972,
+        "basis": "DERIVED",
+        "expected": 2184.442760575665,
+        "observed": 1895,
+        "peers": [
+          "ALWAL (Div13)",
+          "GOWTHAM NAGAR",
+          "VENKATAPURAM",
+          "MACHABOLLARAM",
+          "YAPRAL (Div13)"
+        ],
+        "section": "VAJPAYEE NAGAR"
+      },
+      {
+        "baseline": 6533.4274895738345,
+        "basis": "DERIVED",
+        "expected": 11290.719352072183,
+        "observed": 26212,
+        "peers": [
+          "YELLAREDDYGUDA",
+          "FILM NAGAR",
+          "FATHENAGAR",
+          "BANJARA HILLS",
+          "BORABANDA"
+        ],
+        "section": "VENGALRAONAGAR"
+      },
+      {
+        "baseline": 5921.415337975286,
+        "basis": "DERIVED",
+        "expected": 1928.4528441239797,
+        "observed": 1462,
+        "peers": [
+          "MACHABOLLARAM",
+          "YAPRAL (Div13)",
+          "FATHER BALAIAHNAGAR (Div13)",
+          "GOWTHAM NAGAR",
+          "VAJPAYEE NAGAR"
+        ],
+        "section": "VENKATAPURAM"
+      },
+      {
+        "baseline": 3136.5802561479545,
+        "basis": "DERIVED",
+        "expected": 2123.9254514942036,
+        "observed": 1186,
+        "peers": [
+          "DOMALGUDA",
+          "MUSHEERABAD",
+          "GANDHINAGAR",
+          "BARKATPURA",
+          "BAGH LINGAMPALLY"
+        ],
+        "section": "VIGYANPURI"
+      },
+      {
+        "baseline": 4871.213992523629,
+        "basis": "DERIVED",
+        "expected": 3075.24207433725,
+        "observed": 8114,
+        "peers": [
+          "MEHIDIPATNAM",
+          "TOLI CHOWK",
+          "ASIF NAGAR",
+          "GOLCONDA",
+          "CHINTAL BASTHI"
+        ],
+        "section": "VIJAYNAGAR COLONY"
+      },
+      {
+        "baseline": 4550.680718766316,
+        "basis": "DERIVED",
+        "expected": 808.4223718723291,
+        "observed": 151,
+        "peers": [
+          "ASMANGARH",
+          "SAIDABAD",
+          "CHANCHALGUDA",
+          "MALAKPET",
+          "MOOSARAMBAGH"
+        ],
+        "section": "VINAY NAGAR (DIV 2 (a))"
+      },
+      {
+        "baseline": 5989.808235292586,
+        "basis": "DERIVED",
+        "expected": 6407.037569631563,
+        "observed": 2958,
+        "peers": [
+          "BALAJINAGAR (DIV 9)",
+          "GAYATRI NAGAR",
+          "KUKATPALLY",
+          "BHARATHNAGAR",
+          "MOOSAPET"
+        ],
+        "section": "VIVEKANANDA NAGAR"
+      },
+      {
+        "baseline": 5745.003374653166,
+        "basis": "DERIVED",
+        "expected": 1663.524204099433,
+        "observed": 2390,
+        "peers": [
+          "VENKATAPURAM",
+          "MACHABOLLARAM",
+          "FATHER BALAIAHNAGAR (Div13)",
+          "GOWTHAM NAGAR",
+          "VAJPAYEE NAGAR"
+        ],
+        "section": "YAPRAL (Div13)"
+      },
+      {
+        "baseline": 8665.257831505183,
+        "basis": "DERIVED",
+        "expected": 7654.572233345777,
+        "observed": 4120,
+        "peers": [
+          "BALANAGAR",
+          "HASMATHPET",
+          "KPHB",
+          "GAYATRI NAGAR",
+          "BHARATHNAGAR"
+        ],
+        "section": "YELLAMMABANDA"
+      },
+      {
+        "baseline": 6398.511532300171,
+        "basis": "DERIVED",
+        "expected": 7593.919660976483,
+        "observed": 19814,
+        "peers": [
+          "VENGALRAONAGAR",
+          "FILM NAGAR",
+          "FATHENAGAR",
+          "BORABANDA",
+          "ERRAGADDA"
+        ],
+        "section": "YELLAREDDYGUDA"
+      },
+      {
+        "baseline": 7053.745693664962,
+        "basis": "DERIVED",
+        "expected": 2503.7754432594293,
+        "observed": 11889,
+        "peers": [
+          "GAJULARAMARAM",
+          "SHAPOORNAGAR",
+          "JEEDIMETLA",
+          "CHINTAL",
+          "USHODAYA"
+        ],
+        "section": "suchitra"
+      }
+    ],
+    "test_year": 2025,
+    "train_year": 2024
+  }
+}

@@ -383,4 +383,13 @@ These are land-surface temperatures, not air temperatures, but they show the spr
 moved stations, and the 2018 start leaves 2019-2021 for the normal (as now). If the Hyderabad
 mandal files are missing or too patchy, use the Open-Meteo multi-point fallback: one point per GHMC
 zone (6 zones), given to sections by nearest point.
+# Booking and forecast repair hand-off (2026-10-06)
+
+Section check 1a is implemented locally on `feat/e5-section-check`: exact section rates,
+2024-to-2025 validation, officer API, U5 section cards/dots, four languages and verifier.
+Peer validation improves over the connection baseline but still misses by a median 2.48x.
+Pending: 1b building-weighted section transfers; 2 identifiable under-reporting experiment;
+3 persisted field outcomes and precision after 30 outcomes; F5/F6 refresh, recut crosswalk,
+city ranges, reservoir context and forecast screen. Owner RTI for GIS section boundaries
+is an external action; Codex will not send it. No push, PR or merge before owner approval.
 

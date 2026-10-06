@@ -1,0 +1,133 @@
+{
+  "_example": {
+    "endpoint": "GET /underserved/section-checks",
+    "status": "PROPOSED (implemented locally, owner approval pending)",
+    "basis": "REAL bookings; DERIVED rates; DERIVED_APPROXIMATE need; ASSUMED policy",
+    "built_from": "data/derived/underserved/section_checks.csv and section_checks_summary.json"
+  },
+  "request": {
+    "offset": 0,
+    "limit": 2
+  },
+  "response": {
+    "schema_version": "e5-section-checks-v1",
+    "basis": "DERIVED",
+    "limitations": [
+      "Partial booking or billing years excluded, never filled with zero.",
+      "Unnamed portal section buckets excluded; divisions are part of section identity.",
+      "Connections are accounts, not households; flats share is only a proxy.",
+      "Same-division peers may have different supply and booking access.",
+      "2024 to 2025 accuracy is prediction accuracy, not field-check precision.",
+      "Geocoded point and Census-2011 ward need are approximate context only.",
+      "No field outcomes yet; flags cannot change allocation or entitlement."
+    ],
+    "validation": {
+      "train_year": 2024,
+      "test_year": 2025,
+      "exposure_year": 2024,
+      "peer": {
+        "mean_absolute_error": 6057.835483111992,
+        "spearman": 0.3718343443786221,
+        "median_miss": 2.482408804352271,
+        "within_2x": 0.38016528925619836,
+        "count": 121,
+        "positive_pairs": 121,
+        "zero_pairs_excluded_from_miss": 0,
+        "basis": "DERIVED"
+      },
+      "baseline": {
+        "mean_absolute_error": 7405.759392934651,
+        "spearman": 0.1503900229983166,
+        "median_miss": 3.3102646978616037,
+        "within_2x": 0.2809917355371901,
+        "count": 121,
+        "positive_pairs": 121,
+        "zero_pairs_excluded_from_miss": 0,
+        "basis": "DERIVED"
+      },
+      "basis": "DERIVED"
+    },
+    "flagged_count": 12,
+    "total": 197,
+    "offset": 0,
+    "limit": 2,
+    "items": [
+      {
+        "section_id": "31:40 MLD STP ATTAPUR",
+        "section": "40 MLD STP ATTAPUR",
+        "division": "31",
+        "period_year": 2025,
+        "bookings": 1,
+        "bookings_basis": "REAL",
+        "booking_months": 1,
+        "billing_months": 0,
+        "domestic_connections": null,
+        "connections_basis": "UNAVAILABLE",
+        "flats_connection_share": null,
+        "flats_share_basis": "UNAVAILABLE",
+        "rate": null,
+        "rate_basis": "UNAVAILABLE",
+        "reference_rate": null,
+        "reference_basis": "UNAVAILABLE",
+        "peer_sections": [],
+        "ratio": null,
+        "ratio_basis": "UNAVAILABLE",
+        "ratio_threshold": 0.3269689795090609,
+        "threshold_basis": "ASSUMED",
+        "wad_context": null,
+        "wad_cohort_median": 0.060763,
+        "need_basis": "UNAVAILABLE",
+        "field_check_candidate": false,
+        "status": "MISSING_DOMESTIC_CONNECTIONS",
+        "ground_truth_status": "NOT_YET_CHECKED_ON_GROUND",
+        "basis": "DERIVED",
+        "ward_id": null,
+        "ward_name": null,
+        "lat": null,
+        "lng": null,
+        "location_basis": "UNAVAILABLE"
+      },
+      {
+        "section_id": "12:ADARSHNAGAR",
+        "section": "ADARSHNAGAR",
+        "division": "12",
+        "period_year": 2025,
+        "bookings": 557,
+        "bookings_basis": "REAL",
+        "booking_months": 12,
+        "billing_months": 12,
+        "domestic_connections": 5094.333333333333,
+        "connections_basis": "DERIVED",
+        "flats_connection_share": 0.014378721455211673,
+        "flats_share_basis": "DERIVED",
+        "rate": 109.33717202120003,
+        "rate_basis": "DERIVED",
+        "reference_rate": 616.7031514600801,
+        "reference_basis": "DERIVED",
+        "peer_sections": [
+          "Bhagatsingh Nagar",
+          "JEEDIMETLA",
+          "SHAPOORNAGAR",
+          "suchitra",
+          "GAJULARAMARAM"
+        ],
+        "ratio": 0.1772930327376113,
+        "ratio_basis": "DERIVED",
+        "ratio_threshold": 0.3269689795090609,
+        "threshold_basis": "ASSUMED",
+        "wad_context": null,
+        "wad_cohort_median": 0.060763,
+        "need_basis": "UNAVAILABLE",
+        "field_check_candidate": false,
+        "status": "COMPLETE",
+        "ground_truth_status": "NOT_YET_CHECKED_ON_GROUND",
+        "basis": "DERIVED",
+        "ward_id": null,
+        "ward_name": null,
+        "lat": null,
+        "lng": null,
+        "location_basis": "UNAVAILABLE"
+      }
+    ]
+  }
+}

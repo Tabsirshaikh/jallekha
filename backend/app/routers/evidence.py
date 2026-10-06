@@ -165,7 +165,7 @@ def atlas_live(
             {
                 "ward_id": wid,
                 "name": r["ward_name"],
-                "need": _need(r),
+                "need": _live_need(r),
                 "bookings_window": counts.by_ward.get(wid, 0),
                 "usual_month_bookings": None if usual is None else round(usual, 1),
                 **live_need.evaluate(
@@ -193,7 +193,7 @@ def atlas_live(
     }
 
 
-def _need(row: dict[str, str]) -> dict[str, Any]:
+def _live_need(row: dict[str, str]) -> dict[str, Any]:
     """Census need plus the fair queue's need score (A2/F8: 1 + weighted WAD, CAD, hardship)."""
     need = {k: typed({k: row[k]})[k] for k in ("wad", "cad", "hardship", "households")}
     parts = [need["wad"], need["cad"], need["hardship"]]
@@ -303,6 +303,23 @@ def field_checks(offset: Offset = 0, limit: Limit = ApiConfig.default_limit) -> 
         "field_check_list": e5["field_check_list"],
         "rows": e5["rows"][offset : offset + limit],
         "rows_total": len(e5["rows"]),
+    }
+
+
+@router.get("/underserved/section-checks", dependencies=[Officer])
+def section_checks(offset: Offset = 0, limit: Limit = ApiConfig.default_limit) -> dict[str, Any]:
+    summary = json_file("data/derived/underserved/section_checks_summary.json")
+    rows = [typed(r) for r in csv_rows("data/derived/underserved/section_checks.csv")]
+    for row in rows:
+        row["peer_sections"] = json.loads(row["peer_sections"])
+    validation = {k: v for k, v in summary["validation"].items() if k != "predictions"}
+    return {
+        "schema_version": summary["schema_version"],
+        "validation": validation,
+        "limitations": summary["limitations"],
+        "flagged_count": summary["flagged_count"],
+        "basis": summary["basis"],
+        **page(rows, offset, limit),
     }
 
 

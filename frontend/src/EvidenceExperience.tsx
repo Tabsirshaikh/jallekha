@@ -2,13 +2,20 @@ import { useMemo, useState } from "react";
 import { useLocale, type Locale } from "./i18n";
 import { useAuth } from "./auth";
 import { useApi } from "./useApi";
-import { adaptLiveEvidence, adaptLiveNeed, type Clue, type EvidenceDataset, type Feature, type LiveWard, type Ward } from "./evidenceAdapter";
+import { adaptLiveEvidence, adaptLiveNeed, adaptSectionChecks, type SectionCheck, type Clue, type EvidenceDataset, type Feature, type LiveWard, type Ward } from "./evidenceAdapter";
 import evidence from "./data/u5Evidence.json";
 import geometry from "./data/u5Geometry.json";
+import savedSections from "./data/u5SectionChecks.json";
 import "./EvidenceExperience.css";
 
 type Tab = "need" | "bookings" | "checks";
 type Layer = "rising" | "need" | "wad" | "cad" | "growth";
+const sectionCopy = {
+  en: { tabChecks: "3. Low bookings", stepChecks: "Sections with unusually few bookings per domestic connection: visit to check whether people can book.", wardsChecked: "sections to visit", checksIntro: "These sections booked far fewer tankers per connection than comparable sections in their division. The point locates the section; ward need is background only. Check on the ground before changing anything.", sectionRate: "Bookings per 1,000 domestic connections: {v}", sectionPeer: "Similar sections' rate: {v}", unchecked: "Not yet checked on the ground", emptyChecks: "No sections flagged for a visit", sectionSnapshot: "Saved section checks", sectionLive: "Section checks from the service", checkNone: "Ward booking estimates are unavailable. Section checks are shown separately." },
+  te: { tabChecks: "3. తక్కువ బుకింగ్‌లు", stepChecks: "గృహ కనెక్షన్‌కు అసాధారణంగా తక్కువ బుకింగ్‌లు ఉన్న విభాగాలు: ప్రజలు బుక్ చేయగలరా అని వెళ్లి చూడండి.", wardsChecked: "సందర్శించాల్సిన విభాగాలు", checksIntro: "ఈ విభాగాలు తమ డివిజన్‌లోని ఇలాంటి విభాగాల కంటే కనెక్షన్‌కు చాలా తక్కువ ట్యాంకర్లు బుక్ చేశాయి. చుక్క విభాగాన్ని చూపుతుంది; వార్డు అవసరం నేపథ్యం మాత్రమే. ఏదైనా మార్చే ముందు క్షేత్రస్థాయిలో పరిశీలించండి.", sectionRate: "1,000 గృహ కనెక్షన్లకు బుకింగ్‌లు: {v}", sectionPeer: "ఇలాంటి విభాగాల రేటు: {v}", unchecked: "ఇంకా క్షేత్రస్థాయిలో పరిశీలించలేదు", emptyChecks: "సందర్శనకు గుర్తించిన విభాగాలు లేవు", sectionSnapshot: "భద్రపరచిన విభాగ పరిశీలనలు", sectionLive: "సేవ నుంచి విభాగ పరిశీలనలు", checkNone: "వార్డు బుకింగ్ అంచనాలు అందుబాటులో లేవు. విభాగ పరిశీలనలు విడిగా చూపబడతాయి." },
+  ur: { tabChecks: "3. کم بکنگ", stepChecks: "گھریلو کنکشن کے لحاظ سے غیر معمولی کم بکنگ والے سیکشن: موقع پر دیکھیں کہ لوگ بک کر سکتے ہیں یا نہیں۔", wardsChecked: "سیکشن جن کا دورہ کرنا ہے", checksIntro: "ان سیکشنوں نے اپنی ڈویژن کے ملتے جلتے سیکشنوں سے فی کنکشن بہت کم ٹینکر بک کیے۔ نقطہ سیکشن کی جگہ دکھاتا ہے؛ وارڈ کی ضرورت صرف پس منظر ہے۔ کچھ بدلنے سے پہلے موقع پر جانچ کریں۔", sectionRate: "ہر 1,000 گھریلو کنکشن پر بکنگ: {v}", sectionPeer: "ملتے جلتے سیکشنوں کی شرح: {v}", unchecked: "ابھی موقع پر جانچ نہیں ہوئی", emptyChecks: "دورے کے لیے کوئی سیکشن نشان زد نہیں", sectionSnapshot: "محفوظ سیکشن جانچ", sectionLive: "سروس سے سیکشن جانچ", checkNone: "وارڈ کی بکنگ کے اندازے دستیاب نہیں۔ سیکشن کی جانچ الگ دکھائی جاتی ہے۔" },
+  hi: { tabChecks: "3. कम बुकिंग", stepChecks: "घरेलू कनेक्शन के हिसाब से असामान्य रूप से कम बुकिंग वाले सेक्शन: जाकर देखें कि लोग बुक कर पाते हैं या नहीं।", wardsChecked: "दौरे के लिए सेक्शन", checksIntro: "इन सेक्शन ने अपने डिविज़न के मिलते-जुलते सेक्शन से प्रति कनेक्शन बहुत कम टैंकर बुक किए। बिंदु सेक्शन की जगह दिखाता है; वार्ड की ज़रूरत केवल संदर्भ है। कुछ बदलने से पहले मौके पर जाँच करें।", sectionRate: "हर 1,000 घरेलू कनेक्शन पर बुकिंग: {v}", sectionPeer: "मिलते-जुलते सेक्शन की दर: {v}", unchecked: "अभी मौके पर जाँच नहीं हुई", emptyChecks: "दौरे के लिए कोई सेक्शन चिह्नित नहीं", sectionSnapshot: "सहेजी गई सेक्शन जाँच", sectionLive: "सेवा से सेक्शन जाँच", checkNone: "वार्ड बुकिंग के अनुमान उपलब्ध नहीं हैं। सेक्शन की जाँच अलग दिखाई जाती है।" },
+};
 type Position = [number, number];
 // The committed snapshot (scripts/frontend/build_u5_snapshot.py) is shown whenever live data is not available.
 const snapshot = evidence as EvidenceDataset;
@@ -55,7 +62,7 @@ function clueText(c: Clue, w: Words, days: number, fmt: (n: number) => string) {
 
 export default function EvidenceExperience() {
   const { locale } = useLocale();
-  const w = copy[locale];
+  const w = { ...copy[locale], ...sectionCopy[locale] };
   const nf = useMemo(() => new Intl.NumberFormat(locale === "ur" ? "ur-PK" : locale, { maximumFractionDigits: 1 }), [locale]);
   const pf = useMemo(() => new Intl.NumberFormat(locale === "ur" ? "ur-PK" : locale, { style: "percent", maximumFractionDigits: 0 }), [locale]);
   const fmt = (n: number) => nf.format(n);
@@ -74,6 +81,8 @@ export default function EvidenceExperience() {
   const equityWards = useApi<unknown>(enabled ? "/equity/wards" + PAGE : null);
   const equitySummary = useApi<unknown>(enabled ? "/equity/summary" : null);
   const fieldChecks = useApi<unknown>(enabled ? "/underserved/field-checks" + PAGE : null);
+  const sectionApi = useApi<unknown>(enabled ? "/underserved/section-checks" + PAGE : null);
+  const sectionRows = (sectionApi.live ? adaptSectionChecks(sectionApi.data) : null) ?? adaptSectionChecks(savedSections) ?? [];
   const layerGeo = useApi<unknown>(enabled ? "/coverage/layers/water_access_evidence" : null);
   const liveNeedApi = useApi<unknown>(enabled ? "/atlas/live" : null);
   const sources = [atlas, equityWards, equitySummary, fieldChecks, layerGeo];
@@ -102,7 +111,7 @@ export default function EvidenceExperience() {
     const k = Math.cos((((minY + maxY) / 2) * Math.PI) / 180);
     const width = 1000, height = Math.round((width * (maxY - minY)) / ((maxX - minX) * k));
     const project = ([x, y]: Position) => `${(((x - minX) / (maxX - minX)) * width).toFixed(1)},${(((maxY - y) / (maxY - minY)) * height).toFixed(1)}`;
-    return { width, height, paths: new Map(shapes.map((s) => [s.id, s.rings.map((r) => "M" + r.map(project).join("L") + "Z").join("")])) };
+    return { width, height, project, paths: new Map(shapes.map((s) => [s.id, s.rings.map((r) => "M" + r.map(project).join("L") + "Z").join("")])) };
   }, [shapes]);
 
   // Zoom by the + / - buttons only (no wheel or drag, so the map box never changes size):
@@ -131,7 +140,7 @@ export default function EvidenceExperience() {
     tab === "bookings" ? bookingsOf(r) : shown === "wad" ? r.waterAccessDeficitShare : shown === "cad" ? r.constrainedAccessShare ?? null : shown === "need" ? liveOf(r.id)?.needWeight ?? r.needWeight ?? savedNeed.get(r.id) ?? null : shown === "growth" ? (r.growthRatio === null ? null : r.growthRatio - 1) : null;
   const scale = useMemo(() => classes(rows.map(metric)), [rows, tab, shown, conc]); // eslint-disable-line react-hooks/exhaustive-deps
   function colour(r: Ward) {
-    if (tab === "checks") return r.fieldCandidate === true ? "#c9783f" : NO_DATA;
+    if (tab === "checks") return NO_DATA;
     if (tab === "need" && shown === "rising") {
       const l = liveOf(r.id);
       if (!l || l.knownCount === 0) return NO_DATA;
@@ -142,9 +151,9 @@ export default function EvidenceExperience() {
   }
 
   const rising = rows.filter((r) => liveOf(r.id)?.rising).length;
-  const checks = rows.filter((r) => r.fieldCandidate === true).sort((a, b) => (a.observedBookings ?? 0) / (a.peerExpected || 1) - (b.observedBookings ?? 0) / (b.peerExpected || 1));
+  const checks = sectionRows.filter((r) => r.field_check_candidate).sort((a, b) => (a.rate ?? 0) / (a.reference_rate || 1) - (b.rate ?? 0) / (b.reference_rate || 1));
   const found = query.trim() ? rows.filter((r) => r.name.toLowerCase().includes(query.trim().toLowerCase())).slice(0, 6) : [];
-  const legendScale = tab === "bookings" || shown !== "rising";
+  const legendScale = tab !== "checks" && (tab === "bookings" || shown !== "rising");
 
   // Ranked list under the map for the layer on screen (building growth is listed A-Z: design doc F2
   // says growth must not rank areas).
@@ -195,6 +204,11 @@ export default function EvidenceExperience() {
               onClick={() => pick(r.id)} onMouseEnter={() => setHover(r.id)} onMouseLeave={() => setHover(null)}
               onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedId(r.id); } }}><title>{r.name}</title></path>;
           })}
+          {tab === "checks" && checks.filter((r) => r.lat !== null && r.lng !== null).map((r) => {
+            const [cx, cy] = view.project([r.lng!, r.lat!]).split(",");
+            return <circle key={r.section_id} cx={cx} cy={cy} r={5} fill="#c9783f" stroke="#fff" tabIndex={0} role="button" aria-label={r.section}
+              onClick={() => setSelectedId(r.ward_id)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedId(r.ward_id); } }}><title>{r.section}</title></circle>;
+          })}
         </svg>
         <div className="atlas-overlay atlas-zoom"><button aria-label={w.zoomIn} title={w.zoomIn} onClick={() => zoomBy(0.7)}>+</button><button aria-label={w.zoomOut} title={w.zoomOut} onClick={() => zoomBy(1.4)}>−</button><button aria-label={w.zoomReset} title={w.zoomReset} onClick={() => setZoom(null)}>⤢</button></div>
         {hover && byId.get(hover) && <div className="atlas-tooltip">{byId.get(hover)!.name}</div>}
@@ -215,31 +229,31 @@ export default function EvidenceExperience() {
 
       {tab === "checks" && <section className="atlas-checks">
         <p className="atlas-explain">{w.checksIntro}</p>
-        <div className="atlas-check-grid">{checks.map((r) => <article key={r.id} className="atlas-check-card">
-          <h3>{r.name}</h3>
-          <CheckBars ward={r} w={w} fmt={fmt} />
-          <button className="text-button" onClick={() => setSelectedId(r.id)}>{w.openWard}</button>
+        <p className="muted">{sectionApi.live && adaptSectionChecks(sectionApi.data) ? w.sectionLive : w.sectionSnapshot}</p>
+        {checks.length === 0 && <p>{w.emptyChecks}</p>}
+        <div className="atlas-check-grid">{checks.map((r) => <article key={r.section_id} className="atlas-check-card">
+          <h3>{r.section}</h3>
+          <SectionRates section={r} w={w} fmt={fmt} />
+          {r.ward_id && <button className="text-button" onClick={() => setSelectedId(r.ward_id)}>{w.openWard}</button>}
         </article>)}</div>
       </section>}
 
-      {selected && <WardSheet ward={selected} live={liveOf(selected.id)} days={need?.windowDays ?? 30} minBad={need?.minBad ?? 2} w={w} fmt={fmt} pct={pct} onClose={() => setSelectedId(null)} />}
+      {selected && <WardSheet ward={selected} sections={checks.filter((r) => r.ward_id === selected.id)} live={liveOf(selected.id)} days={need?.windowDays ?? 30} minBad={need?.minBad ?? 2} w={w} fmt={fmt} pct={pct} onClose={() => setSelectedId(null)} />}
     </div>
   );
 }
 
-function CheckBars({ ward, w, fmt }: { ward: Ward; w: Words; fmt: (n: number) => string }) {
-  const values = [ward.observedBookings, ward.peerExpected, ward.modelExpected];
-  if (values.some((v) => v === null || v === undefined)) return <p className="muted">{w.checkNone}</p>;
-  const [seen, peer, model] = values as number[];
-  const max = Math.max(seen, peer, model, 1);
-  const bar = (label: string, v: number, kind: string) => <div className="atlas-bar"><span>{fill(label, { v: fmt(Math.round(v)) })}</span><i className={kind} style={{ width: `${Math.max(1.5, (v / max) * 100)}%` }} /></div>;
+function SectionRates({ section, w, fmt }: { section: SectionCheck; w: SectionWords; fmt: (n: number) => string }) {
   return <div className="atlas-bars">
-    {bar(w.checkBooked, seen, "seen")}{bar(w.checkPeer, peer, "peer")}{bar(w.checkModel, model, "model")}
-    <p className={ward.fieldCandidate ? "atlas-verdict flag" : "atlas-verdict"}>{ward.fieldCandidate ? w.checkFlag : seen >= Math.min(peer, model) ? w.checkMore : w.checkOk}</p>
+    <p>{fill(w.checkBooked, { v: fmt(section.bookings) })}</p>
+    <p>{fill(w.sectionRate, { v: section.rate === null ? "—" : fmt(section.rate) })}</p>
+    <p>{fill(w.sectionPeer, { v: section.reference_rate === null ? "—" : fmt(section.reference_rate) })}</p>
+    <p className="muted">{w.unchecked}</p>
   </div>;
 }
 
-function WardSheet({ ward, live, days, minBad, w, fmt, pct, onClose }: { ward: Ward; live: LiveWard | undefined; days: number; minBad: number; w: Words; fmt: (n: number) => string; pct: (n: number | null | undefined) => string; onClose: () => void }) {
+type SectionWords = Words & Record<keyof typeof sectionCopy.en, string>;
+function WardSheet({ ward, sections, live, days, minBad, w, fmt, pct, onClose }: { ward: Ward; sections: SectionCheck[]; live: LiveWard | undefined; days: number; minBad: number; w: SectionWords; fmt: (n: number) => string; pct: (n: number | null | undefined) => string; onClose: () => void }) {
   const status = !live || live.knownCount === 0 ? w.noLive : live.rising ? w.rising : live.badCount === 1 ? w.oneSign : w.calm;
   return (
     <section className="atlas-sheet" role="dialog" aria-label={ward.name}>
@@ -260,7 +274,7 @@ function WardSheet({ ward, live, days, minBad, w, fmt, pct, onClose }: { ward: W
           </dl>
           <p className="small">{ward.growthRatio === null ? w.noGrowth : fill(w.growth, { p: pct(ward.growthRatio - 1) })}</p>
         </div>
-        <div><h3>{w.checkTitle}</h3><CheckBars ward={ward} w={w} fmt={fmt} /></div>
+        <div><h3>{w.checkTitle}</h3>{sections.length ? sections.map((s) => <div key={s.section_id}><h4>{s.section}</h4><SectionRates section={s} w={w} fmt={fmt} /></div>) : <p className="muted">{w.checkNone}</p>}</div>
       </div>
     </section>
   );

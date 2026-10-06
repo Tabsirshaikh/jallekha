@@ -52,6 +52,10 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - **Basis labels are hidden on the officer need map and overview** (owner decision 2026-10-06: they made the screens hard to read). The API, data files and docs still carry them.
 
 ### F3 Booking Equity and coverage map (E4, E6)
+- **2026-10-06 owner audit:** one-point ward counts are placement artifacts, not ward observations.
+  U5's low-booking tab and ward panel now use exact section checks instead of these numbers.
+  Legacy ward equity outputs remain approximate pending the separate dasymetric branch; an
+  authoritative transfer is still unavailable. No section dot represents a service boundary.
 - Ward booking numbers are approximate (one point per section; about 12% of bookings unplaced).
 - Bookings per 1,000 connections: one connection can serve many flats.
 - The Gini of 0.78 is exact at section level but depends on section definitions that were re-cut in 2026.
@@ -59,6 +63,29 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - The map screens (U5) follow the same live-or-snapshot rule.
 
 ### F4 Under-served Field-Check Screen (E5)
+- **Section replacement (local `feat/e5-section-check`, 2026-10-06):** 197 section/division
+  identities in 2025, 12 visit candidates. Complete booking and billing years only; missing
+  section-month rows are not assumed to be zero. Comparable peers exclude the target and share
+  its division; similarity uses connection count and flats-account share. The 20th percentile
+  ratio threshold is learned on 2024; high ward WAD is approximate context only (cohort median).
+  Same names in different divisions stay separate; unnamed billing buckets are excluded.
+  Rates are annual bookings per 1,000 mean monthly domestic connections, not households.
+- **Temporal validation, DERIVED:** 121 complete matched section/division pairs, 2024 inputs
+  predicting 2025; no 2025 booking or connection inputs enter the predictions.
+
+  | Method | Spearman | Median symmetric miss | Within 2x | Mean absolute error |
+  |---|---:|---:|---:|---:|
+  | Section peer rate | 0.3718 | 2.4824x | 38.02% | 6,057.84 |
+  | 2024 section connections x city rate | 0.1504 | 3.3103x | 28.10% | 7,405.76 |
+
+  Peer prediction beats this baseline but remains weak. No zero pairs were excluded here.
+  This measures booking prediction, **not flag precision**; ground-truth outcomes remain zero.
+  API/data retain basis labels; U5 uses plain words and point dots. These results supersede
+  the ward-based visit list described below, which is retained as historical model diagnosis.
+- **Owner's 2025 ward audit (DERIVED, different cohort/protocol):** on 107 point-assigned wards,
+  NB 0.30 / 5.2x / 22% within 2x; peers 0.44 / 3.7x / 27%; household baseline
+  0.48 / 5.4x / 21%. All six old flags have only one or two pinned sections. Those ward
+  observations cannot establish low bookings or hidden demand. Spatial models were not resampled.
 - 107 wards screened, **6 candidates**, 38 wards left in data review (37 have no placed section).
 - **Only two of the four methods count.** The peer median and the negative-binomial model (NB) both run and pass every check, so a candidate must be flagged by both (`AGREED_FIELD_CHECK_CANDIDATE`; they agree on 6 of 7 flagged wards, Jaccard 0.86). Mailardevpally, flagged by the peer screen alone, is `MODEL_SENSITIVE_REVIEW`.
   - **The two spatial models (BYM2, BYM2-shrinkage) did not converge**, so E5's done-when ("flags stable across model variants") is met only for peer + NB, and the output says `stability_evaluated: false`.

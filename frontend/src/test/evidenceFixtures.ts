@@ -100,6 +100,8 @@ export const liveNeed = {
 
 export const liveInput = { atlas: atlasPage, equityWards: equityWardsPage, equitySummary, fieldChecks, layer: waterAccessLayer };
 
+export const sectionChecks = { total: 1, items: [{ section_id: "1:TEST SECTION", section: "TEST SECTION", division: "1", period_year: 2025, bookings: 12, rate: 12, reference_rate: 900, field_check_candidate: true, ward_id: "relation/901", lat: 17.405, lng: 78.405 }] };
+
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
 }
@@ -113,6 +115,7 @@ export function liveFetch(url: string): Promise<Response> {
     "/equity/wards": equityWardsPage,
     "/equity/summary": equitySummary,
     "/underserved/field-checks": fieldChecks,
+    "/underserved/section-checks": sectionChecks,
     "/coverage/layers/water_access_evidence": waterAccessLayer,
     "/atlas/live": liveNeed,
   };

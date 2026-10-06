@@ -1187,3 +1187,19 @@ The pull-request description must summarize the same information and link to thi
 - **Owner / date:** repo owner, 2026-10-06.
 - **Why:** the map box must stay fixed: no mouse-wheel zoom or drag.
 - **What we changed:** wheel and drag removed; + zooms towards the selected ward (else the centre), - zooms out, the fit button resets.
+## `feat/e5-section-check` — F3/F4 section repair, 2026-10-06
+
+- Preserves the owner's local U5/navigation/forecast work by branching from `277118f`,
+  which includes latest local main (`e75ed63`), rather than discarding those commits.
+- TDD: service import and officer route failed before implementation; U5 test failed on
+  the missing section tab before implementation. Affected tests now pass.
+- Exact 2025 section/division counts and billing denominators; complete-year gates,
+  leave-target-out comparable peers, 2024-trained threshold, contextual ward need only.
+- 197 identities, 12 candidates. 121 temporal validation pairs: peer rho 0.3718,
+  median miss 2.4824x, within-2x 38.02%; baseline 0.1504 / 3.3103x / 28.10%.
+- Officer route, OpenAPI, reproducible verifier and snapshot. U5 hides old ward model
+  numbers, lists sections and marks their approximate points; en/te/ur/hi strings exported.
+- No ground outcomes or precision claim; point-based ward outputs are legacy research.
+  No spatial sampling, source-manifest edits or external publication.
+- Contract checks exposed a pre-existing duplicate `_need` helper that broke explanation
+  and report-card routes; renamed the live-atlas helper to preserve the typed ward lookup.

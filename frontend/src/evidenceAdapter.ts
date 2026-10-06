@@ -174,3 +174,20 @@ export function adaptLiveNeed(raw: unknown): LiveNeed | null {
     },
   };
 }
+
+export type SectionCheck = {
+  section_id: string; section: string; division: string; period_year: number;
+  bookings: number; rate: number | null; reference_rate: number | null;
+  field_check_candidate: boolean; ward_id: string | null; lat: number | null; lng: number | null;
+};
+
+export function adaptSectionChecks(raw: unknown): SectionCheck[] | null {
+  const items = allItems(raw);
+  if (!items || items.some((r) => typeof r.section_id !== "string" || typeof r.section !== "string"
+    || typeof r.field_check_candidate !== "boolean" || num(r.bookings) === null
+    || num(r.period_year) === null)) return null;
+  return items.map((r) => ({ section_id: String(r.section_id), section: String(r.section),
+    division: String(r.division), period_year: Number(r.period_year), bookings: Number(r.bookings),
+    rate: num(r.rate), reference_rate: num(r.reference_rate), field_check_candidate: r.field_check_candidate === true,
+    ward_id: text(r.ward_id), lat: num(r.lat), lng: num(r.lng) }));
+}
