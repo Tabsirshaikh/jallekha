@@ -1181,3 +1181,9 @@ The pull-request description must summarize the same information and link to thi
 - **Owner / date:** repo owner, 2026-10-06.
 - **Why:** the owner wants the map box to stay fixed: no mouse-wheel zoom or drag.
 - **What we changed:** wheel and drag removed; + zooms towards the selected ward (else the centre of the view), - zooms out, the fit button resets. Test: wheel leaves the view unchanged, the buttons change and reset it.
+
+## `fix/u5-zoom-buttons` — zoom by buttons only
+
+- **Owner / date:** repo owner, 2026-10-06.
+- **Why:** the map box must stay fixed: no mouse-wheel zoom or drag.
+- **What we changed:** wheel and drag removed; + zooms towards the selected ward (else the centre), - zooms out, the fit button resets.
