@@ -10,7 +10,9 @@ def test_live_atlas_lists_every_ward_with_need_and_clues(client) -> None:
     assert len(wards) == 145
     ward = next(w for w in wards if w["ward_id"] == "relation/7848824")  # Ward 105 Gachibowli
     assert ward["name"].startswith("Ward 105")
-    assert {"wad", "cad", "hardship", "households"} <= set(ward["need"])
+    assert {"wad", "cad", "hardship", "households", "need_weight"} <= set(ward["need"])
+    n = ward["need"]
+    assert n["need_weight"] == round(1 + 2 * n["wad"] + n["cad"] + n["hardship"], 4)
     assert [c["code"] for c in ward["clues"]] == [
         "owed", "bookings", "complaints", "cuts", "groundwater"
     ]  # fmt: skip

@@ -165,7 +165,7 @@ def atlas_live(
             {
                 "ward_id": wid,
                 "name": r["ward_name"],
-                "need": {k: typed({k: r[k]})[k] for k in ("wad", "cad", "hardship", "households")},
+                "need": _live_need(r),
                 "bookings_window": counts.by_ward.get(wid, 0),
                 "usual_month_bookings": None if usual is None else round(usual, 1),
                 **live_need.evaluate(
@@ -191,6 +191,18 @@ def atlas_live(
             **live_need.concentration(sections, cfg),
         },
     }
+
+
+def _live_need(row: dict[str, str]) -> dict[str, Any]:
+    """Census need plus the fair queue's need score (A2/F8: 1 + weighted WAD, CAD, hardship)."""
+    need = {k: typed({k: row[k]})[k] for k in ("wad", "cad", "hardship", "households")}
+    parts = [need["wad"], need["cad"], need["hardship"]]
+    need["need_weight"] = (
+        round(service_models.need_weight(*parts), 4)
+        if all(isinstance(v, int | float) for v in parts)
+        else None
+    )
+    return need
 
 
 def _utc(moment: datetime) -> datetime:

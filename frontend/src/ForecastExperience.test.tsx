@@ -6,7 +6,6 @@ import ForecastExperience from "./ForecastExperience";
 import { LocaleProvider } from "./i18n";
 import { backtestRows, cityRow, jsonResponse, sectionRow, shortageRow } from "./test/apiFixtures";
 
-const FIXTURE_NOTE = /Forecast values and ranges are demonstration fixtures/;
 
 function renderScreen() {
   return render(
@@ -47,10 +46,9 @@ describe("ForecastExperience", () => {
     vi.stubGlobal("fetch", officerApi());
     renderScreen();
     expect(await screen.findByText("Live data")).toBeInTheDocument();
-    expect(screen.queryByText(FIXTURE_NOTE)).not.toBeInTheDocument();
     const detail = screen.getByRole("region", { name: "Selected forecast month" });
     expect(within(detail).getByText("127,725")).toBeInTheDocument();
-    expect(within(detail).getAllByText(/DERIVED/).length).toBeGreaterThan(0);
+    expect(within(detail).queryByText(/DERIVED/)).toBeNull(); // no basis labels on screen (owner decision)
     expect(within(detail).getByText(/section intervals do not add up/)).toBeInTheDocument();
     expect(within(detail).queryByText(/^0$/)).not.toBeInTheDocument();
   });
@@ -143,7 +141,7 @@ describe("ForecastExperience", () => {
     const detail = screen.getByRole("region", { name: "Selected forecast month" });
     await waitFor(() => expect(within(detail).getByText("18–54")).toBeInTheDocument());
     expect(within(detail).getByText("24")).toBeInTheDocument();
-    expect(within(detail).getAllByText(/ASSUMED/).length).toBeGreaterThan(0);
+    expect(within(detail).queryByText(/ASSUMED/)).toBeNull();
   });
 
   it("asks for sign-in and keeps the labelled fixtures when nobody is signed in", async () => {
@@ -152,7 +150,6 @@ describe("ForecastExperience", () => {
     renderScreen();
     expect(screen.getByText("Saved snapshot")).toBeInTheDocument();
     expect(screen.getByText(/Sign in as an officer to see live data/)).toBeInTheDocument();
-    expect(screen.getByText(FIXTURE_NOTE)).toBeInTheDocument();
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
@@ -162,7 +159,6 @@ describe("ForecastExperience", () => {
     renderScreen();
     expect(await screen.findByText(/Your sign-in was not accepted/)).toBeInTheDocument();
     expect(screen.getByText("Saved snapshot")).toBeInTheDocument();
-    expect(screen.getByText(FIXTURE_NOTE)).toBeInTheDocument();
   });
 
   it("falls back and says the server could not be reached on a network error", async () => {
@@ -171,6 +167,13 @@ describe("ForecastExperience", () => {
     renderScreen();
     expect(await screen.findByText(/server could not be reached/)).toBeInTheDocument();
     expect(screen.getByText("Saved snapshot")).toBeInTheDocument();
-    expect(screen.getByText(FIXTURE_NOTE)).toBeInTheDocument();
+  });
+
+  it("shows the month and its numbers when the pointer is over the chart", () => {
+    const { container } = render(<LocaleProvider><AuthProvider><ForecastExperience /></AuthProvider></LocaleProvider>);
+    const columns = container.querySelectorAll(".forecast-chart rect");
+    expect(columns.length).toBeGreaterThan(10);
+    fireEvent.mouseEnter(columns[0]);
+    expect(container.querySelector(".chart-tooltip")).not.toBeNull();
   });
 });

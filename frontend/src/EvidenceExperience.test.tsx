@@ -43,7 +43,7 @@ describe("EvidenceExperience", () => {
     vi.stubGlobal("fetch", vi.fn().mockImplementation(liveFetch));
     renderScreen();
     await screen.findByText("wards with 2 or more warning signs");
-    fireEvent.click(screen.getByRole("tab", { name: "Bookings" }));
+    fireEvent.click(screen.getByRole("tab", { name: "2. Bookings" }));
     expect(screen.getByText("Top 2 areas take 68% of all tankers")).toBeInTheDocument();
     expect(screen.getByText("Last 30 days, 120 live bookings")).toBeInTheDocument();
     expect(screen.getByText("MADHAPUR")).toBeInTheDocument();
@@ -68,7 +68,7 @@ describe("EvidenceExperience", () => {
   it("explains low-booking wards as booked vs expected", () => {
     vi.stubGlobal("fetch", vi.fn());
     const { container } = renderScreen();
-    fireEvent.click(screen.getByRole("tab", { name: "Low bookings" }));
+    fireEvent.click(screen.getByRole("tab", { name: "3. Expected vs actual" }));
     const cards = container.querySelectorAll(".atlas-check-card");
     expect(cards.length).toBe(6);
     const first = within(cards[0] as HTMLElement);
@@ -83,5 +83,28 @@ describe("EvidenceExperience", () => {
     fireEvent.change(screen.getByLabelText("Find a ward"), { target: { value: "Gachibowli" } });
     fireEvent.click(within(container.querySelector(".atlas-search ul") as HTMLElement).getByRole("button", { name: "Ward 105 Gachibowli" }));
     expect(screen.getByRole("dialog", { name: "Ward 105 Gachibowli" })).toBeInTheDocument();
+  });
+
+  it("zooms only with the buttons", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    const { container } = renderScreen();
+    const svg = container.querySelector(".atlas-map") as SVGSVGElement;
+    const fitted = svg.getAttribute("viewBox");
+    fireEvent.wheel(svg, { deltaY: -100 });
+    expect(svg.getAttribute("viewBox")).toBe(fitted);
+    fireEvent.click(screen.getByRole("button", { name: "Zoom in" }));
+    expect(svg.getAttribute("viewBox")).not.toBe(fitted);
+    fireEvent.click(screen.getByRole("button", { name: "Fit map" }));
+    expect(svg.getAttribute("viewBox")).toBe(fitted);
+  });
+
+  it("ranks wards under the map and lists building growth A-Z", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    const { container } = renderScreen();
+    expect(container.querySelectorAll(".atlas-rank li")).toHaveLength(15);
+    fireEvent.click(screen.getByRole("button", { name: "Show all wards" }));
+    expect(container.querySelectorAll(".atlas-rank li")).toHaveLength(145);
+    fireEvent.click(screen.getByRole("radio", { name: "Building growth" }));
+    expect(screen.getByText(/^Listed A–Z, not ranked/)).toBeInTheDocument();
   });
 });
