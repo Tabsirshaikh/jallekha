@@ -1,0 +1,87 @@
+district,mandal,query,status,osm_type,osm_id,osm_name,lat,lon
+Hyderabad,Amberpet,"Amberpet mandal, Hyderabad, Telangana",BOUNDARY,relation,9823521,"Amberpet mandal, Hyderabad, Telangana, India",17.386178,78.511471
+Hyderabad,Ameerpet,"Ameerpet mandal, Hyderabad, Telangana",BOUNDARY,relation,9844052,"Ameerpet mandal, Hyderabad, Telangana, India",17.442757,78.449626
+Hyderabad,Asifnagar,"Asifnagar mandal, Hyderabad, Telangana",PLACE,way,289969067,"Asifnagar Road, Gudimalkapur, Ward 70 Mehdipatnam, Greater Hyderabad Municipal Corporation Central Zone, Hyderabad, Asif Nagar mandal, Hyderabad, Telangana, 500006, India",17.393520,78.444302
+Hyderabad,Bahadurpura,"Bahadurpura mandal, Hyderabad, Telangana",BOUNDARY,relation,9823555,"Bahadurpura mandal, Hyderabad, Telangana, 500064, India",17.349507,78.452576
+Hyderabad,Bandlaguda,"Bandlaguda mandal, Hyderabad, Telangana",BOUNDARY,relation,9823546,"Bandlaguda mandal, Hyderabad, Telangana, 500005, India",17.322739,78.483074
+Hyderabad,Charminar,"Charminar mandal, Hyderabad, Telangana",BOUNDARY,relation,9823525,"Charminar mandal, Hyderabad, Telangana, 500065, India",17.362196,78.487214
+Hyderabad,Golkonda,"Golkonda mandal, Hyderabad, Telangana",PLACE,way,313512532,"Golkonda Road, Humayun Nagar, Mallepally, Ward 73 Vijay Nagar Colony, Greater Hyderabad Municipal Corporation Central Zone, Hyderabad, Asif Nagar mandal, Hyderabad, Telangana, 500006, India",17.398791,78.445884
+Hyderabad,Himayatnagar,"Himayatnagar mandal, Hyderabad, Telangana",BOUNDARY,relation,9823507,"Himayatnagar mandal, Hyderabad, Telangana, India",17.403982,78.488194
+Hyderabad,Khairatabad,"Khairatabad mandal, Hyderabad, Telangana",BOUNDARY,relation,9823290,"Khairatabad mandal, Hyderabad, Telangana, India",17.427598,78.460901
+Hyderabad,Marredpally,"Marredpally mandal, Hyderabad, Telangana",BOUNDARY,relation,9823218,"Marredpally mandal, Hyderabad, Telangana, India",17.450794,78.504897
+Hyderabad,Musheerabad,"Musheerabad mandal, Hyderabad, Telangana",BOUNDARY,relation,9823557,"Musheerabad mandal, Hyderabad, Telangana, India",17.418511,78.507331
+Hyderabad,Nampally,"Nampally mandal, Hyderabad, Telangana",BOUNDARY,relation,9823503,"Nampally mandal, Hyderabad, Telangana, India",17.385291,78.477555
+Hyderabad,Saidabad,"Saidabad mandal, Hyderabad, Telangana",BOUNDARY,relation,9823538,"Saidabad mandal, Hyderabad, Telangana, 500059, India",17.359533,78.514798
+Hyderabad,Secunderabad,"Secunderabad mandal, Hyderabad, Telangana",BOUNDARY,relation,9823232,"Secunderabad mandal, Hyderabad, Telangana, 500003, India",17.434707,78.489078
+Hyderabad,Shaikpet,"Shaikpet mandal, Hyderabad, Telangana",BOUNDARY,relation,9823301,"Shaikpet mandal, Hyderabad, Telangana, India",17.413406,78.427548
+Hyderabad,Tirumalagiri,"Tirumalagiri mandal, Hyderabad, Telangana",BOUNDARY,relation,9823209,"Tirumalagiri mandal, Hyderabad, Telangana, 500011, India",17.463954,78.483732
+Medchal-Malkajgiri,Alwal,"Alwal mandal, Medchal–Malkajgiri, Telangana",BOUNDARY,relation,9821960,"Alwal mandal, Medchal–Malkajgiri, Telangana, 500087, India",17.515328,78.522786
+Medchal-Malkajgiri,Bachupally,"Bachupally mandal, Medchal–Malkajgiri, Telangana",BOUNDARY,relation,9821936,"Bachupally mandal, Medchal–Malkajgiri, Telangana, India",17.541055,78.363548
+Medchal-Malkajgiri,Balanagar,"Balanagar mandal, Medchal–Malkajgiri, Telangana",BOUNDARY,relation,9822259,"Balanagar mandal, Medchal–Malkajgiri, Telangana, India",17.466198,78.455485
+Medchal-Malkajgiri,Dundigal Gandimaisamma,"Dundigal Gandimaisamma mandal, Medchal–Malkajgiri, Telangana",BOUNDARY,relation,9821561,"Dundigal mandal, Medchal–Malkajgiri, Telangana, India",17.582262,78.413227
+Medchal-Malkajgiri,Ghatkesar,"Ghatkesar mandal, Medchal–Malkajgiri, Telangana",BOUNDARY,relation,9822224,"Ghatkesar mandal, Medchal–Malkajgiri, Telangana, India",17.451084,78.684302
+Medchal-Malkajgiri,Kapra,"Kapra mandal, Medchal–Malkajgiri, Telangana",BOUNDARY,relation,9822008,"Kapra mandal, Medchal–Malkajgiri, Telangana, India",17.500797,78.570206
+Medchal-Malkajgiri,Keesara,"Keesara mandal, Medchal–Malkajgiri, Telangana",BOUNDARY,relation,9822222,"Keesara mandal, Medchal–Malkajgiri, Telangana, 500083, India",17.515002,78.647243
+Medchal-Malkajgiri,Kukatpally,"Kukatpally mandal, Medchal–Malkajgiri, Telangana",BOUNDARY,relation,9822248,"Kukatpally mandal, Medchal–Malkajgiri, Telangana, India",17.482545,78.406375
+Medchal-Malkajgiri,Malkajgiri,"Malkajgiri mandal, Medchal–Malkajgiri, Telangana",BOUNDARY,relation,9822017,"Malkajgiri mandal, Medchal–Malkajgiri, Telangana, 500056, India",17.468600,78.536723
+Medchal-Malkajgiri,Medchal,"Medchal mandal, Medchal–Malkajgiri, Telangana",BOUNDARY,relation,9821551,"Medchal mandal, Medchal–Malkajgiri, Telangana, India",17.628896,78.490334
+Medchal-Malkajgiri,Medipally,"Medipally mandal, Medchal–Malkajgiri, Telangana",BOUNDARY,relation,9822079,"Medipally mandal, Medchal–Malkajgiri, Telangana, India",17.420657,78.592043
+Medchal-Malkajgiri,Muduchinthalapally,"Muduchinthalapally, Medchal–Malkajgiri, Telangana",BOUNDARY,relation,10445930,"Muduchinthalapally, Medchal–Malkajgiri, Telangana, India",17.635730,78.659243
+Medchal-Malkajgiri,Quthbullapur,"Quthbullapur mandal, Medchal–Malkajgiri, Telangana",BOUNDARY,relation,9821946,"Quthbullapur mandal, Medchal–Malkajgiri, Telangana, India",17.521191,78.443385
+Medchal-Malkajgiri,Shamirpet,"Shamirpet mandal, Medchal–Malkajgiri, Telangana",BOUNDARY,relation,9821538,"Shamirpet mandal, Medchal–Malkajgiri, Telangana, India",17.594267,78.574388
+Medchal-Malkajgiri,Uppal,"Uppal mandal, Medchal–Malkajgiri, Telangana",BOUNDARY,relation,9822045,"Uppal mandal, Medchal–Malkajgiri, Telangana, India",17.417462,78.547025
+Rangareddy,Abdullapurmet,"Abdullapurmet mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9832344,"Abdullapurmet mandal, Ranga Reddy, Telangana, India",17.320956,78.692968
+Rangareddy,Amangal,"Amangal mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9844634,"Amangal mandal, Ranga Reddy, Telangana, 509321, India",16.858387,78.535575
+Rangareddy,Balapur,"Balapur mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9832463,"Balapur mandal, Ranga Reddy, Telangana, India",17.286327,78.500693
+Rangareddy,Chevella,"Chevella mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9833480,"Chevella mandal, Ranga Reddy, Telangana, 501503, India",17.306230,78.137008
+Rangareddy,Chowdergudem,"Chowdergudem mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9837236,"Chowdergudem mandal, Ranga Reddy, Telangana, India",17.064173,77.969791
+Rangareddy,Farooqnagar,"Farooqnagar mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9837167,"Farooqnagar mandal, Ranga Reddy, Telangana, India",17.027959,78.181668
+Rangareddy,Gandipet,"Gandipet mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9832908,"Gandipet mandal, Ranga Reddy, Telangana, India",17.381013,78.325633
+Rangareddy,Hayathnagar,"Hayathnagar mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9832574,"Hayathnagar mandal, Greater Hyderabad Municipal Corporation East Zone, Hyderabad, Ranga Reddy, Telangana, India",17.328115,78.604540
+Rangareddy,Ibrahimpatnam,"Ibrahimpatnam mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9836955,"Ibrahimpatnam mandal, Ranga Reddy, Telangana, 501506, India",17.192199,78.608222
+Rangareddy,Kadthal,"Kadthal mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9844364,"Kadthal mandal, Ranga Reddy, Telangana, 509358, India",16.953587,78.509731
+Rangareddy,Kandukur,"Kandukur mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9837045,"Kandukur mandal, Ranga Reddy, Telangana, India",17.081290,78.501968
+Rangareddy,Keshampet,"Keshampet mandal, Ranga Reddy, Telangana",PLACE,way,1495331707,"Mandal Praja parishad Keshampet, Kothapet Road, Keshampeta, Keshampeta mandal, Ranga Reddy, Telangana, 509408, India",16.953210,78.348011
+Rangareddy,Kondurg,"Kondurg mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9837192,"Kondurg mandal, Ranga Reddy, Telangana, 509207, India",17.093419,78.054865
+Rangareddy,Kothur,"Kothur mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9836886,"Kothur mandal, Ranga Reddy, Telangana, India",17.179402,78.262732
+Rangareddy,Madgul,"Madgul mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9844635,"Madgul mandal, Ranga Reddy, Telangana, India",16.844345,78.697812
+Rangareddy,Maheshwaram,"Maheshwaram mandal, Ranga Reddy, Telangana",PLACE,node,5391666983,"Maheshwaram, Maheswaram mandal, Ranga Reddy, Telangana, 501359, India",17.135080,78.433821
+Rangareddy,Manchal,"Manchal mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9837017,"Manchal mandal, Ranga Reddy, Telangana, 501508, India",17.161595,78.720088
+Rangareddy,Moinabad,"Moinabad mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9833014,"Moinabad mandal, Ranga Reddy, Telangana, India",17.320995,78.293809
+Rangareddy,Nandigama,"Nandigama mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9836898,"Nandigama mandal, Ranga Reddy, Telangana, India",17.135670,78.233985
+Rangareddy,Rajendranagar,"Rajendranagar mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9832774,"Rajendranagar mandal, Ranga Reddy, Telangana, India",17.320074,78.418589
+Rangareddy,Saroornagar,"Saroornagar mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9832397,"Saroornagar mandal, Ranga Reddy, Telangana, India",17.358559,78.554610
+Rangareddy,Serilingampally,"Serilingampally mandal, Ranga Reddy, Telangana",PLACE,way,879138502,"Vidyanjali High School, 147, Doyens Rd, Doyens Colony, Serilingampally, Hyderabad, Telangana 500019, Old Bombay Road, Doyens Township, Madinaguda, Masjid Banda, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, 500019, India",17.474950,78.328860
+Rangareddy,Shabad,"Shabad mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9833504,"Shabad mandal, Ranga Reddy, Telangana, 509217, India",17.171726,78.141927
+Rangareddy,Shamshabad,"Shamshabad mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9833068,"Shamshabad mandal, Ranga Reddy, Telangana, India",17.248365,78.263060
+Rangareddy,Shankarpalle,"Shankarpalle mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9832981,"Shankarpalle mandal, Ranga Reddy, Telangana, 502201, India",17.440644,78.143856
+Rangareddy,Talakondapally,"Talakondapally mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9844553,"Talakondapally mandal, Ranga Reddy, Telangana, India",16.868329,78.415673
+Rangareddy,Yacharam,"Yacharam mandal, Ranga Reddy, Telangana",BOUNDARY,relation,9837031,"Yacharam mandal, Ranga Reddy, Telangana, 501509, India",17.030686,78.660387
+Sangareddy,Ameenapur,"Ameenapur mandal, Sangareddy, Telangana",PLACE,node,5605051509,"Ameenapur, Ameenpur mandal, Sangareddy, Telangana, 502032, India",17.523826,78.324195
+Sangareddy,Andhole,"Andhole mandal, Sangareddy, Telangana | Andhole, Sangareddy, Telangana",NOT_FOUND,,,,,
+Sangareddy,Chowtakur,"Chowtakur mandal, Sangareddy, Telangana",BOUNDARY,relation,16462585,"Choutkur mandal, Sangareddy, Telangana, India",17.709957,78.111308
+Sangareddy,Gummadidala,"Gummadidala mandal, Sangareddy, Telangana",BOUNDARY,relation,9767740,"Gummadidala mandal, Sangareddy, Telangana, India",17.680601,78.373412
+Sangareddy,Hathanoora,"Hathanoora mandal, Sangareddy, Telangana | Hathanoora, Sangareddy, Telangana",NOT_FOUND,,,,,
+Sangareddy,Jharasangam,"Jharasangam mandal, Sangareddy, Telangana",BOUNDARY,relation,9765382,"Jharasangam mandal, Sangareddy, Telangana, India",17.744682,77.710721
+Sangareddy,Jinnaram,"Jinnaram mandal, Sangareddy, Telangana",BOUNDARY,relation,9766884,"Jinnaram mandal, Sangareddy, Telangana, 502325, India",17.600136,78.335656
+Sangareddy,Kalher,"Kalher mandal, Sangareddy, Telangana",BOUNDARY,relation,9761934,"Kalher mandal, Sangareddy, Telangana, India",18.145907,77.865771
+Sangareddy,Kandi,"Kandi mandal, Sangareddy, Telangana",BOUNDARY,relation,9766816,"Kandi mandal, Sangareddy, Telangana, 502285, India",17.570863,78.118009
+Sangareddy,Kangti,"Kangti mandal, Sangareddy, Telangana",BOUNDARY,relation,9761833,"Kangti mandal, Sangareddy, Telangana, India",18.224794,77.617909
+Sangareddy,Kohir,"Kohir mandal, Sangareddy, Telangana",BOUNDARY,relation,9765360,"Kohir mandal, Sangareddy, Telangana, India",17.599668,77.716922
+Sangareddy,Kondapur,"Kondapur mandal, Sangareddy, Telangana",BOUNDARY,relation,9766628,"Kondapur mandal, Sangareddy, Telangana, India",17.530523,78.020740
+Sangareddy,Manoor,"Manoor mandal, Sangareddy, Telangana",BOUNDARY,relation,9762000,"Manoor mandal, Sangareddy, Telangana, India",17.961825,77.736761
+Sangareddy,Mogdampalle,"Mogdampalle mandal, Sangareddy, Telangana | Mogdampalle, Sangareddy, Telangana",NOT_FOUND,,,,,
+Sangareddy,Munipalli,"Munipalli mandal, Sangareddy, Telangana | Munipalli, Sangareddy, Telangana",NOT_FOUND,,,,,
+Sangareddy,Nagalgidda,"Nagalgidda mandal, Sangareddy, Telangana",BOUNDARY,relation,9761927,"Nagalgidda mandal, Sangareddy, Telangana, India",18.056020,77.617759
+Sangareddy,Narayankhed,"Narayankhed mandal, Sangareddy, Telangana",BOUNDARY,relation,9761973,"Narayankhed mandal, Sangareddy, Telangana, 502286, India",18.034792,77.777297
+Sangareddy,Nizampet,"Nizampet mandal, Sangareddy, Telangana",PLACE,node,245643131,"Nizampet, Narayankhed mandal, Sangareddy, Telangana, 502271, India",18.092033,77.881597
+Sangareddy,Nyalkal,"Nyalkal mandal, Sangareddy, Telangana",BOUNDARY,relation,9765200,"Nyalkal mandal, Sangareddy, Telangana, India",17.847062,77.660763
+Sangareddy,Patancheruvu,"Patancheruvu mandal, Sangareddy, Telangana",BOUNDARY,relation,9766851,"Patancheruvu mandal, Sangareddy, Telangana, India",17.545789,78.222227
+Sangareddy,Pulkal,"Pulkal mandal, Sangareddy, Telangana",BOUNDARY,relation,9766597,"Pulkal mandal, Sangareddy, Telangana, 502293, India",17.736143,77.986189
+Sangareddy,Raikode,"Raikode mandal, Sangareddy, Telangana",BOUNDARY,relation,9765441,"Raikode mandal, Sangareddy, Telangana, 502257, India",17.848538,77.777105
+Sangareddy,Ramachandrapuram,"Ramachandrapuram mandal, Sangareddy, Telangana",BOUNDARY,relation,9767742,"Ramachandrapuram mandal, Sangareddy, Telangana, 502032, India",17.478769,78.252868
+Sangareddy,Sadasivpet,"Sadasivpet mandal, Sangareddy, Telangana",BOUNDARY,relation,9766603,"Sadasivpet mandal, Sangareddy, Telangana, 502291, India",17.653111,77.963400
+Sangareddy,Sangareddy,"Sangareddy mandal, Sangareddy, Telangana",BOUNDARY,relation,9766644,"Sangareddy mandal, Sangareddy, Telangana, India",17.615515,78.081722
+Sangareddy,Sirgapoor,"Sirgapoor mandal, Sangareddy, Telangana",BOUNDARY,relation,9761866,"Sirgapoor mandal, Sangareddy, Telangana, India",18.152989,77.745816
+Sangareddy,Watpalle,"Watpalle mandal, Sangareddy, Telangana",PLACE,node,5228535880,"Watpalle, Vatpally mandal, Sangareddy, Telangana, India",17.911616,77.874881
+Sangareddy,Zahirabad,"Zahirabad mandal, Sangareddy, Telangana",BOUNDARY,relation,9765231,"Zahirabad mandal, Sangareddy, Telangana, 502220, India",17.679403,77.615308

@@ -72,6 +72,9 @@ class ForecastConfig:
     # Groundwater D7 is not in the repo (NWDP needs registration; data/raw/d7_groundwater).
     covariates: tuple[str, ...] = ("weather_d8",)
     weather_file: str = "data/raw/d8_weather/open_meteo_hyderabad_daily.csv"
+    # D8b: monthly weather per section from the TGDPS stations of its nearest mandal
+    # (scripts/forecast/build_section_weather.py; research follow-up B).
+    section_weather_file: str = "data/derived/weather/section_monthly.csv"
     # Normal weather per calendar month: 2019-2021, the three years before the first booking
     # month (Jan 2022), so the normal never contains a month that is forecast or scored.
     weather_normal_years: tuple[int, int] = (2019, 2021)

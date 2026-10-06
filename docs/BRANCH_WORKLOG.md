@@ -1115,3 +1115,17 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:** 24 scored months; DM can be over-confident in short samples; out-of-sample evidence so far is a tie (`docs/LIMITATIONS.md` F5).
 - **Pull request:** see the PR for `feat/f5-selection-rule`.
 
+## `feat/d8-city-weather` — weather per section from the Telangana weather stations (research follow-up B)
+
+- **Owner / date:** P3 work done by the repo owner, 2026-10-06.
+- **Why:** the forecast used one Open-Meteo point for the whole city, while heat and rain vary across Hyderabad.
+- **What we changed:**
+  - `scripts/data/fetch_d8_stations.py`: the 105 monthly TGDPS files (2018-01 to 2026-09) from Open Data Telangana's catalogue API, four HMWSSB districts kept, both file layouts normalised, the 2023-2026 day/month swap corrected (2,827 dates, flagged, original text kept), gzip with a fixed timestamp (2.1 MB); every source file's SHA-256 in the retrieval log. A download cache outside the repo survives network drops.
+  - `scripts/data/fetch_d8_mandal_points.py`: Nominatim lookup of each mandal in its district (74 boundaries, 8 places, 4 rural mandals not found).
+  - `scripts/forecast/build_section_weather.py`: stations averaged per mandal and day, months with >= 80% of days, nearest mandal per geocoded section, district then city fallback (labelled); spelling-variant alias table; checked by a reproducibility test.
+  - `services/forecast.py`: `global_gbm_local_weather` (the same model with each section's own weather), between `global_gbm` and the combination in the rule's complexity order.
+- **Results:** not significantly better than the city-weather model (22.37% / 37.66% vs 23.01% / 37.39% on 24 origins), so `global_gbm` stays published and the forecast table is unchanged.
+- **Validation:** tests written first and seen failing (station and day averaging, day coverage and rain scaling, blank values, nearest mandal and fallbacks, aliases, per-section feature rows, city fallback, candidate order), then passing.
+- **Known limitations:** mandal points by name lookup; alias table by hand from the files' year spans; 49 sections have no point (`docs/LIMITATIONS.md` F5).
+- **Pull request:** see the PR for `feat/d8-city-weather`.
+

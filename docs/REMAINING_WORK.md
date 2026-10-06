@@ -343,6 +343,8 @@ the simpler option on a tie. About 1 to 2 hours.
 
 ### B. Weather for the whole of Hyderabad, not one point (D8, after item 16)
 
+**Status: done** on `feat/d8-city-weather`: TGDPS daily station data for the four HMWSSB districts, 2018-01 to 2026-09 (105 monthly files from Open Data Telangana's catalogue API, `data/raw/d8_weather_stations/`; 2,827 day/month-swapped dates corrected and flagged), mandals located with Nominatim, each section given its nearest mandal (`data/derived/weather/`), and a per-section-weather gradient-boosting candidate scored under the part A rule. **It does not win** (not significantly better than the city-weather model), so the forecast is unchanged; see `docs/LIMITATIONS.md` F5. The text below is the plan it followed.
+
 **The problem.** The forecast uses one weather series at the city centre (Open-Meteo, 17.385 N,
 78.4867 E). Heat is not even across the city: studies of Hyderabad find the inner city 3 to 4 deg C
 hotter at the surface after its growth ([SIG research report](https://sig.ac.in/assets/pdf/research_student/mtech/21070146006.pdf)),
