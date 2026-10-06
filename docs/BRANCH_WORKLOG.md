@@ -1267,3 +1267,34 @@ failed on NEW suffix then passed. Frontend tests failed before redraw and passed
 passed; full backend run 995 passed/2 failed in373s: outdated forecast example and inherited
 sandbox input hash. Both fixed and 45 affected checks pass; all194 frontend tests, i18n and every data verifier pass.
 No push, PR or merge. Evidence and reproducible commands in LIMITATIONS F5/F6 and API addition.
+
+## `feat/d16-supply-timings` — Prompt A / D16 Water Supply Timings (2026-10-06)
+
+- **Owner / date:** Codex / 2026-10-06.
+- **Purpose:** Walk HMWSSB public Water Supply Timings system and web archives, fetch all available timing records, verify coverage against 2025 tanker bookings and wards, inspect outage/pressure dashboards, draft RTI application, and document honest limitations.
+- **What we found:**
+  - HMWSSB's live "Water Supply Timings" portal (`https://bms.hyderabadwater.gov.in/wstl/managerupload/DivisionMap.aspx`) links 11 division pages requiring browser User-Agent and `Referer: .../DivisionMap.aspx`. It defines 89 sections (93 JS function entries).
+  - Every single live section query currently returns `<script language="javaScript">alert('No Data Found');</script>`: the live database is completely empty.
+  - Wayback Machine CDX search revealed exactly one historical capture containing tabular data: S.R. NAGAR (Division 6, Section 0624) from 2024-05-14 21:57:12 UTC, containing 21 localities. Older `hyderabadwater.gov.in` and `.asp` variants have 0 timing tables. Archive.today has 0 captures.
+  - Coverage: 1 of 89 sections (1.12%), 21 localities, representing 40,862 of 1,436,768 (2.84%) 2025 tanker bookings, mapped to Ward 98 Ameerpet (`relation/7857794`).
+  - Outage Dashboard (`https://erp.hyderabadwater.gov.in/HmwssbOnlineNew/#/OutageDashboard`) requires internal ERP credentials (no public table/JSON feed). Water Pressure Dashboard (`https://mdm.hyderabadwater.gov.in/real-time-water-pressure`) server (65.2.47.226) is unresponsive (timed out).
+- **What we changed:**
+  - `scripts/data/fetch_supply_timings.py`: walks live system, queries CDX API, parses tables, calculates 24h start/end times and hours, and computes coverage against 2025 portal bookings.
+  - `data/raw/d16_supply_timings/supply_timings.csv`: 21 localities for S.R. Nagar with columns `division_code,section,section_code,locality_code,locality,slum_status,from_time,to_time,hours,pattern,water_source,captured_at,capture_source,source_url`.
+  - `data/raw/d16_supply_timings/RETRIEVAL_LOG.md`: provenance log with URLs, dates, counts, and SHA-256 hashes of all saved files.
+  - `data/raw/d16_supply_timings/raw_pages/`: archived raw HTML and gzip pages.
+  - `scripts/data/verify_supply_timings.py` & `data/verification/verify_supply_timings.py`: standalone verifier writing `data/verification/supply_timings_checks.json`.
+  - `docs/handoff/RTI_SUPPLY_HOURS.md`: formal RTI draft requesting scheduled timings, SCADA daily hours/flow 2024–2026, and GIS boundary maps.
+  - `docs/LIMITATIONS.md`: corrected section "Live need on the U5 map" with verified portal facts and 2.84% coverage.
+  - `docs/REMAINING_WORK.md` & `docs/features.csv`: updated status and tracker.
+- **Validation:**
+  - TDD: `backend/tests/test_d16_supply_timings.py` written first and failed on missing script; now 7 tests pass (time conversion, duration math, empty page detection, S.R. Nagar HTML parser, coverage maths, verifier execution).
+  - Verifier `scripts/data/verify_supply_timings.py` exits 0 with `PASS`.
+- **Known limitations:**
+  - 88 of 89 sections (98.88%) have no public timing data; live database is empty.
+  - S.R. Nagar timings are from May 2024 (archived), not live telemetry.
+  - Outage and pressure dashboards are not publicly available without credentials or server repairs.
+- **Handoff / next step:**
+  - Committed locally on `feat/d16-supply-timings`. Do not push or merge until owner says "approve".
+- **Pull request:** pending owner approval.
+

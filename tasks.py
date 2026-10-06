@@ -73,6 +73,7 @@ def test() -> None:
     run([venv_python(), str(ROOT / "scripts/evidence/verify_section_checks.py")])
     run([venv_python(), str(ROOT / "scripts/evidence/verify_booking_transfer.py")])
     run([venv_python(), str(ROOT / "scripts/evidence/verify_underreporting.py")])
+    run([venv_python(), str(ROOT / "scripts/data/verify_supply_timings.py")])
 
 
 def lint() -> None:

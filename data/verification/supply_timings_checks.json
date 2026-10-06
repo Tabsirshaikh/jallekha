@@ -1,0 +1,20 @@
+{
+  "dataset": "D16-HMWSSB-WaterSupplyTimings",
+  "basis": "REAL",
+  "csv_path": "data\\raw\\d16_supply_timings\\supply_timings.csv",
+  "csv_sha256": "81cdc754d4ca1dcbbeaa0c6c5dec3a321f7b8b216c2a1c92a883c2f13776304f",
+  "csv_rows": 21,
+  "sections_covered": 1,
+  "total_sections": 89,
+  "section_coverage_pct": 1.1236,
+  "localities_covered": 21,
+  "covered_2025_bookings": 40862,
+  "total_2025_bookings": 1436768,
+  "bookings_coverage_pct": 2.844,
+  "covered_section": "S.R.NAGAR",
+  "ward_name": "Ward 98 Ameerpet",
+  "ward_id": "relation/7857794",
+  "capture_date": "2024-05-14T21:57:12Z",
+  "live_database_status": "EMPTY_NO_DATA_FOUND",
+  "status": "PASS"
+}
