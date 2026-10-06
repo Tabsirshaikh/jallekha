@@ -34,6 +34,9 @@ class ForecastConfig:
     # the rest test. Below these month counts no coverage is reported. Basis: ASSUMED.
     min_calibration_months: int = 6
     min_test_months: int = 6
+    # ASSUMED: one annual cycle of preceding city errors for adaptive ranges. Window choice
+    # is exploratory on existing data; future coverage still needs independent observation.
+    city_interval_window_months: int = 12
     # Seasonal naive x year-on-year growth: growth = city total of the most recent N months
     # (each with a value a year earlier) / the same months a year earlier. Basis: ASSUMED.
     growth_window_months: int = 3

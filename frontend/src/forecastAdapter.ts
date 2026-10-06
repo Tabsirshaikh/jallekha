@@ -59,6 +59,7 @@ export type ApiShortageRow = {
   risk: string | null;
   reason: string | null;
   groundwater_status: string | null;
+  groundwater_m?: number | null;
 };
 
 /** One forecast month as the outlook chart and detail panel draw it. */
@@ -95,6 +96,7 @@ export type ShortageRow = {
   risk: Risk;
   reason: string;
   groundwaterUnavailable: boolean;
+  groundwater?: number | null;
 };
 
 export type BacktestComparison = { run: string; model: string; origin: string | null; months: number | null; cityMape: number | null; sectionWape: number | null; basis: BasisTag };
@@ -179,6 +181,7 @@ export function shortageFromApi(rows: ApiShortageRow[]): ShortageRow[] {
     risk: risk(row.risk),
     reason: row.reason ?? "",
     groundwaterUnavailable: (row.groundwater_status ?? "UNAVAILABLE") === "UNAVAILABLE",
+    groundwater: row.groundwater_m ?? null,
   }));
 }
 

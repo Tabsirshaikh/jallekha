@@ -9,10 +9,40 @@ import { outlookFromApi, sectionsFromForecast, shortageFromApi, sortByRisk, RISK
   type ApiShortageRow, type OutlookMonth, type Risk } from "./forecastAdapter";
 import { canFetchOfficerData, liveReason, liveReasonCopy } from "./liveReason";
 import "./ForecastExperience.css";
+import { currentWarnings, warningWindow } from "./forecastDates";
+
+const warningCopy = {
+  en: {estimatedCapacity: "Estimated trips", dataThrough: "Booking data through {month}", capacityHelp: "Section capacity is an estimated share of a filling station's trips, based on earlier bookings. Officers can reassign tankers; it is not a verified limit on service.", warningDates: "Warnings for {start}–{end}. Months ahead are counted from today.", unknownHelp: "Each card is one section in one month. Unknown means booking history or capacity is missing; it does not mean there is no risk.", olderInputs: "The latest booking records are older than the current month. These warnings are forecasts, not a live measure of today's supply."},
+  te: {estimatedCapacity: "అంచనా ట్యాంకర్ ప్రయాణాలు", dataThrough: "{month} వరకు బుకింగ్ సమాచారం", capacityHelp: "గత బుకింగ్‌ల ఆధారంగా ఫిల్లింగ్ స్టేషన్ ప్రయాణాల్లో సెక్షన్ వాటాను అంచనా వేశాం. అధికారులు ట్యాంకర్లను వేరే ప్రాంతాలకు కేటాయించవచ్చు; ఇది సేవలకు నిర్ధారిత పరిమితి కాదు.", warningDates: "{start}–{end} కోసం హెచ్చరికలు. ముందున్న నెలలను ఈ రోజు నుంచి లెక్కిస్తాం.", unknownHelp: "ప్రతి కార్డు ఒక నెలలో ఒక సెక్షన్‌ను చూపుతుంది. తెలియదు అంటే బుకింగ్ చరిత్ర లేదా సామర్థ్య సమాచారం లేదు; ప్రమాదం లేదని కాదు.", olderInputs: "తాజా బుకింగ్ రికార్డులు ప్రస్తుత నెల కంటే పాతవి. ఈ హెచ్చరికలు అంచనాలు; ఈ రోజు సరఫరా స్థితిని ప్రత్యక్షంగా కొలిచినవి కావు."},
+  ur: {estimatedCapacity: "اندازے کے مطابق ٹینکر کے چکر", dataThrough: "{month} تک بکنگ کا ریکارڈ", capacityHelp: "پچھلی بکنگ کی بنیاد پر بھرائی اسٹیشن کے چکروں میں سیکشن کا حصہ اندازہ کیا گیا ہے۔ افسر ٹینکر دوسری جگہ بھیج سکتے ہیں؛ یہ خدمت کی تصدیق شدہ حد نہیں ہے۔", warningDates: "{start}–{end} کے لیے انتباہات۔ آنے والے مہینے آج سے گنے جاتے ہیں۔", unknownHelp: "ہر کارڈ ایک مہینے کے ایک سیکشن کو دکھاتا ہے۔ نامعلوم کا مطلب بکنگ کی تاریخ یا گنجائش کا ریکارڈ موجود نہیں؛ اس کا مطلب خطرہ نہ ہونا نہیں۔", olderInputs: "تازہ ترین بکنگ ریکارڈ موجودہ مہینے سے پرانے ہیں۔ یہ انتباہات پیش گوئیاں ہیں، آج کی فراہمی کی براہ راست پیمائش نہیں۔"},
+  hi: {estimatedCapacity: "अनुमानित टैंकर चक्कर", dataThrough: "{month} तक बुकिंग के रिकॉर्ड", capacityHelp: "पिछली बुकिंग के आधार पर भराई स्टेशन के चक्करों में सेक्शन का हिस्सा अनुमानित है। अधिकारी टैंकर दूसरी जगह भेज सकते हैं; यह सेवा की सत्यापित सीमा नहीं है।", warningDates: "{start}–{end} के लिए चेतावनियाँ। आगे के महीने आज से गिने जाते हैं।", unknownHelp: "हर कार्ड एक महीने में एक सेक्शन दिखाता है। अज्ञात का मतलब बुकिंग इतिहास या क्षमता का रिकॉर्ड नहीं है; इसका मतलब जोखिम न होना नहीं है।", olderInputs: "नवीनतम बुकिंग रिकॉर्ड वर्तमान महीने से पुराने हैं। ये चेतावनियाँ अनुमान हैं, आज की आपूर्ति का सीधा माप नहीं।"},
+};
+
+const reasonCopy = {
+  en: {missingHistory: "Earlier bookings are missing for this forecast month.", missingMatch: "Earlier section records could not be matched reliably.", riskSummary: "Expected bookings: {expected}; estimated trips: {capacity}; upper estimate: {upper}. Warning: {risk}.", groundwaterReading: "Nearby groundwater is {value} m {direction} than usual ({month}).", deeper: "deeper", shallower: "shallower", storageReading: "Reservoir storage ({month}): {values}. These figures are background only."},
+  te: {missingHistory: "ఈ నెల అంచనాకు అవసరమైన గత బుకింగ్‌లు లేవు.", missingMatch: "గత సెక్షన్ రికార్డులను నమ్మదగిన విధంగా సరిపోల్చలేకపోయాం.", riskSummary: "అంచనా బుకింగ్‌లు: {expected}; అంచనా ప్రయాణాలు: {capacity}; ఎగువ అంచనా: {upper}. హెచ్చరిక: {risk}.", groundwaterReading: "సమీప భూగర్భజలం సాధారణం కంటే {value} మీటర్లు {direction} ఉంది ({month}).", deeper: "లోతుగా", shallower: "పైకి", storageReading: "రిజర్వాయర్ నిల్వ ({month}): {values}. ఈ గణాంకాలు నేపథ్య సమాచారం మాత్రమే."},
+  ur: {missingHistory: "اس مہینے کی پیش گوئی کے لیے پچھلی بکنگ دستیاب نہیں۔", missingMatch: "پچھلے سیکشن ریکارڈ کا قابل اعتماد ملاپ نہیں ہو سکا۔", riskSummary: "متوقع بکنگ: {expected}؛ اندازے کے چکر: {capacity}؛ بالائی اندازہ: {upper}۔ انتباہ: {risk}۔", groundwaterReading: "قریبی زیر زمین پانی معمول سے {value} میٹر {direction} ہے ({month})۔", deeper: "گہرا", shallower: "اوپر", storageReading: "آبی ذخائر میں پانی ({month}): {values}۔ یہ اعداد صرف پس منظر ہیں۔"},
+  hi: {missingHistory: "इस महीने का अनुमान बनाने के लिए पिछली बुकिंग उपलब्ध नहीं है।", missingMatch: "पुराने सेक्शन रिकॉर्ड का भरोसेमंद मिलान नहीं हो पाया।", riskSummary: "अपेक्षित बुकिंग: {expected}; अनुमानित चक्कर: {capacity}; ऊपरी अनुमान: {upper}। चेतावनी: {risk}।", groundwaterReading: "पास का भूजल सामान्य से {value} मीटर {direction} है ({month})।", deeper: "गहरा", shallower: "ऊपर", storageReading: "जलाशयों में पानी ({month}): {values}। ये आँकड़े केवल संदर्भ हैं।"},
+};
+
+const rangeCopy = {
+  en: {rangeReliability: "In past city checks, the {level}% range contained actual bookings {coverage}% of the time across {months} months. Future demand can fall outside the range."},
+  te: {rangeReliability: "గత నగర పరిశీలనల్లో {months} నెలల్లో, {level}% పరిధిలో నిజమైన బుకింగ్‌లు {coverage}% సార్లు ఉన్నాయి. భవిష్యత్ డిమాండ్ ఈ పరిధి బయట కూడా ఉండవచ్చు."},
+  ur: {rangeReliability: "شہر کے پچھلے {months} مہینوں کی جانچ میں، {level}% کی حد کے اندر اصل بکنگ {coverage}% بار آئی۔ آئندہ طلب اس حد سے باہر بھی ہو سکتی ہے۔"},
+  hi: {rangeReliability: "शहर के पिछले {months} महीनों की जाँच में, {level}% दायरे के अंदर वास्तविक बुकिंग {coverage}% बार रही। भविष्य की माँग इस दायरे से बाहर भी हो सकती है।"},
+};
+
+const detailsCopy = {
+  en: {warningHelp: "How to read these warnings"},
+  te: {warningHelp: "ఈ హెచ్చరికలను ఎలా అర్థం చేసుకోవాలి"},
+  ur: {warningHelp: "ان انتباہات کو کیسے سمجھیں"},
+  hi: {warningHelp: "इन चेतावनियों को कैसे समझें"},
+};
 
 type View = "outlook" | "accuracy" | "shortage";
 type Month = {month: string; bookings: number | null};
 type Snapshot = {snapshotDate: string; historyEnd: string; history: Month[];
+  cityCoverage?: {interval: number; coverage: number | null; months: number}[];
   forecastRows?: ApiForecastRow[]; historyRows?: ApiHistoryRow[];
   accuracyRows?: ApiAccuracyRow[]; shortageRows?: ApiShortageRow[]};
 const snapshot = data as Snapshot;
@@ -135,7 +165,7 @@ function OutlookChart({ history, outlook, selected, onSelect, locale, title, tex
 export default function ForecastExperience() {
   const {locale} = useLocale();
   const {status,role} = useAuth();
-  const w = labels[locale];
+  const w = {...labels[locale], ...warningCopy[locale], capacity: warningCopy[locale].estimatedCapacity, updated: warningCopy[locale].dataThrough};
   const [view,setView] = useState<View>("outlook");
   const [section,setSection] = useState("");
   const [selected,setSelected] = useState<string | null>(null);
@@ -149,7 +179,9 @@ export default function ForecastExperience() {
   const forecasts = usePagedApi<ApiForecastRow>(enabled && section ? "/forecast?"+filter : null);
   const historyApi = usePagedApi<ApiHistoryRow>(enabled ? "/forecast/history?"+filter : null);
   const accuracyApi = usePagedApi<ApiAccuracyRow>(enabled ? "/forecast/accuracy?"+filter : null);
-  const shortageApi = usePagedApi<ApiShortageRow>(enabled ? "/shortage?" : null);
+  const coverageApi = usePagedApi<{interval:number;coverage:number|null;months:number}>(enabled && !section ? "/forecast/backtest?row_type=city_coverage" : null);
+  const window = warningWindow();
+  const shortageApi = usePagedApi<ApiShortageRow>(enabled ? `/shortage?from_month=${window.from}&through_month=${window.through}` : null);
   const core = [city,names,shortageApi];
   const live = enabled && core.every(state => state.live);
   const error = core.find(state=>state.error)?.error ?? null;
@@ -159,7 +191,7 @@ export default function ForecastExperience() {
   const historyRows = live ? historyApi.data?.items ?? [] : (snapshot.historyRows ?? []).filter(row=>section ? row.section===section : row.level==="city");
   const history:Month[] = historyRows.length ? historyRows.map(row=>({month:row.month,bookings:row.actual})) : section || live ? [] : snapshot.history;
   const accuracy = (live ? accuracyApi.data?.items ?? [] : snapshot.accuracyRows ?? []).filter(row=>(section ? row.section===section : row.level==="city") && row.point !== null && row.actual !== null).sort((a,b)=>b.month.localeCompare(a.month));
-  const shortage = sortByRisk(shortageFromApi(live ? shortageApi.data?.items ?? [] : snapshot.shortageRows ?? []));
+  const shortage = sortByRisk(currentWarnings(shortageFromApi(live ? shortageApi.data?.items ?? [] : snapshot.shortageRows ?? []), window));
   const outlook = outlookFromApi(forecastRows,shortage);
   const month = outlook.find(row=>row.month===selected) ?? outlook[0];
   const sections = sectionsFromForecast(live ? names.data?.items ?? [] : snapshot.forecastRows ?? []);
@@ -170,6 +202,20 @@ export default function ForecastExperience() {
   const areaError = live ? areaState.error ?? historyApi.error : null;
   const unavailable = outlook.length===0 || outlook.every(row=>row.median===null);
   const riskNames = {all:w.riskAll,high:w.riskHigh,medium:w.riskMedium,low:w.riskLow,unknown:w.riskUnknown};
+  const reasonText = (row: ReturnType<typeof shortageFromApi>[number]) => {
+    if (locale === "en") return row.reason.replace(/\(A8 fleet split, ASSUMED\)/g,"(estimated capacity)");
+    const copy = reasonCopy[locale];
+    const parts = [row.forecast === null
+      ? row.reason.includes("insufficient seasonal history") ? copy.missingHistory : copy.missingMatch
+      : fill(copy.riskSummary,{expected:fmt(row.forecast),capacity:fmt(row.capacity),upper:fmt(row.upper80),risk:riskNames[row.risk]})];
+    if (row.groundwater != null) {
+      const sourceMonth = row.reason.slice(row.reason.indexOf("groundwater")).match(/\d{4}-\d{2}/)?.[0];
+      parts.push(fill(copy.groundwaterReading,{value:fmt(Math.abs(row.groundwater)),direction:row.groundwater>=0?copy.deeper:copy.shallower,month:sourceMonth?monthName(sourceMonth,locale):"—"}));
+    }
+    const storage = row.reason.match(/reservoir storage \((\d{4}-\d{2})\): (.*?) \(context only\)/);
+    if (storage) parts.push(fill(copy.storageReading,{month:monthName(storage[1],locale),values:storage[2].replace(/ full/g,"")}));
+    return parts.join(" ");
+  };
   const filtered = shortage.filter(row=>(!section || row.section===section) && (riskFilter==="all" || row.risk===riskFilter));
   const visible = filtered.slice(0,shownCount);
   const errors = accuracy.filter(row=>row.actual !== 0).map(row=>Math.abs(((row.point ?? 0)-(row.actual ?? 0))/(row.actual ?? 1))*100);
@@ -181,6 +227,7 @@ export default function ForecastExperience() {
     <div className="forecast-tabs" role="tablist">{(["outlook","accuracy","shortage"] as const).map(tab=><button key={tab} role="tab" aria-selected={view===tab} className={view===tab?"active":""} onClick={()=>setView(tab)}>{w[tab]}</button>)}</div>
     {view==="outlook"&&<>
       <section className="forecast-chart-panel"><h2>{title}</h2>{section&&<p>{section}</p>}<p>{w.historyNote}</p>
+        {!section && (live ? coverageApi.data?.items ?? [] : snapshot.cityCoverage ?? []).filter(row=>row.coverage!==null).map(row=><p key={row.interval} className="forecast-footnote">{fill(rangeCopy[locale].rangeReliability,{level:fmt(Number(row.interval)*100),coverage:fmt(Number(row.coverage)*100),months:fmt(row.months)})}</p>)}
         {live&&areaState.loading ? <p role="status">{w.loading}</p> : areaError ? <p role="alert">{w.loadFailed}</p> : unavailable ? <p>{w.noForecast}</p> : <OutlookChart history={history} outlook={outlook} selected={month?.month ?? null} onSelect={setSelected} locale={locale} title={title} text={w}/>}
         {forecastRows.some(row=>row.match_status==="approximate")&&<p className="forecast-footnote">{w.approximate}</p>}
       </section>
@@ -199,13 +246,15 @@ export default function ForecastExperience() {
       </>}
     </section>}
     {view==="shortage"&&<>
-      <div className="forecast-notice"><p>{w.shortageNote}</p></div>
+      <div className="forecast-notice"><p>{fill(w.warningDates,{start:monthName(window.from,locale),end:monthName(window.through,locale)})}</p><p>{w.context}</p></div>
+      {updated < window.origin && <p role="note">{w.olderInputs}</p>}
+      <details><summary>{detailsCopy[locale].warningHelp}</summary><p>{w.capacityHelp}</p><p>{w.unknownHelp}</p></details>
       {shortage.some(row=>row.groundwaterUnavailable)&&<p>{w.waterUnavailable}</p>}
       <div className="risk-filter" role="group" aria-label={w.filterLabel}>{(["all",...RISK_ORDER] as const).map(value=><button key={value} type="button" aria-pressed={riskFilter===value} onClick={()=>{setRiskFilter(value);setShownCount(SHOW_STEP);}}>{riskNames[value]} ({shortage.filter(row=>(!section||row.section===section)&&(value==="all"||row.risk===value)).length})</button>)}</div>
       {visible.length===0 ? <p>{w.noRisk}</p> : <ol className="shortage-list" aria-label={w.riskListLabel}>{visible.map(row=><li key={row.key} className={"shortage-item risk-"+row.risk}>
         <div className="shortage-item-head"><span className={"risk-pill risk-"+row.risk}>{riskNames[row.risk]}</span><h3>{row.section}</h3><span>{monthName(row.month,locale)} · {fill(w.ahead,{count:fmt(row.monthsAhead)})}</span></div>
         <dl className="shortage-figures"><div><dt>{w.median}</dt><dd>{fmt(row.forecast)}</dd></div><div><dt>{w.p80}</dt><dd>{fmt(row.upper80)}</dd></div><div><dt>{w.capacity}</dt><dd>{fmt(row.capacity)}</dd></div></dl>
-        <p className="shortage-reason">{row.reason}</p>
+        <p className="shortage-reason">{reasonText(row)}</p>
       </li>)}</ol>}
       <div className="shortage-more"><span>{fill(w.showing,{shown:fmt(visible.length),total:fmt(filtered.length)})}</span>{visible.length<filtered.length&&<button onClick={()=>setShownCount(n=>n+SHOW_STEP)}>{w.showMore}</button>}</div>
       <p className="forecast-footnote">{w.context}</p>

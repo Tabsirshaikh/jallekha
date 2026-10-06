@@ -48,6 +48,11 @@ def build_snapshot(root: Path = ROOT, *, snapshot_date: str | None = None) -> di
     return {
         "snapshotDate": snapshot_date or date.today().isoformat(),
         "historyEnd": city[-1]["month"],
+        "cityCoverage": json.loads(
+            (root / "data/verification/forecast_refresh.json").read_text(encoding="utf-8")
+        ).get("city_coverage", [])
+        if (root / "data/verification/forecast_refresh.json").exists()
+        else [],
         "history": [
             {"month": row["month"], "bookings": row["actual"], "basis": row["actual_basis"]}
             for row in city
@@ -55,7 +60,12 @@ def build_snapshot(root: Path = ROOT, *, snapshot_date: str | None = None) -> di
         "forecastRows": _rows(root, "forecast_table.csv"),
         "historyRows": history_rows,
         "accuracyRows": _rows(root, "forecast_accuracy.csv"),
-        "shortageRows": _rows(root, "shortage_risk.csv"),
+        "shortageRows": _rows(
+            root,
+            "shortage_outlook.csv"
+            if (root / "data/derived/shortage_outlook.csv").exists()
+            else "shortage_risk.csv",
+        ),
         "notes": {
             "forecast": "Published model output; intervals use rolling-origin residuals.",
             "accuracy": "Retrospective rolling-origin estimates, not previously issued forecasts.",
