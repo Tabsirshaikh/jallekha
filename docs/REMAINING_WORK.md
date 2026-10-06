@@ -10,13 +10,13 @@ to-do list.
 |---|---|---|---|---|
 | 11 | Ward report cards with real deliveries, debt and schedule | F20 | **done** (`feat/f20-report-cards`) | — |
 | 12 | Gradient-boosting forecast | F5 | **done** (`feat/f5-gbm-forecast`); adoption is the owner's rule | — |
-| 13 | Voice error rate for Telugu and Urdu | F14 | us, after recordings | a small labelled voice set |
+| 13 | Voice error rate for Telugu and Urdu | F14 | **dropped** by owner (2026-10-06) | a small labelled voice set |
 | 14 | Reproduce the duplicate calibration (71% / 88%) | F13 | **done** (`feat/f13-dedup-calibration`); text-similarity test skipped by owner decision | — |
 | 15 | Hospital and school data (D9) in the ward table | F1, F8, F10 | **done** (`feat/d9-facilities`) | — |
 | 16 | Weather data (D8) | F5 | **done** (with item 12) | — |
 | 17 | Groundwater data (D7) | F5, F6 | **done** (`feat/d7-groundwater`, Open Data Telangana, no NWDP account needed) | — |
 | 18 | Degraded-signal replay for the T9 threshold | F17 | **done** (`feat/t9-degraded-replay`); the 90% rule is the owner's | — |
-| 19 | Seven owner decisions | several | owner | owner |
+| 19 | Seven owner decisions | several | owner | 2 and 4 **done** (`feat/item19-trips-protocol`); 6, 7 dropped; 1, 3 (Q1), 5 open; Q2 source found |
 | 20 | Decide the stack (or edit the doc) | all | owner, then us | decision |
 | 21 | Fix demo step 5 in the solution doc | docs | **done** (`docs/demo-step5-2025`) | — |
 | 22 | "Done-when vs doc promise" column in `features.csv` | tracker | **done** (`docs/item-22-promise-column`) | — |
@@ -82,7 +82,7 @@ sample number. Tests at service, API and screen level; `python tasks.py test` an
 
 ### 12. Better F5 forecast: gradient boosting (F5, T2)
 
-**Status: done** on `feat/f5-gbm-forecast`. Built with scikit-learn 1.9.1 (`models` extra) and the D8 weather data. It beats seasonal naive on both measures on the portal history (MAPE 23.21% vs 26.28%, WAPE 37.04% vs 47.67%) and is slightly worse on the short S2 files, so under the current OPEN rule the baseline stays published. See `docs/LIMITATIONS.md` F5. The text below is the plan it followed.
+**Status: done** on `feat/f5-gbm-forecast`. Built with scikit-learn 1.9.1 (`models` extra) and the D8 weather data. It beats seasonal naive on both measures on the portal history (MAPE 23.21% vs 26.28%, WAPE 37.04% vs 47.67%) and is slightly worse on the short S2 files. Research follow-up A then set the selection rule, and gradient boosting is now the published model. See `docs/LIMITATIONS.md` F5. The text below is the plan it followed.
 
 **What it is.** A second forecasting model: one gradient-boosting model pooled over all sections,
 using month, last year's value (lag 12), trend, weather (D8) and groundwater depth (D7), as the
@@ -232,15 +232,17 @@ config uses the chosen threshold (basis DERIVED), or the result says why no thre
 
 ### 19. Seven decisions from the owner
 
+**Status (2026-10-06):** trips per tanker per day set to 9 and the forecast protocol recorded as confirmed (`feat/item19-trips-protocol`). Native-speaker review and the release tag are dropped by owner decision. Q1: searched again, still no public list with coordinates. Q2: a machine-readable source exists (Open Data Telangana, "Telangana Irrigation & CAD Department - Daily Reservoir Storage Levels" (67 monthly files, Jan 2021 - Jul 2026, 82 reservoirs incl. Nagarjuna Sagar, Singur, Sri Pada Yellampally, Akkampalli, Srisailam; not Osmansagar, Himayatsagar, Manjira)); adding it to F6's reasons is about half a day. Still open: GitHub billing, Chronos-2.
+
 | Decision | Why it is needed | What it unblocks |
 |---|---|---|
 | Fix the GitHub billing | Actions has not run since early October 2026 ("recent account payments have failed"); everything was checked locally | green CI, release tag |
-| Trips per tanker per day | the F5 capacity planner refuses to run without it; F6 uses an assumed 9 | F5 capacity check, F6 |
+| ~~Trips per tanker per day~~ **done: 9** (DERIVED, 2026 news; owner confirmed 2026-10-06) | the F5 capacity planner now runs (`data/derived/forecast_capacity.csv`) | F5 capacity check, F6 |
 | Q1 filling points, Q2 reservoir data | both ON_HOLD | F9 positions, F6 reservoir signal |
-| Confirm the forecast protocol behind 21.9% / 35.1% | it was rebuilt by reproduction, not from the lost review file | quoting the numbers on slides |
+| ~~Confirm the forecast protocol behind 21.9% / 35.1%~~ **done**: confirmed by Padmaja on 2026-10-03 (`config/forecast.py`); docs updated 2026-10-06 | it was rebuilt by reproduction, not from the lost review file | quoting the numbers on slides |
 | Is Chronos-2 allowed under the no-LLM rule? | doc lists it as a backtest-only candidate | item 12 comparison |
-| Native speakers for Telugu, Urdu and Hindi | translations are drafts; review pack in `docs/translation_review/` | removing the draft notice |
-| Version for the release tag (X1) | waits on green CI | release |
+| ~~Native speakers for Telugu, Urdu and Hindi~~ dropped by owner (2026-10-06) | translations are drafts; review pack in `docs/translation_review/` | removing the draft notice |
+| ~~Version for the release tag (X1)~~ dropped by owner (2026-10-06) | waits on green CI | release |
 
 ### 20. Decide the stack
 
