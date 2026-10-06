@@ -7,13 +7,15 @@ import { LocaleProvider } from "./i18n";
 import { errorFetch, liveFetch } from "./test/evidenceFixtures";
 
 function renderScreen() {
-  return render(
+  const view = render(
     <LocaleProvider>
       <AuthProvider>
         <EvidenceExperience />
       </AuthProvider>
     </LocaleProvider>,
   );
+  fireEvent.click(screen.getByRole("tab", { name: "Wards" })); // the screen opens on the sections map
+  return view;
 }
 
 describe("EvidenceExperience", () => {

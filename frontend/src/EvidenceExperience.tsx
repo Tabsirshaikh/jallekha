@@ -7,6 +7,7 @@ import evidence from "./data/u5Evidence.json";
 import geometry from "./data/u5Geometry.json";
 import savedSections from "./data/u5SectionChecks.json";
 import SectionOutcomeForm from "./SectionOutcomeForm";
+import SectionMap from "./SectionMap";
 import "./EvidenceExperience.css";
 
 type Tab = "need" | "bookings" | "checks";
@@ -74,6 +75,7 @@ export default function EvidenceExperience() {
   const pf = useMemo(() => new Intl.NumberFormat(locale === "ur" ? "ur-PK" : locale, { style: "percent", maximumFractionDigits: 0 }), [locale]);
   const fmt = (n: number) => nf.format(n);
   const pct = (n: number | null | undefined) => (n === null || n === undefined ? "—" : pf.format(n));
+  const [unit, setUnit] = useState<"sections" | "wards">("sections");
   const [tab, setTab] = useState<Tab>("need");
   const [layer, setLayer] = useState<Layer>("rising");
   const [query, setQuery] = useState("");
@@ -177,8 +179,16 @@ export default function EvidenceExperience() {
   const rankText = (v: number | null) => v === null ? "—" : tab === "bookings" ? fmt(Math.round(v)) : shown === "need" ? v.toFixed(2) : shown === "rising" ? fill(w.signs, { n: v }) : pct(v);
   const layerName = tab === "bookings" ? w.bookingsLayer : shown === "rising" ? w.layerRising : shown === "wad" ? w.layerWad : shown === "cad" ? w.layerCad : shown === "need" ? w.layerNeed : w.layerGrowth;
 
+  const unitToggle = (
+    <div className="atlas-tabs" role="tablist" aria-label="Map by">
+      {(["sections", "wards"] as const).map((u) => <button key={u} role="tab" aria-selected={unit === u} className={unit === u ? "active" : ""} onClick={() => setUnit(u)}>{u === "sections" ? "Sections" : "Wards"}</button>)}
+    </div>
+  );
+  if (unit === "sections") return <div>{unitToggle}<SectionMap /></div>;
+
   return (
     <div className="atlas-page">
+      {unitToggle}
       <header className="atlas-head">
         <div><h1>{w.title}</h1><p className="muted">{need ? w.intro : w.signIn}</p></div>
         <div className="atlas-search">
