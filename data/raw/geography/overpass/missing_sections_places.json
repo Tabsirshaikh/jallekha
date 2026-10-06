@@ -1,0 +1,463 @@
+{
+ "retrieved_at_utc": "2026-10-06T20:37:46+00:00",
+ "version": 0.6,
+ "generator": "Overpass API 0.7.62.11 87bfad18",
+ "osm3s": {
+  "timestamp_osm_base": "2026-10-06T20:40:12Z",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+ },
+ "elements": [
+  {
+   "type": "node",
+   "id": 245640121,
+   "lat": 17.2611444,
+   "lon": 78.3931943,
+   "tags": {
+    "name": "Shamshabad",
+    "name:ar": "شمس آباد",
+    "name:fa": "شمس آباد",
+    "name:ml": "ഷംഷാബാദ്",
+    "name:te": "శంషాబాద్",
+    "place": "village",
+    "population": "5000",
+    "postal_code": "509218",
+    "wikidata": "Q11105829",
+    "wikipedia": "en:Shamshabad"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2002214372,
+   "lat": 17.5410548,
+   "lon": 78.3635484,
+   "tags": {
+    "name": "Bachupally",
+    "name:te": "బాచుపల్లి",
+    "place": "suburb",
+    "wikidata": "Q4838923"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2921505704,
+   "lat": 17.499603,
+   "lon": 78.3397686,
+   "tags": {
+    "name": "Deepthisree Nagar",
+    "name:te": "దీప్తిశ్రీ నగర్",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2921528745,
+   "lat": 17.5020418,
+   "lon": 78.4260747,
+   "tags": {
+    "name": "Jagadgirigutta",
+    "name:te": "జగద్గిరిగుట్ట",
+    "place": "suburb"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2923174834,
+   "lat": 17.5022292,
+   "lon": 78.5088584,
+   "tags": {
+    "name": "Alwal",
+    "name:te": "ఆల్వాల్",
+    "place": "suburb",
+    "wikidata": "Q2726158"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2923174840,
+   "lat": 17.5083672,
+   "lon": 78.4958715,
+   "tags": {
+    "name": "Father Balaiah Nagar",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2923196503,
+   "lat": 17.5030543,
+   "lon": 78.5407976,
+   "tags": {
+    "name": "Yapral",
+    "name:te": "యాప్రాల్",
+    "place": "suburb",
+    "wikidata": "Q8049130"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2923222379,
+   "lat": 17.4835578,
+   "lon": 78.3213131,
+   "tags": {
+    "name": "Adarsh Nagar",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2923222382,
+   "lat": 17.4773141,
+   "lon": 78.3258464,
+   "tags": {
+    "name": "Doyens Township",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2923247798,
+   "lat": 17.4964141,
+   "lon": 78.3773785,
+   "tags": {
+    "name": "Bhagat Singh Nagar",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2924213333,
+   "lat": 17.4959379,
+   "lon": 78.4450488,
+   "tags": {
+    "name": "Bhagat Singh Nagar",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2926905012,
+   "lat": 17.4599973,
+   "lon": 78.5340922,
+   "tags": {
+    "name": "Chanakyapuri",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2929579786,
+   "lat": 17.4524567,
+   "lon": 78.5352209,
+   "tags": {
+    "name": "Maruti Nagar",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2935016444,
+   "lat": 17.4137645,
+   "lon": 78.5679641,
+   "tags": {
+    "name": "Adarsh Nagar",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2935016456,
+   "lat": 17.4293838,
+   "lon": 78.5822881,
+   "tags": {
+    "name": "Maruthi Nagar",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2935023012,
+   "lat": 17.4058387,
+   "lon": 78.4711355,
+   "tags": {
+    "name": "Adarsh Nagar",
+    "name:te": "ఆదర్శ్ నగర్",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2942962635,
+   "lat": 17.3945004,
+   "lon": 78.5925253,
+   "tags": {
+    "name": "Peerzadiguda",
+    "name:fa": "پیرزادی گودا",
+    "name:te": "పీర్జాదిగూడ",
+    "place": "suburb"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2942982517,
+   "lat": 17.3821968,
+   "lon": 78.4271855,
+   "tags": {
+    "name": "Maruti Nagar",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2948197389,
+   "lat": 17.3687913,
+   "lon": 78.5137788,
+   "tags": {
+    "name": "Asmangadh",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2948197403,
+   "lat": 17.3721658,
+   "lon": 78.5385776,
+   "tags": {
+    "name": "Maruti Nagar",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2948275423,
+   "lat": 17.3518433,
+   "lon": 78.4603915,
+   "tags": {
+    "name": "Chandulal Baradari",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2948276359,
+   "lat": 17.3586277,
+   "lon": 78.4858046,
+   "tags": {
+    "name": "Yakutpura",
+    "name:fa": "یاقوت پورہ",
+    "name:ml": "യാകുത്പുര",
+    "name:te": "యాకుత్పురా",
+    "place": "suburb",
+    "wikidata": "Q8047259",
+    "wikipedia": "en:Yakutpura"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2948307779,
+   "lat": 17.3606758,
+   "lon": 78.5601419,
+   "tags": {
+    "name": "Chanakyapuri",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2948309787,
+   "lat": 17.3443667,
+   "lon": 78.5087764,
+   "tags": {
+    "name": "Maruti Nagar",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2948309803,
+   "lat": 17.3515414,
+   "lon": 78.5111106,
+   "tags": {
+    "name": "Vinay Nagar",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2949046150,
+   "lat": 17.3221808,
+   "lon": 78.4294273,
+   "tags": {
+    "name": "Adarsh Nagar",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4309199246,
+   "lat": 17.2090428,
+   "lon": 78.4767822,
+   "tags": {
+    "name": "Tukkuguda",
+    "name:te": "తుక్కుగూడ",
+    "place": "village",
+    "wikidata": "Q7851850"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4315376282,
+   "lat": 17.5452261,
+   "lon": 78.2428887,
+   "tags": {
+    "name": "Pocharam",
+    "place": "village"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4487889903,
+   "lat": 17.3138317,
+   "lon": 78.5779533,
+   "tags": {
+    "name": "Maruthi Nagar",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5390598299,
+   "lat": 17.4891828,
+   "lon": 78.6017275,
+   "tags": {
+    "name": "Nagaram",
+    "name:te": "నగరం",
+    "place": "suburb",
+    "wikidata": "Q6958534",
+    "wikipedia": "en:Nagaram, Medchal–Malkajgiri district"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5390598303,
+   "lat": 17.4329342,
+   "lon": 78.6066091,
+   "tags": {
+    "name": "Chengicherla",
+    "name:te": "చెంగిచెర్ల",
+    "place": "village",
+    "wikidata": "Q5091358"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5390598311,
+   "lat": 17.436614,
+   "lon": 78.6422235,
+   "tags": {
+    "name": "Pocharam",
+    "name:te": "పోచారం",
+    "place": "village"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5390598591,
+   "lat": 17.5921885,
+   "lon": 78.698051,
+   "tags": {
+    "name": "Thumkunta",
+    "place": "village"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5395682090,
+   "lat": 17.1766905,
+   "lon": 78.6024034,
+   "tags": {
+    "name": "Pocharam",
+    "name:te": "పోచారం",
+    "place": "village",
+    "wikidata": "Q7206317"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5605051515,
+   "lat": 17.5088742,
+   "lon": 78.3195355,
+   "tags": {
+    "name": "Maruthi Nagar",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6163803095,
+   "lat": 17.6601058,
+   "lon": 78.2816258,
+   "tags": {
+    "name": "Nagaram",
+    "place": "village"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6265816389,
+   "lat": 17.2983155,
+   "lon": 78.537303,
+   "tags": {
+    "name": "Maruti Nagar",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6854523495,
+   "lat": 17.5146989,
+   "lon": 78.4473499,
+   "tags": {
+    "name": "Shapur Nagar",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "node",
+   "id": 7175448859,
+   "lat": 17.5018763,
+   "lon": 78.5090947,
+   "tags": {
+    "name": "alwal",
+    "place": "neighbourhood"
+   }
+  },
+  {
+   "type": "way",
+   "id": 731848146,
+   "center": {
+    "lat": 17.516464,
+    "lon": 78.4447031
+   },
+   "nodes": [
+    5311829467,
+    3598284878,
+    1054044521,
+    6853291872,
+    6853291873,
+    7001306704,
+    3598287085,
+    6853291875,
+    9903766116,
+    6853291876,
+    9903766110,
+    9903766109,
+    5311829467
+   ],
+   "tags": {
+    "name": "Shapur Nagar",
+    "name:te": "షాపూర్ నగర్",
+    "place": "village"
+   }
+  }
+ ]
+}
