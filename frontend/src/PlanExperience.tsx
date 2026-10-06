@@ -1,4 +1,5 @@
 import PlanMap from "./PlanMap";
+import PlanRoutes from "./PlanRoutes";
 import SectionPlanForm from "./SectionPlanForm";
 import { useMemo, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { ApiError, apiFetch } from "./api";
@@ -311,6 +312,8 @@ function LivePlans({ t, locale, notice, plans, reloadList, userId }: { t: Copy; 
       </section>
 
       <PlanMap plan={plan} />
+
+      {plan.source === "section_month" && <PlanRoutes key={plan.id} planId={plan.id} />}
 
       {weighted && <section className="plan-panel plan-gains" aria-labelledby="plan-gains-title"><div className="plan-panel-title"><div><p className="eyebrow">{t.weightsTitle}</p><h2 id="plan-gains-title">{t.gainsTitle}</h2></div><span className="source-tag">{tag}</span></div>
         <p className="plan-threshold">{fill(t.gainsIntro, { day: plan.day })}</p>

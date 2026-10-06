@@ -15,7 +15,9 @@ turns them into named tankers with times:
   priority loads leave in the first wave and no tanker idles while loads wait), if the whole trip
   fits in the working day; a load that cannot be fitted is listed, never dropped silently.
 * **Road legs**: OSRM car legs (cached, DERIVED, free-flow so optimistic) where the section was
-  placed when they were built; the straight line x 1.35 at 25 km/h (ESTIMATE) otherwise.
+  placed when they were built; the straight line x 1.35 at 25 km/h (ESTIMATE) otherwise. Each
+  way adds the drive inside the section to the household (A8, about 1 km): a station that
+  stands on a section's centre point is not a zero-kilometre trip.
 
 Pure function over the plan and files; no clock, no randomness.
 """
@@ -84,26 +86,46 @@ def _haversine(a: tuple[float, float], b: tuple[float, float]) -> float:
 
 
 def leg(
-    root: Path, station: str, section: str | None, lat: float | None, lng: float | None
+    root: Path,
+    station: str,
+    section: str | None,
+    lat: float | None,
+    lng: float | None,
+    access: bool = True,
 ) -> tuple[float, float, float, float, str]:
-    """(km there, minutes there, km back, minutes back, basis) between a station and a place."""
+    """(km there, minutes there, km back, minutes back, basis) between a station and a place.
+
+    A section is an area, not a point, so unless the place is one address (`access` False) each
+    way adds the drive inside the section to the household: `section_access_km` x road factor
+    (A8, 0.732 km x 1.35 each way, DERIVED), at the average speed."""
+    inside_km = SANDBOX_CONFIG.section_access_km * ALLOCATION_CONFIG.road_factor if access else 0.0
+    inside_min = inside_km / ALLOCATION_CONFIG.avg_speed_kmph * 60
     known = _osrm(str(root)).get((section or "", station))
     if known is not None:
-        return (*known, "OSRM")
+        out_km, out_min, back_km, back_min = known
+        return (
+            out_km + inside_km,
+            out_min + inside_min,
+            back_km + inside_km,
+            back_min + inside_min,
+            "OSRM",
+        )
     here = _stations(str(root))[station]
     if lat is not None and lng is not None:
-        km = _haversine(here, (lat, lng)) * ALLOCATION_CONFIG.road_factor
+        km = _haversine(here, (lat, lng)) * ALLOCATION_CONFIG.road_factor + inside_km
         minutes = km / ALLOCATION_CONFIG.avg_speed_kmph * 60
         return km, minutes, km, minutes, "ESTIMATE"
     # No location at all: the typical leg of this station.
     table = [v for (s, st), v in _osrm(str(root)).items() if st == station]
     if table:
         return (
-            statistics.median(v[0] for v in table), statistics.median(v[1] for v in table),
-            statistics.median(v[2] for v in table), statistics.median(v[3] for v in table),
+            statistics.median(v[0] for v in table) + inside_km,
+            statistics.median(v[1] for v in table) + inside_min,
+            statistics.median(v[2] for v in table) + inside_km,
+            statistics.median(v[3] for v in table) + inside_min,
             "ESTIMATE",
-        )  # fmt: skip
-    return 5.0, 12.0, 5.0, 12.0, "ESTIMATE"
+        )
+    return 5.0 + inside_km, 12.0 + inside_min, 5.0 + inside_km, 12.0 + inside_min, "ESTIMATE"
 
 
 def hhmm(minute: float) -> str:
@@ -239,8 +261,8 @@ def build_routes(
             kmo, mino, kmb, minb, basis = leg(root, station, load.name if load.kind != "critical"
                                               else load.group.removeprefix(SECTION_PREFIX),
                                               load.lat, load.lng)  # fmt: skip
-            if load.kind == "critical" and load.lat is not None:
-                kmo, mino, kmb, minb, basis = leg(root, station, None, load.lat, load.lng)
+            if load.kind == "critical" and load.lat is not None:  # one address, no drive inside
+                kmo, mino, kmb, minb, basis = leg(root, station, None, load.lat, load.lng, False)
             duration = fill + mino + service + minb
             if not free or free[0][0] + duration > day_end:
                 unscheduled.append(
@@ -328,7 +350,7 @@ def build_routes(
             "station; loads go in the plan's priority order to the tanker free first",
             "legs": "DERIVED where OSRM road legs were built (free-flow car, no traffic), "
             "ESTIMATE (straight line x 1.35 at 25 km/h) for sections placed after review and "
-            "for facilities",
+            "for facilities, plus about 1 km each way inside the section to the household (A8)",
             "times": f"Fill {fill} min, unload {service} min (ASSUMED); working day "
             f"{hhmm(day_start)}-{hhmm(day_end)} (two shifts, ASSUMED)",
             "tankers": "Tankers per station follow its trips of the day; the fleet is 1,150 "

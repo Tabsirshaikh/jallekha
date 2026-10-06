@@ -187,3 +187,16 @@ or with outages or section debts, gets a short hash in its id (`section-<day>-<c
   section's area. Accounts are `section:<name>` (`unit: "section"` in the account view) and the next
   plan by section reads them (a section in debt gets more turns).
 
+### Tanker routes of a plan by section: `GET /plans/{plan_id}/routes[?station=ST12]` (feat/route-planner)
+Officer only; 409 for a plan that is not by section, 404 for an unknown station. A booking is one
+tanker load, so a trip is station -> place -> station and a tanker's day is a list of timed round
+trips. Answer: `summary` (tankers on the road of the fleet of 1,150, trips, special trips, km,
+sections reached, latest finish, trips per tanker, loads that do not fit the day, legs that are
+estimates), `stations` (tankers, trips, km, finish, unscheduled per station), `tankers` (only for
+the requested `station`: id, trips with times leave/arrive/unloaded/back, kind booked | scheduled |
+outage | critical, km, leg basis OSRM | ESTIMATE), `unscheduled` (loads that did not fit),
+`basis`. Loads leave in priority order (critical facilities, cut sections, scheduled supply, then
+the booked queue as the fair queue served it) on the station's tanker that is free first; a load
+a neighbouring station lent its trip for is driven from the lender; scheduled-supply and outage
+loads go to the nearest station with a spare special trip. Computed from the plan, never stored.
+
