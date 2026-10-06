@@ -25,7 +25,14 @@ fetch successive pages until `total` is reached.
 `python scripts/forecast/refresh_forecast.py` fetches only new portal months, checks the accepted
 reservoir catalogue, trains through the latest published month, and rewrites forecast, capacity,
 history, accuracy, crosswalk, evaluation and shortage outputs. Add `--offline` to reproduce from
-committed raw bytes. Then `python scripts/frontend/build_u6_snapshot.py` rebuilds the UI fallback.
+committed raw bytes. The refresh also rebuilds the UI fallback automatically.
+
+After changes to A8 station assignments or capacities, run
+`python scripts/forecast/refresh_forecast.py --capacity-only`. It updates forecast capacities,
+city capacity totals, shortage reasons/ratios and `u6Forecast.json` together from the existing
+forecast and conservative crosswalk. It does not fetch data, retrain, change predicted bookings
+or recalculate intervals. Section capacity remains the documented ASSUMED A8 split. Run the
+shortage reproduction and current-input capacity tests after any A8 rebuild.
 Raw reservoir provenance is in `data/verification/reservoir_manifest.csv`; the global manifest
 is unchanged. Legacy `run_backtest.py --out-dir ...` remains a historical protocol comparator,
 not the publishing command.

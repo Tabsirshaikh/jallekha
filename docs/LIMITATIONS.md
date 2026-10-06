@@ -176,6 +176,14 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 
 ### F5 Surge Forecast and Capacity Planner (T2)
 
+- **Capacity synchronization repair (2026-10-07, local `fix/forecast-capacity-sync`):** routing
+  updates changed A8 home stations while published capacities remained stale. Rebuilt 168
+  section/month forecast capacities, 42 shortage rows and U6's saved snapshot using the current
+  split. Predictions, intervals and individual risk categories are unchanged; capacities retain
+  ASSUMED bases. `refresh_forecast.py --capacity-only` synchronizes these outputs without fetching
+  or fitting; full monthly refresh now updates the snapshot too. Regression checks compare
+  every published section capacity with current station inputs and verify shortage reproduction.
+
 - **Local refresh (`feat/f5-forecast-refresh`, 2026-10-06, approval pending) supersedes the stale published GBM below.** Exact city totals now train through Aug 2026; the twelve forecast months are Sep 2026-Aug 2027. 31 shared origins include 2026, with the same research-A rule (both city MAPE and matched-section WAPE plus one-sided HLN DM at 5%). **No candidate passes; seasonal naive is retained.** Its city MAPE is 31.16% and section WAPE 46.57%. New fixed candidates are median year-on-year level corrections over 6/12 months, recency-weighted seasonal Ridge, a known-calendar summer interaction, and origin-lagged groundwater/reservoir context; no tuning grid was used. This matched cohort differs from the old 221-section experiment, so its percentages are not directly comparable with that run.
 
 | Candidate | City MAPE | Matched-section WAPE | HLN DM one-sided p | Rule |

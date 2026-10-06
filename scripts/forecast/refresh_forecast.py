@@ -1,7 +1,8 @@
 """One-command F5/F6 monthly refresh (fetch latest portal, train, rewrite all artifacts).
 
-Usage: python scripts/forecast/refresh_forecast.py [--offline]
+Usage: python scripts/forecast/refresh_forecast.py [--offline | --capacity-only]
 Offline repeats a build from committed raw files without network access.
+Capacity-only refreshes capacities, shortage and U6's saved view without fitting a model.
 """
 
 from __future__ import annotations
@@ -9,6 +10,7 @@ from __future__ import annotations
 import argparse
 import calendar
 import csv
+import importlib.util
 import json
 import math
 import os
@@ -87,11 +89,10 @@ def source_signals():
     return signals, reservoir_rows
 
 
-def build_shortage(table, matches, reservoirs):
-    origin = table[0]["updated_through"]
-    lookup = {r["section"]: r for r in matches}
+def transferred_capacities(matches):
+    """Use the current A8 home-station split for uniquely matched current sections."""
     caps = shortage.load_capacity(ROOT)
-    transferred_caps = {
+    return {
         r["section"]: shortage.SectionCapacity(
             r["section"],
             caps[r["old_section"]].trips_per_day,
@@ -100,6 +101,80 @@ def build_shortage(table, matches, reservoirs):
         for r in matches
         if r["old_section"] in caps
     }
+
+
+def sync_capacity():
+    """Rebuild capacity-dependent outputs together without fetching or fitting a model."""
+
+    def read(name):
+        with (ROOT / "data/derived" / name).open(encoding="utf-8", newline="") as handle:
+            return list(csv.DictReader(handle))
+
+    table = read("forecast_table.csv")
+    matches = read("forecast_section_crosswalk.csv")
+    caps = transferred_capacities(matches)
+    for row in table:
+        days = calendar.monthrange(*map(int, row["month"].split("-")))[1]
+        if row["level"] == "city":
+            row["capacity_trips"] = CFG.fleet_tankers_2026 * CFG.trips_per_tanker_per_day * days
+            row["capacity_trips_basis"] = "DERIVED: configured fleet x daily trips x days"
+        else:
+            cap = caps.get(row["section"])
+            row["capacity_trips"] = cap.trips_per_day * days if cap else None
+            row["capacity_trips_basis"] = (
+                cap.basis if cap else "UNAVAILABLE: no uniquely matched capacity"
+            )
+    # Preserve the exact strings of predictions and intervals; only capacity changes.
+    write("forecast_table.csv", table)
+    write(
+        "forecast_capacity.csv",
+        [
+            {
+                "month": r["month"],
+                "trips_needed": r["point"],
+                "trips_needed_basis": r["point_basis"],
+                "capacity_trips": r["capacity_trips"],
+                "capacity_basis": r["capacity_trips_basis"],
+                "shortfall_trips": max(0, float(r["point"]) - r["capacity_trips"])
+                if r["point"]
+                else None,
+                "fleet_basis": f"ASSUMED: configured {CFG.fleet_tankers_2026} tanker fleet",
+            }
+            for r in table
+            if r["level"] == "city"
+        ],
+    )
+    numeric = {"point", "lower_80", "upper_80", "lower_90", "upper_90"}
+    risk_input = [
+        {k: None if v == "" else float(v) if k in numeric else v for k, v in r.items()}
+        for r in table
+    ]
+    reservoirs = (
+        read("reservoir_monthly.csv")
+        if (ROOT / "data/derived/reservoir_monthly.csv").exists()
+        else []
+    )
+    for row in reservoirs:
+        row["storage_share"] = float(row["storage_share"])
+    write("shortage_risk.csv", build_shortage(risk_input, matches, reservoirs))
+    snapshot_script = Path(__file__).resolve().parents[1] / "frontend/build_u6_snapshot.py"
+    spec = importlib.util.spec_from_file_location("capacity_u6_snapshot", snapshot_script)
+    assert spec and spec.loader
+    snapshot = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(snapshot)
+    output = ROOT / "frontend/src/data/u6Forecast.json"
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(
+        json.dumps(snapshot.build_snapshot(ROOT), ensure_ascii=False, separators=(",", ":")) + "\n",
+        encoding="utf-8",
+    )
+    print("Updated forecast capacities, shortage warnings and U6 snapshot without retraining.")
+
+
+def build_shortage(table, matches, reservoirs):
+    origin = table[0]["updated_through"]
+    lookup = {r["section"]: r for r in matches}
+    transferred_caps = transferred_capacities(matches)
     groundwater = shortage.load_groundwater(
         ROOT / "data/derived/groundwater/section_anomaly.csv", origin
     )
@@ -214,7 +289,18 @@ def build_shortage(table, matches, reservoirs):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--offline", action="store_true")
+    parser.add_argument(
+        "--capacity-only",
+        action="store_true",
+        help=(
+            "Rebuild capacities, shortage and U6 snapshot from the published forecast; "
+            "no fetch or retraining"
+        ),
+    )
     args = parser.parse_args(argv)
+    if args.capacity_only:
+        sync_capacity()
+        return 0
     if not args.offline:
         subprocess.run(
             [sys.executable, str(ROOT / "scripts/data/fetch_hmwssb_portal.py"), "--new-only"],
@@ -379,16 +465,7 @@ def main(argv=None):
                 if section not in matched.values[origin]:
                     continue
                 errors[section].append(abs(matched.values[origin].get(section, 0) - value))
-    caps = shortage.load_capacity(ROOT)
-    transferred_caps = {
-        r["section"]: shortage.SectionCapacity(
-            r["section"],
-            caps[r["old_section"]].trips_per_day,
-            caps[r["old_section"]].basis + "; conservative recut name transfer",
-        )
-        for r in matches
-        if r["old_section"] in caps
-    }
+    transferred_caps = transferred_capacities(matches)
     table = []
     city_widths, _ = refresh.city_intervals(backtest, selected)
     for h in range(1, CFG.horizon_months + 1):
@@ -612,6 +689,7 @@ def main(argv=None):
         json.dumps(report, indent=2) + "\n", encoding="utf-8"
     )
     print(json.dumps(report, indent=2))
+    sync_capacity()
     return 0
 
 

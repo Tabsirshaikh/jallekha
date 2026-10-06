@@ -1,5 +1,20 @@
 # Branch worklog
 
+## `fix/forecast-capacity-sync` — synchronized capacities, 2026-10-07
+
+- Isolated worktree `../jallekha-capacity-sync`, based on fetched main `6b6bff1`; no edits to
+  the other session's checkout. TDD: current-source capacity assertion, new CLI test and existing
+  shortage reproduction test failed first; all now pass.
+- Routing had reassigned home stations without regenerating F5/F6 capacities. Added a capacity-only
+  refresh and shared section-capacity transfer; full refresh also updates U6 snapshot automatically.
+- Rebuilt 168 forecast section/month capacities, 42 shortage rows and saved screen data. Ahmed
+  Nagar September capacity 112.1 -> 97.7 trips (ASSUMED split). Predictions and ranges preserved;
+  all risk labels unchanged. Test checks no fetch/fitting, cross-output agreement and repeatability.
+- Affected backend tests pass; full test command exited zero, including frontend, translations
+  and all data verifiers. Fixed a CLI help line-length lint issue without changing its text;
+  full lint passes. No API/UI string changes, source-manifest changes or new model fitting.
+  Owner subsequently authorized committing and pushing this fix branch; no PR/merge.
+
 This file records what each task branch discovered and changed. It lets a teammate understand, review, reproduce, or correct the work without relying on chat history.
 
 ## Required workflow

@@ -1,5 +1,11 @@
 # JalLekha 2.0: remaining work (items 11 to 22)
 
+**Capacity artifact repair (2026-10-07, local):** `fix/forecast-capacity-sync` synchronizes
+forecast capacities, shortage warnings and U6 snapshot after station-assignment changes.
+Run `.venv/Scripts/python.exe scripts/forecast/refresh_forecast.py --capacity-only` after
+rebuilding A8 station inputs. It preserves the published predictions and does not retrain.
+This fixes artifact consistency; forecast accuracy and approximate capacities retain F5/F6 limits.
+
 Status on `main` as of 2026-10-05, after PR #66. Items 1 to 10 of the 22-item list are done
 (PRs #64, #65) and so are the four follow-up fixes (PR #66). This file lists what is left: for
 each item, what it is, where it stands in the code today, what blocks it, how to do it, and when
@@ -426,4 +432,3 @@ execution of the documented refresh command. No newly tested candidate passed th
 - **Outage & Pressure Dashboards:** Outage Dashboard is behind internal ERP login (no public data); Water Pressure Dashboard server (`65.2.47.226`) is unreachable/timed out.
 - **RTI application drafted:** `docs/handoff/RTI_SUPPLY_HOURS.md` requests scheduled supply timings, SCADA daily supply hours/flow (2024–2026), and GIS boundary shapefiles.
 - **Tests & Verifier:** `backend/tests/test_d16_supply_timings.py` (7 tests pass) and `scripts/data/verify_supply_timings.py` (`data/verification/supply_timings_checks.json`).
-
