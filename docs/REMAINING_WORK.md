@@ -1,5 +1,15 @@
 # JalLekha 2.0: remaining work (items 11 to 22)
 
+**F5/F6 warning follow-up, 2026-10-07 (`fix/forecast-capacity-sync`):** fixed current-date
+warning windows, misleading unmatched-history reasons, hidden known capacity/context,
+empty-cohort GBM crash and missing-observation-as-zero GBM training. Conservative name
+cleanup recovers 14 matches (77 approximate/196 unmatched). Rebuilt backtests select local
+weather GBM at city error 27.72% versus baseline 31.16% on the same 31 origins. Recent city
+ranges measure 76.19%/90.48% coverage, still exploratory. Groundwater, reservoir and their
+joint candidate were evaluated; they do not displace the selected model and remain F6 context.
+Still needed: authoritative section identities/boundaries, verified current capacities,
+independent future range checks and field outcomes. These cannot be replaced by invented values.
+
 **Capacity artifact repair (2026-10-07, local):** `fix/forecast-capacity-sync` synchronizes
 forecast capacities, shortage warnings and U6 snapshot after station-assignment changes.
 Run `.venv/Scripts/python.exe scripts/forecast/refresh_forecast.py --capacity-only` after

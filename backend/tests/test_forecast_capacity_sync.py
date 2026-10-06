@@ -44,6 +44,22 @@ def test_published_section_capacities_match_current_station_assignments():
             ]
 
 
+def test_missing_prediction_keeps_known_capacity_and_explains_the_actual_gap():
+    matches = {r["section"]: r for r in rows(ROOT, "forecast_section_crosswalk.csv")}
+    table = {(r["section"], r["month"]): r for r in rows(ROOT, "forecast_table.csv")}
+    for row in rows(ROOT, "shortage_risk.csv"):
+        if row["forecast_bookings"] or not matches[row["section"]]["old_section"]:
+            continue
+        assert "no unique historical section match" not in row["reason"]
+        assert "seasonal history" in row["reason"]
+        source = table[row["section"], row["month"]]
+        if source["capacity_trips"]:
+            assert float(row["capacity_trips"]) == pytest.approx(
+                float(source["capacity_trips"]), abs=0.05
+            )
+        assert row["risk"] == "unknown"
+
+
 def test_capacity_only_refresh_preserves_predictions_and_updates_all_outputs(tmp_path, monkeypatch):
     derived = tmp_path / "data/derived"
     derived.mkdir(parents=True)
@@ -91,7 +107,7 @@ def test_capacity_only_refresh_preserves_predictions_and_updates_all_outputs(tmp
             float(source["capacity_trips"]) if source["capacity_trips"] else None
         )
     for source, saved in zip(
-        rows(tmp_path, "shortage_risk.csv"), snapshot["shortageRows"], strict=True
+        rows(tmp_path, "shortage_outlook.csv"), snapshot["shortageRows"], strict=True
     ):
         assert saved["capacity_trips"] == (
             float(source["capacity_trips"]) if source["capacity_trips"] else None

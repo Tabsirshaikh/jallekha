@@ -18,6 +18,7 @@ import statistics
 import subprocess
 import sys
 from collections import defaultdict
+from dataclasses import replace
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -157,6 +158,7 @@ def sync_capacity():
     for row in reservoirs:
         row["storage_share"] = float(row["storage_share"])
     write("shortage_risk.csv", build_shortage(risk_input, matches, reservoirs))
+    write("shortage_outlook.csv", build_shortage(risk_input, matches, reservoirs, all_months=True))
     snapshot_script = Path(__file__).resolve().parents[1] / "frontend/build_u6_snapshot.py"
     spec = importlib.util.spec_from_file_location("capacity_u6_snapshot", snapshot_script)
     assert spec and spec.loader
@@ -171,10 +173,16 @@ def sync_capacity():
     print("Updated forecast capacities, shortage warnings and U6 snapshot without retraining.")
 
 
-def build_shortage(table, matches, reservoirs):
+def build_shortage(table, matches, reservoirs, *, all_months=False):
     origin = table[0]["updated_through"]
     lookup = {r["section"]: r for r in matches}
     transferred_caps = transferred_capacities(matches)
+    config = (
+        replace(shortage.SHORTAGE_CONFIG, months_ahead=tuple(range(1, CFG.horizon_months + 1)))
+        if all_months
+        else shortage.SHORTAGE_CONFIG
+    )
+    wanted = {shortage._add_months(origin, k) for k in config.months_ahead}
     groundwater = shortage.load_groundwater(
         ROOT / "data/derived/groundwater/section_anomaly.csv", origin
     )
@@ -192,6 +200,7 @@ def build_shortage(table, matches, reservoirs):
         transferred_caps,
         origin,
         groundwater=groundwater or None,
+        config=config,
     )
     risk_output = []
     latest_res = max((r["month"] for r in reservoirs), default="")
@@ -244,36 +253,65 @@ def build_shortage(table, matches, reservoirs):
             }
         )
     for row in table:
-        if (
-            row["level"] == "section"
-            and row["point"] is None
-            and row["month"] in {shortage._add_months(origin, k) for k in (1, 2, 3)}
-        ):
+        if row["level"] == "section" and row["point"] is None and row["month"] in wanted:
             empty = {k: None for k in risk_output[0]} if risk_output else {}
+            match = lookup[row["section"]]
+            matched = bool(match["old_section"])
+            cap = transferred_caps.get(row["section"])
+            trips = (
+                cap.trips_per_day * calendar.monthrange(*map(int, row["month"].split("-")))[1]
+                if cap
+                else None
+            )
+            signal = groundwater.get(row["section"])
+            reason = (
+                "Booking forecast unavailable: insufficient seasonal history for this month"
+                if matched
+                else "Booking forecast unavailable: no unique historical section match"
+            )
+            reason += (
+                f"; estimated capacity {trips:,.1f} trips"
+                if trips is not None
+                else "; capacity unknown"
+            )
+            reason += (
+                f"; groundwater {signal.value:+.1f} m deeper (+) or shallower (-) than usual "
+                f"({signal.month}; {signal.wells} nearby wells)"
+                if signal and signal.value is not None
+                else "; groundwater unavailable"
+            )
             empty.update(
                 {
                     "section": row["section"],
-                    "section_basis": "current section; UNAVAILABLE: no unique match",
+                    "section_basis": "current section; " + match["basis"],
                     "month": row["month"],
                     "months_ahead": next(
-                        k for k in (1, 2, 3) if shortage._add_months(origin, k) == row["month"]
+                        k
+                        for k in config.months_ahead
+                        if shortage._add_months(origin, k) == row["month"]
                     ),
                     "forecast_bookings": None,
                     "forecast_bookings_basis": row["point_basis"],
                     "upper_80_basis": "UNAVAILABLE",
-                    "capacity_trips_basis": "UNAVAILABLE: no unique history match",
+                    "capacity_trips": round(trips, 1) if trips is not None else None,
+                    "capacity_trips_basis": cap.basis + "; x calendar days"
+                    if cap
+                    else "UNAVAILABLE: no uniquely matched capacity",
                     "capacity_ratio_basis": "UNAVAILABLE",
                     "risk": "unknown",
-                    "risk_basis": "UNAVAILABLE: forecast history unmatched",
-                    "reason": (
-                        "Booking forecast unavailable: no unique historical section match; "
-                        "capacity unknown; groundwater unavailable"
-                    )
-                    + reservoir_context,
-                    "reason_basis": "UNAVAILABLE: uncertain section match; reservoir context only",
-                    "groundwater_status": "UNAVAILABLE",
-                    "groundwater_status_basis": "UNAVAILABLE",
-                    "groundwater_m_basis": "UNAVAILABLE",
+                    "risk_basis": "UNAVAILABLE: forecast missing; risk cannot be calculated",
+                    "reason": reason + reservoir_context,
+                    "reason_basis": "DERIVED: missing forecast and available contextual data",
+                    "groundwater_status": "DERIVED"
+                    if signal and signal.value is not None
+                    else "UNAVAILABLE",
+                    "groundwater_status_basis": "DERIVED: transferred historical point context"
+                    if signal and signal.value is not None
+                    else "UNAVAILABLE",
+                    "groundwater_m": signal.value if signal else None,
+                    "groundwater_m_basis": "DERIVED: nearby well anomaly"
+                    if signal and signal.value is not None
+                    else "UNAVAILABLE",
                     "reservoir_status": "DERIVED" if latest_res else "UNAVAILABLE",
                     "reservoir_status_basis": "DERIVED: observed storage, context only"
                     if latest_res

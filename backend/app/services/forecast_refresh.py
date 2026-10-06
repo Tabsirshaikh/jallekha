@@ -21,11 +21,14 @@ NEW_MODELS = (
     "ridge_summer",
     "ridge_groundwater",
     "ridge_reservoir",
+    "ridge_groundwater_reservoir",
 )
 
 
 def normal_name(name: str) -> str:
-    return re.sub(r"\s+", " ", re.sub(r"\s*\((?:OLD|NEW)\)\s*", "", name.upper())).strip()
+    return re.sub(
+        r"\s+", " ", re.sub(r"\s*\((?:OLD|NEW|DIV\s*\d+|PD\s*\d+)\)\s*", "", name.upper())
+    ).strip()
 
 
 def matched_panel(panel: fc.Panel, matches: Sequence[Mapping[str, str]]) -> fc.Panel:
@@ -132,8 +135,15 @@ def city_predict(
         ]
         if name == "ridge_summer":
             row.append(float(month[1] in (3, 4, 5, 6)) * row[1])
-        if name in ("ridge_groundwater", "ridge_reservoir"):
-            series = signals.get(name, {})
+        contexts = (
+            ("ridge_groundwater", "ridge_reservoir")
+            if name == "ridge_groundwater_reservoir"
+            else (name,)
+            if name in ("ridge_groundwater", "ridge_reservoir")
+            else ()
+        )
+        for context in contexts:
+            series = signals.get(context, {})
             available = [m for m in series if m < cutoff]
             row.append(series[max(available)] if available else 0.0)
             row.append(float(bool(available)))
@@ -155,20 +165,23 @@ def city_intervals(
 ) -> tuple[dict[float, float], list[dict[str, object]]]:
     points = sorted((r for r in rows if r.model == model), key=lambda r: r.origin)
     split = len(points) // 2
-    calibration, test = points[:split], points[split:]
+    test = points[split:]
+    window = FORECAST_CONFIG.city_interval_window_months
+    errors = [abs(r.city_actual - r.city_forecast) for r in points]
     widths = {
-        level: fc.conformal_quantile([abs(r.city_actual - r.city_forecast) for r in points], level)
+        level: fc.conformal_quantile(errors[-window:], level)
         for level in FORECAST_CONFIG.interval_levels
     }
     measured = []
     for level in widths:
-        q = fc.conformal_quantile(
-            [abs(r.city_actual - r.city_forecast) for r in calibration], level
-        )
+        past_widths = [
+            fc.conformal_quantile(errors[max(0, i - window) : i], level)
+            for i in range(split, len(points))
+        ]
         enough = (
-            split >= FORECAST_CONFIG.min_calibration_months
+            min(split, window) >= FORECAST_CONFIG.min_calibration_months
             and len(test) >= FORECAST_CONFIG.min_test_months
-            and math.isfinite(q)
+            and all(math.isfinite(q) for q in past_widths)
         )
         measured.append(
             {
@@ -178,15 +191,19 @@ def city_intervals(
                 "interval": level,
                 "months": len(test),
                 "section_months": len(test),
-                "coverage": sum(abs(r.city_actual - r.city_forecast) <= q for r in test) / len(test)
+                "coverage": sum(e <= q for e, q in zip(errors[split:], past_widths, strict=True))
+                / len(test)
                 if enough
                 else None,
                 "coverage_basis": (
-                    "DERIVED: first-half city absolute residuals calibrated; later half measured"
+                    "DERIVED: preceding rolling city residuals only; later months measured"
                 )
                 if enough
                 else "UNAVAILABLE: too few finite calibration/test months",
-                "note": f"{split} calibration months; one-step coverage, not a 12-step guarantee",
+                "note": (
+                    f"Previous {window} residuals; exploratory window choice; "
+                    "one-step coverage, not a 12-step guarantee"
+                ),
             }
         )
     return widths, measured

@@ -176,6 +176,27 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 
 ### F5 Surge Forecast and Capacity Planner (T2)
 
+- **Warning/forecast quality repair (`fix/forecast-capacity-sync`, 2026-10-07) supersedes the
+  earlier refresh figures below.** Division/PD annotations are removed only for unique
+  one-to-one name correspondence: 77 approximate matches (up from 63), 196 unmatched, zero
+  authoritative boundary matches. No fuzzy geocode or invented history is used. Fixed GBM
+  training of absent section-month observations as zero and a crash on an empty seasonal cohort.
+  Explicit published zeros remain zeros. Same 31-origin research-A rule now selects
+  `global_gbm_local_weather`: city MAPE 27.72% versus naive 31.16%, matched-section WAPE
+  37.76% versus 48.35%, HLN DM one-sided p=0.0073. Comparisons use the same expanded cohort;
+  old-cohort scores cannot be compared directly. Frozen February-August holdout is unchanged.
+- **Recent city ranges:** a preceding 12-residual window [ASSUMED, exploratory] replaces fixed
+  calibration; held months never calibrate themselves. Selected-model one-step coverage is
+  76.19% / 90.48% for nominal 80% / 90%, on 21 later months. The window was explored using
+  existing data and needs independent future validation. 80% still undercovers; applying one-step
+  widths across twelve forecast horizons remains approximate. UI shows measured city coverage.
+- **Groundwater/reservoir use:** both remain REAL-source contextual inputs in F6. F5 tested
+  individual and joint lagged predictors; joint Ridge city MAPE 44.22%, section WAPE 52.89%,
+  versus 31.16% / 48.35% baseline, failed the rule. Groundwater-only and reservoir-only Ridge
+  city errors are 44.31% and 43.12%. None displaces the selected local-weather model. Reservoir
+  level is not verified section supply or tanker availability, so risk thresholds are unchanged.
+  Source metadata checked on October 7 still publishes bookings only through August 2026.
+
 - **Capacity synchronization repair (2026-10-07, local `fix/forecast-capacity-sync`):** routing
   updates changed A8 home stations while published capacities remained stale. Rebuilt 168
   section/month forecast capacities, 42 shortage rows and U6's saved snapshot using the current
@@ -219,6 +240,19 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - `GET /forecast` and `/forecast/backtest` serve the table, and the U6 screen shows them live (city forecast DERIVED with no city interval, section forecast with intervals, backtest accuracy per model) with the committed real history and SIMULATION fixtures as the fallback.
 
 ### F6 Shortage Early Warning (T8)
+- **Current-date window repair (2026-10-07):** `shortage_outlook.csv` stores risks for all
+  twelve published forecast months; legacy `shortage_risk.csv` preserves the origin's first
+  three months. U6 and optional API month filters select the next three calendar months from
+  today in Hyderabad, not from the August training cutoff. Lead times are recalculated.
+  October 7 view: November 2026-January 2027, 819 records; 27 high, 30 medium, 154 low,
+  608 unknown. Of unknowns, 588 are 196 unmatched sections x three months; 20 matched
+  section-months lack seasonal observations. Known estimated capacity and groundwater remain
+  visible in these rows; reasons distinguish absent history from an unmatched identity.
+- **Capacity remains an estimate, not an observed operating limit.** UI now labels it
+  "Estimated trips" and explains that historical station shares can be reassigned. No
+  verified current section fleet/dispatch capacities were found; official data is still needed.
+  Last observed bookings through August and July water observations are disclosed. Passing
+  tests does not establish real shortage precision or calibrated multi-step prediction ranges.
 
 - **Local refreshed warning (`feat/f5-forecast-refresh`, approval pending):** 819 section-month rows for Sep-Nov 2026; 6 high, 28 medium, 143 low, 642 unknown. Unmatched section identities retain null booking forecasts/capacity and unknown risk. Capacity transfers only use unique historical name matches and remain ASSUMED; stations and section boundaries are still stand-ins. The city capacity uses the owner-confirmed 1,123 tankers x 9 daily trips.
 - **Accepted reservoir context is now included.** 67 daily-source monthly files Jan 2021-Jul 2026 from Telangana I&CAD are logged in a separate hash manifest; latest July storage for Nagarjuna Sagar, Singur, Sri Pada Yellampally, Akkampalli and Srisailam appears beside groundwater in reasons. Monthly storage means are DERIVED from REAL observations; source zeros can represent unfilled/missing reporting and should not be interpreted as confirmed supply loss. Reservoir context does not alter the capacity-only risk rule. No global source-manifest changes or E5 spatial re-fitting were needed.

@@ -1,5 +1,25 @@
 # F5/F6 refresh contract (2026-10-06)
 
+## Warning quality follow-up (2026-10-07, `fix/forecast-capacity-sync`)
+
+- `GET /shortage?from_month=YYYY-MM&through_month=YYYY-MM` filters the new twelve-month
+  `shortage_outlook.csv` before pagination. `months_ahead` counts from the month preceding
+  `from_month`; without that parameter the stored forecast-origin lead time is retained.
+  Invalid month syntax returns422. With neither range parameter, legacy first-three-month
+  behavior is preserved. U6 requests the next three calendar months using Hyderabad's date.
+- Rows with missing forecasts preserve any known capacity and groundwater. Risk stays unknown;
+  reasons distinguish absent seasonal history from unmatched sections. Response keys are unchanged.
+- `GET /forecast/backtest?row_type=city_coverage` returns measured city interval reliability.
+  UI snapshot includes these figures and the full shortage outlook; no missing records become zeros.
+- Current matches are77 approximate and196 unmatched after removing division/PD annotation
+  differences only when names match uniquely. These are not authoritative boundary matches.
+  The corrected GBM and adaptive city-range results supersede earlier figures in F5 limitations.
+- Reservoir and groundwater observations are background in warnings; lagged forecast candidates,
+  including the joint variant, were evaluated without forcing an inferior model into publication.
+
+The current server is open when `AUTH_REQUIRED` is unset; with it set to true, officer authorization
+is required. The older token-only text below describes the earlier contract.
+
 PROPOSED: implemented on local `feat/f5-forecast-refresh`; owner approval pending.
 
 All routes require an officer token. Pagination uses `offset` and `limit` (maximum 200); clients

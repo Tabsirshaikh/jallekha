@@ -5,7 +5,8 @@ Pure apart from `load_capacity` and `load_groundwater`, which read committed fil
 Groundwater (D7, item 17): the reason gives the section's groundwater anomaly at the forecast
 origin (median of nearby wells; scripts/forecast/build_groundwater.py) or why there is none; it
 does not change the risk level. Without groundwater data the reason says it is unavailable.
-Reservoir levels are behind a flag that is off (Q2 not approved) and have no data.
+The publishing builder adds accepted reservoir observations as context. The pure risk rule
+does not use reservoir storage: a validated connection to section capacity is unavailable.
 """
 
 from __future__ import annotations
@@ -205,7 +206,7 @@ def risk_list(
     )
     if use_reservoirs:
         raise ValueError(
-            "reservoir levels are not in the repo (Q2 not approved); keep the flag off"
+            "Reservoir observations are context-only; no validated reservoir-based risk rule exists"
         )
     wanted = {_add_months(origin, k): k for k in config.months_ahead}
     rows: list[ShortageRow] = []

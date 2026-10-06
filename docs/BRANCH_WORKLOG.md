@@ -1,5 +1,32 @@
 # Branch worklog
 
+## `fix/forecast-capacity-sync` — warning quality follow-up, 2026-10-07
+
+- Owner asked to address the remaining F5/F6 bugs and explain groundwater/reservoir use.
+  Read F5/F6 limitations and P3 before work; no spatial sampling or edits to the other checkout.
+- TDD failures observed for preserved known capacity, date window, API filtering, division
+  annotation matches, rolling range leakage, joint water candidate and empty/missing GBM input.
+  Fixes preserve explicit zeros, exclude absent training observations and avoid empty prediction crashes.
+- Forecast matches 77 approximate/196 unmatched; local-weather GBM wins the unchanged 31-origin
+  rule: city 27.72% vs31.16%, section37.76% vs48.35%, p=.0073. Joint water Ridge44.22%/52.89% loses.
+  Previous-year rolling city errors: 80/90 nominal coverage76.19%/90.48% on21 months, exploratory;
+  no independent future or multi-step calibration claim. Frozen2026 holdout remains unchanged.
+- Added twelve-month shortage outlook, optional API month filters, Hyderabad-date next-three-month
+  view and current lead times. Legacy first-three-month risk file retained for compatibility.
+  Nov-Jan view819 rows:27high/30medium/154low/608unknown (588unmatched+20missing seasonal history).
+- Known capacity/groundwater remain shown without a forecast. UI explains estimated trips,
+  missing data, stale observations and measured city range reliability in four languages;
+  localized warning summaries replace raw English text outside English. Source stock percentages
+  remain context; reporting zeros are not verified empty reservoirs.
+- Portal metadata still endsAug2026; no newer month invented. Actual capacity/section GIS absent.
+  API examples/shapes unchanged; new query parameters documented and OpenAPI regenerated.
+  Browser verified live API on5198 and UI5197; no browser errors, correct Nov-Jan dates.
+- Validation:70 affected backend tests passed, including the existing forecast/backtest suite;
+  frontend202 tests passed on the full run and its one outdated date-copy assertion was updated
+  and passed on rerun. Lint/type checks, translation checks and production build pass. Verified
+  live filter counts819/27high/30medium/608unknown/154low and Hindi dates in the real browser.
+  No repeated full PyMC suite for this follow-up; the owner requested focused checks.
+
 ## `fix/forecast-capacity-sync` — synchronized capacities, 2026-10-07
 
 - Isolated worktree `../jallekha-capacity-sync`, based on fetched main `6b6bff1`; no edits to
