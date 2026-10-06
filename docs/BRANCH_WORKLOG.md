@@ -1168,3 +1168,10 @@ The pull-request description must summarize the same information and link to thi
 - **Validation:** service and API tests written first and seen failing, then passing; screen tests rewritten for the new layout; headless screenshot checked.
 - **Known limitations:** `docs/LIMITATIONS.md` "Live need on the U5 map".
 - **Pull request:** see the PR for `feat/u5-live-atlas`.
+
+## `fix/u5-map-signs` — owner review of the need map
+
+- **Owner / date:** repo owner, 2026-10-06.
+- **Why:** owner review: a focus box appeared on click, the map was too small, CAD was mislabelled ("limited water access"; it is the Channel Access Deficit, homes with no phone), "need rising" was driven by groundwater alone and showed missing data as green ticks, and the booking check said 2022-24 for 2025 figures.
+- **What we changed:** groundwater is background (`counts: false`), owed and bookings are unknown until data is entered (`known_count`), unknown wards grey; WAD / CAD labels corrected in all four languages; booking check says 2025, names the peer and model figures and says when a ward booked more than expected; map fills the screen, zoom (wheel, buttons) and drag, no focus box.
+- **Validation:** tests written first for the sign rules and seen failing; screen tests updated; headless screenshot checked.

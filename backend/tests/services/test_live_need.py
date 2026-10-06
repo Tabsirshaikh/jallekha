@@ -36,9 +36,22 @@ def test_bookings_jump_against_the_usual_month() -> None:
     assert clue["bad"] is False and clue["known"] is False
 
 
-def test_groundwater_and_missing_data_are_not_bad() -> None:
-    deeper = ln.evaluate(_signals(groundwater_m=1.4))
-    assert {c["code"]: c["bad"] for c in deeper["clues"]}["groundwater"] is True
+def test_groundwater_is_background_not_a_warning() -> None:
+    # Groundwater is low across most of the city in a dry year: shown, never counted.
+    deeper = ln.evaluate(_signals(groundwater_m=4.4, owed_litres=5000.0))
+    gw = {c["code"]: c for c in deeper["clues"]}["groundwater"]
+    assert gw["bad"] is False and gw["counts"] is False and gw["value"] == 4.4
+    assert deeper["bad_count"] == 1 and deeper["rising"] is False
+
+
+def test_signs_with_no_data_entered_are_unknown_not_fine() -> None:
+    blank = ln.evaluate(_signals(usual_month=20.0), owed_known=False, bookings_known=False)
+    by = {c["code"]: c for c in blank["clues"]}
+    assert by["owed"]["known"] is False and by["bookings"]["known"] is False
+    assert blank["known_count"] == 2  # complaints and cuts are recorded live
+
+
+def test_missing_groundwater_is_unknown() -> None:
     missing = {c["code"]: c for c in ln.evaluate(_signals())["clues"]}["groundwater"]
     assert missing["bad"] is False and missing["known"] is False
 
