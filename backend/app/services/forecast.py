@@ -439,6 +439,8 @@ def _gbm(
     query = _gbm_rows(train, target, min(target, origin), local, groundwater)
     if query is None:
         return None
+    if not query[0]:
+        return {}  # A missing section cohort supplies no forecast rows, not synthetic zeros.
     features: list[list[float]] = []
     targets: list[float] = []
     months = 0
@@ -449,8 +451,10 @@ def _gbm(
         months += 1
         actual = train.values[month]
         for section, row in zip(*rows, strict=True):
+            if section not in actual:
+                continue  # Absent observations are unknown; only explicitly published zero is zero.
             features.append(row)
-            targets.append(math.log1p(actual.get(section, 0.0)) - row[0])
+            targets.append(math.log1p(actual[section]) - row[0])
     if months < cfg.gbm_min_training_months or len(targets) < cfg.gbm_min_training_rows:
         return None
     from sklearn.ensemble import HistGradientBoostingRegressor  # `models` extra

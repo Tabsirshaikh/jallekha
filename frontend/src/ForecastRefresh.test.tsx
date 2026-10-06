@@ -23,7 +23,7 @@ describe("Refreshed forecast", () => {
     vi.stubGlobal("fetch", fetchMock);
     const {container} = render(<LocaleProvider><AuthProvider><ForecastExperience /></AuthProvider></LocaleProvider>);
     await screen.findByText("Live data");
-    expect(screen.getByText("Updated Aug 2026")).toBeInTheDocument();
+    expect(screen.getByText("Booking data through Aug 2026")).toBeInTheDocument();
     expect(screen.getByRole("tab", {name: "Next 12 months"})).toBeInTheDocument();
     const detail = screen.getByRole("region", {name: "Selected forecast month"});
     expect(within(detail).getByText("160,000–240,000")).toBeInTheDocument();

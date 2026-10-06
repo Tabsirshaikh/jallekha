@@ -40,8 +40,8 @@ function officerApi(shortage: Shortage[] = [shortageRow("ALPHA LOW", "low", { ca
 }
 
 describe("ForecastExperience", () => {
-  beforeEach(() => setToken(null));
-  afterEach(() => vi.unstubAllGlobals());
+  beforeEach(() => { setToken(null); vi.useFakeTimers({toFake: ["Date"]}); vi.setSystemTime(new Date("2026-01-15T12:00:00Z")); });
+  afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers(); });
 
   it("preserves unavailable intervals in an older API response", async () => {
     setToken("t-officer");
@@ -129,6 +129,20 @@ describe("ForecastExperience", () => {
     await screen.findByText("Live data");
     fireEvent.click(screen.getByRole("tab", { name: "How good was our forecast?" }));
     expect(screen.getByText(/No earlier forecast can be checked/)).toBeInTheDocument();
+  });
+
+  it("shows the current three-month window, estimated capacities and stale-input notice", async () => {
+    vi.setSystemTime(new Date("2026-10-07T12:00:00Z"));
+    setToken("t-officer");
+    vi.stubGlobal("fetch", officerApi([shortageRow("PAST SECTION", "high", {month: "2026-09"}), shortageRow("GOLCONDA", "high", {month: "2026-11", months_ahead: 3})]));
+    renderScreen();
+    await screen.findByText("Live data");
+    fireEvent.click(screen.getByRole("tab", {name: "Shortage warnings"}));
+    expect(screen.queryByText("PAST SECTION")).not.toBeInTheDocument();
+    expect(screen.getByText("GOLCONDA").closest("li")).toHaveTextContent("1 months ahead");
+    expect(screen.getByText("Estimated trips")).toBeInTheDocument();
+    expect(screen.getByText(/latest booking records are older/)).toBeInTheDocument();
+    expect(screen.getByText(/Nov(?:ember)? 2026–Jan(?:uary)? 2027/)).toBeInTheDocument();
   });
 
   it("loads a selected section with its DERIVED interval and ASSUMED capacity", async () => {

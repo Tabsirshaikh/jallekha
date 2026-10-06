@@ -25,6 +25,7 @@ ACCURACY = "data/derived/forecast_accuracy.csv"
 Officer = Depends(require_roles("officer"))
 Offset = Annotated[int, Query(ge=0)]
 Limit = Annotated[int, Query(ge=1, le=ApiConfig.max_limit)]
+Month = Annotated[str | None, Query(pattern=r"^\d{4}-(0[1-9]|1[0-2])$")]
 
 
 @router.get("/forecast", dependencies=[Officer])
@@ -46,8 +47,12 @@ def forecast(
 
 
 @router.get("/forecast/backtest", dependencies=[Officer])
-def backtest(offset: Offset = 0, limit: Limit = ApiConfig.default_limit) -> dict[str, Any]:
-    rows = [typed(r) for r in csv_rows(BACKTEST)]
+def backtest(
+    offset: Offset = 0, limit: Limit = ApiConfig.default_limit, row_type: str | None = None
+) -> dict[str, Any]:
+    rows = [
+        typed(r) for r in csv_rows(BACKTEST) if row_type is None or r.get("row_type") == row_type
+    ]
     return {"items": rows[offset : offset + limit], "total": len(rows)}
 
 
@@ -83,7 +88,12 @@ def accuracy(
 
 
 @router.get("/shortage", dependencies=[Officer])
-def shortage(offset: Offset = 0, limit: Limit = ApiConfig.default_limit) -> dict[str, Any]:
+def shortage(
+    offset: Offset = 0,
+    limit: Limit = ApiConfig.default_limit,
+    from_month: Month = None,
+    through_month: Month = None,
+) -> dict[str, Any]:
     """T8's risk list; an empty, UNAVAILABLE answer only if its file is missing."""
     if not (REPO_ROOT / SHORTAGE).exists():
         return {
@@ -92,5 +102,17 @@ def shortage(offset: Offset = 0, limit: Limit = ApiConfig.default_limit) -> dict
             "basis": UNAVAILABLE,
             "reason": "T8 shortage warning is not merged",
         }
-    rows = [typed(r) for r in csv_rows(SHORTAGE)]
+    outlook = "data/derived/shortage_outlook.csv"
+    path = outlook if (from_month or through_month) and (REPO_ROOT / outlook).exists() else SHORTAGE
+    rows = [
+        typed(r)
+        for r in csv_rows(path)
+        if (from_month is None or r["month"] >= from_month)
+        and (through_month is None or r["month"] <= through_month)
+    ]
+    if from_month is not None:
+        year, month = map(int, from_month.split("-"))
+        for row in rows:
+            target_year, target_month = map(int, row["month"].split("-"))
+            row["months_ahead"] = (target_year - year) * 12 + target_month - month + 1
     return {"items": rows[offset : offset + limit], "total": len(rows), "basis": "DERIVED"}
