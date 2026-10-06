@@ -1,0 +1,646 @@
+month,level,section,actual,actual_basis
+2025-09,city,,47080.0,REAL: sum of all portal section bookings
+2025-09,section,ADIKMET,31.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,AHMED NAGAR,36.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,AMBERPET,3.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,ASIF NAGAR,88.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,ATTAPUR,135.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,AZAMPURA,17.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,BAGH LINGAMPALLY,152.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,BALANAGAR,62.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,BANDLAGUDA,8.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,BANJARA HILLS,1933.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,BARKATPURA,123.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,BORABANDA,119.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,CHANDA NAGAR,312.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,CHERLAPALLY,44.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,CHINTAL,113.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,DAMMAIGUDA,3.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,DEEPTHISRI NAGAR,286.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,ERRAGADDA,620.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,FILM NAGAR,219.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,GAJULARAMARAM,194.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,GAYATRI NAGAR,816.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,GOLCONDA,15.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,GOWLIPURA,2.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,GUNFOUNDRY,129.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,HAFEEZPET,2181.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,HASMATHPET,453.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,HYDERGUDA,614.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,JANGAMMET,1.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,JUBILEE HILLS,1528.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,KAKATIYA NAGAR,187.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,KARWAN,38.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,KATEDAN,13.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,KUKATPALLY,208.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,LALAPET,30.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,LINGOJIGUDA,43.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,MACHABOLLARAM,90.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,MADANNAPET,6.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,MANSOORABAD,60.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,METTUGUDA,19.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,MIYAPUR,405.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,MOOSAPET,90.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,MOOSARAMBAGH,121.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,MOTI NAGAR,224.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,MUSHEERABAD,158.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,NACHARAM,134.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,NAGARAM,7.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,NAGOLE,15.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,SAIBABA NAGAR,121.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,SAIDABAD,70.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,SAROORNAGAR,241.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,SHAIKPET,382.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,SOMAJIGUDA,777.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,SULEMAN NAGAR,68.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,SURARAM,75.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,TARNAKA,289.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,UPPAL,76.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,VANASTHALIPURAM,84.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,VENKATAPURAM,131.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,ZIAGUDA,24.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-09,section,NIZAMPET (PD 7) (OLD),1843.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,city,,48284.0,REAL: sum of all portal section bookings
+2025-10,section,ADIKMET,44.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,AHMED NAGAR,33.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,AMBERPET,29.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,ASIF NAGAR,96.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,ATTAPUR,169.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,AZAMPURA,3.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,BAGH LINGAMPALLY,210.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,BALANAGAR,62.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,BANDLAGUDA,20.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,BANJARA HILLS,2019.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,BARKATPURA,155.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,BORABANDA,95.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,CHANDA NAGAR,317.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,CHERLAPALLY,36.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,CHINTAL,78.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,DAMMAIGUDA,2.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,DEEPTHISRI NAGAR,299.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,ERRAGADDA,403.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,FILM NAGAR,407.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,GAJULARAMARAM,138.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,GAYATRI NAGAR,509.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,GOLCONDA,14.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,GOWLIPURA,2.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,GUNFOUNDRY,105.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,HAFEEZPET,2438.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,HASMATHPET,363.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,HYDERGUDA,605.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,JUBILEE HILLS,1546.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,KAKATIYA NAGAR,249.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,KARWAN,57.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,KATEDAN,21.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,KUKATPALLY,137.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,LALAPET,24.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,LINGOJIGUDA,111.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,MACHABOLLARAM,65.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,MADANNAPET,17.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,MANSOORABAD,45.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,METTUGUDA,17.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,MIYAPUR,720.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,MOOSAPET,173.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,MOOSARAMBAGH,171.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,MOTI NAGAR,187.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,MUSHEERABAD,245.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,NACHARAM,174.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,NAGARAM,3.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,NAGOLE,20.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,PATHERGATTI,2.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,SAIBABA NAGAR,92.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,SAIDABAD,100.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,SAROORNAGAR,444.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,SHAIKPET,385.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,SOMAJIGUDA,751.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,SULEMAN NAGAR,111.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,SURARAM,85.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,TARNAKA,227.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,UPPAL,91.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,VANASTHALIPURAM,118.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,VENKATAPURAM,76.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,ZIAGUDA,13.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-10,section,NIZAMPET (PD 7) (OLD),2172.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,city,,45589.0,REAL: sum of all portal section bookings
+2025-11,section,ADIKMET,55.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,AHMED NAGAR,47.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,AMBERPET,3.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,ASIF NAGAR,74.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,ATTAPUR,125.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,BAGH LINGAMPALLY,157.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,BALANAGAR,77.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,BANDLAGUDA,10.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,BANJARA HILLS,2278.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,BARKATPURA,111.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,BORABANDA,41.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,CHANDA NAGAR,309.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,CHERLAPALLY,87.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,CHINTAL,159.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,DAMMAIGUDA,2.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,DEEPTHISRI NAGAR,275.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,ERRAGADDA,270.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,FILM NAGAR,366.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,GAJULARAMARAM,125.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,GAYATRI NAGAR,432.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,GOLCONDA,144.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,GUNFOUNDRY,134.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,HAFEEZPET,2367.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,HASMATHPET,316.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,HYDERGUDA,440.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,JUBILEE HILLS,1460.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,KAKATIYA NAGAR,213.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,KARWAN,26.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,KATEDAN,21.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,KUKATPALLY,48.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,LALAPET,28.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,LINGOJIGUDA,55.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,MACHABOLLARAM,74.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,MADANNAPET,4.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,MANSOORABAD,24.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,METTUGUDA,21.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,MIYAPUR,406.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,MOOSAPET,43.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,MOOSARAMBAGH,116.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,MOTI NAGAR,146.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,MUSHEERABAD,178.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,NACHARAM,157.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,NAGOLE,11.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,PATHERGATTI,3.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,SAIBABA NAGAR,93.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,SAIDABAD,56.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,SAROORNAGAR,206.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,SHAIKPET,361.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,SOMAJIGUDA,653.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,SULEMAN NAGAR,89.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,SURARAM,59.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,TARNAKA,253.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,UPPAL,113.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,VANASTHALIPURAM,130.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,VENKATAPURAM,87.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,ZIAGUDA,8.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-11,section,NIZAMPET (PD 7) (OLD),1450.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,city,,55215.0,REAL: sum of all portal section bookings
+2025-12,section,ADIKMET,58.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,AHMED NAGAR,31.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,AMBERPET,14.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,ASIF NAGAR,50.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,ATTAPUR,110.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,AZAMPURA,3.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,BAGH LINGAMPALLY,176.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,BALANAGAR,59.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,BANDLAGUDA,29.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,BANJARA HILLS,2846.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,BARKATPURA,107.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,BORABANDA,34.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,CHANDA NAGAR,300.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,CHERLAPALLY,58.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,CHINTAL,94.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,DAMMAIGUDA,1.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,DEEPTHISRI NAGAR,338.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,ERRAGADDA,234.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,FILM NAGAR,336.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,GAJULARAMARAM,142.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,GAYATRI NAGAR,489.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,GOLCONDA,183.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,GOWLIPURA,3.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,GUNFOUNDRY,140.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,HAFEEZPET,3216.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,HASMATHPET,281.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,HYDERGUDA,464.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,JUBILEE HILLS,1494.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,KAKATIYA NAGAR,186.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,KARWAN,29.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,KATEDAN,25.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,KUKATPALLY,112.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,LALAPET,8.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,LINGOJIGUDA,50.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,MACHABOLLARAM,83.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,MADANNAPET,6.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,MANSOORABAD,24.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,METTUGUDA,20.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,MIYAPUR,518.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,MOOSAPET,54.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,MOOSARAMBAGH,111.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,MOTI NAGAR,135.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,MUSHEERABAD,109.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,NACHARAM,149.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,NAGARAM,4.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,NAGOLE,10.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,PATHERGATTI,2.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,SAIBABA NAGAR,82.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,SAIDABAD,62.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,SAROORNAGAR,160.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,SHAIKPET,380.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,SOMAJIGUDA,680.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,SULEMAN NAGAR,95.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,SURARAM,52.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,TARNAKA,246.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,UPPAL,102.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,VANASTHALIPURAM,90.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,VENKATAPURAM,104.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,ZIAGUDA,6.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2025-12,section,NIZAMPET (PD 7) (OLD),2075.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,city,,71833.0,REAL: sum of all portal section bookings
+2026-01,section,ADIKMET,56.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,AHMED NAGAR,26.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,AMBERPET,6.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,ASIF NAGAR,118.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,ATTAPUR,125.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,BAGH LINGAMPALLY,131.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,BALANAGAR,36.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,BANDLAGUDA,27.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,BANJARA HILLS,3038.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,BARKATPURA,79.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,BORABANDA,198.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,CHANDA NAGAR,372.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,CHERLAPALLY,44.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,CHINTAL,278.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,DAMMAIGUDA,2.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,DEEPTHISRI NAGAR,363.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,ERRAGADDA,276.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,FILM NAGAR,309.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,GAJULARAMARAM,194.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,GAYATRI NAGAR,1206.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,GOLCONDA,199.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,GOWLIPURA,1.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,GUNFOUNDRY,151.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,HAFEEZPET,4953.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,HASMATHPET,358.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,HYDERGUDA,535.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,JUBILEE HILLS,1599.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,KAKATIYA NAGAR,138.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,KARWAN,62.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,KATEDAN,23.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,KUKATPALLY,223.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,LALAPET,60.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,LINGOJIGUDA,50.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,MACHABOLLARAM,114.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,MADANNAPET,2.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,MANSOORABAD,45.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,METTUGUDA,27.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,MIYAPUR,538.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,MOOSAPET,148.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,MOOSARAMBAGH,93.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,MOTI NAGAR,173.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,MUSHEERABAD,117.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,NACHARAM,138.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,NAGARAM,2.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,NAGOLE,6.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,SAIBABA NAGAR,119.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,SAIDABAD,27.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,SAROORNAGAR,272.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,SHAIKPET,533.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,SOMAJIGUDA,1022.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,SULEMAN NAGAR,93.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,SURARAM,44.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,TARNAKA,344.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,UPPAL,183.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,VANASTHALIPURAM,131.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,VENKATAPURAM,115.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,ZIAGUDA,13.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-01,section,NIZAMPET (PD 7) (OLD),2340.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-02,city,,102415.0,REAL: sum of all portal section bookings
+2026-03,city,,176258.0,REAL: sum of all portal section bookings
+2026-03,section,ADIKMET,1.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,AHMED NAGAR,1.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,ATTAPUR,1.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,BANJARA HILLS,18.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,BARKATPURA,3.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,BORABANDA,4.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,CHANDA NAGAR,6.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,DEEPTHISRI NAGAR,8.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,ERRAGADDA,6.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,FILM NAGAR,6.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,GAYATRI NAGAR,48.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,GOLCONDA,1.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,GUNFOUNDRY,6.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,HAFEEZPET,5.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,HASMATHPET,1.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,HYDERGUDA,11.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,JUBILEE HILLS,37.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,KATEDAN,1.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,KUKATPALLY,1.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,LINGOJIGUDA,2.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,MACHABOLLARAM,4.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,MANSOORABAD,10.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,MIYAPUR,3.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,MOOSAPET,7.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,MOTI NAGAR,17.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,SAROORNAGAR,1.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,SHAIKPET,2.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,SOMAJIGUDA,25.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,VANASTHALIPURAM,2.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-03,section,ZIAGUDA,1.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,city,,240619.0,REAL: sum of all portal section bookings
+2026-04,section,ADIKMET,205.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,AHMED NAGAR,282.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,AMBERPET,15.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,ASIF NAGAR,188.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,ATTAPUR,546.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,AZAMPURA,43.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,BAGH LINGAMPALLY,393.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,BALANAGAR,89.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,BANDLAGUDA,53.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,BANJARA HILLS,2535.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,BARKATPURA,525.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,BORABANDA,509.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,CHANDA NAGAR,799.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,CHENGICHERLA,139.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,CHERLAPALLY,2.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,CHINTAL,44.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,DAMMAIGUDA,3.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,DEEPTHISRI NAGAR,1330.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,ERRAGADDA,718.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,FILM NAGAR,1606.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,GAJULARAMARAM,813.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,GAYATRI NAGAR,5783.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,GOLCONDA,73.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,GOWLIPURA,11.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,GUNFOUNDRY,615.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,HAFEEZPET,535.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,HASMATHPET,88.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,HYDERGUDA,2481.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,JUBILEE HILLS,7465.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,KAKATIYA NAGAR,131.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,KARWAN,15.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,KATEDAN,46.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,KUKATPALLY,222.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,LALAPET,23.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,LINGOJIGUDA,222.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,MACHABOLLARAM,1513.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,MADANNAPET,4.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,MADHAPUR,10168.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,MANSOORABAD,490.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,METTUGUDA,484.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,MIYAPUR,887.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,MOOSAPET,361.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,MOOSARAMBAGH,207.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,MOTI NAGAR,1523.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,MUSHEERABAD,460.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,NACHARAM,155.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,NAGARAM,7.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,NAGOLE,34.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,PATHERGATTI,13.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,SAIBABA NAGAR,131.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,SAIDABAD,57.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,SAROORNAGAR,359.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,SHAIKPET,1022.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,SOMAJIGUDA,3155.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,SULEMAN NAGAR,262.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,SURARAM,261.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,TARNAKA,266.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,UPPAL,279.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,VANASTHALIPURAM,666.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,VENKATAPURAM,28.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-04,section,ZIAGUDA,70.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,city,,319106.0,REAL: sum of all portal section bookings
+2026-05,section,ADIKMET,379.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,AHMED NAGAR,342.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,AMBERPET,30.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,ASIF NAGAR,444.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,ATTAPUR,960.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,AZAMPURA,122.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,BAGH LINGAMPALLY,448.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,BALANAGAR,91.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,BANDLAGUDA,209.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,BANJARA HILLS,3799.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,BARKATPURA,742.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,BORABANDA,875.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,CHANDA NAGAR,1044.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,CHENGICHERLA,356.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,CHERLAPALLY,14.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,CHINTAL,409.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,DAMMAIGUDA,8.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,DEEPTHISRI NAGAR,1752.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,ERRAGADDA,939.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,FILM NAGAR,2369.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,GAJULARAMARAM,1884.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,GAYATRI NAGAR,6335.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,GOLCONDA,694.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,GOWLIPURA,14.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,GUNFOUNDRY,958.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,HAFEEZPET,789.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,HASMATHPET,116.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,HYDERGUDA,3301.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,JANGAMMET,9.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,JUBILEE HILLS,9733.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,KAKATIYA NAGAR,282.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,KARWAN,62.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,KATEDAN,109.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,KUKATPALLY,291.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,LALAPET,40.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,LINGOJIGUDA,469.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,MACHABOLLARAM,2372.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,MADANNAPET,9.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,MADHAPUR,14317.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,MANSOORABAD,1867.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,METTUGUDA,853.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,MIYAPUR,1122.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,MOOSAPET,628.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,MOOSARAMBAGH,315.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,MOTI NAGAR,1656.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,MUSHEERABAD,620.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,NACHARAM,216.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,NAGARAM,12.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,NAGOLE,30.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,PATHERGATTI,16.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,SAIBABA NAGAR,305.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,SAIDABAD,153.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,SAROORNAGAR,617.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,SHAIKPET,1579.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,SOMAJIGUDA,3634.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,SULEMAN NAGAR,438.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,SURARAM,468.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,TARNAKA,524.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,UPPAL,371.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,VANASTHALIPURAM,1658.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,VENKATAPURAM,56.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-05,section,ZIAGUDA,191.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,city,,290795.0,REAL: sum of all portal section bookings
+2026-06,section,ADIKMET,401.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,AHMED NAGAR,276.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,AMBERPET,32.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,ASIF NAGAR,247.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,ATTAPUR,822.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,AZAMPURA,109.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,BAGH LINGAMPALLY,353.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,BALANAGAR,149.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,BANDLAGUDA,113.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,BANJARA HILLS,2884.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,BARKATPURA,479.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,BORABANDA,854.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,CHANDA NAGAR,801.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,CHENGICHERLA,791.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,CHERLAPALLY,50.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,CHINTAL,526.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,DAMMAIGUDA,15.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,DEEPTHISRI NAGAR,1796.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,ERRAGADDA,787.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,FILM NAGAR,1975.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,GAJULARAMARAM,3048.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,GAYATRI NAGAR,5653.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,GOLCONDA,255.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,GOWLIPURA,7.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,GUNFOUNDRY,697.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,HAFEEZPET,728.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,HASMATHPET,332.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,HYDERGUDA,3037.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,JANGAMMET,4.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,JUBILEE HILLS,8099.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,KAKATIYA NAGAR,543.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,KARWAN,66.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,KATEDAN,71.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,KUKATPALLY,453.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,LALAPET,26.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,LINGOJIGUDA,629.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,MACHABOLLARAM,2906.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,MADANNAPET,7.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,MADHAPUR,13470.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,MANSOORABAD,1909.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,METTUGUDA,1113.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,MIYAPUR,1003.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,MOOSAPET,481.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,MOOSARAMBAGH,457.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,MOTI NAGAR,1353.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,MUSHEERABAD,516.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,NACHARAM,340.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,NAGARAM,14.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,NAGOLE,74.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,PATHERGATTI,25.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,SAIBABA NAGAR,391.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,SAIDABAD,198.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,SAROORNAGAR,530.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,SHAIKPET,1055.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,SOMAJIGUDA,2786.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,SULEMAN NAGAR,454.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,SURARAM,410.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,TARNAKA,754.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,UPPAL,343.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,VANASTHALIPURAM,1936.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,VENKATAPURAM,54.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-06,section,ZIAGUDA,98.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,city,,257769.0,REAL: sum of all portal section bookings
+2026-07,section,ADIKMET,243.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,AHMED NAGAR,86.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,AMBERPET,21.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,ASIF NAGAR,101.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,ATTAPUR,407.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,AZAMPURA,92.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,BAGH LINGAMPALLY,334.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,BALANAGAR,125.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,BANDLAGUDA,42.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,BANJARA HILLS,2391.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,BARKATPURA,474.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,BORABANDA,665.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,CHANDA NAGAR,520.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,CHENGICHERLA,1117.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,CHERLAPALLY,156.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,CHINTAL,454.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,DAMMAIGUDA,10.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,DEEPTHISRI NAGAR,1440.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,ERRAGADDA,666.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,FILM NAGAR,1518.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,GAJULARAMARAM,3595.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,GAYATRI NAGAR,4205.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,GOLCONDA,309.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,GOWLIPURA,4.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,GUNFOUNDRY,871.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,HAFEEZPET,508.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,HASMATHPET,295.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,HYDERGUDA,2657.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,JUBILEE HILLS,6119.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,KAKATIYA NAGAR,504.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,KARWAN,50.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,KATEDAN,30.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,KUKATPALLY,623.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,LALAPET,34.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,LINGOJIGUDA,474.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,MACHABOLLARAM,3271.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,MADANNAPET,6.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,MADHAPUR,11736.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,MANSOORABAD,2146.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,METTUGUDA,989.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,MIYAPUR,609.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,MOOSAPET,420.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,MOOSARAMBAGH,423.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,MOTI NAGAR,1577.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,MUSHEERABAD,493.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,NACHARAM,414.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,NAGARAM,22.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,NAGOLE,86.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,PATHERGATTI,14.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,SAIBABA NAGAR,398.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,SAIDABAD,147.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,SAROORNAGAR,489.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,SHAIKPET,883.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,SOMAJIGUDA,2526.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,SULEMAN NAGAR,339.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,SURARAM,374.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,TARNAKA,776.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,UPPAL,367.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,VANASTHALIPURAM,1467.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,VENKATAPURAM,69.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-07,section,ZIAGUDA,102.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,city,,164367.0,REAL: sum of all portal section bookings
+2026-08,section,ADIKMET,178.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,AHMED NAGAR,52.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,AMBERPET,26.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,ASIF NAGAR,66.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,ATTAPUR,366.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,AZAMPURA,13.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,BAGH LINGAMPALLY,229.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,BALANAGAR,68.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,BANDLAGUDA,23.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,BANJARA HILLS,1543.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,BARKATPURA,274.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,BORABANDA,404.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,CHANDA NAGAR,285.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,CHENGICHERLA,789.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,CHERLAPALLY,120.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,CHINTAL,291.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,DAMMAIGUDA,6.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,DEEPTHISRI NAGAR,868.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,ERRAGADDA,277.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,FILM NAGAR,963.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,GAJULARAMARAM,2546.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,GAYATRI NAGAR,2792.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,GOLCONDA,256.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,GOWLIPURA,1.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,GUNFOUNDRY,485.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,HAFEEZPET,352.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,HASMATHPET,77.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,HYDERGUDA,1884.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,JANGAMMET,1.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,JUBILEE HILLS,3062.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,KAKATIYA NAGAR,314.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,KARWAN,23.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,KATEDAN,26.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,KUKATPALLY,202.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,LALAPET,16.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,LINGOJIGUDA,196.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,MACHABOLLARAM,2739.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,MADANNAPET,6.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,MADHAPUR,8333.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,MANSOORABAD,508.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,METTUGUDA,701.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,MIYAPUR,480.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,MOOSAPET,296.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,MOOSARAMBAGH,184.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,MOTI NAGAR,731.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,MUSHEERABAD,325.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,NACHARAM,331.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,NAGARAM,18.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,NAGOLE,24.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,PATHERGATTI,6.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,SAIBABA NAGAR,158.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,SAIDABAD,77.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,SAROORNAGAR,246.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,SHAIKPET,585.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,SOMAJIGUDA,1331.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,SULEMAN NAGAR,223.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,SURARAM,95.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,TARNAKA,534.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,UPPAL,206.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,VANASTHALIPURAM,626.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,VENKATAPURAM,77.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL
+2026-08,section,ZIAGUDA,27.0,DERIVED_APPROXIMATE: historical correspondence; current published counts REAL

@@ -1,0 +1,30 @@
+{
+  "_example": {
+    "endpoint": "GET /forecast/history",
+    "status": "PROPOSED: implemented locally on feat/f5-forecast-refresh; approval pending",
+    "basis": "REAL observed totals; DERIVED forecasts and errors; approximate section matches explicitly labelled",
+    "built_from": "data/derived/forecast_history.csv"
+  },
+  "request": {
+    "level": "city"
+  },
+  "response": {
+    "items": [
+      {
+        "month": "2025-09",
+        "level": "city",
+        "section": null,
+        "actual": 47080.0,
+        "actual_basis": "REAL: sum of all portal section bookings"
+      },
+      {
+        "month": "2025-10",
+        "level": "city",
+        "section": null,
+        "actual": 48284.0,
+        "actual_basis": "REAL: sum of all portal section bookings"
+      }
+    ],
+    "total": 12
+  }
+}

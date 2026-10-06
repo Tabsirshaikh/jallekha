@@ -4,7 +4,7 @@ import { setToken } from "./api";
 import { AuthProvider } from "./auth";
 import ForecastExperience from "./ForecastExperience";
 import { LocaleProvider } from "./i18n";
-import { backtestRows, cityRow, jsonResponse, sectionRow, shortageRow } from "./test/apiFixtures";
+import { cityRow, jsonResponse, sectionRow, shortageRow } from "./test/apiFixtures";
 
 
 function renderScreen() {
@@ -24,7 +24,8 @@ function officerApi(shortage: Shortage[] = [shortageRow("ALPHA LOW", "low", { ca
     const url = new URL(input, "http://localhost");
     const q = url.searchParams;
     if (url.pathname === "/auth/me") return Promise.resolve(jsonResponse({ role: "officer", user_id: "off-1" }));
-    if (url.pathname === "/forecast/backtest") return Promise.resolve(jsonResponse({ items: backtestRows(), total: 5 }));
+
+    if (url.pathname === "/forecast/history" || url.pathname === "/forecast/accuracy") return Promise.resolve(jsonResponse({items: [], total: 0}));
     if (url.pathname === "/forecast" && q.get("level") === "city") return Promise.resolve(jsonResponse({ items: [cityRow("2026-02", 127725), cityRow("2026-03", 203085)], total: 2 }));
     if (url.pathname === "/forecast" && q.get("section")) return Promise.resolve(jsonResponse({ items: [sectionRow(q.get("section") ?? "", "2026-02", 36)], total: 1 }));
     if (url.pathname === "/forecast" && q.get("level") === "section") return Promise.resolve(jsonResponse({ items: [sectionRow("ADARSHNAGAR", "2026-02", 36), sectionRow("AMEENPUR (PD 8)", "2026-02", 30)], total: 2 }));
@@ -41,7 +42,7 @@ describe("ForecastExperience", () => {
   beforeEach(() => setToken(null));
   afterEach(() => vi.unstubAllGlobals());
 
-  it("shows the live T2 city forecast as DERIVED with blank city intervals", async () => {
+  it("preserves unavailable intervals in an older API response", async () => {
     setToken("t-officer");
     vi.stubGlobal("fetch", officerApi());
     renderScreen();
@@ -49,7 +50,7 @@ describe("ForecastExperience", () => {
     const detail = screen.getByRole("region", { name: "Selected forecast month" });
     expect(within(detail).getByText("127,725")).toBeInTheDocument();
     expect(within(detail).queryByText(/DERIVED/)).toBeNull(); // no basis labels on screen (owner decision)
-    expect(within(detail).getByText(/section intervals do not add up/)).toBeInTheDocument();
+    expect(within(detail).getAllByText(/Range unavailable/)[0]).toBeInTheDocument();
     expect(within(detail).queryByText(/^0$/)).not.toBeInTheDocument();
   });
 
@@ -64,15 +65,14 @@ describe("ForecastExperience", () => {
     expect(items).toHaveLength(3);
     expect(items[0]).toHaveTextContent("AMEENPUR (PD 8)");
     expect(items[0]).toHaveTextContent("High");
-    expect(items[0]).toHaveTextContent("1 month ahead");
-    expect(items[0]).toHaveTextContent("ASSUMED");
+    expect(items[0]).toHaveTextContent("1 months ahead");
+    expect(items[0]).not.toHaveTextContent("ASSUMED");
     expect(items[2]).toHaveTextContent("ALPHA LOW");
     const unknown = items[1];
     expect(unknown).toHaveTextContent("40 MLD STP ATTAPUR");
     expect(unknown).toHaveTextContent("Unknown");
     expect(within(unknown).getByText("—")).toBeInTheDocument();
     expect(screen.getByText(/Groundwater data unavailable/)).toBeInTheDocument();
-    expect(screen.getByText(/named as before the Feb\/Mar 2026 re-cut/)).toBeInTheDocument();
   });
 
   it("says groundwater is shown in the reasons, not used for the risk, when the API has it", async () => {
@@ -83,7 +83,7 @@ describe("ForecastExperience", () => {
     await screen.findByText("Live data");
     fireEvent.click(screen.getByRole("tab", { name: "Shortage warnings" }));
     expect(screen.getByText(/0.8 m shallower than usual/)).toBeInTheDocument();
-    expect(screen.getAllByText(/not used to set the risk|not part of the risk rule/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/not used to set the risk/).length).toBeGreaterThan(0);
     expect(screen.queryByText(/Groundwater data unavailable/)).not.toBeInTheDocument();
   });
 
@@ -121,15 +121,13 @@ describe("ForecastExperience", () => {
     expect(within(list()).getAllByRole("listitem")).toHaveLength(20);
   });
 
-  it("shows live backtest accuracy against the seasonal-naive baseline", async () => {
+  it("reports missing past comparisons plainly", async () => {
     setToken("t-officer");
     vi.stubGlobal("fetch", officerApi());
     renderScreen();
     await screen.findByText("Live data");
-    fireEvent.click(screen.getByRole("tab", { name: "Accuracy vs baseline" }));
-    expect(screen.getByText("15.1%")).toBeInTheDocument();
-    expect(screen.getByText("25.3%")).toBeInTheDocument();
-    expect(screen.getByText(/no model beats seasonal naive/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("tab", { name: "How good was our forecast?" }));
+    expect(screen.getByText(/No earlier forecast can be checked/)).toBeInTheDocument();
   });
 
   it("loads a selected section with its DERIVED interval and ASSUMED capacity", async () => {

@@ -1,0 +1,142 @@
+{
+  "updated_through": "2026-08",
+  "selected_model": "seasonal_naive",
+  "selection_origins": 31,
+  "section_matches": {
+    "exact": 0,
+    "approximate": 63,
+    "unmatched": 210
+  },
+  "selection_tests": [
+    {
+      "model": "naive_x_growth",
+      "city_mape": 25.761676346143258,
+      "section_wape": 42.77959119814257,
+      "baseline_city_mape": 31.155091207562172,
+      "baseline_section_wape": 46.57229285241361,
+      "p_value": 0.14151867069531177,
+      "passed": false
+    },
+    {
+      "model": "seasonal_level12",
+      "city_mape": 29.59483578313155,
+      "section_wape": 49.19593722322947,
+      "baseline_city_mape": 31.155091207562172,
+      "baseline_section_wape": 46.57229285241361,
+      "p_value": 0.8538282336443741,
+      "passed": false
+    },
+    {
+      "model": "seasonal_level6",
+      "city_mape": 25.41844293983361,
+      "section_wape": 47.386774926702884,
+      "baseline_city_mape": 31.155091207562172,
+      "baseline_section_wape": 46.57229285241361,
+      "p_value": 0.6342111396440313,
+      "passed": false
+    },
+    {
+      "model": "recent_seasonal_ridge",
+      "city_mape": 43.21002745713655,
+      "section_wape": 53.578370169403634,
+      "baseline_city_mape": 31.155091207562172,
+      "baseline_section_wape": 46.57229285241361,
+      "p_value": 0.9764681452268146,
+      "passed": false
+    },
+    {
+      "model": "ridge_summer",
+      "city_mape": 42.9332781141426,
+      "section_wape": 53.168142815702105,
+      "baseline_city_mape": 31.155091207562172,
+      "baseline_section_wape": 46.57229285241361,
+      "p_value": 0.9695746723453533,
+      "passed": false
+    },
+    {
+      "model": "ridge_groundwater",
+      "city_mape": 44.30881454178512,
+      "section_wape": 53.5563537055793,
+      "baseline_city_mape": 31.155091207562172,
+      "baseline_section_wape": 46.57229285241361,
+      "p_value": 0.9731928762579968,
+      "passed": false
+    },
+    {
+      "model": "ridge_reservoir",
+      "city_mape": 43.12159106163751,
+      "section_wape": 53.593560255741046,
+      "baseline_city_mape": 31.155091207562172,
+      "baseline_section_wape": 46.57229285241361,
+      "p_value": 0.9767280822847871,
+      "passed": false
+    },
+    {
+      "model": "global_gbm",
+      "city_mape": 35.50397705119481,
+      "section_wape": 39.34174197780996,
+      "baseline_city_mape": 31.155091207562172,
+      "baseline_section_wape": 46.57229285241361,
+      "p_value": 0.12181046940639118,
+      "passed": false
+    },
+    {
+      "model": "global_gbm_local_weather",
+      "city_mape": 34.35824551595852,
+      "section_wape": 39.17874885489401,
+      "baseline_city_mape": 31.155091207562172,
+      "baseline_section_wape": 46.57229285241361,
+      "p_value": 0.1196203199506118,
+      "passed": false
+    },
+    {
+      "model": "global_gbm_groundwater",
+      "city_mape": 34.70130592588336,
+      "section_wape": 39.09964396539836,
+      "baseline_city_mape": 31.155091207562172,
+      "baseline_section_wape": 46.57229285241361,
+      "p_value": 0.11145109369492799,
+      "passed": false
+    },
+    {
+      "model": "combo_naive_gbm",
+      "city_mape": 32.17597715843495,
+      "section_wape": 38.260714236762816,
+      "baseline_city_mape": 31.155091207562172,
+      "baseline_section_wape": 46.57229285241361,
+      "p_value": 0.002999189900808355,
+      "passed": false
+    }
+  ],
+  "city_coverage": [
+    {
+      "run": "refresh",
+      "row_type": "city_coverage",
+      "model": "seasonal_naive",
+      "interval": 0.8,
+      "months": 22,
+      "section_months": 22,
+      "coverage": 0.5454545454545454,
+      "coverage_basis": "DERIVED: first-half city absolute residuals calibrated; later half measured",
+      "note": "21 calibration months; one-step coverage, not a 12-step guarantee"
+    },
+    {
+      "run": "refresh",
+      "row_type": "city_coverage",
+      "model": "seasonal_naive",
+      "interval": 0.9,
+      "months": 22,
+      "section_months": 22,
+      "coverage": 0.8181818181818182,
+      "coverage_basis": "DERIVED: first-half city absolute residuals calibrated; later half measured",
+      "note": "21 calibration months; one-step coverage, not a 12-step guarantee"
+    }
+  ],
+  "basis": "DERIVED: refreshed rolling-origin evaluation; matched section boundary equivalence unverified",
+  "frozen_2026_holdout": {
+    "months": 7,
+    "previous_model_city_mape": 31.101779029003914,
+    "seasonal_naive_city_mape": 31.767594652590926,
+    "basis": "DERIVED: archived Jan2026 forecast versus exact Feb-Aug portal totals"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "_example": {
+    "endpoint": "GET /forecast/accuracy",
+    "status": "PROPOSED: implemented locally on feat/f5-forecast-refresh; approval pending",
+    "basis": "REAL observed totals; DERIVED forecasts and errors; approximate section matches explicitly labelled",
+    "built_from": "data/derived/forecast_accuracy.csv"
+  },
+  "request": {
+    "level": "city"
+  },
+  "response": {
+    "items": [
+      {
+        "month": "2025-09",
+        "level": "city",
+        "section": null,
+        "point": 40312.0,
+        "actual": 47080.0,
+        "error_pct": -14.375531011045029,
+        "capacity_trips": 303210.0,
+        "point_basis": "DERIVED: retrospective rolling-origin estimate; not a previously issued forecast",
+        "actual_basis": "REAL: portal city total",
+        "error_pct_basis": "DERIVED: signed forecast error / actual",
+        "capacity_trips_basis": "DERIVED: current fleet assumption applied to month"
+      },
+      {
+        "month": "2025-10",
+        "level": "city",
+        "section": null,
+        "point": 43156.0,
+        "actual": 48284.0,
+        "error_pct": -10.620495402203629,
+        "capacity_trips": 313317.0,
+        "point_basis": "DERIVED: retrospective rolling-origin estimate; not a previously issued forecast",
+        "actual_basis": "REAL: portal city total",
+        "error_pct_basis": "DERIVED: signed forecast error / actual",
+        "capacity_trips_basis": "DERIVED: current fleet assumption applied to month"
+      }
+    ],
+    "total": 12
+  }
+}

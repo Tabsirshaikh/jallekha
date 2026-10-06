@@ -124,7 +124,7 @@ def main(argv: list[str] | None = None) -> int:
     s2 = fc.load_panel(S2_DIR, cfg.baseline_column)
     portal = fc.load_panel(PORTAL_DIR, cfg.baseline_column, through=cfg.portal_through)
     rows_s2, summary_s2, _ = _run("s2_2022-01_2024-02", s2)
-    portal_name = f"portal_2022-01_{_label(cfg.portal_through)}"
+    portal_name = f"portal_2022-01_{_label(portal.months[-1])}"
     rows_portal, summary_portal, backtest_portal = _run(portal_name, portal)
     # The rule is judged on the longest run (portal); S2 only checks the documented baseline.
     history = {o: fc.yoy_months(portal.until(o)) for o in {r.origin for r in backtest_portal}}

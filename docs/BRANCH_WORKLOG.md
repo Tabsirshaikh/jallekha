@@ -1249,3 +1249,21 @@ The pull-request description must summarize the same information and link to thi
   all data verifiers and production build pass. The first full run exposed stale sandbox
   provenance after the E4 rebuild; refreshed only the E4 summary checksum because its consumed
   Gini values are unchanged, then reran the full suite successfully.
+
+
+## feat/f5-forecast-refresh ? 2026-10-06 (local, owner approval pending)
+
+Refreshed exact city bookings through Aug2026 and Sep2026-Aug2027 horizon; tested fixed level,
+recency Ridge, summer and lagged groundwater/reservoir candidates alongside existing models.
+No candidate passes both metrics plus HLN DM: retain seasonal naive, disclose undercoverage.
+Added direct city ranges, paged history/accuracy API, conservative one-to-one section matches
+(63 approximate/210 unmatched), unknown warnings instead of invented counts/capacities, and
+logged Q2 reservoir context. Corrected transient NEW aliases after browser review exposed a
+missing May; unavailable section-month identities stay absent. Replaced illustrative U6 output
+with actual published snapshots and separate observed/future/accuracy/section views in en/te/ur/hi.
+
+TDD: new refresh tests failed on missing module; passed after implementation. Alias regression
+failed on NEW suffix then passed. Frontend tests failed before redraw and passed after. Full lint
+passed; full backend run 995 passed/2 failed in373s: outdated forecast example and inherited
+sandbox input hash. Both fixed and 45 affected checks pass; all194 frontend tests, i18n and every data verifier pass.
+No push, PR or merge. Evidence and reproducible commands in LIMITATIONS F5/F6 and API addition.

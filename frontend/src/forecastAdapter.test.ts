@@ -26,6 +26,12 @@ describe("basisTag", () => {
 });
 
 describe("outlookFromApi", () => {
+  it("uses calibrated city ranges and the forecast's capacity for all twelve months", () => {
+    const rows = [{ ...cityRow("2026-09", 200000), lower_80: 160000, upper_80: 240000,
+      lower_90: 140000, upper_90: 260000, lower_80_basis: "DERIVED: city calibration",
+      capacity_trips: 303210, capacity_trips_basis: "DERIVED: fleet trips" }] as ApiForecastRow[];
+    expect(outlookFromApi(rows, [])[0]).toMatchObject({low80: 160000, high90: 260000, capacity: 303210, capacityBasis: "DERIVED"});
+  });
   it("keeps city intervals null (not zero), carries bases and sorts by month", () => {
     const rows = [cityRow("2026-03", 203085), cityRow("2026-02", 127725)] as ApiForecastRow[];
     const outlook = outlookFromApi(rows, []);

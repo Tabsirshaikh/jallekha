@@ -21,7 +21,14 @@ export type ApiForecastRow = {
   upper_90: number | null;
   lower_90_basis: string | null;
   upper_90_basis: string | null;
+  capacity_trips?: number | null;
+  capacity_trips_basis?: string | null;
+  updated_through?: string;
+  match_status?: string;
 };
+
+export type ApiHistoryRow = {month: string; level: string; section: string | null; actual: number | null; actual_basis: string; updated_through?: string};
+export type ApiAccuracyRow = ApiHistoryRow & {point: number | null; error_pct: number | null; capacity_trips?: number | null};
 
 export type ApiBacktestRow = {
   run: string;
@@ -133,7 +140,7 @@ export function outlookFromApi(rows: ApiForecastRow[], shortage: ShortageRow[]):
     .sort((a, b) => a.month.localeCompare(b.month))
     .map((row) => {
       const capacityRow = row.section === null ? undefined : shortage.find((s) => s.section === row.section && s.month === row.month);
-      const capacity = capacityRow?.capacity ?? null;
+      const capacity = row.capacity_trips ?? capacityRow?.capacity ?? null;
       const rangeBasis = basisTag(row.lower_80_basis);
       return {
         month: row.month,
@@ -145,7 +152,7 @@ export function outlookFromApi(rows: ApiForecastRow[], shortage: ShortageRow[]):
         capacity,
         basis: basisTag(row.point_basis),
         rangeBasis,
-        capacityBasis: capacity === null ? "UNAVAILABLE" : (capacityRow?.capacityBasis ?? "UNAVAILABLE"),
+        capacityBasis: capacity === null ? "UNAVAILABLE" : row.capacity_trips != null ? basisTag(row.capacity_trips_basis) : (capacityRow?.capacityBasis ?? "UNAVAILABLE"),
         rangeNote: rangeBasis === "UNAVAILABLE" ? detail(row.lower_80_basis) : null,
       };
     });
