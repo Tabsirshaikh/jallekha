@@ -84,4 +84,17 @@ describe("EvidenceExperience", () => {
     fireEvent.click(within(container.querySelector(".atlas-search ul") as HTMLElement).getByRole("button", { name: "Ward 105 Gachibowli" }));
     expect(screen.getByRole("dialog", { name: "Ward 105 Gachibowli" })).toBeInTheDocument();
   });
+
+  it("zooms only with the buttons", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    const { container } = renderScreen();
+    const svg = container.querySelector(".atlas-map") as SVGSVGElement;
+    const fitted = svg.getAttribute("viewBox");
+    fireEvent.wheel(svg, { deltaY: -100 });
+    expect(svg.getAttribute("viewBox")).toBe(fitted);
+    fireEvent.click(screen.getByRole("button", { name: "Zoom in" }));
+    expect(svg.getAttribute("viewBox")).not.toBe(fitted);
+    fireEvent.click(screen.getByRole("button", { name: "Fit map" }));
+    expect(svg.getAttribute("viewBox")).toBe(fitted);
+  });
 });

@@ -23,8 +23,6 @@
 .atlas-map path { stroke: #fff; stroke-width: 1.2; cursor: pointer; transition: opacity .15s, stroke-width .15s; vector-effect: non-scaling-stroke; }
 .atlas-map path.hover { stroke: var(--deep); stroke-width: 2; }
 .atlas-map path.selected { stroke: var(--ink); stroke-width: 3; }
-.atlas-map { touch-action: none; cursor: grab; user-select: none; }
-.atlas-map:active { cursor: grabbing; }
 .atlas-map path:focus { outline: none; }
 .atlas-map path:focus-visible { outline: none; stroke: var(--green); stroke-width: 3; }
 .atlas-overlay { position: absolute; z-index: 5; }

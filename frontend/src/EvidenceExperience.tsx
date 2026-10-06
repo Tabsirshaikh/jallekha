@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { useLocale, type Locale } from "./i18n";
 import { useAuth } from "./auth";
 import { useApi } from "./useApi";
@@ -102,31 +102,27 @@ export default function EvidenceExperience() {
     return { width, height, paths: new Map(shapes.map((s) => [s.id, s.rings.map((r) => "M" + r.map(project).join("L") + "Z").join("")])) };
   }, [shapes]);
 
-  // Zoom and drag: the view box moves over the fitted map; a drag never counts as a click.
+  // Zoom by the + / - buttons only (no wheel or drag, so the map box never changes size):
+  // towards the selected ward, else the centre of the current view.
   const [zoom, setZoom] = useState<{ x: number; y: number; w: number } | null>(null);
-  const box = zoom ?? { x: -10, y: -10, w: view.width + 20 };
-  const boxH = (box.w * (view.height + 20)) / (view.width + 20);
-  const drag = useRef<{ px: number; py: number; x: number; y: number; moved: boolean } | null>(null);
-  const svgRef = useRef<SVGSVGElement | null>(null);
-  const zoomBy = (factor: number, cx = 0.5, cy = 0.5) => {
-    const w2 = Math.min(view.width + 20, Math.max(80, box.w * factor));
-    const h2 = (w2 * (view.height + 20)) / (view.width + 20);
-    setZoom({ x: box.x + (box.w - w2) * cx, y: box.y + (boxH - h2) * cy, w: w2 });
+  const full = view.width + 20, fullH = view.height + 20;
+  const box = zoom ?? { x: -10, y: -10, w: full };
+  const boxH = (box.w * fullH) / full;
+  const centre = (): [number, number] => {
+    const d = selectedId ? view.paths.get(selectedId) : undefined;
+    const nums = d ? (d.match(/-?\d+(\.\d+)?/g) ?? []).map(Number) : [];
+    if (nums.length < 2) return [box.x + box.w / 2, box.y + boxH / 2];
+    const xs = nums.filter((_, i) => i % 2 === 0), ys = nums.filter((_, i) => i % 2 === 1);
+    return [(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...ys) + Math.max(...ys)) / 2];
   };
-  const onWheel = (e: React.WheelEvent<SVGSVGElement>) => {
-    const r = svgRef.current?.getBoundingClientRect();
-    if (!r) return;
-    zoomBy(e.deltaY < 0 ? 0.8 : 1.25, (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height);
+  const zoomBy = (factor: number) => {
+    const w2 = Math.min(full, Math.max(80, box.w * factor));
+    if (w2 >= full) { setZoom(null); return; }
+    const h2 = (w2 * fullH) / full;
+    const [cx, cy] = centre();
+    setZoom({ x: Math.min(Math.max(cx - w2 / 2, -10), full - 10 - w2), y: Math.min(Math.max(cy - h2 / 2, -10), fullH - 10 - h2), w: w2 });
   };
-  const onDown = (e: React.PointerEvent<SVGSVGElement>) => { drag.current = { px: e.clientX, py: e.clientY, x: box.x, y: box.y, moved: false }; };
-  const onMove = (e: React.PointerEvent<SVGSVGElement>) => {
-    const d = drag.current, r = svgRef.current?.getBoundingClientRect();
-    if (!d || !r) return;
-    const dx = e.clientX - d.px, dy = e.clientY - d.py;
-    if (Math.abs(dx) + Math.abs(dy) > 4) d.moved = true;
-    if (d.moved) setZoom({ x: d.x - (dx * box.w) / r.width, y: d.y - (dy * boxH) / r.height, w: box.w });
-  };
-  const pick = (id: string) => { if (!drag.current?.moved) setSelectedId(id); };
+  const pick = (id: string) => setSelectedId(id);
 
   const metric = (r: Ward): number | null =>
     tab === "bookings" ? bookingsOf(r) : shown === "wad" ? r.waterAccessDeficitShare : shown === "cad" ? r.constrainedAccessShare ?? null : shown === "growth" ? (r.growthRatio === null ? null : r.growthRatio - 1) : null;
@@ -174,8 +170,7 @@ export default function EvidenceExperience() {
           {tab === "bookings" && !conc && <div className="atlas-stat-card"><p className="atlas-big">{fill(w.topShare, { n: fmt(dataset.summary.equity.top_section_count), p: pct(dataset.summary.equity.top_booking_share) })}</p><p className="muted">{w.sourceHistory}</p></div>}
           {tab === "checks" && <p className="atlas-stat"><strong>{fmt(checks.length)}</strong> {w.wardsChecked}</p>}
         </div>
-        <svg ref={svgRef} className="atlas-map" viewBox={`${box.x} ${box.y} ${box.w} ${boxH}`} role="group" aria-label={w.title}
-          onWheel={onWheel} onPointerDown={onDown} onPointerMove={onMove} onPointerUp={() => setTimeout(() => { drag.current = null; }, 0)} onPointerLeave={() => { drag.current = null; }}>
+        <svg className="atlas-map" viewBox={`${box.x} ${box.y} ${box.w} ${boxH}`} role="group" aria-label={w.title}>
           {rows.map((r) => {
             const d = view.paths.get(r.id);
             if (!d) return null;
