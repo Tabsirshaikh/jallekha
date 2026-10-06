@@ -53,3 +53,6 @@
   .forecast-heading-tags { justify-content: flex-start; }
   .shortage-figures { grid-template-columns: 1fr; }
 }
+
+/* Owner decision 2026-10-06: no basis labels on the officer screens (kept in API, data, docs). */
+.forecast-page .source-tag, .forecast-page .shortage-figures b, .forecast-page .eyebrow { display: none; }
