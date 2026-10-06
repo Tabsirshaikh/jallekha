@@ -140,6 +140,18 @@ def plan_view(record: PlanRecord) -> dict[str, Any]:
         )
     }  # fmt: skip
     recipe = record.recipe or {}
+    group_of = {p.booking.booking_id: p.booking.group for p in record.inputs.pending}
+    group_totals: dict[str, dict[str, int]] = {}
+    for st in record.plan.stations.values():
+        for b in st.served:
+            group_totals.setdefault(b.group, {"served": 0, "waiting": 0})["served"] += 1
+        for booking_id in st.waiting:
+            group_totals.setdefault(group_of[booking_id], {"served": 0, "waiting": 0})[
+                "waiting"
+            ] += 1
+    by_ward = unplaced = None
+    if recipe.get("source") == plan_builder.SECTION:
+        by_ward, unplaced = section_plan.ward_totals(REPO_ROOT, group_totals)
     weights = recipe.get("weights")
     shown = NeedWeights(**weights) if weights else NeedWeights.default()
     stops = recipe.get("stops", [])
@@ -150,6 +162,11 @@ def plan_view(record: PlanRecord) -> dict[str, Any]:
             "unit": recipe.get("unit", "ward"),
             "capacity_scenario": recipe.get("capacity"),
             "trips_total": sum(st["trips"] for st in stations.values()),
+            # Served and waiting bookings per group; for a plan by section also per ward (shared
+            # by building share, an estimate) and what no ward could take.
+            "group_totals": group_totals,
+            "ward_totals": by_ward,
+            "ward_unplaced": unplaced,
             # Registered delivery stops the plan used (supplied plans) and its loads for each.
             "stops": [
                 {

@@ -336,3 +336,44 @@ def trips_per_day() -> int:
     from app.config.sandbox import SANDBOX_CONFIG
 
     return int(SANDBOX_CONFIG.fleet_tankers * SANDBOX_CONFIG.trips_per_tanker_day)
+
+
+WEIGHTS_REVIEWED = "data/derived/crosswalk/section_ward_building_weights_reviewed.csv"
+WEIGHTS = "data/derived/crosswalk/section_ward_building_weights.csv"
+_WARD_WEIGHTS: dict[str, tuple[float, dict[str, dict[str, float]]]] = {}
+
+
+def ward_weights(root: Path) -> dict[str, dict[str, float]]:
+    """Share of each section's buildings in each ward (the reviewed build when present)."""
+    path = root / (WEIGHTS_REVIEWED if (root / WEIGHTS_REVIEWED).exists() else WEIGHTS)
+    mtime = path.stat().st_mtime
+    cached = _WARD_WEIGHTS.get(str(path))
+    if cached is None or cached[0] != mtime:
+        table: dict[str, dict[str, float]] = defaultdict(dict)
+        with path.open(encoding="utf-8", newline="") as handle:
+            for r in csv.DictReader(handle):
+                table[r["section"]][r["ward_id"]] = float(r["weight"])
+        _WARD_WEIGHTS[str(path)] = (mtime, dict(table))
+    return _WARD_WEIGHTS[str(path)][1]
+
+
+def ward_totals(
+    root: Path, group_totals: Mapping[str, Mapping[str, int]]
+) -> tuple[dict[str, dict[str, float]], dict[str, float]]:
+    """Served and waiting bookings of the sections, shared over wards by building share (an
+    estimate, DERIVED_APPROXIMATE), and what could not be placed on any ward."""
+    weights = ward_weights(root)
+    wards: dict[str, dict[str, float]] = {}
+    unplaced = {"served": 0.0, "waiting": 0.0}
+    for group, t in group_totals.items():
+        shares = weights.get(group.removeprefix(SECTION_PREFIX))
+        if not shares:
+            unplaced["served"] += t["served"]
+            unplaced["waiting"] += t["waiting"]
+            continue
+        for ward, w in shares.items():
+            row = wards.setdefault(ward, {"served": 0.0, "waiting": 0.0})
+            row["served"] += t["served"] * w
+            row["waiting"] += t["waiting"] * w
+    rounded = {w: {k: round(v, 1) for k, v in r.items()} for w, r in wards.items()}
+    return rounded, {k: round(v, 1) for k, v in unplaced.items()}

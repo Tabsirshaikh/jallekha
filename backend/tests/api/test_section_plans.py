@@ -49,6 +49,11 @@ def test_section_plan_through_the_api(client) -> None:  # type: ignore[no-untype
     waiting = sum(s["waiting_total"] for s in plan["stations"].values())
     assert served + waiting > 6000 and waiting > 0  # the tight scenario leaves some waiting
     assert all(g.startswith("section:") for g in plan["effective_entitlement"])
+    totals = plan["group_totals"]
+    assert sum(t["served"] + t["waiting"] for t in totals.values()) == served + waiting
+    by_ward = sum(w["served"] + w["waiting"] for w in plan["ward_totals"].values())
+    placed = by_ward + plan["ward_unplaced"]["served"] + plan["ward_unplaced"]["waiting"]
+    assert abs(placed - (served + waiting)) < 5  # shared over wards by building share, rounded
     # the same request again returns the stored plan, nothing new is built
     again = client.post("/plans", json=body, headers=auth("officer"))
     assert again.status_code == 200 and again.json()["digest"] == plan["digest"]
