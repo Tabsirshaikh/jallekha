@@ -22,6 +22,9 @@ export type ScheduleRow = { wardId: string; litres: number | null; floor: number
 export type OutageView = { critical: number | null; allocations: number | null; unusedLitres: number | null; countsTowardDebt: boolean | null; basis: Record<string, string> };
 export type ConfidenceView = { threshold: number | null; thresholdBasis: string | null; calibrationStatus: string | null; groups: number; belowThreshold: number };
 
+/** Served and waiting bookings of one group (section or ward) in the day's plan. */
+export type GroupTotals = { served: number; waiting: number };
+
 export type LivePlan = {
   id: string; day: string; status: string; approved: boolean; approvedBy: string | null; approvalReason: string | null;
   basis: { plan: string | null; entitlement: string | null; flags: string | null; weights: string | null };
@@ -31,6 +34,14 @@ export type LivePlan = {
   names: Record<string, string | null>;
   /** planner_replay (the committed replay) or supplied_bookings; null when the answer does not say. */
   source: string | null;
+  /** "section" for a plan by section (real month totals divided by days), else "ward". */
+  unit: "section" | "ward";
+  /** fleet or tight for a plan by section; null otherwise. */
+  capacityScenario: string | null;
+  /** Served and waiting bookings per group; for a plan by section also per ward (shared by building share). */
+  groupTotals: Record<string, GroupTotals>;
+  wardTotals: Record<string, GroupTotals> | null;
+  wardUnplaced: GroupTotals | null;
   bookingsSupplied: number | null;
   trips: number | null; reserveTrips: number | null; outageTrips: number | null; served: number | null; waiting: number | null; stationsTotal: number | null;
   queue: QueueRow[]; flags: FlagRow[]; flagsTotal: number; checkedTotal: number; unchecked: string[];
@@ -104,6 +115,18 @@ function toConfidence(raw: unknown): { view: ConfidenceView; byGroup: Map<string
   };
 }
 
+function totalsOf(value: unknown): Record<string, GroupTotals> | null {
+  if (!isRow(value)) return null;
+  const out: Record<string, GroupTotals> = {};
+  for (const [key, row] of Object.entries(value)) {
+    const served = isRow(row) ? num(row.served) : null;
+    const waiting = isRow(row) ? num(row.waiting) : null;
+    if (served === null || waiting === null) return null;
+    out[key] = { served, waiting };
+  }
+  return out;
+}
+
 export function adaptLivePlan(rawPlan: unknown, rawConfidence: unknown): LivePlan | null {
   const confidence = toConfidence(rawConfidence);
   if (!confidence || !isRow(rawPlan) || typeof rawPlan.plan_id !== "string" || typeof rawPlan.day !== "string") return null;
@@ -159,6 +182,11 @@ export function adaptLivePlan(rawPlan: unknown, rawConfidence: unknown): LivePla
     weights: planWeights && isRow(rawPlan.weights) ? { ...planWeights, isDefault: rawPlan.weights.is_default === true } : null,
     names,
     source: text(rawPlan.source),
+    unit: rawPlan.unit === "section" ? "section" : "ward",
+    capacityScenario: text(rawPlan.capacity_scenario),
+    groupTotals: totalsOf(rawPlan.group_totals) ?? {},
+    wardTotals: totalsOf(rawPlan.ward_totals),
+    wardUnplaced: isRow(rawPlan.ward_unplaced) && num(rawPlan.ward_unplaced.served) !== null && num(rawPlan.ward_unplaced.waiting) !== null ? { served: rawPlan.ward_unplaced.served as number, waiting: rawPlan.ward_unplaced.waiting as number } : null,
     bookingsSupplied: num(rawPlan.bookings_supplied),
     trips: stations.length ? sum(stations.map((station) => num(station.trips))) : null,
     reserveTrips: num(rawPlan.reserve_trips),

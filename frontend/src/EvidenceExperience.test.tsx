@@ -8,13 +8,15 @@ import { errorFetch, liveFetch } from "./test/evidenceFixtures";
 import { expectNoDataRequests } from "./test/noDataRequests";
 
 function renderScreen() {
-  return render(
+  const view = render(
     <LocaleProvider>
       <AuthProvider>
         <EvidenceExperience />
       </AuthProvider>
     </LocaleProvider>,
   );
+  fireEvent.click(screen.getByRole("tab", { name: "Wards" })); // the screen opens on the sections map
+  return view;
 }
 
 describe("EvidenceExperience", () => {
@@ -75,8 +77,8 @@ describe("EvidenceExperience", () => {
     expect(container.querySelectorAll(".atlas-map circle")).toHaveLength(cards.length);
     const first = within(cards[0] as HTMLElement);
     expect(first.getByText(/^Booked .* tankers in 2025$/)).toBeInTheDocument();
-    expect(first.getByText(/^Bookings per 1,000 domestic connections:/)).toBeInTheDocument();
-    expect(first.getByText(/^Similar sections' rate:/)).toBeInTheDocument();
+    expect(first.getByText(/^Booked .* tankers in 2025/)).toBeInTheDocument();
+    expect(first.getByText(/^Similar sections booked about/)).toBeInTheDocument();
     expect(screen.queryByText(/^Statistical model/)).not.toBeInTheDocument();
     expect(first.getByText("Not yet checked on the ground")).toBeInTheDocument();
     fireEvent.click(first.getByRole("button", { name: "Open on map" }));
@@ -100,8 +102,8 @@ describe("EvidenceExperience", () => {
     fireEvent.click(dot);
     const detail = within(screen.getByRole("region", { name: dot.getAttribute("aria-label")! }));
     expect(detail.getByText(/^Booked .* tankers in 2025$/)).toBeInTheDocument();
-    expect(detail.getByText(/^Bookings per 1,000 domestic connections:/)).toBeInTheDocument();
-    expect(detail.getByText(/^Similar sections' rate:/)).toBeInTheDocument();
+    expect(detail.getByText(/^Booked .* tankers in 2025/)).toBeInTheDocument();
+    expect(detail.getByText(/^Similar sections booked about/)).toBeInTheDocument();
     expect(detail.getByText("Not yet checked on the ground")).toBeInTheDocument();
     expect(dot).toHaveAttribute("aria-pressed", "true");
   });

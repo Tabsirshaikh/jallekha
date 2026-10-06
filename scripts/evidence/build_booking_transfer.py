@@ -30,6 +30,14 @@ from app.services.booking_transfer import cells  # noqa: E402
 OUTPUT = "data/derived/crosswalk/section_ward_building_weights.csv"
 SUMMARY = "data/derived/crosswalk/section_ward_building_summary.json"
 POINTS = "data/derived/crosswalk/section_to_ward_2016.csv"
+# Second build (--with-reviewed): the same method with the reviewed placements of sections the
+# geocoder could not find (scripts/data/place_missing_sections.py, then a person's review) added as
+# extra points. Adding points changes every neighbour's cell, so the whole transfer is rebuilt.
+# Written beside, never over, the first build, which the ward-level files were built from.
+REVIEWED = "data/derived/crosswalk/section_placement_reviewed.csv"
+OUTPUT_REVIEWED = "data/derived/crosswalk/section_ward_building_weights_reviewed.csv"
+SUMMARY_REVIEWED = "data/derived/crosswalk/section_ward_building_summary_reviewed.json"
+ACCEPTED = ("ACCEPT_AUTO", "ACCEPT_REVIEWED")
 GEOMETRY = "data/raw/geography/datameet/ghmc-wards.geojson"
 
 
@@ -61,7 +69,16 @@ def sample(geometry, values, valid, affine):
     return float(samples.sum(dtype="float64")), int(inside.sum()), int(selected.sum())
 
 
-def build(root=ROOT):
+def reviewed_points(root):
+    """Placed sections of the review file, as rows shaped like the geocoded points."""
+    return [
+        {"section": r["section"], "division": r["division"], "lat": r["lat"], "lng": r["lng"]}
+        for r in records(root / REVIEWED)
+        if r["final_status"] in ACCEPTED and r["lat"] and r["lng"]
+    ]
+
+
+def build(root=ROOT, with_reviewed=False):
     projected = Transformer.from_crs(4326, CONFIG.projected_crs, always_xy=True)
     features = json.loads((root / GEOMETRY).read_text(encoding="utf-8"))["features"]
     wards = {
@@ -70,6 +87,9 @@ def build(root=ROOT):
     }
     city = unary_union(list(wards.values()))
     points = records(root / POINTS)
+    if with_reviewed:
+        known = {r["section"] for r in points if r["lat"] and r["lng"]}
+        points += [p for p in reviewed_points(root) if p["section"] not in known]
     sites = {
         r["section"]: (*projected.transform(float(r["lng"]), float(r["lat"])), r["division"])
         for r in points
@@ -87,7 +107,7 @@ def build(root=ROOT):
     )
     if not tiles:
         raise ValueError("Missing Open Buildings grid inputs")
-    inputs = [root / POINTS, root / GEOMETRY]
+    inputs = [root / POINTS, root / GEOMETRY] + ([root / REVIEWED] if with_reviewed else [])
     coverage = []
     for path in tiles:
         meta_path = path.with_suffix(".json")
@@ -183,12 +203,18 @@ def build(root=ROOT):
     writer.writeheader()
     writer.writerows(rows)
     return {
-        OUTPUT: stream.getvalue().encode(),
-        SUMMARY: (json.dumps(summary, indent=2, sort_keys=True) + "\n").encode(),
+        OUTPUT_REVIEWED if with_reviewed else OUTPUT: stream.getvalue().encode(),
+        SUMMARY_REVIEWED if with_reviewed else SUMMARY: (
+            json.dumps(summary, indent=2, sort_keys=True) + "\n"
+        ).encode(),
     }
 
 
 if __name__ == "__main__":
-    for name, content in build().items():
+    reviewed = "--with-reviewed" in sys.argv
+    for name, content in build(with_reviewed=reviewed).items():
         (ROOT / name).write_bytes(content)
-    print("Approximate building-weighted section transfer built")
+    print(
+        "Approximate building-weighted section transfer built"
+        + (" (with reviewed placements)" if reviewed else "")
+    )

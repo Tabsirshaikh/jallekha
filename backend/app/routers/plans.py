@@ -8,24 +8,29 @@ plan is 404, a stored plan that no longer rebuilds to its digest is 409.
 
 from __future__ import annotations
 
+import json
 from collections.abc import Iterator
 from contextlib import contextmanager
 from dataclasses import asdict
 from datetime import UTC, date, datetime
 from functools import lru_cache
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Response
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, ConfigDict
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 from app.auth import require_roles
 from app.config.allocation import ALLOCATION_CONFIG
 from app.config.api import ApiConfig
 from app.config.confidence import CONFIDENCE_CONFIG
 from app.config.env import REPO_ROOT
+from app.models import SupplyNotice
 from app.routers import evidence
 from app.routers.common import csv_rows, invalid, not_found, page, typed
+from app.routers.notices import get_notice_service
 from app.routers.stores import (
     DebtStore,
     DeliveryStore,
@@ -43,10 +48,13 @@ from app.services import (
     ledger_store,
     plan_builder,
     planner,
+    route_schedule,
+    section_plan,
     ward_locate,
 )
 from app.services.keyed_lock import KeyedLocks
 from app.services.ledger_store import StoredLedger
+from app.services.notices import NoticeService
 from app.services.service_models import NeedWeights
 
 router = APIRouter(tags=["plans"])
@@ -99,6 +107,38 @@ class NewPlan(BaseModel):
     # The day's bookings, supplied by an officer (see docs/api_additions/plans.md). Absent: the
     # plan is built from the committed replay, which needs a day inside its window.
     bookings: list[dict[str, Any]] | None = None
+    # "section": plan by HMWSSB section from the real monthly totals of the day's month divided by
+    # the days (section_plan.py); `capacity` is then the fleet or the tight scenario.
+    unit: Literal["ward", "section"] = "ward"
+    capacity: Literal["fleet", "tight"] = "fleet"
+    # For a plan by section (section_plan.py): estimated priority classes, scheduled supply for the
+    # sections the F4 screen flags, and carry-over from the days before. Outages come from the
+    # supply notices that overlap the day.
+    priority: bool = True
+    scheduled: Literal["f4", "none"] = "f4"
+    carry_over: bool = True
+
+
+def _notice_outages(notices: NoticeService, day: date) -> list[dict[str, Any]]:
+    """Supply notices overlapping the day, as outages by section (stored in the plan's recipe)."""
+    with Session(notices.engine) as session:
+        rows = session.execute(
+            select(
+                SupplyNotice.id,
+                SupplyNotice.ward_ids_json,
+                SupplyNotice.start_at,
+                SupplyNotice.end_at,
+            )
+        ).all()
+
+    def aware(moment: datetime) -> datetime:
+        return moment if moment.tzinfo else moment.replace(tzinfo=UTC)
+
+    found = [
+        {"id": r[0], "ward_ids": json.loads(r[1]), "start": aware(r[2]), "end": aware(r[3])}
+        for r in rows
+    ]
+    return section_plan.outages_from_notices(REPO_ROOT, found, day)  # type: ignore[arg-type]
 
 
 def _record(plans: PlanStore, plan_id: str) -> PlanRecord:
@@ -135,6 +175,18 @@ def plan_view(record: PlanRecord) -> dict[str, Any]:
         )
     }  # fmt: skip
     recipe = record.recipe or {}
+    group_of = {p.booking.booking_id: p.booking.group for p in record.inputs.pending}
+    group_totals: dict[str, dict[str, int]] = {}
+    for st in record.plan.stations.values():
+        for b in st.served:
+            group_totals.setdefault(b.group, {"served": 0, "waiting": 0})["served"] += 1
+        for booking_id in st.waiting:
+            group_totals.setdefault(group_of[booking_id], {"served": 0, "waiting": 0})[
+                "waiting"
+            ] += 1
+    by_ward = unplaced = None
+    if recipe.get("source") == plan_builder.SECTION:
+        by_ward, unplaced = section_plan.ward_totals(REPO_ROOT, group_totals)
     weights = recipe.get("weights")
     shown = NeedWeights(**weights) if weights else NeedWeights.default()
     stops = recipe.get("stops", [])
@@ -142,6 +194,14 @@ def plan_view(record: PlanRecord) -> dict[str, Any]:
     view.update(
         {
             "source": recipe.get("source", plan_builder.SOURCE),
+            "unit": recipe.get("unit", "ward"),
+            "capacity_scenario": recipe.get("capacity"),
+            "trips_total": sum(st["trips"] for st in stations.values()),
+            # Served and waiting bookings per group; for a plan by section also per ward (shared
+            # by building share, an estimate) and what no ward could take.
+            "group_totals": group_totals,
+            "ward_totals": by_ward,
+            "ward_unplaced": unplaced,
             # Registered delivery stops the plan used (supplied plans) and its loads for each.
             "stops": [
                 {
@@ -185,6 +245,7 @@ def create_plan(
     response: Response,
     deliveries: Deliveries,
     debts: Debts,
+    notices: Annotated[NoticeService, Depends(get_notice_service)],
 ) -> dict[str, Any]:
     """Build and store a plan (T9 gate): from the bookings supplied in the request, or, without
     them, for a day of the committed replay. A supplied plan also uses the registered delivery
@@ -195,9 +256,14 @@ def create_plan(
         weights = NeedWeights(**body.weights.model_dump()).validated() if body.weights else None
     except ValueError as exc:
         return invalid(str(exc))
+    by_section = body.unit == "section"
+    if by_section and body.bookings is not None:
+        return invalid("A plan by section is made from the month's totals: do not supply bookings")
     supplied = body.bookings is not None
     stops: list[dict[str, Any]] = []
     owed: list[Any] = []
+    if by_section:
+        owed = list(debts.accounts().values())
     if supplied:
         stops = [
             {"stop_id": s.stop_id, "ward_id": s.ward_id, "lat": s.lat, "lon": s.lon}
@@ -205,9 +271,22 @@ def create_plan(
             if s.ward_id
         ]
         owed = list(debts.accounts().values())
+    recipe: dict[str, Any] = {}
+    if by_section:
+        try:
+            recipe = plan_builder.section_recipe(
+                body.day, body.capacity, weights, owed, body.priority, body.scheduled,
+                body.carry_over, _notice_outages(notices, body.day),
+            )  # fmt: skip
+        except plan_builder.InvalidBookings as exc:
+            return invalid(str(exc))
+        except plan_builder.ReplayDayUnavailable as exc:
+            raise HTTPException(404, str(exc)) from exc
     try:
         plan_id = (
-            plan_builder.supplied_plan_id(body.day, body.bookings, weights, stops, owed)
+            plan_builder.section_plan_id(body.day, body.capacity, weights, recipe)
+            if by_section
+            else plan_builder.supplied_plan_id(body.day, body.bookings, weights, stops, owed)
             if body.bookings is not None
             else plan_builder.plan_id_for(body.day, weights)
         )
@@ -222,7 +301,9 @@ def create_plan(
         return plan_view(existing)
     try:
         built = (
-            plan_builder.build_supplied_plan(
+            plan_builder._build_section(recipe)
+            if by_section
+            else plan_builder.build_supplied_plan(
                 body.day, body.bookings, weights=weights, stops=stops, debts=owed
             )
             if body.bookings is not None
@@ -237,6 +318,13 @@ def create_plan(
         response.status_code = 200
         return plan_view(_record(plans, built.plan.plan_id))
     for entry_type, payload, actor in built.events:  # plan_created, once
+        if by_section:
+            payload = {
+                **payload,
+                "source": plan_builder.SECTION,
+                "unit": "section",
+                "capacity": body.capacity,
+            }
         if supplied:  # say where the bookings came from
             payload = {
                 **payload,
@@ -287,11 +375,48 @@ def _gate(mtime: float) -> confidence.T9Gate:
     return confidence.T9Gate(confidence.SignalTables.from_files(REPO_ROOT))
 
 
+_ROUTES: dict[tuple[str, str], dict[str, Any]] = {}
+
+
+@router.get("/plans/{plan_id}/routes", dependencies=[Officer])
+def plan_routes(plan_id: str, plans: Plans, station: str | None = None) -> dict[str, Any]:
+    """Tanker routes of a plan by section (route_schedule.py): the summary and every station's
+    figures; with `station`, also that station's tankers and their trips (a day has about 6,000
+    trips, so the trips of other stations are not sent). Computed from the plan, never stored."""
+    record = _record(plans, plan_id)
+    if (record.recipe or {}).get("source") != plan_builder.SECTION:
+        raise HTTPException(409, "Routes are made for plans by section")
+    key = (plan_id, record.plan.digest)
+    if key not in _ROUTES:
+        if len(_ROUTES) >= 8:
+            _ROUTES.pop(next(iter(_ROUTES)))
+        sections = section_plan.static_sections(REPO_ROOT)
+        _ROUTES[key] = route_schedule.build_routes(REPO_ROOT, record.plan, record.inputs, sections)
+    full = _ROUTES[key]
+    if station is not None and station not in {r["station_id"] for r in full["stations"]}:
+        raise not_found(f"Station {station}")
+    return {
+        "plan_id": plan_id,
+        "day": record.plan.day.isoformat(),
+        "station": station,
+        "summary": full["summary"],
+        "stations": full["stations"],
+        "tankers": [t for t in full["tankers"] if t["station_id"] == station] if station else [],
+        "unscheduled": [
+            u for u in full["unscheduled"] if station is None or u["station_id"] == station
+        ][:200],
+        "unscheduled_total": len(full["unscheduled"]),
+        "basis": full["basis"],
+    }
+
+
 @router.get("/plans/{plan_id}/confidence", dependencies=[Officer])
 def plan_confidence(plan_id: str, plans: Plans) -> dict[str, Any]:
     record = _record(plans, plan_id)
-    gate = _gate((REPO_ROOT / CONFIDENCE_CONFIG.evidence_path).stat().st_mtime)
     groups = sorted({b.booking.group for b in record.inputs.pending})
+    if (record.recipe or {}).get("source") == plan_builder.SECTION:
+        return _section_confidence(groups)
+    gate = _gate((REPO_ROOT / CONFIDENCE_CONFIG.evidence_path).stat().st_mtime)
     items = []
     for group in groups:
         c = gate.explain(group)
@@ -315,6 +440,30 @@ def plan_confidence(plan_id: str, plans: Plans) -> dict[str, Any]:
         "threshold_basis": gate.config.threshold_basis,
         "calibration": typed(selection) if selection else None,
         "groups": items,
+    }
+
+
+def _section_confidence(groups: list[str]) -> dict[str, Any]:
+    """Confidence of a plan by section: a section whose need or connection count is an estimate is
+    flagged for an officer (section_plan.SectionGate); the T9 ward signals do not apply."""
+    sections = section_plan.load_sections(REPO_ROOT)
+    assessed = section_plan.SectionGate(sections).assess(groups)
+    return {
+        "threshold": 0.5,
+        "threshold_basis": "ASSUMED (flagged when need or connections are an estimate)",
+        "calibration": None,
+        "groups": [
+            {
+                "group": g,
+                "confidence": a.confidence,
+                "needs_check": a.needs_check,
+                "reason": a.reason,
+                "used": ["need", "connections"] if not a.needs_check else [],
+                "unavailable": [] if not a.needs_check else ["need or connections (estimated)"],
+                "signals": [],
+            }
+            for g, a in assessed.items()
+        ],
     }
 
 

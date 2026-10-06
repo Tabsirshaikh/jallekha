@@ -21,11 +21,12 @@ from pydantic import BaseModel
 
 from app.auth import require_roles
 from app.config.api import ApiConfig
+from app.config.env import REPO_ROOT
 from app.config.report_cards import REPORT_CARD_CONFIG
 from app.routers.common import get_now, invalid, page
 from app.routers.plans import Ledger, Plans, _record
 from app.routers.stores import DebtStore, DeliveryStore, get_debt_store, get_delivery_store
-from app.services import day_close, plan_builder, ward_locate
+from app.services import day_close, plan_builder, section_plan, ward_locate
 from app.services.debt_store import DebtDayConflict
 from app.services.keyed_lock import KeyedLocks
 from app.services.water_debt import DebtAccount, cap_litres
@@ -58,11 +59,17 @@ def _one_close() -> Iterator[None]:
 
 
 def account_view(account: DebtAccount) -> dict[str, Any]:
+    by_section = account.account_id.startswith(day_close.SECTION_PREFIX)
     ward_id = account.account_id.removeprefix(day_close.WARD_PREFIX)
     return {
         "account_id": account.account_id,
-        "ward_id": ward_id,
-        "ward_name": ward_locate.ward_name(ward_id),
+        "unit": "section" if by_section else "ward",
+        "ward_id": None if by_section else ward_id,
+        "ward_name": (
+            account.account_id.removeprefix(day_close.SECTION_PREFIX)
+            if by_section
+            else ward_locate.ward_name(ward_id)
+        ),
         "debt_litres": account.debt_litres,
         "daily_entitlement_litres": account.daily_entitlement_litres,
         "cap_litres": cap_litres(account),
@@ -78,7 +85,15 @@ def _closed_view(closed: day_close.ClosedDay) -> dict[str, Any]:
         "plan_id": closed.plan_id,
         "plan_digest": closed.plan_digest,
         "wards": [
-            {**asdict(w), "ward_name": ward_locate.ward_name(w.ward_id)} for w in closed.wards
+            {
+                **asdict(w),
+                "ward_name": (
+                    w.ward_id.removeprefix(day_close.SECTION_PREFIX)
+                    if w.ward_id.startswith(day_close.SECTION_PREFIX)
+                    else ward_locate.ward_name(w.ward_id)
+                ),
+            }
+            for w in closed.wards
         ],
         "accounts": [account_view(a) for a in closed.accounts],
         "basis": (
@@ -119,14 +134,16 @@ def close(
                 "if it had none)",
             )
         plan, plan_stops = None, []
+        by_section = False
         if body.plan_id is not None:
             record = _record(plans, body.plan_id)
             recipe = record.recipe or {}
-            if recipe.get("source") != plan_builder.SUPPLIED:
+            by_section = recipe.get("source") == plan_builder.SECTION
+            if recipe.get("source") not in (plan_builder.SUPPLIED, plan_builder.SECTION):
                 raise HTTPException(
                     409,
                     f"Plan {body.plan_id} is a replay SIMULATION; only a plan built from "
-                    "supplied bookings can create water debt",
+                    "supplied bookings or by section can create water debt",
                 )
             plan, plan_stops = record.plan, recipe.get("stops", [])
         # Every delivery of the day at a stop that serves a ward counts for that ward.
@@ -136,10 +153,25 @@ def close(
             stop_ids=list(ward_of_stop), started_from=start, started_before=end
         )
         try:
-            closed = day_close.close_day(
-                day, plan, plan_stops, ward_of_stop, todays, debts.accounts(), ledger, now,
-                body.officer_id, body.reason,
-            )  # fmt: skip
+            if by_section:
+                assert plan is not None
+                stop_section = {
+                    s.stop_id: g
+                    for s in deliveries.list_stops()
+                    if (g := section_plan.section_of_point(REPO_ROOT, s.lat, s.lon)) is not None
+                }
+                section_todays = deliveries.list_deliveries(
+                    stop_ids=list(stop_section), started_from=start, started_before=end
+                )
+                closed = day_close.close_section_day(
+                    day, plan, section_plan.fresh_bookings(REPO_ROOT, day), stop_section,
+                    section_todays, debts.accounts(), ledger, now, body.officer_id, body.reason,
+                )  # fmt: skip
+            else:
+                closed = day_close.close_day(
+                    day, plan, plan_stops, ward_of_stop, todays, debts.accounts(), ledger, now,
+                    body.officer_id, body.reason,
+                )  # fmt: skip
         except day_close.DayCloseRefused as exc:
             raise HTTPException(409, str(exc)) from exc
         try:

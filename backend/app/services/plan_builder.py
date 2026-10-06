@@ -42,6 +42,7 @@ from app.services import (
     confidence,
     fair_queue,
     planner,
+    section_plan,
     service_models,
     water_debt,
 )
@@ -50,6 +51,8 @@ from app.services.service_models import NeedWeights
 
 SOURCE = "planner_replay"
 SUPPLIED = "supplied_bookings"
+SECTION = "section_month"  # a day planned by section from one month's real totals divided by days
+SECTION_GATE = "SECTION"
 IST = timezone(timedelta(hours=5, minutes=30))
 GATE = "T9"
 _MODULE = "jallekha_planner_replay"  # private name: tests load the script under its own name
@@ -237,6 +240,8 @@ def _recipe_weights(recipe: Mapping[str, Any]) -> NeedWeights | None:
 def _build(recipe: dict[str, Any]) -> BuiltPlan:
     if recipe.get("source") == SUPPLIED:
         return _build_supplied(recipe)
+    if recipe.get("source") == SECTION:
+        return _build_section(recipe)
     day = date.fromisoformat(recipe["day"])
     first, last = replay_window()
     if not first <= day <= last:
@@ -279,6 +284,8 @@ def build_replay_plan(
 
 def rebuild(recipe: Mapping[str, Any]) -> BuiltPlan:
     """Rebuild a stored plan from its recipe. Only recipes this module wrote can be rebuilt."""
+    if recipe.get("source") == SECTION:
+        return _rebuild_section(recipe)
     script = _script()
     supplied = recipe.get("source") == SUPPLIED
     expected = {
@@ -363,7 +370,11 @@ def compare_to_default(built: BuiltPlan, top: int = 10) -> dict[str, Any]:
         "gainers": sorted((r for r in rows if r["change"] > 0), key=lambda r: -r["change"])[:top],
         "losers": sorted((r for r in rows if r["change"] < 0), key=lambda r: r["change"])[:top],
         "all_changes": rows,
-        "basis": "SIMULATION (same replay day, same trips; only the need weights differ)",
+        "basis": (
+            "DERIVED (same day, same trips; only the need weights differ)"
+            if built.recipe.get("source") == SECTION
+            else "SIMULATION (same replay day, same trips; only the need weights differ)"
+        ),
     }
 
 
@@ -618,3 +629,221 @@ def stop_litres(plan: planner.DailyPlan, stop_ids: Sequence[str]) -> dict[str, f
         if need.kind == "scheduled" and need.place_id in wanted:
             litres[need.place_id] += need.litres
     return litres
+
+
+# --- plans by section from one month's real totals ---------------------------------------------
+
+
+def section_plan_id(
+    day: date,
+    capacity: str = "fleet",
+    weights: NeedWeights | None = None,
+    recipe: Mapping[str, Any] | None = None,
+) -> str:
+    """`section-<day>-<capacity>`, plus the weights when they are not the defaults and a short
+    hash of whatever else changes the plan (options other than the defaults, outages, debts)."""
+    plan_id = f"section-{day.isoformat()}-{capacity}"
+    weights = weights.validated() if weights is not None else None
+    if weights is not None and weights != NeedWeights.default():
+        plan_id += _weight_suffix(weights)
+    recipe = recipe or {}
+    extras: dict[str, Any] = {}
+    if recipe.get("priority") is False:
+        extras["priority"] = False
+    if recipe.get("scheduled", "f4") != "f4":
+        extras["scheduled"] = recipe["scheduled"]
+    if recipe.get("carry_over") is False:
+        extras["carry_over"] = False
+    for key in ("outages", "debts"):
+        if recipe.get(key):
+            extras[key] = recipe[key]
+    if extras:
+        blob = json.dumps(extras, sort_keys=True, separators=(",", ":"), default=str).encode()
+        plan_id += f"-{hashlib.sha256(blob).hexdigest()[:8]}"
+    return plan_id
+
+
+def build_section_plan(
+    day: date,
+    capacity: str = "fleet",
+    weights: NeedWeights | None = None,
+    debts: Sequence[water_debt.DebtAccount] = (),
+    priority: bool = True,
+    scheduled: str = "f4",
+    carry_over: bool = True,
+    outages: Sequence[Mapping[str, Any]] = (),
+) -> BuiltPlan:
+    """The DRAFT plan by section for a day of 2025: the month's real booking total of each section
+    divided by the days of the month, need = connections x Census-2011 need carried onto the
+    section (estimates flagged for an officer's check), trips = the fleet or the `tight`
+    scenario (section_plan.py). Nothing is random; the plan is rebuilt from its recipe."""
+    return _build_section(
+        section_recipe(day, capacity, weights, debts, priority, scheduled, carry_over, outages)
+    )
+
+
+def section_recipe(
+    day: date,
+    capacity: str = "fleet",
+    weights: NeedWeights | None = None,
+    debts: Sequence[water_debt.DebtAccount] = (),
+    priority: bool = True,
+    scheduled: str = "f4",
+    carry_over: bool = True,
+    outages: Sequence[Mapping[str, Any]] = (),
+) -> dict[str, Any]:
+    """The recipe a plan by section is stored and rebuilt from (validated)."""
+    if capacity not in section_plan.CAPACITY_SCENARIOS:
+        raise InvalidBookings(
+            f"capacity must be one of {', '.join(section_plan.CAPACITY_SCENARIOS)}"
+        )
+    if day.year != section_plan.PLAN_YEAR:
+        raise ReplayDayUnavailable(
+            f"Section plans are made for days of {section_plan.PLAN_YEAR} (the section names of "
+            "the tables); choose a day in that year"
+        )
+    recipe: dict[str, Any] = {
+        "source": SECTION,
+        "unit": "section",
+        "capacity": capacity,
+        "day": day.isoformat(),
+        "gate": SECTION_GATE,
+    }
+    if scheduled not in section_plan.CFG.scheduled_modes:
+        raise InvalidBookings(
+            f"scheduled must be one of {', '.join(section_plan.CFG.scheduled_modes)}"
+        )
+    recipe["priority"] = bool(priority)
+    recipe["scheduled"] = scheduled
+    recipe["carry_over"] = bool(carry_over)
+    if outages:
+        recipe["outages"] = [dict(o) for o in outages]
+    if kept := normalise_debts([d for d in debts if d.account_id.startswith("section:")]):
+        recipe["debts"] = kept
+    if weights is not None:
+        weights = weights.validated()
+        if weights != NeedWeights.default():
+            recipe["weights"] = weights.as_dict()
+    return recipe
+
+
+def _build_section(recipe: dict[str, Any]) -> BuiltPlan:
+    day = date.fromisoformat(recipe["day"])
+    weights = _recipe_weights(recipe)
+    capacity = recipe["capacity"]
+    debts = [water_debt.account_from_dict(d) for d in recipe.get("debts", [])]
+    options = section_plan.SectionOptions(
+        priority=bool(recipe.get("priority", True)),
+        scheduled=str(recipe.get("scheduled", "f4")),
+        carry_over=bool(recipe.get("carry_over", True)),
+        outages=tuple(recipe.get("outages", ())),
+    )
+    try:
+        inputs, sections, left_out, notes = section_plan.plan_inputs(
+            REPO_ROOT,
+            day,
+            weights or NeedWeights.default(),
+            section_plan_id(day, capacity, weights, recipe),
+            debts,
+            capacity,
+            options,
+            _script().planner_now,
+        )
+    except section_plan.SectionPlanUnavailable as exc:
+        raise ReplayDayUnavailable(str(exc)) from exc
+    events = _Events()
+    now = _script().planner_now(day)  # plans are made at 05:00 local time on their day
+    plan = planner.build_plan(inputs, section_plan.SectionGate(sections), events, now)
+    basis = _basis_section(
+        day, capacity, weights, len(inputs.pending), left_out, sections, notes, options
+    )
+    return BuiltPlan(inputs, plan, basis, recipe, tuple(events.events))
+
+
+def _basis_section(
+    day: date,
+    capacity: str,
+    weights: NeedWeights | None,
+    bookings: int,
+    left_out: Sequence[tuple[str, int]],
+    sections: Mapping[str, section_plan.SectionInfo],
+    notes: Mapping[str, int],
+    options: section_plan.SectionOptions,
+) -> dict[str, str]:
+    chosen = weights or NeedWeights.default()
+    estimated = sum(1 for s in sections.values() if s.estimated)
+    trips = section_plan.total_trips(REPO_ROOT, capacity)
+    capacity_text = (
+        "the fleet, 1,150 tankers x 9 trips (ASSUMED, from news)"
+        if capacity == "fleet"
+        else "the tight scenario: the replay's trips calibrated to the REAL Jun-Aug 2026 delivered "
+        "share (DERIVED)"
+    )
+    parts = [
+        f"{bookings} bookings for {day.isoformat()}: the real {day.strftime('%B %Y')} total of "
+        "each section (REAL, HMWSSB) divided by the days of the month (not a forecast of that day)",
+        f"{trips} trips a day = {capacity_text}, shared over the 90 ASSUMED stand-in "
+        "stations by the year's bookings",
+    ]
+    if options.carry_over:
+        parts.append(
+            f"{notes['carried_bookings']} bookings carried over from the days before (waiting "
+            "bookings expire after 3 days; fair-queue credits carried)"
+        )
+    if options.priority:
+        parts.append(
+            f"priority classes ESTIMATED: {notes['tier0']} tier 0 (one booking per mapped hospital "
+            f"or care home, ASSUMED), {notes['tier1']} tier 1 (Census share of homes without water "
+            f"on premises), {notes['tier2']} tier 2; {notes['commercial']} labelled commercial "
+            "(city share from the 2022 RTI, spread by commercial connections)"
+        )
+    else:
+        parts.append("every booking counted as tier 2 and domestic")
+    if notes["scheduled_sections"]:
+        parts.append(
+            f"scheduled supply (F9) for {notes['scheduled_sections']} sections the field-check "
+            "screen (F4) flags, from a reserved share of the trips, at an estimated centre stop"
+        )
+    if notes["outage_events"]:
+        parts.append(
+            f"{notes['outage_events']} outage notices on the day (F10): water to critical "
+            f"facilities ({notes['critical_stops']} mapped) first, then every cut section to the "
+            "floor"
+        )
+    return {
+        "plan": "; ".join(parts) + ".",
+        "effective_entitlement": (
+            "DERIVED (domestic connections from HMWSSB billing x need weight; Census 2011 need "
+            f"carried onto the section by building share). {estimated} sections have an ESTIMATED "
+            "need or connection count (division or city median) and need an officer's check"
+        ),
+        "weights": (
+            "ASSUMED policy weights"
+            + (" chosen by an officer for this plan" if weights else " (configured defaults)")
+            + f": need weight = 1 + {chosen.wad:g} x water-access deficit"
+            + f" + {chosen.cad:g} x no-phone share + {chosen.hardship:g} x hardship"
+        ),
+        "flags": "DERIVED (a section whose need or connections are an estimate is flagged)",
+    }
+
+
+def _rebuild_section(recipe: Mapping[str, Any]) -> BuiltPlan:
+    expected = {
+        "source": SECTION,
+        "unit": "section",
+        "gate": SECTION_GATE,
+    }
+    differs = sorted(k for k, v in expected.items() if recipe.get(k) != v)
+    if (
+        differs
+        or recipe.get("capacity") not in section_plan.CAPACITY_SCENARIOS
+        or "day" not in recipe
+    ):
+        raise PlanRebuildError(
+            f"Section plan recipe cannot be rebuilt here (fields {differs or ['capacity', 'day']})"
+        )
+    try:
+        _recipe_weights(recipe)
+        return _build_section(dict(recipe))
+    except (KeyError, TypeError, ValueError) as exc:
+        raise PlanRebuildError(f"Section plan recipe is unusable: {exc}") from exc

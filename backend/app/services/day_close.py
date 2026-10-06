@@ -199,3 +199,91 @@ def close_day(
         accounts=tuple(sorted(settled, key=lambda a: a.account_id)),
         wards=tuple(days),
     )
+
+
+SECTION_PREFIX = "section:"
+
+
+def close_section_day(
+    day: date,
+    plan: planner.DailyPlan,
+    booked: Mapping[str, int],
+    section_of_stop: Mapping[str, str],
+    deliveries: Sequence[dl.DeliveryState],
+    accounts: Mapping[str, DebtAccount],
+    ledger: LedgerPort,
+    now: datetime,
+    officer_id: str,
+    reason: str,
+) -> ClosedDay:
+    """Settle every section's debt for `day` from an approved plan by section (A6, F11).
+
+    owed = the bookings the section made that day (`booked`, group -> number) x one tanker load;
+    paid = Confirmed deliveries of the day at stops inside the section's area
+    (`section_of_stop`, stop -> group). Only Confirmed counts: with no delivery recorded a section
+    keeps the whole of what it booked as debt, to the cap. Waiting bookings are planned again on
+    the days after (carry-over), so the debt is the extra push on top. Raises DayCloseRefused,
+    writing nothing, if it cannot."""
+    fields = _checks(day, plan, deliveries, accounts, reason)
+    by_section: dict[str, list[dl.DeliveryState]] = defaultdict(list)
+    for delivery in deliveries:
+        if delivery.stop_id in section_of_stop:
+            by_section[section_of_stop[delivery.stop_id]].append(delivery)
+    load = ALLOCATION_CONFIG.tanker_load_litres
+    groups = sorted(
+        {g for g, n in booked.items() if n > 0}
+        | {a for a in accounts if a.startswith(SECTION_PREFIX)}
+    )
+    settled: list[DebtAccount] = []
+    days: list[WardDay] = []
+    for group in groups:
+        entitled = booked.get(group, 0) * float(load)
+        account = accounts.get(group) or DebtAccount(group, entitled)
+        if entitled > 0:  # the cap follows the latest day's entitlement
+            account = DebtAccount(**{**account.__dict__, "daily_entitlement_litres": entitled})
+        done = [d for d in by_section.get(group, []) if d.outcome is not None]
+        credits = [
+            DeliveryCredit(d.delivery_id, float(load), d.outcome.outcome)  # type: ignore[union-attr]
+            for d in done
+        ]
+        change = water_debt.settle_day(account, day, entitled, credits, ledger, now, officer_id)
+        settled.append(change.account)
+        days.append(
+            WardDay(
+                ward_id=group,
+                planned_litres=entitled,
+                credited_litres=change.credited_litres,
+                deliveries=dict(sorted(Counter(c.outcome for c in credits).items())),
+                debt_before=change.debt_before,
+                debt_after=change.account.debt_litres,
+                capped=change.capped,
+                alert=change.alert,
+                days_in_debt=change.days_in_debt,
+            )
+        )
+    ledger.append(
+        "debt_day_closed",
+        {
+            "entity_type": "debt_day",
+            "entity_id": day.isoformat(),
+            "day": day.isoformat(),
+            "plan_id": plan.plan_id,
+            "digest": plan.digest,
+            "unit": "section",
+            "wards": len(days),
+            "planned_litres": round(sum(w.planned_litres for w in days), 3),
+            "credited_litres": round(sum(w.credited_litres for w in days), 3),
+            "debt_after_litres": round(sum(w.debt_after for w in days), 3),
+            "alerts": sorted(w.ward_id for w in days if w.alert),
+            "at": now.isoformat(),
+            **fields,
+        },
+        officer_id,
+    )
+    return ClosedDay(
+        day=day,
+        plan_id=plan.plan_id,
+        plan_digest=plan.digest,
+        accounts=tuple(sorted(settled, key=lambda a: a.account_id)),
+        wards=tuple(days),
+    )

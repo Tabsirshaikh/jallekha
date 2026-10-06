@@ -1,0 +1,20 @@
+.plan-routes { display: grid; gap: 14px; }
+.plan-routes-grid { display: grid; grid-template-columns: minmax(260px, 1fr) minmax(0, 2fr); gap: 16px; align-items: start; }
+@media (max-width: 900px) { .plan-routes-grid { grid-template-columns: 1fr; } }
+.plan-routes-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.plan-routes-table th { text-align: start; color: var(--muted); font-weight: 600; padding: 4px 6px; border-bottom: 1px solid var(--line); }
+.plan-routes-table td { padding: 4px 6px; border-bottom: 1px dashed var(--line); }
+.plan-routes-table tr.selected td { background: #eef5f1; }
+.plan-routes-table button { background: none; border: 0; padding: 0; font: inherit; color: var(--deep); font-weight: 700; cursor: pointer; }
+.plan-routes-map { position: relative; background: linear-gradient(180deg, #fbfdfb, #eef5f1); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.plan-routes-map svg { display: block; width: 100%; height: auto; max-height: 72vh; }
+.plan-routes-n { font-size: 11px; font-weight: 700; fill: #fff; pointer-events: none; }
+.plan-routes-legend { display: flex; flex-wrap: wrap; gap: 12px; padding: 8px 12px; font-size: .82rem; color: var(--muted); }
+.plan-routes-legend i { width: 18px; height: 4px; display: inline-block; margin-inline-end: 6px; vertical-align: middle; border-radius: 2px; }
+.plan-routes-legend i.dot { width: 10px; height: 10px; border-radius: 50%; background: #2b3a37; }
+.plan-routes-tankers { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.plan-routes-tankers button { display: grid; gap: 2px; text-align: start; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; font: inherit; cursor: pointer; }
+.plan-routes-tankers button.active { border-color: var(--deep); background: #eef5f1; }
+.plan-routes-tankers span { font-size: .82rem; color: var(--muted); }
+.plan-routes-trips { margin-top: 8px; }
+.plan-routes-legend i.area { height: 10px; background: #86c2a8; opacity: .6; }

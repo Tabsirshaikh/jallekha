@@ -4,7 +4,7 @@
     "status": "FROM_MAIN (service on main, route and plan store not built)",
     "basis": "SIMULATION: A7 build_plan on the first day of P2's committed planner replay",
     "built_from": "services/planner.py build_plan -> DailyPlan (StationPlan, ServedBooking, Transfer, WardShare, OutageResponse, Assessment, Unrouted, SpecialStop); scripts/sandbox/build_planner_replay.py replay(max_days=1)",
-    "notes": "Lists are cut to the first items; *_total fields give the full counts. queue_states is internal and not shown. `weights` is the need weights the plan was built with (is_default true unless an officer chose others at POST /plans); `group_names` gives each group a readable name (ward name, or the HMWSSB section name; null when unknown). `source` is planner_replay (the committed replay) or supplied_bookings (bookings an officer supplied); `bookings_supplied` is their number, or null for a replay plan."
+    "notes": "Lists are cut to the first items; *_total fields give the full counts. queue_states is internal and not shown. `weights` is the need weights the plan was built with (is_default true unless an officer chose others at POST /plans); `group_names` gives each group a readable name (ward name, or the HMWSSB section name; null when unknown). `source` is planner_replay (the committed replay) or supplied_bookings (bookings an officer supplied); `bookings_supplied` is their number, or null for a replay plan. `unit` is ward or section (a plan by section: source section_month, `capacity_scenario` fleet or tight); `trips_total` is the trips of all stations that day; `group_totals` counts each group's served and waiting bookings; `ward_totals` and `ward_unplaced` are set only for a plan by section (its bookings shared over wards by building share, an estimate)."
   },
   "request": {
     "plan_id": "replay-2025-03-01"
@@ -26,6 +26,12 @@
       "is_default": true
     },
     "source": "planner_replay",
+    "unit": "ward",
+    "capacity_scenario": null,
+    "trips_total": 6480,
+    "group_totals": {"section:ADARSHNAGAR": {"served": 3, "waiting": 0}},
+    "ward_totals": null,
+    "ward_unplaced": null,
     "stops": [],
     "debts_used": 0,
     "bookings_supplied": null,
