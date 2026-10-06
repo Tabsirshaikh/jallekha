@@ -80,3 +80,103 @@ def test_section_plan_rejects_other_years_and_supplied_bookings(client) -> None:
         headers=auth("officer"),
     )
     assert both.status_code == 422
+
+
+def _served_reasons(plan: dict) -> dict[str, int]:
+    out: dict[str, int] = {}
+    for station in plan["stations"].values():
+        for booking in station["served"]:
+            out[booking["reason"]] = out.get(booking["reason"], 0) + 1
+    return out
+
+
+def test_priority_classes_scheduled_supply_and_carry_over(client) -> None:  # type: ignore[no-untyped-def]
+    base = {"day": "2025-05-15", "unit": "section", "capacity": "tight"}
+    full = client.post("/plans", json=base, headers=auth("officer")).json()
+    plain = client.post(
+        "/plans",
+        json={**base, "priority": False, "scheduled": "none", "carry_over": False},
+        headers=auth("officer"),
+    )
+    assert plain.status_code == 201
+    plain = plain.json()
+    assert plain["plan_id"] != full["plan_id"]  # options other than the defaults change the id
+    # estimated priority classes: hospital bookings first, then the no-water share
+    reasons = _served_reasons(full)
+    assert reasons.get("TIER_0", 0) > 0 and reasons.get("TIER_1", 0) > 0
+    assert set(_served_reasons(plain)) == {"DRR"}
+    # scheduled supply for the sections the field-check screen flags
+    assert full["scheduled_total"] == 12 and plain["scheduled_total"] == 0
+    assert all(k.startswith("section:") for k in full["scheduled"])
+
+    # carry-over: bookings left waiting on the days before are planned again today
+    def booked(p: dict) -> int:
+        return sum(s["served_total"] + s["waiting_total"] for s in p["stations"].values())
+
+    assert booked(full) > booked(plain)
+    assert "carried over" in full["basis"]["plan"]
+
+
+def test_a_supply_notice_makes_an_outage_response_by_section(client) -> None:  # type: ignore[no-untyped-def]
+    notice = {
+        "source": "hmwssb_press_release",
+        "raw_text": "Water supply will be interrupted in Gachibowli for pipeline works.",
+        "area_names": ["Gachibowli"],
+        "start": "2025-05-14T06:00:00+05:30",
+        "end": "2025-05-16T06:00:00+05:30",
+        "entered_by": "officer-7",
+        "is_synthetic": True,
+    }
+    assert client.post("/notices", json=notice, headers=auth("officer")).status_code == 200
+    body = {"day": "2025-05-15", "unit": "section", "capacity": "fleet", "carry_over": False}
+    plan = client.post("/plans", json=body, headers=auth("officer")).json()
+    assert plan["outage"]["allocations"], plan["outage"]
+    cut = plan["outage"]["allocations"][0]
+    assert all(g.startswith("section:") for g in cut["ward_ids"])
+    assert plan["outage_trips"] > 0 and plan["outage"]["critical"]  # critical facilities first
+    assert "outage notices" in plan["basis"]["plan"]
+
+
+def _approve(client, plan: dict) -> None:  # type: ignore[no-untyped-def]
+    plan_id = plan["plan_id"]
+    for group in plan["flags"]:
+        checked = client.post(
+            f"/plans/{plan_id}/groups/{group}/check",
+            json={"officer_id": "officer-01", "reason": "Checked for the test"},
+            headers=auth("officer"),
+        )
+        assert checked.status_code == 200, checked.text
+    approved = client.post(
+        f"/plans/{plan_id}/approve",
+        json={"officer_id": "officer-01", "reason": "Approved for the test"},
+        headers=auth("officer"),
+    )
+    assert approved.status_code == 200, approved.text
+
+
+def test_closing_a_day_settles_section_debt_and_the_next_plan_uses_it(client) -> None:  # type: ignore[no-untyped-def]
+    body = {"day": "2025-05-15", "unit": "section", "capacity": "fleet", "carry_over": False}
+    plan = client.post("/plans", json=body, headers=auth("officer")).json()
+    _approve(client, plan)
+    closed = client.post(
+        "/debt/days/2025-05-15/close",
+        json={"plan_id": plan["plan_id"], "officer_id": "officer-01", "reason": "Day over"},
+        headers=auth("officer"),
+    )
+    assert closed.status_code == 200, closed.text
+    sections = closed.json()["wards"]
+    assert len(sections) > 100 and all(w["ward_id"].startswith("section:") for w in sections)
+    # nothing was confirmed delivered, so each section keeps what it booked as debt
+    owed = sections[0]
+    assert owed["credited_litres"] == 0 and owed["debt_after"] == owed["planned_litres"] > 0
+    accounts = client.get("/debt/accounts?limit=200", headers=auth("officer")).json()["items"]
+    assert accounts and all(a["unit"] == "section" for a in accounts)
+    assert accounts[0]["ward_id"] is None and accounts[0]["ward_name"]
+    # the next day's plan reads those accounts: a section in debt gets more turns
+    nxt = {**body, "day": "2025-05-16"}
+    after = client.post("/plans", json=nxt, headers=auth("officer"))
+    assert after.status_code == 201, after.text
+    after = after.json()
+    assert after["debts_used"] > 100  # the saved section accounts reach the plan
+    group = "section:" + owed["ward_name"]
+    assert after["effective_entitlement"][group] > plan["effective_entitlement"][group]

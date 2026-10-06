@@ -11,6 +11,9 @@ const LAST_DAY = "2025-12-31";
 export default function SectionPlanForm({ weights, onBuilt }: { weights: Weights; onBuilt: (planId: string) => void }) {
   const [day, setDay] = useState("");
   const [capacity, setCapacity] = useState<"fleet" | "tight">("fleet");
+  const [priority, setPriority] = useState(true);
+  const [carryOver, setCarryOver] = useState(true);
+  const [scheduled, setScheduled] = useState<"f4" | "none">("f4");
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<{ tone: "ok" | "error"; text: string } | null>(null);
 
@@ -21,7 +24,7 @@ export default function SectionPlanForm({ weights, onBuilt }: { weights: Weights
     setBusy(true);
     setNote(null);
     try {
-      const built = await apiFetch<{ plan_id: string }>("/plans", { method: "POST", body: { day, unit: "section", capacity, weights } });
+      const built = await apiFetch<{ plan_id: string }>("/plans", { method: "POST", body: { day, unit: "section", capacity, weights, priority, scheduled, carry_over: carryOver } });
       onBuilt(built.plan_id);
       setNote({ tone: "ok", text: `Plan for ${day} is ready below.` });
     } catch (cause) {
@@ -44,6 +47,15 @@ export default function SectionPlanForm({ weights, onBuilt }: { weights: Weights
         <option value="tight">Tight: the trips behind the real Jun–Aug 2026 delivered share</option>
       </select>
       <small>With the whole fleet nearly every booking is served on a normal 2025 day; the tight setting shows who waits and why.</small>
+      <label className="plan-check"><input type="checkbox" checked={priority} onChange={(event) => setPriority(event.target.checked)} /> Serve hospitals first, then homes without water on premises (estimated)</label>
+      <small>HMWSSB does not publish booking types, so this is an estimate: every mapped hospital or care home counts as one of its section’s bookers, and the Census share of homes fetching water from outside counts as the no-water group.</small>
+      <label className="plan-check"><input type="checkbox" checked={carryOver} onChange={(event) => setCarryOver(event.target.checked)} /> Carry waiting bookings over from the days before</label>
+      <label htmlFor="section-plan-scheduled">Tankers for sections that should have booked</label>
+      <select id="section-plan-scheduled" value={scheduled} onChange={(event) => setScheduled(event.target.value as "f4" | "none")}>
+        <option value="f4">Yes: sections the field-check screen flags get a reserved share of the trips</option>
+        <option value="none">No scheduled supply</option>
+      </select>
+      <small>A supply cut (a notice entered for that day) is added automatically: critical facilities first, then every cut section to the minimum.</small>
       <button className="button button-primary" type="submit" disabled={busy || !day}>Build plan by section</button>
       {busy && <p className="plan-message" role="status">Building the plan…</p>}
       {note && <p className={`plan-message ${note.tone}`} role={note.tone === "error" ? "alert" : "status"}>{note.text}</p>}

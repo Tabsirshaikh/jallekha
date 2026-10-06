@@ -4087,6 +4087,25 @@
             ],
             "title": "Capacity",
             "default": "fleet"
+          },
+          "priority": {
+            "type": "boolean",
+            "title": "Priority",
+            "default": true
+          },
+          "scheduled": {
+            "type": "string",
+            "enum": [
+              "f4",
+              "none"
+            ],
+            "title": "Scheduled",
+            "default": "f4"
+          },
+          "carry_over": {
+            "type": "boolean",
+            "title": "Carry Over",
+            "default": true
           }
         },
         "type": "object",

@@ -8,6 +8,7 @@ plan is 404, a stored plan that no longer rebuilds to its digest is 409.
 
 from __future__ import annotations
 
+import json
 from collections.abc import Iterator
 from contextlib import contextmanager
 from dataclasses import asdict
@@ -18,14 +19,18 @@ from typing import Annotated, Any, Literal
 from fastapi import APIRouter, Depends, HTTPException, Response
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, ConfigDict
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 from app.auth import require_roles
 from app.config.allocation import ALLOCATION_CONFIG
 from app.config.api import ApiConfig
 from app.config.confidence import CONFIDENCE_CONFIG
 from app.config.env import REPO_ROOT
+from app.models import SupplyNotice
 from app.routers import evidence
 from app.routers.common import csv_rows, invalid, not_found, page, typed
+from app.routers.notices import get_notice_service
 from app.routers.stores import (
     DebtStore,
     DeliveryStore,
@@ -48,6 +53,7 @@ from app.services import (
 )
 from app.services.keyed_lock import KeyedLocks
 from app.services.ledger_store import StoredLedger
+from app.services.notices import NoticeService
 from app.services.service_models import NeedWeights
 
 router = APIRouter(tags=["plans"])
@@ -104,6 +110,34 @@ class NewPlan(BaseModel):
     # the days (section_plan.py); `capacity` is then the fleet or the tight scenario.
     unit: Literal["ward", "section"] = "ward"
     capacity: Literal["fleet", "tight"] = "fleet"
+    # For a plan by section (section_plan.py): estimated priority classes, scheduled supply for the
+    # sections the F4 screen flags, and carry-over from the days before. Outages come from the
+    # supply notices that overlap the day.
+    priority: bool = True
+    scheduled: Literal["f4", "none"] = "f4"
+    carry_over: bool = True
+
+
+def _notice_outages(notices: NoticeService, day: date) -> list[dict[str, Any]]:
+    """Supply notices overlapping the day, as outages by section (stored in the plan's recipe)."""
+    with Session(notices.engine) as session:
+        rows = session.execute(
+            select(
+                SupplyNotice.id,
+                SupplyNotice.ward_ids_json,
+                SupplyNotice.start_at,
+                SupplyNotice.end_at,
+            )
+        ).all()
+
+    def aware(moment: datetime) -> datetime:
+        return moment if moment.tzinfo else moment.replace(tzinfo=UTC)
+
+    found = [
+        {"id": r[0], "ward_ids": json.loads(r[1]), "start": aware(r[2]), "end": aware(r[3])}
+        for r in rows
+    ]
+    return section_plan.outages_from_notices(REPO_ROOT, found, day)  # type: ignore[arg-type]
 
 
 def _record(plans: PlanStore, plan_id: str) -> PlanRecord:
@@ -210,6 +244,7 @@ def create_plan(
     response: Response,
     deliveries: Deliveries,
     debts: Debts,
+    notices: Annotated[NoticeService, Depends(get_notice_service)],
 ) -> dict[str, Any]:
     """Build and store a plan (T9 gate): from the bookings supplied in the request, or, without
     them, for a day of the committed replay. A supplied plan also uses the registered delivery
@@ -235,9 +270,20 @@ def create_plan(
             if s.ward_id
         ]
         owed = list(debts.accounts().values())
+    recipe: dict[str, Any] = {}
+    if by_section:
+        try:
+            recipe = plan_builder.section_recipe(
+                body.day, body.capacity, weights, owed, body.priority, body.scheduled,
+                body.carry_over, _notice_outages(notices, body.day),
+            )  # fmt: skip
+        except plan_builder.InvalidBookings as exc:
+            return invalid(str(exc))
+        except plan_builder.ReplayDayUnavailable as exc:
+            raise HTTPException(404, str(exc)) from exc
     try:
         plan_id = (
-            plan_builder.section_plan_id(body.day, body.capacity, weights)
+            plan_builder.section_plan_id(body.day, body.capacity, weights, recipe)
             if by_section
             else plan_builder.supplied_plan_id(body.day, body.bookings, weights, stops, owed)
             if body.bookings is not None
@@ -254,7 +300,7 @@ def create_plan(
         return plan_view(existing)
     try:
         built = (
-            plan_builder.build_section_plan(body.day, body.capacity, weights, owed)
+            plan_builder._build_section(recipe)
             if by_section
             else plan_builder.build_supplied_plan(
                 body.day, body.bookings, weights=weights, stops=stops, debts=owed

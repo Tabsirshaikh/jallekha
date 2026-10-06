@@ -57,8 +57,10 @@ EQUITY_SUMMARY = "data/derived/equity/summary.json"
 WARD_SNAPSHOT = "frontend/src/data/u5Evidence.json"
 WARDS = "data/raw/geography/datameet/ghmc-wards.geojson"
 NEED_OUT = "data/derived/evidence/section_need.csv"
+FACILITIES_OUT = "data/derived/evidence/section_facilities.csv"
 EVIDENCE_OUT = "frontend/src/data/u5SectionEvidence.json"
 GEOMETRY_OUT = "frontend/src/data/u5SectionGeometry.json"
+CELLS_OUT = "data/derived/crosswalk/section_cells.geojson"
 
 INDICATORS = ("wad", "cad", "hardship", "non_tap_share")
 MIN_COVERED = 0.5  # share of a section's building weight that must have ward need. ASSUMED.
@@ -117,9 +119,22 @@ def main() -> None:
         smooth = cell.buffer(-SMOOTH_M).buffer(SMOOTH_M).intersection(city)
         areas[name] = smooth if not smooth.is_empty else cell
 
-    facilities = [
-        Point(*to_utm.transform(float(r["lon"]), float(r["lat"]))) for r in read(FACILITIES)
-    ]
+    facility_rows = read(FACILITIES)
+    facilities = [Point(*to_utm.transform(float(r["lon"]), float(r["lat"]))) for r in facility_rows]
+    # Each mapped facility goes to the section whose approximate area holds it (areas do not
+    # overlap, except sections that share one point). OSM as mapped: incomplete, DERIVED.
+    placed_facilities: list[dict[str, str]] = []
+    for row, point in zip(facility_rows, facilities, strict=True):
+        for section_name, area in areas.items():
+            if not area.is_empty and area.contains(point):
+                placed_facilities.append(
+                    {
+                        "section": section_name,
+                        **{k: row[k] for k in ("osm_ref", "category", "name", "lat", "lon")},
+                        "basis": "DERIVED",
+                    }
+                )
+                break
     history = {(r["division"], r["section"]): r for r in read(EQUITY_SECTIONS)}
     summary = json.loads((ROOT / EQUITY_SUMMARY).read_text())
 
@@ -219,6 +234,33 @@ def main() -> None:
                     }
                 )
 
+    with (ROOT / FACILITIES_OUT).open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(placed_facilities[0]), lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(sorted(placed_facilities, key=lambda r: (r["section"], r["osm_ref"])))
+    # Every section's approximate area, for placing a delivery stop in a section (water debt).
+    cells_out = []
+    division_of = {r["section"]: r["division"] for r in points}
+    for section_name, area in sorted(areas.items()):
+        if area.is_empty:
+            continue
+        shape_geo = transform(to_deg.transform, area).simplify(SIMPLIFY_DEG)
+        if shape_geo.geom_type not in ("Polygon", "MultiPolygon"):
+            continue
+        cells_out.append(
+            {
+                "type": "Feature",
+                "properties": {
+                    "section": section_name,
+                    "division": division_of.get(section_name, ""),
+                },
+                "geometry": shape_to_json(shape_geo),
+            }
+        )
+    (ROOT / CELLS_OUT).write_text(
+        json.dumps({"type": "FeatureCollection", "features": cells_out}, separators=(",", ":"))
+        + "\n"
+    )
     fields = list(need_rows[0])
     with (ROOT / NEED_OUT).open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")

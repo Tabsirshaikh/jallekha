@@ -18,3 +18,5 @@
 .plan-map-side li { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed var(--line); padding-bottom: 3px; }
 .plan-map-side li button { background: none; border: 0; padding: 0; font: inherit; color: var(--deep); cursor: pointer; text-align: start; }
 .plan-map-pick { display: grid; gap: 2px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+
+.plan-check { display: flex; align-items: center; gap: 8px; font-size: .92rem; }

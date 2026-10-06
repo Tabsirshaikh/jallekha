@@ -349,8 +349,8 @@ function LivePlans({ t, locale, notice, plans, reloadList, userId }: { t: Copy; 
         </section>
       </div>
 
-      <section className="plan-panel plan-schedule" aria-labelledby="plan-schedule-title"><div className="plan-panel-title"><div><p className="eyebrow" id="plan-schedule-title">{t.liveSchedule}</p><h2>{t.liveScheduleNote}</h2></div><span className="source-tag">{tag}</span></div>
-        <div className="plan-schedule-table"><div className="plan-schedule-row plan-schedule-head"><span>{t.ward}</span><span>{t.litres}</span><span>{t.scheduleStatus}</span></div>
+      <section className="plan-panel plan-schedule" aria-labelledby="plan-schedule-title"><div className="plan-panel-title"><div><p className="eyebrow" id="plan-schedule-title">{t.liveSchedule}</p><h2>{plan.source === "section_month" ? "Sections the field-check screen flags (F4) get tankers although they did not book. Litres are the section’s need at 15 litres per person a day; the stop is an estimated centre and is not routed yet." : t.liveScheduleNote}</h2></div><span className="source-tag">{tag}</span></div>
+        <div className="plan-schedule-table"><div className="plan-schedule-row plan-schedule-head"><span>{plan.source === "section_month" ? "Section" : t.ward}</span><span>{t.litres}</span><span>{t.scheduleStatus}</span></div>
           {plan.schedule.map((row) => <div className="plan-schedule-row" key={row.wardId}><span>{label(row.wardId)}</span><span>{n(row.litres)} / {n(row.floor)}</span><span className="plan-schedule-status"><span>{row.status === "FLOOR_NOT_MET" ? t.floorNotMet : row.status === "FLOOR_MET" ? t.floorMet : row.status ?? "—"}</span>{row.unrouted === "NEEDS_SERVICE_POINT" ? <small>{t.needsServicePoint}</small> : row.unrouted ? <small>{row.unrouted}</small> : null}</span></div>)}
         </div>
       </section>

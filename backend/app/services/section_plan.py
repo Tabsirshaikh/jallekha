@@ -27,13 +27,18 @@ import csv
 import json
 import math
 import statistics
+import threading
 from collections import Counter, defaultdict
-from collections.abc import Iterable, Mapping
+from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
-from datetime import UTC, date, datetime, time, timedelta
+from datetime import UTC, date, datetime, time, timedelta, timezone
+from functools import lru_cache
 from pathlib import Path
 
-from app.services import fair_queue, planner
+from app.config.sandbox import SANDBOX_CONFIG
+from app.config.section_plan import SECTION_PLAN_CONFIG as CFG
+from app.services import fair_queue, outage, planner
+from app.services.scheduled_supply import ScheduledWard, ServicePoint, ServicePointRegistry
 from app.services.service_models import NeedWeights
 from app.services.water_debt import DebtAccount
 
@@ -41,6 +46,9 @@ SECTION_PREFIX = "section:"
 SECTION_NEED = "data/derived/evidence/section_need.csv"
 CHECKS = "data/derived/underserved/section_checks.csv"
 SECTION_POINTS = "data/derived/sandbox/section_points.csv"
+SECTION_FACILITIES = "data/derived/evidence/section_facilities.csv"
+BILLING = "data/raw/hmwssb_billing_portal"
+WARD_POPULATION = "data/derived/population/ward_population_2025.csv"
 STATIONS = "data/derived/sandbox/stations.csv"
 STATION_PAIRS = "data/derived/sandbox/station_station_km.csv"
 SECTION_STATION_KM = "data/derived/sandbox/section_station_km.csv"
@@ -73,6 +81,13 @@ class SectionInfo:
     station_basis: str  # NETWORK, NEAREST_STATION or DIVISION_STATION
     lat: float | None
     lng: float | None
+    f4_flagged: bool = False  # flagged by the under-served field-check screen (F4)
+    household_size: float = CFG.household_size_fallback
+
+    @property
+    def people(self) -> float:
+        """Domestic connections x household size: an ESTIMATE (one connection can serve flats)."""
+        return self.connections * self.household_size
 
     @property
     def group(self) -> str:
@@ -141,6 +156,13 @@ def load_sections(root: Path) -> dict[str, SectionInfo]:
         if p["home_station"] and name in division:
             home_by_division[division[name]][p["home_station"]] += 1
 
+    sizes = [
+        float(r["household_size_2011"])
+        for r in _rows(root, WARD_POPULATION)
+        if r.get("household_size_2011")
+    ]
+    size = statistics.median(sizes) if sizes else CFG.household_size_fallback  # Census 2011
+
     out: dict[str, SectionInfo] = {}
     for r in checks:
         name, div = r["section"], r["division"]
@@ -181,7 +203,8 @@ def load_sections(root: Path) -> dict[str, SectionInfo]:
             station = min(stations)  # no information at all: first station, flagged below
             station_basis = "DIVISION_STATION"
         out[name] = SectionInfo(name, div, conns, conns_basis, wad, cad, hard, basis, station,
-                                station_basis, lat, lng)  # fmt: skip
+                                station_basis, lat, lng,
+                                r["field_check_candidate"] == "True", size)  # fmt: skip
     return out
 
 
@@ -204,10 +227,88 @@ def daily_count(total: int, days: int, index: int) -> int:
     return total * (index + 1) // days - total * index // days
 
 
+@dataclass(frozen=True)
+class SectionOptions:
+    """What a plan by section assumes beyond the real monthly totals (stored in its recipe)."""
+
+    priority: bool = True  # estimated tier 0 (hospitals) and tier 1 (no water on premises)
+    scheduled: str = "f4"  # F9 candidates: "f4" (the F4 flagged sections) or "none"
+    carry_over: bool = True  # replay the days before, carrying the waiting list and turn credits
+    outages: tuple[Mapping[str, object], ...] = ()  # outage notices on the day, as stored
+
+
+def load_facilities(root: Path) -> dict[str, list[dict[str, str]]]:
+    """Mapped facilities (OSM, D9) inside each section's approximate area."""
+    out: dict[str, list[dict[str, str]]] = defaultdict(list)
+    for r in _rows(root, SECTION_FACILITIES):
+        out[r["section"]].append(r)
+    return dict(out)
+
+
+def commercial_shares(root: Path, sections: Mapping[str, SectionInfo]) -> dict[str, float]:
+    """Share of each section's bookings labelled commercial: its commercial connections (billing
+    category C) weighed so that the city's share equals the real 2022 share of commercial tanker
+    trips (RTI). DERIVED from REAL billing, calibrated to a REAL (2022) city share."""
+    domestic = {"D", "DS", "DM", "DP", "M0", "M1", "M2", "M3", "M4", "MB"}
+    dom: dict[str, list[float]] = defaultdict(list)
+    com: dict[str, list[float]] = defaultdict(list)
+    for month in range(1, 13):
+        path = root / BILLING / f"{PLAN_YEAR}-{month:02}.csv"
+        if not path.exists():
+            continue
+        d: dict[str, float] = defaultdict(float)
+        c: dict[str, float] = defaultdict(float)
+        with path.open(encoding="utf-8-sig", newline="") as handle:
+            for row in csv.DictReader(handle):
+                n = float(row["noofcans"] or 0)
+                if row["category"] in domestic:
+                    d[row["section"].strip()] += n
+                elif row["category"] == "C":
+                    c[row["section"].strip()] += n
+        for name in set(d) | set(c):
+            dom[name].append(d.get(name, 0.0))
+            com[name].append(c.get(name, 0.0))
+    mean = lambda xs: sum(xs) / len(xs) if xs else 0.0  # noqa: E731
+    dm = {n: mean(dom[n]) for n in sections}
+    cm = {n: mean(com[n]) for n in sections}
+    weight = {
+        n: sum(month_totals(root, PLAN_YEAR, m).get(n, 0) for m in range(1, 13)) for n in sections
+    }
+    total = sum(weight.values()) or 1.0
+
+    def city_share(r: float) -> float:
+        return (
+            sum(
+                weight[n] * (r * cm[n] / (dm[n] + r * cm[n]) if dm[n] + r * cm[n] else 0.0)
+                for n in sections
+            )
+            / total
+        )
+
+    low, high = 0.0, 1000.0
+    for _ in range(60):
+        mid = (low + high) / 2
+        low, high = (mid, high) if city_share(mid) < CFG.commercial_trip_share else (low, mid)
+    r = (low + high) / 2
+    return {n: (r * cm[n] / (dm[n] + r * cm[n]) if dm[n] + r * cm[n] else 0.0) for n in sections}
+
+
 def make_bookings(
-    sections: Mapping[str, SectionInfo], totals: Mapping[str, int], day: date
+    sections: Mapping[str, SectionInfo],
+    totals: Mapping[str, int],
+    day: date,
+    options: SectionOptions | None = None,
+    facilities: Mapping[str, list[dict[str, str]]] | None = None,
+    commercial: Mapping[str, float] | None = None,
 ) -> tuple[list[fair_queue.QueueBooking], list[tuple[str, int]]]:
-    """The day's bookings from month totals, and the sections left out (no section row)."""
+    """The day's bookings from month totals, and the sections left out (no section row).
+
+    With `options.priority`, the first bookings of a section are tier 0 (one per mapped hospital or
+    care home, at most all of them), the next share `wad` of the rest are tier 1; the others are
+    tier 2. A share of the last tier-2 bookings of each section is labelled commercial."""
+    options = options or SectionOptions()
+    facilities = facilities or {}
+    commercial = commercial or {}
     days = calendar.monthrange(day.year, day.month)[1]
     index = day.day - 1
     out: list[fair_queue.QueueBooking] = []
@@ -219,15 +320,25 @@ def make_bookings(
             if n:
                 left_out.append((name, n))
             continue
+        info = sections[name]
+        n0 = n1 = 0
+        if options.priority:
+            critical = sum(
+                1 for f in facilities.get(name, ()) if f["category"] in CFG.tier0_categories
+            )
+            n0 = min(n, math.floor(critical * CFG.tier0_bookings_per_facility))
+            n1 = min(n - n0, round(info.wad * (n - n0)))
+        n_commercial = round(commercial.get(name, 0.0) * (n - n0 - n1))
         for k in range(n):
+            tier = 0 if k < n0 else 1 if k < n0 + n1 else 2
             out.append(
                 fair_queue.QueueBooking(
                     booking_id=f"{name}|{day.isoformat()}|{k + 1}",
                     group=SECTION_PREFIX + name,
                     arrived_at=midnight + timedelta(seconds=int(86400 * (k + 0.5) / n)),
-                    tier=2,
+                    tier=tier,
                     consumer_id=f"{name}|{day.isoformat()}|{k + 1}",
-                    category="domestic",
+                    category="commercial" if k >= n - n_commercial else "domestic",
                 )
             )
     return out, left_out
@@ -300,6 +411,153 @@ class SectionGate:
         return out
 
 
+IST = timezone(timedelta(hours=5, minutes=30))
+
+
+class _NullLedger:
+    """A LedgerPort for the days replayed before the plan's own day: their events are not kept."""
+
+    def append(self, entry_type: str, payload: Mapping[str, object], actor: str) -> None:
+        return None
+
+
+@dataclass(frozen=True)
+class _Static:
+    sections: dict[str, SectionInfo]
+    facilities: dict[str, list[dict[str, str]]]
+    commercial: dict[str, float]
+    capacity: dict[str, int]
+    pairs: dict[tuple[str, str], float]
+
+
+@lru_cache(maxsize=4)
+def _static(root: str, scenario: str) -> _Static:
+    path = Path(root)
+    sections = load_sections(path)
+    return _Static(
+        sections,
+        load_facilities(path),
+        commercial_shares(path, sections),
+        station_capacity(path, sections, scenario),
+        station_pairs(path),
+    )
+
+
+def scheduled_for(
+    sections: Mapping[str, SectionInfo], mode: str, weights: NeedWeights
+) -> tuple[list[ScheduledWard], ServicePointRegistry]:
+    """F9: the F4-flagged sections as scheduled-supply candidates, each with a stop at its
+    estimated centre (an officer replaces it by registering a real standpipe)."""
+    if mode == "none":
+        return [], ServicePointRegistry()
+    if mode not in CFG.scheduled_modes:
+        raise ValueError(f"scheduled must be one of {CFG.scheduled_modes}")
+    wards, points = [], []
+    for info in sections.values():
+        if not info.f4_flagged:
+            continue
+        wards.append(ScheduledWard(info.group, info.people * info.wad, info.need_weight(weights)))
+        if info.lat is not None and info.lng is not None:
+            points.append(
+                ServicePoint(
+                    point_id=f"centre:{info.section}",
+                    ward_id=info.group,
+                    name=f"{info.section} (estimated centre)",
+                    lat=info.lat,
+                    lng=info.lng,
+                    registered_by="system",
+                    reason="estimated centre of the section; replace with a real standpipe",
+                )
+            )
+    return wards, ServicePointRegistry(tuple(points))
+
+
+def outages_from(
+    options: SectionOptions,
+    sections: Mapping[str, SectionInfo],
+    facilities: Mapping[str, list[dict[str, str]]],
+) -> tuple[list[outage.OutageEvent], list[outage.CriticalStop], dict[str, tuple[float, float]]]:
+    """F10: outage notices on the day as outage events by section, and the mapped critical
+    facilities of the cut sections as stops to serve first."""
+    events: list[outage.OutageEvent] = []
+    stops: list[outage.CriticalStop] = []
+    where: dict[str, tuple[float, float]] = {}
+    for o in options.outages:
+        areas = {n: float(p) for n, p in dict(o["areas"]).items() if n in sections}  # type: ignore[arg-type]
+        if not areas:
+            continue
+        start = datetime.fromisoformat(str(o["start"]))
+        end = datetime.fromisoformat(str(o["end"])) if o.get("end") else None
+        events.append(
+            outage.OutageEvent(
+                outage_id=str(o["outage_id"]),
+                ward_ids=tuple(SECTION_PREFIX + n for n in sorted(areas)),
+                start=start,
+                end=end,
+                source=str(o.get("source", "notice")),
+                reason=str(o.get("reason", "")),
+                created_by=str(o.get("created_by", "notice")),
+                people_affected=sum(areas.values()),
+                planned_hours=(end - start).total_seconds() / 3600 if end else None,
+            )
+        )
+        for name in sorted(areas):
+            for f in facilities.get(name, ()):
+                if f["category"] in CFG.outage_critical_categories and f["osm_ref"] not in where:
+                    stops.append(
+                        outage.CriticalStop(
+                            f["osm_ref"], f["name"] or f["category"],
+                            SECTION_PREFIX + name, CFG.critical_stop_litres,
+                        )
+                    )  # fmt: skip
+                    where[f["osm_ref"]] = (float(f["lat"]), float(f["lon"]))
+    return events, stops, where
+
+
+_STEPS: dict[tuple, tuple[list[planner.PlannerBooking], dict[str, fair_queue.QueueState]]] = {}
+_STEPS_LOCK = threading.Lock()
+
+
+def _day_inputs(
+    root: Path,
+    st: _Static,
+    day: date,
+    weights: NeedWeights,
+    options: SectionOptions,
+    plan_id: str,
+    pending: list[planner.PlannerBooking],
+    states: Mapping[str, fair_queue.QueueState],
+    debts: Iterable[DebtAccount],
+    final: bool,
+) -> tuple[planner.PlanInputs, list[tuple[str, int]], list[planner.PlannerBooking]]:
+    totals = month_totals(root, day.year, day.month)
+    fresh, left_out = make_bookings(st.sections, totals, day, options, st.facilities, st.commercial)
+    expiry = SANDBOX_CONFIG.booking_expiry_days
+    kept = [p for p in pending if (day - p.booking.arrived_at.astimezone(IST).date()).days < expiry]
+    new = [planner.PlannerBooking(b, st.sections[b.group.removeprefix(SECTION_PREFIX)].station)
+           for b in fresh]  # fmt: skip
+    scheduled, registry = scheduled_for(st.sections, options.scheduled, weights)
+    events, stops, where = (
+        outages_from(options, st.sections, st.facilities) if final else ([], [], {})
+    )
+    inputs = planner.PlanInputs(
+        plan_id=plan_id,
+        day=day,
+        capacity=st.capacity,
+        pending=kept + new,
+        entitlement={s.group: s.entitlement(weights) for s in st.sections.values()},
+        queue_states=dict(states),
+        debts={a.account_id: a for a in debts} if final else {},
+        scheduled=scheduled,
+        outages=events,
+        critical_stops=stops,
+        station_km=st.pairs,
+        critical_locations=where,
+        registry=registry,
+    )
+    return inputs, left_out, kept
+
+
 def plan_inputs(
     root: Path,
     day: date,
@@ -307,34 +565,66 @@ def plan_inputs(
     plan_id: str,
     debts: Iterable[DebtAccount] = (),
     scenario: str = "fleet",
-) -> tuple[planner.PlanInputs, dict[str, SectionInfo], list[tuple[str, int]]]:
+    options: SectionOptions | None = None,
+    plan_now: Callable[[date], datetime] | None = None,
+) -> tuple[planner.PlanInputs, dict[str, SectionInfo], list[tuple[str, int]], dict[str, int]]:
+    """Inputs for the plan of `day`. With carry-over the days before it (back `carry_days`, inside
+    2025) are planned first, so the bookings and fair-queue credits left over arrive with it."""
+    options = options or SectionOptions()
     if day.year != PLAN_YEAR:
         raise SectionPlanUnavailable(
             f"Section plans use the {PLAN_YEAR} section names; choose a day in {PLAN_YEAR}"
         )
-    sections = load_sections(root)
-    totals = month_totals(root, day.year, day.month)
-    bookings, left_out = make_bookings(sections, totals, day)
-    pending = [
-        planner.PlannerBooking(b, sections[b.group.removeprefix(SECTION_PREFIX)].station)
-        for b in bookings
-    ]
-    inputs = planner.PlanInputs(
-        plan_id=plan_id,
-        day=day,
-        capacity=station_capacity(root, sections, scenario),
-        pending=pending,
-        entitlement={s.group: s.entitlement(weights) for s in sections.values()},
-        queue_states={},
-        debts={a.account_id: a for a in debts},
-        station_km=station_pairs(root),
+    st = _static(str(root), scenario)
+    now_of = plan_now or (lambda d: datetime(d.year, d.month, d.day, 5, 0, tzinfo=IST))
+    start = (
+        max(date(PLAN_YEAR, 1, 1), day - timedelta(days=CFG.carry_days))
+        if options.carry_over
+        else day
     )
-    return inputs, sections, left_out
+    pending: list[planner.PlannerBooking] = []
+    states: dict[str, fair_queue.QueueState] = {}
+    gate = SectionGate(st.sections)
+    key_base = (str(root), scenario, weights, options.priority, options.scheduled, start)
+    d = start
+    while d < day:
+        key = (*key_base, d)
+        with _STEPS_LOCK:
+            hit = _STEPS.get(key)
+        if hit is None:
+            inputs, _, _ = _day_inputs(
+                root, st, d, weights, options, f"carry-{d.isoformat()}", pending, states, (), False
+            )
+            plan = planner.build_plan(inputs, gate, _NullLedger(), now_of(d))
+            served = {b.booking_id for sp in plan.stations.values() for b in sp.served}
+            hit = (
+                [p for p in inputs.pending if p.booking.booking_id not in served],
+                dict(plan.queue_states),
+            )
+            with _STEPS_LOCK:
+                _STEPS[key] = hit
+                while len(_STEPS) > 64:
+                    _STEPS.pop(next(iter(_STEPS)))
+        pending, states = list(hit[0]), dict(hit[1])
+        d += timedelta(days=1)
+    inputs, left_out, carried = _day_inputs(
+        root, st, day, weights, options, plan_id, pending, states, debts, True
+    )
+    tiers = Counter(p.booking.tier for p in inputs.pending)
+    notes = {
+        "carried_bookings": len(carried),
+        "tier0": tiers[0],
+        "tier1": tiers[1],
+        "tier2": tiers[2],
+        "commercial": sum(1 for p in inputs.pending if p.booking.category == "commercial"),
+        "scheduled_sections": len(inputs.scheduled),
+        "outage_events": len(inputs.outages),
+        "critical_stops": len(inputs.critical_stops),
+    }
+    return inputs, st.sections, left_out, notes
 
 
 def trips_per_day() -> int:
-    from app.config.sandbox import SANDBOX_CONFIG
-
     return int(SANDBOX_CONFIG.fleet_tankers * SANDBOX_CONFIG.trips_per_tanker_day)
 
 
@@ -377,3 +667,76 @@ def ward_totals(
             row["waiting"] += t["waiting"] * w
     rounded = {w: {k: round(v, 1) for k, v in r.items()} for w, r in wards.items()}
     return rounded, {k: round(v, 1) for k, v in unplaced.items()}
+
+
+def outages_from_notices(
+    root: Path, notices: Iterable[Mapping[str, object]], day: date
+) -> list[dict[str, object]]:
+    """Supply notices (F15, each naming wards) that overlap `day` as outages by section: a section
+    is cut when at least `outage_min_building_share` of its buildings are in the notice's wards;
+    its people affected are its estimated people times that share. Stored in the plan's recipe."""
+    sections = _static(str(root), "fleet").sections
+    shares = ward_weights(root)
+    day_start = datetime.combine(day, time(0, 0), tzinfo=IST)
+    day_end = day_start + timedelta(days=1)
+    out: list[dict[str, object]] = []
+    for n in sorted(notices, key=lambda n: str(n["id"])):
+        start, end = n["start"], n["end"]
+        assert isinstance(start, datetime) and isinstance(end, datetime)
+        if end <= day_start or start >= day_end:
+            continue
+        wards = set(n["ward_ids"])  # type: ignore[call-overload]
+        areas: dict[str, int] = {}
+        for name, by_ward in sorted(shares.items()):
+            if name not in sections:
+                continue
+            share = sum(w for ward, w in by_ward.items() if ward in wards)
+            if share >= CFG.outage_min_building_share:
+                areas[name] = round(sections[name].people * share)
+        if areas:
+            out.append(
+                {
+                    "outage_id": f"notice-{n['id']}",
+                    "areas": areas,
+                    "start": start.isoformat(),
+                    "end": end.isoformat(),
+                    "source": "notice",
+                    "reason": "supply notice (F15)",
+                    "created_by": "notice",
+                }
+            )
+    return out
+
+
+CELLS = "data/derived/crosswalk/section_cells.geojson"
+
+
+@lru_cache(maxsize=2)
+def _cells(root: str) -> list[tuple[str, object]]:
+    from shapely.geometry import shape
+
+    data = json.loads((Path(root) / CELLS).read_text(encoding="utf-8"))
+    return [(f["properties"]["section"], shape(f["geometry"])) for f in data["features"]]
+
+
+def section_of_point(root: Path, lat: float, lng: float) -> str | None:
+    """The section whose approximate area holds the point (a delivery stop), as its group id."""
+    from shapely.geometry import Point
+
+    point = Point(lng, lat)
+    for name, cell in _cells(str(root)):
+        if cell.contains(point):  # type: ignore[attr-defined]
+            return SECTION_PREFIX + name
+    return None
+
+
+def fresh_bookings(root: Path, day: date) -> dict[str, int]:
+    """Bookings that arrive on `day` per section group (the month's total divided by its days)."""
+    sections = _static(str(root), "fleet").sections
+    days = calendar.monthrange(day.year, day.month)[1]
+    totals = month_totals(root, day.year, day.month)
+    return {
+        SECTION_PREFIX + n: daily_count(t, days, day.day - 1)
+        for n, t in totals.items()
+        if n in sections
+    }

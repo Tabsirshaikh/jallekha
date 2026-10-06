@@ -164,3 +164,26 @@ are `section:<name>`. `GET /plans/{id}/confidence` answers with the section gate
 estimated section, 1 otherwise). Basis: bookings REAL monthly totals, daily split by division of the
 month, capacity ASSUMED (fleet) or DERIVED (tight), need DERIVED_APPROXIMATE or ESTIMATED.
 
+### Plans by section, more (feat/section-plan-completion)
+`POST /plans` for `unit: "section"` also accepts `priority` (default `true`), `scheduled` (`"f4"`
+or `"none"`, default `"f4"`) and `carry_over` (default `true`). A plan with other than the defaults,
+or with outages or section debts, gets a short hash in its id (`section-<day>-<capacity>-<hash>`).
+- **Priority classes (estimated):** HMWSSB publishes no booking types, so each mapped hospital or
+  care home (OSM, D9) is taken as one of its section's bookers every day (tier 0) and the Census
+  share of homes fetching water from outside (WAD, carried onto the section) as the share of the
+  rest in tier 1. Basis ASSUMED / ESTIMATED. Bookings are labelled domestic or commercial by the
+  section's commercial connections, calibrated to the real 2022 commercial trip share (RTI).
+- **Carry-over:** the days before (back `expiry + 1` = 4 days, inside 2025) are planned first; the
+  bookings still waiting (they expire after 3 days) and the fair queue's turn credits arrive with
+  the plan.
+- **Scheduled supply (F9):** the sections the field-check screen (F4) flags get a reserved share of
+  the trips (weighted max-min, 15 litres per person a day over people off premises = connections x
+  household size x WAD), with a stop at the estimated centre of the section, not routed yet.
+- **Outages (F10):** the supply notices (F15) that overlap the day become outages by section (a
+  section is cut when at least half its buildings are in the notice's wards); the mapped hospitals,
+  care homes, UPHCs and clinics of cut sections are critical stops served first.
+- **Water debt:** `POST /debt/days/{day}/close` takes the id of an approved plan by section. Owed =
+  the section's bookings of the day x 5,000 l; paid = Confirmed deliveries at stops inside the
+  section's area. Accounts are `section:<name>` (`unit: "section"` in the account view) and the next
+  plan by section reads them (a section in debt gets more turns).
+
