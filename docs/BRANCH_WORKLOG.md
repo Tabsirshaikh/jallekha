@@ -1129,3 +1129,18 @@ The pull-request description must summarize the same information and link to thi
 - **Known limitations:** mandal points by name lookup; alias table by hand from the files' year spans; 49 sections have no point (`docs/LIMITATIONS.md` F5).
 - **Pull request:** see the PR for `feat/d8-city-weather`.
 
+## `feat/d7-groundwater` — groundwater levels in the shortage reasons and as a forecast candidate (item 17)
+
+- **Owner / date:** P3 work done by the repo owner, 2026-10-06.
+- **Why:** F6 said "groundwater data unavailable" on every row because the NWDP route needed an account.
+- **What we changed:**
+  - `scripts/data/fetch_d7_groundwater.py`: the Ground Water Department's 67 monthly well-level files (Jan 2021 - Jul 2026) from Open Data Telangana's catalogue API, four HMWSSB districts kept, gzip, every source SHA-256 logged; the old NWDP plan kept as `NWDP_NOTE.md`.
+  - `scripts/forecast/build_groundwater.py`: well identity (village + position rounded to 0.01 deg, swapped coordinates fixed, out-of-region positions dropped), anomaly against the same month in at least 2 earlier years, section anomaly = median of wells within 5 km (at least 2), every section-month with its value or reason; reproducibility test.
+  - `services/shortage.py`: `load_groundwater` (latest month at or before the forecast origin), `GroundwaterSignal`, reasons with the anomaly or why there is none, `groundwater_m` column; the risk rule is unchanged.
+  - `services/forecast.py`: `groundwater_anomaly` feature (blank for other models, which drop blank columns, so they are unchanged) and the `global_gbm_groundwater` candidate.
+  - U6: DERIVED groundwater note and card when the API has it (all four languages); the saved-sample card says the sample has none. Shortage API example regenerated.
+- **Results:** 389 of 551 shortage rows carry a groundwater anomaly. The groundwater forecast candidate is better on both measures (22.63% / 36.80% vs 23.01% / 37.39%) but not significantly (p = 0.074), so the forecast is unchanged.
+- **Validation:** tests written first and seen failing (coordinate swaps and region, well identity, anomaly needs two earlier years and ignores N/A, nearby-well median and reasons, latest month at or before the origin, reason text and unchanged risk, feature from the month before the cutoff, candidate order, U6 note), then passing.
+- **Known limitations:** short history (2021 start); messy well positions; the anomaly is shown, not used for the risk (`docs/LIMITATIONS.md` F5, F6).
+- **Pull request:** see the PR for `feat/d7-groundwater`.
+

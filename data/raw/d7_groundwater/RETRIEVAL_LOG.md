@@ -1,87 +1,91 @@
-# D7 Groundwater Levels — Retrieval Log
+# D7 Groundwater levels (Telangana Ground Water Department) — Retrieval Log
 
-**Dataset:** Telangana Groundwater Department / National Water Data Portal (NWDP)  
-**Status:** TO FETCH (NWDP API requires registration; data format verification needed)  
-**Basis:** TO FETCH — verified to exist, not yet downloaded  
-**Used by:** F5 Surge Forecast covariate; F6 Shortage Early Warning
-
----
-
-## Source
+**Dataset:** Open Data Telangana, "Telangana Ground Water Department Water Level Data"
+**Basis:** REAL (monthly depth to water at the department's observation wells, m below ground)
+**Licence:** Government Open Data License - India
+**Used by:** F6 shortage reasons (groundwater anomaly near each section); F5 candidate feature
+**Note:** the National Water Data Portal route needs an account and was not used (NWDP_NOTE.md).
 
 | Field | Value |
 |---|---|
-| Dataset name | Groundwater Level Monitoring Data, Telangana |
-| Publisher | Central Ground Water Board (CGWB) / National Water Data Portal |
-| Portal URL | https://nwdp.nwic.gov.in |
-| Coverage | Telangana state; telemetry (six-hourly) and manual quarterly wells |
-| Temporal coverage | ~2021–2025 (telemetry); quarterly since ~2000 (manual) |
-| Format | CSV download (per station or bulk) |
-| Licence | Government of India Open Data Licence (GODL) v1.0 |
-| Verified to exist | 2026-10-01 (NWDP portal pages confirmed via JALLEKHA_FINAL_SOLUTION.md research) |
+| Catalogue | `https://data.telangana.gov.in/api/1/search?fulltext=ground%20water&page-size=50` (each file's `downloadURL`) |
+| Months | 2021-01 to 2026-07 (67 monthly files) |
+| Districts kept | Hyderabad, Medchal-Malkajgiri, Rangareddy, Sangareddy |
+| Rows | 16,021 (0 with a date outside the file's month, left blank) |
+| Retrieved | 2026-10-06 03:17 UTC |
+| File | `tggwd_levels_hmwssb_districts.csv.gz` (gzip, fixed timestamp) |
+| SHA-256 | `80cd8a6b458b44fb1b5f3551ef75965f9dfee7fcebbaa7fa7953671b4b6a2edd` |
 
----
+Values are copied as written; only the date is parsed (original text in `date_raw`).
 
-## Why Not Yet Downloaded
+## Source files
 
-1. **Registration required:** NWDP requires a user account (https://nwdp.nwic.gov.in/register).
-2. **Station list:** Must first retrieve the list of monitoring wells in Hyderabad / Ranga Reddy district, then download individual station CSVs or use the bulk export.
-3. **API not fully documented:** No publicly documented REST endpoint for bulk download without UI interaction.
-
----
-
-## Retrieval Steps
-
-1. Register at https://nwdp.nwic.gov.in/register (free, government portal).
-2. Navigate to: **Data Access → Groundwater Level → Telangana → Hyderabad / Ranga Reddy District**.
-3. Download the **quarterly manual well data** for all wells in Hyderabad district and Ranga Reddy district, years 2019–2024 (CSV export).
-4. Optionally: download the **six-hourly telemetry data** for the same period if available for Hyderabad wells.
-5. Save files as:
-   ```
-   data/raw/d7_groundwater/telangana_gw_quarterly_<district>.csv
-   data/raw/d7_groundwater/telangana_gw_telemetry_<district>.csv  (if available)
-   ```
-
-After download, add each file to `data/verification/d1_manifest.csv` with:
-- `dataset_id`: `D7-GW-Quarterly-Hyderabad`, `D7-GW-Quarterly-Rangareddy`, etc.
-- `basis`: `REAL`
-- `license`: `GODL v1.0`
-- `source_url`: `https://nwdp.nwic.gov.in`
-- `retrieved_at_utc`: (timestamp of download)
-- `sha256`: computed after download
-
----
-
-## Columns to Expect (from CGWB documentation)
-
-| Column | Description |
-|---|---|
-| `station_id` | Well/borehole identifier |
-| `district` | District name |
-| `mandal` / `tehsil` | Sub-district admin unit |
-| `latitude`, `longitude` | Well location |
-| `date` | Measurement date |
-| `depth_to_water_level_mbgl` | Depth to water table in metres below ground level |
-
----
-
-## Acceptance Criteria (for T2 and T8 tasks)
-
-- Monthly mean depth-to-water-table per mandal for Hyderabad / Ranga Reddy.
-- Must cover at least Jan 2022 – Feb 2024 (overlap with D1 HMWSSB period).
-- Anomaly = monthly z-score > 1.5 (configurable in `config/evidence.py`).
-- All derived anomaly values carry `_basis = "DERIVED"`.
-
----
-
-## Fallback (if NWDP data cannot be retrieved)
-
-Per F6 design: if no machine-readable groundwater source is verified, the shortage early warning uses **forecast demand vs capacity only** (no groundwater covariate). This fallback is documented in `config/evidence.py` under `GROUNDWATER_AVAILABLE = False`.
-
----
-
-## Known Limitations
-
-- Manual quarterly wells are sparse; interpolation to mandal level introduces uncertainty (label DERIVED).
-- Telemetry wells may not be in the most water-stressed areas.
-- Reservoir levels (D15) are tracked separately (Q2 decision pending).
+| Month | File | Bytes | SHA-256 | Rows kept | Dates not usable |
+|---|---|---|---|---|---|
+| 2021-01 | [Telangana Ground Water Department Water Level Data January 2021](https://data.telangana.gov.in/sites/default/files/ground_water_level_2021_January.csv) | 72,804 | `8b909ba184fe77550bb71c7ebcb1d267d8f01dfb98dff2bf45547ce5004ed620` | 175 | 0 |
+| 2021-02 | [Telangana Ground Water Department Water Level Data February 2021](https://data.telangana.gov.in/sites/default/files/ground_water_level_2021_February.csv) | 72,879 | `5fe08f24620d49d323d7b1fe9f6e3457bb214f1ec08ddd12c2a625d79b59d4d9` | 175 | 0 |
+| 2021-03 | [Telangana Ground Water Department Water Level Data March 2021](https://data.telangana.gov.in/sites/default/files/ground_water_level_2021_March.csv) | 72,980 | `f2fa97a4d6183be2b7e2374659f83f798be72b50f98538ef1f725f9d0f4ac462` | 175 | 0 |
+| 2021-04 | [Telangana Ground Water Department Water Level Data April 2021](https://data.telangana.gov.in/sites/default/files/ground_water_level_2021_April.csv) | 72,955 | `6e36ce7564d46c793d9bdb130b4a60b6d07fc672fcbc27148a540d4094a0b8b6` | 175 | 0 |
+| 2021-05 | [Telangana Ground Water Department Water Level Data May 2021](https://data.telangana.gov.in/sites/default/files/ground_water_level_2021_May.csv) | 73,404 | `cab6f93a5da9cb580c90efb18c2dd253a9794dc8f050fa50dbc33801d7eb3d76` | 175 | 0 |
+| 2021-06 | [Telangana Ground Water Department Water Level Data June 2021](https://data.telangana.gov.in/sites/default/files/ground_water_level_2021_June.csv) | 73,349 | `4e4d1d9cc9d7f710716a2b976d4d1b1ca56e96c718a23429e9309f33d523d513` | 175 | 0 |
+| 2021-07 | [Telangana Ground Water Department Water Level Data July 2021](https://data.telangana.gov.in/sites/default/files/ground_water_level_2021_July.csv) | 73,183 | `068bc865547ad7e0bbfab05e33a441523c7e08f2d2b38828286d9e2987de9436` | 175 | 0 |
+| 2021-08 | [Telangana Ground Water Department Water Level Data August 2021](https://data.telangana.gov.in/sites/default/files/ground_water_level_2021_August.csv) | 73,207 | `0decf62d881cffde0518c1acef3c8e32a89e6b2d490054775705a53a6275bc07` | 175 | 0 |
+| 2021-09 | [Telangana Ground Water Department Water Level Data September 2021](https://data.telangana.gov.in/sites/default/files/ground_water_level_2021_September.csv) | 73,112 | `ba1fb6365044c71d65dc297a26d520a1bac74f7152d20cfadeacc8e336e50854` | 175 | 0 |
+| 2021-10 | [Telangana Ground Water Department Water Level Data October 2021](https://data.telangana.gov.in/sites/default/files/ground_water_level_2021_October.csv) | 73,135 | `78dca53880d3fd96f3329bbc8b2d61c25b3a8ca0561a6e5690b65b2e30296513` | 175 | 0 |
+| 2021-11 | [Telangana Ground Water Department Water Level Data November 2021](https://data.telangana.gov.in/sites/default/files/ground_water_level_2021_November.csv) | 73,298 | `37c82a5ace79bd7f2cc778c1b3c564e010579685c02f79c84192ce4e4dffe537` | 175 | 0 |
+| 2021-12 | [Telangana Ground Water Department Water Level Data December 2021](https://data.telangana.gov.in/sites/default/files/ground_water_level_2021_December.csv) | 73,553 | `4873dfdd32848e61d4c0ae625a6aa92b2b1820540a06d6461cc597f535674690` | 175 | 0 |
+| 2022-01 | [Telangana Ground Water Department Water Level Data January 2022](https://data.telangana.gov.in/sites/default/files/ground_water_level_2022_January.csv) | 73,586 | `ee77b5cd28196f6eb580eb974989b7c398b1d27e89234e78f8ee9c5e308a6f88` | 175 | 0 |
+| 2022-02 | [Telangana Ground Water Department Water Level Data February 2022](https://data.telangana.gov.in/sites/default/files/ground_water_level_2022_February.csv) | 73,661 | `26a5505cab3ebab7295e2fa435b7fcfdb0f9631d6c9ca5b935a55e8c5ba61d19` | 175 | 0 |
+| 2022-03 | [Telangana Ground Water Department Water Level Data March 2022](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2022_March.csv) | 97,955 | `14af8549028f840c3501038f25ac912612f591f03b88f592c14c55571ff03ee6` | 235 | 0 |
+| 2022-04 | [Telangana Ground Water Department Water Level Data April 2022](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2022_April.csv) | 98,108 | `9b4d03677917398eb2d00e417f942c44d814e8c9d8cd3e696a9dad8db656f0e8` | 235 | 0 |
+| 2022-05 | [Telangana Ground Water Department Water Level Data May 2022](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2022_May.csv) | 111,061 | `65e3ba0b06055cf687e0d7989ed7bf5812011d8f204cc95e1949ccd2ae939e47` | 235 | 0 |
+| 2022-06 | [Telangana Ground Water Department Water Level Data June 2022](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2022_June.csv) | 98,573 | `aeb942cbe63fe241bc1f9e827cdd75e9e5e802666f67d1cf45a0b86cd0469af1` | 235 | 0 |
+| 2022-07 | [Telangana Ground Water Department Water Level Data July 2022](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2022_July.csv) | 98,276 | `107160c1b8c2be74d26a509bf851d2143232ba03cb01afeabba9ffac390e4a19` | 235 | 0 |
+| 2022-08 | [Telangana Ground Water Department Water Level Data August 2022](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2022_August.csv) | 98,373 | `37617882b5c3575ed045a3e6d5fbc979853bf6d9848d02d72ee6eed744f234a1` | 235 | 0 |
+| 2022-09 | [Telangana Ground Water Department Water Level Data September 2022](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2022_September.csv) | 98,525 | `61efcb5573e8a6d844e6792d7de82900d7042e85e06ab8c187ed3de05d2e769b` | 235 | 0 |
+| 2022-10 | [Telangana Ground Water Department Water Level Data October 2022](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2022_October.csv) | 98,420 | `a6f94e9ad640c29a9c407150ba620424fe6e6a11f85a34188f778429c4ac6dda` | 235 | 0 |
+| 2022-11 | [Telangana Ground Water Department Water Level Data November 2022](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2022_November.csv) | 98,484 | `af3f13d90ef173c06b88c8a841bdfd75cbe4bb3ad059f0066173e8ac254462c9` | 235 | 0 |
+| 2022-12 | [Telangana Ground Water Department Water Level Data December 2022](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2022_December.csv) | 98,390 | `6865f72c64eca1d6f3f6d5ce84201f0e6144b3ae7b64af682ea54f295a73d1ff` | 235 | 0 |
+| 2023-01 | [Telangana Ground Water Department Water Level Data January 2023](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2023_January.csv) | 99,026 | `6dc7d4253a3547376323c6659d99add4a6120dfda1590a2131006505f2cd9c84` | 235 | 0 |
+| 2023-02 | [Telangana Ground Water Department Water Level Data February 2023](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2023_February.csv) | 99,160 | `fd0ae08c924d529abb8d3abb0e2881559b53a9c9b1e99d27d3d305b5d72e19e4` | 235 | 0 |
+| 2023-03 | [Telangana Ground Water Department Water Level Data March 2023](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2023_March.csv) | 99,347 | `2b14c79b3e2bf2879a2c35e8b3e2fc1007588a58883594cf585f07025d3eea60` | 235 | 0 |
+| 2023-04 | [Telangana Ground Water Department Water Level Data April 2023](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2023_April.csv) | 99,552 | `aaa0abd7a3b9577909483b72acb98981f5c72fb9c1e90d345b643389faa5d551` | 235 | 0 |
+| 2023-05 | [Telangana Ground Water Department Water Level Data May 2023](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2023_May.csv) | 99,618 | `458218471ac1d294ba77a1d8243429911e322a6742b2b88d64f02f241ca63a85` | 235 | 0 |
+| 2023-06 | [Telangana Ground Water Department Water Level Data June 2023](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2023_June.csv) | 99,624 | `c8f8e1c41a56db034fe975745986d6cefdf06cd1be93e2a51568a16c0ae9f75c` | 235 | 0 |
+| 2023-07 | [Telangana Ground Water Department Water Level Data July 2023](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2023_July.csv) | 99,392 | `78d053ba01f455c7694f5b2a6d4e57c80fe57e54a71fab25377f97d79f8c1831` | 235 | 0 |
+| 2023-08 | [Telangana Ground Water Department Water Level Data August 2023](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2023_August.csv) | 181,237 | `434ef454036cfd22de1edf71d05c71a83b50c11409465fbf087cf28eae7710d1` | 266 | 0 |
+| 2023-09 | [Telangana Ground Water Department Water Level Data September 2023](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2023_September.csv) | 181,246 | `788322dc3b6cdb536c1168f47aa2ba692d26ec4ce337d8631c4ac2b69b29a37b` | 266 | 0 |
+| 2023-10 | [Telangana Ground Water Department Water Level Data October 2023](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2023_October.csv) | 181,240 | `f50869fe0dfc3deeb6fbfe559f9fcd5d845a3ee8a9ac056c03fd0ca20954f859` | 266 | 0 |
+| 2023-11 | [Telangana Ground Water Department Water Level Data November 2023](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2023_November.csv) | 181,258 | `c62e2a3fda9e14e06a6098ce3c54a2979bd1e37aa6443f738c6d48e65167c5c6` | 266 | 0 |
+| 2023-12 | [Telangana Ground Water Department Water Level Data December 2023](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2023_December.csv) | 181,323 | `b6f03729a8f34a7e6f08cbbae432f1e196c7f94ca31989f270c444775335f388` | 266 | 0 |
+| 2024-01 | [Telangana Ground Water Department Water Level Data January 2024](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2024_January.csv) | 181,438 | `7605c0ba8b0fcb611d8e10c770ab898cb586e536cfeea34dbc1809a642907376` | 266 | 0 |
+| 2024-02 | [Telangana Ground Water Department Water Level Data February 2024](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2024_February.csv) | 181,562 | `958bd33ec639e333ed44e0fa84037d524b19af055320a2611351e93ba9e375bc` | 266 | 0 |
+| 2024-03 | [Telangana Ground Water Department Water Level Data March 2024](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2024_March.csv) | 181,661 | `8ef7f174d5908026e2aae9a4024a11c3ed3b4ac27deb07433b24e6947b90a38b` | 266 | 0 |
+| 2024-04 | [Telangana Ground Water Department Water Level Data April 2024](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2024_April.csv) | 181,742 | `b714934796681a8f1e8b792a24bbba189e7fb5dd61decd0d3f09292bcb5c541f` | 266 | 0 |
+| 2024-05 | [Telangana Ground Water Department Water Level Data May 2024](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2024_May.csv) | 181,723 | `1e7ddc022fbf53bd311e44896a06a3c537ea8980eee3544308ab3dd4c550a1f7` | 266 | 0 |
+| 2024-06 | [Telangana Ground Water Department Water Level Data June 2024](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2024_June.csv) | 181,698 | `dc7d6f3f0c642dfb6e35e5873a69f2c222cbe1ed13b2dece2aeb70a8469682e2` | 266 | 0 |
+| 2024-07 | [Telangana Ground Water Department Water Level Data July 2024](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2024_July.csv) | 181,593 | `b2b87e6a79ed0087d6169f2b5ef55b44d85ea9d73540e3ecc9dc408abd15103d` | 266 | 0 |
+| 2024-08 | [Telangana Ground Water Department Water Level Data August 2024](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2024_August.csv) | 181,505 | `c5137b7af4643d7668dbf70f725d13868e2fb708ef810da982d4915caf261e10` | 266 | 0 |
+| 2024-09 | [Telangana Ground Water Department Water Level Data September 2024](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2024_September.csv) | 181,342 | `48e1fbaa0c6b630dd244670283f5316147097bfe26bcb4437a1a321409255996` | 266 | 0 |
+| 2024-10 | [Telangana Ground Water Department Water Level Data October 2024](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2024_October.csv) | 181,326 | `9b7ca593245f26e3f79500909372ba6c09d5e1e248082bef807c7b9ec5b3211b` | 266 | 0 |
+| 2024-11 | [Telangana Ground Water Department Water Level Data November 2024](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2024_November.csv) | 181,311 | `6263568482cabb0da0b90398331639793979cdd3c8a08b64bf793bc15e35984b` | 266 | 0 |
+| 2024-12 | [Telangana Ground Water Department Water Level Data December 2024](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2024_December.csv) | 181,415 | `3819b1fc5f1e10475c60177f18ea4a3d634b5f85c428d5e067172cb52322c6ef` | 266 | 0 |
+| 2025-01 | [Telangana Ground Water Department Water Level Data January 2025](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2025_January.csv) | 181,599 | `83b1b0e3a66d4cef6171d3b96223ba83d244f2617aa238ed5ea72cb616c39858` | 266 | 0 |
+| 2025-02 | [Telangana Ground Water Department Water Level Data February 2025](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2025_February.csv) | 181,636 | `ec52810ab3da08b0bc3d42f2c983756dfd592cd3b5e05060c4877fa06091b10b` | 266 | 0 |
+| 2025-03 | [Telangana Ground Water Department Water Level Data March 2025](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2025_March.csv) | 181,708 | `c93e2b0db1234a935dd90402e3425728d25d4c0b6c6f43b75c4ceb6a431817b0` | 266 | 0 |
+| 2025-04 | [Telangana Ground Water Department Water Level Data April 2025](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2025_April.csv) | 181,748 | `c3bb5ab8181444f5621fbb59a2e83ce78c40bf6a73bced9e2dee969e576efd4a` | 266 | 0 |
+| 2025-05 | [Telangana Ground Water Department Water Level Data May 2025](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2025_May.csv) | 181,683 | `232ace33f1f315d7897d8a9b71a3ace291deac548ab232a43f567bf675e4341a` | 266 | 0 |
+| 2025-06 | [Telangana Ground Water Department Water Level Data June 2025](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2025_June.csv) | 181,639 | `e039c117cb16b36f6f0625ef9a655c32c2f52f0201e8c81b93085c368d3be491` | 266 | 0 |
+| 2025-07 | [Telangana Ground Water Department Water Level Data July 2025](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2025_July.csv) | 181,591 | `2811f5b457d6f5abc8abd83ddc0795f7de0a8d89de4ab26d2956313ba5eb27bf` | 266 | 0 |
+| 2025-08 | [Telangana Ground Water Department Water Level Data August 2025](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2025_August.csv) | 181,363 | `2851e3cf997fe98e83feaee9627ed674997e9f630bbacfe49ecbdcb9f7c6f9d2` | 266 | 0 |
+| 2025-09 | [Telangana Ground Water Department Water Level Data September 2025](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2025_September.csv) | 181,225 | `8c7a3cb269d7dfc4baca6dc34ef984f1cff01d1e1f617ee27679bfed3cf6cd69` | 266 | 0 |
+| 2025-10 | [Telangana Ground Water Department Water Level Data October 2025](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2025_October.csv) | 181,212 | `5ddf0827b53e6671d03e77593c42d6b424631ae9b922822e2c85be4b4fdb2f08` | 266 | 0 |
+| 2025-11 | [Telangana Ground Water Department Water Level Data November 2025](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2025_November.csv) | 181,134 | `2d49459112db752a95b65b10310ada4dc394ea656ddad31aafe17d520fd15e72` | 266 | 0 |
+| 2025-12 | [Telangana Ground Water Department Water Level Data December 2025](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2025_December.csv) | 181,269 | `c75c6dd149dc0a31b3f240d8ff27d83f26b0df49db39967bf322f731847e19cb` | 266 | 0 |
+| 2026-01 | [Telangana Ground Water Department Water Level Data January 2026](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2026_January.csv) | 181,346 | `39bf891720a9c357ebff9d5d04df8949bb6aa693cf0f6ff6d015c7c6f925db02` | 266 | 0 |
+| 2026-02 | [Telangana Ground Water Department Water Level Data February 2026](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2026_February.csv) | 181,438 | `f84523ab17d7181bdfcfdfc94857de7c71fca43b1725ebb942f68eeb484968ab` | 266 | 0 |
+| 2026-03 | [Telangana Ground Water Department Water Level Data March 2026](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2026_March.csv) | 181,508 | `7405c636fac78ddfdb0dade159cef34679bd126a2fad11b8867c7af23b010df8` | 266 | 0 |
+| 2026-04 | [Telangana Ground Water Department Water Level Data April 2026](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2026_April.csv) | 181,599 | `523a17595f5d5143530841d6f53ccd333ee69ce01b5845a853f13461be47b731` | 266 | 0 |
+| 2026-05 | [Telangana Ground Water Department Water Level Data May 2026](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2026_May.csv) | 181,584 | `bd1e53eb4bb13167dc3a097ebff9548a5f42aad311cb2d1e84b9ebd730e4dd1f` | 266 | 0 |
+| 2026-06 | [Telangana Ground Water Department Water Level Data June 2026](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2026_June.csv) | 181,619 | `c094d2cb25895acc180227ba547d65e41f87ddfb49788c175ae896ebe77059ff` | 266 | 0 |
+| 2026-07 | [Telangana Ground Water Department Water Level Data July 2026](https://data.telangana.gov.in/sites/default/files/uploaded_resources/ground_water_level_2026_July.csv) | 181,656 | `93ec95f53bff7ba952e8b0139d753d6348f2d0d6783fc6e4b58bba2730b2f557` | 266 | 0 |

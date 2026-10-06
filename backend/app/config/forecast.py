@@ -69,12 +69,15 @@ class ForecastConfig:
     selection_alpha: float = 0.05
     selection_min_yoy_months: int = 12
     # Covariates of the gradient-boosting candidate: weather D8 (Open-Meteo, REAL reanalysis).
-    # Groundwater D7 is not in the repo (NWDP needs registration; data/raw/d7_groundwater).
+    # Groundwater D7: Telangana Ground Water Department wells (data/raw/d7_groundwater, item 17);
+    # a candidate model adds each section's anomaly (global_gbm_groundwater).
     covariates: tuple[str, ...] = ("weather_d8",)
     weather_file: str = "data/raw/d8_weather/open_meteo_hyderabad_daily.csv"
     # D8b: monthly weather per section from the TGDPS stations of its nearest mandal
     # (scripts/forecast/build_section_weather.py; research follow-up B).
     section_weather_file: str = "data/derived/weather/section_monthly.csv"
+    # D7: groundwater anomaly per section and month (scripts/forecast/build_groundwater.py).
+    groundwater_file: str = "data/derived/groundwater/section_anomaly.csv"
     # Normal weather per calendar month: 2019-2021, the three years before the first booking
     # month (Jan 2022), so the normal never contains a month that is forecast or scored.
     weather_normal_years: tuple[int, int] = (2019, 2021)
@@ -124,7 +127,12 @@ class ShortageConfig:
     a8_sections_path: str = "data/derived/sandbox/section_points.csv"
     a8_replay: str = "main_2025"
     a8_scenario: str = "fleet"
-    # Groundwater (D7) is not in the repo: the reason says so, no value is invented.
+    # Groundwater (D7, item 17): each section's anomaly (median of TGGWD wells within the radius,
+    # data/derived/groundwater/section_anomaly.csv) is given in the reason; it does not change
+    # the risk level (a groundwater rule would be OPEN, owner to confirm). The radius must match
+    # scripts/forecast/build_groundwater.py RADIUS_KM. Without the file the note below is used.
+    groundwater_path: str = "data/derived/groundwater/section_anomaly.csv"
+    groundwater_radius_km: float = 5.0
     groundwater_note: str = "groundwater data unavailable"
     # Reservoir levels: only if Q2 is approved (docs/features.csv T8 note). Off; no data.
     reservoirs_enabled: bool = False

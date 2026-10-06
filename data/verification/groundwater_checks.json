@@ -1,0 +1,21 @@
+{
+  "inputs_sha256": {
+    "data/derived/crosswalk/section_to_ward_2016.csv": "7cd5f22f86e0418601aa46f65b08a2e8b85acc5bbcd312adcaab5ffb6faabf25",
+    "data/raw/d7_groundwater/tggwd_levels_hmwssb_districts.csv.gz": "80cd8a6b458b44fb1b5f3551ef75965f9dfee7fcebbaa7fa7953671b4b6a2edd"
+  },
+  "latest_month": "2026-07",
+  "outputs_sha256": {
+    "data/derived/groundwater/section_anomaly.csv": "3b5c519a0b1528f2efa2d5f00473874d02e19cdb07fa75a94404318d4e1b4cd6",
+    "data/derived/groundwater/well_anomaly.csv": "6d6cd903a25b4c55f79f19981bcf481230e450091e8b593b5393b6b84ba332fb"
+  },
+  "sections": 221,
+  "sections_with_value_at_latest_month": 147,
+  "settings": {
+    "min_prior_years": 2,
+    "min_wells": 2,
+    "position_decimals": 2,
+    "radius_km": 5.0
+  },
+  "well_months_with_anomaly": 6571,
+  "wells": 337
+}

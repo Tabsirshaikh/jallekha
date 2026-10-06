@@ -263,6 +263,22 @@ def section_monthly_weather() -> dict[str, dict[Month, MonthWeather]]:
 
 
 @lru_cache(maxsize=1)
+def section_groundwater() -> dict[str, dict[Month, float]]:
+    """D7: each section's groundwater anomaly per month (metres deeper than usual; median of
+    nearby TGGWD wells; data/derived/groundwater/section_anomaly.csv). Empty if absent."""
+    file = REPO_ROOT / FORECAST_CONFIG.groundwater_file
+    if not file.exists():
+        return {}
+    out: dict[str, dict[Month, float]] = {}
+    with file.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            if row["anomaly_m"]:
+                month = (int(row["month"][:4]), int(row["month"][5:7]))
+                out.setdefault(row["section"], {})[month] = float(row["anomaly_m"])
+    return out
+
+
+@lru_cache(maxsize=1)
 def _section_normals() -> dict[str, dict[int, MonthWeather]]:
     """Each section's normal per calendar month over `weather_normal_years`."""
     first, last = FORECAST_CONFIG.weather_normal_years
@@ -341,11 +357,13 @@ def _recent_growth(train: Panel, cutoff: Month, window: int) -> tuple[float, dic
 
 
 def _gbm_rows(
-    train: Panel, target: Month, cutoff: Month, local: bool = False
+    train: Panel, target: Month, cutoff: Month, local: bool = False, groundwater: bool = False
 ) -> tuple[list[str], list[list[float]]] | None:
     """Feature rows for every section of the month a year before `target`, using only data
     before `cutoff` (and before the training end). `local`: each section's own weather (D8b)
-    where it has a series, the city series otherwise."""
+    where it has a series, the city series otherwise. `groundwater`: the section's groundwater
+    anomaly in the month before `cutoff` (D7); otherwise that column is blank (NaN), and a model
+    leaves out a column that is blank throughout, so the other models are unchanged."""
     period = FORECAST_CONFIG.seasonal_period_months
     lag_month = shift(target, -period)
     if lag_month not in train.values or lag_month >= cutoff:
@@ -363,6 +381,8 @@ def _gbm_rows(
         own, normal = series[section], normals[section]
         return (*_weather_anomaly(lag_month, own, normal), *_recent_weather(cutoff, own, normal))
 
+    wells = section_groundwater() if groundwater else {}
+    before = shift(cutoff, -1)
     sections = sorted(train.values[lag_month])
     rows = []
     for s in sections:
@@ -378,6 +398,7 @@ def _gbm_rows(
                 lag_rain,
                 recent_rain,
                 recent_heat,
+                wells.get(s, {}).get(before, math.nan),
             ]
         )
     return sections, rows
@@ -386,6 +407,7 @@ def _gbm_rows(
 GBM_FEATURES = (
     "log_lag12", "log_lag24", "month", "section_growth", "city_growth",
     "lag12_heat_anomaly", "lag12_rain_anomaly", "recent_rain_anomaly", "recent_heat_anomaly",
+    "groundwater_anomaly",
 )  # fmt: skip
 
 
@@ -403,18 +425,25 @@ def global_gbm_local_weather(train: Panel, target: Month) -> SectionValues | Non
     return _gbm(train, target, local=True)
 
 
-def _gbm(train: Panel, target: Month, local: bool) -> SectionValues | None:
+def global_gbm_groundwater(train: Panel, target: Month) -> SectionValues | None:
+    """The city-weather model plus each section's groundwater anomaly (D7, item 17)."""
+    return _gbm(train, target, local=False, groundwater=True)
+
+
+def _gbm(
+    train: Panel, target: Month, local: bool, groundwater: bool = False
+) -> SectionValues | None:
     _check(train, target)
     cfg = FORECAST_CONFIG
     origin = shift(max(train.values), 1) if train.values else target
-    query = _gbm_rows(train, target, min(target, origin), local)
+    query = _gbm_rows(train, target, min(target, origin), local, groundwater)
     if query is None:
         return None
     features: list[list[float]] = []
     targets: list[float] = []
     months = 0
     for month in sorted(train.values):
-        rows = _gbm_rows(train, month, month, local)
+        rows = _gbm_rows(train, month, month, local, groundwater)
         if rows is None:
             continue
         months += 1
@@ -464,6 +493,7 @@ MODELS: dict[str, Model] = {
     "naive_x_growth": naive_x_growth,
     "global_gbm": global_gbm,
     "global_gbm_local_weather": global_gbm_local_weather,
+    "global_gbm_groundwater": global_gbm_groundwater,
     "combo_naive_gbm": combo_naive_gbm,
 }
 # Simplest first: on a statistical tie the simpler model is used.
@@ -472,6 +502,7 @@ COMPLEXITY: tuple[str, ...] = (
     "naive_x_growth",
     "global_gbm",
     "global_gbm_local_weather",
+    "global_gbm_groundwater",
     "combo_naive_gbm",
 )
 

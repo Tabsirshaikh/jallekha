@@ -23,7 +23,7 @@ No LLM in any scoring, allocation or explanation step.
   for your feature before changing it).
 - **To-do list: `docs/REMAINING_WORK.md`** (items 11-22, each with what, where it stands, how to do
   it, done-when; plus "Research follow-ups"). Done: 11 (#68), 12 + 16 (#69), 14 (#70), 21 (#74),
-  22 (#75), 15 (#76), 18 (#77), research A (#79), research B (`feat/d8-city-weather`). Left: 13, 17, 19,
+  22 (#75), 15 (#76), 18 (#77), research A (#79), research B (#80), 17 (`feat/d7-groundwater`). Left: 13, 19,
   20.
 - Last full check on `main` (5c4d43c): lint clean; 908 backend + 184 frontend tests pass; all data
   verifiers pass.
@@ -56,7 +56,8 @@ contest `ExplainExperience.tsx`; U9 impact `ImpactExperience.tsx`. Snapshot buil
 D1 HMWSSB monthly tanker bookings per section (`hmwssb_tankers` 2022-Feb 2024, `hmwssb_tankers_portal`
 to Aug 2026; sections re-cut Feb/Mar 2026); `census` (2011); `geography` (2016 GHMC wards
 `datameet/ghmc-wards.geojson`, 145 wards, ids like `relation/7848824`; OSM district/mandals/HMWSSB
-points); `d6_open_buildings` (growth); `d7_groundwater` (NOT fetched, needs NWDP login); `d8_weather`
+points); `d6_open_buildings` (growth); `d7_groundwater` (TGGWD monthly well levels 2021-2026 from Open Data Telangana, gzip; section
+anomalies in `data/derived/groundwater/`); `d8_weather`
 (Open-Meteo daily, city centre); `d8_weather_stations` (TGDPS daily per mandal 2018-2026, gzip;
 per-section monthly weather in `data/derived/weather/`); `d13_chicago_311` (F13 calibration); `d9_facilities` (OSM hospitals,
 clinics, UPHCs, schools, care homes; counts per ward in `data/derived/evidence/ward_facilities.csv`).
@@ -66,7 +67,6 @@ clinics, UPHCs, schools, care homes; counts per ward in `data/derived/evidence/w
 | Item | Read first | Change |
 |---|---|---|
 | 13 voice error rate | `backend/app/config/intake.py` (`asr_model_id`), `services/intake_pipeline.py` | blocked: needs labelled Telugu/Urdu recordings |
-| 17 groundwater | `data/raw/d7_groundwater/RETRIEVAL_LOG.md`, `services/shortage.py` | blocked: NWDP account |
 | 19, 20 | `docs/REMAINING_WORK.md` | owner decisions; 20 = edit design doc section 7 "Stack" (line ~138) or build Docker/PostgreSQL/Leaflet |
 
 ## Commands (run from the repo root, Windows)

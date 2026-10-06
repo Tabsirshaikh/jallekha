@@ -77,6 +77,18 @@ describe("ForecastExperience", () => {
     expect(screen.getByText(/named as before the Feb\/Mar 2026 re-cut/)).toBeInTheDocument();
   });
 
+  it("says groundwater is shown in the reasons, not used for the risk, when the API has it", async () => {
+    setToken("t-officer");
+    const reason = "Forecast 75 bookings in 2026-02; groundwater 0.8 m shallower than usual near this section (median of 7 wells within 5 km, 2026-01).";
+    vi.stubGlobal("fetch", officerApi([shortageRow("ALPHA LOW", "low", { groundwater_status: "DERIVED", groundwater_m: -0.8, reason })]));
+    renderScreen();
+    await screen.findByText("Live data");
+    fireEvent.click(screen.getByRole("tab", { name: "Shortage warnings" }));
+    expect(screen.getByText(/0.8 m shallower than usual/)).toBeInTheDocument();
+    expect(screen.getAllByText(/not used to set the risk|not part of the risk rule/).length).toBeGreaterThan(0);
+    expect(screen.queryByText(/Groundwater data unavailable/)).not.toBeInTheDocument();
+  });
+
   it("shows a small real capacity with a decimal instead of rounding it to zero", async () => {
     setToken("t-officer");
     vi.stubGlobal("fetch", officerApi([shortageRow("GUNDLAPOCHAMPALLY (PD 7)", "high", { capacity_trips: 0.3, capacity_ratio: 3.5156 })]));

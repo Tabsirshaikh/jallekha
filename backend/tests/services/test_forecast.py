@@ -439,3 +439,30 @@ def test_local_weather_model_is_a_candidate_between_gbm_and_the_combination() ->
     order = fc.COMPLEXITY
     assert order.index("global_gbm") < order.index("global_gbm_local_weather")
     assert order.index("global_gbm_local_weather") < order.index("combo_naive_gbm")
+
+
+# --- item 17: groundwater as a candidate feature -------------------------------------------
+
+
+def test_groundwater_feature_is_the_anomaly_just_before_the_cutoff(monkeypatch) -> None:
+    monkeypatch.setattr(
+        fc,
+        "section_groundwater",
+        lambda: {"HOT": {(2024, 12): 1.5, (2025, 1): 9.9}, "COOL": {(2024, 11): -0.5}},
+    )
+    train = _two_section_panel()
+    sections, rows = fc._gbm_rows(train, (2025, 3), (2025, 1), groundwater=True)
+    col = fc.GBM_FEATURES.index("groundwater_anomaly")
+    by_section = dict(zip(sections, rows, strict=True))
+    assert by_section["HOT"][col] == 1.5  # Dec 2024: the month before the Jan 2025 cutoff
+    assert math.isnan(by_section["COOL"][col])  # no value that month
+    # Other models never see it: the column is blank and left out when they fit.
+    _, city = fc._gbm_rows(train, (2025, 3), (2025, 1))
+    assert all(math.isnan(r[col]) for r in city)
+
+
+def test_groundwater_model_is_a_candidate_before_the_combination() -> None:
+    assert "global_gbm_groundwater" in fc.MODELS
+    order = fc.COMPLEXITY
+    assert order.index("global_gbm_local_weather") < order.index("global_gbm_groundwater")
+    assert order.index("global_gbm_groundwater") < order.index("combo_naive_gbm")
