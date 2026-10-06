@@ -13,7 +13,7 @@ from contextlib import contextmanager
 from dataclasses import asdict
 from datetime import UTC, date, datetime
 from functools import lru_cache
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Response
 from fastapi.encoders import jsonable_encoder
@@ -43,6 +43,7 @@ from app.services import (
     ledger_store,
     plan_builder,
     planner,
+    section_plan,
     ward_locate,
 )
 from app.services.keyed_lock import KeyedLocks
@@ -99,6 +100,10 @@ class NewPlan(BaseModel):
     # The day's bookings, supplied by an officer (see docs/api_additions/plans.md). Absent: the
     # plan is built from the committed replay, which needs a day inside its window.
     bookings: list[dict[str, Any]] | None = None
+    # "section": plan by HMWSSB section from the real monthly totals of the day's month divided by
+    # the days (section_plan.py); `capacity` is then the fleet or the tight scenario.
+    unit: Literal["ward", "section"] = "ward"
+    capacity: Literal["fleet", "tight"] = "fleet"
 
 
 def _record(plans: PlanStore, plan_id: str) -> PlanRecord:
@@ -142,6 +147,9 @@ def plan_view(record: PlanRecord) -> dict[str, Any]:
     view.update(
         {
             "source": recipe.get("source", plan_builder.SOURCE),
+            "unit": recipe.get("unit", "ward"),
+            "capacity_scenario": recipe.get("capacity"),
+            "trips_total": sum(st["trips"] for st in stations.values()),
             # Registered delivery stops the plan used (supplied plans) and its loads for each.
             "stops": [
                 {
@@ -195,9 +203,14 @@ def create_plan(
         weights = NeedWeights(**body.weights.model_dump()).validated() if body.weights else None
     except ValueError as exc:
         return invalid(str(exc))
+    by_section = body.unit == "section"
+    if by_section and body.bookings is not None:
+        return invalid("A plan by section is made from the month's totals: do not supply bookings")
     supplied = body.bookings is not None
     stops: list[dict[str, Any]] = []
     owed: list[Any] = []
+    if by_section:
+        owed = list(debts.accounts().values())
     if supplied:
         stops = [
             {"stop_id": s.stop_id, "ward_id": s.ward_id, "lat": s.lat, "lon": s.lon}
@@ -207,7 +220,9 @@ def create_plan(
         owed = list(debts.accounts().values())
     try:
         plan_id = (
-            plan_builder.supplied_plan_id(body.day, body.bookings, weights, stops, owed)
+            plan_builder.section_plan_id(body.day, body.capacity, weights)
+            if by_section
+            else plan_builder.supplied_plan_id(body.day, body.bookings, weights, stops, owed)
             if body.bookings is not None
             else plan_builder.plan_id_for(body.day, weights)
         )
@@ -222,7 +237,9 @@ def create_plan(
         return plan_view(existing)
     try:
         built = (
-            plan_builder.build_supplied_plan(
+            plan_builder.build_section_plan(body.day, body.capacity, weights, owed)
+            if by_section
+            else plan_builder.build_supplied_plan(
                 body.day, body.bookings, weights=weights, stops=stops, debts=owed
             )
             if body.bookings is not None
@@ -237,6 +254,13 @@ def create_plan(
         response.status_code = 200
         return plan_view(_record(plans, built.plan.plan_id))
     for entry_type, payload, actor in built.events:  # plan_created, once
+        if by_section:
+            payload = {
+                **payload,
+                "source": plan_builder.SECTION,
+                "unit": "section",
+                "capacity": body.capacity,
+            }
         if supplied:  # say where the bookings came from
             payload = {
                 **payload,
@@ -290,8 +314,10 @@ def _gate(mtime: float) -> confidence.T9Gate:
 @router.get("/plans/{plan_id}/confidence", dependencies=[Officer])
 def plan_confidence(plan_id: str, plans: Plans) -> dict[str, Any]:
     record = _record(plans, plan_id)
-    gate = _gate((REPO_ROOT / CONFIDENCE_CONFIG.evidence_path).stat().st_mtime)
     groups = sorted({b.booking.group for b in record.inputs.pending})
+    if (record.recipe or {}).get("source") == plan_builder.SECTION:
+        return _section_confidence(groups)
+    gate = _gate((REPO_ROOT / CONFIDENCE_CONFIG.evidence_path).stat().st_mtime)
     items = []
     for group in groups:
         c = gate.explain(group)
@@ -315,6 +341,30 @@ def plan_confidence(plan_id: str, plans: Plans) -> dict[str, Any]:
         "threshold_basis": gate.config.threshold_basis,
         "calibration": typed(selection) if selection else None,
         "groups": items,
+    }
+
+
+def _section_confidence(groups: list[str]) -> dict[str, Any]:
+    """Confidence of a plan by section: a section whose need or connection count is an estimate is
+    flagged for an officer (section_plan.SectionGate); the T9 ward signals do not apply."""
+    sections = section_plan.load_sections(REPO_ROOT)
+    assessed = section_plan.SectionGate(sections).assess(groups)
+    return {
+        "threshold": 0.5,
+        "threshold_basis": "ASSUMED (flagged when need or connections are an estimate)",
+        "calibration": None,
+        "groups": [
+            {
+                "group": g,
+                "confidence": a.confidence,
+                "needs_check": a.needs_check,
+                "reason": a.reason,
+                "used": ["need", "connections"] if not a.needs_check else [],
+                "unavailable": [] if not a.needs_check else ["need or connections (estimated)"],
+                "signals": [],
+            }
+            for g, a in assessed.items()
+        ],
     }
 
 

@@ -152,3 +152,15 @@ the replay (404 otherwise).
 bookings, or `null` for a replay plan. List rows also carry `source`. `basis.plan` says the
 bookings are as supplied and not verified here.
 
+### Plans by section: `unit`, `capacity`, `capacity_scenario`, `trips_total` (feat/section-queue)
+`POST /plans` accepts `unit: "section"` (default `"ward"`) and `capacity: "fleet" | "tight"` (default
+`"fleet"`). A plan by section is made for a day of 2025 from that month's real booking total of each
+HMWSSB section divided by the days of the month (all tier 2, domestic); entitlement is the section's
+domestic connections x its need weight; sections whose need or connections are estimates are flagged
+and need an officer's check before approval. `bookings` must not be supplied (422); a day outside 2025
+is 404. Plan id `section-<day>-<capacity>` (plus the weights when not the defaults). The view and the
+list carry `source: "section_month"`, `unit: "section"`, `capacity_scenario` and `trips_total`; groups
+are `section:<name>`. `GET /plans/{id}/confidence` answers with the section gate (confidence 0 for an
+estimated section, 1 otherwise). Basis: bookings REAL monthly totals, daily split by division of the
+month, capacity ASSUMED (fleet) or DERIVED (tight), need DERIVED_APPROXIMATE or ESTIMATED.
+

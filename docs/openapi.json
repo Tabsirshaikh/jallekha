@@ -596,6 +596,58 @@
         }
       }
     },
+    "/atlas/live-sections": {
+      "get": {
+        "tags": [
+          "evidence"
+        ],
+        "summary": "Atlas Live Sections",
+        "description": "The same live clues per HMWSSB section (DERIVED_APPROXIMATE need from data/derived/\nevidence/section_need.csv). Bookings are exact per section, as are well levels. Water owed,\n\"no water\" complaints and supply cuts are recorded per ward, so a section uses the ward that\nholds most of its buildings (`main_ward_id`). The answer has the shape of /atlas/live (the\nkey `ward_id` holds the section id) so one screen draws both.",
+        "operationId": "atlas_live_sections_atlas_live_sections_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Atlas Live Sections Atlas Live Sections Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/atlas/wards/{ward_id}": {
       "get": {
         "tags": [
@@ -4017,6 +4069,24 @@
               }
             ],
             "title": "Bookings"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "ward",
+              "section"
+            ],
+            "title": "Unit",
+            "default": "ward"
+          },
+          "capacity": {
+            "type": "string",
+            "enum": [
+              "fleet",
+              "tight"
+            ],
+            "title": "Capacity",
+            "default": "fleet"
           }
         },
         "type": "object",
