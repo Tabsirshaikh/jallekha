@@ -76,7 +76,9 @@ def build_coverage_layers(
     if set(evidence) != ward_ids or set(underserved) != ward_ids:
         raise ValueError("E2/E5 ward identifiers do not exactly match the reviewed geography")
     ward_status = equity_summary.get("ward_metrics_status")
-    if ward_status == "APPROXIMATE_SECTION_POINT_IN_WARD":
+    if ward_status == "APPROXIMATE_SECTION_POINT_IN_WARD" or str(ward_status).startswith(
+        "VORONOI_DIVISION_HULL_"
+    ):
         # E4 places sections by located point (section_to_ward_2016.csv); values are approximate
         if equity_wards is None:
             raise ValueError("Approximate E4 ward metrics need the E4 ward rows")
@@ -147,7 +149,7 @@ def build_coverage_layers(
                     if bookings_by_ward.get(ward_id, {}).get("bookings")
                     else "UNAVAILABLE",
                     "display_status": (
-                        "APPROXIMATE_SECTION_POINT_IN_WARD"
+                        ward_status
                         if bookings_by_ward.get(ward_id, {}).get("bookings")
                         else "UNAVAILABLE_NO_PLACED_SECTION"
                         if bookings_by_ward

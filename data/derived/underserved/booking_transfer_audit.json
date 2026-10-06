@@ -1,0 +1,75 @@
+{
+  "basis": "DERIVED_APPROXIMATE",
+  "period_year": 2025,
+  "paired_wards": 107,
+  "placed_bookings": 1319204.0,
+  "unplaced_bookings": 117564,
+  "city_bookings": 1436768,
+  "results": {
+    "point": {
+      "NB_archived_predictions": {
+        "mean_absolute_error": 13938.875426647955,
+        "spearman": 0.29997795792772497,
+        "median_miss": 5.2139519200295075,
+        "within_2x": 0.22429906542056074,
+        "count": 107,
+        "positive_pairs": 107,
+        "zero_pairs_excluded_from_miss": 0,
+        "basis": "DERIVED"
+      },
+      "peer_recomputed": {
+        "mean_absolute_error": 12257.72984788297,
+        "spearman": 0.43591388896214933,
+        "median_miss": 3.661517439463099,
+        "within_2x": 0.27102803738317754,
+        "count": 107,
+        "positive_pairs": 107,
+        "zero_pairs_excluded_from_miss": 0,
+        "basis": "DERIVED"
+      },
+      "household_city_rate": {
+        "mean_absolute_error": 13974.287984265366,
+        "spearman": 0.47882736156926214,
+        "median_miss": 5.393403376410332,
+        "within_2x": 0.21495327102803738,
+        "count": 107,
+        "positive_pairs": 107,
+        "zero_pairs_excluded_from_miss": 0,
+        "basis": "DERIVED"
+      }
+    },
+    "building": {
+      "NB_archived_predictions": {
+        "mean_absolute_error": 12580.280274206441,
+        "spearman": 0.28562471835263226,
+        "median_miss": 4.179487027927265,
+        "within_2x": 0.2616822429906542,
+        "count": 107,
+        "positive_pairs": 107,
+        "zero_pairs_excluded_from_miss": 0,
+        "basis": "DERIVED"
+      },
+      "peer_recomputed": {
+        "mean_absolute_error": 10206.405335972606,
+        "spearman": 0.3642998491349752,
+        "median_miss": 2.8358364038181088,
+        "within_2x": 0.27102803738317754,
+        "count": 107,
+        "positive_pairs": 107,
+        "zero_pairs_excluded_from_miss": 0,
+        "basis": "DERIVED"
+      },
+      "household_city_rate": {
+        "mean_absolute_error": 11967.0094031128,
+        "spearman": 0.44080017241717123,
+        "median_miss": 4.1991549792014355,
+        "within_2x": 0.19626168224299065,
+        "count": 107,
+        "positive_pairs": 107,
+        "zero_pairs_excluded_from_miss": 0,
+        "basis": "DERIVED"
+      }
+    }
+  },
+  "interpretation": "In-sample sensitivity diagnostic; no authoritative ward observations. NB is the archived point-input fit, not refitted on new counts. Improved agreement cannot validate the geography."
+}

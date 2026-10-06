@@ -19,7 +19,9 @@
   "top_booking_share": 0.676969188,
   "top_fraction_requested": 0.1,
   "top_section_count": 21,
-  "ward_booking_share_placed": 0.871311,
-  "ward_metrics_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
-  "ward_rate_population": "Census 2011 population via E2 (2009 to 2016 crosswalk)"
+  "ward_booking_share_placed": 0.816211,
+  "ward_bookings_basis": "DERIVED_APPROXIMATE",
+  "ward_metrics_status": "VORONOI_DIVISION_HULL_1KM_OPEN_BUILDINGS_2023_32M_COUNT_SHARE",
+  "ward_rate_population": "UNAVAILABLE: authoritative transfer and denominator unverified",
+  "ward_unplaced_bookings": 241906
 }

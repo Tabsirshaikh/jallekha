@@ -52,6 +52,22 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - **Basis labels are hidden on the officer need map and overview** (owner decision 2026-10-06: they made the screens hard to read). The API, data files and docs still carry them.
 
 ### F3 Booking Equity and coverage map (E4, E6)
+- **Building-weighted repair (local `feat/booking-dasymetric`):** section totals are split over
+  historical wards by 2023 Open Buildings fractional-count mass in approximate section cells.
+  Cells use all located section points (global Voronoi), clipped by the section division's
+  point convex hull plus 1 km [ASSUMED] and the GHMC ward union. Duplicate locations share a cell.
+  Existing E3 32 m count rasters were used; **individual vector building footprints are absent**.
+  This is an approximate building-count implementation, not exact footprint interpolation.
+  Cached rasters and their checksums are verified. Unlocated/empty/incomplete cells stay unplaced;
+  section/division identities must match. 171 sections have weights across all 145 wards.
+  2025: 1,319,204 of 1,436,768 bookings placed (91.82%), 117,564 unplaced.
+  Ward counts are DERIVED_APPROXIMATE; per-1,000-population rates remain null under F3.
+  `equity/wards`, coverage layers, report-card examples and U5 snapshot were rebuilt.
+- **No accuracy claim from literature:** built-environment dasymetric methods can improve
+  population transfer ([Rubinyi et al., 2021](https://www.sciencedirect.com/science/article/abs/pii/S0198971521000016)),
+  but this application's unknown section boundaries, account demand and old building raster
+  differ. [Google's Temporal documentation](https://sites.research.google/gr/open-buildings/temporal/)
+  describes the modelled count band; it is not a census of connections or residents.
 - **2026-10-06 owner audit:** one-point ward counts are placement artifacts, not ward observations.
   U5's low-booking tab and ward panel now use exact section checks instead of these numbers.
   Legacy ward equity outputs remain approximate pending the separate dasymetric branch; an
@@ -63,6 +79,21 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - The map screens (U5) follow the same live-or-snapshot rule.
 
 ### F4 Under-served Field-Check Screen (E5)
+- **Transfer sensitivity audit (107 identical wards, DERIVED_APPROXIMATE):** original point
+  table reproduced from source data; after the building-count split, re-evaluated archived NB
+  predictions and recomputed peers/household baseline. Results:
+
+  | Reference | Point: rho / miss / within 2x | Building: rho / miss / within 2x |
+  |---|---|---|
+  | Archived NB (not refitted) | 0.3000 / 5.2140x / 22.43% | 0.2856 / 4.1795x / 26.17% |
+  | Recomputed ward peers | 0.4359 / 3.6615x / 27.10% | 0.3643 / 2.8358x / 27.10% |
+  | Household x city rate | 0.4788 / 5.3934x / 21.50% | 0.4408 / 4.1992x / 19.63% |
+
+  Magnitude miss improves but **all rankings worsen**; no overall improvement established.
+  This is an in-sample sensitivity diagnostic, not geographic ground truth or temporal validation.
+  Archived NB/spatial outputs remain frozen on original inputs and are never applied to new
+  fractional counts; no Windows spatial resampling. Section checks remain the operational list.
+  Reproduce with `scripts/evidence/audit_booking_transfer.py`.
 - **Section replacement (local `feat/e5-section-check`, 2026-10-06):** 197 section/division
   identities in 2025, 12 visit candidates. Complete booking and billing years only; missing
   section-month rows are not assumed to be zero. Comparable peers exclude the target and share

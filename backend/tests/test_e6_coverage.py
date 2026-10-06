@@ -83,7 +83,7 @@ def test_unavailable_values_are_null_and_provisional_values_remain_review_only()
         row = e4[props["ward_id"]]
         if row["bookings"]:
             assert props["observed_bookings"] == float(row["bookings"])
-            assert props["display_status"] == "APPROXIMATE_SECTION_POINT_IN_WARD"
+            assert props["display_status"].startswith("VORONOI_DIVISION_HULL_")
             assert props["value_basis"] == "DERIVED_APPROXIMATE"
         else:
             assert props["observed_bookings"] is None and props["bookings_per_1000"] is None
@@ -117,7 +117,7 @@ def test_manifest_has_exactly_three_layers_and_excludes_unsupported_tap_claim():
         )
         if r["bookings_per_1000"]
     )
-    assert e4_rates >= 85
+    assert e4_rates == 0  # F3: no authoritative ward transfer/population denominator.
     e5_screened = sum(
         r["field_check_candidate"] is not None
         for r in json.loads(

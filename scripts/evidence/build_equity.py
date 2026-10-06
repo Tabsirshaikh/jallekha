@@ -2,8 +2,8 @@
 
 Section rates use HMWSSB's own billing data: bookings per 1,000 domestic connections (consumer
 accounts) per month, REAL over REAL, same section names, no geography. Ward bookings are
-approximate: each section's bookings go to the 2016 ward containing its located point
-(data/derived/crosswalk/section_to_ward_2016.csv); wards without a placed section stay empty.
+approximate: each section is split by Open Buildings count shares in a clipped Voronoi cell.
+Unplaced sections stay unplaced; ward population rates remain unavailable under F3.
 """
 
 from __future__ import annotations
@@ -19,11 +19,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "backend"))
+from app.config.booking_transfer import BOOKING_TRANSFER_CONFIG  # noqa: E402
 from app.config.equity import EQUITY_CONFIG  # noqa: E402
+from app.services.booking_transfer import split  # noqa: E402
 
 OUT = "data/derived/equity/"
 BILLING = "data/raw/hmwssb_billing_portal"
 SECTION_WARDS = "data/derived/crosswalk/section_to_ward_2016.csv"
+BUILDING_WEIGHTS = "data/derived/crosswalk/section_ward_building_weights.csv"
 # Domestic connection categories from the HMWSSB billing legend (portal metadata): D Domestic,
 # DS Domestic-Slums, DM Domestic-Municipality, DP Domestic Private, M0 Domestic with Flats,
 # M1 MSAC-Domestic, M4 MSB-individual, MB Multi Stored Buildings. Flats/apartment categories
@@ -227,25 +230,23 @@ def build(root=ROOT):
         encoding="utf-8", newline=""
     ) as handle:
         wards = list(csv.DictReader(handle))
-    with (root / SECTION_WARDS).open(encoding="utf-8", newline="") as handle:
-        links = {r["section"]: r["ward_id"] for r in csv.DictReader(handle) if r["ward_id"]}
-    ward_bookings = defaultdict(int)
-    for section, section_total in totals.items():
-        if section in links:
-            ward_bookings[links[section]] += section_total
+    weights = defaultdict(dict)
+    with (root / BUILDING_WEIGHTS).open(encoding="utf-8", newline="") as handle:
+        for r in csv.DictReader(handle):
+            if r["division"] == divisions.get(r["section"]):
+                weights[r["section"]][r["ward_id"]] = float(r["weight"])
+    ward_bookings, unplaced = split(totals, weights)
     ward_rows = []
     for w in wards:
         booked = ward_bookings.get(w["ward_id"])
-        population = float(w["population"]) if w.get("population") else None
         ward_rows.append(
             {
                 "ward_id": w["ward_id"],
                 "ward_name": w["ward_name"],
                 "bookings": booked,
-                "bookings_per_1000": round(per_thousand(booked, population), 6)
-                if booked is not None and population
-                else None,
-                "mapping_status": "APPROXIMATE_SECTION_POINT_IN_WARD"
+                # F3: no verified section transfer / population denominator for a ward rate.
+                "bookings_per_1000": None,
+                "mapping_status": BOOKING_TRANSFER_CONFIG.method
                 if booked is not None
                 else "NO_PLACED_SECTION",
                 "census_join_status": w["join_status"],
@@ -266,9 +267,11 @@ def build(root=ROOT):
         "bottom_section_count": bottom_count,
         "bottom_booking_share": round(sum(totals[s] for s in ordered[-bottom_count:]) / total, 9),
         "missing_source_months": [r["month"] for r in monthly if r["bookings"] is None],
-        "ward_metrics_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
+        "ward_metrics_status": BOOKING_TRANSFER_CONFIG.method,
         "ward_booking_share_placed": round(sum(ward_bookings.values()) / total, 6),
-        "ward_rate_population": "Census 2011 population via E2 (2009 to 2016 crosswalk)",
+        "ward_rate_population": "UNAVAILABLE: authoritative transfer and denominator unverified",
+        "ward_unplaced_bookings": sum(unplaced.values()),
+        "ward_bookings_basis": "DERIVED_APPROXIMATE",
         "section_rate_denominator": (
             "HMWSSB billing and collection data, mean monthly domestic connections "
             "(categories D, DS, DM, DP, M0, M1, M4, MB) over the same months"
@@ -296,6 +299,9 @@ def build(root=ROOT):
         },
         "section_wards_sha256_lf": hashlib.sha256(
             (root / SECTION_WARDS).read_text(encoding="utf-8").encode()
+        ).hexdigest(),
+        "building_weights_sha256_lf": hashlib.sha256(
+            (root / BUILDING_WEIGHTS).read_text(encoding="utf-8").encode()
         ).hexdigest(),
         "evidence_input_sha256_lf": hashlib.sha256(
             (root / "data/derived/evidence/ward_evidence.csv").read_text(encoding="utf-8").encode()

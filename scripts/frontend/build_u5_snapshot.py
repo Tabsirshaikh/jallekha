@@ -92,7 +92,7 @@ def main() -> None:
                 "annualGrowth": optional_float(growth["adjusted_annual_growth"]),
                 "growthQuality": growth["growth_stability"],
                 "growthBasis": growth["basis"],
-                "bookings": optional_int(equity["bookings"]),
+                "bookings": optional_float(equity["bookings"]),
                 "bookingsPer1000": optional_float(equity["bookings_per_1000"]),
                 "bookingStatus": equity["mapping_status"],
                 "fieldStatus": field["status"],

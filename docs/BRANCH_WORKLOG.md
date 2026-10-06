@@ -1203,3 +1203,16 @@ The pull-request description must summarize the same information and link to thi
   No spatial sampling, source-manifest edits or external publication.
 - Contract checks exposed a pre-existing duplicate `_need` helper that broke explanation
   and report-card routes; renamed the live-atlas helper to preserve the typed ward lookup.
+## `feat/booking-dasymetric` — F3/F4 transfer repair, 2026-10-06
+
+- TDD: geometry/mass tests failed on missing service; equity conservation test failed against
+  old point totals. Geometry, split conservation and E4/E6 affected tests now pass.
+- Global Voronoi from all points, clipped to division hull + 1km and historical ward union;
+  2023 Open Buildings fractional-count shares from existing 32m E3 cache, not vector footprints.
+- 171 weighted sections, 145 wards; 91.82% of 2025 bookings placed. Unplaced counts preserved.
+  Ward counts approximate; F3 per-population metrics remain null. Rebuilt E4/E6/U5 and examples.
+- Reproduced original 107-ward diagnostic; magnitude errors improve but rho falls for NB,
+  peers and baseline. Full figures and caveats in F4. No claim of geographic improvement.
+- Legacy E5 fits frozen on original observations. No spatial resampling or source-manifest edits.
+  New section checks retain exact counts; approximate counts are research/context only.
+- Actual vector building footprints and official section GIS are still absent. RTI is owner action.

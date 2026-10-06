@@ -388,8 +388,9 @@ zone (6 zones), given to sections by nearest point.
 Section check 1a is implemented locally on `feat/e5-section-check`: exact section rates,
 2024-to-2025 validation, officer API, U5 section cards/dots, four languages and verifier.
 Peer validation improves over the connection baseline but still misses by a median 2.48x.
-Pending: 1b building-weighted section transfers; 2 identifiable under-reporting experiment;
+1b is implemented locally using the existing 32m Open Buildings count grid; vector footprints
+are absent. Magnitude errors improve but rankings worsen in the 107-ward diagnostic, so accuracy
+is unproven. Ward per-population rates remain null. Pending: 2 under-reporting experiment;
 3 persisted field outcomes and precision after 30 outcomes; F5/F6 refresh, recut crosswalk,
 city ranges, reservoir context and forecast screen. Owner RTI for GIS section boundaries
 is an external action; Codex will not send it. No push, PR or merge before owner approval.
-

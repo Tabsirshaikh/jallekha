@@ -1,7 +1,7 @@
 {
   "_example": {
     "endpoint": "GET /wards/{ward_id}/report-card",
-    "status": "ROUTE_ON_MAIN (deliveries from stored stops and deliveries; debt from closed days; schedule from the stored plans)",
+    "status": "PROPOSED (local dasymetric repair, approval pending)",
     "basis": "need: REAL Census 2011 reweighted (DERIVED, HISTORICAL) + A2; bookings: REAL HMWSSB section records placed on wards (DERIVED_APPROXIMATE); deliveries: REAL or SYNTHETIC as the stops are registered; debt: DERIVED (A6 from closed days); schedule: the plan's own basis. Each live block is {value, basis, reason}: value null with basis UNAVAILABLE and the reason when there is nothing yet.",
     "built_from": "ward_evidence.csv row + build_ward_needs + equity/wards.csv + equity/monthly.csv; services/report_card.py over the delivery store (stops of the ward), the debt store and one stored plan (supplied before replay, latest day, approved before draft)",
     "notes": "SYNTHETIC example: one registered stop in Ward 105 Gachibowli, a plan from 12 supplied bookings for 2026-10-03 approved, 3 deliveries (2 Confirmed, 1 Disputed), the day closed. See docs/api_additions/report_cards.md."
@@ -43,10 +43,10 @@
           "2022-12"
         ]
       },
-      "bookings": 66431,
-      "bookings_per_1000": 1202.218723,
+      "bookings": 36738.15250654185,
+      "bookings_per_1000": null,
       "basis": "DERIVED_APPROXIMATE",
-      "mapping_status": "APPROXIMATE_SECTION_POINT_IN_WARD"
+      "mapping_status": "VORONOI_DIVISION_HULL_1KM_OPEN_BUILDINGS_2023_32M_COUNT_SHARE"
     },
     "deliveries": {
       "value": {

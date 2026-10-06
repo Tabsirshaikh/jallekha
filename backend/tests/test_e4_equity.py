@@ -100,22 +100,25 @@ def test_ward_bookings_are_approximate_and_preserve_placed_bookings():
     wards = list(csv.DictReader(io.StringIO(artifacts[equity.OUT + "wards.csv"].decode())))
     sections = list(csv.DictReader(io.StringIO(artifacts[equity.OUT + "sections.csv"].decode())))
     links = {
-        r["section"]: r["ward_id"]
+        (r["division"], r["section"]): r["ward_id"]
         for r in csv.DictReader(
-            (ROOT / "data/derived/crosswalk/section_to_ward_2016.csv").open(encoding="utf-8")
+            (ROOT / "data/derived/crosswalk/section_ward_building_weights.csv").open(
+                encoding="utf-8"
+            )
         )
         if r["ward_id"]
     }
-    placed = sum(int(r["bookings"]) for r in sections if r["section"] in links)
+    placed = sum(int(r["bookings"]) for r in sections if (r["division"], r["section"]) in links)
     with_bookings = [w for w in wards if w["bookings"]]
     assert sum(float(w["bookings"]) for w in with_bookings) == pytest.approx(placed)
     for ward in wards:
         if ward["bookings"]:
-            assert ward["mapping_status"] == "APPROXIMATE_SECTION_POINT_IN_WARD"
+            assert ward["mapping_status"].startswith("VORONOI_DIVISION_HULL_")
             assert ward["basis"] == "DERIVED_APPROXIMATE"
+            assert ward["bookings_per_1000"] == ""
         else:
             assert ward["mapping_status"] == "NO_PLACED_SECTION"
             assert ward["bookings_per_1000"] == ""
     summary = json.loads(artifacts[equity.OUT + "summary.json"])
     assert summary["ward_booking_share_placed"] >= 0.75
-    assert summary["ward_metrics_status"] == "APPROXIMATE_SECTION_POINT_IN_WARD"
+    assert summary["ward_metrics_status"].startswith("VORONOI_DIVISION_HULL_")

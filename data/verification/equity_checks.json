@@ -1,12 +1,13 @@
 {
+  "building_weights_sha256_lf": "1b4461f6bbb5526d1c19028d09b80f39f9a1aa10d059fa359dc7fc897d68ca13",
   "evidence_input_sha256_lf": "629ca414bdbe335f0036933bf942132564a594c57b31fd7efd42805201b4d9fc",
   "outputs_sha256": {
     "data/derived/equity/lorenz.csv": "9dd6aa1e8b03b2a6b68a29884727ccd1e466edb9f00b935b36ec8b365ad4ea39",
     "data/derived/equity/monthly.csv": "f4c96b7644531da85ed5e076ca7d1a4395ccf3b49518a0105b29a3df8baec5dd",
     "data/derived/equity/seasonality.csv": "8ac04e6664a46abe797b84f0479110d8dadeabc0281ea34a81b59bd1b7c55507",
     "data/derived/equity/sections.csv": "0032980d327caf81056918047ee5021fdefcd1a7090574436790063b2838e60e",
-    "data/derived/equity/summary.json": "6daec4e3e762a0b02074086fbca73e5e64bad001f30baf487d308a1230d1768e",
-    "data/derived/equity/wards.csv": "ca868e6b2a1493da88ac1ac8fdf070ff94667ad569e367869ff3a163ff9dc7c1"
+    "data/derived/equity/summary.json": "b27a982d16262f6fdb510e2930f72d6ed9f11b0832212b6eb2ba35178fd3baad",
+    "data/derived/equity/wards.csv": "1ba3158e8677b060941c859bb718cacf02e1cdbdece07998f1df181109466e07"
   },
   "raw_inputs_sha256": {
     "data/raw/hmwssb_billing_portal/2022-01.csv": "1c2d2bee9d1d1aa60b2e24f06f7194d49b58581f3f6db00becee4163d31c9157",

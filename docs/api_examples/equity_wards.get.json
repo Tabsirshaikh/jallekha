@@ -1,7 +1,7 @@
 {
   "_example": {
     "endpoint": "GET /equity/wards?offset=0&limit=2",
-    "status": "FROM_MAIN (data on main, route not built)",
+    "status": "PROPOSED (local dasymetric repair, approval pending)",
     "basis": "basis column",
     "built_from": "data/derived/equity/wards.csv",
     "source": {
@@ -25,18 +25,18 @@
       {
         "ward_id": "relation/7848799",
         "ward_name": "Ward 91 Khairatabad",
-        "bookings": null,
+        "bookings": 16343.873923047418,
         "bookings_per_1000": null,
-        "mapping_status": "NO_PLACED_SECTION",
+        "mapping_status": "VORONOI_DIVISION_HULL_1KM_OPEN_BUILDINGS_2023_32M_COUNT_SHARE",
         "census_join_status": "AREAL_2009_CROSSWALK",
-        "basis": "UNAVAILABLE"
+        "basis": "DERIVED_APPROXIMATE"
       },
       {
         "ward_id": "relation/7848824",
         "ward_name": "Ward 105 Gachibowli",
-        "bookings": 66431,
-        "bookings_per_1000": 1202.218723,
-        "mapping_status": "APPROXIMATE_SECTION_POINT_IN_WARD",
+        "bookings": 36738.15250654185,
+        "bookings_per_1000": null,
+        "mapping_status": "VORONOI_DIVISION_HULL_1KM_OPEN_BUILDINGS_2023_32M_COUNT_SHARE",
         "census_join_status": "AREAL_2009_CROSSWALK",
         "basis": "DERIVED_APPROXIMATE"
       }
