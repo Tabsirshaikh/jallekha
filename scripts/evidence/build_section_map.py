@@ -39,7 +39,15 @@ from app.config.booking_transfer import BOOKING_TRANSFER_CONFIG as GEO  # noqa: 
 from app.config.live_need import LIVE_NEED_CONFIG as LIVE  # noqa: E402
 from app.services.booking_transfer import cells  # noqa: E402
 
+sys.path.insert(0, str(ROOT / "scripts" / "evidence"))
+from build_booking_transfer import (  # noqa: E402
+    OUTPUT_REVIEWED,
+    reviewed_points,
+)
+
 WEIGHTS = "data/derived/crosswalk/section_ward_building_weights.csv"
+# Built by `build_booking_transfer.py --with-reviewed`: the same transfer with the reviewed
+# placements of sections the geocoder could not find. Used when present.
 POINTS = "data/derived/crosswalk/section_to_ward_2016.csv"
 CHECKS = "data/derived/underserved/section_checks.csv"
 WARD_NEED = "data/derived/evidence/ward_evidence.csv"
@@ -84,7 +92,8 @@ def main() -> None:
         for w in json.loads((ROOT / WARD_SNAPSHOT).read_text())["wards"]
     }
     by_section: dict[str, dict[str, float]] = defaultdict(dict)
-    for r in read(WEIGHTS):
+    with_reviewed = (ROOT / OUTPUT_REVIEWED).exists()
+    for r in read(OUTPUT_REVIEWED if with_reviewed else WEIGHTS):
         by_section[r["section"]][r["ward_id"]] = float(r["weight"])
 
     to_utm = Transformer.from_crs(4326, GEO.projected_crs, always_xy=True)
@@ -92,6 +101,12 @@ def main() -> None:
     wards = json.loads((ROOT / WARDS).read_text(encoding="utf-8"))["features"]
     city = unary_union([transform(to_utm.transform, shape(f["geometry"])) for f in wards])
     points = read(POINTS)
+    placed = {r["section"] for r in points if r["lat"] and r["lng"]}
+    extra = (
+        [p for p in reviewed_points(ROOT) if p["section"] not in placed] if with_reviewed else []
+    )
+    reviewed_names = {p["section"] for p in extra}
+    points += extra
     sites = {
         r["section"]: (*to_utm.transform(float(r["lng"]), float(r["lat"])), r["division"])
         for r in points
@@ -152,6 +167,9 @@ def main() -> None:
                     "need_weight": round(score, 4),
                     "growth_ratio": "" if growth is None else round(growth, 6),
                     "critical_facilities": "" if count is None else count,
+                    "location_basis": "REVIEWED_PLACEMENT"
+                    if name in reviewed_names
+                    else "GEOCODED",
                     "main_ward_id": main,
                     "wards_overlapped": len(weights),
                     "domestic_connections": "" if conns is None else round(conns),
