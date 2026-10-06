@@ -7,7 +7,8 @@ import evidence from "./data/u5Evidence.json";
 import geometry from "./data/u5Geometry.json";
 import savedSections from "./data/u5SectionChecks.json";
 import SectionOutcomeForm from "./SectionOutcomeForm";
-import SectionMap from "./SectionMap";
+import sectionEvidence from "./data/u5SectionEvidence.json";
+import sectionGeometry from "./data/u5SectionGeometry.json";
 import "./EvidenceExperience.css";
 
 type Tab = "need" | "bookings" | "checks";
@@ -28,6 +29,9 @@ type Position = [number, number];
 // The committed snapshot (scripts/frontend/build_u5_snapshot.py) is shown whenever live data is not available.
 const snapshot = evidence as EvidenceDataset;
 const snapshotFeatures = (geometry as { features: Feature[] }).features;
+// Sections: the same shapes of data, one row per HMWSSB section (scripts/evidence/build_section_map.py).
+const sectionSnapshot = sectionEvidence as unknown as EvidenceDataset;
+const sectionFeatures = (sectionGeometry as unknown as { features: Feature[] }).features;
 // Need score per ward from the snapshot, used when the live API does not send one.
 const savedNeed = new Map(snapshot.wards.map((w) => [w.id, w.needWeight ?? null]));
 const PAGE = "?limit=200"; // all 145 wards in one page (API maximum is 200)
@@ -70,12 +74,19 @@ function clueText(c: Clue, w: Words, days: number, fmt: (n: number) => string) {
 
 export default function EvidenceExperience() {
   const { locale } = useLocale();
-  const w = { ...copy[locale], ...sectionCopy[locale], ...outcomeCopy[locale] };
+  const [unit, setUnit] = useState<"sections" | "wards">("sections");
+  const bySection = unit === "sections";
+  const w = useMemo(() => {
+    const base = { ...copy[locale], ...sectionCopy[locale], ...outcomeCopy[locale] };
+    if (!bySection || locale !== "en") return base;
+    // The section screen says "section" where the ward screen says "ward" (English only for now).
+    const words = Object.fromEntries(Object.entries(base).map(([k, v]) => [k, v.replace(/\bwards\b/g, "sections").replace(/\bWards\b/g, "Sections").replace(/\bward\b/g, "section").replace(/\bWard\b/g, "Section")])) as typeof base;
+    return { ...words, households: "Domestic connections", needTitle: "Need (Census 2011, estimated for this area)" };
+  }, [locale, bySection]);
   const nf = useMemo(() => new Intl.NumberFormat(locale === "ur" ? "ur-PK" : locale, { maximumFractionDigits: 1 }), [locale]);
   const pf = useMemo(() => new Intl.NumberFormat(locale === "ur" ? "ur-PK" : locale, { style: "percent", maximumFractionDigits: 0 }), [locale]);
   const fmt = (n: number) => nf.format(n);
   const pct = (n: number | null | undefined) => (n === null || n === undefined ? "—" : pf.format(n));
-  const [unit, setUnit] = useState<"sections" | "wards">("sections");
   const [tab, setTab] = useState<Tab>("need");
   const [layer, setLayer] = useState<Layer>("rising");
   const [query, setQuery] = useState("");
@@ -87,22 +98,23 @@ export default function EvidenceExperience() {
   // Live data needs an officer token; signed out the screen shows the saved snapshot.
   const { status } = useAuth();
   const enabled = status !== "anonymous" && status !== "rejected";
-  const atlas = useApi<unknown>(enabled ? "/atlas/wards" + PAGE : null);
-  const equityWards = useApi<unknown>(enabled ? "/equity/wards" + PAGE : null);
-  const equitySummary = useApi<unknown>(enabled ? "/equity/summary" : null);
-  const fieldChecks = useApi<unknown>(enabled ? "/underserved/field-checks" + PAGE : null);
+  const wardLive = enabled && !bySection; // the ward answers are not needed on the section screen
+  const atlas = useApi<unknown>(wardLive ? "/atlas/wards" + PAGE : null);
+  const equityWards = useApi<unknown>(wardLive ? "/equity/wards" + PAGE : null);
+  const equitySummary = useApi<unknown>(wardLive ? "/equity/summary" : null);
+  const fieldChecks = useApi<unknown>(wardLive ? "/underserved/field-checks" + PAGE : null);
   const sectionApi = useApi<unknown>(enabled ? "/underserved/section-checks" + PAGE : null);
   const checkedSectionsApi = useApi<unknown>(enabled ? "/field-checks/sections" + PAGE : null);
   const sectionRows = (checkedSectionsApi.live ? adaptSectionChecks(checkedSectionsApi.data) : null) ?? (sectionApi.live ? adaptSectionChecks(sectionApi.data) : null) ?? adaptSectionChecks(savedSections) ?? [];
-  const layerGeo = useApi<unknown>(enabled ? "/coverage/layers/water_access_evidence" : null);
-  const liveNeedApi = useApi<unknown>(enabled ? "/atlas/live" : null);
+  const layerGeo = useApi<unknown>(wardLive ? "/coverage/layers/water_access_evidence" : null);
+  const liveNeedApi = useApi<unknown>(enabled ? (bySection ? "/atlas/live-sections" : "/atlas/live") : null);
   const sources = [atlas, equityWards, equitySummary, fieldChecks, layerGeo];
   const allLive = sources.every((s) => s.live);
   const live = useMemo(() => (allLive ? adaptLiveEvidence({ atlas: atlas.data, equityWards: equityWards.data, equitySummary: equitySummary.data, fieldChecks: fieldChecks.data, layer: layerGeo.data }) : null), [allLive, atlas.data, equityWards.data, equitySummary.data, fieldChecks.data, layerGeo.data]);
   const need = useMemo(() => (liveNeedApi.live ? adaptLiveNeed(liveNeedApi.data) : null), [liveNeedApi.live, liveNeedApi.data]);
 
-  const dataset = live?.dataset ?? snapshot;
-  const features = live?.features ?? snapshotFeatures;
+  const dataset = bySection ? sectionSnapshot : live?.dataset ?? snapshot;
+  const features = bySection ? sectionFeatures : live?.features ?? snapshotFeatures;
   const rows = dataset.wards;
   const byId = useMemo(() => new Map(rows.map((r) => [r.id, r])), [rows]);
   const selected = selectedId ? byId.get(selectedId) ?? null : null;
@@ -115,15 +127,16 @@ export default function EvidenceExperience() {
 
   // Map: equirectangular projection corrected for latitude, so wards keep their shape.
   const shapes = useMemo(() => features.flatMap((f) => (byId.has(f.properties.ward_id) ? [{ id: f.properties.ward_id, rings: rings(f) }] : [])), [features, byId]);
+  const base = useMemo(() => (bySection ? snapshotFeatures.map((f) => ({ id: f.properties.ward_id, rings: rings(f) })) : []), [bySection]);
   const view = useMemo(() => {
-    const all = shapes.flatMap((s) => s.rings.flat());
+    const all = [...shapes, ...base].flatMap((s) => s.rings.flat());
     const xs = all.map((p) => p[0]), ys = all.map((p) => p[1]);
     const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
     const k = Math.cos((((minY + maxY) / 2) * Math.PI) / 180);
     const width = 1000, height = Math.round((width * (maxY - minY)) / ((maxX - minX) * k));
     const project = ([x, y]: Position) => `${(((x - minX) / (maxX - minX)) * width).toFixed(1)},${(((maxY - y) / (maxY - minY)) * height).toFixed(1)}`;
-    return { width, height, project, paths: new Map(shapes.map((s) => [s.id, s.rings.map((r) => "M" + r.map(project).join("L") + "Z").join("")])) };
-  }, [shapes]);
+    return { width, height, project, base: base.map((s) => s.rings.map((r) => "M" + r.map(project).join("L") + "Z").join("")), paths: new Map(shapes.map((s) => [s.id, s.rings.map((r) => "M" + r.map(project).join("L") + "Z").join("")])) };
+  }, [shapes, base]);
 
   // Zoom by the + / - buttons only (no wheel or drag, so the map box never changes size):
   // towards the selected ward, else the centre of the current view.
@@ -151,7 +164,7 @@ export default function EvidenceExperience() {
     tab === "bookings" ? bookingsOf(r) : shown === "wad" ? r.waterAccessDeficitShare : shown === "cad" ? r.constrainedAccessShare ?? null : shown === "need" ? liveOf(r.id)?.needWeight ?? r.needWeight ?? savedNeed.get(r.id) ?? null : shown === "growth" ? (r.growthRatio === null ? null : r.growthRatio - 1) : null;
   const scale = useMemo(() => classes(rows.map(metric)), [rows, tab, shown, conc]); // eslint-disable-line react-hooks/exhaustive-deps
   function colour(r: Ward) {
-    if (tab === "checks") return NO_DATA;
+    if (tab === "checks") return bySection && r.fieldCandidate ? "#c9783f" : NO_DATA;
     if (tab === "need" && shown === "rising") {
       const l = liveOf(r.id);
       if (!l || l.knownCount === 0) return NO_DATA;
@@ -180,11 +193,10 @@ export default function EvidenceExperience() {
   const layerName = tab === "bookings" ? w.bookingsLayer : shown === "rising" ? w.layerRising : shown === "wad" ? w.layerWad : shown === "cad" ? w.layerCad : shown === "need" ? w.layerNeed : w.layerGrowth;
 
   const unitToggle = (
-    <div className="atlas-tabs" role="tablist" aria-label="Map by">
-      {(["sections", "wards"] as const).map((u) => <button key={u} role="tab" aria-selected={unit === u} className={unit === u ? "active" : ""} onClick={() => setUnit(u)}>{u === "sections" ? "Sections" : "Wards"}</button>)}
+    <div className="atlas-tabs atlas-unit" role="tablist" aria-label="Map by">
+      {(["sections", "wards"] as const).map((u) => <button key={u} role="tab" aria-selected={unit === u} className={unit === u ? "active" : ""} onClick={() => { setUnit(u); setSelectedId(null); setSelectedSectionId(null); }}>{u === "sections" ? "Sections" : "Wards"}</button>)}
     </div>
   );
-  if (unit === "sections") return <div>{unitToggle}<SectionMap /></div>;
 
   return (
     <div className="atlas-page">
@@ -217,6 +229,7 @@ export default function EvidenceExperience() {
       </div>
       <section className="atlas-stage">
         <svg className="atlas-map" viewBox={`${box.x} ${box.y} ${box.w} ${boxH}`} role="group" aria-label={w.title}>
+          {view.base.map((d, i) => <path key={"b" + i} d={d} className="atlas-base" fill="#f1f3f0" pointerEvents="none" />)}
           {rows.map((r) => {
             const d = view.paths.get(r.id);
             if (!d) return null;
@@ -224,7 +237,7 @@ export default function EvidenceExperience() {
               onClick={() => pick(r.id)} onMouseEnter={() => setHover(r.id)} onMouseLeave={() => setHover(null)}
               onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedId(r.id); } }}><title>{r.name}</title></path>;
           })}
-          {tab === "checks" && checks.filter((r) => r.lat !== null && r.lng !== null).map((r) => {
+          {tab === "checks" && !bySection && checks.filter((r) => r.lat !== null && r.lng !== null).map((r) => {
             const [cx, cy] = view.project([r.lng!, r.lat!]).split(",");
             return <g key={r.section_id}><circle cx={cx} cy={cy} r={selectedSectionId === r.section_id ? 8 : 5} fill={selectedSectionId === r.section_id ? "#76390e" : "#c9783f"} stroke="#fff" tabIndex={0} role="button" aria-label={r.section} aria-pressed={selectedSectionId === r.section_id}
               onClick={() => { setSelectedSectionId(r.section_id); setSelectedId(null); }} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedSectionId(r.section_id); setSelectedId(null); } }}><title>{r.section}</title></circle>{selectedSectionId === r.section_id && <text className="atlas-section-label" x={Number(cx) + 12} y={Number(cy) - 10}>{r.section}</text>}</g>;
@@ -240,7 +253,7 @@ export default function EvidenceExperience() {
         {tab === "bookings" && conc && conc.top.length > 0 && <aside className="atlas-overlay atlas-top-list"><h3>{w.topList}</h3><ol>{conc.top.map((t) => <li key={t.section}><span>{t.section}</span><strong>{pct(t.share)}</strong></li>)}</ol></aside>}
         {tab === "checks" && selectedSection && <aside className="atlas-overlay atlas-section-detail" role="region" aria-label={selectedSection.section}>
           <header><h3>{selectedSection.section}</h3><button className="atlas-close" aria-label={w.close} onClick={() => setSelectedSectionId(null)}>×</button></header>
-          <SectionRates section={selectedSection} w={w} fmt={fmt} />
+          <SectionRates section={selectedSection} w={w} fmt={fmt} rich={locale === "en"} />
           <p className="atlas-verdict flag">{w.stepChecks}</p>
         </aside>}
       </section>
@@ -258,28 +271,47 @@ export default function EvidenceExperience() {
         {checks.length === 0 && <p>{w.emptyChecks}</p>}
         <div className="atlas-check-grid">{checks.map((r) => <article key={r.section_id} className="atlas-check-card">
           <h3>{r.section}</h3>
-          <SectionRates section={r} w={w} fmt={fmt} />
-          {r.ward_id && <button className="text-button" onClick={() => setSelectedId(r.ward_id)}>{w.openWard}</button>}
+          <SectionRates section={r} w={w} fmt={fmt} rich={locale === "en"} />
+          {(bySection || r.ward_id) && <button className="text-button" onClick={() => setSelectedId(bySection ? r.section_id : r.ward_id)}>{w.openWard}</button>}
         </article>)}</div>
         <SectionOutcomeForm onSaved={checkedSectionsApi.reload} />
       </section>}
 
-      {selected && <WardSheet ward={selected} sections={checks.filter((r) => r.ward_id === selected.id)} live={liveOf(selected.id)} days={need?.windowDays ?? 30} minBad={need?.minBad ?? 2} w={w} fmt={fmt} pct={pct} onClose={() => setSelectedId(null)} />}
+      {selected && <WardSheet ward={selected} sections={bySection ? sectionRows.filter((r) => r.section_id === selected.id) : checks.filter((r) => r.ward_id === selected.id)} live={liveOf(selected.id)} days={need?.windowDays ?? 30} minBad={need?.minBad ?? 2} w={w} fmt={fmt} pct={pct} rich={locale === "en"} onClose={() => setSelectedId(null)} />}
     </div>
   );
 }
 
-function SectionRates({ section, w, fmt }: { section: SectionCheck; w: SectionWords; fmt: (n: number) => string }) {
-  return <div className="atlas-bars">
+function SectionRates({ section, w, fmt, rich }: { section: SectionCheck; w: SectionWords; fmt: (n: number) => string; rich: boolean }) {
+  const outcome = <p className="muted">{section.latest_outcome ? `${section.latest_outcome.checked_on} · ${section.latest_outcome.could_not_book === "yes" ? w.checkedYes : section.latest_outcome.could_not_book === "no" ? w.checkedNo : w.checkedUnclear}` : w.unchecked}</p>;
+  const expected = section.reference_rate !== null && section.domestic_connections ? Math.round((section.reference_rate * section.domestic_connections) / 1000) : null;
+  if (!rich || expected === null) return <div className="atlas-bars">
     <p>{fill(w.checkBooked, { v: fmt(section.bookings) })}</p>
     <p>{fill(w.sectionRate, { v: section.rate === null ? "—" : fmt(section.rate) })}</p>
     <p>{fill(w.sectionPeer, { v: section.reference_rate === null ? "—" : fmt(section.reference_rate) })}</p>
-    <p className="muted">{section.latest_outcome ? `${section.latest_outcome.checked_on} · ${section.latest_outcome.could_not_book === "yes" ? w.checkedYes : section.latest_outcome.could_not_book === "no" ? w.checkedNo : w.checkedUnclear}` : w.unchecked}</p>
+    {outcome}
+  </div>;
+  // Same look as the ward booking check: what the section booked, what similar sections would
+  // have booked with its connections, and a plain verdict. Bars share one scale.
+  const top = Math.max(section.bookings, expected, 1);
+  const share = section.ratio ?? (expected ? section.bookings / expected : null);
+  const verdict = section.field_check_candidate ? { tone: "flag", text: `Far lower than similar sections (${fmt(Math.round((share ?? 0) * 100))}% of what they book) in an area with high water need: worth a visit to check whether people can book.` }
+    : share !== null && share < 0.5 ? { tone: "", text: `Lower than similar sections (${fmt(Math.round(share * 100))}%), but not flagged: the area's need is not above the cohort's.` }
+    : share !== null && share < 0.9 ? { tone: "", text: "A bit lower than similar sections, but not low enough to flag." }
+    : share !== null && share <= 1.5 ? { tone: "", text: "In line with similar sections." }
+    : { tone: "", text: "More bookings than similar sections." };
+  return <div className="atlas-bars">
+    <p>Booked {fmt(section.bookings)} tankers in 2025</p>
+    <div className="atlas-bar"><i className="seen" style={{ width: `${Math.max(1, (section.bookings / top) * 100)}%` }} /></div>
+    <p>Similar sections booked about {fmt(expected)} for this many connections</p>
+    <div className="atlas-bar"><i className="peer" style={{ width: `${Math.max(1, (expected / top) * 100)}%` }} /></div>
+    <p className={"atlas-verdict " + verdict.tone}>{verdict.text}</p>
+    {outcome}
   </div>;
 }
 
 type SectionWords = Words & Record<keyof typeof sectionCopy.en | keyof typeof outcomeCopy.en, string>;
-function WardSheet({ ward, sections, live, days, minBad, w, fmt, pct, onClose }: { ward: Ward; sections: SectionCheck[]; live: LiveWard | undefined; days: number; minBad: number; w: SectionWords; fmt: (n: number) => string; pct: (n: number | null | undefined) => string; onClose: () => void }) {
+function WardSheet({ ward, sections, live, days, minBad, w, fmt, pct, rich, onClose }: { rich: boolean; ward: Ward; sections: SectionCheck[]; live: LiveWard | undefined; days: number; minBad: number; w: SectionWords; fmt: (n: number) => string; pct: (n: number | null | undefined) => string; onClose: () => void }) {
   const status = !live || live.knownCount === 0 ? w.noLive : live.rising ? w.rising : live.badCount === 1 ? w.oneSign : w.calm;
   return (
     <section className="atlas-sheet" role="dialog" aria-label={ward.name}>
@@ -300,7 +332,7 @@ function WardSheet({ ward, sections, live, days, minBad, w, fmt, pct, onClose }:
           </dl>
           <p className="small">{ward.growthRatio === null ? w.noGrowth : fill(w.growth, { p: pct(ward.growthRatio - 1) })}</p>
         </div>
-        <div><h3>{w.checkTitle}</h3>{sections.length ? sections.map((s) => <div key={s.section_id}><h4>{s.section}</h4><SectionRates section={s} w={w} fmt={fmt} /></div>) : <p className="muted">{w.checkNone}</p>}</div>
+        <div><h3>{w.checkTitle}</h3>{sections.length ? sections.map((s) => <div key={s.section_id}><h4>{s.section}</h4><SectionRates section={s} w={w} fmt={fmt} rich={rich} /></div>) : <p className="muted">{w.checkNone}</p>}</div>
       </div>
     </section>
   );
