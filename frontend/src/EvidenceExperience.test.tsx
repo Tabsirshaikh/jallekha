@@ -43,7 +43,7 @@ describe("EvidenceExperience", () => {
     vi.stubGlobal("fetch", vi.fn().mockImplementation(liveFetch));
     renderScreen();
     await screen.findByText("wards with 2 or more warning signs");
-    fireEvent.click(screen.getByRole("tab", { name: "Bookings" }));
+    fireEvent.click(screen.getByRole("tab", { name: "2. Bookings" }));
     expect(screen.getByText("Top 2 areas take 68% of all tankers")).toBeInTheDocument();
     expect(screen.getByText("Last 30 days, 120 live bookings")).toBeInTheDocument();
     expect(screen.getByText("MADHAPUR")).toBeInTheDocument();
@@ -68,7 +68,7 @@ describe("EvidenceExperience", () => {
   it("explains low-booking wards as booked vs expected", () => {
     vi.stubGlobal("fetch", vi.fn());
     const { container } = renderScreen();
-    fireEvent.click(screen.getByRole("tab", { name: "Low bookings" }));
+    fireEvent.click(screen.getByRole("tab", { name: "3. Expected vs actual" }));
     const cards = container.querySelectorAll(".atlas-check-card");
     expect(cards.length).toBe(6);
     const first = within(cards[0] as HTMLElement);

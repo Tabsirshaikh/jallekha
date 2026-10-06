@@ -122,3 +122,4 @@
 .atlas-rank li button:hover, .atlas-rank li button.active { background: var(--soft-green); }
 .atlas-rank-n { color: var(--muted); font-weight: 700; }
 .atlas-rank-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.atlas-step { margin: 0; color: var(--deep); font-weight: 500; }
