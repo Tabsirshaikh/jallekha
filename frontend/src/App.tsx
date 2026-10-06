@@ -126,6 +126,7 @@ function PlaceholderPage({ workspace, pageKey }: { workspace: Workspace; pageKey
 export default function App() {
   const [workspace, setWorkspace] = useState<Workspace>("officer");
   const [activeItem, setActiveItem] = useState<MessageKey>("officerOverview");
+  const [navOpen, setNavOpen] = useState(true);
   const { direction, locale, t } = useLocale();
   const meta = workspaceNames[workspace];
 
@@ -135,10 +136,10 @@ export default function App() {
   }
 
   return (
-    <div className="app-frame" dir={direction} lang={locale}>
+    <div className={navOpen ? "app-frame" : "app-frame nav-closed"} dir={direction} lang={locale}>
       <Sidebar workspace={workspace} activeItem={activeItem} onNavigate={setActiveItem} />
       <div className="main-column">
-        <header className="topbar"><div className="mobile-brand"><Brand /></div><div className="topbar-context"><span className="topbar-kicker">JALLEKHA 2.0</span><span className="topbar-divider">/</span><span>{t(meta.title)}</span></div><WorkspaceSwitcher value={workspace} onChange={changeWorkspace} /><SignIn /><button className="help-button" aria-label={t("help")}><Icon name="help" size={20} /></button></header>
+        <header className="topbar"><button className="nav-toggle" aria-label={t("navigation")} aria-expanded={navOpen} onClick={() => setNavOpen(!navOpen)}>☰</button><div className="mobile-brand"><Brand /></div><div className="topbar-context"><span className="topbar-kicker">JALLEKHA 2.0</span><span className="topbar-divider">/</span><span>{t(meta.title)}</span></div><WorkspaceSwitcher value={workspace} onChange={changeWorkspace} /><SignIn /><button className="help-button" aria-label={t("help")}><Icon name="help" size={20} /></button></header>
         <MobileNavigation workspace={workspace} activeItem={activeItem} onNavigate={setActiveItem} />
         {translationStatus[locale] === "draft" && <p className="translation-draft-note" role="note" aria-label={t("translationStatusLabel")}>{t("translationDraft")}</p>}
         <main className={`page-content ${workspace}-content ${workspace === "officer" && activeItem === "officerWaterAccess" ? "officer-evidence-content" : workspace === "officer" && activeItem === "officerForecast" ? "officer-forecast-content" : workspace === "officer" && activeItem === "officerAllocationPlan" ? "officer-plan-content" : ""}`}>
