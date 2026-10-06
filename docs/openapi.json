@@ -540,6 +540,58 @@
         }
       }
     },
+    "/atlas/live": {
+      "get": {
+        "tags": [
+          "evidence"
+        ],
+        "summary": "Atlas Live",
+        "description": "Census need per ward plus five live clues (services/live_need.py) and booking\nconcentration from the bookings officers supplied in the last 30 days (history if none).",
+        "operationId": "atlas_live_atlas_live_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Atlas Live Atlas Live Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/atlas/wards/{ward_id}": {
       "get": {
         "tags": [

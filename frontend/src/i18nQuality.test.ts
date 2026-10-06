@@ -20,6 +20,7 @@ describe("translations", () => {
       "src/FieldWorkerExperience.tsx",
       "src/ForecastExperience.tsx",
       "src/ImpactExperience.tsx",
+      "src/OfficerOverview.tsx",
       "src/PlanExperience.tsx",
       "src/ResidentExperience.tsx",
       "src/i18n.tsx",

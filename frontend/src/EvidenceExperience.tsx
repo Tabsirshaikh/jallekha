@@ -2,51 +2,69 @@ import { useMemo, useState } from "react";
 import { useLocale, type Locale } from "./i18n";
 import { useAuth } from "./auth";
 import { useApi } from "./useApi";
-import DataSourceChip from "./DataSource";
-import { adaptLiveEvidence, reasonForError, type EvidenceDataset, type FallbackReason, type Feature, type Ward } from "./evidenceAdapter";
+import { adaptLiveEvidence, adaptLiveNeed, type Clue, type EvidenceDataset, type Feature, type LiveWard, type Ward } from "./evidenceAdapter";
 import evidence from "./data/u5Evidence.json";
 import geometry from "./data/u5Geometry.json";
+import "./EvidenceExperience.css";
 
-type View = "access" | "equity" | "checks";
+type Tab = "need" | "bookings" | "checks";
+type Layer = "rising" | "wad" | "cad" | "growth";
 type Position = [number, number];
 // The committed snapshot (scripts/frontend/build_u5_snapshot.py) is shown whenever live data is not available.
 const snapshot = evidence as EvidenceDataset;
 const snapshotFeatures = (geometry as { features: Feature[] }).features;
-const PAGE = "?limit=200"; // every one of the 145 historical wards in one page (API maximum is 200)
-const copy = {
-  en: { title:"Water access & equity atlas", intro:"Explore ward evidence, service patterns and areas that may need a field check.", access:"Access & growth", equity:"Booking equity", checks:"Field checks", search:"Search wards", searchHint:"Ward name or number", ward:"Ward", deficit:"Water access deficit", census:"Census 2011", households:"Households", population:"Population", growth:"Building change", years:"2016–2023", review:"Review required", mapped:"Census-linked", polygons:"Historical ward polygons", historic:"Census values are transferred approximately from 2009 wards to an incomplete 2016 map. They are not current household observations or current ward boundaries.", unavailable:"Unavailable", select:"Select a ward on the map or list to inspect its evidence.", source:"DERIVED", exact:"Exact section-level totals", gini:"Booking concentration (Gini)", top:"Top 10% of sections", bottom:"Bottom 100 sections", sections:"sections", bookings:"Bookings", delivered:"Delivered", approximate:"Approximate", wardRates:"Approximate ward rates", rate:"Bookings / 1,000 connections", wardCaveat:"Ward rates use approximate section placement; these are not exact ward totals.", missingMonth:"December 2022 has no records; it is not treated as zero.", fieldTitle:"Possible field checks", fieldIntro:"Screening points to investigate with residents; a flag is not proof of unmet need, neglect or entitlement.", candidates:"Field-check candidates", eligible:"Areas screened", dataReview:"Needs data review", reasons:"Why it was flagged", none:"No positive field-check reasons are available.", value:"Observed", threshold:"Reference", searchEmpty:"No wards match this search.", snapshot:"Snapshot", layer:"Map layer", high:"Higher / candidate", low:"Lower / not flagged", noFlag:"No automatic service decision", candidate:"Field check", checkCandidate:"Peer-reference ratio below threshold", checkModel:"Statistical-model (negative binomial) reference ratio below threshold", wad:"Census water-access deficit above cohort threshold", cad:"Constrained-access indicator above cohort median", hardship:"Hardship proxy above cohort median", buildingNote:"Building signal only; not a population estimate", allNote:"Historical and approximate values are labeled; unavailable values remain blank.", accessLayer:"Water-access deficit", growthLayer:"Building change", checkLayer:"Field-check status", liveNote:"Served by the JalLekha API just now.", loadingNote:"Checking for live data; showing the saved snapshot meanwhile.", signInNote:"Sign in with an officer token to see live data. Showing the saved snapshot.", forbiddenNote:"This account cannot open officer evidence. Showing the saved snapshot.", unreachableNote:"The server could not be reached. Showing the saved snapshot.", serverErrorNote:"The server returned an error. Showing the saved snapshot.", incompleteNote:"The server's answer was incomplete. Showing the saved snapshot.", dataSource:"Data source", facilities:"Hospitals, clinics, schools, care homes", facilitiesNote:"Counted as mapped in OpenStreetMap; facilities missing from the map are not counted." },
-  te: { title:"నీటి లభ్యత మరియు సమానత్వ అట్లాస్", intro:"వార్డు ఆధారాలు, సేవల సరళి, క్షేత్ర పరిశీలన అవసరమయ్యే ప్రాంతాలను చూడండి.", access:"లభ్యత మరియు వృద్ధి", equity:"బుకింగ్ సమానత్వం", checks:"క్షేత్ర పరిశీలనలు", search:"వార్డులను వెతకండి", searchHint:"వార్డు పేరు లేదా సంఖ్య", ward:"వార్డు", deficit:"నీటి లభ్యత లోటు", census:"2011 జనగణన", households:"కుటుంబాలు", population:"జనాభా", growth:"భవన మార్పు", years:"2016–2023", review:"పరిశీలన అవసరం", mapped:"జనగణన అనుసంధానం", polygons:"చారిత్రక వార్డు ఆకృతులు", historic:"2011 జనగణన విలువలు 2009 వార్డుల నుంచి 2016 అసంపూర్ణ మ్యాప్‌కు సుమారుగా బదిలీ అయ్యాయి. ఇవి ప్రస్తుత కుటుంబ సమాచారం లేదా ప్రస్తుత వార్డు సరిహద్దులు కావు.", unavailable:"అందుబాటులో లేదు", select:"ఆధారాలను చూడటానికి మ్యాప్ లేదా జాబితాలో వార్డును ఎంచుకోండి.", source:"ఉత్పన్నం", exact:"ఖచ్చితమైన సెక్షన్ స్థాయి మొత్తం", gini:"బుకింగ్ కేంద్రీకరణ (Gini)", top:"పై 10% సెక్షన్లు", bottom:"క్రింది 100 సెక్షన్లు", sections:"సెక్షన్లు", bookings:"బుకింగ్‌లు", delivered:"పంపిణీ", approximate:"సుమారు", wardRates:"సుమారు వార్డు రేట్లు", rate:"1,000 కనెక్షన్లకు బుకింగ్‌లు", wardCaveat:"వార్డు రేట్లు సుమారు సెక్షన్ స్థానాలపై ఆధారపడి ఉన్నాయి; ఇవి ఖచ్చితమైన వార్డు మొత్తాలు కావు.", missingMonth:"డిసెంబర్ 2022లో రికార్డులు లేవు; దాన్ని సున్నాగా పరిగణించలేదు.", fieldTitle:"సాధ్యమైన క్షేత్ర పరిశీలనలు", fieldIntro:"నివాసులతో కలిసి పరిశీలించాల్సిన సూచనలు; ఇది అవసరం తీరలేదని, నిర్లక్ష్యమని లేదా హక్కు అని రుజువు కాదు.", candidates:"క్షేత్ర పరిశీలన సూచనలు", eligible:"పరిశీలించిన ప్రాంతాలు", dataReview:"డేటా సమీక్ష అవసరం", reasons:"సూచనకు కారణం", none:"సానుకూల పరిశీలన కారణాలు అందుబాటులో లేవు.", value:"గమనించినది", threshold:"ప్రమాణం", searchEmpty:"ఈ వెతుకులాటకు వార్డులు లేవు.", snapshot:"నమూనా తేదీ", layer:"మ్యాప్ పొర", high:"ఎక్కువ / సూచన", low:"తక్కువ / సూచన లేదు", noFlag:"స్వయంచాలక సేవా నిర్ణయం లేదు", candidate:"క్షేత్ర పరిశీలన", checkCandidate:"సహచర ప్రమాణ నిష్పత్తి పరిమితి కంటే తక్కువ", checkModel:"గణాంక నమూనా (నెగటివ్ బైనామియల్) ప్రమాణ నిష్పత్తి పరిమితి కంటే తక్కువ", wad:"జనగణన నీటి లోటు గుంపు పరిమితి కంటే ఎక్కువ", cad:"పరిమిత ప్రాప్యత సూచిక గుంపు మధ్యకం కంటే ఎక్కువ", hardship:"కష్ట సూచిక గుంపు మధ్యకం కంటే ఎక్కువ", buildingNote:"భవన సూచిక మాత్రమే; జనాభా అంచనా కాదు", allNote:"చారిత్రక, సుమారు విలువలకు లేబుల్ ఉంటుంది; లేని విలువలు ఖాళీగా ఉంటాయి.", accessLayer:"నీటి లభ్యత లోటు", growthLayer:"భవన మార్పు", checkLayer:"క్షేత్ర పరిశీలన స్థితి", liveNote:"JalLekha API నుంచి ఇప్పుడే వచ్చిన డేటా.", loadingNote:"ప్రత్యక్ష డేటా కోసం తనిఖీ చేస్తోంది; అప్పటివరకు సేవ్ చేసిన నమూనా డేటా.", signInNote:"ప్రత్యక్ష డేటా కోసం అధికారి టోకెన్‌తో సైన్ ఇన్ చేయండి. సేవ్ చేసిన నమూనా డేటా చూపిస్తున్నాం.", forbiddenNote:"ఈ ఖాతాకు అధికారి ఆధారాలు చూసే అనుమతి లేదు. సేవ్ చేసిన నమూనా డేటా చూపిస్తున్నాం.", unreachableNote:"సర్వర్‌ను చేరుకోలేకపోయాం. సేవ్ చేసిన నమూనా డేటా చూపిస్తున్నాం.", serverErrorNote:"సర్వర్ లోపం చూపింది. సేవ్ చేసిన నమూనా డేటా చూపిస్తున్నాం.", incompleteNote:"సర్వర్ సమాధానం అసంపూర్ణంగా ఉంది. సేవ్ చేసిన నమూనా డేటా చూపిస్తున్నాం.", dataSource:"డేటా మూలం", facilities:"ఆసుపత్రులు, క్లినిక్‌లు, పాఠశాలలు, సంరక్షణ గృహాలు", facilitiesNote:"OpenStreetMapలో నమోదైనవి మాత్రమే లెక్కించాం; మ్యాప్‌లో లేనివి లెక్కలో లేవు." },
-  ur: { title:"پانی تک رسائی اور مساوات کا نقشہ", intro:"وارڈ کے شواہد، سروس کے رجحانات اور ممکنہ میدانی جانچ کے علاقوں کو دیکھیں۔", access:"رسائی اور ترقی", equity:"بکنگ میں مساوات", checks:"میدانی جانچ", search:"وارڈ تلاش کریں", searchHint:"وارڈ کا نام یا نمبر", ward:"وارڈ", deficit:"پانی تک رسائی کی کمی", census:"مردم شماری 2011", households:"گھرانے", population:"آبادی", growth:"عمارتوں میں تبدیلی", years:"2016–2023", review:"جائزہ ضروری", mapped:"مردم شماری سے منسلک", polygons:"تاریخی وارڈ نقشے", historic:"مردم شماری 2011 کی قدریں 2009 وارڈ سے نامکمل 2016 نقشے پر اندازاً منتقل کی گئی ہیں۔ یہ موجودہ گھرانوں یا موجودہ وارڈ حدود کا ڈیٹا نہیں۔", unavailable:"دستیاب نہیں", select:"شواہد دیکھنے کے لیے نقشے یا فہرست میں وارڈ منتخب کریں۔", source:"اخذ شدہ", exact:"سیکشن کی درست مجموعی تعداد", gini:"بکنگ کا ارتکاز (Gini)", top:"سب سے اوپر کے 10% سیکشن", bottom:"نیچے کے 100 سیکشن", sections:"سیکشن", bookings:"بکنگ", delivered:"پہنچایا گیا", approximate:"تقریبی", wardRates:"وارڈ کی اندازاً شرحیں", rate:"1,000 کنکشن پر بکنگ", wardCaveat:"وارڈ شرحیں سیکشن کی اندازاً جگہ پر مبنی ہیں؛ یہ درست وارڈ مجموعے نہیں۔", missingMonth:"دسمبر 2022 کا ریکارڈ موجود نہیں؛ اسے صفر نہیں سمجھا گیا۔", fieldTitle:"ممکنہ میدانی جانچ", fieldIntro:"رہائشیوں کے ساتھ جانچ کے اشارے؛ یہ ضرورت پوری نہ ہونے، غفلت یا حق کا ثبوت نہیں۔", candidates:"میدانی جانچ کے اشارے", eligible:"جانچے گئے علاقے", dataReview:"ڈیٹا کا جائزہ ضروری", reasons:"اشارے کی وجہ", none:"مثبت جانچ کی وجوہ دستیاب نہیں۔", value:"درج قدر", threshold:"معیار", searchEmpty:"اس تلاش سے کوئی وارڈ نہیں ملا۔", snapshot:"جھلک کی تاریخ", layer:"نقشے کی تہہ", high:"زیادہ / اشارہ", low:"کم / کوئی اشارہ نہیں", noFlag:"خودکار سروس فیصلہ نہیں", candidate:"میدانی جانچ", checkCandidate:"ساتھی معیار کا تناسب حد سے کم", checkModel:"شماریاتی ماڈل (نیگیٹو بائنومیئل) معیار کا تناسب حد سے کم", wad:"مردم شماری میں پانی کی کمی گروہی حد سے زیادہ", cad:"محدود رسائی کا اشاریہ گروہی میانہ سے زیادہ", hardship:"مشکل حالات کا اشاریہ گروہی میانہ سے زیادہ", buildingNote:"صرف عمارتوں کا اشارہ؛ آبادی کا تخمینہ نہیں", allNote:"تاریخی اور اندازاً قدریں واضح ہیں؛ غیر دستیاب قدریں خالی ہیں۔", accessLayer:"پانی تک رسائی کی کمی", growthLayer:"عمارتوں میں تبدیلی", checkLayer:"میدانی جانچ کی حیثیت", liveNote:"یہ ڈیٹا ابھی JalLekha API سے آیا ہے۔", loadingNote:"براہِ راست ڈیٹا کی جانچ ہو رہی ہے؛ تب تک محفوظ شدہ نمونہ۔", signInNote:"براہِ راست ڈیٹا کے لیے افسر ٹوکن سے سائن ان کریں۔ محفوظ شدہ نمونہ دکھایا جا رہا ہے۔", forbiddenNote:"اس اکاؤنٹ کو افسر کے شواہد دیکھنے کی اجازت نہیں۔ محفوظ شدہ نمونہ دکھایا جا رہا ہے۔", unreachableNote:"سرور سے رابطہ نہیں ہو سکا۔ محفوظ شدہ نمونہ دکھایا جا رہا ہے۔", serverErrorNote:"سرور نے خرابی بتائی۔ محفوظ شدہ نمونہ دکھایا جا رہا ہے۔", incompleteNote:"سرور کا جواب نامکمل تھا۔ محفوظ شدہ نمونہ دکھایا جا رہا ہے۔", dataSource:"ڈیٹا کا ذریعہ", facilities:"ہسپتال، کلینک، اسکول، نگہداشت گھر", facilitiesNote:"صرف OpenStreetMap میں درج سہولیات گنی گئی ہیں؛ نقشے پر نہ ہونے والی شامل نہیں۔" },
-  hi: { title:"पानी की उपलब्धता और समानता एटलस", intro:"वार्ड के साक्ष्य, सेवा के रुझान और संभावित मैदानी जाँच वाले क्षेत्र देखें।", access:"उपलब्धता और वृद्धि", equity:"बुकिंग में समानता", checks:"मैदानी जाँच", search:"वार्ड खोजें", searchHint:"वार्ड का नाम या नंबर", ward:"वार्ड", deficit:"पानी की उपलब्धता में कमी", census:"जनगणना 2011", households:"परिवार", population:"जनसंख्या", growth:"इमारतों में बदलाव", years:"2016–2023", review:"समीक्षा ज़रूरी", mapped:"जनगणना से जुड़े", polygons:"ऐतिहासिक वार्ड नक्शे", historic:"जनगणना 2011 के मान 2009 वार्ड से अधूरे 2016 नक्शे पर अनुमान से स्थानांतरित किए गए हैं। ये मौजूदा परिवारों या मौजूदा वार्ड सीमाओं के आँकड़े नहीं हैं।", unavailable:"उपलब्ध नहीं", select:"साक्ष्य देखने के लिए नक्शे या सूची में वार्ड चुनें।", source:"व्युत्पन्न", exact:"सटीक सेक्शन-स्तर कुल", gini:"बुकिंग संकेंद्रण (Gini)", top:"शीर्ष 10% सेक्शन", bottom:"निचले 100 सेक्शन", sections:"सेक्शन", bookings:"बुकिंग", delivered:"पहुंचाया", approximate:"अनुमानित", wardRates:"अनुमानित वार्ड दरें", rate:"1,000 कनेक्शन पर बुकिंग", wardCaveat:"वार्ड दरें अनुमानित सेक्शन स्थान पर आधारित हैं; ये सटीक वार्ड कुल नहीं हैं।", missingMonth:"दिसंबर 2022 के रिकॉर्ड नहीं हैं; इसे शून्य नहीं माना गया।", fieldTitle:"संभावित मैदानी जाँच", fieldIntro:"निवासियों के साथ जाँच के संकेत; यह अपूर्ण ज़रूरत, उपेक्षा या हक़ का प्रमाण नहीं है।", candidates:"मैदानी जाँच संकेत", eligible:"जाँचे गए क्षेत्र", dataReview:"डेटा समीक्षा ज़रूरी", reasons:"संकेत का कारण", none:"सकारात्मक जाँच कारण उपलब्ध नहीं हैं।", value:"दर्ज मान", threshold:"मानक", searchEmpty:"इस खोज से कोई वार्ड नहीं मिला।", snapshot:"स्नैपशॉट", layer:"नक्शा परत", high:"अधिक / संकेत", low:"कम / संकेत नहीं", noFlag:"कोई स्वचालित सेवा निर्णय नहीं", candidate:"मैदानी जाँच", checkCandidate:"सहकर्मी मानक अनुपात सीमा से कम", checkModel:"सांख्यिकीय मॉडल (नेगेटिव बाइनोमियल) मानक अनुपात सीमा से कम", wad:"जनगणना पानी-कमी समूह सीमा से अधिक", cad:"सीमित पहुँच संकेतक समूह माध्यिका से अधिक", hardship:"कठिनाई संकेतक समूह माध्यिका से अधिक", buildingNote:"सिर्फ इमारतों का संकेत; जनसंख्या का अनुमान नहीं", allNote:"ऐतिहासिक और अनुमानित मान स्पष्ट हैं; अनुपलब्ध मान खाली रहते हैं।", accessLayer:"पानी की उपलब्धता में कमी", growthLayer:"इमारतों में बदलाव", checkLayer:"मैदानी जाँच स्थिति", liveNote:"यह डेटा अभी JalLekha API से आया है।", loadingNote:"लाइव डेटा की जाँच हो रही है; तब तक सहेजा हुआ स्नैपशॉट।", signInNote:"लाइव डेटा देखने के लिए अधिकारी टोकन से साइन इन करें। सहेजा हुआ स्नैपशॉट दिखाया जा रहा है।", forbiddenNote:"इस खाते को अधिकारी साक्ष्य देखने की अनुमति नहीं है। सहेजा हुआ स्नैपशॉट दिखाया जा रहा है।", unreachableNote:"सर्वर से संपर्क नहीं हो सका। सहेजा हुआ स्नैपशॉट दिखाया जा रहा है।", serverErrorNote:"सर्वर ने त्रुटि लौटाई। सहेजा हुआ स्नैपशॉट दिखाया जा रहा है।", incompleteNote:"सर्वर का उत्तर अधूरा था। सहेजा हुआ स्नैपशॉट दिखाया जा रहा है।", dataSource:"डेटा स्रोत", facilities:"अस्पताल, क्लिनिक, स्कूल, देखभाल गृह", facilitiesNote:"केवल OpenStreetMap में दर्ज सुविधाएँ गिनी गई हैं; नक्शे पर न होने वाली शामिल नहीं हैं।" },
-} satisfies Record<Locale, Record<string, string>>;
+const PAGE = "?limit=200"; // all 145 wards in one page (API maximum is 200)
+const SCALE = ["#e3f1ea", "#b9dccb", "#86c2a8", "#4f9e83", "#1f7560"];
+const NO_DATA = "#eceeeb";
 
-function pct(v: number | null, locale: Locale) { return v === null ? "—" : new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 1 }).format(v); }
-function num(v: number | null, locale: Locale) { return v === null ? "—" : new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(v); }
-function reasonText(code: string, w: Record<string, string>, model?: string) {
-  if (code === "LOW_OBSERVED_REFERENCE_RATIO") return model === "NB" ? w.checkModel : w.checkCandidate;
-  if (code === "WAD_ABOVE_COHORT_QUANTILE") return w.wad;
-  if (code === "CAD_ABOVE_COHORT_MEDIAN") return w.cad;
-  if (code === "HARDSHIP_ABOVE_COHORT_MEDIAN") return w.hardship;
-  return code.replaceAll("_", " ").toLowerCase();
-}
+const copy = {
+  en: { title: "Water need map", intro: "Where people lack water, where need may be rising, and where bookings look too low. Click a ward for details.", tabNeed: "Need", tabBookings: "Bookings", tabChecks: "Low bookings", layerRising: "Need rising now", layerWad: "No water at home", layerCad: "Limited water access", layerGrowth: "Building growth", signIn: "Sign in as an officer to see today's live signs. Showing saved data.", rising: "Need may be rising", oneSign: "1 warning sign", calm: "No warning signs", noLive: "No live data", wardsRising: "wards where need may be rising", wardsChecked: "wards with low bookings to check", search: "Find a ward", close: "Close", needTitle: "Need (Census 2011)", wad: "Homes with no water at home", cad: "Homes with limited water access", hardship: "Homes in hardship", households: "Households", nowTitle: "Signs right now", nowNote: "Need may be rising when {n} or more signs are red.", growthTitle: "Growth", growth: "Buildings grew {p} since 2016", noGrowth: "Building growth unknown", facilities: "Hospitals, clinics and schools mapped", owedBad: "Owed {v} tanker loads", owedOk: "No water owed", bookBad: "{v} bookings in {d} days (usual month: {r})", bookOk: "{v} bookings in {d} days (usual month: {r})", bookUnknown: "{v} bookings in {d} days (no past data)", compBad: "{v} \"no water\" complaints this week", compOk: "{v} \"no water\" complaints this week", cutsBad: "{v} supply cuts this week", cutsOk: "No supply cuts this week", gwBad: "Groundwater {v} m deeper than usual", gwOk: "Groundwater {v} m from usual", gwUnknown: "No groundwater wells nearby", checkTitle: "Booking check", checkBooked: "Booked {v} tankers (2022–24)", checkPeer: "Similar wards booked about {v}", checkModel: "Our model expected about {v}", checkFlag: "Much lower than expected: send someone to check if people can book.", checkOk: "Bookings are not unusually low.", checkNone: "Not enough data to check this ward.", topShare: "Top {n} areas take {p} of all tankers", gini: "Booking concentration", giniHigh: "very uneven", giniMid: "uneven", giniLow: "fairly even", sourceLive: "Last {d} days, {n} live bookings", sourceHistory: "2022–24 bookings (no live bookings yet)", topList: "Busiest areas", bookingsLayer: "Bookings per month", checksIntro: "These wards booked far fewer tankers than similar wards and than our model expected. Low bookings can mean people cannot book (no phone, no account), not that they have water. Check on the ground before changing anything.", openWard: "Open on map", more: "more", less: "less", unknownLegend: "no data", searchEmpty: "No ward found" },
+  te: { title: "నీటి అవసర పటం", intro: "ఎక్కడ నీరు లేదు, ఎక్కడ అవసరం పెరుగుతోంది, ఎక్కడ బుకింగ్‌లు తక్కువగా ఉన్నాయి. వివరాలకు వార్డుపై నొక్కండి.", tabNeed: "అవసరం", tabBookings: "బుకింగ్‌లు", tabChecks: "తక్కువ బుకింగ్‌లు", layerRising: "ఇప్పుడు పెరుగుతున్న అవసరం", layerWad: "ఇంట్లో నీరు లేదు", layerCad: "పరిమిత నీటి లభ్యత", layerGrowth: "భవనాల పెరుగుదల", signIn: "ఈరోజు ప్రత్యక్ష సూచనల కోసం అధికారిగా సైన్ ఇన్ చేయండి. సేవ్ చేసిన డేటా చూపిస్తున్నాం.", rising: "అవసరం పెరుగుతుండవచ్చు", oneSign: "1 హెచ్చరిక సూచన", calm: "హెచ్చరిక సూచనలు లేవు", noLive: "ప్రత్యక్ష డేటా లేదు", wardsRising: "అవసరం పెరుగుతుండవచ్చు ఉన్న వార్డులు", wardsChecked: "తక్కువ బుకింగ్‌లు ఉన్న, పరిశీలించాల్సిన వార్డులు", search: "వార్డును వెతకండి", close: "మూసివేయి", needTitle: "అవసరం (2011 జనగణన)", wad: "ఇంట్లో నీరు లేని కుటుంబాలు", cad: "పరిమిత నీటి లభ్యత ఉన్న కుటుంబాలు", hardship: "కష్టాల్లో ఉన్న కుటుంబాలు", households: "కుటుంబాలు", nowTitle: "ప్రస్తుత సూచనలు", nowNote: "{n} లేదా ఎక్కువ సూచనలు ఎరుపులో ఉంటే అవసరం పెరుగుతుండవచ్చు.", growthTitle: "పెరుగుదల", growth: "2016 నుంచి భవనాలు {p} పెరిగాయి", noGrowth: "భవనాల పెరుగుదల తెలియదు", facilities: "మ్యాప్‌లో ఉన్న ఆసుపత్రులు, క్లినిక్‌లు, పాఠశాలలు", owedBad: "{v} ట్యాంకర్ లోడ్లు బాకీ", owedOk: "నీటి బాకీ లేదు", bookBad: "{d} రోజుల్లో {v} బుకింగ్‌లు (సాధారణ నెల: {r})", bookOk: "{d} రోజుల్లో {v} బుకింగ్‌లు (సాధారణ నెల: {r})", bookUnknown: "{d} రోజుల్లో {v} బుకింగ్‌లు (పాత డేటా లేదు)", compBad: "ఈ వారం {v} \"నీరు రాలేదు\" ఫిర్యాదులు", compOk: "ఈ వారం {v} \"నీరు రాలేదు\" ఫిర్యాదులు", cutsBad: "ఈ వారం {v} సరఫరా నిలిపివేతలు", cutsOk: "ఈ వారం సరఫరా నిలిపివేతలు లేవు", gwBad: "భూగర్భ జలం సాధారణం కంటే {v} మీ. లోతులో", gwOk: "భూగర్భ జలం సాధారణం నుంచి {v} మీ.", gwUnknown: "సమీపంలో భూగర్భ జల బావులు లేవు", checkTitle: "బుకింగ్ పరిశీలన", checkBooked: "{v} ట్యాంకర్లు బుక్ చేశారు (2022–24)", checkPeer: "ఇలాంటి వార్డులు సుమారు {v} బుక్ చేశాయి", checkModel: "మా నమూనా సుమారు {v} అంచనా వేసింది", checkFlag: "అంచనా కంటే చాలా తక్కువ: ప్రజలు బుక్ చేయగలరా అని పరిశీలనకు ఒకరిని పంపండి.", checkOk: "బుకింగ్‌లు అసాధారణంగా తక్కువగా లేవు.", checkNone: "ఈ వార్డును పరిశీలించేందుకు తగిన డేటా లేదు.", topShare: "పై {n} ప్రాంతాలు మొత్తం ట్యాంకర్లలో {p} తీసుకుంటున్నాయి", gini: "బుకింగ్ కేంద్రీకరణ", giniHigh: "చాలా అసమానం", giniMid: "అసమానం", giniLow: "దాదాపు సమానం", sourceLive: "గత {d} రోజులు, {n} ప్రత్యక్ష బుకింగ్‌లు", sourceHistory: "2022–24 బుకింగ్‌లు (ఇంకా ప్రత్యక్ష బుకింగ్‌లు లేవు)", topList: "అత్యధిక బుకింగ్ ప్రాంతాలు", bookingsLayer: "నెలకు బుకింగ్‌లు", checksIntro: "ఈ వార్డులు ఇలాంటి వార్డుల కంటే, మా నమూనా అంచనా కంటే చాలా తక్కువ ట్యాంకర్లు బుక్ చేశాయి. తక్కువ బుకింగ్ అంటే నీరు ఉందని కాదు; ప్రజలు బుక్ చేయలేకపోవచ్చు (ఫోన్, ఖాతా లేకపోవడం). ఏదైనా మార్చే ముందు క్షేత్రస్థాయిలో పరిశీలించండి.", openWard: "మ్యాప్‌లో తెరవండి", more: "ఎక్కువ", less: "తక్కువ", unknownLegend: "డేటా లేదు", searchEmpty: "వార్డు దొరకలేదు" },
+  ur: { title: "پانی کی ضرورت کا نقشہ", intro: "کہاں پانی نہیں، کہاں ضرورت بڑھ رہی ہے، اور کہاں بکنگ بہت کم ہے۔ تفصیل کے لیے وارڈ پر کلک کریں۔", tabNeed: "ضرورت", tabBookings: "بکنگ", tabChecks: "کم بکنگ", layerRising: "ابھی بڑھتی ضرورت", layerWad: "گھر میں پانی نہیں", layerCad: "محدود پانی تک رسائی", layerGrowth: "عمارتوں میں اضافہ", signIn: "آج کے براہِ راست اشارے دیکھنے کے لیے افسر کے طور پر سائن ان کریں۔ محفوظ ڈیٹا دکھایا جا رہا ہے۔", rising: "ضرورت بڑھ رہی ہو سکتی ہے", oneSign: "1 انتباہی اشارہ", calm: "کوئی انتباہی اشارہ نہیں", noLive: "براہِ راست ڈیٹا نہیں", wardsRising: "وارڈ جہاں ضرورت بڑھ رہی ہو سکتی ہے", wardsChecked: "کم بکنگ والے وارڈ جن کی جانچ ہونی ہے", search: "وارڈ تلاش کریں", close: "بند کریں", needTitle: "ضرورت (مردم شماری 2011)", wad: "گھر جن میں پانی نہیں", cad: "گھر جن کی پانی تک رسائی محدود ہے", hardship: "مشکل حالات والے گھر", households: "گھرانے", nowTitle: "ابھی کے اشارے", nowNote: "جب {n} یا زیادہ اشارے سرخ ہوں تو ضرورت بڑھ رہی ہو سکتی ہے۔", growthTitle: "اضافہ", growth: "2016 سے عمارتوں میں {p} اضافہ", noGrowth: "عمارتوں کا اضافہ معلوم نہیں", facilities: "نقشے پر ہسپتال، کلینک اور اسکول", owedBad: "{v} ٹینکر لوڈ واجب الادا", owedOk: "کوئی پانی واجب الادا نہیں", bookBad: "{d} دن میں {v} بکنگ (عام مہینہ: {r})", bookOk: "{d} دن میں {v} بکنگ (عام مہینہ: {r})", bookUnknown: "{d} دن میں {v} بکنگ (پرانا ڈیٹا نہیں)", compBad: "اس ہفتے {v} \"پانی نہیں\" شکایات", compOk: "اس ہفتے {v} \"پانی نہیں\" شکایات", cutsBad: "اس ہفتے {v} سپلائی بندش", cutsOk: "اس ہفتے کوئی سپلائی بندش نہیں", gwBad: "زیرِ زمین پانی معمول سے {v} میٹر گہرا", gwOk: "زیرِ زمین پانی معمول سے {v} میٹر", gwUnknown: "قریب کوئی زیرِ زمین پانی کا کنواں نہیں", checkTitle: "بکنگ کی جانچ", checkBooked: "{v} ٹینکر بک کیے (2022–24)", checkPeer: "ملتے جلتے وارڈوں نے تقریباً {v} بک کیے", checkModel: "ہمارے ماڈل کا اندازہ تقریباً {v}", checkFlag: "اندازے سے بہت کم: کسی کو بھیج کر دیکھیں کہ لوگ بک کر سکتے ہیں یا نہیں۔", checkOk: "بکنگ غیر معمولی طور پر کم نہیں۔", checkNone: "اس وارڈ کی جانچ کے لیے کافی ڈیٹا نہیں۔", topShare: "سب سے اوپر کے {n} علاقے کل ٹینکروں کا {p} لیتے ہیں", gini: "بکنگ کا ارتکاز", giniHigh: "بہت غیر مساوی", giniMid: "غیر مساوی", giniLow: "تقریباً مساوی", sourceLive: "پچھلے {d} دن، {n} براہِ راست بکنگ", sourceHistory: "2022–24 کی بکنگ (ابھی کوئی براہِ راست بکنگ نہیں)", topList: "سب سے مصروف علاقے", bookingsLayer: "ماہانہ بکنگ", checksIntro: "ان وارڈوں نے ملتے جلتے وارڈوں اور ہمارے ماڈل کے اندازے سے بہت کم ٹینکر بک کیے۔ کم بکنگ کا مطلب یہ ہو سکتا ہے کہ لوگ بک نہیں کر پاتے (فون یا اکاؤنٹ نہیں)، یہ نہیں کہ ان کے پاس پانی ہے۔ کچھ بدلنے سے پہلے موقع پر جانچ کریں۔", openWard: "نقشے پر کھولیں", more: "زیادہ", less: "کم", unknownLegend: "ڈیٹا نہیں", searchEmpty: "کوئی وارڈ نہیں ملا" },
+  hi: { title: "पानी की ज़रूरत का नक्शा", intro: "कहाँ पानी नहीं है, कहाँ ज़रूरत बढ़ रही है, और कहाँ बुकिंग बहुत कम है। विवरण के लिए वार्ड पर क्लिक करें।", tabNeed: "ज़रूरत", tabBookings: "बुकिंग", tabChecks: "कम बुकिंग", layerRising: "अभी बढ़ती ज़रूरत", layerWad: "घर में पानी नहीं", layerCad: "सीमित पानी पहुँच", layerGrowth: "इमारतों में बढ़ोतरी", signIn: "आज के लाइव संकेत देखने के लिए अधिकारी के रूप में साइन इन करें। सहेजा हुआ डेटा दिखाया जा रहा है।", rising: "ज़रूरत बढ़ रही हो सकती है", oneSign: "1 चेतावनी संकेत", calm: "कोई चेतावनी संकेत नहीं", noLive: "लाइव डेटा नहीं", wardsRising: "वार्ड जहाँ ज़रूरत बढ़ रही हो सकती है", wardsChecked: "कम बुकिंग वाले वार्ड जिनकी जाँच करनी है", search: "वार्ड खोजें", close: "बंद करें", needTitle: "ज़रूरत (जनगणना 2011)", wad: "घर जिनमें पानी नहीं", cad: "घर जिनकी पानी तक पहुँच सीमित है", hardship: "कठिनाई वाले घर", households: "परिवार", nowTitle: "अभी के संकेत", nowNote: "जब {n} या अधिक संकेत लाल हों तो ज़रूरत बढ़ रही हो सकती है।", growthTitle: "बढ़ोतरी", growth: "2016 से इमारतें {p} बढ़ीं", noGrowth: "इमारतों की बढ़ोतरी अज्ञात", facilities: "नक्शे पर अस्पताल, क्लिनिक और स्कूल", owedBad: "{v} टैंकर लोड बकाया", owedOk: "कोई पानी बकाया नहीं", bookBad: "{d} दिनों में {v} बुकिंग (सामान्य महीना: {r})", bookOk: "{d} दिनों में {v} बुकिंग (सामान्य महीना: {r})", bookUnknown: "{d} दिनों में {v} बुकिंग (पुराना डेटा नहीं)", compBad: "इस हफ़्ते {v} \"पानी नहीं\" शिकायतें", compOk: "इस हफ़्ते {v} \"पानी नहीं\" शिकायतें", cutsBad: "इस हफ़्ते {v} आपूर्ति बंद", cutsOk: "इस हफ़्ते कोई आपूर्ति बंद नहीं", gwBad: "भूजल सामान्य से {v} मी. गहरा", gwOk: "भूजल सामान्य से {v} मी.", gwUnknown: "पास में भूजल कुआँ नहीं", checkTitle: "बुकिंग जाँच", checkBooked: "{v} टैंकर बुक किए (2022–24)", checkPeer: "मिलते-जुलते वार्डों ने लगभग {v} बुक किए", checkModel: "हमारे मॉडल का अनुमान लगभग {v}", checkFlag: "अनुमान से बहुत कम: किसी को भेजकर देखें कि लोग बुक कर पाते हैं या नहीं।", checkOk: "बुकिंग असामान्य रूप से कम नहीं है।", checkNone: "इस वार्ड की जाँच के लिए पर्याप्त डेटा नहीं।", topShare: "शीर्ष {n} इलाके कुल टैंकरों का {p} लेते हैं", gini: "बुकिंग संकेंद्रण", giniHigh: "बहुत असमान", giniMid: "असमान", giniLow: "लगभग समान", sourceLive: "पिछले {d} दिन, {n} लाइव बुकिंग", sourceHistory: "2022–24 की बुकिंग (अभी कोई लाइव बुकिंग नहीं)", topList: "सबसे व्यस्त इलाके", bookingsLayer: "प्रति माह बुकिंग", checksIntro: "इन वार्डों ने मिलते-जुलते वार्डों और हमारे मॉडल के अनुमान से बहुत कम टैंकर बुक किए। कम बुकिंग का मतलब हो सकता है कि लोग बुक नहीं कर पाते (फ़ोन या खाता नहीं), यह नहीं कि उनके पास पानी है। कुछ बदलने से पहले मौके पर जाँच करें।", openWard: "नक्शे पर खोलें", more: "अधिक", less: "कम", unknownLegend: "डेटा नहीं", searchEmpty: "कोई वार्ड नहीं मिला" },
+} satisfies Record<Locale, Record<string, string>>;
+type Words = (typeof copy)["en"];
+
+const fill = (s: string, v: Record<string, string | number>) => s.replace(/\{(\w+)\}/g, (_, k: string) => String(v[k] ?? ""));
 function points(v: unknown): Position[] {
   if (!Array.isArray(v)) return [];
   if (typeof v[0] === "number" && typeof v[1] === "number") return [[v[0], v[1]]];
   return v.flatMap(points);
 }
 function rings(f: Feature): Position[][] {
-  const groups = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates as unknown[];
-  return groups.flatMap((group) => Array.isArray(group) && Array.isArray(group[0]) ? [points(group[0])] : []).filter((ring) => ring.length > 2);
+  const polys = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : (f.geometry.coordinates as unknown[]);
+  return polys.flatMap((poly) => (Array.isArray(poly) ? poly.map(points) : [])).filter((ring) => ring.length > 2);
+}
+/** Five equal-count classes; returns the class (0-4) of a value, or null when it is missing. */
+function classes(values: (number | null)[]) {
+  const sorted = values.filter((v): v is number => v !== null).sort((a, b) => a - b);
+  const cuts = [1, 2, 3, 4].map((k) => sorted[Math.floor((sorted.length * k) / 5)] ?? Infinity);
+  return { cuts, of: (v: number | null) => (v === null ? null : cuts.filter((c) => v >= c).length) };
+}
+
+function clueText(c: Clue, w: Words, days: number, fmt: (n: number) => string) {
+  const v = c.value ?? 0;
+  if (c.code === "owed") return c.bad ? fill(w.owedBad, { v: fmt(v) }) : w.owedOk;
+  if (c.code === "bookings") return fill(c.known ? (c.bad ? w.bookBad : w.bookOk) : w.bookUnknown, { v: fmt(v), d: days, r: fmt(c.reference / 1.5) });
+  if (c.code === "complaints") return fill(c.bad ? w.compBad : w.compOk, { v: fmt(v) });
+  if (c.code === "cuts") return c.bad ? fill(w.cutsBad, { v: fmt(v) }) : w.cutsOk;
+  return c.known ? fill(c.bad ? w.gwBad : w.gwOk, { v: v.toFixed(1) }) : w.gwUnknown;
 }
 
 export default function EvidenceExperience() {
   const { locale } = useLocale();
   const w = copy[locale];
-  const [view, setView] = useState<View>("access");
-  const [layer, setLayer] = useState<"access" | "growth" | "checks">("access");
+  const nf = useMemo(() => new Intl.NumberFormat(locale === "ur" ? "ur-PK" : locale, { maximumFractionDigits: 1 }), [locale]);
+  const pf = useMemo(() => new Intl.NumberFormat(locale === "ur" ? "ur-PK" : locale, { style: "percent", maximumFractionDigits: 0 }), [locale]);
+  const fmt = (n: number) => nf.format(n);
+  const pct = (n: number | null | undefined) => (n === null || n === undefined ? "—" : pf.format(n));
+  const [tab, setTab] = useState<Tab>("need");
+  const [layer, setLayer] = useState<Layer>("rising");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  // Live data needs a token; signed out (or rejected) the screen does not call the API at all.
+  const [hover, setHover] = useState<string | null>(null);
+
+  // Live data needs an officer token; signed out the screen shows the saved snapshot.
   const { status } = useAuth();
   const enabled = status !== "anonymous" && status !== "rejected";
   const atlas = useApi<unknown>(enabled ? "/atlas/wards" + PAGE : null);
@@ -54,53 +72,147 @@ export default function EvidenceExperience() {
   const equitySummary = useApi<unknown>(enabled ? "/equity/summary" : null);
   const fieldChecks = useApi<unknown>(enabled ? "/underserved/field-checks" + PAGE : null);
   const layerGeo = useApi<unknown>(enabled ? "/coverage/layers/water_access_evidence" : null);
+  const liveNeedApi = useApi<unknown>(enabled ? "/atlas/live" : null);
   const sources = [atlas, equityWards, equitySummary, fieldChecks, layerGeo];
-  const allLive = sources.every((source) => source.live);
-  const live = useMemo(() => allLive ? adaptLiveEvidence({ atlas: atlas.data, equityWards: equityWards.data, equitySummary: equitySummary.data, fieldChecks: fieldChecks.data, layer: layerGeo.data }) : null, [allLive, atlas.data, equityWards.data, equitySummary.data, fieldChecks.data, layerGeo.data]);
-  const error = sources.find((source) => source.error)?.error ?? null;
-  const reason: FallbackReason | null = live ? null : !enabled ? "signIn" : error ? reasonForError(error) : allLive ? "incomplete" : null;
-  const notes: Record<FallbackReason, string> = { signIn: w.signInNote, forbidden: w.forbiddenNote, unreachable: w.unreachableNote, serverError: w.serverErrorNote, incomplete: w.incompleteNote };
+  const allLive = sources.every((s) => s.live);
+  const live = useMemo(() => (allLive ? adaptLiveEvidence({ atlas: atlas.data, equityWards: equityWards.data, equitySummary: equitySummary.data, fieldChecks: fieldChecks.data, layer: layerGeo.data }) : null), [allLive, atlas.data, equityWards.data, equitySummary.data, fieldChecks.data, layerGeo.data]);
+  const need = useMemo(() => (liveNeedApi.live ? adaptLiveNeed(liveNeedApi.data) : null), [liveNeedApi.live, liveNeedApi.data]);
+
   const dataset = live?.dataset ?? snapshot;
   const features = live?.features ?? snapshotFeatures;
   const rows = dataset.wards;
-  const rowIndex = useMemo(() => new Map(rows.map((row) => [row.id, row])), [rows]);
-  const selected = selectedId ? rowIndex.get(selectedId) ?? null : null;
-  const visible = rows.filter((row) => (row.name + " " + row.id).toLowerCase().includes(query.trim().toLowerCase())).sort((a,b) => a.name.localeCompare(b.name));
-  const candidates = rows.filter((row) => row.fieldCandidate === true).sort((a,b) => a.name.localeCompare(b.name));
-  const mapped = features.map((feature) => ({ feature, row: rowIndex.get(feature.properties.ward_id) })).filter((item): item is { feature: Feature; row: Ward } => Boolean(item.row));
-  const all = mapped.flatMap(({feature}) => points(feature.geometry.coordinates));
-  const bounds = all.reduce((b,[x,y]) => ({ minX:Math.min(b.minX,x), maxX:Math.max(b.maxX,x), minY:Math.min(b.minY,y), maxY:Math.max(b.maxY,y) }), {minX:Infinity,maxX:-Infinity,minY:Infinity,maxY:-Infinity});
-  const project = ([x,y]: Position) => (14+(x-bounds.minX)/(bounds.maxX-bounds.minX)*592)+","+(14+(bounds.maxY-y)/(bounds.maxY-bounds.minY)*432);
-  const fmt = (value: number | null) => pct(value, locale === "ur" ? "ur-PK" as Locale : locale);
-  function color(row: Ward) {
-    if (layer === "checks") return row.fieldCandidate === true ? "#bd7950" : row.fieldCandidate === false ? "#d6e9df" : "#e9ece8";
-    const value = layer === "growth" ? row.growthRatio : row.waterAccessDeficitShare;
-    if (value === null) return "#e9ece8";
-    return value >= (layer === "growth" ? 1.45 : .16) ? "#b5d6c7" : "#e0eee7";
+  const byId = useMemo(() => new Map(rows.map((r) => [r.id, r])), [rows]);
+  const selected = selectedId ? byId.get(selectedId) ?? null : null;
+  const liveOf = (id: string): LiveWard | undefined => need?.wards.get(id);
+  const conc = need?.concentration ?? null;
+  // Without live data the live layer has nothing to show: fall back to the Census layer.
+  const shown: Layer = layer === "rising" && !need ? "wad" : layer;
+  const usualMonth = (r: Ward) => (r.bookings === null ? null : r.bookings / 25);
+  const bookingsOf = (r: Ward) => (conc?.source === "live" ? liveOf(r.id)?.bookingsWindow ?? 0 : usualMonth(r));
+
+  // Map: equirectangular projection corrected for latitude, so wards keep their shape.
+  const shapes = useMemo(() => features.flatMap((f) => (byId.has(f.properties.ward_id) ? [{ id: f.properties.ward_id, rings: rings(f) }] : [])), [features, byId]);
+  const view = useMemo(() => {
+    const all = shapes.flatMap((s) => s.rings.flat());
+    const xs = all.map((p) => p[0]), ys = all.map((p) => p[1]);
+    const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+    const k = Math.cos((((minY + maxY) / 2) * Math.PI) / 180);
+    const width = 1000, height = Math.round((width * (maxY - minY)) / ((maxX - minX) * k));
+    const project = ([x, y]: Position) => `${(((x - minX) / (maxX - minX)) * width).toFixed(1)},${(((maxY - y) / (maxY - minY)) * height).toFixed(1)}`;
+    return { width, height, paths: new Map(shapes.map((s) => [s.id, s.rings.map((r) => "M" + r.map(project).join("L") + "Z").join("")])) };
+  }, [shapes]);
+
+  const metric = (r: Ward): number | null =>
+    tab === "bookings" ? bookingsOf(r) : shown === "wad" ? r.waterAccessDeficitShare : shown === "cad" ? r.constrainedAccessShare ?? null : shown === "growth" ? (r.growthRatio === null ? null : r.growthRatio - 1) : null;
+  const scale = useMemo(() => classes(rows.map(metric)), [rows, tab, shown, conc]); // eslint-disable-line react-hooks/exhaustive-deps
+  function colour(r: Ward) {
+    if (tab === "checks") return r.fieldCandidate === true ? "#c9783f" : NO_DATA;
+    if (tab === "need" && shown === "rising") {
+      const l = liveOf(r.id);
+      if (!l) return NO_DATA;
+      return l.rising ? "#c4473a" : l.badCount === 1 ? "#e3a64a" : "#9fd0b8";
+    }
+    const c = scale.of(metric(r));
+    return c === null ? NO_DATA : SCALE[c];
   }
-  return <div className="evidence-page">
-    <header className="evidence-heading"><div><p className="eyebrow">{w.source} · {dataset.geographyVersion}</p><h1>{w.title}</h1><p className="muted">{w.intro}</p></div><span className="evidence-basis-tag">DERIVED{dataset.snapshotDate ? " · " + dataset.snapshotDate : ""}</span></header>
-    <div className="evidence-notice muted-notice"><strong>{w.dataSource}: <DataSourceChip state={{ live: live !== null, loading: !live && reason === null, error: reason === "unreachable" ? error : null }} /></strong><span>{live ? w.liveNote : reason ? notes[reason] : w.loadingNote}</span></div>
-    <div className="evidence-tabs" role="tablist">{(["access","equity","checks"] as const).map((tab) => <button key={tab} role="tab" aria-selected={view===tab} className={view===tab?"active":""} onClick={() => setView(tab)}>{w[tab]}</button>)}</div>
-    {view === "access" && <>
-      <div className="evidence-notice"><strong>{w.polygons}: {dataset.geographyVersion}</strong><span>{w.historic}</span></div>
-      <div className="evidence-metrics"><article><span>{w.polygons}</span><strong>{num(dataset.summary.wardCount,locale)}</strong></article><article><span>{w.mapped}</span><strong>{num(dataset.summary.censusMappedCount,locale)} / {num(dataset.summary.wardCount,locale)}</strong></article><article><span>{w.review}</span><strong>{num(dataset.summary.censusReviewCount,locale)}</strong></article></div>
-      <div className="evidence-explorer"><section className="evidence-map-panel"><div className="evidence-panel-head"><div><h2>{w.ward}</h2><p>{w.select}</p></div><label className="evidence-layer-select"><span>{w.layer}</span><select value={layer} onChange={(e) => setLayer(e.target.value as typeof layer)}><option value="access">{w.accessLayer}</option><option value="growth">{w.growthLayer}</option><option value="checks">{w.checkLayer}</option></select></label></div>
-        <div className="evidence-map-wrap"><svg className="evidence-map" viewBox="0 0 620 460" role="group" aria-label={w.title}>{mapped.map(({feature,row}) => <path key={row.id} d={rings(feature).map((ring) => "M"+ring.map(project).join("L")+"Z").join("")} fill={color(row)} className={selectedId===row.id?"selected":""} tabIndex={0} role="button" aria-label={row.name+" · "+(layer==="growth"?w.growth:layer==="checks"?w.checks:w.deficit)+" · "+(layer==="growth"?fmt(row.growthRatio===null?null:row.growthRatio-1):layer==="checks"?(row.fieldCandidate===true?w.candidate:row.fieldCandidate===false?w.noFlag:w.review):fmt(row.waterAccessDeficitShare))} onClick={() => setSelectedId(row.id)} onKeyDown={(e) => {if(e.key==="Enter"||e.key===" "){e.preventDefault();setSelectedId(row.id);}}}><title>{row.name}</title></path>)}</svg></div><div className="evidence-map-legend"><span><i className="legend-swatch high"/>{w.high}</span><span><i className="legend-swatch low"/>{w.low}</span><span><i className="legend-swatch unavailable"/>{w.unavailable}</span></div>
-      </section><section className="evidence-list-panel"><label className="evidence-search"><span>{w.search}</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={w.searchHint}/></label><div className="evidence-ward-list">{visible.map((row) => <button key={row.id} className={selectedId===row.id?"evidence-ward-row selected":"evidence-ward-row"} onClick={() => setSelectedId(row.id)}><span><strong>{row.name}</strong><small>{row.reviewRequired?w.review:w.census}</small></span><span>{layer==="growth"?fmt(row.growthRatio===null?null:row.growthRatio-1):layer==="checks"?(row.fieldCandidate===true?w.candidate:row.fieldCandidate===false?"—":w.review):fmt(row.waterAccessDeficitShare)}</span></button>)}{visible.length===0&&<p className="muted evidence-empty">{w.searchEmpty}</p>}</div>
-        {selected&&<article className="evidence-selected-card"><div className="evidence-selected-head"><div><p className="eyebrow">{w.census} · {selected.censusYear??"—"}</p><h3>{selected.name}</h3></div><span className="source-tag derived">{w.source}</span></div><div className="evidence-selected-grid"><div><small>{w.deficit}</small><strong>{fmt(selected.waterAccessDeficitShare)}</strong></div><div><small>{w.households} · 2011</small><strong>{num(selected.households2011,locale)}</strong></div><div><small>{w.population} · 2011</small><strong>{num(selected.population2011,locale)}</strong></div><div><small>{w.growth} · {w.years}</small><strong>{selected.growthRatio===null?w.unavailable:fmt(selected.growthRatio-1)}</strong></div>{selected.criticalFacilities!==null&&selected.criticalFacilities!==undefined&&<div><small>{w.facilities} · OSM</small><strong>{num(selected.criticalFacilities,locale)}</strong></div>}</div><p className="evidence-small-note">{w.buildingNote}</p>{selected.criticalFacilities!==null&&selected.criticalFacilities!==undefined&&<p className="evidence-small-note">{w.facilitiesNote}</p>}</article>}</section></div>
-    </>}
-    {view === "equity" && <>
-      <div className="evidence-notice"><strong>{w.exact}</strong><span>{dataset.summary.equity.interpretation}</span></div>
-      <div className="evidence-metrics evidence-equity-metrics"><article><span>{w.bookings}</span><strong>{num(dataset.summary.equity.bookings,locale)}</strong><small>{num(dataset.summary.equity.section_count,locale)} {w.sections}</small></article><article><span>{w.gini}</span><strong>{dataset.summary.equity.gini.toFixed(2)}</strong><small>{w.exact}</small></article><article><span>{w.top}</span><strong>{fmt(dataset.summary.equity.top_booking_share)}</strong><small>{num(dataset.summary.equity.top_section_count,locale)} {w.sections}</small></article><article><span>{w.bottom}</span><strong>{fmt(dataset.summary.equity.bottom_booking_share)}</strong><small>{num(dataset.summary.equity.bottom_section_count,locale)} {w.sections}</small></article></div>
-      <div className="evidence-notice muted-notice"><strong>{w.wardRates}</strong><span>{w.wardCaveat} {w.missingMonth}</span></div>
-      <section className="evidence-table-panel"><div className="evidence-panel-head"><div><h2>{w.wardRates}</h2><p>{w.rate}</p></div><span className="source-tag derived">DERIVED · {w.approximate}</span></div><div className="evidence-table-scroll"><table><thead><tr><th>{w.ward}</th><th>{w.bookings}</th><th>{w.rate}</th><th>{w.source}</th></tr></thead><tbody>{[...rows].sort((a,b)=>(b.bookingsPer1000??-1)-(a.bookingsPer1000??-1)).slice(0,30).map((row)=><tr key={row.id}><td><button className="evidence-table-link" onClick={() => {setView("access");setSelectedId(row.id);}}>{row.name}</button></td><td>{num(row.bookings,locale)}</td><td>{row.bookingsPer1000===null?w.unavailable:row.bookingsPer1000.toLocaleString(locale,{maximumFractionDigits:1})}</td><td><span className="evidence-status">{row.bookingStatus==="APPROXIMATE_SECTION_POINT_IN_WARD"?w.approximate:w.unavailable}</span></td></tr>)}</tbody></table></div></section>
-    </>}
-    {view === "checks" && <>
-      <div className="evidence-notice field-check-notice"><strong>{w.fieldTitle}</strong><span>{w.fieldIntro}</span></div>
-      <div className="evidence-metrics"><article><span>{w.candidates}</span><strong>{num(dataset.summary.fieldCheckCount,locale)}</strong></article><article><span>{w.eligible}</span><strong>{num(dataset.summary.eligibleCount,locale)}</strong></article><article><span>{w.dataReview}</span><strong>{num(dataset.summary.dataReviewCount,locale)}</strong></article></div>
-      <section className="evidence-candidates"><div className="evidence-panel-head"><div><h2>{w.candidates}</h2><p>{w.fieldIntro}</p></div><span className="source-tag derived">DERIVED · PEER + NB</span></div><div className="evidence-candidate-grid">{candidates.map((row)=><article className="evidence-candidate-card" key={row.id}><div className="evidence-selected-head"><div><span className="evidence-status candidate-status">{w.candidate}</span><h3>{row.name}</h3></div><button className="text-button" onClick={() => {setView("access");setSelectedId(row.id);}}>{w.ward}</button></div><h4>{w.reasons}</h4>{row.fieldReasons.length===0?<p>{w.none}</p>:<ul>{row.fieldReasons.map((reason)=><li key={row.id+reason.code+(reason.model??"")}><strong>{reasonText(reason.code,w,reason.model)}</strong><span>{w.value}: {fmt(reason.value)} · {w.threshold}: {fmt(reason.threshold)}</span><small>{reason.basis}</small></li>)}</ul>}<p className="evidence-small-note">{w.census} · {row.censusYear??"—"} · {w.growth}: {row.growthRatio===null?w.unavailable:fmt(row.growthRatio-1)} · {w.buildingNote}</p></article>)}</div></section>
-    </>}
-    <p className="evidence-footer-note">{w.allNote} · {dataset.snapshotDate ? w.snapshot + ": " + dataset.snapshotDate : w.liveNote} · {dataset.geographyVersion}</p>
+
+  const rising = rows.filter((r) => liveOf(r.id)?.rising).length;
+  const checks = rows.filter((r) => r.fieldCandidate === true).sort((a, b) => (a.observedBookings ?? 0) / (a.peerExpected || 1) - (b.observedBookings ?? 0) / (b.peerExpected || 1));
+  const found = query.trim() ? rows.filter((r) => r.name.toLowerCase().includes(query.trim().toLowerCase())).slice(0, 6) : [];
+  const legendScale = tab === "bookings" || shown !== "rising";
+
+  return (
+    <div className="atlas-page">
+      <header className="atlas-head">
+        <div><h1>{w.title}</h1><p className="muted">{w.intro}</p></div>
+        <div className="atlas-search">
+          <input aria-label={w.search} placeholder={w.search} value={query} onChange={(e) => setQuery(e.target.value)} />
+          {query.trim() && <ul>{found.length ? found.map((r) => <li key={r.id}><button onClick={() => { setSelectedId(r.id); setQuery(""); }}>{r.name}</button></li>) : <li className="muted">{w.searchEmpty}</li>}</ul>}
+        </div>
+      </header>
+      {!need && <p className="atlas-hint" role="note">{w.signIn}</p>}
+
+      <div className="atlas-tabs" role="tablist">
+        {(["need", "bookings", "checks"] as const).map((t) => <button key={t} role="tab" aria-selected={tab === t} className={tab === t ? "active" : ""} onClick={() => setTab(t)}>{t === "need" ? w.tabNeed : t === "bookings" ? w.tabBookings : w.tabChecks}</button>)}
+      </div>
+
+      <section className="atlas-stage">
+        <div className="atlas-overlay atlas-overlay-top">
+          {tab === "need" && <div className="atlas-chips" role="radiogroup">{(["rising", "wad", "cad", "growth"] as const).map((l) => <button key={l} role="radio" aria-checked={shown === l} className={shown === l ? "active" : ""} disabled={l === "rising" && !need} title={l === "rising" && !need ? w.signIn : undefined} onClick={() => setLayer(l)}>{l === "rising" ? w.layerRising : l === "wad" ? w.layerWad : l === "cad" ? w.layerCad : w.layerGrowth}</button>)}</div>}
+          {tab === "need" && layer === "rising" && need && <p className="atlas-stat"><strong>{fmt(rising)}</strong> {w.wardsRising}</p>}
+          {tab === "bookings" && conc && <div className="atlas-stat-card">
+            <p className="atlas-big">{fill(w.topShare, { n: fmt(conc.topSections), p: pct(conc.topShare) })}</p>
+            <p>{w.gini}: <strong>{conc.gini === null ? "—" : conc.gini >= 0.6 ? w.giniHigh : conc.gini >= 0.35 ? w.giniMid : w.giniLow}</strong> ({conc.gini?.toFixed(2) ?? "—"})</p>
+            <p className="muted">{conc.source === "live" ? fill(w.sourceLive, { d: need?.windowDays ?? 30, n: fmt(conc.liveBookings) }) : w.sourceHistory}</p>
+          </div>}
+          {tab === "bookings" && !conc && <div className="atlas-stat-card"><p className="atlas-big">{fill(w.topShare, { n: fmt(dataset.summary.equity.top_section_count), p: pct(dataset.summary.equity.top_booking_share) })}</p><p className="muted">{w.sourceHistory}</p></div>}
+          {tab === "checks" && <p className="atlas-stat"><strong>{fmt(checks.length)}</strong> {w.wardsChecked}</p>}
+        </div>
+        <svg className="atlas-map" viewBox={`-10 -10 ${view.width + 20} ${view.height + 20}`} role="group" aria-label={w.title}>
+          {rows.map((r) => {
+            const d = view.paths.get(r.id);
+            if (!d) return null;
+            return <path key={r.id} d={d} fill={colour(r)} className={(selectedId === r.id ? "selected " : "") + (hover === r.id ? "hover" : "")} tabIndex={0} role="button" aria-label={r.name}
+              onClick={() => setSelectedId(r.id)} onMouseEnter={() => setHover(r.id)} onMouseLeave={() => setHover(null)}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedId(r.id); } }}><title>{r.name}</title></path>;
+          })}
+        </svg>
+        {hover && byId.get(hover) && <div className="atlas-tooltip">{byId.get(hover)!.name}</div>}
+        <div className="atlas-overlay atlas-legend">
+          {legendScale ? <><span>{w.less}</span>{SCALE.map((c) => <i key={c} style={{ background: c }} />)}<span>{w.more}</span><i style={{ background: NO_DATA }} /><span>{w.unknownLegend}</span></>
+            : tab === "checks" ? <><i style={{ background: "#c9783f" }} /><span>{w.tabChecks}</span></>
+            : <><i style={{ background: "#c4473a" }} /><span>{w.rising}</span><i style={{ background: "#e3a64a" }} /><span>{w.oneSign}</span><i style={{ background: "#9fd0b8" }} /><span>{w.calm}</span><i style={{ background: NO_DATA }} /><span>{w.noLive}</span></>}
+        </div>
+        {tab === "bookings" && conc && conc.top.length > 0 && <aside className="atlas-overlay atlas-top-list"><h3>{w.topList}</h3><ol>{conc.top.map((t) => <li key={t.section}><span>{t.section}</span><strong>{pct(t.share)}</strong></li>)}</ol></aside>}
+      </section>
+
+      {tab === "checks" && <section className="atlas-checks">
+        <p className="atlas-explain">{w.checksIntro}</p>
+        <div className="atlas-check-grid">{checks.map((r) => <article key={r.id} className="atlas-check-card">
+          <h3>{r.name}</h3>
+          <CheckBars ward={r} w={w} fmt={fmt} />
+          <button className="text-button" onClick={() => setSelectedId(r.id)}>{w.openWard}</button>
+        </article>)}</div>
+      </section>}
+
+      {selected && <WardSheet ward={selected} live={liveOf(selected.id)} days={need?.windowDays ?? 30} minBad={need?.minBad ?? 2} w={w} fmt={fmt} pct={pct} onClose={() => setSelectedId(null)} />}
+    </div>
+  );
+}
+
+function CheckBars({ ward, w, fmt }: { ward: Ward; w: Words; fmt: (n: number) => string }) {
+  const values = [ward.observedBookings, ward.peerExpected, ward.modelExpected];
+  if (values.some((v) => v === null || v === undefined)) return <p className="muted">{w.checkNone}</p>;
+  const [seen, peer, model] = values as number[];
+  const max = Math.max(seen, peer, model, 1);
+  const bar = (label: string, v: number, kind: string) => <div className="atlas-bar"><span>{fill(label, { v: fmt(Math.round(v)) })}</span><i className={kind} style={{ width: `${Math.max(1.5, (v / max) * 100)}%` }} /></div>;
+  return <div className="atlas-bars">
+    {bar(w.checkBooked, seen, "seen")}{bar(w.checkPeer, peer, "peer")}{bar(w.checkModel, model, "model")}
+    <p className={ward.fieldCandidate ? "atlas-verdict flag" : "atlas-verdict"}>{ward.fieldCandidate ? w.checkFlag : w.checkOk}</p>
   </div>;
+}
+
+function WardSheet({ ward, live, days, minBad, w, fmt, pct, onClose }: { ward: Ward; live: LiveWard | undefined; days: number; minBad: number; w: Words; fmt: (n: number) => string; pct: (n: number | null | undefined) => string; onClose: () => void }) {
+  const status = !live ? w.noLive : live.rising ? w.rising : live.badCount === 1 ? w.oneSign : w.calm;
+  return (
+    <section className="atlas-sheet" role="dialog" aria-label={ward.name}>
+      <header><div><h2>{ward.name}</h2><span className={"atlas-pill " + (!live ? "none" : live.rising ? "bad" : live.badCount === 1 ? "warn" : "ok")}>{status}</span></div><button className="atlas-close" onClick={onClose} aria-label={w.close}>×</button></header>
+      <div className="atlas-sheet-grid">
+        <div><h3>{w.nowTitle}</h3>
+          {live ? <><ul className="atlas-clues">{live.clues.map((c) => <li key={c.code} className={c.bad ? "bad" : c.known ? "ok" : "unknown"}>{clueText(c, w, days, fmt)}</li>)}</ul><p className="muted small">{fill(w.nowNote, { n: minBad })}</p></> : <p className="muted">{w.signIn}</p>}
+        </div>
+        <div><h3>{w.needTitle}</h3>
+          <dl className="atlas-facts">
+            <div><dt>{w.wad}</dt><dd>{pct(ward.waterAccessDeficitShare)}</dd></div>
+            <div><dt>{w.cad}</dt><dd>{pct(ward.constrainedAccessShare)}</dd></div>
+            <div><dt>{w.hardship}</dt><dd>{pct(ward.hardshipShare)}</dd></div>
+            <div><dt>{w.households}</dt><dd>{ward.households2011 === null ? "—" : fmt(ward.households2011)}</dd></div>
+            {ward.criticalFacilities !== null && ward.criticalFacilities !== undefined && <div><dt>{w.facilities}</dt><dd>{fmt(ward.criticalFacilities)}</dd></div>}
+          </dl>
+          <p className="small">{ward.growthRatio === null ? w.noGrowth : fill(w.growth, { p: pct(ward.growthRatio - 1) })}</p>
+        </div>
+        <div><h3>{w.checkTitle}</h3><CheckBars ward={ward} w={w} fmt={fmt} /></div>
+      </div>
+    </section>
+  );
 }

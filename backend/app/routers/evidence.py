@@ -4,17 +4,24 @@ ward report card, SMS summary and impact. Built from committed P1 / P2 files and
 
 from __future__ import annotations
 
+import json
 import logging
-from datetime import datetime
+import statistics
+from collections import Counter
+from datetime import UTC, datetime, timedelta
 from functools import lru_cache
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, Query
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 from app.auth import require_roles
 from app.config.api import SMS_SUMMARY_TEMPLATE_KEY, SMS_SUMMARY_TEMPLATES, ApiConfig
 from app.config.env import REPO_ROOT
+from app.config.live_need import LIVE_NEED_CONFIG
 from app.config.report_cards import REPORT_CARD_CONFIG
+from app.models import Complaint, SupplyNotice
 from app.routers.common import (
     UNAVAILABLE,
     csv_rows,
@@ -24,6 +31,8 @@ from app.routers.common import (
     page,
     typed,
 )
+from app.routers.intake import get_intake_service
+from app.routers.notices import get_notice_service
 from app.routers.stores import (
     DebtStore,
     DeliveryStore,
@@ -33,8 +42,17 @@ from app.routers.stores import (
     get_delivery_store,
     get_plan_store,
 )
-from app.services import day_close, ledger_store, plan_builder, report_card, service_models
+from app.services import (
+    day_close,
+    ledger_store,
+    live_need,
+    plan_builder,
+    report_card,
+    service_models,
+)
+from app.services.intake_pipeline import IntakeService
 from app.services.ledger_store import StoredLedger
+from app.services.notices import NoticeService
 
 router = APIRouter(tags=["evidence"])
 logger = logging.getLogger(__name__)
@@ -58,6 +76,8 @@ FACILITY_CATEGORIES = ("hospitals", "clinics", "uphcs", "schools", "care_homes")
 # Likeliest tier-0 stops first (F8 tier 0, F10); schools last.
 CANDIDATE_ORDER = ("hospitals", "uphcs", "clinics", "care_homes", "schools")
 IMPACT = "data/derived/sandbox/summary.json"
+SECTION_WARDS = "data/derived/crosswalk/section_to_ward_2016.csv"
+GROUNDWATER = "data/derived/groundwater/section_anomaly.csv"
 
 Officer = Depends(require_roles("officer"))
 Reader = Depends(require_roles("officer", "resident", "councillor"))
@@ -92,6 +112,101 @@ def _need(ward_id: str) -> service_models.WardNeed:
 @router.get("/atlas/wards", dependencies=[Officer])
 def atlas_wards(offset: Offset = 0, limit: Limit = ApiConfig.default_limit) -> dict[str, Any]:
     return page([typed(r) for r in csv_rows(EVIDENCE)], offset, limit)
+
+
+@router.get("/atlas/live", dependencies=[Officer])
+def atlas_live(
+    plans: Annotated[PlanStore, Depends(get_plan_store)],
+    debts: Annotated[DebtStore, Depends(get_debt_store)],
+    intake: Annotated[IntakeService, Depends(get_intake_service)],
+    notices: Annotated[NoticeService, Depends(get_notice_service)],
+    now: Annotated[datetime, Depends(get_now)],
+) -> dict[str, Any]:
+    """Census need per ward plus five live clues (services/live_need.py) and booking
+    concentration from the bookings officers supplied in the last 30 days (history if none)."""
+    cfg = LIVE_NEED_CONFIG
+    section_ward = {r["section"]: r["ward_id"] for r in csv_rows(SECTION_WARDS) if r["ward_id"]}
+    counts = live_need.count_bookings(
+        plans.supplied_bookings(), section_ward, now, cfg.bookings_window_days
+    )
+    history = {r["ward_id"]: r["bookings"] for r in csv_rows(EQUITY_WARDS)}
+    owed = {
+        a.account_id.removeprefix(day_close.WARD_PREFIX): a.debt_litres
+        for a in debts.accounts().values()
+    }
+    complaints: Counter[str] = Counter()
+    since = now - timedelta(days=cfg.complaint_window_days)
+    with Session(intake.engine) as session:
+        rows = session.execute(
+            select(Complaint.area_id, Complaint.created_at).where(Complaint.category == "no_water")
+        )
+        complaints.update(area for area, at in rows if area and _utc(at) >= since)
+    cuts: Counter[str] = Counter()
+    since = now - timedelta(days=cfg.cut_window_days)
+    with Session(notices.engine) as session:
+        rows = session.execute(
+            select(SupplyNotice.ward_ids_json, SupplyNotice.start_at, SupplyNotice.end_at)
+        )
+        for ward_ids, start, end in rows:
+            if _utc(end) >= since and _utc(start) <= now:
+                cuts.update(set(json.loads(ward_ids)))
+    groundwater = _ward_groundwater(section_ward, now)
+    wards = []
+    for r in csv_rows(EVIDENCE):
+        wid = r["ward_id"]
+        past = history.get(wid) or ""
+        usual = float(past) / cfg.history_months if past else None
+        signals = live_need.WardSignals(
+            wid, owed.get(wid, 0.0), counts.by_ward.get(wid, 0), usual, complaints[wid],
+            cuts[wid], groundwater.get(wid),
+        )  # fmt: skip
+        wards.append(
+            {
+                "ward_id": wid,
+                "name": r["ward_name"],
+                "need": {k: typed({k: r[k]})[k] for k in ("wad", "cad", "hardship", "households")},
+                "bookings_window": counts.by_ward.get(wid, 0),
+                "usual_month_bookings": None if usual is None else round(usual, 1),
+                **live_need.evaluate(signals, cfg),
+            }
+        )
+    live = counts.total > 0
+    sections = (
+        counts.by_section
+        if live
+        else {r["section"]: int(r["bookings"] or 0) for r in csv_rows(EQUITY_SECTIONS)}
+    )
+    return {
+        "as_of": now.isoformat(),
+        "window_days": cfg.bookings_window_days,
+        "min_bad_clues": cfg.min_bad_clues,
+        "wards": wards,
+        "concentration": {
+            "source": "live" if live else "history",
+            "live_bookings": counts.total,
+            "unplaced_bookings": counts.unplaced,
+            **live_need.concentration(sections, cfg),
+        },
+    }
+
+
+def _utc(moment: datetime) -> datetime:
+    """SQLite returns stored times without a zone; they are UTC."""
+    return moment if moment.tzinfo else moment.replace(tzinfo=UTC)
+
+
+def _ward_groundwater(section_ward: dict[str, str], now: datetime) -> dict[str, float]:
+    """Median of each ward's section anomalies in the latest month at or before `now`."""
+    latest: dict[str, tuple[str, float]] = {}
+    cutoff = now.strftime("%Y-%m")
+    for r in csv_rows(GROUNDWATER):
+        if r["anomaly_m"] and r["month"] <= cutoff and r["section"] in section_ward:
+            if r["section"] not in latest or r["month"] > latest[r["section"]][0]:
+                latest[r["section"]] = (r["month"], float(r["anomaly_m"]))
+    by_ward: dict[str, list[float]] = {}
+    for section, (_, value) in latest.items():
+        by_ward.setdefault(section_ward[section], []).append(value)
+    return {w: statistics.median(v) for w, v in by_ward.items()}
 
 
 @router.get("/atlas/wards/{ward_id:path}", dependencies=[Officer])

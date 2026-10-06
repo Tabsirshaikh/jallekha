@@ -6,6 +6,9 @@ export type FieldReason = { code: string; model?: string; value: number | null; 
 export type Ward = {
   id: string; name: string; censusYear: number | null; reviewRequired: boolean;
   population2011: number | null; households2011: number | null; waterAccessDeficitShare: number | null;
+  constrainedAccessShare?: number | null; hardshipShare?: number | null;
+  /** Field check (E5): bookings seen, and what similar wards and the statistical model expected. */
+  observedBookings?: number | null; peerExpected?: number | null; modelExpected?: number | null;
   /** OSM hospitals, clinics, UPHCs, schools and care homes placed in the ward (D9); null if not served. */
   criticalFacilities: number | null;
   growthRatio: number | null; growthQuality: string | null; bookings: number | null; bookingsPer1000: number | null;
@@ -69,6 +72,11 @@ export function toWard(evidence: Row, equity: Row | undefined, field: Row | unde
     population2011: num(evidence.population),
     households2011: num(evidence.households),
     waterAccessDeficitShare: num(evidence.wad),
+    constrainedAccessShare: num(evidence.cad),
+    hardshipShare: num(evidence.hardship),
+    observedBookings: num(field?.observed_bookings),
+    peerExpected: isRow(field?.model_scores) && isRow(field.model_scores.PEER_MEDIAN) ? num(field.model_scores.PEER_MEDIAN.expected) : null,
+    modelExpected: isRow(field?.model_scores) && isRow(field.model_scores.NB) ? num(field.model_scores.NB.expected) : null,
     criticalFacilities: num(evidence.critical_facilities),
     growthRatio: num(field?.growth_ratio_context_only),
     growthQuality: text(field?.growth_quality),
@@ -134,4 +142,32 @@ export function reasonForError(error: ApiError): FallbackReason {
   if (error.status === 403) return "forbidden";
   if (error.status === 0) return "unreachable";
   return "serverError";
+}
+
+/** U5 live need (GET /atlas/live): five clues per ward and booking concentration. */
+export type Clue = { code: "owed" | "bookings" | "complaints" | "cuts" | "groundwater"; bad: boolean; known: boolean; value: number | null; reference: number };
+export type LiveWard = { id: string; clues: Clue[]; badCount: number; rising: boolean; bookingsWindow: number; usualMonth: number | null };
+export type Concentration = { source: "live" | "history"; liveBookings: number; gini: number | null; topShare: number | null; topSections: number; sections: number; bookings: number; top: { section: string; bookings: number; share: number }[] };
+export type LiveNeed = { windowDays: number; minBad: number; wards: Map<string, LiveWard>; concentration: Concentration };
+
+export function adaptLiveNeed(raw: unknown): LiveNeed | null {
+  if (!isRow(raw) || !Array.isArray(raw.wards) || !isRow(raw.concentration)) return null;
+  const c = raw.concentration;
+  const wards = new Map<string, LiveWard>();
+  for (const w of raw.wards.filter(isRow)) {
+    if (typeof w.ward_id !== "string" || !Array.isArray(w.clues)) return null;
+    wards.set(w.ward_id, {
+      id: w.ward_id,
+      clues: w.clues.filter(isRow).map((k) => ({ code: k.code as Clue["code"], bad: k.bad === true, known: k.known !== false, value: num(k.value), reference: num(k.reference) ?? 0 })),
+      badCount: num(w.bad_count) ?? 0, rising: w.rising === true, bookingsWindow: num(w.bookings_window) ?? 0, usualMonth: num(w.usual_month_bookings),
+    });
+  }
+  return {
+    windowDays: num(raw.window_days) ?? 30, minBad: num(raw.min_bad_clues) ?? 2, wards,
+    concentration: {
+      source: c.source === "live" ? "live" : "history", liveBookings: num(c.live_bookings) ?? 0, gini: num(c.gini), topShare: num(c.top_share),
+      topSections: num(c.top_sections) ?? 0, sections: num(c.sections) ?? 0, bookings: num(c.bookings) ?? 0,
+      top: Array.isArray(c.top) ? c.top.filter(isRow).map((t) => ({ section: String(t.section), bookings: num(t.bookings) ?? 0, share: num(t.share) ?? 0 })) : [],
+    },
+  };
 }
