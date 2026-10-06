@@ -17,6 +17,7 @@ from pathlib import Path
 
 import pytest
 
+from app.config.allocation import ALLOCATION_CONFIG
 from app.config.sandbox import SANDBOX_CONFIG
 from app.services import sandbox
 
@@ -60,6 +61,40 @@ def test_stations_are_reproducible_committed_and_labelled() -> None:
     assert sum(int(s["home_sections"]) for s in stations) >= 170
     checks = json.loads(built[stations_build.CHECKS])["summary"]
     assert checks["booking_share_by_point_basis"]["GEOCODED"] > 0.85
+
+
+def test_road_km_are_osrm_legs_plus_access() -> None:
+    """Item 20: section-station and station-station km are OSRM road km (DERIVED), both
+    directions; only the drive inside the section keeps straight line x road_factor."""
+    built = stations_build.build()
+    legs = {(r["section"], r["station_id"]): r for r in _rows(stations_build.OSRM_SECTION_STATION)}
+    access = 2 * SANDBOX_CONFIG.section_access_km * ALLOCATION_CONFIG.road_factor
+    network = list(csv.DictReader(io.StringIO(built[stations_build.NETWORK].decode())))
+    assert network
+    for row in network:
+        leg = legs[(row["section"], row["station_id"])]
+        road = float(leg["out_km"]) + float(leg["back_km"])
+        assert float(row["round_trip_km"]) == pytest.approx(road + access, abs=0.002)
+        assert row["km_basis"].startswith("DERIVED: OSRM")
+    # each section's candidates are its nearest stations by road, home station first
+    for section in {r["section"] for r in network}:
+        mine = sorted((r for r in network if r["section"] == section), key=lambda r: int(r["rank"]))
+        by_road = sorted(
+            (float(v["out_km"]) + float(v["back_km"]), k[1])
+            for k, v in legs.items()
+            if k[0] == section
+        )
+        assert [r["station_id"] for r in mine] == [sid for _, sid in by_road[: len(mine)]]
+    pair_legs = {
+        (r["station_a"], r["station_b"]): r for r in _rows(stations_build.OSRM_STATION_STATION)
+    }
+    pairs = list(csv.DictReader(io.StringIO(built[stations_build.STATION_PAIRS].decode())))
+    for row in pairs:
+        leg = pair_legs[(row["station_a"], row["station_b"])]
+        assert float(row["round_trip_km"]) == pytest.approx(
+            float(leg["ab_km"]) + float(leg["ba_km"]), abs=0.002
+        )
+        assert row["km_basis"].startswith("DERIVED: OSRM")
 
 
 def test_committed_outputs_match_their_checks() -> None:
