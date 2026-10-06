@@ -114,3 +114,11 @@
 .overview-steps small { display: block; color: var(--muted); }
 .overview-step { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--deep); color: #fff; font-weight: 700; }
 .overview-more { margin: 12px 0 0; }
+
+.atlas-rank { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; }
+.atlas-rank h2 { margin: 0 0 8px; font-size: 1.1rem; }
+.atlas-rank ol { list-style: none; margin: 0 0 8px; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 4px 18px; }
+.atlas-rank li button { width: 100%; display: grid; grid-template-columns: 30px 1fr auto; gap: 8px; align-items: center; padding: 7px 8px; border: 0; border-bottom: 1px dashed var(--line); background: none; font: inherit; color: var(--ink); text-align: start; cursor: pointer; border-radius: 8px; }
+.atlas-rank li button:hover, .atlas-rank li button.active { background: var(--soft-green); }
+.atlas-rank-n { color: var(--muted); font-weight: 700; }
+.atlas-rank-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

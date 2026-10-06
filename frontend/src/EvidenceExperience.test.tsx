@@ -97,4 +97,14 @@ describe("EvidenceExperience", () => {
     fireEvent.click(screen.getByRole("button", { name: "Fit map" }));
     expect(svg.getAttribute("viewBox")).toBe(fitted);
   });
+
+  it("ranks wards under the map and lists building growth A-Z", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    const { container } = renderScreen();
+    expect(container.querySelectorAll(".atlas-rank li")).toHaveLength(15);
+    fireEvent.click(screen.getByRole("button", { name: "Show all wards" }));
+    expect(container.querySelectorAll(".atlas-rank li")).toHaveLength(145);
+    fireEvent.click(screen.getByRole("radio", { name: "Building growth" }));
+    expect(screen.getByText(/^Listed A–Z, not ranked/)).toBeInTheDocument();
+  });
 });
