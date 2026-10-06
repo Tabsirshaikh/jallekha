@@ -22,7 +22,7 @@ class LiveNeedConfig:
     complaints_min: int = 3
     # Supply cuts: officer-entered supply notices (F15) overlapping the last `cut_window_days`.
     cut_window_days: int = 7
-    # Groundwater: median anomaly of the ward's sections (metres deeper than the same month in
+    # Groundwater (shown as background, never counted as a warning sign): median anomaly of the ward's sections (metres deeper than the same month in
     # earlier years, data/derived/groundwater/section_anomaly.csv, latest month).
     groundwater_deeper_m: float = 1.0
     # Water owed: any water debt (F11) counts.

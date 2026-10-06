@@ -38,27 +38,46 @@ class BookingCounts:
     total: int
 
 
-def _clue(code: str, bad: bool, value: float | None, reference: float, known: bool = True):
+def _clue(
+    code: str, bad: bool, value: float | None, reference: float, known: bool = True, counts=True
+):
     return {
         "code": code,
-        "bad": bad and known,
+        "bad": bad and known and counts,
         "known": known,
+        "counts": counts,
         "value": value,
         "reference": reference,
     }
 
 
-def evaluate(s: WardSignals, cfg: LiveNeedConfig = LIVE_NEED_CONFIG) -> dict:
+def evaluate(
+    s: WardSignals,
+    cfg: LiveNeedConfig = LIVE_NEED_CONFIG,
+    *,
+    owed_known: bool = True,
+    bookings_known: bool = True,
+) -> dict:
+    """Four warning signs count (owed, bookings jump, complaints, cuts). `owed_known` is False
+    until an officer has closed a day; `bookings_known` is False until bookings are supplied.
+    Groundwater is background risk (low across most of the city in a dry year): shown, never
+    counted."""
     load = ALLOCATION_CONFIG.tanker_load_litres
     jump_at = None if s.usual_month is None else s.usual_month * cfg.bookings_jump_ratio
     clues = [
-        _clue("owed", s.owed_litres >= cfg.owed_min_litres, round(s.owed_litres / load, 1), 0.0),
+        _clue(
+            "owed",
+            s.owed_litres >= cfg.owed_min_litres,
+            round(s.owed_litres / load, 1),
+            0.0,
+            known=owed_known,
+        ),
         _clue(
             "bookings",
             jump_at is not None and s.bookings_window >= max(jump_at, cfg.bookings_jump_min),
             s.bookings_window,
             round(jump_at, 1) if jump_at is not None else 0.0,
-            known=jump_at is not None,
+            known=bookings_known and jump_at is not None,
         ),
         _clue("complaints", s.complaints >= cfg.complaints_min, s.complaints, cfg.complaints_min),
         _clue("cuts", s.cuts >= 1, s.cuts, 1),
@@ -68,10 +87,17 @@ def evaluate(s: WardSignals, cfg: LiveNeedConfig = LIVE_NEED_CONFIG) -> dict:
             None if s.groundwater_m is None else round(s.groundwater_m, 2),
             cfg.groundwater_deeper_m,
             known=s.groundwater_m is not None,
+            counts=False,
         ),
     ]
     bad = sum(c["bad"] for c in clues)
-    return {"clues": clues, "bad_count": bad, "rising": bad >= cfg.min_bad_clues}
+    known = sum(c["known"] and c["counts"] for c in clues)
+    return {
+        "clues": clues,
+        "bad_count": bad,
+        "known_count": known,
+        "rising": bad >= cfg.min_bad_clues,
+    }
 
 
 def count_bookings(

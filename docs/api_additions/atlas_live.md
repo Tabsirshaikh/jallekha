@@ -9,7 +9,9 @@ records: water still owed (F11 debt accounts), bookings in the last 30 days agai
 usual month (2022-24 history / 25 months), "no water" complaints in the last 7 days (F14,
 `complaint.area_id`), supply notices overlapping the last 7 days (F15), and the median groundwater
 anomaly of the ward's sections (D7, latest month). A clue with no data is `known: false` and never
-bad. A ward is `rising` when at least `min_bad_clues` (2) clues are bad.
+bad (owed is unknown until an officer has closed a day; bookings until bookings are supplied).
+Groundwater has `counts: false`: shown as background, never counted. A ward is `rising` when at
+least `min_bad_clues` (2) counted clues are bad; `known_count` says how many counted clues have data.
 
 Concentration uses the distinct bookings (by id) stored in supplied plans that arrived in the last
 30 days; with none it uses the 2022-24 section totals (`source: "history"`).

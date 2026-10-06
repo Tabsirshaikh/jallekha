@@ -151,6 +151,7 @@ def atlas_live(
             if _utc(end) >= since and _utc(start) <= now:
                 cuts.update(set(json.loads(ward_ids)))
     groundwater = _ward_groundwater(section_ward, now)
+    owed_known = debts.last_closed_day() is not None  # no day closed: owed is unknown
     wards = []
     for r in csv_rows(EVIDENCE):
         wid = r["ward_id"]
@@ -167,7 +168,9 @@ def atlas_live(
                 "need": {k: typed({k: r[k]})[k] for k in ("wad", "cad", "hardship", "households")},
                 "bookings_window": counts.by_ward.get(wid, 0),
                 "usual_month_bookings": None if usual is None else round(usual, 1),
-                **live_need.evaluate(signals, cfg),
+                **live_need.evaluate(
+                    signals, cfg, owed_known=owed_known, bookings_known=counts.total > 0
+                ),
             }
         )
     live = counts.total > 0

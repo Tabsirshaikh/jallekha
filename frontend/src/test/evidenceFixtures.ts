@@ -87,11 +87,11 @@ export const waterAccessLayer = {
   ],
 };
 
-const clue = (code: string, bad: boolean, value: number, reference: number, known = true) => ({ code, bad, known, value, reference });
+const clue = (code: string, bad: boolean, value: number, reference: number, known = true) => ({ code, bad, known, counts: code !== "groundwater", value, reference });
 export const liveNeed = {
   as_of: "2026-10-06T12:00:00+00:00", window_days: 30, min_bad_clues: 2,
   wards: [
-    { ward_id: "relation/901", name: "Ward 901 Testpur", need: {}, bookings_window: 4, usual_month_bookings: 10, bad_count: 2, rising: true,
+    { ward_id: "relation/901", name: "Ward 901 Testpur", need: {}, bookings_window: 4, usual_month_bookings: 10, bad_count: 2, known_count: 4, rising: true,
       clues: [clue("owed", true, 6, 0), clue("bookings", false, 4, 15), clue("complaints", true, 3, 3), clue("cuts", false, 0, 1), clue("groundwater", false, 0, 1, false)] },
   ],
   concentration: { source: "live", live_bookings: 120, unplaced_bookings: 0, gini: 0.71, top_share: 0.68, top_sections: 2, sections: 12, bookings: 120,

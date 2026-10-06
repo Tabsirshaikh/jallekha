@@ -24,12 +24,13 @@ describe("EvidenceExperience", () => {
     setToken("t-officer");
     vi.stubGlobal("fetch", vi.fn().mockImplementation(liveFetch));
     const { container } = renderScreen();
-    expect(await screen.findByText("wards where need may be rising")).toBeInTheDocument();
+    expect(await screen.findByText("wards with 2 or more warning signs")).toBeInTheDocument();
     expect(container.querySelectorAll(".atlas-map path")).toHaveLength(3);
     expect(screen.queryByText(/DERIVED|SIMULATION|GHMC_2016/)).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Ward 901 Testpur" }));
     const sheet = within(screen.getByRole("dialog", { name: "Ward 901 Testpur" }));
-    expect(sheet.getByText("Need may be rising")).toBeInTheDocument();
+    expect(sheet.getByText("2 or more warning signs")).toBeInTheDocument();
+    expect(sheet.getByText("Background")).toBeInTheDocument();
     expect(sheet.getByText("Owed 6 tanker loads")).toBeInTheDocument();
     expect(sheet.getByText('3 "no water" complaints this week')).toBeInTheDocument();
     expect(sheet.getByText("No groundwater wells nearby")).toBeInTheDocument();
@@ -41,7 +42,7 @@ describe("EvidenceExperience", () => {
     setToken("t-officer");
     vi.stubGlobal("fetch", vi.fn().mockImplementation(liveFetch));
     renderScreen();
-    await screen.findByText("wards where need may be rising");
+    await screen.findByText("wards with 2 or more warning signs");
     fireEvent.click(screen.getByRole("tab", { name: "Bookings" }));
     expect(screen.getByText("Top 2 areas take 68% of all tankers")).toBeInTheDocument();
     expect(screen.getByText("Last 30 days, 120 live bookings")).toBeInTheDocument();
@@ -52,7 +53,7 @@ describe("EvidenceExperience", () => {
     setToken("t-bad");
     vi.stubGlobal("fetch", vi.fn().mockImplementation(errorFetch(401)));
     const { container } = renderScreen();
-    expect(await screen.findByRole("note")).toHaveTextContent("Sign in as an officer");
+    expect(await screen.findByText(/^Sign in as an officer/)).toBeInTheDocument();
     expect(container.querySelectorAll(".atlas-map path").length).toBeGreaterThan(100);
   });
 
@@ -61,7 +62,7 @@ describe("EvidenceExperience", () => {
     vi.stubGlobal("fetch", fetch);
     renderScreen();
     expect(fetch).not.toHaveBeenCalled();
-    expect(screen.getByRole("note")).toHaveTextContent("Sign in as an officer");
+    expect(screen.getByText(/^Sign in as an officer/)).toBeInTheDocument();
   });
 
   it("explains low-booking wards as booked vs expected", () => {
@@ -71,9 +72,9 @@ describe("EvidenceExperience", () => {
     const cards = container.querySelectorAll(".atlas-check-card");
     expect(cards.length).toBe(6);
     const first = within(cards[0] as HTMLElement);
-    expect(first.getByText(/^Booked .* tankers \(2022–24\)$/)).toBeInTheDocument();
-    expect(first.getByText(/^Similar wards booked about/)).toBeInTheDocument();
-    expect(first.getByText(/^Our model expected about/)).toBeInTheDocument();
+    expect(first.getByText(/^Booked .* tankers in 2025$/)).toBeInTheDocument();
+    expect(first.getByText(/^5 similar wards booked about/)).toBeInTheDocument();
+    expect(first.getByText(/^Statistical model .* expected about/)).toBeInTheDocument();
   });
 
   it("searches wards and opens the chosen one", () => {
