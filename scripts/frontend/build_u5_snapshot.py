@@ -74,6 +74,7 @@ def main() -> None:
                 "nonTapShare": optional_float(row["non_tap_share"]),
                 "waterAccessDeficitShare": optional_float(row["wad"]),
                 "hardshipShare": optional_float(row["hardship"]),
+                "constrainedAccessShare": optional_float(row["cad"]),
                 "criticalFacilities": optional_int(row["critical_facilities"]),
                 "growthRatio": optional_float(growth["building_growth_ratio"]),
                 "annualGrowth": optional_float(growth["adjusted_annual_growth"]),
@@ -85,6 +86,9 @@ def main() -> None:
                 "fieldStatus": field["status"],
                 "fieldCandidate": field["field_check_candidate"],
                 "fieldReasons": field["reasons"],
+                "observedBookings": field.get("observed_bookings"),
+                "peerExpected": (field.get("model_scores") or {}).get("PEER_MEDIAN", {}).get("expected"),
+                "modelExpected": (field.get("model_scores") or {}).get("NB", {}).get("expected"),
                 "fieldNotes": field["input_notes"],
                 "fieldAction": field["action"],
             }

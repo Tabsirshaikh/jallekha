@@ -84,7 +84,8 @@ clinics, UPHCs, schools, care homes; counts per ward in `data/derived/evidence/w
 ## Rules
 
 - **TDD**: write the test, watch it fail, implement, watch it pass.
-- **Basis labels everywhere**: every number shown or stored says REAL / DERIVED / SIMULATION /
+- **Basis labels everywhere** (stored data, API and docs; the officer need map and overview hide them on
+  screen, owner decision 2026-10-06): every number shown or stored says REAL / DERIVED / SIMULATION /
   SYNTHETIC / ASSUMED / UNAVAILABLE (with a reason). Never show a made-up number as real.
 - **Honest results**: if a model does not beat the baseline or a figure does not reproduce, say so
   in `LIMITATIONS.md`; never tune tests or rules to match a target.

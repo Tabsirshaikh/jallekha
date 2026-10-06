@@ -289,6 +289,10 @@ only partly met.
 
 ---
 
+## UI revamp (2026-10-06)
+
+**Done in this round** (`feat/u5-live-atlas`): officer overview and the U5 need map rebuilt, with live need clues and live booking concentration (`GET /atlas/live`). **Next rounds:** forecast, plan, explain and impact screens; the resident "did tap water come today?" SMS question (supply hours, the strongest missing need clue); an RTI to HMWSSB for supply hours per section.
+
 ## Research follow-ups (2026-10-05)
 
 Research only: nothing below is built yet. Each part says what was found, what we recommend and

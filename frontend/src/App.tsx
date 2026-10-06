@@ -4,6 +4,7 @@ import DriverExperience from "./DriverExperience";
 import ResidentExperience from "./ResidentExperience";
 import FieldWorkerExperience from "./FieldWorkerExperience";
 import SignIn from "./SignIn";
+import OfficerOverview from "./OfficerOverview";
 const EvidenceExperience = lazy(() => import("./EvidenceExperience"));
 const ForecastExperience = lazy(() => import("./ForecastExperience"));
 const PlanExperience = lazy(() => import("./PlanExperience"));
@@ -122,31 +123,6 @@ function PlaceholderPage({ workspace, pageKey }: { workspace: Workspace; pageKey
   return <section className="placeholder-page"><span className="placeholder-icon"><Icon name={navByWorkspace[workspace].find((item) => item.key === pageKey)?.icon ?? "overview"} size={25} /></span><p className="eyebrow">{t("workspaceSection")}</p><h1>{t(pageKey)}</h1><p>{t("sectionPlaceholder")}</p><span className="prototype-note">{t("shellPreview")}</span></section>;
 }
 
-function SourceTag({ kind }: { kind: "REAL" | "DERIVED" | "SIMULATION" }) {
-  return <span className={`source-tag ${kind.toLowerCase()}`}>{kind}</span>;
-}
-
-function OfficerHome({ onNavigate }: { onNavigate: (key: MessageKey) => void }) {
-  const { t } = useLocale();
-  return (
-    <>
-      <div className="welcome-row"><div><p className="eyebrow">{t("planningWorkspace")}</p><h1>{t("goodMorning")}</h1><p className="muted">{t("officerIntro")}</p></div><button className="button button-secondary"><Icon name="location" size={18} /> {t("hyderabad")} <span className="chevron">⌄</span></button></div>
-      <section className="notice-bar"><span className="notice-icon"><Icon name="check" size={18} /></span><p><strong>{t("evidenceBeforeAllocation")}</strong><span>{t("reviewDataBasis")}</span></p><span className="notice-link">{t("readGuide")} <Icon name="arrow" size={16} /></span></section>
-      <div className="section-heading"><div><h2>{t("atAGlance")}</h2><p className="muted">{t("currentEvidence")}</p></div><span className="updated-label"><span className="status-dot" /> {t("readyToReview")}</span></div>
-      <div className="metric-grid">
-        <article className="metric-card"><div className="metric-top"><span className="metric-icon teal"><Icon name="atlas" /></span><SourceTag kind="REAL" /></div><p className="metric-label">{t("waterAccessEvidence")}</p><strong className="metric-value">{t("wardLevel")}</strong><p className="metric-note">{t("censusBaseline")}</p></article>
-        <article className="metric-card"><div className="metric-top"><span className="metric-icon blue"><Icon name="water" /></span><SourceTag kind="DERIVED" /></div><p className="metric-label">{t("serviceCoverage")}</p><strong className="metric-value">{t("readyToReview")}</strong><p className="metric-note">{t("exploreNeed")}</p></article>
-        <article className="metric-card"><div className="metric-top"><span className="metric-icon amber"><Icon name="plan" /></span><SourceTag kind="SIMULATION" /></div><p className="metric-label">{t("allocationWorkspace")}</p><strong className="metric-value">{t("noPlanPending")}</strong><p className="metric-note">{t("officerReviewPlan")}</p></article>
-      </div>
-      <div className="content-grid">
-        <section className="panel focus-panel"><div className="panel-heading"><div><p className="eyebrow">{t("startHere")}</p><h2>{t("buildFairPicture")}</h2></div><span className="panel-mark"><Icon name="atlas" size={21} /></span></div><p className="panel-copy">{t("fairPictureCopy")}</p><button className="text-button" onClick={() => onNavigate("officerWaterAccess")}>{t("openWaterAccess")} <Icon name="arrow" size={17} /></button><div className="mini-legend"><span><i className="legend-dot teal-dot" />{t("accessNeed")}</span><span><i className="legend-dot blue-dot" />{t("serviceHistory")}</span><span><i className="legend-dot amber-dot" />{t("needsReview")}</span></div></section>
-        <section className="panel checklist-panel"><div className="panel-heading"><div><p className="eyebrow">{t("yourWorkflow")}</p><h2>{t("planningChecklist")}</h2></div><span className="quiet-count">{t("checklistCount")}</span></div><ol className="checklist"><li className="complete"><span className="step-check"><Icon name="check" size={14} /></span><span><strong>{t("reviewEvidence")}</strong><small>{t("understandData")}</small></span></li><li><span className="step-number">2</span><span><strong>{t("comparePatterns")}</strong><small>{t("fieldCheckPrompt")}</small></span></li><li><span className="step-number">3</span><span><strong>{t("reviewProposedPlan")}</strong><small>{t("approvalReason")}</small></span></li></ol></section>
-      </div>
-      <p className="honesty-note"><span className="honesty-mark">i</span>{t("historicalApproximate")} {t("flagNotProof")}</p>
-    </>
-  );
-}
-
 export default function App() {
   const [workspace, setWorkspace] = useState<Workspace>("officer");
   const [activeItem, setActiveItem] = useState<MessageKey>("officerOverview");
@@ -167,7 +143,7 @@ export default function App() {
         {translationStatus[locale] === "draft" && <p className="translation-draft-note" role="note" aria-label={t("translationStatusLabel")}>{t("translationDraft")}</p>}
         <main className={`page-content ${workspace}-content ${workspace === "officer" && activeItem === "officerWaterAccess" ? "officer-evidence-content" : workspace === "officer" && activeItem === "officerForecast" ? "officer-forecast-content" : workspace === "officer" && activeItem === "officerAllocationPlan" ? "officer-plan-content" : ""}`}>
           <div className="page-title-mobile"><p className="eyebrow">{t(meta.eyebrow)}</p><h1>{t(meta.title)}</h1><p className="muted">{t(meta.description)}</p></div>
-          {workspace === "driver" ? <DriverExperience page={activeItem === "driverProof" ? "proof" : activeItem === "help" ? "help" : "route"} onNavigate={setActiveItem} /> : workspace === "resident" ? <ResidentExperience page={activeItem === "residentReport" ? "report" : activeItem === "residentRequests" ? "requests" : activeItem === "residentUpdates" ? "ward" : "home"} onNavigate={setActiveItem} /> : workspace === "fieldWorker" ? <FieldWorkerExperience page={activeItem === "fieldWorkerQueue" ? "queue" : "report"} onNavigate={setActiveItem} /> : activeItem === "officerWaterAccess" ? <Suspense fallback={<p className="muted" role="status">{t("loadingEvidence")}</p>}><EvidenceExperience /></Suspense> : activeItem === "officerForecast" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><ForecastExperience /></Suspense> : activeItem === "officerAllocationPlan" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><PlanExperience /></Suspense> : activeItem === "officerExplain" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><ExplainExperience /></Suspense> : activeItem === "officerImpact" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><ImpactExperience /></Suspense> : activeItem !== navByWorkspace[workspace][0].key ? <PlaceholderPage workspace={workspace} pageKey={activeItem} /> : <OfficerHome onNavigate={setActiveItem} />}
+          {workspace === "driver" ? <DriverExperience page={activeItem === "driverProof" ? "proof" : activeItem === "help" ? "help" : "route"} onNavigate={setActiveItem} /> : workspace === "resident" ? <ResidentExperience page={activeItem === "residentReport" ? "report" : activeItem === "residentRequests" ? "requests" : activeItem === "residentUpdates" ? "ward" : "home"} onNavigate={setActiveItem} /> : workspace === "fieldWorker" ? <FieldWorkerExperience page={activeItem === "fieldWorkerQueue" ? "queue" : "report"} onNavigate={setActiveItem} /> : activeItem === "officerWaterAccess" ? <Suspense fallback={<p className="muted" role="status">{t("loadingEvidence")}</p>}><EvidenceExperience /></Suspense> : activeItem === "officerForecast" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><ForecastExperience /></Suspense> : activeItem === "officerAllocationPlan" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><PlanExperience /></Suspense> : activeItem === "officerExplain" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><ExplainExperience /></Suspense> : activeItem === "officerImpact" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><ImpactExperience /></Suspense> : activeItem !== navByWorkspace[workspace][0].key ? <PlaceholderPage workspace={workspace} pageKey={activeItem} /> : <OfficerOverview onNavigate={setActiveItem} />}
         </main>
         <footer className="app-footer"><span>JalLekha <span className="footer-separator">·</span> {t("footerTagline")}</span><span>{t("footerPromise")}</span></footer>
       </div>

@@ -1155,3 +1155,16 @@ The pull-request description must summarize the same information and link to thi
 - **Results:** 1,123 tankers x 9 trips covers every forecast month (May 2026 peak: 73% of capacity); a peak-season rate, and the forecast under-forecast the real 2026 surge.
 - **Validation:** test written first and seen failing (config value, basis, same as sandbox, capacity basis), then passing; the script test checks the capacity file.
 - **Pull request:** see the PR for `feat/item19-trips-protocol`.
+
+## `feat/u5-live-atlas` — live need map and officer overview
+
+- **Owner / date:** repo owner, 2026-10-06.
+- **Why:** the owner found the atlas too complex (basis labels, geography jargon, small map) and not live: booking equity came from fixed 2022-24 files and need never changed.
+- **What we changed:**
+  - `GET /atlas/live` (`services/live_need.py`, `config/live_need.py`): Census need plus five live clues per ward (water owed, bookings jump, "no water" complaints, supply cuts, groundwater), flagged at 2 bad clues; booking concentration from bookings supplied in the last 30 days (history if none). `PlanStore.supplied_bookings()` reads stored bookings without rebuilding plans.
+  - U5 rebuilt (`EvidenceExperience.tsx` + `.css`): near full-page map with a latitude-corrected projection, layers (need rising now, no water at home, limited access, building growth), bookings tab with concentration and busiest areas on the map, low-bookings tab explained as booked vs similar wards vs model, ward sheet at the bottom with all ward facts and the live signs in plain words, ward search. No basis labels or geography jargon on screen.
+  - Officer overview (`OfficerOverview.tsx`): live cards (need rising, low bookings, concentration, latest plan) that open their screen, and a three-step "what to do today" list; the non-working buttons are gone.
+  - Snapshot (`build_u5_snapshot.py`) carries CAD and the field-check observed / expected bookings.
+- **Validation:** service and API tests written first and seen failing, then passing; screen tests rewritten for the new layout; headless screenshot checked.
+- **Known limitations:** `docs/LIMITATIONS.md` "Live need on the U5 map".
+- **Pull request:** see the PR for `feat/u5-live-atlas`.
