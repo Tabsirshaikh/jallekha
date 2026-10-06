@@ -14,7 +14,7 @@ to-do list.
 | 14 | Reproduce the duplicate calibration (71% / 88%) | F13 | **done** (`feat/f13-dedup-calibration`); text-similarity test skipped by owner decision | — |
 | 15 | Hospital and school data (D9) in the ward table | F1, F8, F10 | **done** (`feat/d9-facilities`) | — |
 | 16 | Weather data (D8) | F5 | **done** (with item 12) | — |
-| 17 | Groundwater data (D7) | F5, F6 | us, after registering | NWDP account |
+| 17 | Groundwater data (D7) | F5, F6 | **done** (`feat/d7-groundwater`, Open Data Telangana, no NWDP account needed) | — |
 | 18 | Degraded-signal replay for the T9 threshold | F17 | **done** (`feat/t9-degraded-replay`); the 90% rule is the owner's | — |
 | 19 | Seven owner decisions | several | owner | owner |
 | 20 | Decide the stack (or edit the doc) | all | owner, then us | decision |
@@ -188,6 +188,8 @@ temperature, total rainfall, hot days over 40 C) for the forecast features.
 that checks coverage. Unblocks item 12.
 
 ### 17. Groundwater data (D7) (F5, F6)
+
+**Status: done** on `feat/d7-groundwater`. The Telangana Ground Water Department's monthly well levels are on Open Data Telangana (67 files, Jan 2021 - Jul 2026), so no NWDP account was needed (the old plan is in `data/raw/d7_groundwater/NWDP_NOTE.md`). Each section gets a groundwater anomaly (median of wells within 5 km against the same month in earlier years); F6's reasons give it with basis DERIVED from REAL readings (389 of 551 rows), and a F5 candidate with the anomaly as a feature is better on both measures but not significantly (p = 0.074), so the forecast is unchanged. See `docs/LIMITATIONS.md` F5 and F6. The text below is the original plan.
 
 **What it is.** Groundwater levels for Hyderabad and Ranga Reddy wells, from CGWB / Telangana
 Groundwater Department through the National Water Data Portal (NWDP).

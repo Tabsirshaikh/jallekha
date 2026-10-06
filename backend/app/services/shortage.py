@@ -1,8 +1,10 @@
 """T8 shortage early warning (F6): per section and month, 1-3 months ahead, T2's forecast
 against capacity, with a risk level from config rules and a reason built from the numbers.
 
-Pure apart from `load_capacity`, which reads A8's committed files. No LLM. Groundwater (D7) is
-not in the repo, so every reason says "groundwater data unavailable" and no value is invented.
+Pure apart from `load_capacity` and `load_groundwater`, which read committed files. No LLM.
+Groundwater (D7, item 17): the reason gives the section's groundwater anomaly at the forecast
+origin (median of nearby wells; scripts/forecast/build_groundwater.py) or why there is none; it
+does not change the risk level. Without groundwater data the reason says it is unavailable.
 Reservoir levels are behind a flag that is off (Q2 not approved) and have no data.
 """
 
@@ -44,6 +46,38 @@ class ShortageRow:
     reason: str
     groundwater_status: str
     reservoir_status: str
+    groundwater_m: float | None = None  # positive = water deeper than usual
+
+
+@dataclass(frozen=True)
+class GroundwaterSignal:
+    value: float | None  # metres; positive = water deeper than usual for the month
+    wells: int
+    month: str  # the groundwater month used (YYYY-MM)
+    reason: str  # why there is no value
+
+
+def load_groundwater(path: Path, origin: str) -> dict[str, GroundwaterSignal]:
+    """Each section's groundwater anomaly in the latest month at or before `origin` (the
+    forecast is made then, so later readings are not used). Empty if the file is absent."""
+    if not path.exists():
+        return {}
+    latest: dict[str, dict[str, str]] = {}
+    with path.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            if row["month"] <= origin and row["month"] > latest.get(row["section"], {}).get(
+                "month", ""
+            ):
+                latest[row["section"]] = row
+    return {
+        section: GroundwaterSignal(
+            float(r["anomaly_m"]) if r["anomaly_m"] else None,
+            int(r["wells"] or 0),
+            r["month"],
+            "" if r["anomaly_m"] else r["basis"].removeprefix("UNAVAILABLE: "),
+        )
+        for section, r in latest.items()
+    }
 
 
 def load_capacity(
@@ -108,7 +142,30 @@ def _num(value: str | None) -> float | None:
     return float(value) if value not in (None, "") else None
 
 
-def _reason(row: ShortageRow, config: ShortageConfig) -> str:
+def _groundwater_text(signal: GroundwaterSignal | None, known: bool, config: ShortageConfig) -> str:
+    if not known:
+        return config.groundwater_note
+    if signal is None:
+        return "groundwater: no value for this section"
+    if signal.value is None:
+        return f"groundwater: {signal.reason} ({signal.month})"
+    size = abs(signal.value)
+    if round(size, 1) == 0:
+        level = "at its usual level"
+    else:
+        level = f"{size:.1f} m {'deeper' if signal.value > 0 else 'shallower'} than usual"
+    return (
+        f"groundwater {level} near this section (median of {signal.wells} wells within "
+        f"{config.groundwater_radius_km:g} km, {signal.month})"
+    )
+
+
+def _reason(
+    row: ShortageRow,
+    config: ShortageConfig,
+    signal: GroundwaterSignal | None = None,
+    known: bool = False,
+) -> str:
     upper = f" (80% bound up to {row.upper_80:,.0f})" if row.upper_80 is not None else ""
     if row.capacity_ratio is None:
         if row.capacity_trips is not None and row.capacity_trips == 0:
@@ -131,7 +188,7 @@ def _reason(row: ShortageRow, config: ShortageConfig) -> str:
             f" {row.capacity_trips:,.0f} trips (A8 fleet split, ASSUMED):"
             f" {row.capacity_ratio:.0%} of capacity, risk {row.risk}"
         )
-    return f"{core}; {config.groundwater_note}."
+    return f"{core}; {_groundwater_text(signal, known, config)}."
 
 
 def risk_list(
@@ -140,6 +197,7 @@ def risk_list(
     origin: str,
     config: ShortageConfig = SHORTAGE_CONFIG,
     reservoirs_enabled: bool | None = None,
+    groundwater: Mapping[str, GroundwaterSignal] | None = None,
 ) -> list[ShortageRow]:
     """Risk per section for each month `months_ahead` after `origin` (YYYY-MM)."""
     use_reservoirs = (
@@ -174,6 +232,13 @@ def risk_list(
             groundwater_status="UNAVAILABLE",
             reservoir_status="NOT_USED",
         )
+        signal = (groundwater or {}).get(f["section"])
+        if signal is not None and signal.value is not None:
+            row = replace(row, groundwater_status="DERIVED", groundwater_m=signal.value)
         rows.append(row)
     rows.sort(key=lambda r: (r.section, r.month))
-    return [replace(r, reason=_reason(r, config)) for r in rows]
+    known = groundwater is not None
+    return [
+        replace(r, reason=_reason(r, config, (groundwater or {}).get(r.section), known))
+        for r in rows
+    ]

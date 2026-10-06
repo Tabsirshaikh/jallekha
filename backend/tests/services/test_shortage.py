@@ -91,6 +91,45 @@ def test_reason_is_built_from_the_numbers_and_says_groundwater_unavailable() -> 
     assert r.groundwater_status == "UNAVAILABLE"
 
 
+def test_reason_gives_the_groundwater_anomaly_near_the_section() -> None:
+    cap = {"S1": sh.SectionCapacity("S1", 10.0, "ASSUMED: test"),
+           "S2": sh.SectionCapacity("S2", 10.0, "ASSUMED: test")}  # fmt: skip
+    signals = {
+        "S1": sh.GroundwaterSignal(1.234, 4, "2026-01", ""),
+        "S2": sh.GroundwaterSignal(None, 1, "2026-01", "1 well with 2+ earlier years within 5 km"),
+    }
+    rows = sh.risk_list(
+        [_row("S1", "2026-02", 290.0, 330.0), _row("S2", "2026-02", 100.0, 120.0)],
+        cap,
+        origin="2026-01",
+        groundwater=signals,
+    )
+    s1, s2 = rows
+    assert "groundwater 1.2 m deeper than usual" in s1.reason and "4 wells" in s1.reason
+    assert "2026-01" in s1.reason
+    assert (s1.groundwater_status, s1.groundwater_m) == ("DERIVED", 1.234)
+    assert s1.risk == "high"  # the anomaly is a reason only: the risk rule is unchanged
+    assert "groundwater: 1 well with 2+ earlier years within 5 km" in s2.reason
+    assert (s2.groundwater_status, s2.groundwater_m) == ("UNAVAILABLE", None)
+
+
+def test_groundwater_signal_is_the_latest_value_at_or_before_the_origin(tmp_path: Path) -> None:
+    csv_path = tmp_path / "section_anomaly.csv"
+    lines = [
+        "section,month,anomaly_m,wells,basis",
+        "S1,2025-12,0.5,3,DERIVED",
+        "S1,2026-01,-0.4,3,DERIVED",
+        "S1,2026-02,9.9,3,DERIVED",
+        "S2,2025-12,0.7,2,DERIVED",
+        "S2,2026-01,,1,UNAVAILABLE: 1 well",
+    ]
+    csv_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    signals = sh.load_groundwater(csv_path, origin="2026-01")
+    assert signals["S1"] == sh.GroundwaterSignal(-0.4, 3, "2026-01", "")
+    # The latest month at or before the origin decides, even when it has no value.
+    assert signals["S2"].value is None and "1 well" in signals["S2"].reason
+
+
 def test_reservoir_flag_off_and_on_without_data() -> None:
     cap = {"S1": sh.SectionCapacity("S1", 10.0, "ASSUMED: test")}
     (r,) = sh.risk_list([_row("S1", "2026-02", 10.0, 20.0)], cap, origin="2026-01")
@@ -161,7 +200,7 @@ def test_risk_list_one_to_three_months_ahead_with_reasons(tmp_path: Path) -> Non
     assert len(rows) == len(expected)
     for r in rows:
         assert r["risk"] in ("low", "medium", "high", "unknown")
-        assert r["reason"] and "groundwater data unavailable" in r["reason"]
+        assert r["reason"] and "groundwater" in r["reason"]
         if r["risk"] != "unknown":
             formatted = f"{float(r['forecast_bookings']):,.0f}"
             assert r["forecast_bookings"] in r["reason"] or formatted in r["reason"]

@@ -4,8 +4,9 @@ Usage:
     python scripts/forecast/run_shortage.py [--out PATH]
 
 Reads data/derived/forecast_table.csv (T2) and A8's committed capacity files; writes
-data/derived/shortage_risk.csv. Every derived column has a _basis column. Groundwater (D7) is
-not in the repo, so every reason says "groundwater data unavailable". Reservoirs are off.
+data/derived/shortage_risk.csv. Every derived column has a _basis column. Groundwater (D7):
+each section's anomaly at the forecast origin (data/derived/groundwater/section_anomaly.csv) is
+in the reason and its own column; it does not change the risk. Reservoirs are off.
 """
 
 from __future__ import annotations
@@ -36,7 +37,10 @@ def build() -> bytes:
     first = min(r["month"] for r in forecast)
     y, m = (int(x) for x in first.split("-"))
     origin = f"{y - (m == 1):04d}-{(m - 2) % 12 + 1:02d}"
-    rows = shortage.risk_list(forecast, shortage.load_capacity(ROOT), origin)
+    groundwater = shortage.load_groundwater(ROOT / cfg.groundwater_path, origin)
+    rows = shortage.risk_list(
+        forecast, shortage.load_capacity(ROOT), origin, groundwater=groundwater or None
+    )
     section_basis = (
         f"REAL HMWSSB section; {cfg.section_label}: {FORECAST_CONFIG.forecast_table_note}"
     )
@@ -68,7 +72,19 @@ def build() -> bytes:
                 "reason": r.reason,
                 "reason_basis": "DERIVED: built from the numbers in this row",
                 "groundwater_status": r.groundwater_status,
-                "groundwater_status_basis": "UNAVAILABLE: D7 groundwater data not in the repo",
+                "groundwater_status_basis": (
+                    "DERIVED: median anomaly of TGGWD wells near the section (REAL levels), "
+                    "latest month at or before the forecast origin"
+                    if r.groundwater_status == "DERIVED"
+                    else "UNAVAILABLE: see the reason"
+                ),
+                "groundwater_m": _fmt(r.groundwater_m, 2),
+                "groundwater_m_basis": (
+                    "DERIVED: metres deeper (+) or shallower (-) than the same month in earlier "
+                    "years, median of nearby wells"
+                    if r.groundwater_m is not None
+                    else "UNAVAILABLE"
+                ),
                 "reservoir_status": r.reservoir_status,
                 "reservoir_status_basis": "flag off: reservoirs only if Q2 is approved",
                 "label": LABEL,
