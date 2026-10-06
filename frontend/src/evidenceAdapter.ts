@@ -179,6 +179,7 @@ export type SectionCheck = {
   section_id: string; section: string; division: string; period_year: number;
   bookings: number; rate: number | null; reference_rate: number | null;
   field_check_candidate: boolean; ward_id: string | null; lat: number | null; lng: number | null;
+  latest_outcome?: { could_not_book: string; checked_on: string } | null;
 };
 
 export function adaptSectionChecks(raw: unknown): SectionCheck[] | null {
@@ -189,5 +190,6 @@ export function adaptSectionChecks(raw: unknown): SectionCheck[] | null {
   return items.map((r) => ({ section_id: String(r.section_id), section: String(r.section),
     division: String(r.division), period_year: Number(r.period_year), bookings: Number(r.bookings),
     rate: num(r.rate), reference_rate: num(r.reference_rate), field_check_candidate: r.field_check_candidate === true,
-    ward_id: text(r.ward_id), lat: num(r.lat), lng: num(r.lng) }));
+    ward_id: text(r.ward_id), lat: num(r.lat), lng: num(r.lng),
+    latest_outcome: isRow(r.latest_outcome) ? { could_not_book: String(r.latest_outcome.could_not_book), checked_on: String(r.latest_outcome.checked_on) } : null }));
 }

@@ -79,6 +79,18 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - The map screens (U5) follow the same live-or-snapshot rule.
 
 ### F4 Under-served Field-Check Screen (E5)
+- **Ground-truth loop (`feat/e5-ground-truth`):** U3 field workers and U5 officers can now
+  record yes/no/unclear booking-access observations, date and note against flagged sections.
+  Notes remain in SQLAlchemy; SHA-256 of note and screening snapshot goes on the ledger under
+  `section_check_recorded`. Idempotent UUID replay, conflict rejection and pending-ledger retry
+  are tested. Pending rows do not count. All API tests use temporary databases.
+  Latest ledger-linked visit per section/year counts; repeats cannot inflate sample size.
+  Precision is withheld until 30 distinct decisive outcomes [ASSUMED]; unclear does not count.
+  There are only 12 current flags, so more independent flag cohorts will be needed to reach 30.
+  The sample is selectively visited flags, not representative of the city; recall is unknown.
+  **Actual ground outcomes remain zero**; browser verification uses a separate temporary database.
+- The officer overview and U5 now count sections, not the old six ward flags. Ward need scores
+  remain Census-based. Archived ward booking/model comparisons are no longer operational.
 - **Under-reporting experiment rejected (`feat/e5-underreporting`, 2026-10-06):** new seeded,
   non-spatial PyMC NB/Binomial thinning model, marginalized to NB(mu*p, alpha). True demand
   exposure uses Census-2011 households apportioned by 2023 building-count mass, WAD/non-tap;

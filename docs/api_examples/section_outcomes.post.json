@@ -1,0 +1,28 @@
+{
+  "_example": {
+    "endpoint": "POST /field-checks/outcomes",
+    "status": "PROPOSED (implemented locally, approval pending)",
+    "basis": "REAL officer/field-worker observation; example is SYNTHETIC",
+    "built_from": "SectionOutcomeStore record response and docs/api_additions/section_outcomes.md"
+  },
+  "request": {
+    "id": "00000000-0000-4000-8000-000000000001",
+    "section_id": "11:B.N.REDDY NAGAR",
+    "could_not_book": "unclear",
+    "checked_on": "2026-10-06",
+    "note": "Example only, not a ground observation"
+  },
+  "response": {
+    "id": "00000000-0000-4000-8000-000000000001",
+    "section_id": "11:B.N.REDDY NAGAR",
+    "period_year": 2025,
+    "checked_on": "2026-10-06",
+    "could_not_book": "unclear",
+    "note": "Example only, not a ground observation",
+    "note_sha256": "<SHA-256 of note>",
+    "screening_sha256": "<SHA-256 of server flag>",
+    "recorded_by": "worker-example",
+    "ledger_missing": false,
+    "basis": "REAL"
+  }
+}

@@ -17,6 +17,7 @@ from app.config.api import ApiConfig
 from app.db import create_all, make_engine
 from app.main import app
 from app.routers import contests, deliveries, evidence, intake, ledger, notices, plans
+from app.routers.section_outcomes import candidates, get_section_outcome_store
 from app.routers.stores import (
     DeliveryStore,
     PlanRecord,
@@ -33,6 +34,7 @@ from app.services import notices as nt
 from app.services.contest import ContestService
 from app.services.debt_store import DebtStore
 from app.services.ledger_store import StoredLedger
+from app.services.section_outcomes import SectionOutcomeStore
 from app.services.sms import FakeSmsSender
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -137,6 +139,9 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClie
         get_plan_store: lambda: plan_store,
         get_delivery_store: lambda: delivery_store,
         get_debt_store: lambda: debt_store,  # never the default database
+        get_section_outcome_store: lambda: SectionOutcomeStore(
+            engine, chain, candidates, clock=lambda: NOW
+        ),
     }
     app.dependency_overrides.update(overrides)
     try:

@@ -392,7 +392,8 @@ Peer validation improves over the connection baseline but still misses by a medi
 are absent. Magnitude errors improve but rankings worsen in the 107-ward diagnostic, so accuracy
 is unproven. Ward per-population rates remain null. Step 2 is evaluated and rejected: all
 three prior-sensitive MAP fits lose to the baseline; section persistence is much stronger.
-Latent reporting/demand remain unavailable; no operational model replacement. Pending:
-3 persisted field outcomes and precision after 30 outcomes; F5/F6 refresh, recut crosswalk,
+Latent reporting/demand remain unavailable; no operational model replacement. Step 3 is built:
+persisted section visits, digest-only ledger, U3/U5 forms and precision after 30 distinct decisive
+outcomes; actual outcomes zero. Pending: F5/F6 refresh, recut crosswalk,
 city ranges, reservoir context and forecast screen. Owner RTI for GIS section boundaries
 is an external action; Codex will not send it. No push, PR or merge before owner approval.

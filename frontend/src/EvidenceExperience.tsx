@@ -6,9 +6,16 @@ import { adaptLiveEvidence, adaptLiveNeed, adaptSectionChecks, type SectionCheck
 import evidence from "./data/u5Evidence.json";
 import geometry from "./data/u5Geometry.json";
 import savedSections from "./data/u5SectionChecks.json";
+import SectionOutcomeForm from "./SectionOutcomeForm";
 import "./EvidenceExperience.css";
 
 type Tab = "need" | "bookings" | "checks";
+const outcomeCopy = {
+  en: { checkedYes: "Visited: people could not book", checkedNo: "Visited: people could book", checkedUnclear: "Visited: booking access unclear" },
+  te: { checkedYes: "సందర్శించారు: ప్రజలు బుక్ చేయలేకపోయారు", checkedNo: "సందర్శించారు: ప్రజలు బుక్ చేయగలిగారు", checkedUnclear: "సందర్శించారు: బుకింగ్ అవకాశం స్పష్టంగా లేదు" },
+  ur: { checkedYes: "دورہ ہوا: لوگ بک نہیں کر سکے", checkedNo: "دورہ ہوا: لوگ بک کر سکے", checkedUnclear: "دورہ ہوا: بکنگ کی رسائی واضح نہیں" },
+  hi: { checkedYes: "दौरा हुआ: लोग बुक नहीं कर पाए", checkedNo: "दौरा हुआ: लोग बुक कर पाए", checkedUnclear: "दौरा हुआ: बुकिंग की पहुँच स्पष्ट नहीं" },
+};
 type Layer = "rising" | "need" | "wad" | "cad" | "growth";
 const sectionCopy = {
   en: { tabChecks: "3. Low bookings", stepChecks: "Sections with unusually few bookings per domestic connection: visit to check whether people can book.", wardsChecked: "sections to visit", checksIntro: "These sections booked far fewer tankers per connection than comparable sections in their division. The point locates the section; ward need is background only. Check on the ground before changing anything.", sectionRate: "Bookings per 1,000 domestic connections: {v}", sectionPeer: "Similar sections' rate: {v}", unchecked: "Not yet checked on the ground", emptyChecks: "No sections flagged for a visit", sectionSnapshot: "Saved section checks", sectionLive: "Section checks from the service", checkNone: "Ward booking estimates are unavailable. Section checks are shown separately." },
@@ -62,7 +69,7 @@ function clueText(c: Clue, w: Words, days: number, fmt: (n: number) => string) {
 
 export default function EvidenceExperience() {
   const { locale } = useLocale();
-  const w = { ...copy[locale], ...sectionCopy[locale] };
+  const w = { ...copy[locale], ...sectionCopy[locale], ...outcomeCopy[locale] };
   const nf = useMemo(() => new Intl.NumberFormat(locale === "ur" ? "ur-PK" : locale, { maximumFractionDigits: 1 }), [locale]);
   const pf = useMemo(() => new Intl.NumberFormat(locale === "ur" ? "ur-PK" : locale, { style: "percent", maximumFractionDigits: 0 }), [locale]);
   const fmt = (n: number) => nf.format(n);
@@ -71,6 +78,7 @@ export default function EvidenceExperience() {
   const [layer, setLayer] = useState<Layer>("rising");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
   const [hover, setHover] = useState<string | null>(null);
   const [showAll, setShowAll] = useState(false);
 
@@ -82,7 +90,8 @@ export default function EvidenceExperience() {
   const equitySummary = useApi<unknown>(enabled ? "/equity/summary" : null);
   const fieldChecks = useApi<unknown>(enabled ? "/underserved/field-checks" + PAGE : null);
   const sectionApi = useApi<unknown>(enabled ? "/underserved/section-checks" + PAGE : null);
-  const sectionRows = (sectionApi.live ? adaptSectionChecks(sectionApi.data) : null) ?? adaptSectionChecks(savedSections) ?? [];
+  const checkedSectionsApi = useApi<unknown>(enabled ? "/field-checks/sections" + PAGE : null);
+  const sectionRows = (checkedSectionsApi.live ? adaptSectionChecks(checkedSectionsApi.data) : null) ?? (sectionApi.live ? adaptSectionChecks(sectionApi.data) : null) ?? adaptSectionChecks(savedSections) ?? [];
   const layerGeo = useApi<unknown>(enabled ? "/coverage/layers/water_access_evidence" : null);
   const liveNeedApi = useApi<unknown>(enabled ? "/atlas/live" : null);
   const sources = [atlas, equityWards, equitySummary, fieldChecks, layerGeo];
@@ -152,6 +161,7 @@ export default function EvidenceExperience() {
 
   const rising = rows.filter((r) => liveOf(r.id)?.rising).length;
   const checks = sectionRows.filter((r) => r.field_check_candidate).sort((a, b) => (a.rate ?? 0) / (a.reference_rate || 1) - (b.rate ?? 0) / (b.reference_rate || 1));
+  const selectedSection = checks.find((r) => r.section_id === selectedSectionId);
   const found = query.trim() ? rows.filter((r) => r.name.toLowerCase().includes(query.trim().toLowerCase())).slice(0, 6) : [];
   const legendScale = tab !== "checks" && (tab === "bookings" || shown !== "rising");
 
@@ -206,8 +216,8 @@ export default function EvidenceExperience() {
           })}
           {tab === "checks" && checks.filter((r) => r.lat !== null && r.lng !== null).map((r) => {
             const [cx, cy] = view.project([r.lng!, r.lat!]).split(",");
-            return <circle key={r.section_id} cx={cx} cy={cy} r={5} fill="#c9783f" stroke="#fff" tabIndex={0} role="button" aria-label={r.section}
-              onClick={() => setSelectedId(r.ward_id)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedId(r.ward_id); } }}><title>{r.section}</title></circle>;
+            return <g key={r.section_id}><circle cx={cx} cy={cy} r={selectedSectionId === r.section_id ? 8 : 5} fill={selectedSectionId === r.section_id ? "#76390e" : "#c9783f"} stroke="#fff" tabIndex={0} role="button" aria-label={r.section} aria-pressed={selectedSectionId === r.section_id}
+              onClick={() => { setSelectedSectionId(r.section_id); setSelectedId(null); }} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedSectionId(r.section_id); setSelectedId(null); } }}><title>{r.section}</title></circle>{selectedSectionId === r.section_id && <text className="atlas-section-label" x={Number(cx) + 12} y={Number(cy) - 10}>{r.section}</text>}</g>;
           })}
         </svg>
         <div className="atlas-overlay atlas-zoom"><button aria-label={w.zoomIn} title={w.zoomIn} onClick={() => zoomBy(0.7)}>+</button><button aria-label={w.zoomOut} title={w.zoomOut} onClick={() => zoomBy(1.4)}>−</button><button aria-label={w.zoomReset} title={w.zoomReset} onClick={() => setZoom(null)}>⤢</button></div>
@@ -218,6 +228,11 @@ export default function EvidenceExperience() {
             : <><i style={{ background: "#c4473a" }} /><span>{w.rising}</span><i style={{ background: "#e3a64a" }} /><span>{w.oneSign}</span><i style={{ background: "#9fd0b8" }} /><span>{w.calm}</span><i style={{ background: NO_DATA }} /><span>{w.noLive}</span></>}
         </div>
         {tab === "bookings" && conc && conc.top.length > 0 && <aside className="atlas-overlay atlas-top-list"><h3>{w.topList}</h3><ol>{conc.top.map((t) => <li key={t.section}><span>{t.section}</span><strong>{pct(t.share)}</strong></li>)}</ol></aside>}
+        {tab === "checks" && selectedSection && <aside className="atlas-overlay atlas-section-detail" role="region" aria-label={selectedSection.section}>
+          <header><h3>{selectedSection.section}</h3><button className="atlas-close" aria-label={w.close} onClick={() => setSelectedSectionId(null)}>×</button></header>
+          <SectionRates section={selectedSection} w={w} fmt={fmt} />
+          <p className="atlas-verdict flag">{w.stepChecks}</p>
+        </aside>}
       </section>
 
       {tab !== "checks" && <section className="atlas-rank">
@@ -236,6 +251,7 @@ export default function EvidenceExperience() {
           <SectionRates section={r} w={w} fmt={fmt} />
           {r.ward_id && <button className="text-button" onClick={() => setSelectedId(r.ward_id)}>{w.openWard}</button>}
         </article>)}</div>
+        <SectionOutcomeForm onSaved={checkedSectionsApi.reload} />
       </section>}
 
       {selected && <WardSheet ward={selected} sections={checks.filter((r) => r.ward_id === selected.id)} live={liveOf(selected.id)} days={need?.windowDays ?? 30} minBad={need?.minBad ?? 2} w={w} fmt={fmt} pct={pct} onClose={() => setSelectedId(null)} />}
@@ -248,11 +264,11 @@ function SectionRates({ section, w, fmt }: { section: SectionCheck; w: SectionWo
     <p>{fill(w.checkBooked, { v: fmt(section.bookings) })}</p>
     <p>{fill(w.sectionRate, { v: section.rate === null ? "—" : fmt(section.rate) })}</p>
     <p>{fill(w.sectionPeer, { v: section.reference_rate === null ? "—" : fmt(section.reference_rate) })}</p>
-    <p className="muted">{w.unchecked}</p>
+    <p className="muted">{section.latest_outcome ? `${section.latest_outcome.checked_on} · ${section.latest_outcome.could_not_book === "yes" ? w.checkedYes : section.latest_outcome.could_not_book === "no" ? w.checkedNo : w.checkedUnclear}` : w.unchecked}</p>
   </div>;
 }
 
-type SectionWords = Words & Record<keyof typeof sectionCopy.en, string>;
+type SectionWords = Words & Record<keyof typeof sectionCopy.en | keyof typeof outcomeCopy.en, string>;
 function WardSheet({ ward, sections, live, days, minBad, w, fmt, pct, onClose }: { ward: Ward; sections: SectionCheck[]; live: LiveWard | undefined; days: number; minBad: number; w: SectionWords; fmt: (n: number) => string; pct: (n: number | null | undefined) => string; onClose: () => void }) {
   const status = !live || live.knownCount === 0 ? w.noLive : live.rising ? w.rising : live.badCount === 1 ? w.oneSign : w.calm;
   return (

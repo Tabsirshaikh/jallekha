@@ -23,6 +23,13 @@
 .atlas-map path { stroke: #fff; stroke-width: 1.2; cursor: pointer; transition: opacity .15s, stroke-width .15s; vector-effect: non-scaling-stroke; }
 .atlas-map path.hover { stroke: var(--deep); stroke-width: 2; }
 .atlas-map path.selected { stroke: var(--ink); stroke-width: 3; }
+.atlas-map circle { cursor: pointer; }
+.atlas-map circle:focus-visible { stroke: var(--deep); stroke-width: 3; outline: none; }
+.atlas-section-label { font-size: 13px; font-weight: 700; fill: #76390e; paint-order: stroke; stroke: white; stroke-width: 4px; pointer-events: none; }
+.atlas-section-detail { top: 14px; inset-inline-start: 14px; width: min(360px, calc(100% - 28px)); max-height: calc(100% - 80px); overflow: auto; padding: 16px; background: rgb(255 255 255 / 97%); border: 2px solid #c9783f; border-radius: 14px; box-shadow: 0 8px 24px rgb(13 76 67 / 16%); }
+.atlas-section-detail header { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
+.atlas-section-detail h3 { margin: 0 0 12px; }
+.atlas-section-detail p { margin: 3px 0; }
 .atlas-map path:focus { outline: none; }
 .atlas-map path:focus-visible { outline: none; stroke: var(--green); stroke-width: 3; }
 .atlas-overlay { position: absolute; z-index: 5; }
@@ -126,3 +133,9 @@
 .atlas-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
 .atlas-toolbar .atlas-help, .atlas-toolbar .atlas-stat { background: none; padding: 0; }
 .atlas-toolbar .atlas-stat-card { box-shadow: none; }
+.section-outcome-form form { display: grid; gap: 1rem; max-width: 38rem; }
+.section-outcome-form label { display: grid; gap: .35rem; }
+.section-outcome-form fieldset { display: flex; gap: 1rem; flex-wrap: wrap; }
+.section-outcome-form fieldset label { display: flex; align-items: center; gap: .5rem; }
+.section-outcome-form input, .section-outcome-form textarea, .section-outcome-form select { min-height: 48px; font: inherit; }
+.section-outcome-form input[type=radio] { width: 24px; }

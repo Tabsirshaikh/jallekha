@@ -1230,3 +1230,22 @@ The pull-request description must summarize the same information and link to thi
   Saved-result verifier checks inputs, predictions, metrics and rejection without fitting.
 - No operational scoring/allocation change, no Windows spatial sampling, no external publication.
   Work isolated after another session stashed this code and switched the shared checkout.
+## `feat/e5-ground-truth` — F4 observation loop, 2026-10-06
+
+- TDD: missing store/API/form tests failed first, then pass for persistence, replay/conflicts,
+  actor authorization, note digests, pending-ledger retry and a 30-distinct-decisive sample gate.
+- Append-only SQLAlchemy observations, new ledger event, digest-only notes, current flag digest,
+  officer/field-worker API and shared U3/U5 form with four languages. Actual outcomes remain zero.
+- Latest linked visit per section/year counts; repeated and unclear visits do not inflate precision.
+  12 current flags cannot reach 30 distinct decisive outcomes; future independent cohorts needed.
+- Live U5 cards reflect recorded outcomes; overview reports 12 section flags instead of six wards.
+  Ward need scores unchanged. Browser preview uses an isolated temporary database, never main DB.
+- Worktree `.claude/worktrees/e5-repairs`; original checkout restored to the other session's
+  supply-timings work after preserving these files. No push, PR, merge or external messages.
+- Selected section dots now show the section name, exact bookings, connection rate, peer rate
+  and visit status beside the map. Browser verified using a temporary database; its synthetic
+  unclear visit is not a ground observation and is not included in committed artifacts.
+- Final validation: full lint, 1,001 backend tests, 196 frontend tests, translation checks,
+  all data verifiers and production build pass. The first full run exposed stale sandbox
+  provenance after the E4 rebuild; refreshed only the E4 summary checksum because its consumed
+  Gini values are unchanged, then reran the full suite successfully.

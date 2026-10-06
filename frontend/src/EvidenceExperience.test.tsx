@@ -91,6 +91,20 @@ describe("EvidenceExperience", () => {
     expect(screen.getByRole("dialog", { name: "Ward 105 Gachibowli" })).toBeInTheDocument();
   });
 
+  it("opens section details immediately when a map dot is selected", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    const { container } = renderScreen();
+    fireEvent.click(screen.getByRole("tab", { name: "3. Low bookings" }));
+    const dot = container.querySelector(".atlas-map circle") as SVGElement;
+    fireEvent.click(dot);
+    const detail = within(screen.getByRole("region", { name: dot.getAttribute("aria-label")! }));
+    expect(detail.getByText(/^Booked .* tankers in 2025$/)).toBeInTheDocument();
+    expect(detail.getByText(/^Bookings per 1,000 domestic connections:/)).toBeInTheDocument();
+    expect(detail.getByText(/^Similar sections' rate:/)).toBeInTheDocument();
+    expect(detail.getByText("Not yet checked on the ground")).toBeInTheDocument();
+    expect(dot).toHaveAttribute("aria-pressed", "true");
+  });
+
   it("uses the live section list, including an empty list, instead of saved flags", async () => {
     setToken("t-officer");
     vi.stubGlobal("fetch", vi.fn().mockImplementation(liveFetch));
@@ -101,7 +115,7 @@ describe("EvidenceExperience", () => {
     expect(container.querySelectorAll(".atlas-check-card")).toHaveLength(1);
     expect(container.querySelectorAll(".atlas-map circle")).toHaveLength(1);
     fireEvent.click(screen.getByRole("button", { name: "TEST SECTION" }));
-    expect(screen.getByRole("dialog", { name: "Ward 901 Testpur" })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "TEST SECTION" })).toBeInTheDocument();
     expect(screen.queryByText(/^Statistical model/)).not.toBeInTheDocument();
   });
 

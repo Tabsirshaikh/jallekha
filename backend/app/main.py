@@ -15,6 +15,7 @@ from app.routers import (
     ledger,
     notices,
     plans,
+    section_outcomes,
     stops,
     system,
 )
@@ -40,3 +41,4 @@ app.include_router(contests.router)
 app.include_router(deliveries.router)
 app.include_router(stops.router)
 app.include_router(debt.router)
+app.include_router(section_outcomes.router)

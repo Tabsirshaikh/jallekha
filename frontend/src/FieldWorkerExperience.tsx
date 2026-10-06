@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState, type FormEvent } from "react"
 import { useAuth } from "./auth";
 import { useLocale, type Locale, type MessageKey } from "./i18n";
 import { sendIntakeBatch } from "./intakeSync";
+import SectionOutcomeForm from "./SectionOutcomeForm";
 
 type Page = "report" | "queue";
 type Category = "no_water" | "tanker_missed" | "dirty_water" | "leak" | "other";
@@ -242,6 +243,7 @@ export default function FieldWorkerExperience({ page, onNavigate }: { page: Page
           {report.error && <small>{report.error}</small>}
         </article>)}</div>}
       </section>}
+      {page === "report" && <SectionOutcomeForm />}
       <p className="resident-honesty-note">{privacyNote}</p>
     </div>
   );

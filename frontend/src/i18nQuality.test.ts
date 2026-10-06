@@ -23,6 +23,7 @@ describe("translations", () => {
       "src/OfficerOverview.tsx",
       "src/PlanExperience.tsx",
       "src/ResidentExperience.tsx",
+      "src/SectionOutcomeForm.tsx",
       "src/i18n.tsx",
     ]);
     expect(entries.length).toBeGreaterThan(400);

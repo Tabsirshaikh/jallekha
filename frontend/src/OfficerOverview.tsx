@@ -4,9 +4,16 @@ import { useAuth } from "./auth";
 import { useApi } from "./useApi";
 import { adaptLiveNeed, type EvidenceDataset } from "./evidenceAdapter";
 import evidence from "./data/u5Evidence.json";
+import sectionChecks from "./data/u5SectionChecks.json";
 import "./EvidenceExperience.css";
 
 const snapshot = evidence as EvidenceDataset;
+const checkCopy = {
+  en: { checks: "Sections with low bookings to check", checksNote: "Few bookings per connection compared with similar sections" },
+  te: { checks: "తక్కువ బుకింగ్‌లు ఉన్న, పరిశీలించాల్సిన విభాగాలు", checksNote: "ఇలాంటి విభాగాలతో పోలిస్తే కనెక్షన్‌కు తక్కువ బుకింగ్‌లు" },
+  ur: { checks: "کم بکنگ والے سیکشن جن کی جانچ کرنی ہے", checksNote: "ملتے جلتے سیکشنوں سے فی کنکشن کم بکنگ" },
+  hi: { checks: "कम बुकिंग वाले सेक्शन जिनकी जाँच करनी है", checksNote: "मिलते-जुलते सेक्शन की तुलना में प्रति कनेक्शन कम बुकिंग" },
+};
 type Plan = { plan_id: string; day: string; status: string; flags_total: number; checked_total: number };
 
 const copy = {
@@ -20,13 +27,15 @@ const fill = (s: string, v: Record<string, string | number>) => s.replace(/\{(\w
 
 export default function OfficerOverview({ onNavigate }: { onNavigate: (key: MessageKey) => void }) {
   const { locale } = useLocale();
-  const w = copy[locale];
+  const w = { ...copy[locale], ...checkCopy[locale] };
   const nf = new Intl.NumberFormat(locale === "ur" ? "ur-PK" : locale);
   const pf = new Intl.NumberFormat(locale === "ur" ? "ur-PK" : locale, { style: "percent", maximumFractionDigits: 0 });
   const { status } = useAuth();
   const enabled = status !== "anonymous" && status !== "rejected";
   const liveApi = useApi<unknown>(enabled ? "/atlas/live" : null);
   const plansApi = useApi<{ items?: Plan[] }>(enabled ? "/plans?limit=200" : null);
+  const checksApi = useApi<{ flagged_count: number }>(enabled ? "/underserved/section-checks?limit=1" : null);
+  const checkCount = checksApi.live && Number.isFinite(checksApi.data?.flagged_count) ? checksApi.data!.flagged_count : sectionChecks.items.filter((row) => row.field_check_candidate).length;
   const need = useMemo(() => (liveApi.live ? adaptLiveNeed(liveApi.data) : null), [liveApi.live, liveApi.data]);
   const rising = need ? [...need.wards.values()].filter((x) => x.rising).length : null;
   const conc = need?.concentration;
@@ -52,7 +61,7 @@ export default function OfficerOverview({ onNavigate }: { onNavigate: (key: Mess
       {!enabled && <p className="atlas-hint" role="note">{w.signIn}</p>}
       <div className="overview-cards">
         {card("officerWaterAccess", w.rising, rising === null ? w.liveDash : nf.format(rising), rising === 0 ? w.risingNone : "", rising ? "alert" : "")}
-        {card("officerWaterAccess", w.checks, nf.format(snapshot.summary.fieldCheckCount ?? 0), w.checksNote, "warn")}
+        {card("officerWaterAccess", w.checks, nf.format(checkCount), w.checksNote, "warn")}
         {card("officerWaterAccess", w.topNote, topP === null ? w.liveDash : pf.format(topP), fill(w.top, { n: nf.format(topN), p: topP === null ? "—" : pf.format(topP) }))}
         {card("officerAllocationPlan", w.plan, latest ? (latest.status === "APPROVED" ? fill(w.planApproved, { day: latest.day }) : fill(w.planDraft, { day: latest.day })) : plans ? w.planNone : w.liveDash,
           latest && latest.status !== "APPROVED" ? fill(w.planFlags, { n: nf.format(Math.max(0, latest.flags_total - latest.checked_total)) }) : "")}
