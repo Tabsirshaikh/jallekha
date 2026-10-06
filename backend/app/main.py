@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -19,6 +20,8 @@ from app.routers import (
     stops,
     system,
 )
+
+load_dotenv()
 
 app = FastAPI(title=APP_CONFIG.name, version=APP_CONFIG.version)
 install_error_handlers(app)
