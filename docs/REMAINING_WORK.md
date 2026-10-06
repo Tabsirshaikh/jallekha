@@ -394,3 +394,21 @@ is unproven. Ward per-population rates remain null. Pending: 2 under-reporting e
 3 persisted field outcomes and precision after 30 outcomes; F5/F6 refresh, recut crosswalk,
 city ranges, reservoir context and forecast screen. Owner RTI for GIS section boundaries
 is an external action; Codex will not send it. No push, PR or merge before owner approval.
+
+# Prompt A: Supply-timings data fetch and coverage (D16, 2026-10-06)
+
+**Status: done locally on `feat/d16-supply-timings` (commit local; pending owner approval).**
+
+- **Live portal audited:** `https://bms.hyderabadwater.gov.in/wstl/managerupload/DivisionMap.aspx` links 11 division pages covering 89 sections. Every section returns `alert('No Data Found')`: live database is empty.
+- **Wayback Machine audited:** Queried Wayback CDX API for `bms.hyderabadwater.gov.in/wstl/WaterSupplyView/ViewTimings.aspx*` and historical `hyderabadwater.gov.in` variants. Exactly one capture with data exists: S.R. NAGAR (Division 6, Section 0624) from 2024-05-14 21:57:12 UTC (21 localities, daily 1.0–2.0 hr supply, Singoor / Lingampally source). Archive.today has 0 captures.
+- **Dataset generated:** `data/raw/d16_supply_timings/supply_timings.csv` with full schema (`division_code,section,section_code,locality_code,locality,slum_status,from_time,to_time,hours,pattern,water_source,captured_at,capture_source,source_url`), `RETRIEVAL_LOG.md` (all SHA-256 digests and byte counts logged), and `raw_pages/` gzipped HTML files.
+- **Coverage report:**
+  - Sections with data: 1 / 89 (1.12%).
+  - Localities: 21.
+  - 2025 Tanker bookings share: 40,862 / 1,436,768 (2.84%).
+  - Ward mapping: Ward 98 Ameerpet (`relation/7857794`).
+  - Remaining 88 sections (98.88%) have no public supply hours available.
+- **Outage & Pressure Dashboards:** Outage Dashboard is behind internal ERP login (no public data); Water Pressure Dashboard server (`65.2.47.226`) is unreachable/timed out.
+- **RTI application drafted:** `docs/handoff/RTI_SUPPLY_HOURS.md` requests scheduled supply timings, SCADA daily supply hours/flow (2024–2026), and GIS boundary shapefiles.
+- **Tests & Verifier:** `backend/tests/test_d16_supply_timings.py` (7 tests pass) and `scripts/data/verify_supply_timings.py` (`data/verification/supply_timings_checks.json`).
+

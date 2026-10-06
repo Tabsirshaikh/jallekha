@@ -175,7 +175,9 @@ def main():
             "endpoint": "GET /underserved/section-checks",
             "status": "PROPOSED (implemented locally, owner approval pending)",
             "basis": "REAL bookings; DERIVED rates; DERIVED_APPROXIMATE need; ASSUMED policy",
-            "built_from": "data/derived/underserved/section_checks.csv and section_checks_summary.json",
+            "built_from": (
+                "data/derived/underserved/section_checks.csv and section_checks_summary.json"
+            ),
         },
         "request": {"offset": 0, "limit": 2},
         "response": {
