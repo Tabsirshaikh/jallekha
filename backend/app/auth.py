@@ -2,6 +2,10 @@
 
 Errors use the shared error shape: 401 `unauthorized` without a valid credential, 403 `forbidden`
 for a valid token with the wrong role.
+
+Sign-in is off by default (`AUTH_REQUIRED` unset): every caller is the `dev` principal, which may
+call every user-role endpoint, so nobody has to sign in. With `AUTH_REQUIRED=true` the token
+checks below apply again. The SMS / telephony gateway credential is always required.
 """
 
 from __future__ import annotations
@@ -53,6 +57,8 @@ def require_roles(*roles: str) -> Callable[..., Principal]:
     def dependency(
         config: Config, authorization: Annotated[str | None, Header()] = None
     ) -> Principal:
+        if not config.auth_required:
+            return Principal("dev")
         token = _bearer(authorization)
         if token is None:
             raise HTTPException(401, "A bearer token is required")

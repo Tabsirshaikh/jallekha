@@ -7,6 +7,7 @@ import ResidentExperience from "./ResidentExperience";
 import { apiError, callsTo, json, routedFetch } from "./test/apiMock";
 import { fakeIndexedDb } from "./test/fakeIndexedDb";
 import { noValue, smsSummary, wardCard } from "./test/wardCardFixtures";
+import { expectNoDataRequests } from "./test/noDataRequests";
 
 function renderWard(locale: Locale = "en") {
   return render(
@@ -147,7 +148,7 @@ describe("ResidentExperience ward report card", () => {
     expect(screen.getByText(/SYNTHETIC demonstration only/)).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Sample Ward 12" })).toBeInTheDocument();
     expect(screen.queryByRole("region", { name: "Water debt" })).not.toBeInTheDocument();
-    expect(fetchMock).not.toHaveBeenCalled();
+    expectNoDataRequests(fetchMock);
   });
 
   it("does not ask the ward routes for a driver, and says live cards are not for that role", async () => {

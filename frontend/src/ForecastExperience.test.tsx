@@ -5,6 +5,7 @@ import { AuthProvider } from "./auth";
 import ForecastExperience from "./ForecastExperience";
 import { LocaleProvider } from "./i18n";
 import { cityRow, jsonResponse, sectionRow, shortageRow } from "./test/apiFixtures";
+import { expectNoDataRequests } from "./test/noDataRequests";
 
 
 function renderScreen() {
@@ -148,7 +149,7 @@ describe("ForecastExperience", () => {
     renderScreen();
     expect(screen.getByText("Saved snapshot")).toBeInTheDocument();
     expect(screen.getByText(/Sign in as an officer to see live data/)).toBeInTheDocument();
-    expect(fetchMock).not.toHaveBeenCalled();
+    expectNoDataRequests(fetchMock);
   });
 
   it("falls back and says the sign-in was not accepted when the API answers 401", async () => {

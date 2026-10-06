@@ -12,7 +12,7 @@ const roleLabel: Record<string, MessageKey> = {
 
 export default function SignIn() {
   const { t } = useLocale();
-  const { status, role, userId, signIn, signOut } = useAuth();
+  const { status, role, userId, open: openServer, signIn, signOut } = useAuth();
   const [open, setOpen] = useState(false);
   const [token, setTokenText] = useState("");
   const fieldId = useId();
@@ -22,6 +22,8 @@ export default function SignIn() {
     await signIn(token);
     setTokenText("");
   }
+
+  if (openServer) return null; // the server asks nobody to sign in
 
   if (status === "signed-in" && role) {
     return (
