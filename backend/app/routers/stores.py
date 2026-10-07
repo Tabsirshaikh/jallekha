@@ -219,7 +219,7 @@ class PlanStore:
         return [
             b
             for recipe in recipes
-            if recipe.get("source") == plan_builder.SUPPLIED
+            if recipe.get("source") in (plan_builder.SUPPLIED, plan_builder.SECTION)
             for b in recipe.get("bookings", [])
         ]
 

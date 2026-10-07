@@ -31,6 +31,7 @@ from app.models import SupplyNotice
 from app.routers import evidence
 from app.routers.common import csv_rows, invalid, not_found, page, typed
 from app.routers.notices import get_notice_service
+from app.routers.section_outcomes import Reviews
 from app.routers.stores import (
     DebtStore,
     DeliveryStore,
@@ -60,6 +61,7 @@ from app.services.keyed_lock import KeyedLocks
 from app.services.ledger_store import StoredLedger
 from app.services.notices import NoticeService
 from app.services.service_models import NeedWeights
+from app.services.supply_reviews import current_sections
 
 router = APIRouter(tags=["plans"])
 
@@ -256,6 +258,7 @@ def create_plan(
     debts: Debts,
     notices: Annotated[NoticeService, Depends(get_notice_service)],
     bookings_: Annotated[bk.BookingStore, Depends(get_booking_store)],
+    reviews: Reviews,
 ) -> dict[str, Any]:
     """Build and store a plan (T9 gate): from the bookings supplied in the request, or, without
     them, for a day of the committed replay. A supplied plan also uses the registered delivery
@@ -267,8 +270,6 @@ def create_plan(
     except ValueError as exc:
         return invalid(str(exc))
     by_section = body.unit == "section"
-    if by_section and body.bookings is not None:
-        return invalid("A plan by section is made from the month's totals: do not supply bookings")
     supplied = body.bookings is not None
     stops: list[dict[str, Any]] = []
     owed: list[Any] = []
@@ -283,12 +284,26 @@ def create_plan(
         owed = list(debts.accounts().values())
     recipe: dict[str, Any] = {}
     if by_section:
+        # bookings made through JalLekha, unless an officer supplies the day's bookings
+        live = (
+            []
+            if body.bookings is not None
+            else [bk.as_plan_booking(r, body.priority) for r in bookings_.waiting_for(body.day)]
+        )
         try:
             recipe = plan_builder.section_recipe(
                 body.day, body.capacity, weights, owed, body.priority, body.scheduled,
-                body.carry_over, _notice_outages(notices, body.day),
-                [bk.as_plan_booking(r, body.priority) for r in bookings_.waiting_for(body.day)],
+                body.carry_over, _notice_outages(notices, body.day), live,
             )  # fmt: skip
+            if body.bookings is not None:
+                recipe["bookings"] = plan_builder.normalise_bookings(
+                    body.day, body.bookings, by_section=True
+                )
+                recipe["carry_over"] = False
+            values = current_sections(body.day, reviews, deliveries)
+            known = {g: v for g, v in values.items() if v["status"] != "UNKNOWN"}
+            if known:
+                recipe["weekly_priority"] = known
         except plan_builder.InvalidBookings as exc:
             return invalid(str(exc))
         except plan_builder.ReplayDayUnavailable as exc:

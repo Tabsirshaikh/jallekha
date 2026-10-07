@@ -1,5 +1,29 @@
 # Branch worklog
 
+## `feat/weekly-water-priority` - 2026-10-07
+
+- Owner approved research-based weekly service feedback after reviewing the implementation plan.
+  Read project guide, F1/F4/F7/F11 limits and research; isolated worktree, no other checkout edits.
+- TDD: missing calculation/UI modules failed first; current supplied section plan initially
+  rejected; day closure failed looking for unavailable 2026-10 portal totals. All fixed.
+- Added append-only supply reviews, ledger digests, officer/field-worker form in four languages,
+  population-based emergency requirement and complete-record/confirmed-delivery gates.
+- Current priority map/selected-section panel keeps Census baseline separate. Section debt takes
+  precedence over ward proxy, including a true zero. Historical recipes remain unchanged.
+- Current supplied section plans freeze weekly evidence in their identity/recipe, adjust turns
+  without double-counting debt, and reserve supply for verified shortages without bookings.
+  Supplied records also feed live booking signs and close-day accounting.
+- Simulation counterfactual: neglected area 7 -> 19 of 20 trips; covered area 13 -> 1; unknown
+  records keep baseline. No real field validation and no globally optimal-policy claim.
+- Validation: 81 affected backend tests pass; final weekly/reserve guard rerun 12 pass;
+  all 205 frontend tests, full lint/type checks, translation check (934 strings) and production
+  build pass. Browser verified live isolated API/UI, English and Hindi, unknown records and
+  the new priority layer. No unrelated PyMC/model-training suite rerun.
+- Translation export now includes shared .ts dictionaries (including five previously omitted
+  live-reason strings). Fixed one inherited Ruff style violation in section-map serialization;
+  no algorithm/output changes there. No push or merge authorized for this branch.
+
+
 ## `fix/forecast-capacity-sync` — warning quality follow-up, 2026-10-07
 
 - Owner asked to address the remaining F5/F6 bugs and explain groundwater/reservoir use.
@@ -1424,3 +1448,10 @@ No push, PR or merge. Evidence and reproducible commands in LIMITATIONS F5/F6 an
 - **Known limitations:** see F12 in `LIMITATIONS.md` (no real SMS provider, booker answers their own check, test-mode location switch, approximate section areas, no cancel/change, English only on the new screens).
 - **Validation:** backend `tests/api` pass (6 new tests in `test_bookings.py`); frontend lint, type check and all tests pass (3 new); browser run of the whole chain.
 
+
+## `fix/weekly-priority-review` — review of `feat/weekly-water-priority`
+
+- **Owner / date:** repo owner, 2026-10-07 (asked to verify the branch and bring back the section booking check).
+- **Findings:** (1) the section sheet's "Booking check" said "unavailable" for every section that is not flagged: the screen took its section list from `/field-checks/sections`, which holds only the 12 flagged sections, whenever that call answered (it does since sign-in was removed), instead of adding their visit outcomes to the full section list; present on main too. (2) A section whose verified need was covered got 0.25 x its Census weight, against the approved plan ("their Census baseline remains unchanged"). (3) Everything shows "—" until an officer records a supply check dated yesterday with complete delivery records: by design, not a bug.
+- **What we changed:** `EvidenceExperience.tsx` (full section list, visit outcomes merged in); `config/weekly_priority.py` covered factor 1.0 (multiplier 1 to 6), tests, `LIMITATIONS.md`, `api_additions/weekly_priority.md`, basis text, `data/verification/weekly_priority_examples.json` rebuilt (neglected area still overtakes: 16 of 20 trips instead of 19).
+- **Validation:** weekly-priority backend tests (12) and Evidence/WeeklyPriority frontend tests pass.

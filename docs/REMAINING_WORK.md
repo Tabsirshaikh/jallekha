@@ -1,5 +1,13 @@
 # JalLekha 2.0: remaining work (items 11 to 22)
 
+**Weekly water priority (2026-10-07, local):** built separate dynamic service shortfall and
+an officer supply/record verification form; new supplied section plans use it, including
+scheduled reserve for verified unbooked shortages. Section debt now reaches the need panel.
+Census baseline remains visible. Still required: real reviewed seven-day service cohorts,
+measured litres/population, authoritative section identities, verified capacities and policy
+comparison on actual outcomes. Missing records stay unknown; no field improvement claimed.
+
+
 **F5/F6 warning follow-up, 2026-10-07 (`fix/forecast-capacity-sync`):** fixed current-date
 warning windows, misleading unmatched-history reasons, hidden known capacity/context,
 empty-cohort GBM crash and missing-observation-as-zero GBM training. Conservative name

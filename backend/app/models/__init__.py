@@ -20,6 +20,7 @@ from app.models.representative import Representative
 from app.models.resident import Resident
 from app.models.resident_response import ResidentResponse
 from app.models.section_check_outcome import SectionCheckOutcome
+from app.models.section_supply_review import SectionSupplyReview
 from app.models.supply_notice import SupplyNotice
 from app.models.voice_note import VoiceNote
 from app.models.water_debt_account import WaterDebtAccount
@@ -47,6 +48,7 @@ __all__ = [
     "StoredPlan",
     "SupplyNotice",
     "SectionCheckOutcome",
+    "SectionSupplyReview",
     "VoiceNote",
     "WaterDebtAccount",
     "new_id",

@@ -21,6 +21,14 @@ import "./PlanVisuals.css";
 const FALLBACK_WEIGHTS: Weights = { wad: 2, cad: 1, hardship: 1 };
 const FALLBACK_MAX_WEIGHT = 5;
 
+const weeklyPlanCopy = {
+  en: { label: "Plan supplied bookings by section using verified weekly priority", bySection: "By section · draft allocation", preview: "Draft from supplied bookings. Capacity and destinations are estimates. Approval does not dispatch tankers." },
+  te: { label: "నిర్ధారిత వారపు ప్రాధాన్యతతో అందించిన బుకింగ్‌లను విభాగం వారీగా ప్రణాళిక చేయండి", bySection: "విభాగం వారీగా · పంపిణీ ముసాయిదా", preview: "అందించిన బుకింగ్‌ల ముసాయిదా. సామర్థ్యం, గమ్యస్థానాలు అంచనాలు. ఆమోదం ట్యాంకర్లను పంపదు." },
+  ur: { label: "تصدیق شدہ ہفتہ وار ترجیح سے فراہم کردہ بکنگ کا سیکشن وار منصوبہ", bySection: "سیکشن وار · تقسیم کا مسودہ", preview: "فراہم کردہ بکنگ کا مسودہ۔ گنجائش اور منزلیں تخمینی ہیں۔ منظوری ٹینکر روانہ نہیں کرتی۔" },
+  hi: { label: "पुष्ट साप्ताहिक प्राथमिकता से दी गई बुकिंग का सेक्शन अनुसार प्लान", bySection: "सेक्शन अनुसार · वितरण मसौदा", preview: "दी गई बुकिंग से मसौदा। क्षमता और गंतव्य अनुमान हैं। मंजूरी से टैंकर रवाना नहीं होते।" },
+};
+
+
 type Group = { id: string; name: string; need: number; gap: number; debt: number; confidence: "good" | "review" };
 const groups: Group[] = [
   { id: "a", name: "Sample Ward A", need: 86, gap: 72, debt: 35, confidence: "good" },
@@ -132,6 +140,7 @@ function LivePlans({ t, locale, notice, plans, reloadList, userId }: { t: Copy; 
   const defaults = plans.defaultWeights ?? FALLBACK_WEIGHTS;
   const maxWeight = plans.maxWeight ?? FALLBACK_MAX_WEIGHT;
   const [edited, setEdited] = useState<Weights | null>(null); // null: the defaults
+  const [suppliedBySection, setSuppliedBySection] = useState(true);
   const [suppliedDay, setSuppliedDay] = useState("");
   const [suppliedText, setSuppliedText] = useState("");
   const [suppliedBusy, setSuppliedBusy] = useState(false);
@@ -214,7 +223,7 @@ function LivePlans({ t, locale, notice, plans, reloadList, userId }: { t: Copy; 
     if (!suppliedDay || rows.length === 0) return setSuppliedNote({ tone: "error", text: t.bookingsNeed });
     setSuppliedBusy(true);
     try {
-      const built = await apiFetch<{ plan_id: string }>("/plans", { method: "POST", body: { day: suppliedDay, weights: chosen, bookings: rows } });
+      const built = await apiFetch<{ plan_id: string }>("/plans", { method: "POST", body: { day: suppliedDay, weights: chosen, bookings: rows, unit: suppliedBySection ? "section" : "ward" } });
       open(built.plan_id);
       setSuppliedNote({ tone: "ok", text: fill(t.bookingsDone, { count: rows.length, day: suppliedDay }) });
       reloadList();
@@ -302,6 +311,7 @@ function LivePlans({ t, locale, notice, plans, reloadList, userId }: { t: Copy; 
         <textarea id="plan-supplied-text" rows={6} spellCheck={false} value={suppliedText} placeholder={"booking_id,section,arrived_at\nB-1,ADARSHNAGAR,2026-10-03T05:30:00+05:30"} onChange={(event) => setSuppliedText(event.target.value)} />
         <label htmlFor="plan-supplied-file">{t.bookingsFile}</label>
         <input id="plan-supplied-file" type="file" accept=".csv,text/csv,text/plain" onChange={readFile} />
+        <label><input type="checkbox" checked={suppliedBySection} onChange={e => setSuppliedBySection(e.target.checked)} />{weeklyPlanCopy[locale].label}</label>
         <small>{t.bookingsWeightsNote}</small>
         <button className="button button-primary" type="submit" disabled={suppliedBusy}>{t.bookingsBuild}</button>
         {suppliedBusy && <p className="plan-message" role="status">{t.bookingsBuilding}</p>}
@@ -318,6 +328,7 @@ function LivePlans({ t, locale, notice, plans, reloadList, userId }: { t: Copy; 
       {plan.approved && <div className="plan-approved" role="status"><strong>{fill(t.approvedLive, { officer: plan.approvedBy ?? "—" })}</strong>{plan.approvalReason && <span>“{plan.approvalReason}”</span>}<span>{t.approvedLiveNote}</span></div>}
       <div className="plan-notice"><strong>{bySection ? "Draft plan from the real 2025 booking totals of each section. The tankers available and the priority classes are assumptions or estimates (see the Source column). Approving it records your decision in the ledger; it does not send tankers." : t.liveCaveat}</strong></div>
       {plan.source === "supplied_bookings" && <div className="plan-notice"><strong>{fill(t.suppliedNote, { count: plan.bookingsSupplied ?? "?", day: plan.day })}</strong></div>}
+      {plan.source === "section_month" && plan.bookingsSupplied !== null && <div className="plan-notice"><strong>{weeklyPlanCopy[locale].preview}</strong></div>}
       {bySection && plan.overview ? <>
         <PlanFacts facts={plan.overview.facts} day={plan.day} capacity={plan.capacityScenario} />
         <PlanMaps key={plan.id + ":maps"} plan={plan} overview={plan.overview} />
