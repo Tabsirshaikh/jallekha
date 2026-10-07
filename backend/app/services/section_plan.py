@@ -221,6 +221,30 @@ def month_totals(root: Path, year: int, month: int) -> dict[str, int]:
     return dict(totals)
 
 
+def estimate_year(day: date) -> int:
+    """The year whose real monthly totals estimate the bookings of `day`: its own year in
+    PLAN_YEAR, else the same month of PLAN_YEAR (the section names of our tables; HMWSSB re-cut
+    the sections in Feb/Mar 2026). Basis: ASSUMED for days after PLAN_YEAR."""
+    return day.year if day.year == PLAN_YEAR else PLAN_YEAR
+
+
+def live_booking(raw: Mapping[str, object]) -> fair_queue.QueueBooking:
+    """A booking made through JalLekha, as stored in a plan's recipe, as a queue booking."""
+    return fair_queue.QueueBooking(
+        booking_id=str(raw["booking_id"]),
+        group=SECTION_PREFIX + str(raw["section"]),
+        arrived_at=datetime.fromisoformat(str(raw["arrived_at"])),
+        tier=int(raw["tier"]),  # type: ignore[call-overload]
+        consumer_id=str(raw["consumer_id"]),
+        category=str(raw["category"]),
+    )
+
+
+def _estimated(booking_id: str) -> bool:
+    """Estimated bookings (make_bookings) are named "SECTION|day|k"; real ones are not."""
+    return "|" in booking_id
+
+
 def daily_count(total: int, days: int, index: int) -> int:
     """Bookings of one section on day `index` (0-based): total / days by running remainder, so the
     days add up to the total exactly and no day differs from another by more than one."""
@@ -235,6 +259,10 @@ class SectionOptions:
     scheduled: str = "f4"  # F9 candidates: "f4" (the F4 flagged sections) or "none"
     carry_over: bool = True  # replay the days before, carrying the waiting list and turn credits
     outages: tuple[Mapping[str, object], ...] = ()  # outage notices on the day, as stored
+    # Bookings made through JalLekha that wait on the day (services/bookings.as_plan_booking).
+    # A section with any of them is planned from its real bookings only; the others from the
+    # month's totals divided by days.
+    live: tuple[Mapping[str, object], ...] = ()
 
 
 def load_facilities(root: Path) -> dict[str, list[dict[str, str]]]:
@@ -530,8 +558,15 @@ def _day_inputs(
     debts: Iterable[DebtAccount],
     final: bool,
 ) -> tuple[planner.PlanInputs, list[tuple[str, int]], list[planner.PlannerBooking]]:
-    totals = month_totals(root, day.year, day.month)
+    totals = month_totals(root, estimate_year(day), day.month)
     fresh, left_out = make_bookings(st.sections, totals, day, options, st.facilities, st.commercial)
+    if final and options.live:
+        # A section with real bookings is planned from them alone: its estimated bookings of the
+        # day and the estimated ones carried over from the days before are left out.
+        real = [live_booking(b) for b in options.live]
+        groups = {b.group for b in real if b.group.removeprefix(SECTION_PREFIX) in st.sections}
+        fresh = [b for b in fresh if b.group not in groups] + [b for b in real if b.group in groups]
+        pending = [p for p in pending if p.booking.group not in groups]
     expiry = SANDBOX_CONFIG.booking_expiry_days
     kept = [p for p in pending if (day - p.booking.arrived_at.astimezone(IST).date()).days < expiry]
     new = [planner.PlannerBooking(b, st.sections[b.group.removeprefix(SECTION_PREFIX)].station)
@@ -571,9 +606,9 @@ def plan_inputs(
     """Inputs for the plan of `day`. With carry-over the days before it (back `carry_days`, inside
     2025) are planned first, so the bookings and fair-queue credits left over arrive with it."""
     options = options or SectionOptions()
-    if day.year != PLAN_YEAR:
+    if day < date(PLAN_YEAR, 1, 1):
         raise SectionPlanUnavailable(
-            f"Section plans use the {PLAN_YEAR} section names; choose a day in {PLAN_YEAR}"
+            f"Section plans use the {PLAN_YEAR} section names; choose a day from {PLAN_YEAR} on"
         )
     st = _static(str(root), scenario)
     now_of = plan_now or (lambda d: datetime(d.year, d.month, d.day, 5, 0, tzinfo=IST))
@@ -613,6 +648,10 @@ def plan_inputs(
     tiers = Counter(p.booking.tier for p in inputs.pending)
     notes = {
         "carried_bookings": len(carried),
+        "live_bookings": sum(1 for p in inputs.pending if not _estimated(p.booking.booking_id)),
+        "live_sections": len(
+            {p.booking.group for p in inputs.pending if not _estimated(p.booking.booking_id)}
+        ),
         "tier0": tiers[0],
         "tier1": tiers[1],
         "tier2": tiers[2],
@@ -730,16 +769,15 @@ def section_of_point(root: Path, lat: float, lng: float) -> str | None:
     return None
 
 
-def fresh_bookings(root: Path, day: date) -> dict[str, int]:
-    """Bookings that arrive on `day` per section group (the month's total divided by its days)."""
-    sections = _static(str(root), "fleet").sections
-    days = calendar.monthrange(day.year, day.month)[1]
-    totals = month_totals(root, day.year, day.month)
-    return {
-        SECTION_PREFIX + n: daily_count(t, days, day.day - 1)
-        for n, t in totals.items()
-        if n in sections
-    }
+def booked_on(inputs: planner.PlanInputs, day: date) -> dict[str, int]:
+    """Bookings of a plan that arrived on `day` (Hyderabad time), per section group: the day's
+    estimates from monthly totals, or the real bookings of a section that has them. What a
+    section is owed when the day is closed (F11); carried-over bookings were owed before."""
+    out: dict[str, int] = defaultdict(int)
+    for p in inputs.pending:
+        if p.booking.arrived_at.astimezone(IST).date() == day:
+            out[p.booking.group] += 1
+    return dict(out)
 
 
 def static_sections(root: Path) -> dict[str, SectionInfo]:

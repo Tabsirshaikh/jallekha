@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from app.config.env import env_str
 
 ASR_MODES = ("fallback", "indicconformer")
-SMS_PROVIDERS = ("fake",)
+SMS_PROVIDERS = ("fake", "outbox")
 
 
 @dataclass(frozen=True)
@@ -15,7 +15,8 @@ class AccessConfig:
     # Environment: ASR_MODE. Source: F14 (IndicConformer on the server; "fallback: voice note
     # saved for a human"). Default fallback so setup needs no ML install.
     asr_mode: str = field(default_factory=lambda: env_str("ASR_MODE", "fallback"))
-    # Environment: SMS_PROVIDER. Only the fake (log-only) provider exists until T3/T4.
+    # Environment: SMS_PROVIDER. No real provider yet (owner decision). fake: keeps nothing
+    # (tests); outbox: test mode, the last messages stay readable on screen (services/sms.py).
     sms_provider: str = field(default_factory=lambda: env_str("SMS_PROVIDER", "fake"))
 
     def __post_init__(self) -> None:

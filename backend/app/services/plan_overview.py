@@ -103,6 +103,7 @@ def section_overview(
                 "served": 0,
                 "served_tiers": [0, 0, 0],
                 "waiting": 0,
+                "live": 0,  # bookings made through JalLekha (REAL); the rest are estimates
             }
         return rows[group]
 
@@ -116,6 +117,7 @@ def section_overview(
         r["bookings"] += 1
         r["tiers"][min(2, p.booking.tier)] += 1
         r["carried"] += p.booking.arrived_at < day_start
+        r["live"] += "|" not in p.booking.booking_id  # estimated ids are "SECTION|day|k"
     by_station: dict[str, Counter[str]] = defaultdict(Counter)
     for p in inputs.pending:
         by_station[p.station][p.booking.group] += 1
@@ -186,6 +188,8 @@ def section_overview(
         "capacity_scenario": capacity_scenario,
         "bookings": sum(r["bookings"] for r in out_rows),
         "carried": sum(r["carried"] for r in out_rows),
+        "live_bookings": sum(r["live"] for r in out_rows),
+        "live_sections": sum(1 for r in out_rows if r["live"]),
         "commercial": sum(1 for p in inputs.pending if p.booking.category == "commercial"),
         "tiers": tiers,
         "served_tiers": served_tiers,

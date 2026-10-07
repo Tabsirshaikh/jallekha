@@ -7,9 +7,11 @@ from app.config.app import APP_CONFIG
 from app.errors import install_error_handlers
 from app.routers import (
     auth_routes,
+    bookings,
     contests,
     debt,
     deliveries,
+    driver_routes,
     evidence,
     forecast,
     intake,
@@ -17,6 +19,7 @@ from app.routers import (
     notices,
     plans,
     section_outcomes,
+    sms_outbox,
     stops,
     system,
 )
@@ -43,5 +46,8 @@ app.include_router(plans.router)
 app.include_router(contests.router)
 app.include_router(deliveries.router)
 app.include_router(stops.router)
+app.include_router(bookings.router)
+app.include_router(driver_routes.router)
+app.include_router(sms_outbox.router)
 app.include_router(debt.router)
 app.include_router(section_outcomes.router)

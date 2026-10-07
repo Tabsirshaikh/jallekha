@@ -57,7 +57,12 @@ EVENT_TYPES = frozenset(
         "contest_filed",  # T7 contest (F16)
         "contest_replied",  # T7 officer reply (F16)
         "field_check_recorded",  # field check
-        "section_check_recorded",  # exact-section booking-access observation, note digest only
+        "section_check_recorded",
+        # bookings made through JalLekha (resident app, field worker): created, a hospital /
+        # care home / school claim checked by an officer, given a tanker by an approved plan
+        "booking_created",
+        "booking_claim_checked",
+        "booking_assigned",  # exact-section booking-access observation, note digest only
         # T4 intake (F14): ids, codes and numbers only in payloads
         "complaint_received",
         "complaint_merged",

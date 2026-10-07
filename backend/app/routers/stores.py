@@ -25,6 +25,7 @@ from app.config.plans import PLAN_STORE_CONFIG
 from app.db import create_all, make_engine, make_session_factory
 from app.models import StoredPlan
 from app.services import plan_builder, planner
+from app.services.bookings import BookingStore
 from app.services.debt_store import DebtStore
 from app.services.delivery_store import DeliveryStore
 from app.services.delivery_store import Stop as Stop  # re-exported for the routers and tests
@@ -269,3 +270,18 @@ def get_debt_store() -> DebtStore:
         create_all(engine)
         _DEBTS = DebtStore(engine)
     return _DEBTS
+
+
+# Bookings made through JalLekha (services/bookings.py).
+_BOOKINGS: BookingStore | None = None
+
+
+def get_booking_store() -> BookingStore:
+    global _BOOKINGS
+    if _BOOKINGS is None:
+        from app.services.ledger_store import get_ledger
+
+        engine = make_engine()
+        create_all(engine)
+        _BOOKINGS = BookingStore(engine, ledger=get_ledger())
+    return _BOOKINGS

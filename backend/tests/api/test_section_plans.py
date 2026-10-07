@@ -71,7 +71,7 @@ def test_section_plan_through_the_api(client) -> None:  # type: ignore[no-untype
 
 def test_section_plan_rejects_other_years_and_supplied_bookings(client) -> None:  # type: ignore[no-untyped-def]
     other = client.post(
-        "/plans", json={"day": "2026-05-15", "unit": "section"}, headers=auth("officer")
+        "/plans", json={"day": "2024-05-15", "unit": "section"}, headers=auth("officer")
     )
     assert other.status_code == 404
     both = client.post(

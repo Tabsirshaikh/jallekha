@@ -23,6 +23,7 @@ from app.routers.stores import (
     PlanRecord,
     PlanStore,
     Stop,
+    get_booking_store,
     get_debt_store,
     get_delivery_store,
     get_plan_store,
@@ -31,6 +32,7 @@ from app.services import delivery as dl
 from app.services import fair_queue, planner
 from app.services import intake_pipeline as ip
 from app.services import notices as nt
+from app.services.bookings import BookingStore
 from app.services.contest import ContestService
 from app.services.debt_store import DebtStore
 from app.services.ledger_store import StoredLedger
@@ -132,6 +134,7 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClie
     delivery_store = DeliveryStore(engine)
     delivery_store.put_stop(Stop("stop-0001", *STOP, reps, residents, "SYNTHETIC"))
     debt_store = DebtStore(engine)
+    booking_store = BookingStore(engine, ledger=chain)
     overrides = {
         get_api_config: ApiConfig.from_env,
         intake.get_intake_service: lambda: intake_service,
@@ -145,6 +148,7 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClie
         get_plan_store: lambda: plan_store,
         get_delivery_store: lambda: delivery_store,
         get_debt_store: lambda: debt_store,  # never the default database
+        get_booking_store: lambda: booking_store,
         get_section_outcome_store: lambda: SectionOutcomeStore(
             engine, chain, candidates, clock=lambda: NOW
         ),

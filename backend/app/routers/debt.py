@@ -146,6 +146,7 @@ def close(
                     "supplied bookings or by section can create water debt",
                 )
             plan, plan_stops = record.plan, recipe.get("stops", [])
+            plan_inputs = record.inputs
         # Every delivery of the day at a stop that serves a ward counts for that ward.
         ward_of_stop = {s.stop_id: s.ward_id for s in deliveries.list_stops() if s.ward_id}
         start, end = day_close.day_bounds(day)
@@ -164,7 +165,7 @@ def close(
                     stop_ids=list(stop_section), started_from=start, started_before=end
                 )
                 closed = day_close.close_section_day(
-                    day, plan, section_plan.fresh_bookings(REPO_ROOT, day), stop_section,
+                    day, plan, section_plan.booked_on(plan_inputs, day), stop_section,
                     section_todays, debts.accounts(), ledger, now, body.officer_id, body.reason,
                 )  # fmt: skip
             else:

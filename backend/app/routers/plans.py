@@ -37,11 +37,13 @@ from app.routers.stores import (
     PlanConflict,
     PlanRecord,
     PlanStore,
+    get_booking_store,
     get_debt_store,
     get_delivery_store,
     get_plan_store,
 )
 from app.services import (
+    booking_dispatch,
     confidence,
     explain,
     fair_queue,
@@ -53,6 +55,7 @@ from app.services import (
     section_plan,
     ward_locate,
 )
+from app.services import bookings as bk
 from app.services.keyed_lock import KeyedLocks
 from app.services.ledger_store import StoredLedger
 from app.services.notices import NoticeService
@@ -252,6 +255,7 @@ def create_plan(
     deliveries: Deliveries,
     debts: Debts,
     notices: Annotated[NoticeService, Depends(get_notice_service)],
+    bookings_: Annotated[bk.BookingStore, Depends(get_booking_store)],
 ) -> dict[str, Any]:
     """Build and store a plan (T9 gate): from the bookings supplied in the request, or, without
     them, for a day of the committed replay. A supplied plan also uses the registered delivery
@@ -283,6 +287,7 @@ def create_plan(
             recipe = plan_builder.section_recipe(
                 body.day, body.capacity, weights, owed, body.priority, body.scheduled,
                 body.carry_over, _notice_outages(notices, body.day),
+                [bk.as_plan_booking(r, body.priority) for r in bookings_.waiting_for(body.day)],
             )  # fmt: skip
         except plan_builder.InvalidBookings as exc:
             return invalid(str(exc))
@@ -384,6 +389,17 @@ def _gate(mtime: float) -> confidence.T9Gate:
 _ROUTES: dict[tuple[str, str], dict[str, Any]] = {}
 
 
+def routes_of(record: PlanRecord) -> dict[str, Any]:
+    """The tanker routes of a plan by section (route_schedule.py), cached per plan digest."""
+    key = (record.plan.plan_id, record.plan.digest)
+    if key not in _ROUTES:
+        if len(_ROUTES) >= 8:
+            _ROUTES.pop(next(iter(_ROUTES)))
+        sections = section_plan.static_sections(REPO_ROOT)
+        _ROUTES[key] = route_schedule.build_routes(REPO_ROOT, record.plan, record.inputs, sections)
+    return _ROUTES[key]
+
+
 @router.get("/plans/{plan_id}/routes", dependencies=[Officer])
 def plan_routes(
     plan_id: str, plans: Plans, station: str | None = None, compact: bool = False
@@ -395,13 +411,7 @@ def plan_routes(
     record = _record(plans, plan_id)
     if (record.recipe or {}).get("source") != plan_builder.SECTION:
         raise HTTPException(409, "Routes are made for plans by section")
-    key = (plan_id, record.plan.digest)
-    if key not in _ROUTES:
-        if len(_ROUTES) >= 8:
-            _ROUTES.pop(next(iter(_ROUTES)))
-        sections = section_plan.static_sections(REPO_ROOT)
-        _ROUTES[key] = route_schedule.build_routes(REPO_ROOT, record.plan, record.inputs, sections)
-    full = _ROUTES[key]
+    full = routes_of(record)
     if station is not None and station not in {r["station_id"] for r in full["stations"]}:
         raise not_found(f"Station {station}")
     return {
@@ -501,7 +511,16 @@ def check_group(plan_id: str, group: str, body: Decision, plans: Plans, ledger: 
 
 
 @router.post("/plans/{plan_id}/approve", dependencies=[Officer])
-def approve(plan_id: str, body: Decision, plans: Plans, ledger: Ledger) -> Any:
+def approve(
+    plan_id: str,
+    body: Decision,
+    plans: Plans,
+    ledger: Ledger,
+    deliveries: Deliveries,
+    bookings_: Annotated[bk.BookingStore, Depends(get_booking_store)],
+) -> Any:
+    """Approve a plan (A7). For a plan by section, every served booking made through JalLekha is
+    then given its tanker and a delivery stop (booking_dispatch.py), so the driver sees it."""
     with _guarded(plan_id):
         record = _record(plans, plan_id)
         if record.plan.status == "APPROVED":
@@ -517,6 +536,8 @@ def approve(plan_id: str, body: Decision, plans: Plans, ledger: Ledger) -> Any:
         except ValueError as exc:
             return invalid(str(exc))
         plans.save(record)
+        if (record.recipe or {}).get("source") == plan_builder.SECTION:
+            booking_dispatch.assign_from_routes(plan_id, routes_of(record), bookings_, deliveries)
         return plan_view(record)
 
 
