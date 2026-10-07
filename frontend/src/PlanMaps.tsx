@@ -51,6 +51,7 @@ function SectionCard({ row, onClose }: { row: SectionRow; onClose: () => void })
         <div><dt>Bookings today</dt><dd>{nf.format(row.bookings)}{row.carried > 0 && <small> ({nf.format(row.carried)} from earlier days)</small>}</dd></div>
         <div><dt>Served today</dt><dd>{nf.format(row.served)}{share !== null && <small> ({share}%)</small>}</dd></div>
         <div><dt>Waiting</dt><dd>{nf.format(row.waiting)}</dd></div>
+        {row.turnFactor !== null && row.turnFactor !== 1 && <div><dt>Turns this week</dt><dd>{row.turnFactor.toFixed(2)}× its Census turns<small> ({row.turnFactor < 1 ? "got water lately" : "left waiting lately"})</small></dd></div>}
         <div><dt>Hospitals · no water at home · others</dt><dd>{row.tiers.map((t) => nf.format(t)).join(" · ")}</dd></div>
         {row.bookingsPer1000 !== null && <div><dt>Tankers a year per 1,000 homes</dt><dd>{nf.format(row.bookingsPer1000)}{row.peerBookingsPer1000 !== null && <small> (similar sections: {nf.format(row.peerBookingsPer1000)})</small>}</dd></div>}
         {row.scheduled && <div><dt>Water sent on schedule</dt><dd>{nf.format(row.scheduled.litres)} litres · {row.scheduled.loads} loads</dd></div>}

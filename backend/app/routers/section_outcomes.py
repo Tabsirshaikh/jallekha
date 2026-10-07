@@ -13,7 +13,8 @@ from app.config.api import ApiConfig
 from app.config.section_outcomes import SECTION_OUTCOME_CONFIG
 from app.routers.common import csv_rows, get_now, invalid, page, typed
 from app.routers.evidence import Limit, Offset
-from app.routers.stores import DeliveryStore, get_delivery_store
+from app.routers.stores import DeliveryStore, get_booking_store, get_delivery_store
+from app.services.bookings import BookingStore
 from app.services.ledger_store import get_ledger
 from app.services.section_outcomes import SectionOutcomeStore
 from app.services.section_plan import IST
@@ -90,9 +91,10 @@ def weekly_priority_view(
     reviews: Reviews,
     deliveries: Annotated[DeliveryStore, Depends(get_delivery_store)],
     now: Annotated[datetime, Depends(get_now)],
+    bookings: Annotated[BookingStore, Depends(get_booking_store)],
     section_id: str | None = None,
 ):
-    values = current_sections(now.astimezone(IST).date(), reviews, deliveries)
+    values = current_sections(now.astimezone(IST).date(), reviews, deliveries, bookings=bookings)
     rows = [v for v in values.values() if section_id is None or v["section_id"] == section_id]
     return {"basis": "DERIVED_APPROXIMATE", "as_of": now.isoformat(), "items": rows}
 

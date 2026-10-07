@@ -204,6 +204,13 @@ With `compact=true` the answer also has `paths` (null otherwise): every tanker's
 1 scheduled, 2 outage, 3 critical), for the city-wide animation (feat/plan-visuals). Trips to a
 place with no location are left out.
 
+### Turns follow recent service and trips follow waiting bookings: `responsive`, `rebalance` (feat/responsive-allocation)
+`POST /plans` with `unit: "section"` takes `responsive` (A) and `rebalance` (B), both true by default; the
+recipe and plan id carry them only when on, so plans stored before rebuild unchanged. `overview.facts`
+gains `trips_moved` and each section row `turn_factor` (this plan's turns over the Census turns).
+`/field-checks/weekly-priority` rows gain `source` (OFFICER_CHECK, BOOKINGS or NONE) and, from bookings,
+`bookings_delivered`, `bookings_not_delivered`, `bookings_unknown`.
+
 ### Plan overview of a plan by section: `overview` in `GET /plans/{plan_id}` (feat/plan-visuals)
 Null for other plans. `facts`: bookings of the day, carried over, commercial, priority classes
 (`tiers` and `served_tiers`: hospitals and care homes, homes without water on premises, others),

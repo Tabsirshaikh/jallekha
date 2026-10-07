@@ -5129,6 +5129,16 @@
             "type": "boolean",
             "title": "Carry Over",
             "default": true
+          },
+          "responsive": {
+            "type": "boolean",
+            "title": "Responsive",
+            "default": true
+          },
+          "rebalance": {
+            "type": "boolean",
+            "title": "Rebalance",
+            "default": true
           }
         },
         "type": "object",

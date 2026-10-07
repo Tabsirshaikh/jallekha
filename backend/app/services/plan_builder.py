@@ -658,6 +658,9 @@ def section_plan_id(
         extras["scheduled"] = recipe["scheduled"]
     if recipe.get("carry_over") is False:
         extras["carry_over"] = False
+    for key in ("rebalance", "responsive"):  # A and B, on in plans made since 2026-10-07
+        if recipe.get(key):
+            extras[key] = True
     for key in ("outages", "debts", "live", "bookings", "weekly_priority"):
         if recipe.get(key):
             extras[key] = recipe[key]
@@ -677,6 +680,8 @@ def build_section_plan(
     carry_over: bool = True,
     outages: Sequence[Mapping[str, Any]] = (),
     live: Sequence[Mapping[str, Any]] = (),
+    rebalance: bool = False,
+    responsive: bool = False,
 ) -> BuiltPlan:
     """The DRAFT plan by section for a day of 2025: the month's real booking total of each section
     divided by the days of the month, need = connections x Census-2011 need carried onto the
@@ -684,8 +689,18 @@ def build_section_plan(
     scenario (section_plan.py). Nothing is random; the plan is rebuilt from its recipe."""
     return _build_section(
         section_recipe(
-            day, capacity, weights, debts, priority, scheduled, carry_over, outages, live
-        )
+            day,
+            capacity,
+            weights,
+            debts,
+            priority,
+            scheduled,
+            carry_over,
+            outages,
+            live,
+            rebalance,
+            responsive,
+        )  # fmt: skip
     )
 
 
@@ -699,8 +714,11 @@ def section_recipe(
     carry_over: bool = True,
     outages: Sequence[Mapping[str, Any]] = (),
     live: Sequence[Mapping[str, Any]] = (),
+    rebalance: bool = False,
+    responsive: bool = False,
 ) -> dict[str, Any]:
-    """The recipe a plan by section is stored and rebuilt from (validated)."""
+    """The recipe a plan by section is stored and rebuilt from (validated). `rebalance` (B) and
+    `responsive` (A) are stored only when on, so plans stored before them rebuild unchanged."""
     if capacity not in section_plan.CAPACITY_SCENARIOS:
         raise InvalidBookings(
             f"capacity must be one of {', '.join(section_plan.CAPACITY_SCENARIOS)}"
@@ -724,6 +742,10 @@ def section_recipe(
     recipe["priority"] = bool(priority)
     recipe["scheduled"] = scheduled
     recipe["carry_over"] = bool(carry_over)
+    if rebalance:
+        recipe["rebalance"] = True
+    if responsive:
+        recipe["responsive"] = True
     if outages:
         recipe["outages"] = [dict(o) for o in outages]
     if live:  # bookings made through JalLekha, waiting on the day (no phone numbers)
@@ -748,6 +770,8 @@ def _build_section(recipe: dict[str, Any]) -> BuiltPlan:
         carry_over=bool(recipe.get("carry_over", True)),
         outages=tuple(recipe.get("outages", ())),
         live=tuple(recipe.get("live", ())),
+        rebalance=bool(recipe.get("rebalance", False)),
+        responsive=bool(recipe.get("responsive", False)),
     )
     try:
         build_inputs = (
@@ -778,7 +802,13 @@ def _build_section(recipe: dict[str, Any]) -> BuiltPlan:
         points = list(inputs.registry.points)
         point_groups = {p.ward_id for p in points}
         for group, value in factors.items():
-            if value["shortfall_litres"] <= 0 or options.scheduled == "none":
+            # A shortfall from bookings is already in the queue (the missed bookings wait or come
+            # back): it only changes the turns, it does not add scheduled water.
+            if (
+                value["shortfall_litres"] <= 0
+                or options.scheduled == "none"
+                or value.get("source") == "BOOKINGS"
+            ):
                 continue
             info = sections[group.removeprefix(section_plan.SECTION_PREFIX)]
             scheduled.append(
@@ -804,8 +834,17 @@ def _build_section(recipe: dict[str, Any]) -> BuiltPlan:
                 )
         inputs = replace(
             inputs,
+            # real records (officer check or the section's own bookings) replace the planned-
+            # service factor of the replay: the Census entitlement times the real factor
             entitlement={
-                g: v * factors.get(g, {}).get("allocation_factor", 1)
+                g: (
+                    sections[g.removeprefix(section_plan.SECTION_PREFIX)].entitlement(
+                        weights or NeedWeights.default()
+                    )
+                    * factors[g]["allocation_factor"]
+                    if g in factors and g.removeprefix(section_plan.SECTION_PREFIX) in sections
+                    else v
+                )
                 for g, v in inputs.entitlement.items()
             },
             debts={g: d for g, d in inputs.debts.items() if g not in factors},
@@ -868,6 +907,19 @@ def _basis_section(
         parts.append(
             f"{notes['live_bookings']} REAL bookings made through JalLekha in "
             f"{notes['live_sections']} sections, which are planned from them alone"
+        )
+    if options.responsive:
+        parts.append(
+            "turns follow the last 7 days of service (A): a section served well gets as little "
+            "as 0.25 x its Census turns and one left waiting up to 4 x; from the section's real "
+            "bookings and Confirmed deliveries or an officer's supply check where they exist, "
+            "else from the PLANNED service of the replayed days (ASSUMED coefficients)"
+        )
+    if options.rebalance:
+        parts.append(
+            "trips follow the waiting bookings (B): each day the same total trips are shared "
+            "over the stations by the bookings waiting there, each station between 0.5 and 2 x "
+            "its usual trips (tankers ASSUMED movable between stations)"
         )
     if options.carry_over:
         parts.append(

@@ -123,6 +123,10 @@ class NewPlan(BaseModel):
     priority: bool = True
     scheduled: Literal["f4", "none"] = "f4"
     carry_over: bool = True
+    # For a plan by section (feat/responsive-allocation): A, turns follow the last 7 days of
+    # service; B, trips follow the bookings waiting at each station. On unless switched off.
+    responsive: bool = True
+    rebalance: bool = True
 
 
 def _notice_outages(notices: NoticeService, day: date) -> list[dict[str, Any]]:
@@ -193,9 +197,11 @@ def plan_view(record: PlanRecord) -> dict[str, Any]:
     by_ward = unplaced = overview = None
     if recipe.get("source") == plan_builder.SECTION:
         by_ward, unplaced = section_plan.ward_totals(REPO_ROOT, group_totals)
+        weights_of = recipe.get("weights")
         overview = plan_overview.section_overview(
-            REPO_ROOT, record.inputs, record.plan, recipe.get("capacity")
-        )
+            REPO_ROOT, record.inputs, record.plan, recipe.get("capacity"),
+            NeedWeights(**weights_of) if weights_of else None,
+        )  # fmt: skip
     weights = recipe.get("weights")
     shown = NeedWeights(**weights) if weights else NeedWeights.default()
     stops = recipe.get("stops", [])
@@ -294,13 +300,14 @@ def create_plan(
             recipe = plan_builder.section_recipe(
                 body.day, body.capacity, weights, owed, body.priority, body.scheduled,
                 body.carry_over, _notice_outages(notices, body.day), live,
+                body.rebalance, body.responsive,
             )  # fmt: skip
             if body.bookings is not None:
                 recipe["bookings"] = plan_builder.normalise_bookings(
                     body.day, body.bookings, by_section=True
                 )
                 recipe["carry_over"] = False
-            values = current_sections(body.day, reviews, deliveries)
+            values = current_sections(body.day, reviews, deliveries, bookings=bookings_)
             known = {g: v for g, v in values.items() if v["status"] != "UNKNOWN"}
             if known:
                 recipe["weekly_priority"] = known

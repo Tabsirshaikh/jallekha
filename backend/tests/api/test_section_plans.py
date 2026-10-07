@@ -43,7 +43,8 @@ def test_section_plan_through_the_api(client) -> None:  # type: ignore[no-untype
     first = client.post("/plans", json=body, headers=auth("officer"))
     assert first.status_code == 201, first.text
     plan = first.json()
-    assert plan["plan_id"] == "section-2025-05-15-tight" and plan["unit"] == "section"
+    # A and B are on by default, so the id carries a hash of them
+    assert plan["plan_id"].startswith("section-2025-05-15-tight-") and plan["unit"] == "section"
     assert plan["status"] == "DRAFT" and plan["flags_total"] > 0
     served = sum(s["served_total"] for s in plan["stations"].values())
     waiting = sum(s["waiting_total"] for s in plan["stations"].values())
@@ -258,3 +259,22 @@ def test_overview_of_a_plan_by_section_adds_up(client) -> None:  # type: ignore[
     # a plan by ward has no overview
     ward = client.post("/plans", json={"day": "2025-05-01"}, headers=auth("officer")).json()
     assert ward["overview"] is None
+
+
+def test_turns_follow_recent_service_and_trips_follow_waiting_bookings(client) -> None:  # type: ignore[no-untyped-def]
+    base = {"day": "2025-05-15", "unit": "section", "capacity": "tight"}
+    new = client.post("/plans", json=base, headers=auth("officer")).json()
+    old = client.post(
+        "/plans", json={**base, "rebalance": False, "responsive": False}, headers=auth("officer")
+    ).json()
+    assert new["plan_id"] != old["plan_id"] and old["plan_id"] == "section-2025-05-15-tight"
+    facts_new, facts_old = new["overview"]["facts"], old["overview"]["facts"]
+    # B: the same total trips, some moved to the stations where bookings wait
+    assert facts_new["trips"] == facts_old["trips"] and facts_new["trips_moved"] > 0
+    assert facts_old["trips_moved"] == 0
+    # A: a section served well in the replayed week gets fewer turns, one left waiting more
+    factors = [s["turn_factor"] for s in new["overview"]["sections"] if s["turn_factor"]]
+    assert min(factors) == 0.25 and max(factors) > 1
+    assert all(s["turn_factor"] in (None, 1.0) for s in old["overview"]["sections"])
+    assert "turns follow the last 7 days of service" in new["basis"]["plan"]
+    assert "trips follow the waiting bookings" in new["basis"]["plan"]
