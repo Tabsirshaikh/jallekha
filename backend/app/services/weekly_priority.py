@@ -55,6 +55,8 @@ def calculate(population, baseline, review, delivered, as_of: date, days_below_m
         allocation_factor=factor,
         current_need_weight=baseline * factor,
         status="SHORTFALL" if shortfall > 0 else "COVERED",
+        basis=("SYNTHETIC (demo supply check) on " if review.get("synthetic") else "")
+        + result["basis"],
         reason="VERIFIED_WEEKLY_SHORTFALL" if shortfall > 0 else "VERIFIED_REQUIREMENT_COVERED",
     )
     return result

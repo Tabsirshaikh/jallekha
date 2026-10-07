@@ -39,10 +39,12 @@ from app.routers.stores import (
     DeliveryStore,
     PlanRecord,
     PlanStore,
+    get_booking_store,
     get_debt_store,
     get_delivery_store,
     get_plan_store,
 )
+from app.services import bookings as bookings_store
 from app.services import (
     day_close,
     ledger_store,
@@ -135,10 +137,17 @@ def _live_inputs(
     notices: NoticeService,
     now: datetime,
     section_ward: dict[str, str],
+    bookings: bookings_store.BookingStore | None = None,
 ) -> _LiveInputs:
     cfg = LIVE_NEED_CONFIG
+    # Bookings officers supplied (CSV) and bookings made through JalLekha (resident app).
+    made = [
+        {"booking_id": r.booking_id, "section": r.section.removeprefix("section:"),
+         "arrived_at": bookings_store._aware(r.arrived_at).isoformat()}
+        for r in (bookings.list() if bookings is not None else [])
+    ]  # fmt: skip
     counts = live_need.count_bookings(
-        plans.supplied_bookings(), section_ward, now, cfg.bookings_window_days
+        [*plans.supplied_bookings(), *made], section_ward, now, cfg.bookings_window_days
     )
     owed = {
         a.account_id.removeprefix(day_close.WARD_PREFIX): a.debt_litres
@@ -150,7 +159,16 @@ def _live_inputs(
         rows = session.execute(
             select(Complaint.area_id, Complaint.created_at).where(Complaint.category == "no_water")
         )
-        complaints.update(area for area, at in rows if area and _utc(at) >= since)
+        for area, at in rows:
+            if not area or _utc(at) < since:
+                continue
+            # area_id is "ward:<id>", "section:<name>" or both joined by ";" (intake router);
+            # older rows hold the bare ward id. The signs count per ward.
+            for part in area.split(";"):
+                if part.startswith("ward:"):
+                    complaints[part.removeprefix("ward:")] += 1
+                elif ":" not in part.split("/")[0]:
+                    complaints[part] += 1
     cuts: Counter[str] = Counter()
     since = now - timedelta(days=cfg.cut_window_days)
     with Session(notices.engine) as session:
@@ -185,12 +203,13 @@ def atlas_live(
     intake: Annotated[IntakeService, Depends(get_intake_service)],
     notices: Annotated[NoticeService, Depends(get_notice_service)],
     now: Annotated[datetime, Depends(get_now)],
+    bookings: Annotated[bookings_store.BookingStore, Depends(get_booking_store)],
 ) -> dict[str, Any]:
     """Census need per ward plus five live clues (services/live_need.py) and booking
     concentration from the bookings officers supplied in the last 30 days (history if none)."""
     cfg = LIVE_NEED_CONFIG
     section_ward = {r["section"]: r["ward_id"] for r in csv_rows(SECTION_WARDS) if r["ward_id"]}
-    live = _live_inputs(plans, debts, intake, notices, now, section_ward)
+    live = _live_inputs(plans, debts, intake, notices, now, section_ward, bookings)
     counts = live.counts
     history = {r["ward_id"]: r["bookings"] for r in csv_rows(EQUITY_WARDS)}
     groundwater = _ward_groundwater(section_ward, now)
@@ -231,6 +250,7 @@ def atlas_live_sections(
     intake: Annotated[IntakeService, Depends(get_intake_service)],
     notices: Annotated[NoticeService, Depends(get_notice_service)],
     now: Annotated[datetime, Depends(get_now)],
+    bookings: Annotated[bookings_store.BookingStore, Depends(get_booking_store)],
 ) -> dict[str, Any]:
     """The same live clues per HMWSSB section (DERIVED_APPROXIMATE need from data/derived/
     evidence/section_need.csv). Bookings are exact per section, as are well levels. Water owed,
@@ -239,7 +259,7 @@ def atlas_live_sections(
     key `ward_id` holds the section id) so one screen draws both."""
     cfg = LIVE_NEED_CONFIG
     section_ward = {r["section"]: r["ward_id"] for r in csv_rows(SECTION_WARDS) if r["ward_id"]}
-    live = _live_inputs(plans, debts, intake, notices, now, section_ward)
+    live = _live_inputs(plans, debts, intake, notices, now, section_ward, bookings)
     counts = live.counts
     groundwater = _section_groundwater(now)
     sections = []

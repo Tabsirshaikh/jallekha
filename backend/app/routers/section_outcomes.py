@@ -57,6 +57,8 @@ class SupplyInput(BaseModel):
     records_complete: bool = False
     booking_reason: Literal["other_supply", "access_difficulty", "unclear"]
     note: str = Field(min_length=1, max_length=SECTION_OUTCOME_CONFIG.maximum_note_chars)
+    # A demo assessment (scripts/demo/seed_demo.py) is labelled SYNTHETIC, never REAL.
+    synthetic: bool = False
 
 
 @router.post("/supply-reviews")

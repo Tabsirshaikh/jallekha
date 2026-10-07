@@ -24,7 +24,8 @@ class SupplyReviewStore:
         SectionSupplyReview.__table__.create(engine, checkfirst=True)
 
     def record(self, data, actor):
-        data = {**data, "recorded_by": actor, "basis": "REAL (officer observation)"}
+        basis = "SYNTHETIC (demo data)" if data.get("synthetic") else "REAL (officer observation)"
+        data = {**data, "recorded_by": actor, "basis": basis}
         blob = json.dumps(data, sort_keys=True)
         with _lock, Session(self.engine, expire_on_commit=False) as session:
             row = session.get(SectionSupplyReview, data["id"])

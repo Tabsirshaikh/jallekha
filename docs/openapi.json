@@ -5329,6 +5329,11 @@
             "maxLength": 2000,
             "minLength": 1,
             "title": "Note"
+          },
+          "synthetic": {
+            "type": "boolean",
+            "title": "Synthetic",
+            "default": false
           }
         },
         "additionalProperties": false,
