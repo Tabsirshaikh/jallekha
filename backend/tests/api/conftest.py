@@ -16,7 +16,16 @@ from app.auth import get_api_config
 from app.config.api import ApiConfig
 from app.db import create_all, make_engine
 from app.main import app
-from app.routers import contests, deliveries, evidence, intake, ledger, notices, plans
+from app.routers import (
+    contests,
+    deliveries,
+    driver_routes,
+    evidence,
+    intake,
+    ledger,
+    notices,
+    plans,
+)
 from app.routers.section_outcomes import candidates, get_section_outcome_store
 from app.routers.stores import (
     DeliveryStore,
@@ -36,6 +45,7 @@ from app.services.bookings import BookingStore
 from app.services.contest import ContestService
 from app.services.debt_store import DebtStore
 from app.services.ledger_store import StoredLedger
+from app.services.route_visits import RouteVisitStore
 from app.services.section_outcomes import SectionOutcomeStore
 from app.services.sms import FakeSmsSender
 
@@ -135,6 +145,7 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClie
     delivery_store.put_stop(Stop("stop-0001", *STOP, reps, residents, "SYNTHETIC"))
     debt_store = DebtStore(engine)
     booking_store = BookingStore(engine, ledger=chain)
+    visit_store = RouteVisitStore()
     overrides = {
         get_api_config: ApiConfig.from_env,
         intake.get_intake_service: lambda: intake_service,
@@ -149,6 +160,7 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClie
         get_delivery_store: lambda: delivery_store,
         get_debt_store: lambda: debt_store,  # never the default database
         get_booking_store: lambda: booking_store,
+        driver_routes.get_visit_store: lambda: visit_store,
         get_section_outcome_store: lambda: SectionOutcomeStore(
             engine, chain, candidates, clock=lambda: NOW
         ),

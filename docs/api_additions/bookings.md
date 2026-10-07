@@ -58,6 +58,19 @@ place for a booking made through JalLekha), plus `station` (`station_id`, `lat`,
 station's place is a stand-in, HMWSSB does not publish it). Estimated loads have no booking and
 need no delivery code.
 
+Each trip also carries `unloaded` (when the tank is empty) and `visited_at` (null, or when the
+driver confirmed the stop with the residents' codes in local test mode, below).
+
+## Route visits in test mode: `POST /driver/route/visits`, `GET /driver/visits?day=`
+Only with `SMS_PROVIDER=outbox` and without sign-in, like the SMS test mode; otherwise 404.
+SIMULATION: after emptying the tank the driver sends `{day, tanker_id, n, codes}` with the code of
+each of three residents; every code is the fixed test code `000000` (no SMS, no OTP). The answer is
+`{plan_id, tanker_id, n, accepted, codes: [true|false per resident], visited_at, basis:
+"SIMULATION"}`; the stop counts only when all three are right, and the first time counts. 404 for
+a trip the tanker does not have in the day's approved plan. `GET /driver/visits?day=` (driver,
+officer) lists `{tanker_id, n, visited_at}` for the approved plan of the day. Kept in server memory:
+a restart clears them; never water debt, never on the ledger.
+
 ## SMS test mode: `GET /sms/test-mode`, `GET /sms/outbox?phone=`, `POST /sms/outbox/reply`
 Only with `SMS_PROVIDER=outbox` and without sign-in (`AUTH_REQUIRED` unset); otherwise 404 and
 `test_mode: false`. Messages are kept in the server's memory and never sent. The outbox lists the

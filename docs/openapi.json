@@ -4174,6 +4174,128 @@
         }
       }
     },
+    "/driver/route/visits": {
+      "post": {
+        "tags": [
+          "driver"
+        ],
+        "summary": "Visit",
+        "description": "Mark a trip of the approved plan visited when every resident gave the code (SIMULATION).",
+        "operationId": "visit_driver_route_visits_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Visit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Visit Driver Route Visits Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/driver/visits": {
+      "get": {
+        "tags": [
+          "driver"
+        ],
+        "summary": "Visits Of Day",
+        "description": "Which trips each tanker of the day's approved plan visited (SIMULATION).",
+        "operationId": "visits_of_day_driver_visits_get",
+        "parameters": [
+          {
+            "name": "day",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "Day"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Visits Of Day Driver Visits Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/sms/test-mode": {
       "get": {
         "tags": [
@@ -5391,6 +5513,42 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "Visit": {
+        "properties": {
+          "day": {
+            "type": "string",
+            "format": "date",
+            "title": "Day"
+          },
+          "tanker_id": {
+            "type": "string",
+            "maxLength": 16,
+            "minLength": 1,
+            "title": "Tanker Id"
+          },
+          "n": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "N"
+          },
+          "codes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 10,
+            "title": "Codes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "day",
+          "tanker_id",
+          "n",
+          "codes"
+        ],
+        "title": "Visit"
       },
       "WeightsIn": {
         "properties": {

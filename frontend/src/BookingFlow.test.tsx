@@ -51,13 +51,19 @@ describe("driver's trips from the approved plan", () => {
 
   it("shows a tanker's trips and starts a booked delivery by sending the code", async () => {
     const assigned = booking({ status: "ASSIGNED", tanker_id: "T0080", station_id: "ST09", depart: "06:20", arrive: "06:22" });
+    let visitedAt: string | null = null;
     const fetchMock = routedFetch({
       "GET /sms/test-mode": () => json({ test_mode: true }),
       "GET /driver/tankers": () => json({ day: "2026-10-07", plan_id: "p", tankers_total: 700, items: [{ tanker_id: "T0080", station_id: "ST09", trips: 2, real_bookings: 1, first_depart: "06:20" }] }),
       "GET /driver/route": () => json({ day: "2026-10-07", plan_id: "p", tanker_id: "T0080", station_id: "ST09", station: { station_id: "ST09", lat: 17.45, lng: 78.38 }, finish: "07:30", km: 5, trips: [
-        { n: 1, kind: "booked", name: "KONDAPUR (DIV 15)", depart: "06:20", arrive: "06:22", back: "06:55", km: 2, booking: assigned, stop_id: "bk-BK-20261007-ABC123", group: "section:KONDAPUR (DIV 15)", lat: 17.46, lng: 78.36 },
-        { n: 2, kind: "booked", name: "MADHAPUR -2", depart: "07:00", arrive: "07:02", back: "07:30", km: 2, booking: null, stop_id: null, group: "section:MADHAPUR -2", lat: 17.45, lng: 78.39 },
+        { n: 1, kind: "booked", name: "KONDAPUR (DIV 15)", depart: "06:20", arrive: "06:22", unloaded: "06:52", back: "06:55", km: 2, booking: assigned, stop_id: "bk-BK-20261007-ABC123", group: "section:KONDAPUR (DIV 15)", lat: 17.46, lng: 78.36, visited_at: null },
+        { n: 2, kind: "booked", name: "MADHAPUR -2", depart: "07:00", arrive: "07:02", unloaded: "07:28", back: "07:30", km: 2, booking: null, stop_id: null, group: "section:MADHAPUR -2", lat: 17.45, lng: 78.39, visited_at: visitedAt },
       ] }),
+      "POST /driver/route/visits": () => (body) => {
+        const ok = (body as { codes: string[] }).codes.map((c) => c === "000000");
+        if (ok.every(Boolean)) visitedAt = "2026-10-07T02:00:00+00:00";
+        return json({ accepted: ok.every(Boolean), codes: ok, visited_at: visitedAt });
+      },
       "POST /deliveries": () => json({ delivery_id: "d1", otp_issued: false, otp_verified: false, outcome_status: "pending" }),
       "POST /deliveries/*/otp": () => json({ delivery_id: "d1", otp_issued: true, otp_verified: false, outcome_status: "pending" }),
     });
@@ -66,13 +72,26 @@ describe("driver's trips from the approved plan", () => {
     expect(await screen.findByText(/1 tankers carry bookings made through JalLekha/)).toBeInTheDocument();
     fireEvent.change(screen.getByLabelText(/My tanker/), { target: { value: "T0080" } });
     expect(await screen.findByText("estimated load, no code needed", { exact: false })).toBeInTheDocument();
-    // the map: the filling station, the stop in hand and the later stop as numbered markers; "next" is the first unfinished trip
+    // the street map tab: the filling station, the stop in hand and the later stop as numbered markers; "next" is the first unfinished trip
+    fireEvent.click(await screen.findByRole("button", { name: "Street map" }));
     expect(await screen.findByTitle("Filling station ST09")).toBeInTheDocument();
     expect(screen.getByTitle("Trip 1: KONDAPUR (DIV 15)")).toBeInTheDocument();
     fireEvent.click(screen.getByTitle("Trip 2: MADHAPUR -2"));
     expect(await screen.findByText(/Showing/)).toBeInTheDocument();
-    // a stop of an estimated load disappears from the map once the driver says it is delivered
-    fireEvent.click(screen.getByRole("button", { name: "Delivered here: next stop" }));
+    // test mode: after emptying the tank the driver takes the code of each of three residents (000000)
+    fireEvent.click(screen.getByRole("button", { name: "Delivered here: take the residents' codes" }));
+    const boxes = [1, 2, 3].map((i) => screen.getByLabelText(`Resident ${i}`));
+    fireEvent.change(boxes[0], { target: { value: "000000" } });
+    fireEvent.change(boxes[1], { target: { value: "123456" } });
+    fireEvent.change(boxes[2], { target: { value: "000000" } });
+    fireEvent.click(screen.getByRole("button", { name: "Confirm delivery" }));
+    expect(await screen.findByText(/1 code\(s\) are not right/)).toBeInTheDocument();
+    expect(boxes[1]).toHaveAttribute("aria-invalid", "true");
+    fireEvent.change(boxes[1], { target: { value: "000000" } });
+    fireEvent.click(screen.getByRole("button", { name: "Confirm delivery" }));
+    // the stop is confirmed on the server and disappears from the street map
+    expect(await screen.findByText(/all three residents gave the code/)).toBeInTheDocument();
+    expect(callsTo(fetchMock, "POST", "/driver/route/visits").at(-1)?.body).toEqual({ day: "2026-10-07", tanker_id: "T0080", n: 2, codes: ["000000", "000000", "000000"] });
     await waitFor(() => expect(screen.queryByTitle("Trip 2: MADHAPUR -2")).not.toBeInTheDocument());
     fireEvent.click(screen.getByRole("button", { name: "Start delivery and send the code" }));
     await waitFor(() => expect(callsTo(fetchMock, "POST", "/deliveries/*/otp")).toHaveLength(1));

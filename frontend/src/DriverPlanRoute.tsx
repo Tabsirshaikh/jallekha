@@ -3,17 +3,21 @@ import { ApiError, apiFetch } from "./api";
 import { useApi } from "./useApi";
 import type { BookingView } from "./BookingExperience";
 import type { MapTrip } from "./DriverLiveMap";
+import type { SimTrip } from "./DriverRouteSim";
 import type { LatLng } from "./routeGeo";
 import "./DriverPlanRoute.css";
 
 // the map (and Leaflet with it) loads only when a driver opens a route
 const DriverLiveMap = lazy(() => import("./DriverLiveMap"));
+const DriverRouteSim = lazy(() => import("./DriverRouteSim"));
 
 // U4: the driver's day from the approved plan by section (GET /driver/tankers, /driver/route). Trips
 // for bookings made through JalLekha carry the delivery-code steps (F12); estimated loads (from
-// monthly totals) have no person behind them and need no code. English only for now.
+// monthly totals) have no person behind them and need no code. In local test mode the driver takes
+// a code from each of three residents at every stop (SIMULATION: the code is 000000, no SMS), and
+// the stop is ticked for the officer too (POST /driver/route/visits). English only for now.
 
-type Trip = { n: number; kind: string; name: string; depart: string; arrive: string; back: string; km: number; booking: BookingView | null; stop_id: string | null; group: string; lat: number | null; lng: number | null };
+type Trip = { n: number; kind: string; name: string; depart: string; arrive: string; unloaded: string; back: string; km: number; booking: BookingView | null; stop_id: string | null; group: string; lat: number | null; lng: number | null; visited_at: string | null };
 type Route = { day: string; plan_id: string; tanker_id: string; station_id: string; station: { station_id: string; lat: number; lng: number }; finish: string; km: number; trips: Trip[] };
 type Tankers = { day: string; plan_id: string; tankers_total: number; items: { tanker_id: string; station_id: string; trips: number; real_bookings: number; first_depart: string }[] };
 type DeliveryView = { delivery_id: string; otp_issued: boolean; otp_verified: boolean; outcome_status: string };
@@ -76,12 +80,14 @@ function RouteView({ route, testMode, onDone }: { route: Route; testMode: boolea
     const id = navigator.geolocation.watchPosition((p) => setGps([p.coords.latitude, p.coords.longitude]), () => setGpsNote("Your position could not be read."), { enableHighAccuracy: true, maximumAge: 5000 });
     return () => navigator.geolocation.clearWatch(id);
   }, [gpsNote]);
-  const isDone = (t: Trip) => finished(t) || byHand.includes(t.n);
+  const [view, setView] = useState<"sim" | "street">("sim");
+  const isDone = (t: Trip) => finished(t) || t.visited_at !== null || byHand.includes(t.n);
   const next = route.trips.find((t) => !isDone(t)) ?? null;
   const current = picked !== null && route.trips.some((t) => t.n === picked && !isDone(t)) ? picked : next?.n ?? 0;
   const trip = route.trips.find((t) => t.n === current) ?? null;
   const mark = (n: number) => { const all = [...byHand, n]; setByHand(all); setPicked(null); try { localStorage.setItem(doneKey(route), JSON.stringify(all)); } catch { /* kept for this visit only */ } };
   const trips: MapTrip[] = route.trips.map((t) => ({ n: t.n, kind: t.kind, name: t.name, lat: t.lat, lng: t.lng, depart: t.depart, done: isDone(t) }));
+  const simTrips: SimTrip[] = route.trips.map((t) => ({ n: t.n, kind: t.kind, name: t.name, group: t.group, lat: t.lat, lng: t.lng, depart: t.depart, arrive: t.arrive, unloaded: t.unloaded, back: t.back, km: t.km, booked: t.booking !== null, done: isDone(t) }));
 
   return <>
     <p className="muted small">Station {route.station_id} · {route.trips.length} trips · {route.km} km · back by {route.finish}. Fill at the station before each trip: one booking is one full tanker.</p>
@@ -89,22 +95,61 @@ function RouteView({ route, testMode, onDone }: { route: Route; testMode: boolea
       <p className="driver-plan-next" role="status">{trip
         ? <>{picked !== null && trip.n !== next?.n ? "Showing" : "Next stop"}: <b>trip {trip.n}, {trip.name}</b> · leave the station at {trip.depart}, arrive {trip.arrive}</>
         : "All of today's trips are finished. Well done."}</p>
+      <div className="driver-plan-views" role="group" aria-label="How to show the route">
+        <button aria-pressed={view === "sim"} onClick={() => setView("sim")}>Route simulation</button>
+        <button aria-pressed={view === "street"} onClick={() => setView("street")}>Street map</button>
+      </div>
       <Suspense fallback={<p className="muted" role="status">Loading the map…</p>}>
-        <DriverLiveMap station={route.station} trips={trips} current={current} gps={gps} testMode={testMode} onChoose={setPicked} />
+        {view === "sim"
+          ? <DriverRouteSim station={route.station} trips={simTrips} current={current} onChoose={setPicked} />
+          : <DriverLiveMap station={route.station} trips={trips} current={current} gps={gps} testMode={testMode} onChoose={setPicked} />}
       </Suspense>
-      <div className="driver-plan-gps">
+      {view === "street" && <div className="driver-plan-gps">
         <button className="button button-secondary" onClick={() => { setGpsNote("on"); if (!navigator.geolocation) setGpsNote("This phone cannot give its position."); }}>{gps ? "Following my position" : "Show my position on the map"}</button>
         {gpsNote && gpsNote !== "on" && <span className="muted small">{gpsNote}</span>}
-      </div>
-      <p className="muted small">This is the route the officer's plan gave this tanker: fill at the station, drive to the stop, come back, fill again. A stop disappears when it is delivered, and the road behind you disappears as you drive. Tap a stop or a trip to see its road. The station's place is a stand-in.</p>
+      </div>}
+      {view === "street" && <p className="muted small">This is the route the officer's plan gave this tanker: fill at the station, drive to the stop, come back, fill again. A stop disappears when it is delivered, and the road behind you disappears as you drive. Tap a stop or a trip to see its road. The station's place is a stand-in.</p>}
     </div>
     <ol className="driver-plan-trips">{route.trips.map((t) => <li key={t.n} className={`${t.booking ? "real" : ""}${t.n === current ? " chosen" : ""}${isDone(t) ? " finished" : ""}`}>
       <div className="driver-plan-trip-head" role="button" tabIndex={0} onClick={() => setPicked(t.n)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setPicked(t.n); } }}><b>{t.n}</b><span>{t.depart} → {t.arrive}</span><strong>{t.name}</strong><small>{KIND[t.kind] ?? t.kind}{t.booking ? ` · ${t.booking.priority}` : " · estimated load, no code needed"}</small></div>
       {t.booking && t.stop_id && <DeliverBooking key={t.booking.booking_id} booking={t.booking} stopId={t.stop_id} tanker={route.tanker_id} testMode={testMode} onDone={onDone} />}
-      {!t.booking && !isDone(t) && <button className="button button-secondary driver-plan-hand" onClick={() => mark(t.n)}>Delivered here: next stop</button>}
-      {!t.booking && byHand.includes(t.n) && <p className="driver-plan-done">✓ Marked delivered (kept on this phone only, no booker to confirm).</p>}
+      {!t.booking && testMode && !isDone(t) && <ResidentCodes day={route.day} tanker={route.tanker_id} n={t.n} onDone={() => { setPicked(null); onDone(); }} />}
+      {!t.booking && !testMode && !isDone(t) && <button className="button button-secondary driver-plan-hand" onClick={() => mark(t.n)}>Delivered here: next stop</button>}
+      {!t.booking && t.visited_at && <p className="driver-plan-done">✓ Delivered: all three residents gave the code at {t.visited_at.slice(11, 16)} UTC (test mode, SIMULATION).</p>}
+      {!t.booking && !t.visited_at && byHand.includes(t.n) && <p className="driver-plan-done">✓ Marked delivered (kept on this phone only, no booker to confirm).</p>}
     </li>)}</ol>
   </>;
+}
+
+type VisitResult = { accepted: boolean; codes: boolean[]; visited_at: string | null };
+const RESIDENTS = 3;
+
+/** Test mode: after emptying the tank, the code of each of three residents (SIMULATION: 000000). */
+function ResidentCodes({ day, tanker, n, onDone }: { day: string; tanker: string; n: number; onDone: () => void }) {
+  const [open, setOpen] = useState(false);
+  const [codes, setCodes] = useState<string[]>(() => Array(RESIDENTS).fill(""));
+  const [wrong, setWrong] = useState<boolean[]>(() => Array(RESIDENTS).fill(false));
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState<string | null>(null);
+  if (!open) return <button className="button button-primary driver-plan-hand" onClick={() => setOpen(true)}>Delivered here: take the residents' codes</button>;
+  async function confirm() {
+    setBusy(true); setNote(null);
+    try {
+      const r = await apiFetch<VisitResult>("/driver/route/visits", { method: "POST", body: { day, tanker_id: tanker, n, codes } });
+      setWrong(r.codes.map((ok) => !ok));
+      if (r.accepted) onDone();
+      else setNote(`${r.codes.filter((ok) => !ok).length} code(s) are not right. Ask those residents to read their code again.`);
+    } catch (cause) { setNote(errorText(cause)); } finally { setBusy(false); }
+  }
+  return (
+    <div className="driver-codes">
+      <p className="muted small">TEST MODE (SIMULATION): ask each of the three residents at this stop for their delivery code. In this test every code is 000000; no SMS is sent.</p>
+      <div className="driver-codes-row">{codes.map((c, i) => <label key={i}>Resident {i + 1}
+        <input inputMode="numeric" maxLength={6} value={c} aria-invalid={wrong[i]} placeholder="000000" onChange={(e) => { const v = e.target.value.replace(/\D/g, ""); setCodes((all) => all.map((x, j) => (j === i ? v : x))); setWrong((all) => all.map((x, j) => (j === i ? false : x))); }} /></label>)}</div>
+      <button className="button button-primary" disabled={busy || codes.some((c) => c.length < 6)} onClick={() => void confirm()}>Confirm delivery</button>
+      {note && <p className="plan-message error" role="alert">{note}</p>}
+    </div>
+  );
 }
 
 function DeliverBooking({ booking, stopId, tanker, testMode, onDone }: { booking: BookingView; stopId: string; tanker: string; testMode: boolean; onDone: () => void }) {

@@ -1,0 +1,24 @@
+.driver-sim { display: grid; gap: 10px; }
+.driver-sim-map svg { max-height: 62vh; }
+.driver-sim-stop { cursor: pointer; }
+.driver-sim-stop:focus-visible circle { stroke: var(--deep); stroke-width: 4; }
+.plan-routes-n.dark { fill: var(--deep); }
+.driver-sim-pump { pointer-events: none; }
+.driver-sim-truck circle { filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .35)); }
+.driver-sim-steps { display: grid; gap: 4px; max-height: 300px; margin: 0; padding: 0; overflow-y: auto; list-style: none; }
+.driver-sim-steps button { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 8px; width: 100%; padding: 7px 10px; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--ink); font: inherit; font-size: .92rem; text-align: start; cursor: pointer; }
+.driver-sim-steps button span { color: var(--muted); font-variant-numeric: tabular-nums; }
+.driver-sim-steps li.station button { background: #f3f6f9; }
+.driver-sim-steps li.past button { opacity: .6; }
+.driver-sim-steps li.now button { border-color: var(--deep); box-shadow: inset 4px 0 0 var(--deep); font-weight: 700; }
+.driver-sim-steps li.done button { border-color: #1f6046; color: #1f6046; }
+.driver-plan-views { display: flex; gap: 6px; }
+.driver-plan-views button { min-height: 40px; padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink); font: inherit; cursor: pointer; }
+.driver-plan-views button[aria-pressed="true"] { border-color: var(--deep); background: var(--deep); color: #fff; }
+.driver-codes { display: grid; gap: 8px; padding: 10px; border: 1.5px dashed #c9a24a; border-radius: 10px; background: #fffaf0; }
+.driver-codes-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.driver-codes label { display: grid; gap: 4px; font-weight: 650; color: var(--ink); }
+.driver-codes input { min-height: 46px; padding: 8px 12px; border: 1px solid #dfe7e1; border-radius: 9px; font: inherit; letter-spacing: .2em; color: var(--ink); }
+.driver-codes input[aria-invalid="true"] { border-color: #c4473a; background: #fff3f1; }
+.driver-codes .button { justify-self: start; min-height: 48px; }
+@media (max-width: 520px) { .driver-codes-row { grid-template-columns: 1fr; } }

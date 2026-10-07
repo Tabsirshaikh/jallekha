@@ -2,6 +2,7 @@ import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useApi } from "./useApi";
 import { HEIGHT, WIDTH, project, sectionShapes, shapeByGroup, wardShapes } from "./mapGeo";
 import { KIND, KINDS } from "./planColours";
+import { FILL, clock, minute, spotAt, type Leg, type Spot } from "./routePlay";
 import "./PlanRoutes.css";
 
 // Tanker routes of a plan by section (GET /plans/{id}/routes): the day of every tanker played on
@@ -15,31 +16,15 @@ type Summary = { tankers: number; fleet: number; stations: number; trips: number
 /** [lat, lng, depart, arrive, unloaded, back, kind] in minutes after midnight (compact_paths). */
 type Compact = [number, number, number, number, number, number, number];
 type Path = { tanker_id: string; station_id: string; trips: Compact[] };
-/** One trip as drawn: where it goes on the drawing and when (minutes after midnight). */
-type Leg = { x: number; y: number; dep: number; arr: number; unl: number; back: number; kind: number };
-type Routes = { summary: Summary; stations: StationRow[]; tankers: Tanker[]; paths: Path[] | null; unscheduled: { kind: string; name: string; reason: string; station_id: string }[]; unscheduled_total: number; basis: Record<string, string> };
+type Routes = { day: string; summary: Summary; stations: StationRow[]; tankers: Tanker[]; paths: Path[] | null; unscheduled: { kind: string; name: string; reason: string; station_id: string }[]; unscheduled_total: number; basis: Record<string, string> };
 type Box = { x: number; y: number; w: number; h: number };
+/** Stops drivers confirmed in local test mode (GET /driver/visits, SIMULATION). */
+type Visits = { plan_id: string; items: { tanker_id: string; n: number; visited_at: string }[] };
+type Seen = Map<string, Map<number, string>>;
 
 const nf = new Intl.NumberFormat("en", { maximumFractionDigits: 0 });
-const DAY_START = 6 * 60, DAY_END = 22 * 60, FILL = 20;
+const DAY_START = 6 * 60, DAY_END = 22 * 60;
 const CITY: Box = { x: -10, y: -10, w: WIDTH + 20, h: HEIGHT + 20 };
-const minute = (hhmm: string) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3, 5));
-const clock = (m: number) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(Math.floor(m % 60)).padStart(2, "0")}`;
-
-type Spot = { x: number; y: number; state: "out" | "unload" | "back" | "fill"; kind: number };
-/** Where a tanker is at minute `t`: on the road out, unloading, on the way back, or filling at its station. */
-function spotAt(trips: Leg[], home: [number, number], t: number): Spot | null {
-  for (const { x, y, dep, arr, unl, back, kind } of trips) {
-    if (t < dep - FILL) return null;
-    if (t > back) continue;
-    if (t < dep) return { x: home[0], y: home[1], state: "fill", kind };
-    if (t < arr) { const f = (t - dep) / Math.max(1, arr - dep); return { x: home[0] + (x - home[0]) * f, y: home[1] + (y - home[1]) * f, state: "out", kind }; }
-    if (t < unl) return { x, y, state: "unload", kind };
-    const f = (t - unl) / Math.max(1, back - unl);
-    return { x: x + (home[0] - x) * f, y: y + (home[1] - y) * f, state: "back", kind };
-  }
-  return null;
-}
 
 /** Where a trip is drawn: the middle of its section (the home is somewhere inside it), else its point. */
 function placeOf(trip: Trip): [number, number] | null {
@@ -115,6 +100,18 @@ export default function PlanRoutes({ planId }: { planId: string }) {
   const detail = useApi<Routes>(station ? `${base}?station=${encodeURIComponent(station)}` : null);
   const data = overview.live ? overview.data : null;
   const chosen = station && detail.live ? detail.data : null;
+  // what drivers confirmed (local test mode only; elsewhere this answers 404 and nothing shows)
+  const visitsApi = useApi<Visits>(data ? `/driver/visits?day=${data.day}` : null);
+  const reloadVisits = visitsApi.reload;
+  useEffect(() => { if (!data) return; const id = setInterval(reloadVisits, 10000); return () => clearInterval(id); }, [data, reloadVisits]);
+  const [visits, setVisits] = useState<Visits | null>(null);
+  if (visitsApi.data && visitsApi.data !== visits) setVisits(visitsApi.data);
+  const seen: Seen = useMemo(() => {
+    const m: Seen = new Map();
+    if (visits && visits.plan_id === planId) for (const v of visits.items) { const t = m.get(v.tanker_id) ?? new Map<number, string>(); t.set(v.n, v.visited_at); m.set(v.tanker_id, t); }
+    return m;
+  }, [visits, planId]);
+  const confirmed = [...seen.values()].reduce((sum, t) => sum + t.size, 0);
 
   // the clock
   useEffect(() => {
@@ -172,14 +169,14 @@ export default function PlanRoutes({ planId }: { planId: string }) {
   const pick = (id: string | null) => { setStation(id); setTanker(null); };
 
   // destinations of the chosen station: one spoke per place, numbered for the chosen tanker
-  const places = new Map<string, { x: number; y: number; kind: string; trips: number; name: string; nums: number[] }>();
+  const places = new Map<string, { x: number; y: number; kind: string; trips: number; name: string; nums: number[]; seen: number }>();
   if (station && stationRow) for (const t of tankers) for (const x of t.trips) {
     const at = placeOf(x);
     if (!at) continue;
     const key = `${x.kind}:${at[0].toFixed(1)},${at[1].toFixed(1)}`;
-    const p = places.get(key) ?? { x: at[0], y: at[1], kind: x.kind, trips: 0, name: x.name, nums: [] };
+    const p = places.get(key) ?? { x: at[0], y: at[1], kind: x.kind, trips: 0, name: x.name, nums: [], seen: 0 };
     p.trips += 1;
-    if (t.tanker_id === tanker) p.nums.push(x.n);
+    if (t.tanker_id === tanker) { p.nums.push(x.n); if (seen.get(t.tanker_id)?.has(x.n)) p.seen += 1; }
     places.set(key, p);
   }
   const home = stationRow ? project([stationRow.lng, stationRow.lat]) : null;
@@ -213,9 +210,9 @@ export default function PlanRoutes({ planId }: { planId: string }) {
             })}
             {home && [...places.values()].map((p, i) => <text key={"t" + i} x={p.x} y={p.y + 22 * k} textAnchor="middle" fontSize={11 * k} className="plan-routes-label">{p.name}</text>)}
             {home && [...places.values()].filter((p) => p.nums.length > 0).map((p, i) => <g key={"n" + i}>
-              <circle cx={p.x} cy={p.y} r={11 * k} fill={KIND[p.kind]?.colour ?? "#1f7560"} stroke="#fff" strokeWidth={1.5} vectorEffect="non-scaling-stroke" />
-              <text x={p.x} y={p.y + 4 * k} textAnchor="middle" fontSize={11 * k} className="plan-routes-n">{p.nums.join(",")}</text>
-              <title>{`${p.name}: trip ${p.nums.join(", ")}`}</title></g>)}
+              <circle cx={p.x} cy={p.y} r={11 * k} fill={p.seen === p.nums.length ? "#1f6046" : KIND[p.kind]?.colour ?? "#1f7560"} stroke="#fff" strokeWidth={1.5} vectorEffect="non-scaling-stroke" />
+              <text x={p.x} y={p.y + 4 * k} textAnchor="middle" fontSize={11 * k} className="plan-routes-n">{p.seen === p.nums.length ? "✓" : p.nums.join(",")}</text>
+              <title>{`${p.name}: trip ${p.nums.join(", ")}${p.seen > 0 ? ` · ${p.seen} confirmed by the driver` : ""}`}</title></g>)}
             {data.stations.map((r) => {
               const [x, y] = stationXY.get(r.station_id)!;
               const on = r.station_id === station;
@@ -238,6 +235,7 @@ export default function PlanRoutes({ planId }: { planId: string }) {
             <span>{nf.format(onRoad)} on the road</span>
             {station && <span>{nf.format(filling)} filling</span>}
             <span>{nf.format(delivered)} of {nf.format(totalLegs)} delivered</span>
+            {confirmed > 0 && <span>✓ {nf.format(confirmed)} stops confirmed by drivers (test mode)</span>}
           </div>
           {station && <button className="plan-routes-back button button-secondary" onClick={() => pick(null)}>← Whole city</button>}
           <div className="plan-routes-legend">
@@ -258,12 +256,12 @@ export default function PlanRoutes({ planId }: { planId: string }) {
             {detail.loading && <p className="plan-empty" role="status">Loading the tankers of {station}…</p>}
             <p className="muted small">Pick a tanker to follow its route.</p>
             <div className="plan-routes-tankers" role="list">{tankers.map((t) => <button key={t.tanker_id} role="listitem" className={t.tanker_id === tanker ? "active" : ""} onClick={() => setTanker(t.tanker_id === tanker ? null : t.tanker_id)}>
-              <strong>{t.tanker_id}</strong><span>{t.trips.length} trips · {t.sections_reached} sections · back {t.finish}</span></button>)}</div>
+              <strong>{t.tanker_id}</strong><span>{t.trips.length} trips · {t.sections_reached} sections · back {t.finish}{seen.get(t.tanker_id)?.size ? ` · ✓ ${seen.get(t.tanker_id)!.size} confirmed` : ""}</span></button>)}</div>
           </>}
         </div>
       </div>
 
-      {current && <DriverSheet tanker={current} day={planId} now={now} />}
+      {current && <DriverSheet tanker={current} day={planId} now={now} seen={seen.get(current.tanker_id) ?? null} />}
       <p className="muted small">Lines on the map are straight; the distances and times are road figures from OSRM where they were built ({nf.format(s.trips - s.legs_estimated)} of {nf.format(s.trips)} trips), else an estimate. Station places are stand-ins: HMWSSB does not publish them. {data.basis.times}.</p>
     </section>
   );
@@ -292,7 +290,7 @@ function DayBar({ tanker, now }: { tanker: Tanker; now: number }) {
   </div>;
 }
 
-function DriverSheet({ tanker, day, now }: { tanker: Tanker; day: string; now: number }) {
+function DriverSheet({ tanker, day, now, seen }: { tanker: Tanker; day: string; now: number; seen: Map<number, string> | null }) {
   const sheet = useRef<HTMLDivElement>(null);
   function print() {
     const w = window.open("", "_blank", "width=800,height=900");
@@ -307,8 +305,8 @@ function DriverSheet({ tanker, day, now }: { tanker: Tanker; day: string; now: n
       <p>{tanker.trips.length} trips · {tanker.sections_reached} sections · {nf.format(tanker.km)} km · back by {tanker.finish} · plan {day}</p>
       <DayBar tanker={tanker} now={now} />
       <table className="plan-routes-table">
-        <thead><tr><th>#</th><th>Fill and leave</th><th>Reach</th><th>Go to</th><th>For</th><th>Back at station</th><th>km</th></tr></thead>
-        <tbody>{tanker.trips.map((t) => <tr key={t.n}><td>{t.n}</td><td>{t.depart}</td><td>{t.arrive}</td><td>{t.name}</td><td><span style={{ color: KIND[t.kind]?.colour }}>{KIND[t.kind]?.label ?? t.kind}</span>{t.booking_id ? ` · ${bookingLabel(t.booking_id)}` : ""}</td><td>{t.back}</td><td>{t.km}{t.leg_basis === "OSRM" ? "" : " (est.)"}</td></tr>)}</tbody>
+        <thead><tr><th>#</th><th>Fill and leave</th><th>Reach</th><th>Go to</th><th>For</th><th>Back at station</th><th>km</th>{seen && <th>Driver confirmed</th>}</tr></thead>
+        <tbody>{tanker.trips.map((t) => <tr key={t.n}><td>{t.n}</td><td>{t.depart}</td><td>{t.arrive}</td><td>{t.name}</td><td><span style={{ color: KIND[t.kind]?.colour }}>{KIND[t.kind]?.label ?? t.kind}</span>{t.booking_id ? ` · ${bookingLabel(t.booking_id)}` : ""}</td><td>{t.back}</td><td>{t.km}{t.leg_basis === "OSRM" ? "" : " (est.)"}</td>{seen && <td>{seen.has(t.n) ? `✓ ${seen.get(t.n)!.slice(11, 16)} UTC` : "—"}</td>}</tr>)}</tbody>
       </table>
     </div>
     <button className="button button-secondary" onClick={print}>Print route sheet</button>

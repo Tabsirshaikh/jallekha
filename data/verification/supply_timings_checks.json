@@ -1,7 +1,7 @@
 {
   "dataset": "D16-HMWSSB-WaterSupplyTimings",
   "basis": "REAL",
-  "csv_path": "data\\raw\\d16_supply_timings\\supply_timings.csv",
+  "csv_path": "data/raw/d16_supply_timings/supply_timings.csv",
   "csv_sha256": "81cdc754d4ca1dcbbeaa0c6c5dec3a321f7b8b216c2a1c92a883c2f13776304f",
   "csv_rows": 21,
   "sections_covered": 1,
