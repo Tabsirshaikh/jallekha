@@ -53,7 +53,10 @@ bookings that arrived that day (the real ones where a section has them).
 From the day's approved plan by section (404 if none): the tankers carrying real bookings
 (`tanker_id`, `station_id`, `trips`, `real_bookings`, `first_depart`), and one tanker's trips
 (`n`, `kind`, `name`, `depart`, `arrive`, `back`, `km`, `leg_basis`, `booking` view or null,
-`stop_id`). Estimated loads have no booking and need no delivery code.
+`stop_id`, and for the driver's map `group`, `lat`, `lng` of where the trip goes: the booker's own
+place for a booking made through JalLekha), plus `station` (`station_id`, `lat`, `lng`; the
+station's place is a stand-in, HMWSSB does not publish it). Estimated loads have no booking and
+need no delivery code.
 
 ## SMS test mode: `GET /sms/test-mode`, `GET /sms/outbox?phone=`, `POST /sms/outbox/reply`
 Only with `SMS_PROVIDER=outbox` and without sign-in (`AUTH_REQUIRED` unset); otherwise 404 and

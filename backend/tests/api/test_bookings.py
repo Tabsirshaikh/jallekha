@@ -140,7 +140,13 @@ def test_one_booking_from_the_form_to_the_closed_day(client) -> None:  # type: i
     listed = client.get(f"/driver/tankers?day={day}", headers=auth("driver")).json()
     assert tanker in {t["tanker_id"] for t in listed["items"]}
     route = client.get(f"/driver/route?day={day}&tanker_id={tanker}", headers=auth("driver"))
-    trip = next(t for t in route.json()["trips"] if t["booking"])
+    body = route.json()
+    # the driver's map: the filling station, and where every trip goes (the booker's own place
+    # for a booking made through JalLekha)
+    assert body["station"]["station_id"] == body["station_id"]
+    assert body["station"]["lat"] and body["station"]["lng"]
+    trip = next(t for t in body["trips"] if t["booking"])
+    assert trip["group"] and trip["lat"] is not None and trip["lng"] is not None
     assert trip["stop_id"] == stop_id and trip["booking"]["booking_id"] == booking["booking_id"]
 
     # the driver starts the delivery; the code goes to the booker's phone
