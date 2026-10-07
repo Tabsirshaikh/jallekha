@@ -819,7 +819,7 @@ def _build_section(recipe: dict[str, Any]) -> BuiltPlan:
     if recipe.get("weekly_priority"):
         basis["weekly_priority"] = (
             "DERIVED_APPROXIMATE: verified seven-day emergency tanker requirement minus "
-            "confirmed deliveries; Census entitlement multiplied by 0.25 + 3.75 x shortfall "
+            "confirmed deliveries; Census entitlement multiplied by 1 + 3 x shortfall "
             "share, with an additional boost for observed days below the daily minimum "
             "(ASSUMED coefficients). Complete officer-reviewed records required. No extra debt "
             "boost for these groups; snapshots frozen in this plan's recipe."

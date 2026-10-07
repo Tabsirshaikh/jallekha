@@ -24,7 +24,7 @@ def test_delivered_water_reduces_priority_and_neglected_area_overtakes_baseline(
     assert served["shortfall_litres"] == 0
     assert neglected["shortfall_litres"] == 10500
     assert neglected["current_need_weight"] > served["current_need_weight"]
-    assert allocation_factors({"a": served, "b": neglected})["a"] < 1
+    assert allocation_factors({"a": served, "b": neglected})["a"] == 1  # Census baseline kept
 
 
 def test_partial_delivery_is_not_adequate_and_no_booking_needed():
@@ -76,4 +76,4 @@ def test_more_days_below_daily_minimum_raise_priority_at_same_weekly_shortfall()
     prolonged = calculate(100, 1.2, review(), 5000, DAY, days_below_minimum=6)
     assert prolonged["allocation_factor"] > brief["allocation_factor"]
     covered = calculate(100, 1.2, review(), 10500, DAY, days_below_minimum=6)
-    assert covered["allocation_factor"] == 0.25
+    assert covered["allocation_factor"] == 1.0  # covered keeps its Census baseline

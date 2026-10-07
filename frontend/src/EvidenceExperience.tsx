@@ -107,7 +107,13 @@ export default function EvidenceExperience() {
   const fieldChecks = useApi<unknown>(wardLive ? "/underserved/field-checks" + PAGE : null);
   const sectionApi = useApi<unknown>(enabled ? "/underserved/section-checks" + PAGE : null);
   const checkedSectionsApi = useApi<unknown>(enabled ? "/field-checks/sections" + PAGE : null);
-  const sectionRows = (checkedSectionsApi.live ? adaptSectionChecks(checkedSectionsApi.data) : null) ?? (sectionApi.live ? adaptSectionChecks(sectionApi.data) : null) ?? adaptSectionChecks(savedSections) ?? [];
+  // Every section's booking check comes from the section-checks list (live, else the saved
+  // snapshot); the field-check list holds only the flagged sections, so it adds their latest visit
+  // outcome and never replaces the full list (else unflagged sections lose their booking check).
+  const allSectionRows = (sectionApi.live ? adaptSectionChecks(sectionApi.data) : null) ?? adaptSectionChecks(savedSections) ?? [];
+  const visited = checkedSectionsApi.live ? adaptSectionChecks(checkedSectionsApi.data) : null;
+  const visitOf = new Map((visited ?? []).map((r) => [r.section_id, r.latest_outcome]));
+  const sectionRows = allSectionRows.length ? allSectionRows.map((r) => ({ ...r, latest_outcome: visitOf.get(r.section_id) ?? r.latest_outcome })) : visited ?? [];
   const layerGeo = useApi<unknown>(wardLive ? "/coverage/layers/water_access_evidence" : null);
   const liveNeedApi = useApi<unknown>(enabled ? (bySection ? "/atlas/live-sections" : "/atlas/live") : null);
   const weeklyApi = useApi<{ items: WeeklyRow[] }>(enabled && bySection ? "/field-checks/weekly-priority" : null);

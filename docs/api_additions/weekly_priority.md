@@ -35,7 +35,7 @@ officer-verified records, never merely an empty database.
 
 Let r = max(0, requirement - delivered) / requirement (0 for zero requirement), and d be
 the number of days below the estimated daily minimum. Allocation multiplier =
-`(0.25 + 3.75*r) * (1 + 0.5*(d/7)*r)` (ASSUMED; max 6, not empirically calibrated).
+`(1 + 3*r) * (1 + 0.5*(d/7)*r)` (ASSUMED; 1 when covered, max 6, not empirically calibrated).
 Current weight = Census weight x multiplier. The allocation entitlement retains section size.
 Tier 0/1 protection and station capacities remain. This does not guarantee global ordering
 between differently sized sections or across stations. Unknown groups keep their previous

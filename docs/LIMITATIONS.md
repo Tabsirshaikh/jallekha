@@ -9,8 +9,9 @@ is an ASSUMED emergency minimum, not full demand. Confirmed REAL-stop deliveries
 ASSUMED 5,000-litre loads; stop locations and section shapes remain approximate. Current
 records must cover yesterday's window; this is not an automatic HMWSSB feed.
 
-A multiplier from 0.25 to 6 (ASSUMED, uncalibrated) reflects shortfall share and days below the
-daily minimum. Covered groups retain a positive share; unknown groups retain old policy.
+A multiplier from 1 to 6 (ASSUMED, uncalibrated) reflects shortfall share and days below the
+daily minimum. Covered groups keep their Census baseline (factor 1; the first version cut them to
+0.25, against the approved plan, fixed 2026-10-07); unknown groups retain old policy.
 Existing tier priorities and station limits remain; differently sized groups/stations do not
 have a guaranteed global priority order. Verified deficits enter the limited scheduled
 reserve even without bookings/F4 flags. No artificial second debt boost is applied.
