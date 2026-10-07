@@ -67,5 +67,11 @@ class SectionPlanConfig:
     route_day_start_minute: int = 6 * 60
     route_day_end_minute: int = 22 * 60
 
+    # Service type of a section on the plan screen (services/plan_overview.py, F7): a section whose
+    # 2025 bookings per 1,000 domestic connections are at or above this percentile of all sections
+    # is a heavy tanker user (its pipes fall short). Basis: ASSUMED cut-off (the top quarter) over
+    # DERIVED rates from REAL bookings (D1) and connections (D19).
+    heavy_use_percentile: int = 75
+
 
 SECTION_PLAN_CONFIG = SectionPlanConfig()

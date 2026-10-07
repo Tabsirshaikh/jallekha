@@ -314,7 +314,7 @@ def shape_to_json(geo) -> dict:
     def rnd(c):
         return (
             [rnd(x) for x in c]
-            if isinstance(c[0], (list, tuple))
+            if isinstance(c[0], list | tuple)
             else [round(c[0], 5), round(c[1], 5)]
         )
 

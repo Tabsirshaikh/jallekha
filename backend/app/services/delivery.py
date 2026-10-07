@@ -167,9 +167,13 @@ def start_delivery(
     ledger: LedgerPort,
     now: datetime,
     radius_m: float | None = None,
+    min_representatives: int | None = None,
 ) -> DeliveryState:
+    """`min_representatives` overrides the 2-3 of a shared stop: a booked home has one person, the
+    booker (services/booking_dispatch.py)."""
     reps = tuple(representatives)
     low, high = TRUST_CONFIG.delivery_representatives_min, TRUST_CONFIG.delivery_representatives_max
+    low = low if min_representatives is None else min_representatives
     if not low <= len(reps) <= high:
         raise ValueError(f"A stop needs {low}-{high} registered representatives, got {len(reps)}")
     if any(rep.stop_id != stop_id for rep in reps):

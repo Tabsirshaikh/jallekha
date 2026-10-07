@@ -39,10 +39,12 @@ from app.routers.stores import (
     DeliveryStore,
     PlanRecord,
     PlanStore,
+    get_booking_store,
     get_debt_store,
     get_delivery_store,
     get_plan_store,
 )
+from app.services import bookings as bookings_store
 from app.services import (
     day_close,
     ledger_store,
@@ -50,6 +52,7 @@ from app.services import (
     plan_builder,
     report_card,
     service_models,
+    weekly_priority,
 )
 from app.services.intake_pipeline import IntakeService
 from app.services.ledger_store import StoredLedger
@@ -134,10 +137,17 @@ def _live_inputs(
     notices: NoticeService,
     now: datetime,
     section_ward: dict[str, str],
+    bookings: bookings_store.BookingStore | None = None,
 ) -> _LiveInputs:
     cfg = LIVE_NEED_CONFIG
+    # Bookings officers supplied (CSV) and bookings made through JalLekha (resident app).
+    made = [
+        {"booking_id": r.booking_id, "section": r.section.removeprefix("section:"),
+         "arrived_at": bookings_store._aware(r.arrived_at).isoformat()}
+        for r in (bookings.list() if bookings is not None else [])
+    ]  # fmt: skip
     counts = live_need.count_bookings(
-        plans.supplied_bookings(), section_ward, now, cfg.bookings_window_days
+        [*plans.supplied_bookings(), *made], section_ward, now, cfg.bookings_window_days
     )
     owed = {
         a.account_id.removeprefix(day_close.WARD_PREFIX): a.debt_litres
@@ -149,7 +159,16 @@ def _live_inputs(
         rows = session.execute(
             select(Complaint.area_id, Complaint.created_at).where(Complaint.category == "no_water")
         )
-        complaints.update(area for area, at in rows if area and _utc(at) >= since)
+        for area, at in rows:
+            if not area or _utc(at) < since:
+                continue
+            # area_id is "ward:<id>", "section:<name>" or both joined by ";" (intake router);
+            # older rows hold the bare ward id. The signs count per ward.
+            for part in area.split(";"):
+                if part.startswith("ward:"):
+                    complaints[part.removeprefix("ward:")] += 1
+                elif ":" not in part.split("/")[0]:
+                    complaints[part] += 1
     cuts: Counter[str] = Counter()
     since = now - timedelta(days=cfg.cut_window_days)
     with Session(notices.engine) as session:
@@ -184,12 +203,13 @@ def atlas_live(
     intake: Annotated[IntakeService, Depends(get_intake_service)],
     notices: Annotated[NoticeService, Depends(get_notice_service)],
     now: Annotated[datetime, Depends(get_now)],
+    bookings: Annotated[bookings_store.BookingStore, Depends(get_booking_store)],
 ) -> dict[str, Any]:
     """Census need per ward plus five live clues (services/live_need.py) and booking
     concentration from the bookings officers supplied in the last 30 days (history if none)."""
     cfg = LIVE_NEED_CONFIG
     section_ward = {r["section"]: r["ward_id"] for r in csv_rows(SECTION_WARDS) if r["ward_id"]}
-    live = _live_inputs(plans, debts, intake, notices, now, section_ward)
+    live = _live_inputs(plans, debts, intake, notices, now, section_ward, bookings)
     counts = live.counts
     history = {r["ward_id"]: r["bookings"] for r in csv_rows(EQUITY_WARDS)}
     groundwater = _ward_groundwater(section_ward, now)
@@ -230,6 +250,7 @@ def atlas_live_sections(
     intake: Annotated[IntakeService, Depends(get_intake_service)],
     notices: Annotated[NoticeService, Depends(get_notice_service)],
     now: Annotated[datetime, Depends(get_now)],
+    bookings: Annotated[bookings_store.BookingStore, Depends(get_booking_store)],
 ) -> dict[str, Any]:
     """The same live clues per HMWSSB section (DERIVED_APPROXIMATE need from data/derived/
     evidence/section_need.csv). Bookings are exact per section, as are well levels. Water owed,
@@ -238,15 +259,17 @@ def atlas_live_sections(
     key `ward_id` holds the section id) so one screen draws both."""
     cfg = LIVE_NEED_CONFIG
     section_ward = {r["section"]: r["ward_id"] for r in csv_rows(SECTION_WARDS) if r["ward_id"]}
-    live = _live_inputs(plans, debts, intake, notices, now, section_ward)
+    live = _live_inputs(plans, debts, intake, notices, now, section_ward, bookings)
     counts = live.counts
     groundwater = _section_groundwater(now)
     sections = []
+    accounts = debts.accounts()
     for r in csv_rows(SECTION_NEED):
         name, main = r["section"], r["main_ward_id"]
         usual = float(r["usual_month_bookings"]) if r["usual_month_bookings"] else None
+        owed, owed_basis = weekly_priority.section_debt(name, main, accounts)
         signals = live_need.WardSignals(
-            r["section_id"], live.owed.get(main, 0.0), counts.by_section.get(name, 0), usual,
+            r["section_id"], owed, counts.by_section.get(name, 0), usual,
             live.complaints[main], live.cuts[main], groundwater.get(name),
         )  # fmt: skip
         sections.append(
@@ -254,6 +277,7 @@ def atlas_live_sections(
                 "ward_id": r["section_id"],
                 "name": name,
                 "main_ward_id": main,
+                "owed_basis": owed_basis,
                 "need": {
                     "wad": float(r["wad"]),
                     "cad": float(r["cad"]),
@@ -265,7 +289,10 @@ def atlas_live_sections(
                 "bookings_window": counts.by_section.get(name, 0),
                 "usual_month_bookings": None if usual is None else round(usual, 1),
                 **live_need.evaluate(
-                    signals, cfg, owed_known=live.owed_known, bookings_known=counts.total > 0
+                    signals,
+                    cfg,
+                    owed_known=owed_basis != "UNAVAILABLE",
+                    bookings_known=counts.total > 0,
                 ),
             }
         )

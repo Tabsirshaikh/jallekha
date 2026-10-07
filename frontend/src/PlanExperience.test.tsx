@@ -58,7 +58,7 @@ describe("PlanExperience (live API)", () => {
     renderScreen();
 
     expect(await screen.findByText("Live data")).toBeInTheDocument();
-    expect(screen.getByText(/built from the committed A8 replay \(SIMULATION\)/)).toBeInTheDocument();
+    expect(screen.getByText("Served by the JalLekha API just now.")).toBeInTheDocument();
     expect(screen.getByText("0 of 2 flagged groups checked")).toBeInTheDocument();
     expect(screen.queryByText("Sample Ward A")).not.toBeInTheDocument();
 
@@ -347,6 +347,7 @@ describe("PlanExperience (sample fallback)", () => {
       const post = server.calls.find((c) => c.method === "POST" && c.path === "/plans");
       expect(post?.body).toEqual({
         day: "2026-10-03",
+        unit: "section",
         weights: { wad: 2, cad: 1, hardship: 1 },
         bookings: [
           { booking_id: "B-1", section: "ADARSHNAGAR", arrived_at: "2026-10-03T05:30:00+05:30" },

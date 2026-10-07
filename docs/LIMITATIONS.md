@@ -1,5 +1,34 @@
 # JalLekha 2.0: known limitations
 
+**Weekly section priority (2026-10-07, local branch `feat/weekly-water-priority`):**
+Census vulnerability stays fixed; a separate seven-completed-day service shortfall changes
+new section allocations. Officer review checks alternative supply, tanker share and complete
+delivery records; absent/stale/pending evidence remains unknown. Population is connections x
+Census household size, not counted residents (flats can be understated). The 15 lpcd allowance
+is an ASSUMED emergency minimum, not full demand. Confirmed REAL-stop deliveries count as
+ASSUMED 5,000-litre loads; stop locations and section shapes remain approximate. Current
+records must cover yesterday's window; this is not an automatic HMWSSB feed.
+
+A multiplier from 1 to 6 (ASSUMED, uncalibrated) reflects shortfall share and days below the
+daily minimum. Covered groups keep their Census baseline (factor 1; the first version cut them to
+0.25, against the approved plan, fixed 2026-10-07); unknown groups retain old policy.
+Existing tier priorities and station limits remain; differently sized groups/stations do not
+have a guaranteed global priority order. Verified deficits enter the limited scheduled
+reserve even without bookings/F4 flags. No artificial second debt boost is applied.
+New current plans use supplied section bookings; historical plans stay frozen, and re-cut
+section identities outside the 2025 catalog remain unsupported. A closed supplied section day
+uses its actual supplied arrival counts. Section warnings now read section debt first rather
+than displaying only the main ward's debt. Four warning badges still describe their original
+clues; use the new current-priority layer for weekly service priority.
+
+Deterministic SIMULATION: two equal-population areas, 40 bookings/20 trips; an adequately
+served high-baseline area gets 13 -> 1 trips and a neglected lower-baseline area 7 -> 19.
+Total served stays 20; unknown evidence preserves 13/7. This demonstrates behaviour, not
+field accuracy or a universal improvement. Need/volume estimates, officer completeness claims,
+assumed coefficients, delivery coverage and actual fleet availability require validation.
+See `api_additions/weekly_priority.md` and `data/verification/weekly_priority_examples.json`.
+
+
 Status on `main` as of 2026-10-04 (after PRs #52, #57, #59, #60, #61 and #62). One section per feature of
 `docs/JALLEKHA_FINAL_SOLUTION.md`, then limits that cut across features, then what is not built yet.
 Sources: `docs/BRANCH_WORKLOG.md` ("Known limitations" of each branch), the solution document's
@@ -277,6 +306,8 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 - Need weights (water access counts double) and thresholds are policy assumptions [ASSUMED]. Officers can try other need weights for one plan (0 to 5 each); a weighted plan is a separate plan with its own ledger entry. The effect is small: on 2025-05-01 the strongest water-access setting moves 6 groups by at most 8 trips, because daily capacity limits it. The debt weight has no slider (the replay has no debts).
 - Wards are never classed `no_connection` by Census alone (maximum non-tap share about 29%); that class normally comes from officer input.
 - Need comes from Census 2011 through the approximate crosswalk.
+- **Service types on the plan screen (plans by section, 2026-10-07):** each section is drawn as one of water cut today (F10), water on a schedule (F9, the 12 field-check sections), books many tankers (2025 bookings per 1,000 domestic connections in the top quarter, cut-off about 1,362 a year), books now and then, or not enough data (29 sections without a connection count). "Books many tankers" stands in for the design's "piped intermittent": it is a DERIVED proxy from REAL bookings and connections with an ASSUMED cut-off, not a measured supply-hours figure (HMWSSB publishes none). No officer input is taken yet.
+- **Reserve not passed back:** a plan keeps 5% of trips for scheduled supply even when the scheduled sections need fewer (2025-05-15, tight: 324 kept, 120 needed); the other 204 are not given to waiting bookings. The plan screen says so. Changing it changes every stored plan's digest, so it is left for an owner decision.
 
 ### F8 Fair Queue (A3)
 - Booking categories (domestic, apartment, commercial) and tier-1 declarations are **not in the HMWSSB data**. The simulation draws them from Census shares (SYNTHETIC).
@@ -315,6 +346,9 @@ Legend: **[OPEN]** needs an owner or outside decision. **[ASSUMED]** a policy se
 ### F12 Delivery proof (T3)
 - The driver app (U4) runs the live flow (start, send code, verify with the device position, outcome) when signed in as a driver and stops are registered; otherwise it shows its fixture preview. Stops are registered by an officer (`POST /stops`); no stop exists until then. Geofence radius (150 m) and the majority margin are [OPEN].
 - Silent residents count for nothing; unresolved deliveries never reduce debt (decided in A6).
+- **Bookings made through JalLekha (feat/booking-flow, 2026-10-07):** the whole chain runs (book -> plan -> approve -> driver -> code -> "did you get water?" -> Confirmed -> day closed, debt paid), tested through the API and in a browser. Limits: **no real SMS is sent** (no provider chosen; `SMS_PROVIDER=outbox` is a local test mode that shows the code and the question on screen); at a booked home the booker is both the person who gets the code and the one asked "did you get water?" (no neighbours are registered), so a Confirmed home delivery rests on one person's word plus the geofence; the driver's "use the booking's place" switch exists only in test mode; the section comes from approximate section areas, so a booking near a border may land in the neighbouring section; one open booking per phone stands in for HMWSSB's caps; hospital, care-home and school claims need an officer's check; no cancel or change of a booking yet; field workers use the same form (no separate screen); the resident app is not tied to an account, so "My bookings" lives on the device; English only on the new screens.
+- **Demo data:** `scripts/demo/seed_demo.py` fills a local test-mode copy with SYNTHETIC bookings, complaints, a notice and supply checks for a demonstration; every record is labelled SYNTHETIC and the script refuses to run unless sign-in is off and SMS_PROVIDER=outbox. It cannot make past deliveries, so the weekly priority's "confirmed water" stays 0 in the demo.
+- Days after 2025: a plan by section for a day after 2025 estimates the sections without real bookings from the same month of 2025 (labelled), because HMWSSB re-cut the sections in Feb/Mar 2026 and our tables use the 2025 names.
 
 ### F13 Duplicate engine (T1)
 - **Calibration reproduced on a logged pull (item 14).** The original 31,098-row extract was never found and Chicago's data changes daily, so the closest match was pulled and registered (`data/raw/d13_chicago_311/`, D13-CHICAGO-311: the four water-supply types, 2022-2023, 31,835 rows, 4,931 duplicates) and `scripts/trust/calibrate_dedup.py` writes `data/derived/dedup_calibration.csv`. Results:

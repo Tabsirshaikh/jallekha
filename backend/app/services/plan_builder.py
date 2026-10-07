@@ -386,7 +386,9 @@ _SHOWN_PROBLEMS = 10
 _ISO_HINT = "arrived_at must be an ISO date and time, for example 2026-10-03T05:30:00+05:30"
 
 
-def normalise_bookings(day: date, raw: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
+def normalise_bookings(
+    day: date, raw: Sequence[Mapping[str, Any]], *, by_section=False
+) -> list[dict[str, Any]]:
     """Check supplied bookings and put them in one canonical order, so the same bookings in any
     order are the same plan. Raises InvalidBookings listing what is wrong (up to 10 problems)."""
     top = PLAN_STORE_CONFIG.max_supplied_bookings
@@ -396,6 +398,7 @@ def normalise_bookings(day: date, raw: Sequence[Mapping[str, Any]]) -> list[dict
         raise InvalidBookings(f"Supply at most {top} bookings for one plan (got {len(raw)})")
     setup = _setup()
     home, mapping, entitlement = setup.ctx.network.home, setup.ctx.mapping, setup.ctx.entitlement
+    section_names = section_plan.load_sections(REPO_ROOT) if by_section else None
     categories = sorted(ALLOCATION_CONFIG.booking_caps)
     problems: list[str] = []
     seen: set[str] = set()
@@ -416,9 +419,10 @@ def normalise_bookings(day: date, raw: Sequence[Mapping[str, Any]]) -> list[dict
         else:
             seen.add(booking_id)
         section = item.get("section")
-        if (
-            not isinstance(section, str)
-            or section not in home
+        if not isinstance(section, str) or (
+            section not in section_names
+            if by_section
+            else section not in home
             or booking_groups.group_for(section, mapping) not in entitlement
         ):
             found.append("section is not an HMWSSB section with a station and need data")
@@ -654,7 +658,7 @@ def section_plan_id(
         extras["scheduled"] = recipe["scheduled"]
     if recipe.get("carry_over") is False:
         extras["carry_over"] = False
-    for key in ("outages", "debts"):
+    for key in ("outages", "debts", "live", "bookings", "weekly_priority"):
         if recipe.get(key):
             extras[key] = recipe[key]
     if extras:
@@ -672,13 +676,16 @@ def build_section_plan(
     scheduled: str = "f4",
     carry_over: bool = True,
     outages: Sequence[Mapping[str, Any]] = (),
+    live: Sequence[Mapping[str, Any]] = (),
 ) -> BuiltPlan:
     """The DRAFT plan by section for a day of 2025: the month's real booking total of each section
     divided by the days of the month, need = connections x Census-2011 need carried onto the
     section (estimates flagged for an officer's check), trips = the fleet or the `tight`
     scenario (section_plan.py). Nothing is random; the plan is rebuilt from its recipe."""
     return _build_section(
-        section_recipe(day, capacity, weights, debts, priority, scheduled, carry_over, outages)
+        section_recipe(
+            day, capacity, weights, debts, priority, scheduled, carry_over, outages, live
+        )
     )
 
 
@@ -691,16 +698,17 @@ def section_recipe(
     scheduled: str = "f4",
     carry_over: bool = True,
     outages: Sequence[Mapping[str, Any]] = (),
+    live: Sequence[Mapping[str, Any]] = (),
 ) -> dict[str, Any]:
     """The recipe a plan by section is stored and rebuilt from (validated)."""
     if capacity not in section_plan.CAPACITY_SCENARIOS:
         raise InvalidBookings(
             f"capacity must be one of {', '.join(section_plan.CAPACITY_SCENARIOS)}"
         )
-    if day.year != section_plan.PLAN_YEAR:
+    if day < date(section_plan.PLAN_YEAR, 1, 1):
         raise ReplayDayUnavailable(
-            f"Section plans are made for days of {section_plan.PLAN_YEAR} (the section names of "
-            "the tables); choose a day in that year"
+            f"Section plans are made for days from {section_plan.PLAN_YEAR} on (the section "
+            "names of the tables)"
         )
     recipe: dict[str, Any] = {
         "source": SECTION,
@@ -718,6 +726,8 @@ def section_recipe(
     recipe["carry_over"] = bool(carry_over)
     if outages:
         recipe["outages"] = [dict(o) for o in outages]
+    if live:  # bookings made through JalLekha, waiting on the day (no phone numbers)
+        recipe["live"] = sorted((dict(b) for b in live), key=lambda b: str(b["booking_id"]))
     if kept := normalise_debts([d for d in debts if d.account_id.startswith("section:")]):
         recipe["debts"] = kept
     if weights is not None:
@@ -737,9 +747,14 @@ def _build_section(recipe: dict[str, Any]) -> BuiltPlan:
         scheduled=str(recipe.get("scheduled", "f4")),
         carry_over=bool(recipe.get("carry_over", True)),
         outages=tuple(recipe.get("outages", ())),
+        live=tuple(recipe.get("live", ())),
     )
     try:
-        inputs, sections, left_out, notes = section_plan.plan_inputs(
+        build_inputs = (
+            section_plan.supplied_inputs if "bookings" in recipe else section_plan.plan_inputs
+        )
+        arguments = {"bookings": recipe["bookings"]} if "bookings" in recipe else {}
+        inputs, sections, left_out, notes = build_inputs(
             REPO_ROOT,
             day,
             weights or NeedWeights.default(),
@@ -748,15 +763,76 @@ def _build_section(recipe: dict[str, Any]) -> BuiltPlan:
             capacity,
             options,
             _script().planner_now,
+            **arguments,
         )
     except section_plan.SectionPlanUnavailable as exc:
         raise ReplayDayUnavailable(str(exc)) from exc
     events = _Events()
+    if recipe.get("weekly_priority"):
+        factors = recipe["weekly_priority"]
+        # Verified shortage also enters the reserve without requiring a booking or F4 flag.
+        from app.config.weekly_priority import WEEKLY_PRIORITY_CONFIG
+        from app.services.scheduled_supply import ScheduledWard
+
+        scheduled = [s for s in inputs.scheduled if s.ward_id not in factors]
+        points = list(inputs.registry.points)
+        point_groups = {p.ward_id for p in points}
+        for group, value in factors.items():
+            if value["shortfall_litres"] <= 0 or options.scheduled == "none":
+                continue
+            info = sections[group.removeprefix(section_plan.SECTION_PREFIX)]
+            scheduled.append(
+                ScheduledWard(
+                    group,
+                    value["shortfall_litres"]
+                    / WEEKLY_PRIORITY_CONFIG.window_days
+                    / ALLOCATION_CONFIG.minimum_litres_per_person_day,
+                    info.need_weight(weights or NeedWeights.default()) * value["allocation_factor"],
+                )
+            )
+            if group not in point_groups and info.lat is not None and info.lng is not None:
+                points.append(
+                    ServicePoint(
+                        f"centre:{info.section}",
+                        group,
+                        f"{info.section} (estimated centre)",
+                        info.lat,
+                        info.lng,
+                        "system",
+                        "verified shortfall; estimated centre must be checked before dispatch",
+                    )
+                )
+        inputs = replace(
+            inputs,
+            entitlement={
+                g: v * factors.get(g, {}).get("allocation_factor", 1)
+                for g, v in inputs.entitlement.items()
+            },
+            debts={g: d for g, d in inputs.debts.items() if g not in factors},
+            scheduled=scheduled,
+            registry=ServicePointRegistry(tuple(points)),
+        )
     now = _script().planner_now(day)  # plans are made at 05:00 local time on their day
     plan = planner.build_plan(inputs, section_plan.SectionGate(sections), events, now)
     basis = _basis_section(
         day, capacity, weights, len(inputs.pending), left_out, sections, notes, options
     )
+    if "bookings" in recipe:
+        basis["plan"] = (
+            f"{len(inputs.pending)} officer-supplied bookings for {day}; inputs not independently "
+            "verified. Capacity and station positions ASSUMED; no synthetic monthly arrivals. "
+            "Priorities use supplied booking tiers. Waiting bookings must be supplied explicitly."
+        )
+    if recipe.get("weekly_priority"):
+        basis["weekly_priority"] = (
+            "DERIVED_APPROXIMATE: verified seven-day emergency tanker requirement minus "
+            "confirmed deliveries; Census entitlement multiplied by 1 + 3 x shortfall "
+            "share, with an additional boost for observed days below the daily minimum "
+            "(ASSUMED coefficients). Complete officer-reviewed records required. No extra debt "
+            "boost for these groups; snapshots frozen in this plan's recipe."
+        )
+    if recipe.get("weekly_priority"):
+        basis["effective_entitlement"] += " " + basis["weekly_priority"]
     return BuiltPlan(inputs, plan, basis, recipe, tuple(events.events))
 
 
@@ -779,12 +855,20 @@ def _basis_section(
         else "the tight scenario: the replay's trips calibrated to the REAL Jun-Aug 2026 delivered "
         "share (DERIVED)"
     )
+    year = section_plan.estimate_year(day)
+    month = f"{day.strftime('%B')} {year}"
     parts = [
-        f"{bookings} bookings for {day.isoformat()}: the real {day.strftime('%B %Y')} total of "
-        "each section (REAL, HMWSSB) divided by the days of the month (not a forecast of that day)",
+        f"{bookings} bookings for {day.isoformat()}: the real {month} total of each section "
+        "(REAL, HMWSSB) divided by the days of the month (not a forecast of that day)"
+        + ("" if year == day.year else f"; the same month of {year} stands in (ASSUMED)"),
         f"{trips} trips a day = {capacity_text}, shared over the 90 ASSUMED stand-in "
         "stations by the year's bookings",
     ]
+    if notes.get("live_bookings"):
+        parts.append(
+            f"{notes['live_bookings']} REAL bookings made through JalLekha in "
+            f"{notes['live_sections']} sections, which are planned from them alone"
+        )
     if options.carry_over:
         parts.append(
             f"{notes['carried_bookings']} bookings carried over from the days before (waiting "

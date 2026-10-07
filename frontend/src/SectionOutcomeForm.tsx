@@ -4,6 +4,7 @@ import { useAuth } from "./auth";
 import { useLocale } from "./i18n";
 import { useApi } from "./useApi";
 import "./SectionOutcomeForm.css";
+import WeeklyPriorityPanel from "./WeeklyPriorityPanel";
 
 const copy = {
   en: { title: "Check booking access on the ground", question: "Could people not book a tanker?", section: "Section visited", date: "Visit date", note: "Visit note", yes: "Yes", no: "No", unclear: "Unclear", save: "Save visit outcome", saving: "Saving…", saved: "Visit outcome saved", pending: "Visit saved; the audit record is pending. Submit again to retry.", error: "Could not save the visit. Your answers are still here.", loadError: "Could not load section visits", empty: "No sections are waiting for a visit", progress: "Not yet checked on the ground: {n} distinct, decisive visits; {min} needed to measure precision.", precision: "Among {n} distinct sections checked, {p} confirmed that people could not book.", choose: "Choose an answer", signIn: "Sign in as an officer or field worker to record a visit." },
@@ -59,5 +60,6 @@ export default function SectionOutcomeForm({ onSaved }: { onSaved?: () => void }
       <button className="button button-dark" type="submit" disabled={saving || !sections.live || !selected || !outcome}>{saving ? w.saving : w.save}</button>
     </form>}
     {message && <p role="status">{message}</p>}
+    <WeeklyPriorityPanel onSaved={onSaved} />
   </section>;
 }

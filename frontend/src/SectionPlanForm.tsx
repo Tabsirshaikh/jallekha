@@ -6,59 +6,61 @@ import type { Weights } from "./planAdapter";
 // English only for now.
 
 const FIRST_DAY = "2025-01-01";
-const LAST_DAY = "2025-12-31";
+const LAST_DAY = "2030-12-31";
 
 export default function SectionPlanForm({ weights, onBuilt }: { weights: Weights; onBuilt: (planId: string) => void }) {
   const [day, setDay] = useState("");
-  const [capacity, setCapacity] = useState<"fleet" | "tight">("fleet");
+  const [capacity, setCapacity] = useState<"fleet" | "tight">("tight");
   const [priority, setPriority] = useState(true);
   const [carryOver, setCarryOver] = useState(true);
-  const [scheduled, setScheduled] = useState<"f4" | "none">("f4");
+  const [scheduled, setScheduled] = useState(true);
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<{ tone: "ok" | "error"; text: string } | null>(null);
 
   async function build(event: FormEvent) {
     event.preventDefault();
     if (busy) return;
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || day < FIRST_DAY || day > LAST_DAY) return setNote({ tone: "error", text: "Choose a day in 2025." });
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || day < FIRST_DAY || day > LAST_DAY) return setNote({ tone: "error", text: "Choose a day from 2025 on." });
     setBusy(true);
     setNote(null);
     try {
-      const built = await apiFetch<{ plan_id: string }>("/plans", { method: "POST", body: { day, unit: "section", capacity, weights, priority, scheduled, carry_over: carryOver } });
+      const built = await apiFetch<{ plan_id: string }>("/plans", { method: "POST", body: { day, unit: "section", capacity, weights, priority, scheduled: scheduled ? "f4" : "none", carry_over: carryOver } });
       onBuilt(built.plan_id);
       setNote({ tone: "ok", text: `Plan for ${day} is ready below.` });
     } catch (cause) {
       const status = cause instanceof ApiError ? cause.status : 0;
-      setNote({ tone: "error", text: status === 404 ? "No plan can be made for that day (2025 only)." : status === 0 ? "The server could not be reached." : cause instanceof ApiError ? cause.message : "The plan could not be built." });
+      setNote({ tone: "error", text: status === 404 ? "No plan can be made for that day." : status === 0 ? "The server could not be reached." : cause instanceof ApiError ? cause.message : "The plan could not be built." });
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <form className="plan-build plan-by-section" noValidate onSubmit={(event) => void build(event)}>
-      <strong>Plan by section</strong>
-      <small>A day of 2025 planned for every HMWSSB section: the real booking total of that month divided by its days (all bookings counted as ordinary domestic ones). Sections whose need is an estimate are flagged for your check.</small>
-      <label htmlFor="section-plan-day">Day</label>
-      <input id="section-plan-day" type="date" min={FIRST_DAY} max={LAST_DAY} value={day} onChange={(event) => setDay(event.target.value)} />
-      <label htmlFor="section-plan-capacity">Tankers available</label>
-      <select id="section-plan-capacity" value={capacity} onChange={(event) => setCapacity(event.target.value as "fleet" | "tight")}>
-        <option value="fleet">Whole fleet: 1,150 tankers x 9 trips a day (from news)</option>
-        <option value="tight">Tight: the trips behind the real Jun–Aug 2026 delivered share</option>
-      </select>
-      <small>With the whole fleet nearly every booking is served on a normal 2025 day; the tight setting shows who waits and why.</small>
-      <label className="plan-check"><input type="checkbox" checked={priority} onChange={(event) => setPriority(event.target.checked)} /> Serve hospitals first, then homes without water on premises (estimated)</label>
-      <small>HMWSSB does not publish booking types, so this is an estimate: every mapped hospital or care home counts as one of its section’s bookers, and the Census share of homes fetching water from outside counts as the no-water group.</small>
-      <label className="plan-check"><input type="checkbox" checked={carryOver} onChange={(event) => setCarryOver(event.target.checked)} /> Carry waiting bookings over from the days before</label>
-      <label htmlFor="section-plan-scheduled">Tankers for sections that should have booked</label>
-      <select id="section-plan-scheduled" value={scheduled} onChange={(event) => setScheduled(event.target.value as "f4" | "none")}>
-        <option value="f4">Yes: sections the field-check screen flags get a reserved share of the trips</option>
-        <option value="none">No scheduled supply</option>
-      </select>
-      <small>A supply cut (a notice entered for that day) is added automatically: critical facilities first, then every cut section to the minimum.</small>
-      <button className="button button-primary" type="submit" disabled={busy || !day}>Build plan by section</button>
-      {busy && <p className="plan-message" role="status">Building the plan…</p>}
-      {note && <p className={`plan-message ${note.tone}`} role={note.tone === "error" ? "alert" : "status"}>{note.text}</p>}
+    <form className="plan-panel plan-section-form" noValidate onSubmit={(event) => void build(event)} aria-labelledby="section-plan-title">
+      <div className="plan-panel-title"><div><p className="eyebrow">New plan</p><h2 id="section-plan-title">Plan a day for every section</h2></div></div>
+      <p className="plan-threshold">Each HMWSSB section's real bookings for the month, spread over its days, shared out over the tankers available.</p>
+      <div className="plan-form-row">
+        <label className="plan-field" htmlFor="section-plan-day"><span>Day</span>
+          <input id="section-plan-day" type="date" min={FIRST_DAY} max={LAST_DAY} value={day} onChange={(event) => setDay(event.target.value)} />
+          <small>A day of 2025, or today: real bookings made through JalLekha are used, other sections use the same month of 2025.</small>
+        </label>
+        <div className="plan-field" role="group" aria-labelledby="section-plan-capacity"><span id="section-plan-capacity">Tankers available</span>
+          <div className="plan-segment">
+            <button type="button" aria-pressed={capacity === "tight"} onClick={() => setCapacity("tight")}><b>Tight day</b><span>As few trips as HMWSSB really managed in summer 2026: shows who waits and why.</span></button>
+            <button type="button" aria-pressed={capacity === "fleet"} onClick={() => setCapacity("fleet")}><b>Whole fleet</b><span>1,150 tankers × 9 trips a day (news): almost every booking is served.</span></button>
+          </div>
+        </div>
+      </div>
+      <fieldset className="plan-options"><legend>Rules</legend>
+        <label className="plan-option"><input type="checkbox" checked={priority} onChange={(event) => setPriority(event.target.checked)} /><b>Hospitals first, then homes with no water at home</b><small>Estimated: HMWSSB does not publish who booked.</small></label>
+        <label className="plan-option"><input type="checkbox" checked={carryOver} onChange={(event) => setCarryOver(event.target.checked)} /><b>Bring forward bookings still waiting from the days before</b><small>A booking drops out after 3 days.</small></label>
+        <label className="plan-option"><input type="checkbox" checked={scheduled} onChange={(event) => setScheduled(event.target.checked)} /><b>Send water to areas that book too little</b><small>12 sections the field-check list flags get water on a schedule.</small></label>
+      </fieldset>
+      <p className="muted small">A water-cut notice entered for the day is added on its own: hospitals there first, then every cut home up to the minimum.</p>
+      <div className="plan-form-actions">
+        <button className="button button-primary" type="submit" disabled={busy || !day}>{busy ? "Building…" : "Build plan by section"}</button>
+        {note && <p className={`plan-message ${note.tone}`} role={note.tone === "error" ? "alert" : "status"}>{note.text}</p>}
+      </div>
     </form>
   );
 }

@@ -23,8 +23,8 @@ from app.auth import Config, require_gateway, require_roles
 from app.config.api import ApiConfig
 from app.routers.common import invalid, not_found, page
 from app.routers.stores import DeliveryStore, Stop, get_delivery_store
+from app.services import booking_dispatch, ledger_store
 from app.services import delivery as dl
-from app.services import ledger_store
 from app.services.delivery_store import DeliveryConflict
 from app.services.keyed_lock import KeyedLocks
 from app.services.ledger_store import StoredLedger
@@ -134,6 +134,7 @@ def start(body: Start, store: Store, ledger: Ledger) -> Any:
             state = dl.start_delivery(
                 body.delivery_id, stop.stop_id, stop.lat, stop.lon, body.driver_id,
                 stop.representatives, ledger, datetime.now(UTC),
+                min_representatives=1 if booking_dispatch.is_booking_stop(stop.stop_id) else None,
             )  # fmt: skip
         except ValueError as exc:
             return invalid(str(exc))

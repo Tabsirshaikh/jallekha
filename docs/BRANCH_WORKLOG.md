@@ -1,5 +1,29 @@
 # Branch worklog
 
+## `feat/weekly-water-priority` - 2026-10-07
+
+- Owner approved research-based weekly service feedback after reviewing the implementation plan.
+  Read project guide, F1/F4/F7/F11 limits and research; isolated worktree, no other checkout edits.
+- TDD: missing calculation/UI modules failed first; current supplied section plan initially
+  rejected; day closure failed looking for unavailable 2026-10 portal totals. All fixed.
+- Added append-only supply reviews, ledger digests, officer/field-worker form in four languages,
+  population-based emergency requirement and complete-record/confirmed-delivery gates.
+- Current priority map/selected-section panel keeps Census baseline separate. Section debt takes
+  precedence over ward proxy, including a true zero. Historical recipes remain unchanged.
+- Current supplied section plans freeze weekly evidence in their identity/recipe, adjust turns
+  without double-counting debt, and reserve supply for verified shortages without bookings.
+  Supplied records also feed live booking signs and close-day accounting.
+- Simulation counterfactual: neglected area 7 -> 19 of 20 trips; covered area 13 -> 1; unknown
+  records keep baseline. No real field validation and no globally optimal-policy claim.
+- Validation: 81 affected backend tests pass; final weekly/reserve guard rerun 12 pass;
+  all 205 frontend tests, full lint/type checks, translation check (934 strings) and production
+  build pass. Browser verified live isolated API/UI, English and Hindi, unknown records and
+  the new priority layer. No unrelated PyMC/model-training suite rerun.
+- Translation export now includes shared .ts dictionaries (including five previously omitted
+  live-reason strings). Fixed one inherited Ruff style violation in section-map serialization;
+  no algorithm/output changes there. No push or merge authorized for this branch.
+
+
 ## `fix/forecast-capacity-sync` — warning quality follow-up, 2026-10-07
 
 - Owner asked to address the remaining F5/F6 bugs and explain groundwater/reservoir use.
@@ -1407,4 +1431,35 @@ No push, PR or merge. Evidence and reproducible commands in LIMITATIONS F5/F6 an
 - **Results (2025-05-15):** tight scenario: 719 tankers (of 1,150) make 6,256 trips, 8.7 trips per tanker (HMWSSB's own figure is 8.9), about 2.8 km a round trip, last tanker back 19:10, nothing left over; whole fleet: 1,147 tankers, 6.0 trips each, back by 17:16. A scheduled-supply load for a flagged section is driven by a tanker of the nearest station that had a spare special trip.
 - **Known limitations:** a trip serves one load (HMWSSB's booking unit), so there is no multi-stop chaining and no solver; a tanker is not sent past another place on the way; station positions are stand-ins placed on section centres, so most trips are short and the distances are between assumed places; OSRM is free-flow (no traffic, no truck limits) and was not built for sections placed after review or for facilities (straight line x 1.35, labelled ESTIMATE; 204 of 6,256 trips); lines on the map are straight, not road shapes; every tanker starts at 06:00 and filling points are not limited; no live GPS; English only; no new frontend tests.
 - **Validation:** backend `tests/api` (including 2 route tests) pass; frontend lint, type check and 200 tests pass; checked in a browser.
+
+## `feat/plan-visuals` — plan by section screen made readable: numbers table, two maps, priority and fair turns, routes played on the map
+
+- **Owner / date:** repo owner, 2026-10-07 ("the info is good but the UI is bad"; visualisation is key; confidence check unchanged for now; English only as before).
+- **What we changed:** backend `services/plan_overview.py` (`overview` of a plan by section: facts, per-section bookings and served by priority class, service type, scheduled and outage water, per-station bookings) in `GET /plans/{id}`; `compact=true` on `GET /plans/{id}/routes` (every tanker's trips for the city animation); `heavy_use_percentile` in `config/section_plan.py`. Frontend: `SectionPlanForm.tsx` redesigned (day, tight or whole fleet as two buttons, three rules as checkboxes); the replay and supplied-bookings forms and weights moved under "More ways to build a plan"; the SIMULATION badge removed; new `PlanFacts.tsx` (the plan in numbers with what each means and its source), `PlanMaps.tsx` (kind of area and served today side by side, section card), `PlanPriority.tsx` (the three priority steps with ranked sections, and a station's queue played tanker by tanker so the fair turns show), `PlanSupply.tsx` (cards for water on a schedule and water cuts), `PlanRoutes.tsx` rewritten (play the day: every tanker moving on the city map; click a station to zoom on its tankers; a tanker's numbered stops, its day as a bar and a printable route sheet); `planColours.ts`, `PlanVisuals.css`; the ward plan screen is unchanged.
+- **Results (2025-05-15, tight):** 8,979 bookings (6,712 new, 2,267 carried); 665 / 835 / 7,479 by priority class, 651 / 835 / 4,651 served; 6,480 trips, 324 kept for 12 scheduled sections that need 120 loads; 6,137 served, 2,842 waiting. Service types: 12 scheduled, 37 heavy, 92 normal, 29 not enough data (of 170 drawn sections).
+- **Known limitations:** see F7 in `LIMITATIONS.md` (service types are a proxy; the unused reserve is not passed back); route lines are straight (no road shapes in the repo; OSRM gave distances only); a tanker's stop is drawn at the middle of its section, not the home; stations are stand-ins; English only.
+- **Validation:** backend section-plan and contract tests pass (1 new test, 1 extended); frontend lint, type check and 208 tests pass (5 new); checked in a browser at desktop and phone width.
+
+## `feat/booking-flow` — bookings through JalLekha, from the form to the closed day
+
+- **Owner / date:** repo owner, 2026-10-07 (build order 1-5: booking intake, plan from real bookings, plan-to-driver link, SMS sender, closing the day by section). Branched from `feat/plan-visuals`.
+- **What we changed:** backend `models/booking.py`, `config/bookings.py`, `services/bookings.py` (location -> section and ward, categories, claims, tiers, one open booking per phone, ledger events), `routers/bookings.py`; `section_plan.py` (real bookings replace a section's estimate; days after 2025 estimated from the same month of 2025; `booked_on`), `plan_builder.py` (real bookings in the recipe and plan id), `services/booking_dispatch.py` and approval in `routers/plans.py` (served real bookings get tanker, trip and a stop where the booker gets the code), `routers/driver_routes.py`, `delivery.py` (one representative for a booking stop), `routers/debt.py` (owed = the plan's own bookings of the day), `services/sms.py` + `routers/sms_outbox.py` (`SMS_PROVIDER=outbox` test mode), ledger event types. Frontend: `BookingExperience.tsx` (resident "Book a tanker": map pin or my location -> section, who for, water at home, phone; My bookings with progress and test-mode messages), `DriverPlanRoute.tsx` (driver's trips from the approved plan, code steps), `PlanBookings.tsx` (officer: waiting bookings, claims to verify), `PlanFacts.tsx` (real-booking row, estimate year), `i18n.tsx` ("Book a tanker" in en, te, ur, hi), `vite.config.ts` proxy.
+- **Results:** API test and browser run: a Kondapur booking with no water at home -> tier 1 -> tanker T0080 at 06:20 in today's tight plan -> code sent and verified at the booking's place -> booker answers 1 -> Confirmed; closing the day owed Kondapur 5,000 l and credited 5,000 l (debt 0). A verified clinic booking is served first (TIER_0).
+- **Known limitations:** see F12 in `LIMITATIONS.md` (no real SMS provider, booker answers their own check, test-mode location switch, approximate section areas, no cancel/change, English only on the new screens).
+- **Validation:** backend `tests/api` pass (6 new tests in `test_bookings.py`); frontend lint, type check and all tests pass (3 new); browser run of the whole chain.
+
+
+## `fix/weekly-priority-review` — review of `feat/weekly-water-priority`
+
+- **Owner / date:** repo owner, 2026-10-07 (asked to verify the branch and bring back the section booking check).
+- **Findings:** (1) the section sheet's "Booking check" said "unavailable" for every section that is not flagged: the screen took its section list from `/field-checks/sections`, which holds only the 12 flagged sections, whenever that call answered (it does since sign-in was removed), instead of adding their visit outcomes to the full section list; present on main too. (2) A section whose verified need was covered got 0.25 x its Census weight, against the approved plan ("their Census baseline remains unchanged"). (3) Everything shows "—" until an officer records a supply check dated yesterday with complete delivery records: by design, not a bug.
+- **What we changed:** `EvidenceExperience.tsx` (full section list, visit outcomes merged in); `config/weekly_priority.py` covered factor 1.0 (multiplier 1 to 6), tests, `LIMITATIONS.md`, `api_additions/weekly_priority.md`, basis text, `data/verification/weekly_priority_examples.json` rebuilt (neglected area still overtakes: 16 of 20 trips instead of 19).
+- **Validation:** weekly-priority backend tests (12) and Evidence/WeeklyPriority frontend tests pass.
+
+## `feat/integration` — plan screen, booking flow and weekly water priority together, plus demo data
+
+- **Owner / date:** repo owner, 2026-10-07 ("merge all the branches to main"; "add synthetic bookings to show the warnings working").
+- **What we changed:** merged `feat/plan-visuals`, `feat/booking-flow` and `fix/weekly-priority-review` (the reviewed `feat/weekly-water-priority`); conflicts resolved (ledger event types, section plan id extras, day close by section counts the plan's own bookings, plan creation takes waiting bookings unless an officer supplies them). The live warning signs now count bookings made through JalLekha (`routers/evidence.py`). **Bug fixed:** "no water" complaints sent with a ward are stored as `ward:<id>`, and the signs looked them up by the bare id, so they never counted; they do now (test added). Supply checks can be marked `synthetic` (basis "SYNTHETIC (demo data)", carried into the weekly priority's basis). New `scripts/demo/seed_demo.py`: in local test mode only, makes SYNTHETIC bookings in 8 sections (two hospitals and a school verified), "no water" complaints in 4 sections, a supply-cut notice and three supply checks.
+- **Results (demo run):** 25 bookings, 16 complaints; complaint signs bad in Kondapur, Hafeezpet, Gachibowli and Manikonda, Manikonda "rising" (complaints + cut); weekly priority: Manikonda and KPHB SHORTFALL, Somajiguda COVERED (keeps its Census baseline).
+- **Validation:** backend `tests/api` and `tests/services` pass; frontend lint, type check and tests pass.
 

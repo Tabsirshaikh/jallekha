@@ -9,6 +9,7 @@ import OfficerOverview from "./OfficerOverview";
 const EvidenceExperience = lazy(() => import("./EvidenceExperience"));
 const ForecastExperience = lazy(() => import("./ForecastExperience"));
 const PlanExperience = lazy(() => import("./PlanExperience"));
+const BookingExperience = lazy(() => import("./BookingExperience"));
 const ExplainExperience = lazy(() => import("./ExplainExperience"));
 const ImpactExperience = lazy(() => import("./ImpactExperience"));
 
@@ -27,6 +28,7 @@ const navByWorkspace: Record<Workspace, { key: MessageKey; icon: IconName }[]> =
   ],
   resident: [
     { key: "residentHome", icon: "overview" },
+    { key: "residentBook", icon: "water" },
     { key: "residentRequests", icon: "water" },
     { key: "residentReport", icon: "report" },
     { key: "residentUpdates", icon: "impact" },
@@ -149,7 +151,7 @@ export default function App() {
         {translationStatus[locale] === "draft" && <p className="translation-draft-note" role="note" aria-label={t("translationStatusLabel")}>{t("translationDraft")}</p>}
         <main className={`page-content ${workspace}-content ${workspace === "officer" && activeItem === "officerWaterAccess" ? "officer-evidence-content" : workspace === "officer" && activeItem === "officerForecast" ? "officer-forecast-content" : workspace === "officer" && activeItem === "officerAllocationPlan" ? "officer-plan-content" : ""}`}>
           <div className="page-title-mobile"><p className="eyebrow">{t(meta.eyebrow)}</p><h1>{t(meta.title)}</h1><p className="muted">{t(meta.description)}</p></div>
-          {workspace === "driver" ? <DriverExperience page={activeItem === "driverProof" ? "proof" : activeItem === "help" ? "help" : "route"} onNavigate={setActiveItem} /> : workspace === "resident" ? <ResidentExperience page={activeItem === "residentReport" ? "report" : activeItem === "residentRequests" ? "requests" : activeItem === "residentUpdates" ? "ward" : "home"} onNavigate={setActiveItem} /> : workspace === "fieldWorker" ? <FieldWorkerExperience page={activeItem === "fieldWorkerQueue" ? "queue" : "report"} onNavigate={setActiveItem} /> : activeItem === "officerWaterAccess" ? <Suspense fallback={<p className="muted" role="status">{t("loadingEvidence")}</p>}><EvidenceExperience /></Suspense> : activeItem === "officerForecast" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><ForecastExperience /></Suspense> : activeItem === "officerAllocationPlan" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><PlanExperience /></Suspense> : activeItem === "officerExplain" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><ExplainExperience /></Suspense> : activeItem === "officerImpact" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><ImpactExperience /></Suspense> : activeItem !== navByWorkspace[workspace][0].key ? <PlaceholderPage workspace={workspace} pageKey={activeItem} /> : <OfficerOverview onNavigate={setActiveItem} />}
+          {workspace === "driver" ? <DriverExperience page={activeItem === "driverProof" ? "proof" : activeItem === "help" ? "help" : "route"} onNavigate={setActiveItem} /> : workspace === "resident" && activeItem === "residentBook" ? <Suspense fallback={<p className="muted" role="status">…</p>}><BookingExperience /></Suspense> : workspace === "resident" ? <ResidentExperience page={activeItem === "residentReport" ? "report" : activeItem === "residentRequests" ? "requests" : activeItem === "residentUpdates" ? "ward" : "home"} onNavigate={setActiveItem} /> : workspace === "fieldWorker" ? <FieldWorkerExperience page={activeItem === "fieldWorkerQueue" ? "queue" : "report"} onNavigate={setActiveItem} /> : activeItem === "officerWaterAccess" ? <Suspense fallback={<p className="muted" role="status">{t("loadingEvidence")}</p>}><EvidenceExperience /></Suspense> : activeItem === "officerForecast" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><ForecastExperience /></Suspense> : activeItem === "officerAllocationPlan" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><PlanExperience /></Suspense> : activeItem === "officerExplain" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><ExplainExperience /></Suspense> : activeItem === "officerImpact" ? <Suspense fallback={<p className="muted" role="status">{t("loadingForecast")}</p>}><ImpactExperience /></Suspense> : activeItem !== navByWorkspace[workspace][0].key ? <PlaceholderPage workspace={workspace} pageKey={activeItem} /> : <OfficerOverview onNavigate={setActiveItem} />}
         </main>
         <footer className="app-footer"><span>JalLekha <span className="footer-separator">·</span> {t("footerTagline")}</span><span>{t("footerPromise")}</span></footer>
       </div>

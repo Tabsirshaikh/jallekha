@@ -1,6 +1,7 @@
 """SQLAlchemy models: one table per file. Import each model module here so create_all sees it."""
 
 from app.models.base import Base, IdTimestampMixin, new_id, utcnow
+from app.models.booking import Booking
 from app.models.complaint import Complaint
 from app.models.contest import Contest
 from app.models.contest_reply import ContestReply
@@ -19,12 +20,14 @@ from app.models.representative import Representative
 from app.models.resident import Resident
 from app.models.resident_response import ResidentResponse
 from app.models.section_check_outcome import SectionCheckOutcome
+from app.models.section_supply_review import SectionSupplyReview
 from app.models.supply_notice import SupplyNotice
 from app.models.voice_note import VoiceNote
 from app.models.water_debt_account import WaterDebtAccount
 
 __all__ = [
     "Base",
+    "Booking",
     "Complaint",
     "Contest",
     "ContestReply",
@@ -45,6 +48,7 @@ __all__ = [
     "StoredPlan",
     "SupplyNotice",
     "SectionCheckOutcome",
+    "SectionSupplyReview",
     "VoiceNote",
     "WaterDebtAccount",
     "new_id",
