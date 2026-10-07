@@ -1,15 +1,20 @@
-import { useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { ApiError, apiFetch } from "./api";
 import { useApi } from "./useApi";
 import type { BookingView } from "./BookingExperience";
+import type { MapTrip } from "./DriverLiveMap";
+import type { LatLng } from "./routeGeo";
 import "./DriverPlanRoute.css";
+
+// the map (and Leaflet with it) loads only when a driver opens a route
+const DriverLiveMap = lazy(() => import("./DriverLiveMap"));
 
 // U4: the driver's day from the approved plan by section (GET /driver/tankers, /driver/route). Trips
 // for bookings made through JalLekha carry the delivery-code steps (F12); estimated loads (from
 // monthly totals) have no person behind them and need no code. English only for now.
 
-type Trip = { n: number; kind: string; name: string; depart: string; arrive: string; back: string; km: number; booking: BookingView | null; stop_id: string | null };
-type Route = { day: string; plan_id: string; tanker_id: string; station_id: string; finish: string; km: number; trips: Trip[] };
+type Trip = { n: number; kind: string; name: string; depart: string; arrive: string; back: string; km: number; booking: BookingView | null; stop_id: string | null; group: string; lat: number | null; lng: number | null };
+type Route = { day: string; plan_id: string; tanker_id: string; station_id: string; station: { station_id: string; lat: number; lng: number }; finish: string; km: number; trips: Trip[] };
 type Tankers = { day: string; plan_id: string; tankers_total: number; items: { tanker_id: string; station_id: string; trips: number; real_bookings: number; first_depart: string }[] };
 type DeliveryView = { delivery_id: string; otp_issued: boolean; otp_verified: boolean; outcome_status: string };
 type VerifyResult = { result: string; location: { status: string; distance_m: number | null }; delivery: DeliveryView };
@@ -51,15 +56,55 @@ export default function DriverPlanRoute() {
       {list.error && <p className="muted">{list.error.status === 404 ? "No approved plan by section for this day yet. The officer approves the plan; then your trips appear here." : errorText(list.error)}</p>}
       {list.data && !tanker && <p className="muted">{tankers.length > 0 ? `${tankers.length} tankers carry bookings made through JalLekha today (of ${list.data.tankers_total} on the road). Pick yours: ${tankers.slice(0, 6).map((t) => t.tanker_id).join(", ")}${tankers.length > 6 ? "…" : ""}` : "No booking made through JalLekha is in today's plan; your trips are estimated loads."}</p>}
       {route.error && <p className="plan-message error" role="alert">{route.error.status === 404 ? `Tanker ${tanker} has no trips in today's plan.` : errorText(route.error)}</p>}
-      {route.data && <>
-        <p className="muted small">Station {route.data.station_id} · {route.data.trips.length} trips · {route.data.km} km · back by {route.data.finish}. Fill at the station before each trip: one booking is one full tanker.</p>
-        <ol className="driver-plan-trips">{route.data.trips.map((t) => <li key={t.n} className={t.booking ? "real" : ""}>
-          <div className="driver-plan-trip-head"><b>{t.n}</b><span>{t.depart} → {t.arrive}</span><strong>{t.name}</strong><small>{KIND[t.kind] ?? t.kind}{t.booking ? ` · ${t.booking.priority}` : " · estimated load, no code needed"}</small></div>
-          {t.booking && t.stop_id && <DeliverBooking key={t.booking.booking_id} booking={t.booking} stopId={t.stop_id} tanker={route.data!.tanker_id} testMode={testMode} onDone={route.reload} />}
-        </li>)}</ol>
-      </>}
+      {route.data && <RouteView key={`${route.data.day}|${route.data.tanker_id}`} route={route.data} testMode={testMode} onDone={route.reload} />}
     </section>
   );
+}
+
+const finished = (t: Trip) => t.booking?.status === "DELIVERED" || t.booking?.status === "NOT_CONFIRMED";
+const doneKey = (r: Route) => `jallekha-driver-done:${r.day}:${r.tanker_id}`;
+function savedDone(r: Route): number[] { try { return JSON.parse(localStorage.getItem(doneKey(r)) ?? "[]") as number[]; } catch { return []; } }
+
+/** One tanker's day: the map, the next stop and the trips. A trip is finished when its booking is delivered (the server knows), or, for an estimated load that has no booker, when the driver taps "Delivered here" (kept on this phone only). */
+function RouteView({ route, testMode, onDone }: { route: Route; testMode: boolean; onDone: () => void }) {
+  const [picked, setPicked] = useState<number | null>(null);
+  const [byHand, setByHand] = useState<number[]>(() => savedDone(route));
+  const [gps, setGps] = useState<LatLng | null>(null);
+  const [gpsNote, setGpsNote] = useState<string | null>(null);
+  useEffect(() => {
+    if (!gpsNote || gpsNote !== "on" || !navigator.geolocation) return;
+    const id = navigator.geolocation.watchPosition((p) => setGps([p.coords.latitude, p.coords.longitude]), () => setGpsNote("Your position could not be read."), { enableHighAccuracy: true, maximumAge: 5000 });
+    return () => navigator.geolocation.clearWatch(id);
+  }, [gpsNote]);
+  const isDone = (t: Trip) => finished(t) || byHand.includes(t.n);
+  const next = route.trips.find((t) => !isDone(t)) ?? null;
+  const current = picked !== null && route.trips.some((t) => t.n === picked && !isDone(t)) ? picked : next?.n ?? 0;
+  const trip = route.trips.find((t) => t.n === current) ?? null;
+  const mark = (n: number) => { const all = [...byHand, n]; setByHand(all); setPicked(null); try { localStorage.setItem(doneKey(route), JSON.stringify(all)); } catch { /* kept for this visit only */ } };
+  const trips: MapTrip[] = route.trips.map((t) => ({ n: t.n, kind: t.kind, name: t.name, lat: t.lat, lng: t.lng, depart: t.depart, done: isDone(t) }));
+
+  return <>
+    <p className="muted small">Station {route.station_id} · {route.trips.length} trips · {route.km} km · back by {route.finish}. Fill at the station before each trip: one booking is one full tanker.</p>
+    <div className="driver-plan-map">
+      <p className="driver-plan-next" role="status">{trip
+        ? <>{picked !== null && trip.n !== next?.n ? "Showing" : "Next stop"}: <b>trip {trip.n}, {trip.name}</b> · leave the station at {trip.depart}, arrive {trip.arrive}</>
+        : "All of today's trips are finished. Well done."}</p>
+      <Suspense fallback={<p className="muted" role="status">Loading the map…</p>}>
+        <DriverLiveMap station={route.station} trips={trips} current={current} gps={gps} testMode={testMode} onChoose={setPicked} />
+      </Suspense>
+      <div className="driver-plan-gps">
+        <button className="button button-secondary" onClick={() => { setGpsNote("on"); if (!navigator.geolocation) setGpsNote("This phone cannot give its position."); }}>{gps ? "Following my position" : "Show my position on the map"}</button>
+        {gpsNote && gpsNote !== "on" && <span className="muted small">{gpsNote}</span>}
+      </div>
+      <p className="muted small">This is the route the officer's plan gave this tanker: fill at the station, drive to the stop, come back, fill again. A stop disappears when it is delivered, and the road behind you disappears as you drive. Tap a stop or a trip to see its road. The station's place is a stand-in.</p>
+    </div>
+    <ol className="driver-plan-trips">{route.trips.map((t) => <li key={t.n} className={`${t.booking ? "real" : ""}${t.n === current ? " chosen" : ""}${isDone(t) ? " finished" : ""}`}>
+      <div className="driver-plan-trip-head" role="button" tabIndex={0} onClick={() => setPicked(t.n)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setPicked(t.n); } }}><b>{t.n}</b><span>{t.depart} → {t.arrive}</span><strong>{t.name}</strong><small>{KIND[t.kind] ?? t.kind}{t.booking ? ` · ${t.booking.priority}` : " · estimated load, no code needed"}</small></div>
+      {t.booking && t.stop_id && <DeliverBooking key={t.booking.booking_id} booking={t.booking} stopId={t.stop_id} tanker={route.tanker_id} testMode={testMode} onDone={onDone} />}
+      {!t.booking && !isDone(t) && <button className="button button-secondary driver-plan-hand" onClick={() => mark(t.n)}>Delivered here: next stop</button>}
+      {!t.booking && byHand.includes(t.n) && <p className="driver-plan-done">✓ Marked delivered (kept on this phone only, no booker to confirm).</p>}
+    </li>)}</ol>
+  </>;
 }
 
 function DeliverBooking({ booking, stopId, tanker, testMode, onDone }: { booking: BookingView; stopId: string; tanker: string; testMode: boolean; onDone: () => void }) {

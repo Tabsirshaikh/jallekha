@@ -97,16 +97,26 @@ def route(
                 "back": x["back"],
                 "km": x["km"],
                 "leg_basis": x["leg_basis"],
+                # where the trip goes, for the driver's map (a booking uses the booker's place)
+                "group": x["group"],
+                "lat": booking["lat"] if booking else x["lat"],
+                "lng": booking["lon"] if booking else x["lng"],
                 # a booking made through JalLekha: where to go and how to prove the delivery
                 "booking": booking,
                 "stop_id": booking_dispatch.stop_id_for(x["booking_id"]) if booking else None,
             }
         )
+    station = next(r for r in routes["stations"] if r["station_id"] == tanker["station_id"])
     return {
         "day": day.isoformat(),
         "plan_id": plan_id,
         "tanker_id": tanker_id,
         "station_id": tanker["station_id"],
+        "station": {
+            "station_id": station["station_id"],
+            "lat": station["lat"],
+            "lng": station["lng"],
+        },
         "finish": tanker["finish"],
         "km": tanker["km"],
         "trips": trips,
