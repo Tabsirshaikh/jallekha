@@ -170,3 +170,17 @@
   .plan-facts-table tr.plan-facts-group { display: block; }
 }
 @media (max-width: 450px) { .plan-segment { grid-template-columns: 1fr; } }
+
+/* --- bookings through JalLekha (officer) ---------------------------------------------------- */
+.plan-bookings { display: grid; gap: 10px; }
+.plan-bookings-counts { display: flex; flex-wrap: wrap; gap: 8px; }
+.plan-bookings-counts span { padding: 6px 12px; border-radius: 999px; background: #f3f6f4; color: var(--ink); }
+.plan-bookings-claims { display: grid; gap: 8px; padding: 12px; border: 1px solid #ead8bb; border-radius: 12px; background: #fffaf1; }
+.plan-bookings-claims h3 { margin: 0; color: #745b3f; font-size: 1rem; }
+.plan-bookings-claims label { display: grid; gap: 4px; color: var(--ink); }
+.plan-bookings-claims input { min-height: 44px; padding: 8px 12px; border: 1px solid #dfe7e1; border-radius: 9px; font: inherit; }
+.plan-bookings-claims ul { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.plan-bookings-claims li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; background: #fff; }
+.plan-bookings-claims li div { display: grid; flex: 1 1 220px; }
+.plan-bookings-claims li small { color: var(--muted); }
+.plan-bookings .text-button { justify-self: start; }

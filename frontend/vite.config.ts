@@ -24,6 +24,9 @@ export default defineConfig({
       "/ledger": { target: "http://127.0.0.1:8000", changeOrigin: true },
       "/notices": { target: "http://127.0.0.1:8000", changeOrigin: true },
       "/health": { target: "http://127.0.0.1:8000", changeOrigin: true },
+      "/bookings": { target: "http://127.0.0.1:8000", changeOrigin: true },
+      "/driver": { target: "http://127.0.0.1:8000", changeOrigin: true },
+      "/sms": { target: "http://127.0.0.1:8000", changeOrigin: true },
     },
   },
   test: {

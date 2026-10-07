@@ -30,6 +30,8 @@ export type SectionCategory = "cut" | "scheduled" | "heavy" | "normal" | "unknow
 /** A plan by section in figures (GET /plans/{id} `overview`, plan_overview.py). */
 export type PlanFacts = {
   bookings: number; carried: number; commercial: number; tiers: [number, number, number]; servedTiers: [number, number, number];
+  /** Bookings made through JalLekha in the plan, and their sections (0 when the answer has none). */
+  liveBookings: number; liveSections: number;
   served: number; waiting: number; trips: number; fleetTankers: number; tripsPerTanker: number; reserveTrips: number; reserveUsedTrips: number;
   outageTrips: number; bookedTrips: number; scheduledSections: number; cutSections: number; criticalStops: number; stations: number; loadLitres: number; litresPerPerson: number;
 };
@@ -260,6 +262,7 @@ function overviewOf(raw: unknown, stations: Row[]): PlanOverview | null {
     fleetTankers: v.fleet_tankers!, tripsPerTanker: v.trips_per_tanker!, reserveTrips: v.reserve_trips!, reserveUsedTrips: v.reserve_used_trips!, outageTrips: v.outage_trips!,
     bookedTrips: v.booked_trips!, scheduledSections: v.scheduled_sections!, cutSections: v.cut_sections!, criticalStops: v.critical_stops!, stations: v.stations!,
     loadLitres: v.load_litres!, litresPerPerson: v.litres_per_person!,
+    liveBookings: num(f.live_bookings) ?? 0, liveSections: num(f.live_sections) ?? 0,
   };
   const sections: SectionRow[] = [];
   for (const r of rows(raw.sections)) {

@@ -1,0 +1,20 @@
+.driver-plan { display: grid; gap: 10px; margin-bottom: 18px; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #fff; }
+.driver-plan-head { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; }
+.driver-plan-head > div { flex: 1 1 200px; }
+.driver-plan-head h2 { margin: 2px 0 0; color: var(--deep); }
+.driver-plan-head label { display: grid; gap: 4px; color: var(--muted); font-size: .9rem; }
+.driver-plan-head input, .driver-plan-proof input:not([type="checkbox"]) { min-height: 46px; padding: 8px 12px; border: 1px solid #dfe7e1; border-radius: 9px; font: inherit; color: var(--ink); }
+.driver-plan-trips { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.driver-plan-trips li { display: grid; gap: 8px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fbfcfb; }
+.driver-plan-trips li.real { border-color: var(--green); background: #fff; box-shadow: inset 4px 0 0 var(--green); }
+.driver-plan-trip-head { display: grid; grid-template-columns: 30px 110px minmax(0, 1fr); gap: 2px 10px; align-items: baseline; }
+.driver-plan-trip-head b { grid-row: span 2; color: var(--muted); }
+.driver-plan-trip-head span { grid-row: span 2; color: var(--ink); font-variant-numeric: tabular-nums; }
+.driver-plan-trip-head strong { color: var(--ink); }
+.driver-plan-trip-head small { color: var(--muted); }
+.driver-plan-proof { display: grid; gap: 8px; }
+.driver-plan-proof label { display: grid; gap: 4px; font-weight: 650; color: var(--ink); }
+.driver-plan-proof .button { justify-self: start; min-height: 48px; }
+.driver-plan-test { display: flex !important; align-items: center; gap: 8px; padding: 8px 10px; border: 1.5px dashed #c9a24a; border-radius: 10px; background: #fffaf0; font-weight: 500 !important; font-size: .88rem; }
+.driver-plan-done { margin: 0; color: #1f6046; font-weight: 700; }
+@media (max-width: 520px) { .driver-plan-trip-head { grid-template-columns: 26px minmax(0, 1fr); } .driver-plan-trip-head span { grid-row: auto; } }

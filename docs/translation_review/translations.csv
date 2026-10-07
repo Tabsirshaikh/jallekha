@@ -436,6 +436,7 @@ src/i18n.tsx,1,officerAllocationPlan,Allocation plan,పంపిణీ ప్�
 src/i18n.tsx,1,officerImpact,Impact,ప్రభావం,اثر,प्रभाव,,,,
 src/i18n.tsx,1,officerExplain,Explanations & contests,వివరణలు మరియు అభ్యంతరాలు,وضاحت اور اعتراضات,स्पष्टीकरण और आपत्तियाँ,,,,
 src/i18n.tsx,1,residentHome,Home,ముఖపుట,گھر,मुखपृष्ठ,,,,
+src/i18n.tsx,1,residentBook,Book a tanker,ట్యాంకర్ బుక్ చేయండి,ٹینکر بک کریں,टैंकर बुक करें,,,,
 src/i18n.tsx,1,residentRequests,My requests,నా అభ్యర్థనలు,میری درخواستیں,मेरे अनुरोध,,,,
 src/i18n.tsx,1,residentReport,Report an issue,సమస్యను తెలియజేయండి,مسئلہ بتائیں,समस्या बताएं,,,,
 src/i18n.tsx,1,residentUpdates,Ward updates,వార్డు సమాచారం,وارڈ کی تازہ معلومات,वार्ड अपडेट,,,,

@@ -6,7 +6,7 @@ import type { Weights } from "./planAdapter";
 // English only for now.
 
 const FIRST_DAY = "2025-01-01";
-const LAST_DAY = "2025-12-31";
+const LAST_DAY = "2030-12-31";
 
 export default function SectionPlanForm({ weights, onBuilt }: { weights: Weights; onBuilt: (planId: string) => void }) {
   const [day, setDay] = useState("");
@@ -20,7 +20,7 @@ export default function SectionPlanForm({ weights, onBuilt }: { weights: Weights
   async function build(event: FormEvent) {
     event.preventDefault();
     if (busy) return;
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || day < FIRST_DAY || day > LAST_DAY) return setNote({ tone: "error", text: "Choose a day in 2025." });
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || day < FIRST_DAY || day > LAST_DAY) return setNote({ tone: "error", text: "Choose a day from 2025 on." });
     setBusy(true);
     setNote(null);
     try {
@@ -29,7 +29,7 @@ export default function SectionPlanForm({ weights, onBuilt }: { weights: Weights
       setNote({ tone: "ok", text: `Plan for ${day} is ready below.` });
     } catch (cause) {
       const status = cause instanceof ApiError ? cause.status : 0;
-      setNote({ tone: "error", text: status === 404 ? "No plan can be made for that day (2025 only)." : status === 0 ? "The server could not be reached." : cause instanceof ApiError ? cause.message : "The plan could not be built." });
+      setNote({ tone: "error", text: status === 404 ? "No plan can be made for that day." : status === 0 ? "The server could not be reached." : cause instanceof ApiError ? cause.message : "The plan could not be built." });
     } finally {
       setBusy(false);
     }
@@ -42,7 +42,7 @@ export default function SectionPlanForm({ weights, onBuilt }: { weights: Weights
       <div className="plan-form-row">
         <label className="plan-field" htmlFor="section-plan-day"><span>Day</span>
           <input id="section-plan-day" type="date" min={FIRST_DAY} max={LAST_DAY} value={day} onChange={(event) => setDay(event.target.value)} />
-          <small>Any day of 2025.</small>
+          <small>A day of 2025, or today: real bookings made through JalLekha are used, other sections use the same month of 2025.</small>
         </label>
         <div className="plan-field" role="group" aria-labelledby="section-plan-capacity"><span id="section-plan-capacity">Tankers available</span>
           <div className="plan-segment">

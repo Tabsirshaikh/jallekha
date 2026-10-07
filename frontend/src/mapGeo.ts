@@ -56,3 +56,6 @@ export const wardShapes: Shape[] = wardFeatures.map((f) => ({
   id: f.properties.ward_id, name: wardNames.get(f.properties.ward_id) ?? f.properties.ward_name, group: `ward:${f.properties.ward_id}`, d: pathOf(f), centre: centreOf(f),
 }));
 export const shapeByGroup = new Map(sectionShapes.map((s) => [s.group, s]));
+
+/** x, y of the 1000-wide drawing back to lng, lat (inverse of `project`). */
+export const unproject = ([x, y]: [number, number]): Pos => [minX + (x / WIDTH) * (maxX - minX), maxY - (y / HEIGHT) * (maxY - minY)];

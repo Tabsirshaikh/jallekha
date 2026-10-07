@@ -14,7 +14,8 @@ type Row = { what: string; value: string; note?: string; meaning: string; source
 export default function PlanFacts({ facts, day, capacity }: { facts: Facts; day: string; capacity: string | null }) {
   const [y, m] = day.split("-").map(Number);
   const days = new Date(y, m, 0).getDate();
-  const month = `${MONTHS[m - 1]} ${y}`;
+  // Days after 2025 are estimated from the same month of 2025 (the section names of the tables).
+  const month = `${MONTHS[m - 1]} ${Math.min(y, 2025)}`;
   const fresh = facts.bookings - facts.carried;
   const [t0, t1, t2] = facts.tiers;
   const [s0, s1, s2] = facts.servedTiers;
@@ -25,7 +26,9 @@ export default function PlanFacts({ facts, day, capacity }: { facts: Facts; day:
       title: "Bookings",
       rows: [
         { what: "Bookings to serve today", value: nf.format(facts.bookings), strong: true, source: "real",
-          meaning: `${nf.format(fresh)} new today (each section's real ${month} total ÷ ${days} days) + ${nf.format(facts.carried)} still waiting from the days before.` },
+          meaning: `${nf.format(fresh)} new today (each section's real ${month} total ÷ ${days} days${y > 2025 ? ", standing in for this year" : ""}) + ${nf.format(facts.carried)} still waiting from the days before.` },
+        ...(facts.liveBookings > 0 ? [{ what: "Of these, booked through JalLekha", value: nf.format(facts.liveBookings), source: "real" as Source,
+          meaning: `Real bookings from the resident app in ${facts.liveSections} section${facts.liveSections === 1 ? "" : "s"}. Those sections are planned from their real bookings only; the others from the monthly estimate.` }] : []),
         { what: "1st: hospitals and care homes", value: nf.format(t0), note: `${nf.format(s0)} served`, source: "estimate",
           meaning: "Served before anyone else. One booking a day for each hospital or care home on the map." },
         { what: "2nd: homes with no water at home", value: nf.format(t1), note: `${nf.format(s1)} served`, source: "estimate",

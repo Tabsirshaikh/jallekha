@@ -1,5 +1,6 @@
 import { useState, type Dispatch, type FormEvent, type SetStateAction } from "react";
 import { ApiError, apiFetch } from "./api";
+import DriverPlanRoute from "./DriverPlanRoute";
 import { useAuth } from "./auth";
 import DataSourceChip from "./DataSource";
 import {
@@ -306,6 +307,7 @@ export default function DriverExperience({ page, onNavigate }: { page: DriverPag
         <DataSourceChip state={{ live: liveStops !== null, loading: !liveStops && reason === null, error: reason === "unreachable" ? stopsState.error : null }} />
         {!liveStops && <span className="muted">{reason ? reasonText[reason] : lw.loadingStops}</span>}
       </div>
+      {page === "route" && driverId && <DriverPlanRoute />}
       {page === "route" && liveStops && <>
         <section className="driver-route-card"><div className="route-card-top"><div><span className="route-label">{words.routeTitle}</span><h2>{lw.driverLabel} {driverId}</h2></div><span className="route-icon" aria-hidden="true">↗</span></div><p>{lw.liveIntro}</p><div className="route-summary"><div><small>{words.stops}</small><strong>{liveStops.length}</strong></div><div><small>{lw.deliveriesRecorded}</small><strong>{liveDeliveries?.length ?? "–"}</strong></div><div><small>{lw.awaitingOutcome}</small><strong>{liveDeliveries?.filter((item) => item.outcome_status === "pending").length ?? "–"}</strong></div></div></section>
         <div className="driver-section-title"><h2>{t("atEachStop")}</h2><p className="muted">{t("stopIntro")}</p></div>

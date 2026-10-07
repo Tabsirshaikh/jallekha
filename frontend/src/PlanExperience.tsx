@@ -1,3 +1,4 @@
+import PlanBookings from "./PlanBookings";
 import PlanFacts from "./PlanFacts";
 import PlanMap from "./PlanMap";
 import PlanMaps from "./PlanMaps";
@@ -263,6 +264,8 @@ function LivePlans({ t, locale, notice, plans, reloadList, userId }: { t: Copy; 
   return <div className="plan-page">
     <header className="plan-heading"><div><p className="eyebrow">{t.draft}</p><h1>{t.title}</h1><p className="muted">Build a plan for a day, see who gets water and how the tankers drive, check the flagged sections and approve it.</p></div></header>
     {notice}
+
+    <PlanBookings officerId={officerId} />
 
     <div className="plan-start">
       <SectionPlanForm weights={chosen} onBuilt={(id) => { open(id); reloadList(); }} />
