@@ -13,7 +13,7 @@ const out = join(here, "..", "..", "docs", "translation_review", "translations.c
 
 const sources = Object.fromEntries(
   readdirSync(src)
-    .filter((name) => name.endsWith(".tsx") && !name.endsWith(".test.tsx"))
+    .filter((name) => /\.tsx?$/.test(name) && !/\.(test|d)\.tsx?$/.test(name))
     .map((name) => [`src/${name}`, readFileSync(join(src, name), "utf8")]),
 );
 const entries = extractTranslations(sources);

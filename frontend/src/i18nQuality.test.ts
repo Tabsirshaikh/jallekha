@@ -5,7 +5,7 @@
 import { describe, expect, it } from "vitest";
 import { extractTranslations, placeholders, SCRIPTS, isProse, type Entry } from "../scripts/i18nExtract.mjs";
 
-const raw = import.meta.glob("./*.tsx", { query: "?raw", import: "default", eager: true }) as Record<string, string>;
+const raw = import.meta.glob(["./*.tsx", "./*.ts", "!./*.test.ts", "!./*.test.tsx", "!./*.d.ts"], { query: "?raw", import: "default", eager: true }) as Record<string, string>;
 const sources = Object.fromEntries(Object.entries(raw).map(([path, text]) => [path.replace("./", "src/"), text]));
 const entries: Entry[] = extractTranslations(sources);
 const OTHERS = ["te", "ur", "hi"] as const;
@@ -25,6 +25,8 @@ describe("translations", () => {
       "src/ResidentExperience.tsx",
       "src/SectionOutcomeForm.tsx",
       "src/i18n.tsx",
+      "src/liveReason.ts",
+      "src/weeklyPriorityCopy.ts",
     ]);
     expect(entries.length).toBeGreaterThan(400);
   });

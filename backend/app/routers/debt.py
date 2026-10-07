@@ -10,6 +10,7 @@ another process (409).
 
 from __future__ import annotations
 
+from collections import Counter
 from collections.abc import Iterator
 from contextlib import contextmanager
 from dataclasses import asdict
@@ -163,8 +164,19 @@ def close(
                 section_todays = deliveries.list_deliveries(
                     stop_ids=list(stop_section), started_from=start, started_before=end
                 )
+                if "bookings" in recipe:
+                    booked = Counter(
+                        "section:" + b["section"]
+                        for b in recipe["bookings"]
+                        if datetime.fromisoformat(b["arrived_at"])
+                        .astimezone(section_plan.IST)
+                        .date()
+                        == day
+                    )
+                else:
+                    booked = section_plan.fresh_bookings(REPO_ROOT, day)
                 closed = day_close.close_section_day(
-                    day, plan, section_plan.fresh_bookings(REPO_ROOT, day), stop_section,
+                    day, plan, booked, stop_section,
                     section_todays, debts.accounts(), ledger, now, body.officer_id, body.reason,
                 )  # fmt: skip
             else:

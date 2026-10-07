@@ -50,6 +50,7 @@ from app.services import (
     plan_builder,
     report_card,
     service_models,
+    weekly_priority,
 )
 from app.services.intake_pipeline import IntakeService
 from app.services.ledger_store import StoredLedger
@@ -242,11 +243,13 @@ def atlas_live_sections(
     counts = live.counts
     groundwater = _section_groundwater(now)
     sections = []
+    accounts = debts.accounts()
     for r in csv_rows(SECTION_NEED):
         name, main = r["section"], r["main_ward_id"]
         usual = float(r["usual_month_bookings"]) if r["usual_month_bookings"] else None
+        owed, owed_basis = weekly_priority.section_debt(name, main, accounts)
         signals = live_need.WardSignals(
-            r["section_id"], live.owed.get(main, 0.0), counts.by_section.get(name, 0), usual,
+            r["section_id"], owed, counts.by_section.get(name, 0), usual,
             live.complaints[main], live.cuts[main], groundwater.get(name),
         )  # fmt: skip
         sections.append(
@@ -254,6 +257,7 @@ def atlas_live_sections(
                 "ward_id": r["section_id"],
                 "name": name,
                 "main_ward_id": main,
+                "owed_basis": owed_basis,
                 "need": {
                     "wad": float(r["wad"]),
                     "cad": float(r["cad"]),
@@ -265,7 +269,10 @@ def atlas_live_sections(
                 "bookings_window": counts.by_section.get(name, 0),
                 "usual_month_bookings": None if usual is None else round(usual, 1),
                 **live_need.evaluate(
-                    signals, cfg, owed_known=live.owed_known, bookings_known=counts.total > 0
+                    signals,
+                    cfg,
+                    owed_known=owed_basis != "UNAVAILABLE",
+                    bookings_known=counts.total > 0,
                 ),
             }
         )

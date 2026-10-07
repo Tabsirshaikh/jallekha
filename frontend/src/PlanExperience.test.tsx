@@ -347,6 +347,7 @@ describe("PlanExperience (sample fallback)", () => {
       const post = server.calls.find((c) => c.method === "POST" && c.path === "/plans");
       expect(post?.body).toEqual({
         day: "2026-10-03",
+        unit: "section",
         weights: { wad: 2, cad: 1, hardship: 1 },
         bookings: [
           { booking_id: "B-1", section: "ADARSHNAGAR", arrived_at: "2026-10-03T05:30:00+05:30" },

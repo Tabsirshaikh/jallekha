@@ -624,6 +624,68 @@ def plan_inputs(
     return inputs, st.sections, left_out, notes
 
 
+def supplied_inputs(
+    root,
+    day,
+    weights,
+    plan_id,
+    debts=(),
+    scenario="fleet",
+    options=None,
+    plan_now=None,
+    *,
+    bookings,
+):
+    """Current section bookings; no synthetic arrivals or implicit historical carry-over."""
+    st = _static(str(root), scenario)
+    options = options or SectionOptions()
+    pending = []
+    for row in bookings:
+        booking = fair_queue.QueueBooking(
+            booking_id=row["booking_id"],
+            group=SECTION_PREFIX + row["section"],
+            arrived_at=datetime.fromisoformat(row["arrived_at"]),
+            tier=row["tier"],
+            consumer_id=row["consumer_id"],
+            category=row["category"],
+        )
+        if (
+            day - booking.arrived_at.astimezone(IST).date()
+        ).days >= SANDBOX_CONFIG.booking_expiry_days:
+            raise SectionPlanUnavailable(
+                "Supplied waiting booking has expired under the queue policy"
+            )
+        pending.append(planner.PlannerBooking(booking, st.sections[row["section"]].station))
+    scheduled, registry = scheduled_for(st.sections, options.scheduled, weights)
+    events, stops, where = outages_from(options, st.sections, st.facilities)
+    inputs = planner.PlanInputs(
+        plan_id=plan_id,
+        day=day,
+        capacity=st.capacity,
+        pending=pending,
+        entitlement={s.group: s.entitlement(weights) for s in st.sections.values()},
+        debts={a.account_id: a for a in debts},
+        scheduled=scheduled,
+        registry=registry,
+        outages=events,
+        critical_stops=stops,
+        critical_locations=where,
+        station_km=st.pairs,
+    )
+    tiers = Counter(p.booking.tier for p in pending)
+    notes = {
+        "carried_bookings": 0,
+        "tier0": tiers[0],
+        "tier1": tiers[1],
+        "tier2": tiers[2],
+        "commercial": sum(p.booking.category == "commercial" for p in pending),
+        "scheduled_sections": len(scheduled),
+        "outage_events": len(events),
+        "critical_stops": len(stops),
+    }
+    return inputs, st.sections, [], notes
+
+
 def trips_per_day() -> int:
     return int(SANDBOX_CONFIG.fleet_tankers * SANDBOX_CONFIG.trips_per_tanker_day)
 

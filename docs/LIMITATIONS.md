@@ -1,5 +1,33 @@
 # JalLekha 2.0: known limitations
 
+**Weekly section priority (2026-10-07, local branch `feat/weekly-water-priority`):**
+Census vulnerability stays fixed; a separate seven-completed-day service shortfall changes
+new section allocations. Officer review checks alternative supply, tanker share and complete
+delivery records; absent/stale/pending evidence remains unknown. Population is connections x
+Census household size, not counted residents (flats can be understated). The 15 lpcd allowance
+is an ASSUMED emergency minimum, not full demand. Confirmed REAL-stop deliveries count as
+ASSUMED 5,000-litre loads; stop locations and section shapes remain approximate. Current
+records must cover yesterday's window; this is not an automatic HMWSSB feed.
+
+A multiplier from 0.25 to 6 (ASSUMED, uncalibrated) reflects shortfall share and days below the
+daily minimum. Covered groups retain a positive share; unknown groups retain old policy.
+Existing tier priorities and station limits remain; differently sized groups/stations do not
+have a guaranteed global priority order. Verified deficits enter the limited scheduled
+reserve even without bookings/F4 flags. No artificial second debt boost is applied.
+New current plans use supplied section bookings; historical plans stay frozen, and re-cut
+section identities outside the 2025 catalog remain unsupported. A closed supplied section day
+uses its actual supplied arrival counts. Section warnings now read section debt first rather
+than displaying only the main ward's debt. Four warning badges still describe their original
+clues; use the new current-priority layer for weekly service priority.
+
+Deterministic SIMULATION: two equal-population areas, 40 bookings/20 trips; an adequately
+served high-baseline area gets 13 -> 1 trips and a neglected lower-baseline area 7 -> 19.
+Total served stays 20; unknown evidence preserves 13/7. This demonstrates behaviour, not
+field accuracy or a universal improvement. Need/volume estimates, officer completeness claims,
+assumed coefficients, delivery coverage and actual fleet availability require validation.
+See `api_additions/weekly_priority.md` and `data/verification/weekly_priority_examples.json`.
+
+
 Status on `main` as of 2026-10-04 (after PRs #52, #57, #59, #60, #61 and #62). One section per feature of
 `docs/JALLEKHA_FINAL_SOLUTION.md`, then limits that cut across features, then what is not built yet.
 Sources: `docs/BRANCH_WORKLOG.md` ("Known limitations" of each branch), the solution document's

@@ -386,7 +386,9 @@ _SHOWN_PROBLEMS = 10
 _ISO_HINT = "arrived_at must be an ISO date and time, for example 2026-10-03T05:30:00+05:30"
 
 
-def normalise_bookings(day: date, raw: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
+def normalise_bookings(
+    day: date, raw: Sequence[Mapping[str, Any]], *, by_section=False
+) -> list[dict[str, Any]]:
     """Check supplied bookings and put them in one canonical order, so the same bookings in any
     order are the same plan. Raises InvalidBookings listing what is wrong (up to 10 problems)."""
     top = PLAN_STORE_CONFIG.max_supplied_bookings
@@ -396,6 +398,7 @@ def normalise_bookings(day: date, raw: Sequence[Mapping[str, Any]]) -> list[dict
         raise InvalidBookings(f"Supply at most {top} bookings for one plan (got {len(raw)})")
     setup = _setup()
     home, mapping, entitlement = setup.ctx.network.home, setup.ctx.mapping, setup.ctx.entitlement
+    section_names = section_plan.load_sections(REPO_ROOT) if by_section else None
     categories = sorted(ALLOCATION_CONFIG.booking_caps)
     problems: list[str] = []
     seen: set[str] = set()
@@ -416,9 +419,10 @@ def normalise_bookings(day: date, raw: Sequence[Mapping[str, Any]]) -> list[dict
         else:
             seen.add(booking_id)
         section = item.get("section")
-        if (
-            not isinstance(section, str)
-            or section not in home
+        if not isinstance(section, str) or (
+            section not in section_names
+            if by_section
+            else section not in home
             or booking_groups.group_for(section, mapping) not in entitlement
         ):
             found.append("section is not an HMWSSB section with a station and need data")
@@ -654,7 +658,7 @@ def section_plan_id(
         extras["scheduled"] = recipe["scheduled"]
     if recipe.get("carry_over") is False:
         extras["carry_over"] = False
-    for key in ("outages", "debts"):
+    for key in ("outages", "debts", "bookings", "weekly_priority"):
         if recipe.get(key):
             extras[key] = recipe[key]
     if extras:
@@ -739,7 +743,11 @@ def _build_section(recipe: dict[str, Any]) -> BuiltPlan:
         outages=tuple(recipe.get("outages", ())),
     )
     try:
-        inputs, sections, left_out, notes = section_plan.plan_inputs(
+        build_inputs = (
+            section_plan.supplied_inputs if "bookings" in recipe else section_plan.plan_inputs
+        )
+        arguments = {"bookings": recipe["bookings"]} if "bookings" in recipe else {}
+        inputs, sections, left_out, notes = build_inputs(
             REPO_ROOT,
             day,
             weights or NeedWeights.default(),
@@ -748,15 +756,76 @@ def _build_section(recipe: dict[str, Any]) -> BuiltPlan:
             capacity,
             options,
             _script().planner_now,
+            **arguments,
         )
     except section_plan.SectionPlanUnavailable as exc:
         raise ReplayDayUnavailable(str(exc)) from exc
     events = _Events()
+    if recipe.get("weekly_priority"):
+        factors = recipe["weekly_priority"]
+        # Verified shortage also enters the reserve without requiring a booking or F4 flag.
+        from app.config.weekly_priority import WEEKLY_PRIORITY_CONFIG
+        from app.services.scheduled_supply import ScheduledWard
+
+        scheduled = [s for s in inputs.scheduled if s.ward_id not in factors]
+        points = list(inputs.registry.points)
+        point_groups = {p.ward_id for p in points}
+        for group, value in factors.items():
+            if value["shortfall_litres"] <= 0 or options.scheduled == "none":
+                continue
+            info = sections[group.removeprefix(section_plan.SECTION_PREFIX)]
+            scheduled.append(
+                ScheduledWard(
+                    group,
+                    value["shortfall_litres"]
+                    / WEEKLY_PRIORITY_CONFIG.window_days
+                    / ALLOCATION_CONFIG.minimum_litres_per_person_day,
+                    info.need_weight(weights or NeedWeights.default()) * value["allocation_factor"],
+                )
+            )
+            if group not in point_groups and info.lat is not None and info.lng is not None:
+                points.append(
+                    ServicePoint(
+                        f"centre:{info.section}",
+                        group,
+                        f"{info.section} (estimated centre)",
+                        info.lat,
+                        info.lng,
+                        "system",
+                        "verified shortfall; estimated centre must be checked before dispatch",
+                    )
+                )
+        inputs = replace(
+            inputs,
+            entitlement={
+                g: v * factors.get(g, {}).get("allocation_factor", 1)
+                for g, v in inputs.entitlement.items()
+            },
+            debts={g: d for g, d in inputs.debts.items() if g not in factors},
+            scheduled=scheduled,
+            registry=ServicePointRegistry(tuple(points)),
+        )
     now = _script().planner_now(day)  # plans are made at 05:00 local time on their day
     plan = planner.build_plan(inputs, section_plan.SectionGate(sections), events, now)
     basis = _basis_section(
         day, capacity, weights, len(inputs.pending), left_out, sections, notes, options
     )
+    if "bookings" in recipe:
+        basis["plan"] = (
+            f"{len(inputs.pending)} officer-supplied bookings for {day}; inputs not independently "
+            "verified. Capacity and station positions ASSUMED; no synthetic monthly arrivals. "
+            "Priorities use supplied booking tiers. Waiting bookings must be supplied explicitly."
+        )
+    if recipe.get("weekly_priority"):
+        basis["weekly_priority"] = (
+            "DERIVED_APPROXIMATE: verified seven-day emergency tanker requirement minus "
+            "confirmed deliveries; Census entitlement multiplied by 0.25 + 3.75 x shortfall "
+            "share, with an additional boost for observed days below the daily minimum "
+            "(ASSUMED coefficients). Complete officer-reviewed records required. No extra debt "
+            "boost for these groups; snapshots frozen in this plan's recipe."
+        )
+    if recipe.get("weekly_priority"):
+        basis["effective_entitlement"] += " " + basis["weekly_priority"]
     return BuiltPlan(inputs, plan, basis, recipe, tuple(events.events))
 
 

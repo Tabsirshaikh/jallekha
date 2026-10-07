@@ -3838,6 +3838,126 @@
         }
       }
     },
+    "/field-checks/supply-reviews": {
+      "post": {
+        "tags": [
+          "field checks"
+        ],
+        "summary": "Supply Review",
+        "operationId": "supply_review_field_checks_supply_reviews_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SupplyInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/field-checks/weekly-priority": {
+      "get": {
+        "tags": [
+          "field checks"
+        ],
+        "summary": "Weekly Priority View",
+        "operationId": "weekly_priority_view_field_checks_weekly_priority_get",
+        "parameters": [
+          {
+            "name": "section_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Section Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/field-checks/sections": {
       "get": {
         "tags": [
@@ -4359,6 +4479,72 @@
           "driver_id"
         ],
         "title": "Start"
+      },
+      "SupplyInput": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "section_id": {
+            "type": "string",
+            "title": "Section Id"
+          },
+          "checked_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Checked On"
+          },
+          "supply": {
+            "type": "string",
+            "enum": [
+              "adequate",
+              "insufficient",
+              "unavailable",
+              "unknown"
+            ],
+            "title": "Supply"
+          },
+          "tanker_share": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Tanker Share"
+          },
+          "records_complete": {
+            "type": "boolean",
+            "title": "Records Complete",
+            "default": false
+          },
+          "booking_reason": {
+            "type": "string",
+            "enum": [
+              "other_supply",
+              "access_difficulty",
+              "unclear"
+            ],
+            "title": "Booking Reason"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "section_id",
+          "checked_on",
+          "supply",
+          "tanker_share",
+          "booking_reason",
+          "note"
+        ],
+        "title": "SupplyInput"
       },
       "ValidationError": {
         "properties": {

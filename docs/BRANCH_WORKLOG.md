@@ -1,5 +1,29 @@
 # Branch worklog
 
+## `feat/weekly-water-priority` - 2026-10-07
+
+- Owner approved research-based weekly service feedback after reviewing the implementation plan.
+  Read project guide, F1/F4/F7/F11 limits and research; isolated worktree, no other checkout edits.
+- TDD: missing calculation/UI modules failed first; current supplied section plan initially
+  rejected; day closure failed looking for unavailable 2026-10 portal totals. All fixed.
+- Added append-only supply reviews, ledger digests, officer/field-worker form in four languages,
+  population-based emergency requirement and complete-record/confirmed-delivery gates.
+- Current priority map/selected-section panel keeps Census baseline separate. Section debt takes
+  precedence over ward proxy, including a true zero. Historical recipes remain unchanged.
+- Current supplied section plans freeze weekly evidence in their identity/recipe, adjust turns
+  without double-counting debt, and reserve supply for verified shortages without bookings.
+  Supplied records also feed live booking signs and close-day accounting.
+- Simulation counterfactual: neglected area 7 -> 19 of 20 trips; covered area 13 -> 1; unknown
+  records keep baseline. No real field validation and no globally optimal-policy claim.
+- Validation: 81 affected backend tests pass; final weekly/reserve guard rerun 12 pass;
+  all 205 frontend tests, full lint/type checks, translation check (934 strings) and production
+  build pass. Browser verified live isolated API/UI, English and Hindi, unknown records and
+  the new priority layer. No unrelated PyMC/model-training suite rerun.
+- Translation export now includes shared .ts dictionaries (including five previously omitted
+  live-reason strings). Fixed one inherited Ruff style violation in section-map serialization;
+  no algorithm/output changes there. No push or merge authorized for this branch.
+
+
 ## `fix/forecast-capacity-sync` — warning quality follow-up, 2026-10-07
 
 - Owner asked to address the remaining F5/F6 bugs and explain groundwater/reservoir use.

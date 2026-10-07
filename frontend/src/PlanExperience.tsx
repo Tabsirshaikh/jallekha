@@ -15,6 +15,20 @@ import "./PlanExperience.css";
 const FALLBACK_WEIGHTS: Weights = { wad: 2, cad: 1, hardship: 1 };
 const FALLBACK_MAX_WEIGHT = 5;
 
+const weeklyPlanCopy = {
+  en: { label: "Plan supplied bookings by section using verified weekly priority", bySection: "By section · draft allocation", preview: "Draft from supplied bookings. Capacity and destinations are estimates. Approval does not dispatch tankers." },
+  te: { label: "నిర్ధారిత వారపు ప్రాధాన్యతతో అందించిన బుకింగ్‌లను విభాగం వారీగా ప్రణాళిక చేయండి", bySection: "విభాగం వారీగా · పంపిణీ ముసాయిదా", preview: "అందించిన బుకింగ్‌ల ముసాయిదా. సామర్థ్యం, గమ్యస్థానాలు అంచనాలు. ఆమోదం ట్యాంకర్లను పంపదు." },
+  ur: { label: "تصدیق شدہ ہفتہ وار ترجیح سے فراہم کردہ بکنگ کا سیکشن وار منصوبہ", bySection: "سیکشن وار · تقسیم کا مسودہ", preview: "فراہم کردہ بکنگ کا مسودہ۔ گنجائش اور منزلیں تخمینی ہیں۔ منظوری ٹینکر روانہ نہیں کرتی۔" },
+  hi: { label: "पुष्ट साप्ताहिक प्राथमिकता से दी गई बुकिंग का सेक्शन अनुसार प्लान", bySection: "सेक्शन अनुसार · वितरण मसौदा", preview: "दी गई बुकिंग से मसौदा। क्षमता और गंतव्य अनुमान हैं। मंजूरी से टैंकर रवाना नहीं होते।" },
+};
+
+const weeklyScheduleCopy = {
+  en: { text: "Reserved water for verified shortages and flagged sections. Delivery points are estimates and need officer checking." },
+  te: { text: "నిర్ధారిత లోటు, గుర్తించిన విభాగాల కోసం కేటాయించిన నీరు. పంపిణీ ప్రదేశాలు అంచనాలు; అధికారి తనిఖీ అవసరం." },
+  ur: { text: "تصدیق شدہ کمی اور نشان زدہ سیکشنوں کے لیے مخصوص پانی۔ ترسیل کے مقامات تخمینی ہیں؛ افسر کی جانچ ضروری ہے۔" },
+  hi: { text: "पुष्ट कमी और चिन्हित सेक्शन के लिए आरक्षित पानी। वितरण स्थान अनुमान हैं; अधिकारी की जाँच जरूरी है।" },
+};
+
 type Group = { id: string; name: string; need: number; gap: number; debt: number; confidence: "good" | "review" };
 const groups: Group[] = [
   { id: "a", name: "Sample Ward A", need: 86, gap: 72, debt: 35, confidence: "good" },
@@ -126,6 +140,7 @@ function LivePlans({ t, locale, notice, plans, reloadList, userId }: { t: Copy; 
   const defaults = plans.defaultWeights ?? FALLBACK_WEIGHTS;
   const maxWeight = plans.maxWeight ?? FALLBACK_MAX_WEIGHT;
   const [edited, setEdited] = useState<Weights | null>(null); // null: the defaults
+  const [suppliedBySection, setSuppliedBySection] = useState(true);
   const [suppliedDay, setSuppliedDay] = useState("");
   const [suppliedText, setSuppliedText] = useState("");
   const [suppliedBusy, setSuppliedBusy] = useState(false);
@@ -208,7 +223,7 @@ function LivePlans({ t, locale, notice, plans, reloadList, userId }: { t: Copy; 
     if (!suppliedDay || rows.length === 0) return setSuppliedNote({ tone: "error", text: t.bookingsNeed });
     setSuppliedBusy(true);
     try {
-      const built = await apiFetch<{ plan_id: string }>("/plans", { method: "POST", body: { day: suppliedDay, weights: chosen, bookings: rows } });
+      const built = await apiFetch<{ plan_id: string }>("/plans", { method: "POST", body: { day: suppliedDay, weights: chosen, bookings: rows, unit: suppliedBySection ? "section" : "ward" } });
       open(built.plan_id);
       setSuppliedNote({ tone: "ok", text: fill(t.bookingsDone, { count: rows.length, day: suppliedDay }) });
       reloadList();
@@ -255,15 +270,15 @@ function LivePlans({ t, locale, notice, plans, reloadList, userId }: { t: Copy; 
 
   const tag = plan?.source === "section_month" ? "DERIVED · ASSUMED CAPACITY" : "SIMULATION"; // a plan by section uses real monthly totals
   return <div className="plan-page">
-    <header className="plan-heading"><div><p className="eyebrow">{t.draft}</p><h1>{t.title}</h1><p className="muted">{t.liveIntro}</p></div><span className="forecast-demo-badge">{t.liveBadge}</span></header>
+    <header className="plan-heading"><div><p className="eyebrow">{t.draft}</p><h1>{t.title}</h1><p className="muted">{t.liveIntro}</p></div><span className="forecast-demo-badge">{plan?.bookingsSupplied !== null && plan ? t.suppliedLabel : t.liveBadge}</span></header>
     {notice}
-    <div className="plan-notice"><strong>{plan?.source === "section_month" ? "This plan uses the real monthly booking totals of each HMWSSB section, divided by the days of the month; the trips available are an assumption. Approval is saved on the server and logged in the ledger; it does not dispatch tankers." : t.liveCaveat}</strong></div>
+    <div className="plan-notice"><strong>{plan && plan.bookingsSupplied !== null ? weeklyPlanCopy[locale].preview : plan?.source === "section_month" ? "This plan uses the real monthly booking totals of each HMWSSB section, divided by the days of the month; the trips available are an assumption. Approval is saved on the server and logged in the ledger; it does not dispatch tankers." : t.liveCaveat}</strong></div>
 
     <section className="plan-panel plan-plans" aria-labelledby="plan-list-title">
       <div className="plan-plans-list">
         <div className="plan-panel-title"><div><p className="eyebrow">{tag}</p><h2 id="plan-list-title">{t.plans}</h2></div></div>
         {plans.items.length === 0 ? <p className="plan-empty">{t.noPlans}</p> : <ul className="plan-list">{plans.items.map((item) => <li key={item.id} className={item.id === selectedId ? "plan-list-row selected" : "plan-list-row"}>
-          <div><strong>{item.day}</strong><small><span>{statusLabel(item.status)}</span> · <span>{fill(t.flagsProgress, { checked: n(item.checkedTotal), total: n(item.flagsTotal) })}</span></small>{item.source === "supplied_bookings" && <small><span>{t.suppliedLabel}</span></small>}{item.source === "section_month" && <small><span>By section · real monthly totals</span></small>}{item.weights && <small><span>{fill(t.weightsBadge, { wad: item.weights.wad, cad: item.weights.cad, hardship: item.weights.hardship })}</span></small>}</div>
+          <div><strong>{item.day}</strong><small><span>{statusLabel(item.status)}</span> · <span>{fill(t.flagsProgress, { checked: n(item.checkedTotal), total: n(item.flagsTotal) })}</span></small>{item.source === "supplied_bookings" && <small><span>{t.suppliedLabel}</span></small>}{item.source === "section_month" && <small><span>{weeklyPlanCopy[locale].bySection}</span></small>}{item.weights && <small><span>{fill(t.weightsBadge, { wad: item.weights.wad, cad: item.weights.cad, hardship: item.weights.hardship })}</span></small>}</div>
           <button className="button button-secondary" aria-label={item.weights ? fill(t.openWeightedAria, { day: item.day, wad: item.weights.wad, cad: item.weights.cad, hardship: item.weights.hardship }) : item.source === "supplied_bookings" ? fill(t.openSuppliedAria, { day: item.day }) : fill(t.openAria, { day: item.day })} aria-pressed={item.id === selectedId} onClick={() => open(item.id)}>{item.id === selectedId ? t.opened : t.open}</button>
         </li>)}</ul>}
         {plans.total > plans.items.length && <p className="plan-empty">{fill(t.showing, { shown: plans.items.length, total: plans.total })}</p>}
@@ -289,6 +304,7 @@ function LivePlans({ t, locale, notice, plans, reloadList, userId }: { t: Copy; 
         <textarea id="plan-supplied-text" rows={6} spellCheck={false} value={suppliedText} placeholder={"booking_id,section,arrived_at\nB-1,ADARSHNAGAR,2026-10-03T05:30:00+05:30"} onChange={(event) => setSuppliedText(event.target.value)} />
         <label htmlFor="plan-supplied-file">{t.bookingsFile}</label>
         <input id="plan-supplied-file" type="file" accept=".csv,text/csv,text/plain" onChange={readFile} />
+        <label><input type="checkbox" checked={suppliedBySection} onChange={e => setSuppliedBySection(e.target.checked)} />{weeklyPlanCopy[locale].label}</label>
         <small>{t.bookingsWeightsNote}</small>
         <button className="button button-primary" type="submit" disabled={suppliedBusy}>{t.bookingsBuild}</button>
         {suppliedBusy && <p className="plan-message" role="status">{t.bookingsBuilding}</p>}
@@ -303,7 +319,7 @@ function LivePlans({ t, locale, notice, plans, reloadList, userId }: { t: Copy; 
     {plan && <>
       {plan.approved && <div className="plan-approved" role="status"><strong>{fill(t.approvedLive, { officer: plan.approvedBy ?? "—" })}</strong>{plan.approvalReason && <span>“{plan.approvalReason}”</span>}<span>{t.approvedLiveNote}</span></div>}
       {plan.source === "section_month" && <div className="plan-notice"><strong>{plan.basis.plan}</strong></div>}
-      {plan.source === "supplied_bookings" && <div className="plan-notice"><strong>{fill(t.suppliedNote, { count: plan.bookingsSupplied ?? "?", day: plan.day })}</strong></div>}
+      {(plan.source === "supplied_bookings" || plan.bookingsSupplied !== null) && <div className="plan-notice"><strong>{fill(t.suppliedNote, { count: plan.bookingsSupplied ?? "?", day: plan.day })}</strong></div>}
       <section className="plan-summary" aria-label={`${t.draft} · ${plan.day}`}>
         <article><span>{t.liveTrips}</span><strong>{n(plan.trips)}</strong><small>{tag}</small></article>
         <article><span>{t.reserve}</span><strong>{n(plan.reserveTrips)}</strong><small>{tag}</small></article>
@@ -352,7 +368,7 @@ function LivePlans({ t, locale, notice, plans, reloadList, userId }: { t: Copy; 
         </section>
       </div>
 
-      <section className="plan-panel plan-schedule" aria-labelledby="plan-schedule-title"><div className="plan-panel-title"><div><p className="eyebrow" id="plan-schedule-title">{t.liveSchedule}</p><h2>{plan.source === "section_month" ? "Sections the field-check screen flags (F4) get tankers although they did not book. Litres are the section’s need at 15 litres per person a day; the stop is an estimated centre and is not routed yet." : t.liveScheduleNote}</h2></div><span className="source-tag">{tag}</span></div>
+      <section className="plan-panel plan-schedule" aria-labelledby="plan-schedule-title"><div className="plan-panel-title"><div><p className="eyebrow" id="plan-schedule-title">{t.liveSchedule}</p><h2>{plan.bookingsSupplied !== null && plan.source === "section_month" ? weeklyScheduleCopy[locale].text : plan.source === "section_month" ? "Sections the field-check screen flags (F4) get tankers although they did not book. Litres are the section’s need at 15 litres per person a day; the stop is an estimated centre and is not routed yet." : t.liveScheduleNote}</h2></div><span className="source-tag">{tag}</span></div>
         <div className="plan-schedule-table"><div className="plan-schedule-row plan-schedule-head"><span>{plan.source === "section_month" ? "Section" : t.ward}</span><span>{t.litres}</span><span>{t.scheduleStatus}</span></div>
           {plan.schedule.map((row) => <div className="plan-schedule-row" key={row.wardId}><span>{label(row.wardId)}</span><span>{n(row.litres)} / {n(row.floor)}</span><span className="plan-schedule-status"><span>{row.status === "FLOOR_NOT_MET" ? t.floorNotMet : row.status === "FLOOR_MET" ? t.floorMet : row.status ?? "—"}</span>{row.unrouted === "NEEDS_SERVICE_POINT" ? <small>{t.needsServicePoint}</small> : row.unrouted ? <small>{row.unrouted}</small> : null}</span></div>)}
         </div>
