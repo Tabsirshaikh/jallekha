@@ -12,6 +12,7 @@ from app.config.allocation import ALLOCATION_CONFIG
 from app.config.env import REPO_ROOT
 from app.config.weekly_priority import WEEKLY_PRIORITY_CONFIG as CFG
 from app.models import SectionSupplyReview
+from app.services import bookings as bookings_service
 from app.services import section_plan, weekly_priority
 from app.services.service_models import NeedWeights
 
@@ -81,7 +82,39 @@ class SupplyReviewStore:
             return result
 
 
-def current_sections(as_of: date, reviews: SupplyReviewStore, deliveries, root=REPO_ROOT):
+def booking_results(as_of: date, bookings, deliveries) -> dict[str, list[int]]:
+    """Per section group, [delivered, not delivered, unknown] for the JalLekha bookings made in
+    the 7 completed days before `as_of` (services/bookings.py, F12 outcomes)."""
+    if bookings is None:
+        return {}
+    first = as_of - timedelta(days=CFG.window_days)
+    expiry = section_plan.SANDBOX_CONFIG.booking_expiry_days
+    out: dict[str, list[int]] = {}
+    for row in bookings.list():
+        if row.status == "CANCELLED":
+            continue
+        made = bookings_service.local_day(bookings_service._aware(row.arrived_at))
+        if not first <= made < as_of:
+            continue
+        counts = out.setdefault(row.section, [0, 0, 0])
+        outcome = None
+        if row.stop_id:
+            found = deliveries.list_deliveries(stop_id=row.stop_id)
+            outcome = found[-1].outcome.outcome if found and found[-1].outcome else None
+        if outcome == "Confirmed":
+            counts[0] += 1
+        elif outcome in ("Failed", "Disputed"):
+            counts[1] += 1
+        elif row.status == "WAITING" and (as_of - made).days >= expiry:
+            counts[1] += 1  # waited until it expired: never delivered
+        else:
+            counts[2] += 1  # on the way, or delivered without proof: unknown
+    return out
+
+
+def current_sections(
+    as_of: date, reviews: SupplyReviewStore, deliveries, root=REPO_ROOT, bookings=None
+):
     """One count per confirmed load at a REAL registered stop; geography remains approximate.
 
     Complete records are an explicit officer assertion. Unresolved outcomes invalidate
@@ -110,6 +143,7 @@ def current_sections(as_of: date, reviews: SupplyReviewStore, deliveries, root=R
             paid[group] = paid.get(group, 0) + ALLOCATION_CONFIG.tanker_load_litres
             day = d.started_at.astimezone(section_plan.IST).date()
             daily[(group, day)] = daily.get((group, day), 0) + ALLOCATION_CONFIG.tanker_load_litres
+    booked = booking_results(as_of, bookings, deliveries)
     output = {}
     for info in sections.values():
         # Section ids match the F4 evidence file (division:name), not the allocation group.
@@ -123,14 +157,14 @@ def current_sections(as_of: date, reviews: SupplyReviewStore, deliveries, root=R
             daily.get((info.group, first + timedelta(days=i)), 0) < requirement
             for i in range(CFG.window_days)
         )
+        baseline = info.need_weight(NeedWeights.default())
         value = weekly_priority.calculate(
-            info.people,
-            info.need_weight(NeedWeights.default()),
-            review,
-            paid.get(info.group, 0),
-            as_of,
-            deprived,
+            info.people, baseline, review, paid.get(info.group, 0), as_of, deprived
         )
+        value["source"] = "OFFICER_CHECK" if value["status"] != "UNKNOWN" else "NONE"
+        if value["status"] == "UNKNOWN" and info.group in booked:
+            # No usable officer check: the section's own bookings of the last 7 days decide.
+            value = weekly_priority.from_bookings(info.people, baseline, *booked[info.group], as_of)
         output[info.group] = {
             **value,
             "section_id": ident,

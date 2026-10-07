@@ -29,7 +29,7 @@ import math
 import statistics
 import threading
 from collections import Counter, defaultdict
-from collections.abc import Callable, Iterable, Mapping
+from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from datetime import UTC, date, datetime, time, timedelta, timezone
 from functools import lru_cache
@@ -37,7 +37,8 @@ from pathlib import Path
 
 from app.config.sandbox import SANDBOX_CONFIG
 from app.config.section_plan import SECTION_PLAN_CONFIG as CFG
-from app.services import fair_queue, outage, planner
+from app.config.weekly_priority import WEEKLY_PRIORITY_CONFIG as WEEKLY
+from app.services import fair_queue, outage, planner, weekly_priority
 from app.services.scheduled_supply import ScheduledWard, ServicePoint, ServicePointRegistry
 from app.services.service_models import NeedWeights
 from app.services.water_debt import DebtAccount
@@ -240,6 +241,22 @@ def live_booking(raw: Mapping[str, object]) -> fair_queue.QueueBooking:
     )
 
 
+def service_factors(history: Sequence[Mapping[str, tuple[int, int]]]) -> dict[str, float]:
+    """A: each section's turn factor from its last 7 days (booked, served) in `history`
+    (weekly_priority.service_factor); sections with too few bookings keep 1 (Census baseline)."""
+    booked: Counter[str] = Counter()
+    served: Counter[str] = Counter()
+    for day in history[-WEEKLY.window_days :]:
+        for group, (b, s) in day.items():
+            booked[group] += b
+            served[group] += s
+    return {
+        g: weekly_priority.service_factor(max(0.0, 1 - min(1.0, served[g] / n)))
+        for g, n in booked.items()
+        if n >= WEEKLY.min_known_bookings
+    }
+
+
 def _estimated(booking_id: str) -> bool:
     """Estimated bookings (make_bookings) are named "SECTION|day|k"; real ones are not."""
     return "|" in booking_id
@@ -263,6 +280,12 @@ class SectionOptions:
     # A section with any of them is planned from its real bookings only; the others from the
     # month's totals divided by days.
     live: tuple[Mapping[str, object], ...] = ()
+    # B: each day the trips follow the bookings waiting at each station (CFG bounds).
+    rebalance: bool = False
+    # A: in the days the plan replays, a section served well in the last 7 days gets fewer turns
+    # and one left waiting gets more (weekly_priority.service_factor; PLANNED service, not
+    # confirmed deliveries; real records, when they exist, replace it on the plan's own day).
+    responsive: bool = False
 
 
 def load_facilities(root: Path) -> dict[str, list[dict[str, str]]]:
@@ -546,6 +569,40 @@ _STEPS: dict[tuple, tuple[list[planner.PlannerBooking], dict[str, fair_queue.Que
 _STEPS_LOCK = threading.Lock()
 
 
+def rebalanced(
+    base: Mapping[str, int], pending: Iterable[planner.PlannerBooking]
+) -> dict[str, int]:
+    """B: the same total trips shared over the stations by the bookings waiting at each today,
+    each station kept between CFG.rebalance_min_share and CFG.rebalance_max_share of its usual
+    trips (largest remainder). Tankers are taken to be movable between stations each morning:
+    ASSUMED (HMWSSB does not publish how it moves tankers)."""
+    total = sum(base.values())
+    want: Counter[str] = Counter(p.station for p in pending)
+    grand = sum(want[s] for s in base) or 1
+    exact = {
+        s: min(
+            CFG.rebalance_max_share * base[s],
+            max(CFG.rebalance_min_share * base[s], total * want[s] / grand),
+        )
+        for s in base
+    }
+    out = {s: max(1 if base[s] else 0, math.floor(v)) for s, v in exact.items()}
+    spare = total - sum(out.values())
+    order = sorted(base, key=lambda s: (-(exact[s] - math.floor(exact[s])), -want[s], s))
+    i = 0
+    while spare > 0 and order:  # give the rest where the bounds allow, most wanted first
+        s = order[i % len(order)]
+        if out[s] < CFG.rebalance_max_share * base[s] or i >= 3 * len(order):
+            out[s] += 1
+            spare -= 1
+        i += 1
+    while spare < 0:  # rounding up to 1 trip went over: take back from the largest
+        s = max(out, key=lambda k: (out[k] - CFG.rebalance_min_share * base[k], k))
+        out[s] -= 1
+        spare += 1
+    return out
+
+
 def _day_inputs(
     root: Path,
     st: _Static,
@@ -557,6 +614,7 @@ def _day_inputs(
     states: Mapping[str, fair_queue.QueueState],
     debts: Iterable[DebtAccount],
     final: bool,
+    service: Mapping[str, float] | None = None,
 ) -> tuple[planner.PlanInputs, list[tuple[str, int]], list[planner.PlannerBooking]]:
     totals = month_totals(root, estimate_year(day), day.month)
     fresh, left_out = make_bookings(st.sections, totals, day, options, st.facilities, st.commercial)
@@ -575,12 +633,17 @@ def _day_inputs(
     events, stops, where = (
         outages_from(options, st.sections, st.facilities) if final else ([], [], {})
     )
+    pending_all = kept + new
+    service = service or {}
     inputs = planner.PlanInputs(
         plan_id=plan_id,
         day=day,
-        capacity=st.capacity,
-        pending=kept + new,
-        entitlement={s.group: s.entitlement(weights) for s in st.sections.values()},
+        capacity=rebalanced(st.capacity, pending_all) if options.rebalance else st.capacity,
+        pending=pending_all,
+        entitlement={
+            s.group: s.entitlement(weights) * service.get(s.group, 1.0)
+            for s in st.sections.values()
+        },
         queue_states=dict(states),
         debts={a.account_id: a for a in debts} if final else {},
         scheduled=scheduled,
@@ -612,38 +675,51 @@ def plan_inputs(
         )
     st = _static(str(root), scenario)
     now_of = plan_now or (lambda d: datetime(d.year, d.month, d.day, 5, 0, tzinfo=IST))
-    start = (
-        max(date(PLAN_YEAR, 1, 1), day - timedelta(days=CFG.carry_days))
-        if options.carry_over
-        else day
-    )
+    back = max(CFG.carry_days, WEEKLY.window_days if options.responsive else 0)
+    start = max(date(PLAN_YEAR, 1, 1), day - timedelta(days=back)) if options.carry_over else day
     pending: list[planner.PlannerBooking] = []
     states: dict[str, fair_queue.QueueState] = {}
     gate = SectionGate(st.sections)
-    key_base = (str(root), scenario, weights, options.priority, options.scheduled, start)
+    key_base = (
+        str(root), scenario, weights, options.priority, options.scheduled, start,
+        options.rebalance, options.responsive,
+    )  # fmt: skip
+    history: list[dict[str, tuple[int, int]]] = []  # per replayed day: group -> (booked, served)
     d = start
     while d < day:
         key = (*key_base, d)
         with _STEPS_LOCK:
             hit = _STEPS.get(key)
         if hit is None:
+            factors = service_factors(history) if options.responsive else None
             inputs, _, _ = _day_inputs(
-                root, st, d, weights, options, f"carry-{d.isoformat()}", pending, states, (), False
-            )
+                root, st, d, weights, options, f"carry-{d.isoformat()}", pending, states, (),
+                False, factors,
+            )  # fmt: skip
             plan = planner.build_plan(inputs, gate, _NullLedger(), now_of(d))
             served = {b.booking_id for sp in plan.stations.values() for b in sp.served}
+            before = {p.booking.booking_id for p in pending}
+            record: dict[str, list[int]] = defaultdict(lambda: [0, 0])
+            for p in inputs.pending:
+                if p.booking.booking_id not in before:
+                    record[p.booking.group][0] += 1
+                if p.booking.booking_id in served:
+                    record[p.booking.group][1] += 1
             hit = (
                 [p for p in inputs.pending if p.booking.booking_id not in served],
                 dict(plan.queue_states),
+                {g: (b, s) for g, (b, s) in record.items()},
             )
             with _STEPS_LOCK:
                 _STEPS[key] = hit
                 while len(_STEPS) > 64:
                     _STEPS.pop(next(iter(_STEPS)))
         pending, states = list(hit[0]), dict(hit[1])
+        history.append(dict(hit[2]))
         d += timedelta(days=1)
+    final_factors = service_factors(history) if options.responsive else None
     inputs, left_out, carried = _day_inputs(
-        root, st, day, weights, options, plan_id, pending, states, debts, True
+        root, st, day, weights, options, plan_id, pending, states, debts, True, final_factors
     )
     tiers = Counter(p.booking.tier for p in inputs.pending)
     notes = {

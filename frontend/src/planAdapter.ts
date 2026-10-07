@@ -32,6 +32,8 @@ export type PlanFacts = {
   bookings: number; carried: number; commercial: number; tiers: [number, number, number]; servedTiers: [number, number, number];
   /** Bookings made through JalLekha in the plan, and their sections (0 when the answer has none). */
   liveBookings: number; liveSections: number;
+  /** B: trips moved to other stations than their usual share (0 when off). */
+  tripsMoved: number;
   served: number; waiting: number; trips: number; fleetTankers: number; tripsPerTanker: number; reserveTrips: number; reserveUsedTrips: number;
   outageTrips: number; bookedTrips: number; scheduledSections: number; cutSections: number; criticalStops: number; stations: number; loadLitres: number; litresPerPerson: number;
 };
@@ -39,7 +41,9 @@ export type Water = { litres: number; people: number; loads: number; full: boole
 export type SectionRow = {
   group: string; name: string; category: SectionCategory; bookings: number; carried: number; tiers: [number, number, number]; servedTiers: [number, number, number];
   served: number; waiting: number; bookingsPer1000: number | null; peerBookingsPer1000: number | null; station: string | null; needEstimated: boolean;
-  noWaterShare: number | null; fairShare: number; scheduled: Water | null; outage: Water | null; criticalLitres: number;
+  noWaterShare: number | null; fairShare: number;
+  /** A: this plan's turns against the Census turns (1 = Census only); null when unknown. */
+  turnFactor: number | null; scheduled: Water | null; outage: Water | null; criticalLitres: number;
 };
 /** One filling station's queue: its bookings per section and the order the fair queue served them. */
 export type StationQueue = { station: string; trips: number; bookedTrips: number; bookings: Record<string, number>; served: { group: string; reason: string }[] };
@@ -262,7 +266,7 @@ function overviewOf(raw: unknown, stations: Row[]): PlanOverview | null {
     fleetTankers: v.fleet_tankers!, tripsPerTanker: v.trips_per_tanker!, reserveTrips: v.reserve_trips!, reserveUsedTrips: v.reserve_used_trips!, outageTrips: v.outage_trips!,
     bookedTrips: v.booked_trips!, scheduledSections: v.scheduled_sections!, cutSections: v.cut_sections!, criticalStops: v.critical_stops!, stations: v.stations!,
     loadLitres: v.load_litres!, litresPerPerson: v.litres_per_person!,
-    liveBookings: num(f.live_bookings) ?? 0, liveSections: num(f.live_sections) ?? 0,
+    liveBookings: num(f.live_bookings) ?? 0, liveSections: num(f.live_sections) ?? 0, tripsMoved: num(f.trips_moved) ?? 0,
   };
   const sections: SectionRow[] = [];
   for (const r of rows(raw.sections)) {
@@ -273,7 +277,7 @@ function overviewOf(raw: unknown, stations: Row[]): PlanOverview | null {
       group, name, category: (CATEGORIES.has(String(r.category)) ? r.category : "unknown") as SectionCategory,
       bookings: num(r.bookings) ?? 0, carried: num(r.carried) ?? 0, tiers: t, servedTiers: st, served: num(r.served) ?? 0, waiting: num(r.waiting) ?? 0,
       bookingsPer1000: num(r.bookings_per_1000), peerBookingsPer1000: num(r.peer_bookings_per_1000), station: text(r.station), needEstimated: r.need_estimated === true,
-      noWaterShare: num(r.no_water_share), fairShare: num(r.fair_share) ?? 0, scheduled: waterOf(r.scheduled), outage: waterOf(r.outage), criticalLitres: num(r.critical_litres) ?? 0,
+      noWaterShare: num(r.no_water_share), fairShare: num(r.fair_share) ?? 0, turnFactor: num(r.turn_factor), scheduled: waterOf(r.scheduled), outage: waterOf(r.outage), criticalLitres: num(r.critical_litres) ?? 0,
     });
   }
   // The order each station served its bookings in (position order, as the fair queue decided).

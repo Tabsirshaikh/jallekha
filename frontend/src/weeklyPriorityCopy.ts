@@ -12,4 +12,12 @@ export const weeklyDaysCopy = {
   hi: { label: "दैनिक न्यूनतम से कम आपूर्ति वाले दिन", unknown: "वर्तमान प्राथमिकता पुष्ट नहीं है; जनगणना आधार लागू है।" },
 };
 
-export type WeeklyRow = { section_id: string; section: string; status: string; population_estimate: number; baseline_need_weight: number; current_need_weight: number; weekly_requirement_litres: number | null; confirmed_litres: number | null; shortfall_litres: number | null; days_below_minimum?: number | null; window_start?: string; window_end?: string };
+export type WeeklyRow = { section_id: string; section: string; status: string; population_estimate: number; baseline_need_weight: number; current_need_weight: number; weekly_requirement_litres: number | null; confirmed_litres: number | null; shortfall_litres: number | null; days_below_minimum?: number | null; window_start?: string; window_end?: string; source?: string; bookings_delivered?: number; bookings_not_delivered?: number; bookings_unknown?: number };
+
+/** What the current priority rests on: the section's own bookings, an officer's supply check, or nothing yet. */
+export const weeklySourceCopy = {
+  en: { bookings: "From this section's bookings in the last 7 days: {d} delivered, {n} not delivered, {u} still unknown.", officer: "From an officer's supply check.", none: "Not enough known deliveries yet (needs 3 bookings with a known result, or an officer's supply check)." },
+  te: { bookings: "గత 7 రోజుల్లో ఈ విభాగం బుకింగ్‌ల నుంచి: {d} అందాయి, {n} అందలేదు, {u} ఇంకా తెలియదు.", officer: "అధికారి సరఫరా పరిశీలన నుంచి.", none: "తెలిసిన డెలివరీలు ఇంకా సరిపోలేదు (ఫలితం తెలిసిన 3 బుకింగ్‌లు లేదా అధికారి సరఫరా పరిశీలన అవసరం)." },
+  ur: { bookings: "پچھلے 7 دنوں میں اس سیکشن کی بکنگ سے: {d} پہنچیں، {n} نہیں پہنچیں، {u} ابھی معلوم نہیں۔", officer: "افسر کی فراہمی کی جانچ سے۔", none: "ابھی کافی معلوم ترسیلات نہیں (معلوم نتیجے والی 3 بکنگ یا افسر کی فراہمی کی جانچ درکار)۔" },
+  hi: { bookings: "पिछले 7 दिनों में इस सेक्शन की बुकिंग से: {d} पहुँचीं, {n} नहीं पहुँचीं, {u} अभी पता नहीं।", officer: "अधिकारी की आपूर्ति जाँच से।", none: "अभी पर्याप्त पता चली डिलीवरी नहीं (नतीजे वाली 3 बुकिंग या अधिकारी की आपूर्ति जाँच चाहिए)।" },
+};

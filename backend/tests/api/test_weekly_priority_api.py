@@ -95,7 +95,7 @@ def test_current_section_plan_uses_verified_priority_and_saved_snapshot(client, 
     assert response.status_code == 201, response.text
     plan = response.json()
     assert (
-        plan["effective_entitlement"][info.group] == info.entitlement(NeedWeights.default()) * 1.0
+        plan["effective_entitlement"][info.group] == info.entitlement(NeedWeights.default()) * 0.25
     )
     ident = plan["plan_id"]
     review.update(id=str(uuid4()), supply="unavailable", tanker_share=1, note="Supply failed")

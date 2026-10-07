@@ -54,6 +54,8 @@ export default function PlanFacts({ facts, day, capacity }: { facts: Facts; day:
           meaning: facts.cutSections > 0
             ? `${facts.cutSections} sections have a water cut today: hospitals there first, then every home up to the minimum.`
             : "No water-cut notice for this day, so no trips are kept for it." },
+        ...(facts.tripsMoved > 0 ? [{ what: "Trips moved to busier stations", value: nf.format(facts.tripsMoved), source: "result" as Source,
+          meaning: "Same total trips, shifted towards stations where bookings are piling up (each station between half and double its usual trips)." }] : []),
         { what: "Trips left for bookings", value: nf.format(facts.bookedTrips), source: "result",
           meaning: `Shared over ${facts.stations} filling stations. A station with spare trips lends them to a busy neighbour.` },
       ],

@@ -4,7 +4,7 @@ import { useAuth } from "./auth";
 import { useLocale } from "./i18n";
 import { useApi } from "./useApi";
 
-import { weeklyCopy, weeklyDaysCopy, type WeeklyRow } from "./weeklyPriorityCopy";
+import { weeklyCopy, weeklyDaysCopy, weeklySourceCopy, type WeeklyRow } from "./weeklyPriorityCopy";
 
 export default function WeeklyPriorityPanel({ sectionId, onSaved }: { sectionId?: string; onSaved?: () => void }) {
   const { locale } = useLocale();
@@ -47,6 +47,7 @@ export default function WeeklyPriorityPanel({ sectionId, onSaved }: { sectionId?
     {api.loading ? <p>{w.loading}</p> : !row ? <p>{w.loadError}</p> : <>
       {!sectionId && <label>{w.section}<select disabled={busy} value={row.section_id} onChange={e => { setSelected(e.target.value); setSupply("unknown"); setComplete(false); setNote(""); setMessage(""); retry.current = null; }}>{rows.map(r => <option key={r.section_id} value={r.section_id}>{r.section}</option>)}</select></label>}
       <p>{row.window_start} – {row.window_end}</p>
+      <p>{row.source === "BOOKINGS" && row.status !== "UNKNOWN" ? weeklySourceCopy[locale].bookings.replace("{d}", String(row.bookings_delivered ?? 0)).replace("{n}", String(row.bookings_not_delivered ?? 0)).replace("{u}", String(row.bookings_unknown ?? 0)) : row.source === "OFFICER_CHECK" ? weeklySourceCopy[locale].officer : weeklySourceCopy[locale].none}</p>
       {row.status === "UNKNOWN" && <p>{w.unknown}</p>}
       {row.status === "UNKNOWN" && <p>{weeklyDaysCopy[locale].unknown}</p>}
       <dl className="atlas-facts">{([[w.population, row.population_estimate], [w.baseline, row.baseline_need_weight], [w.current, row.status === "UNKNOWN" ? null : row.current_need_weight], [w.requirement, row.weekly_requirement_litres], [w.delivered, row.confirmed_litres], [w.shortfall, row.shortfall_litres], [weeklyDaysCopy[locale].label, row.days_below_minimum ?? null]] as const).map(([label, v]) => <div key={label}><dt>{label}</dt><dd>{fmt(v)}</dd></div>)}</dl>

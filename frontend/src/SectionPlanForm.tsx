@@ -14,6 +14,8 @@ export default function SectionPlanForm({ weights, onBuilt }: { weights: Weights
   const [priority, setPriority] = useState(true);
   const [carryOver, setCarryOver] = useState(true);
   const [scheduled, setScheduled] = useState(true);
+  const [responsive, setResponsive] = useState(true);
+  const [rebalance, setRebalance] = useState(true);
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<{ tone: "ok" | "error"; text: string } | null>(null);
 
@@ -24,7 +26,7 @@ export default function SectionPlanForm({ weights, onBuilt }: { weights: Weights
     setBusy(true);
     setNote(null);
     try {
-      const built = await apiFetch<{ plan_id: string }>("/plans", { method: "POST", body: { day, unit: "section", capacity, weights, priority, scheduled: scheduled ? "f4" : "none", carry_over: carryOver } });
+      const built = await apiFetch<{ plan_id: string }>("/plans", { method: "POST", body: { day, unit: "section", capacity, weights, priority, scheduled: scheduled ? "f4" : "none", carry_over: carryOver, responsive, rebalance } });
       onBuilt(built.plan_id);
       setNote({ tone: "ok", text: `Plan for ${day} is ready below.` });
     } catch (cause) {
@@ -55,6 +57,8 @@ export default function SectionPlanForm({ weights, onBuilt }: { weights: Weights
         <label className="plan-option"><input type="checkbox" checked={priority} onChange={(event) => setPriority(event.target.checked)} /><b>Hospitals first, then homes with no water at home</b><small>Estimated: HMWSSB does not publish who booked.</small></label>
         <label className="plan-option"><input type="checkbox" checked={carryOver} onChange={(event) => setCarryOver(event.target.checked)} /><b>Bring forward bookings still waiting from the days before</b><small>A booking drops out after 3 days.</small></label>
         <label className="plan-option"><input type="checkbox" checked={scheduled} onChange={(event) => setScheduled(event.target.checked)} /><b>Send water to areas that book too little</b><small>12 sections the field-check list flags get water on a schedule.</small></label>
+        <label className="plan-option"><input type="checkbox" checked={responsive} onChange={(event) => setResponsive(event.target.checked)} /><b>Areas that got water this week wait their turn</b><small>A section served well in the last 7 days gets fewer turns (down to ¼); one left waiting gets more (up to 4×). The Census need stays the base.</small></label>
+        <label className="plan-option"><input type="checkbox" checked={rebalance} onChange={(event) => setRebalance(event.target.checked)} /><b>Move trips to stations where bookings pile up</b><small>Same total trips; each station gets between half and double its usual trips, by the bookings waiting there.</small></label>
       </fieldset>
       <p className="muted small">A water-cut notice entered for the day is added on its own: hospitals there first, then every cut home up to the minimum.</p>
       <div className="plan-form-actions">

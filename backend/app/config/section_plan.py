@@ -73,5 +73,13 @@ class SectionPlanConfig:
     # DERIVED rates from REAL bookings (D1) and connections (D19).
     heavy_use_percentile: int = 75
 
+    # B (feat/responsive-allocation): each day the trips follow the bookings waiting at each
+    # filling station, the total unchanged, every station kept between these shares of its usual
+    # trips (tankers taken to be movable between stations each morning). Research 2026-10-07: 21
+    # days of May 2025, tight: the worst section went from 40% to 63% of its bookings served and
+    # expired bookings from 6,000 to about 2,100 with A. Basis: ASSUMED bounds.
+    rebalance_min_share: float = 0.5
+    rebalance_max_share: float = 2.0
+
 
 SECTION_PLAN_CONFIG = SectionPlanConfig()

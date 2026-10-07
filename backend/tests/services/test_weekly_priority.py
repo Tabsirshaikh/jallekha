@@ -24,7 +24,7 @@ def test_delivered_water_reduces_priority_and_neglected_area_overtakes_baseline(
     assert served["shortfall_litres"] == 0
     assert neglected["shortfall_litres"] == 10500
     assert neglected["current_need_weight"] > served["current_need_weight"]
-    assert allocation_factors({"a": served, "b": neglected})["a"] == 1  # Census baseline kept
+    assert allocation_factors({"a": served, "b": neglected})["a"] < 1  # served drops below
 
 
 def test_partial_delivery_is_not_adequate_and_no_booking_needed():
@@ -76,4 +76,30 @@ def test_more_days_below_daily_minimum_raise_priority_at_same_weekly_shortfall()
     prolonged = calculate(100, 1.2, review(), 5000, DAY, days_below_minimum=6)
     assert prolonged["allocation_factor"] > brief["allocation_factor"]
     covered = calculate(100, 1.2, review(), 10500, DAY, days_below_minimum=6)
-    assert covered["allocation_factor"] == 1.0  # covered keeps its Census baseline
+    assert covered["allocation_factor"] == 0.25  # covered drops to a quarter, never to zero
+
+
+def test_a_sections_own_bookings_lower_or_raise_its_turns_and_unknown_counts_for_nothing():
+    from app.services.weekly_priority import from_bookings
+
+    served = from_bookings(1000, 1.5, delivered=6, not_delivered=0, unknown=4, as_of=DAY)
+    neglected = from_bookings(1000, 1.2, delivered=0, not_delivered=5, unknown=0, as_of=DAY)
+    assert served["status"] == "COVERED" and served["allocation_factor"] == 0.25
+    assert neglected["status"] == "SHORTFALL" and neglected["allocation_factor"] == 4.0
+    # the lower-Census, neglected section overtakes the higher-Census, well-served one
+    assert neglected["current_need_weight"] > served["current_need_weight"]
+    # deliveries on the way or without proof are not zero water: too few known results
+    unknown = from_bookings(1000, 1.5, delivered=1, not_delivered=0, unknown=9, as_of=DAY)
+    assert unknown["status"] == "UNKNOWN" and unknown["allocation_factor"] == 1.0
+
+
+def test_rebalanced_trips_keep_the_total_and_the_bounds():
+    from app.services import planner, section_plan
+    from app.services.fair_queue import QueueBooking
+
+    base = {"A": 100, "B": 100, "C": 100}
+    one = QueueBooking("b", "section:X", None, 2, "c", "domestic")  # type: ignore[arg-type]
+    wait = [planner.PlannerBooking(one, "A")] * 500  # 500 bookings wait at station A
+    out = section_plan.rebalanced(base, wait)
+    assert sum(out.values()) == 300
+    assert out["A"] == 200 and out["B"] >= 50 and out["C"] >= 50  # at most 2 x, at least 0.5 x

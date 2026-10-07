@@ -37,6 +37,7 @@ from app.config.allocation import ALLOCATION_CONFIG
 from app.config.sandbox import SANDBOX_CONFIG
 from app.config.section_plan import SECTION_PLAN_CONFIG as CFG
 from app.services import planner, section_plan
+from app.services.service_models import NeedWeights
 
 CHECKS = section_plan.CHECKS
 PREFIX = section_plan.SECTION_PREFIX
@@ -78,13 +79,22 @@ def _category(
     return "heavy" if rate >= cutoff else "normal"
 
 
+def _moved(root: Path, scenario: str | None, plan: planner.DailyPlan) -> int:
+    if scenario not in section_plan.CAPACITY_SCENARIOS:
+        return 0
+    usual = section_plan._static(str(root), scenario).capacity
+    return sum(max(0, sp.trips - usual.get(s, 0)) for s, sp in plan.stations.items())
+
+
 def section_overview(
     root: Path,
     inputs: planner.PlanInputs,
     plan: planner.DailyPlan,
     capacity_scenario: str | None,
+    weights: NeedWeights | None = None,
 ) -> dict[str, Any]:
     sections = section_plan.static_sections(root)
+    weights = weights or NeedWeights.default()
     checks = _checks(str(root))
     cutoff = heavy_cutoff(root)
     load = ALLOCATION_CONFIG.tanker_load_litres
@@ -173,6 +183,12 @@ def section_overview(
         r["need_estimated"] = info.estimated if info else True
         r["no_water_share"] = round(info.wad, 4) if info else None
         r["fair_share"] = round(plan.effective_entitlement.get(group, 0.0), 6)
+        # A: this plan's turns against the Census turns (1 = Census only; below 1 = served well
+        # lately, above 1 = left waiting lately)
+        census = info.entitlement(weights) if info else 0.0
+        r["turn_factor"] = (
+            round(inputs.entitlement.get(group, census) / census, 3) if census else None
+        )
         r.setdefault("scheduled", None)
         r.setdefault("outage", None)
         r.setdefault("critical_litres", 0)
@@ -202,6 +218,8 @@ def section_overview(
         "reserve_used_trips": math.ceil(scheduled_litres / load - 1e-9),
         "outage_trips": plan.outage_trips,
         "booked_trips": sum(sp.booked_trips for sp in plan.stations.values()),
+        # B: trips moved to other stations than their usual share (0 when B is off)
+        "trips_moved": _moved(root, capacity_scenario, plan),
         "scheduled_sections": sum(1 for s in plan.scheduled.values() if s.litres > 0),
         "cut_sections": len(cut),
         "critical_stops": len(plan.outage.critical),
