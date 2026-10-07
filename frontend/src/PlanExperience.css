@@ -108,3 +108,4 @@
 .plan-supplied textarea { width: 100%; min-height: 144px; font-family: ui-monospace, Consolas, monospace; font-size: 1rem; padding: 10px 12px; }
 .plan-supplied input[type="date"], .plan-supplied input[type="file"] { min-height: 48px; font-size: 1rem; }
 .plan-supplied .plan-message ul { margin: 0; padding-inline-start: 20px; }
+.plan-grid.plan-grid-one { grid-template-columns: 1fr; }

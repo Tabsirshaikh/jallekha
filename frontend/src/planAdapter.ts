@@ -25,6 +25,24 @@ export type ConfidenceView = { threshold: number | null; thresholdBasis: string 
 /** Served and waiting bookings of one group (section or ward) in the day's plan. */
 export type GroupTotals = { served: number; waiting: number };
 
+/** Service type of a section (F7): cut today, water on a schedule, heavy or normal booker. */
+export type SectionCategory = "cut" | "scheduled" | "heavy" | "normal" | "unknown";
+/** A plan by section in figures (GET /plans/{id} `overview`, plan_overview.py). */
+export type PlanFacts = {
+  bookings: number; carried: number; commercial: number; tiers: [number, number, number]; servedTiers: [number, number, number];
+  served: number; waiting: number; trips: number; fleetTankers: number; tripsPerTanker: number; reserveTrips: number; reserveUsedTrips: number;
+  outageTrips: number; bookedTrips: number; scheduledSections: number; cutSections: number; criticalStops: number; stations: number; loadLitres: number; litresPerPerson: number;
+};
+export type Water = { litres: number; people: number; loads: number; full: boolean; hoursCutOff: number | null };
+export type SectionRow = {
+  group: string; name: string; category: SectionCategory; bookings: number; carried: number; tiers: [number, number, number]; servedTiers: [number, number, number];
+  served: number; waiting: number; bookingsPer1000: number | null; peerBookingsPer1000: number | null; station: string | null; needEstimated: boolean;
+  noWaterShare: number | null; fairShare: number; scheduled: Water | null; outage: Water | null; criticalLitres: number;
+};
+/** One filling station's queue: its bookings per section and the order the fair queue served them. */
+export type StationQueue = { station: string; trips: number; bookedTrips: number; bookings: Record<string, number>; served: { group: string; reason: string }[] };
+export type PlanOverview = { facts: PlanFacts; sections: SectionRow[]; stations: StationQueue[]; heavyCutoff: number | null; heavyPercentile: number | null };
+
 export type LivePlan = {
   id: string; day: string; status: string; approved: boolean; approvedBy: string | null; approvalReason: string | null;
   basis: { plan: string | null; entitlement: string | null; flags: string | null; weights: string | null };
@@ -47,6 +65,8 @@ export type LivePlan = {
   queue: QueueRow[]; flags: FlagRow[]; flagsTotal: number; checkedTotal: number; unchecked: string[];
   schedule: ScheduleRow[]; scheduledTotal: number | null; unroutedTotal: number | null;
   outage: OutageView; confidence: ConfidenceView;
+  /** Set only for a plan by section; null when absent or malformed (the screen then shows less). */
+  overview: PlanOverview | null;
 };
 
 /** One group that gains or loses booked trips under a plan's weights. */
@@ -210,7 +230,65 @@ export function adaptLivePlan(rawPlan: unknown, rawConfidence: unknown): LivePla
       basis: isRow(outage.basis) ? Object.fromEntries(Object.entries(outage.basis).filter((entry): entry is [string, string] => typeof entry[1] === "string")) : {},
     },
     confidence: confidence.view,
+    overview: overviewOf(rawPlan.overview, stations),
   };
+}
+
+const triple = (value: unknown): [number, number, number] | null => {
+  if (!Array.isArray(value) || value.length !== 3) return null;
+  const [a, b, c] = value.map(num);
+  return a === null || b === null || c === null ? null : [a, b, c];
+};
+const CATEGORIES = new Set(["cut", "scheduled", "heavy", "normal", "unknown"]);
+
+function waterOf(value: unknown): Water | null {
+  if (!isRow(value)) return null;
+  const litres = num(value.litres), people = num(value.people), loads = num(value.loads);
+  if (litres === null || people === null || loads === null) return null;
+  return { litres, people, loads, full: value.full === true, hoursCutOff: num(value.hours_cut_off) };
+}
+
+function overviewOf(raw: unknown, stations: Row[]): PlanOverview | null {
+  if (!isRow(raw) || !isRow(raw.facts) || !Array.isArray(raw.sections) || !Array.isArray(raw.stations)) return null;
+  const f = raw.facts;
+  const tiers = triple(f.tiers), servedTiers = triple(f.served_tiers);
+  const keys = ["bookings", "carried", "commercial", "served", "waiting", "trips", "fleet_tankers", "trips_per_tanker", "reserve_trips", "reserve_used_trips", "outage_trips", "booked_trips", "scheduled_sections", "cut_sections", "critical_stops", "stations", "load_litres", "litres_per_person"] as const;
+  const v = Object.fromEntries(keys.map((k) => [k, num(f[k])]));
+  if (!tiers || !servedTiers || keys.some((k) => v[k] === null)) return null;
+  const facts: PlanFacts = {
+    bookings: v.bookings!, carried: v.carried!, commercial: v.commercial!, tiers, servedTiers, served: v.served!, waiting: v.waiting!, trips: v.trips!,
+    fleetTankers: v.fleet_tankers!, tripsPerTanker: v.trips_per_tanker!, reserveTrips: v.reserve_trips!, reserveUsedTrips: v.reserve_used_trips!, outageTrips: v.outage_trips!,
+    bookedTrips: v.booked_trips!, scheduledSections: v.scheduled_sections!, cutSections: v.cut_sections!, criticalStops: v.critical_stops!, stations: v.stations!,
+    loadLitres: v.load_litres!, litresPerPerson: v.litres_per_person!,
+  };
+  const sections: SectionRow[] = [];
+  for (const r of rows(raw.sections)) {
+    const t = triple(r.tiers), st = triple(r.served_tiers);
+    const name = text(r.name), group = text(r.group);
+    if (!t || !st || !name || !group) return null;
+    sections.push({
+      group, name, category: (CATEGORIES.has(String(r.category)) ? r.category : "unknown") as SectionCategory,
+      bookings: num(r.bookings) ?? 0, carried: num(r.carried) ?? 0, tiers: t, servedTiers: st, served: num(r.served) ?? 0, waiting: num(r.waiting) ?? 0,
+      bookingsPer1000: num(r.bookings_per_1000), peerBookingsPer1000: num(r.peer_bookings_per_1000), station: text(r.station), needEstimated: r.need_estimated === true,
+      noWaterShare: num(r.no_water_share), fairShare: num(r.fair_share) ?? 0, scheduled: waterOf(r.scheduled), outage: waterOf(r.outage), criticalLitres: num(r.critical_litres) ?? 0,
+    });
+  }
+  // The order each station served its bookings in (position order, as the fair queue decided).
+  const servedAt = new Map<string, { group: string; reason: string }[]>();
+  for (const station of stations) {
+    const id = text(station.station);
+    if (!id) continue;
+    const list = rows(station.served).filter((b) => typeof b.group === "string").sort((a, b) => (num(a.position) ?? 0) - (num(b.position) ?? 0));
+    servedAt.set(id, list.map((b) => ({ group: b.group as string, reason: text(b.reason) ?? "DRR" })));
+  }
+  const queues: StationQueue[] = rows(raw.stations).flatMap((s) => {
+    const id = text(s.station_id);
+    if (!id || !isRow(s.bookings)) return [];
+    const bookings = Object.fromEntries(Object.entries(s.bookings).filter((e): e is [string, number] => typeof e[1] === "number"));
+    return [{ station: id, trips: num(s.trips) ?? 0, bookedTrips: num(s.booked_trips) ?? 0, bookings, served: servedAt.get(id) ?? [] }];
+  });
+  const cats = isRow(raw.categories) ? raw.categories : {};
+  return { facts, sections, stations: queues, heavyCutoff: num(cats.heavy_cutoff), heavyPercentile: num(cats.heavy_percentile) };
 }
 
 /** Why the sample plan is shown instead of live plans (same rules as the atlas screen). */

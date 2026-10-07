@@ -2260,7 +2260,7 @@
           "plans"
         ],
         "summary": "Plan Routes",
-        "description": "Tanker routes of a plan by section (route_schedule.py): the summary and every station's\nfigures; with `station`, also that station's tankers and their trips (a day has about 6,000\ntrips, so the trips of other stations are not sent). Computed from the plan, never stored.",
+        "description": "Tanker routes of a plan by section (route_schedule.py): the summary and every station's\nfigures; with `station`, also that station's tankers and their trips (a day has about 6,000\ntrips, so the trips of other stations are not sent); with `compact`, every tanker's trips in\na small form (`paths`) for the city-wide animation. Computed from the plan, never stored.",
         "operationId": "plan_routes_plans__plan_id__routes_get",
         "parameters": [
           {
@@ -2286,6 +2286,16 @@
                 }
               ],
               "title": "Station"
+            }
+          },
+          {
+            "name": "compact",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Compact"
             }
           },
           {

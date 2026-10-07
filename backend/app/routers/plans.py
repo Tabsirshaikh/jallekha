@@ -47,6 +47,7 @@ from app.services import (
     fair_queue,
     ledger_store,
     plan_builder,
+    plan_overview,
     planner,
     route_schedule,
     section_plan,
@@ -184,9 +185,12 @@ def plan_view(record: PlanRecord) -> dict[str, Any]:
             group_totals.setdefault(group_of[booking_id], {"served": 0, "waiting": 0})[
                 "waiting"
             ] += 1
-    by_ward = unplaced = None
+    by_ward = unplaced = overview = None
     if recipe.get("source") == plan_builder.SECTION:
         by_ward, unplaced = section_plan.ward_totals(REPO_ROOT, group_totals)
+        overview = plan_overview.section_overview(
+            REPO_ROOT, record.inputs, record.plan, recipe.get("capacity")
+        )
     weights = recipe.get("weights")
     shown = NeedWeights(**weights) if weights else NeedWeights.default()
     stops = recipe.get("stops", [])
@@ -202,6 +206,8 @@ def plan_view(record: PlanRecord) -> dict[str, Any]:
             "group_totals": group_totals,
             "ward_totals": by_ward,
             "ward_unplaced": unplaced,
+            # A plan by section in figures an officer can read (plan_overview.py); else null.
+            "overview": overview,
             # Registered delivery stops the plan used (supplied plans) and its loads for each.
             "stops": [
                 {
@@ -379,10 +385,13 @@ _ROUTES: dict[tuple[str, str], dict[str, Any]] = {}
 
 
 @router.get("/plans/{plan_id}/routes", dependencies=[Officer])
-def plan_routes(plan_id: str, plans: Plans, station: str | None = None) -> dict[str, Any]:
+def plan_routes(
+    plan_id: str, plans: Plans, station: str | None = None, compact: bool = False
+) -> dict[str, Any]:
     """Tanker routes of a plan by section (route_schedule.py): the summary and every station's
     figures; with `station`, also that station's tankers and their trips (a day has about 6,000
-    trips, so the trips of other stations are not sent). Computed from the plan, never stored."""
+    trips, so the trips of other stations are not sent); with `compact`, every tanker's trips in
+    a small form (`paths`) for the city-wide animation. Computed from the plan, never stored."""
     record = _record(plans, plan_id)
     if (record.recipe or {}).get("source") != plan_builder.SECTION:
         raise HTTPException(409, "Routes are made for plans by section")
@@ -406,6 +415,7 @@ def plan_routes(plan_id: str, plans: Plans, station: str | None = None) -> dict[
             u for u in full["unscheduled"] if station is None or u["station_id"] == station
         ][:200],
         "unscheduled_total": len(full["unscheduled"]),
+        "paths": route_schedule.compact_paths(full) if compact else None,
         "basis": full["basis"],
     }
 

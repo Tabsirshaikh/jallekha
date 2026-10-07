@@ -359,3 +359,33 @@ def build_routes(
             "spare special trip; stops are the estimated centre of the section",
         },
     }
+
+
+KINDS = ("booked", "scheduled", "outage", "critical")
+
+
+def compact_paths(routes: dict[str, Any]) -> list[dict[str, Any]]:
+    """Every tanker's trips in a small form for the city-wide animation: per trip
+    [lat, lng, depart, arrive, unloaded, back, kind] with times in minutes after midnight and kind
+    an index of KINDS (trips with no known place are left out)."""
+
+    def minute(text: str) -> int:
+        return int(text[:2]) * 60 + int(text[3:])
+
+    out = []
+    for t in routes["tankers"]:
+        trips = [
+            [
+                round(x["lat"], 4),
+                round(x["lng"], 4),
+                minute(x["depart"]),
+                minute(x["arrive"]),
+                minute(x["unloaded"]),
+                minute(x["back"]),
+                KINDS.index(x["kind"]),
+            ]
+            for x in t["trips"]
+            if x["lat"] is not None and x["lng"] is not None
+        ]
+        out.append({"tanker_id": t["tanker_id"], "station_id": t["station_id"], "trips": trips})
+    return out

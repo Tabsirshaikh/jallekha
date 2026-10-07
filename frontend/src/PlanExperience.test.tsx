@@ -58,7 +58,7 @@ describe("PlanExperience (live API)", () => {
     renderScreen();
 
     expect(await screen.findByText("Live data")).toBeInTheDocument();
-    expect(screen.getByText(/built from the committed A8 replay \(SIMULATION\)/)).toBeInTheDocument();
+    expect(screen.getByText("Served by the JalLekha API just now.")).toBeInTheDocument();
     expect(screen.getByText("0 of 2 flagged groups checked")).toBeInTheDocument();
     expect(screen.queryByText("Sample Ward A")).not.toBeInTheDocument();
 

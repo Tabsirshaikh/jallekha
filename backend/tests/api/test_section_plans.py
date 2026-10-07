@@ -212,9 +212,49 @@ def test_tanker_routes_of_a_plan_by_section(client) -> None:  # type: ignore[no-
         ).status_code
         == 404
     )
+    # every tanker's day in a small form for the city-wide animation
+    city = client.get(
+        f"/plans/{plan['plan_id']}/routes?compact=true", headers=auth("officer")
+    ).json()
+    assert data["paths"] is None and len(city["paths"]) == summary["tankers"]
+    trips = [t for p in city["paths"] for t in p["trips"]]
+    assert 0 <= summary["trips"] - len(trips) < 10  # trips to a place with no location left out
+    assert all(t[2] < t[3] <= t[4] < t[5] <= 22 * 60 for t in trips)
 
 
 def test_routes_are_only_for_plans_by_section(client) -> None:  # type: ignore[no-untyped-def]
     made = client.post("/plans", json={"day": "2025-05-01"}, headers=auth("officer")).json()
     refused = client.get(f"/plans/{made['plan_id']}/routes", headers=auth("officer"))
     assert refused.status_code == 409
+
+
+def test_overview_of_a_plan_by_section_adds_up(client) -> None:  # type: ignore[no-untyped-def]
+    body = {"day": "2025-05-15", "unit": "section", "capacity": "tight"}
+    plan = client.post("/plans", json=body, headers=auth("officer")).json()
+    overview = plan["overview"]
+    facts, sections = overview["facts"], overview["sections"]
+    served = sum(s["served_total"] for s in plan["stations"].values())
+    waiting = sum(s["waiting_total"] for s in plan["stations"].values())
+    # the figures are the plan's own: bookings, served and waiting, priority classes
+    assert facts["served"] == served and facts["waiting"] == waiting
+    assert facts["bookings"] == served + waiting == sum(facts["tiers"])
+    assert 0 < facts["carried"] < facts["bookings"]
+    assert facts["trips"] == plan["trips_total"]
+    assert facts["reserve_trips"] == plan["reserve_trips"] >= facts["reserve_used_trips"] > 0
+    assert facts["served_tiers"][0] <= facts["tiers"][0] and facts["served_tiers"][1] > 0
+    # every section has a row and a service type; scheduled ones carry their water
+    assert len(sections) == 197
+    kinds = {s["category"] for s in sections}
+    assert kinds <= {"cut", "scheduled", "heavy", "normal", "unknown"}
+    assert {"scheduled", "heavy", "normal"} <= kinds
+    scheduled = [s for s in sections if s["category"] == "scheduled"]
+    assert len(scheduled) == facts["scheduled_sections"] == 12
+    assert all(s["scheduled"]["litres"] > 0 and s["scheduled"]["loads"] > 0 for s in scheduled)
+    for s in sections:
+        assert s["served"] + s["waiting"] == s["bookings"] == sum(s["tiers"])
+    # each station's bookings by section add up to the day's bookings
+    held = sum(sum(st["bookings"].values()) for st in overview["stations"])
+    assert held == facts["bookings"]
+    # a plan by ward has no overview
+    ward = client.post("/plans", json={"day": "2025-05-01"}, headers=auth("officer")).json()
+    assert ward["overview"] is None

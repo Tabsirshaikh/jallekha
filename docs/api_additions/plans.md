@@ -187,7 +187,7 @@ or with outages or section debts, gets a short hash in its id (`section-<day>-<c
   section's area. Accounts are `section:<name>` (`unit: "section"` in the account view) and the next
   plan by section reads them (a section in debt gets more turns).
 
-### Tanker routes of a plan by section: `GET /plans/{plan_id}/routes[?station=ST12]` (feat/route-planner)
+### Tanker routes of a plan by section: `GET /plans/{plan_id}/routes[?station=ST12][&compact=true]` (feat/route-planner)
 Officer only; 409 for a plan that is not by section, 404 for an unknown station. A booking is one
 tanker load, so a trip is station -> place -> station and a tanker's day is a list of timed round
 trips. Answer: `summary` (tankers on the road of the fleet of 1,150, trips, special trips, km,
@@ -199,4 +199,21 @@ outage | critical, km, leg basis OSRM | ESTIMATE), `unscheduled` (loads that did
 the booked queue as the fair queue served it) on the station's tanker that is free first; a load
 a neighbouring station lent its trip for is driven from the lender; scheduled-supply and outage
 loads go to the nearest station with a spare special trip. Computed from the plan, never stored.
+With `compact=true` the answer also has `paths` (null otherwise): every tanker's trips as
+`[lat, lng, depart, arrive, unloaded, back, kind]` (minutes after midnight; kind 0 booked,
+1 scheduled, 2 outage, 3 critical), for the city-wide animation (feat/plan-visuals). Trips to a
+place with no location are left out.
+
+### Plan overview of a plan by section: `overview` in `GET /plans/{plan_id}` (feat/plan-visuals)
+Null for other plans. `facts`: bookings of the day, carried over, commercial, priority classes
+(`tiers` and `served_tiers`: hospitals and care homes, homes without water on premises, others),
+served, waiting, trips, trips kept for scheduled supply (`reserve_trips`) and how many of them the
+scheduled water needs (`reserve_used_trips`), outage trips, trips left for bookings. `sections`:
+one row per section (all 197, also the ones with no booking that day) with its bookings and served
+by priority class, its service type (`cut` water cut by a notice, `scheduled` water on a schedule
+for a section the field-check screen flags, `heavy` 2025 bookings per 1,000 connections in the top
+quarter, `normal`, `unknown` without a connection count), its scheduled-supply or outage water
+(litres, people, loads), bookings per 1,000 connections and the peers' rate. `stations`: the
+bookings of each section held at each filling station (the screen replays the station's queue
+from `stations[*].served`). Basis: DERIVED from the plan; the service-type cut-off is ASSUMED.
 
